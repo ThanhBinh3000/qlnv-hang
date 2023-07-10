@@ -18,7 +18,7 @@ public interface HopDongMttHdrRepository extends JpaRepository<HopDongMttHdr, Lo
           "AND (:#{#param.namHd} IS NULL OR DX.namHd = :#{#param.namHd}) " +
           "AND (:#{#param.soHd} IS NULL OR LOWER(DX.soHd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soHd}),'%' ) ) )" +
           "AND (:#{#param.tenHd} IS NULL OR LOWER(DX.tenHd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.tenHd}),'%'))) " +
-          "AND (:#{#param.tenDviMua} IS NULL OR LOWER(DX.tenDviMua) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.tenDviMua}),'%'))) " +
+          "AND (:#{#param.tenDviBan} IS NULL OR LOWER(DX.tenDviBan) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.tenDviBan}),'%'))) " +
           "AND (:#{#param.loaiVthh} IS NULL OR DX.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
           "AND (:#{#param.trangThai} IS NULL OR DX.trangThai = :#{#param.trangThai}) " +
           "AND (:#{#param.maDvi} IS NULL OR DX.maDvi = :#{#param.maDvi})")

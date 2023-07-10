@@ -17,7 +17,7 @@ import java.util.List;
 @Setter
 public class XhXkTongHopHdr extends BaseEntity implements Serializable {
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_Xk_TONG_HOP_HDR";
+  public static final String TABLE_NAME = "XH_XK_TONG_HOP_HDR";
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXkTongHopHdr.TABLE_NAME + "_SEQ")
@@ -42,6 +42,9 @@ public class XhXkTongHopHdr extends BaseEntity implements Serializable {
   //Lưu id và mã danh sách tổng hợp của tổng cục, bản ghi Cục (capth = 2) sẽ có giá trị 2 cột này.
   private Long idThTc;
   private String maDanhSachTc;
+
+  private Long idBaoCao;
+  private String soBaoCao;
 
   @Transient
   private String tenTrangThai;

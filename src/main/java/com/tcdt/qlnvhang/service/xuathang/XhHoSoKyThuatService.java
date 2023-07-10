@@ -252,8 +252,8 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
           xhHoSoKyThuatDtl.setKetLuan(nhHoSoBienBan.getKetLuan());
           xhHoSoKyThuatDtl.setLoaiBb(nhHoSoBienBan.getLoaiBb());
           xhHoSoKyThuatDtl.setThoiDiemLap(THOI_DIEM_NHAP_HANG);
-          xhHoSoKyThuatDtl.setCanCu(null);
-          xhHoSoKyThuatDtl.setVanBanBsung(null);
+          xhHoSoKyThuatDtl.setCanCu(new ArrayList<>());
+          xhHoSoKyThuatDtl.setVanBanBsung(new ArrayList<>());
           xhHoSoKyThuatDtl.setTgianBsung(DataUtils.convertToLocalDate(nhHoSoBienBan.getTgianBsung()));
           String sFileDinhKem = objectMapper.writeValueAsString(nhHoSoBienBan.getFileDinhKems());
           List<FileDKemJoinHoSoKyThuatDtl> listFileDinhKem = objectMapper.readValue(sFileDinhKem, new TypeReference<List<FileDKemJoinHoSoKyThuatDtl>>() {
@@ -302,13 +302,13 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
         }
 
         xhHskt = new XhHoSoKyThuatHdr();
-        xhHskt.setIdHsktNh(objReq.getId());
+        //xhHskt.setIdHsktNh(objReq.getId());
         xhHskt.setIdHsktNh(nhHoSoKyThuat.getId());
         xhHskt.setSoHsktNh(nhHoSoKyThuat.getSoHoSoKyThuat());
         xhHskt.setSoBbLayMauNh(nhHoSoKyThuat.getSoBbLayMau());
+        xhHskt.setSoQdGiaoNvNh(nhHoSoKyThuat.getSoQdGiaoNvNh());
         xhHskt.setNgayTaoNh(DataUtils.convertToLocalDate(nhHoSoKyThuat.getNgayTao()));
         xhHskt.setNgayDuyetNh(DataUtils.convertToLocalDate(nhHoSoKyThuat.getNgayPduyet()));
-
         String maDiaDiem = "";
         if (DataUtils.isNullOrEmpty(firstBySoBienBan.get().getMaLoKho())) {
           maDiaDiem = firstBySoBienBan.get().getMaNganKho();
