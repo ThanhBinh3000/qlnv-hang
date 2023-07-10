@@ -39,7 +39,11 @@ public interface DcnbBienBanLayMauHdrRepository extends JpaRepository<DcnbBienBa
             "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR bblm.ngayLayMau >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR bblm.ngayLayMau <= :#{#param.denNgay}) ) " +
-            "ORDER BY bblm.soQdinhDcc desc, bblm.nam desc")
+            "GROUP BY bblm.id, qdc.id,qdc.soQdinh, qdc.nam, khdcd.thoiGianDkDc, khdcd.maDiemKho, khdcd.maLoKho,khdcd.tenLoKho, khdcd.maNganKho, khdcd.tenNganKho,khdcd.thayDoiThuKho, "+
+            "bblm.soBbLayMau,bblm.ngayLayMau,bblm.soBbTinhKho,bblm.ngayXuatDocKho, " +
+            "bblm.soBbHaoDoi,bblm.trangThai, bblm.trangThai,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.maNhaKho,khdcd.tenNhaKho, " +
+            "khdcd.thuKhoId, khdcd.thuKho, khdcd.thuKhoNhanId, khdcd.thuKhoNhan, khdcd.donViTinh, khdcd.tenDonViTinh " +
+            "ORDER BY bblm.soQdinhDcc desc, bblm.nam desc ")
     Page<DcnbBienBanLayMauHdrDTO> searchPageChiCucXuat(@Param("param") SearchDcnbBienBanLayMau param, Pageable pageable);
 
     @Query(value = "SELECT distinct hdr FROM DcnbBienBanLayMauHdr hdr " +
@@ -159,6 +163,10 @@ public interface DcnbBienBanLayMauHdrRepository extends JpaRepository<DcnbBienBa
             "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(bblm.soQdinhDcc) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR bblm.ngayLayMau >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR bblm.ngayLayMau <= :#{#param.denNgay}) ) " +
+            "GROUP BY bblm.id,qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maDiemKhoNhan,khdcd.tenDiemKhoNhan,khdcd.maLoKhoNhan," +
+            "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, khdcd.thayDoiThuKho,bblm.soBbLayMau,bblm.ngayLayMau,bblm.soBbTinhKho,bblm.ngayXuatDocKho," +
+            "bblm.soBbHaoDoi,bblm.trangThai, bblm.trangThai,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan," +
+            "khdcd.thuKhoId, khdcd.thuKho, khdcd.thuKhoNhanId, khdcd.thuKhoNhan, khdcd.donViTinh, khdcd.tenDonViTinh "+
             "ORDER BY bblm.soQdinhDcc desc, bblm.nam desc")
     Page<DcnbBienBanLayMauHdrDTO> searchPageCucNhan(@Param("param") SearchDcnbBienBanLayMau req, Pageable pageable);
 }

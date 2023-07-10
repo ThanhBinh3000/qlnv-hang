@@ -95,7 +95,7 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
         }else{
             req.setTypeDataLink(Contains.DIEU_CHUYEN);
             if ("00".equals(req.getType())) { // kiểu xuất
-                searchDto = dcnbBienBanLayMauHdrRepository.searchPageCucXuat(req, pageable);
+                searchDto = dcnbBienBanLayMauHdrRepository.searchPageCucNhan(req, pageable);
             }
             if ("01".equals(req.getType())) { // kiểu nhan
                 searchDto = dcnbBienBanLayMauHdrRepository.searchPageCucNhan(req, pageable);
