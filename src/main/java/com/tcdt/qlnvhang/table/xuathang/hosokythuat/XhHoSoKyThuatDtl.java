@@ -82,7 +82,7 @@ public class XhHoSoKyThuatDtl extends BaseEntity implements Serializable {
   @Fetch(value = FetchMode.SUBSELECT)
   @JoinColumn(name = "dataId")
   @JsonManagedReference
-  @Where(clause = "data_type='" + XhHoSoKyThuatDtl.TABLE_NAME + "'")
+  @Where(clause = "data_type='" + XhHoSoKyThuatDtl.TABLE_NAME + "_DINH_KEM'")
   private List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem = new ArrayList<>();
 
   public void setFileDinhKem(List<FileDKemJoinHoSoKyThuatDtl> children) {
@@ -114,13 +114,13 @@ public class XhHoSoKyThuatDtl extends BaseEntity implements Serializable {
   @Fetch(value = FetchMode.SUBSELECT)
   @JoinColumn(name = "dataId")
   @JsonManagedReference
-  @Where(clause = "data_type='" + XhHoSoKyThuatDtl.TABLE_NAME + "VAN_BAN_BSUNG'")
+  @Where(clause = "data_type='" + XhHoSoKyThuatDtl.TABLE_NAME + "_VAN_BAN_BSUNG'")
   private List<FileDKemJoinHoSoKyThuatDtl> vanBanBsung = new ArrayList<>();
 
   public void setVanBanBsung(List<FileDKemJoinHoSoKyThuatDtl> children) {
     this.vanBanBsung.clear();
     for (FileDKemJoinHoSoKyThuatDtl child : children) {
-      child.setDataType(XhHoSoKyThuatDtl.TABLE_NAME + "_DINH_KEM");
+      child.setDataType(XhHoSoKyThuatDtl.TABLE_NAME + "_VAN_BAN_BSUNG");
       child.setParent(this);
     }
     this.vanBanBsung.addAll(children);
