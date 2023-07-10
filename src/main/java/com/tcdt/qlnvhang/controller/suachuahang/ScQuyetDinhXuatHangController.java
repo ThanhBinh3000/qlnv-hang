@@ -34,10 +34,10 @@ public class ScQuyetDinhXuatHangController {
     @ApiOperation(value = "Tra cứu", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody ScQuyetDinhXuatHangReq objReq) {
+    public ResponseEntity<BaseResponse> colection(@RequestBody ScQuyetDinhXuatHangReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(scQuyetDinhXuatHangService.searchPage(currentUser,objReq));
+            resp.setData(scQuyetDinhXuatHangService.searchPage(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -52,10 +52,10 @@ public class ScQuyetDinhXuatHangController {
     @ApiOperation(value = "Tạo mới", response = List.class)
     @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ScQuyetDinhXuatHangReq objReq) {
+    public ResponseEntity<BaseResponse> insert(@Valid @RequestBody ScQuyetDinhXuatHangReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(scQuyetDinhXuatHangService.create(currentUser,objReq));
+            resp.setData(scQuyetDinhXuatHangService.create(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -69,11 +69,10 @@ public class ScQuyetDinhXuatHangController {
 
     @ApiOperation(value = "Cập nhật", response = List.class)
     @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser,
-                                               @Valid @RequestBody ScQuyetDinhXuatHangReq objReq) {
+    public ResponseEntity<BaseResponse> update(@Valid @RequestBody ScQuyetDinhXuatHangReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(scQuyetDinhXuatHangService.update(currentUser,objReq));
+            resp.setData(scQuyetDinhXuatHangService.update(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -103,7 +102,7 @@ public class ScQuyetDinhXuatHangController {
 
     @ApiOperation(value = "Trình duyệt", response = List.class)
     @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> updateStatus(@NonNull @RequestBody StatusReq req) {
+    public ResponseEntity<BaseResponse> updateStatus(@NonNull @RequestBody ScQuyetDinhXuatHangReq req) {
         BaseResponse resp = new BaseResponse();
         try {
             scQuyetDinhXuatHangService.approve(req);

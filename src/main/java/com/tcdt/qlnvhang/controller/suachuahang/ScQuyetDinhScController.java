@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhScReq;
+import com.tcdt.qlnvhang.request.suachua.ScTongHopReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.suachuahang.impl.ScQuyetDinhScImpl;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -45,6 +46,23 @@ public class ScQuyetDinhScController {
             log.error("Tra cứu thông tin : {}", e);
         }
 
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Danh sách tổng hợp để trình và thẩm định", response = List.class)
+    @PostMapping(value = "/ds-quyet-dinh-xh", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> listTrinhThamDinh(@RequestBody ScQuyetDinhScReq objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(scQuyetDinhSc.dsQuyetDinhXuatHang(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu thông tin : {}", e);
+        }
         return ResponseEntity.ok(resp);
     }
 
@@ -99,21 +117,21 @@ public class ScQuyetDinhScController {
         return ResponseEntity.ok(resp);
     }
 
-//    @ApiOperation(value = "Trình duyệt", response = List.class)
-//    @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<BaseResponse> updateStatus(@NonNull @RequestParam(name = "id") Long id) {
-//        BaseResponse resp = new BaseResponse();
-//        try {
-//            scQuyetDinhSc.approve(id);
-//            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-//            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-//        } catch (Exception e) {
-//            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-//            resp.setMsg(e.getMessage());
-//            log.error("Phê duyệt thông tin : {}", e);
-//        }
-//        return ResponseEntity.ok(resp);
-//    }
+    @ApiOperation(value = "Trình duyệt", response = List.class)
+    @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> updateStatus(@NonNull @RequestBody ScQuyetDinhScReq req) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            scQuyetDinhSc.approve(req);
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Phê duyệt thông tin : {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
 
 
     @ApiOperation(value = "Xoá thông tin", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
