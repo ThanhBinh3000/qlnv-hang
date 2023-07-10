@@ -18,6 +18,7 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.UserUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -71,15 +72,15 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
         req.setTypes(Arrays.asList(Contains.NHAN_DIEU_CHUYEN, Contains.DIEU_CHUYEN));
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             search = dcnbQuyetDinhDcCHdrRepository.searchChiCuc(req, pageable);
-        }else {
+        } else {
             search = dcnbQuyetDinhDcCHdrRepository.searchCuc(req, pageable);
         }
 
-        search.forEach( item -> {
-            if(item.getDanhSachQuyetDinh() != null && !item.getDanhSachQuyetDinh().isEmpty()){
+        search.forEach(item -> {
+            if (item.getDanhSachQuyetDinh() != null && !item.getDanhSachQuyetDinh().isEmpty()) {
                 List<DcnbQuyetDinhDcCDtl> danhSachQuyetDinh = item.getDanhSachQuyetDinh();
                 danhSachQuyetDinh.forEach(i -> {
-                    if(!Objects.isNull(i.getKeHoachDcHdrId())){
+                    if (!Objects.isNull(i.getKeHoachDcHdrId())) {
                         Optional<DcnbKeHoachDcHdr> byId = dcnbKeHoachDcHdrRepository.findById(i.getKeHoachDcHdrId());
                         byId.ifPresent(i::setDcnbKeHoachDcHdr);
                     }
@@ -94,7 +95,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
-        if(!currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)){
+        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
             throw new Exception("Chức năng thêm mới chỉ dành cho cấp cục");
         }
         List<DcnbQuyetDinhDcCHdr> optionalList = dcnbQuyetDinhDcCHdrRepository.findBySoQdinh(objReq.getSoQdinh());
@@ -134,12 +135,12 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                 } else {
                     throw new Exception("dcnbKeHoachDcHdr.id phải là null!");
                 }
-            }else {
+            } else {
                 if (e.getKeHoachDcHdrId() == null) {
                     if (e.getDanhSachKeHoach() != null && !e.getDanhSachKeHoach().isEmpty()) {
                         Optional<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcnbKeHoachDcHdrRepository.findById(e.getDanhSachKeHoach().get(0).getHdrId());
                         if (!dcnbKeHoachDcHdr.isPresent()) {
-                            throw new Exception("Không tìm thấy kế hoạch id = "+ e.getDanhSachKeHoach().get(0).getHdrId());
+                            throw new Exception("Không tìm thấy kế hoạch id = " + e.getDanhSachKeHoach().get(0).getHdrId());
                         }
                         e.getDanhSachKeHoach().forEach(e1 -> {
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr.get());
@@ -161,7 +162,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                 .filter(number -> Collections.frequency(longs, number) > 1)
                 .distinct()
                 .collect(Collectors.toList());
-        if(!duplicates.isEmpty()){
+        if (!duplicates.isEmpty()) {
             throw new Exception("Mỗi danhSachQuyetDinh chỉ có 1 keHoachDcHdrId!");
         }
         DcnbQuyetDinhDcCHdr created = dcnbQuyetDinhDcCHdrRepository.save(data);
@@ -172,11 +173,11 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
         return created;
     }
 
-    public List<DcnbQuyetDinhDcCHdrDTO> danhSachQuyetDinhChiCuc(CustomUserDetails currentUser, SearchDcnbQuyetDinhDcC req) throws Exception{
+    public List<DcnbQuyetDinhDcCHdrDTO> danhSachQuyetDinhChiCuc(CustomUserDetails currentUser, SearchDcnbQuyetDinhDcC req) throws Exception {
         // 2 trường hợp
         // trường 1: chi cục lấy ra quyết định của cục
         // trường 2: cục lấy ra quyết định của cục nhưng phải được bh biên bản lấy mẫu
-        if(currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)){
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             String dvql = currentUser.getDvql();
             req.setMaDvi(dvql);
             req.setTypes(Arrays.asList(Contains.NHAN_DIEU_CHUYEN, Contains.DIEU_CHUYEN));
@@ -206,7 +207,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
 
         DcnbQuyetDinhDcCHdr data = optional.get();
         objReq.setMaDvi(data.getMaDvi());
-        objReq.setType( data.getType());
+        objReq.setType(data.getType());
         BeanUtils.copyProperties(objReq, data);
         data.setDanhSachQuyetDinh(objReq.getDanhSachQuyetDinh());
         for (DcnbQuyetDinhDcCDtl e : objReq.getDanhSachQuyetDinh()) {
@@ -281,12 +282,12 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                 } else {
                     throw new Exception("dcnbKeHoachDcHdr.id phải khác null!");
                 }
-            }else {
+            } else {
                 if (e.getKeHoachDcHdrId() != null) {
                     if (e.getDanhSachKeHoach() != null && !e.getDanhSachKeHoach().isEmpty()) {
                         Optional<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcnbKeHoachDcHdrRepository.findById(e.getDanhSachKeHoach().get(0).getHdrId());
                         if (!dcnbKeHoachDcHdr.isPresent()) {
-                            throw new Exception("Không tìm thấy kế hoạch id = "+ e.getDanhSachKeHoach().get(0).getHdrId());
+                            throw new Exception("Không tìm thấy kế hoạch id = " + e.getDanhSachKeHoach().get(0).getHdrId());
                         }
                         e.getDanhSachKeHoach().forEach(e1 -> {
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr.get());
@@ -308,7 +309,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                 .filter(number -> Collections.frequency(longs, number) > 1)
                 .distinct()
                 .collect(Collectors.toList());
-        if(!duplicates.isEmpty()){
+        if (!duplicates.isEmpty()) {
             throw new Exception("Mỗi danhSachQuyetDinh chỉ có 1 keHoachDcHdrId!");
         }
         DcnbQuyetDinhDcCHdr created = dcnbQuyetDinhDcCHdrRepository.save(data);
@@ -433,7 +434,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                 List<DcnbQuyetDinhDcCDtl> danhSachQuyetDinh = optional.get().getDanhSachQuyetDinh();
                 for (DcnbQuyetDinhDcCDtl hh : danhSachQuyetDinh) {
                     List<DcnbKeHoachDcDtl> danhSachKeHoach = hh.getDanhSachKeHoach();
-                    for (DcnbKeHoachDcDtl kh: danhSachKeHoach){
+                    for (DcnbKeHoachDcDtl kh : danhSachKeHoach) {
                         Optional<DcnbKeHoachDcDtl> parentDtl = dcnbKeHoachDcDtlRepository.findById(kh.getParentId());
                         if (parentDtl.isPresent()) {
                             parentDtl.get().setMaDiemKhoNhan(kh.getMaDiemKhoNhan());
@@ -456,11 +457,14 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                             dataLink.setKeHoachDcHdrId(kh.getHdrId());
                             dataLink.setKeHoachDcDtlParentId(parentDtl.get().getId());
                             dataLink.setKeHoachDcHdrParentId(parentDtl.get().getHdrId());
-                            dataLink.setQdCcId( optional.get().getId());
-                            dataLink.setQdCcParentId( optional.get().getParentId());
-                            dataLink.setQdCtcId( optional.get().getCanCuQdTc());
+                            dataLink.setQdCcId(optional.get().getId());
+                            dataLink.setQdCcParentId(optional.get().getParentId());
+                            dataLink.setQdCtcId(optional.get().getCanCuQdTc());
                             dataLink.setType(Contains.NHAN_DIEU_CHUYEN);
-                            dcnbDataLinkHdrRepository.save(dataLink);
+                            DcnbDataLinkHdr dataLinkChiCuc = dcnbDataLinkHdrRepository.findDataLinkChiCucNhan(currentUser.getDvql(), kh.getHdrId(), kh.getMaNganKhoNhan(), kh.getMaLoKhoNhan());
+                            if(dataLinkChiCuc == null){
+                                dcnbDataLinkHdrRepository.save(dataLink);
+                            }
                         }
                         kh.setDaXdinhDiemNhap(true);
                         dcnbKeHoachDcDtlRepository.save(kh);
@@ -471,7 +475,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                     Optional<DcnbKeHoachDcHdr> parentHdr = dcnbKeHoachDcHdrRepository.findById(hdr.get().getParentId());
                     if (parentHdr.isPresent()) {
                         boolean allMatch = parentHdr.get().getDanhSachHangHoa().stream().allMatch(n -> (n.getDaXdinhDiemNhap() != null && n.getDaXdinhDiemNhap() == true));
-                        if(allMatch){
+                        if (allMatch) {
                             parentHdr.get().setDaXdinhDiemNhap(true);
                             dcnbKeHoachDcHdrRepository.save(parentHdr.get());
                         }
@@ -518,49 +522,49 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                 optional.get().setNgayDuyetTc(LocalDate.now());
                 optional.get().setNguoiDuyetTcId(currentUser.getUser().getId());
                 Optional<DcnbQuyetDinhDcTcHdr> dcnbQuyetDinhDcTcHdr = Optional.empty();
-                if(optional.get().getCanCuQdTc() != null){
+                if (optional.get().getCanCuQdTc() != null) {
                     dcnbQuyetDinhDcTcHdr = dcnbQuyetDinhDcTcHdrRepository.findById(optional.get().getCanCuQdTc());
                 }
-                if(dcnbQuyetDinhDcTcHdr.isPresent()){
-                    if("00".equals(optional.get().getLoaiQdinh())){
+                if (dcnbQuyetDinhDcTcHdr.isPresent()) {
+                    if ("00".equals(optional.get().getLoaiQdinh())) {
                         String qdinhNhapCucId = dcnbQuyetDinhDcTcHdr.get().getQdinhNhapCucId();
-                        if(qdinhNhapCucId == null){
+                        if (qdinhNhapCucId == null) {
                             qdinhNhapCucId = "";
-                        }else {
-                            qdinhNhapCucId+=","+optional.get().getId();
+                        } else {
+                            qdinhNhapCucId += "," + optional.get().getId();
                         }
                         dcnbQuyetDinhDcTcHdr.get().setQdinhNhapCucId(qdinhNhapCucId);
                         String soQdinh = dcnbQuyetDinhDcTcHdr.get().getSoQdinhNhapCuc();
-                        if(soQdinh == null){
+                        if (soQdinh == null) {
                             soQdinh = "";
-                        }else {
-                            soQdinh+=","+optional.get().getSoQdinh();
+                        } else {
+                            soQdinh += "," + optional.get().getSoQdinh();
                         }
                         dcnbQuyetDinhDcTcHdr.get().setSoQdinhNhapCuc(soQdinh);
                     }
-                    if("01".equals(optional.get().getLoaiQdinh())){
+                    if ("01".equals(optional.get().getLoaiQdinh())) {
                         String qdinhXuatCucId = dcnbQuyetDinhDcTcHdr.get().getQdinhXuatCucId();
-                        if(qdinhXuatCucId == null){
+                        if (qdinhXuatCucId == null) {
                             qdinhXuatCucId = "";
-                        }else {
-                            qdinhXuatCucId+=","+optional.get().getId();
+                        } else {
+                            qdinhXuatCucId += "," + optional.get().getId();
                         }
                         dcnbQuyetDinhDcTcHdr.get().setQdinhXuatCucId(qdinhXuatCucId);
                         String soQdinh = dcnbQuyetDinhDcTcHdr.get().getSoQdinhXuatCuc();
-                        if(soQdinh == null){
+                        if (soQdinh == null) {
                             soQdinh = "";
-                        }else {
-                            soQdinh+=","+optional.get().getSoQdinh();
+                        } else {
+                            soQdinh += "," + optional.get().getSoQdinh();
                         }
                         dcnbQuyetDinhDcTcHdr.get().setSoQdinhXuatCuc(soQdinh);
                     }
                 }
-                if(Contains.GIUA_2_CHI_CUC_TRONG_1_CUC.equals(optional.get().getLoaiDc())){ // khác điều chuyển "khác cục"
+                if (Contains.GIUA_2_CHI_CUC_TRONG_1_CUC.equals(optional.get().getLoaiDc())) { // khác điều chuyển "khác cục"
                     // clone chi cục nhận
                     cloneQuyetDinhDcCNhan(statusReq, optional, true);
                     // clone chi cục xuat
                     cloneQuyetDinhDcCXuat(statusReq, optional);
-                }else {
+                } else {
                     // clone chi cục xuat
                     cloneQuyetDinhDcCXuat(statusReq, optional);
                 }
@@ -574,14 +578,15 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
     }
 
     private void cloneQuyetDinhDcCXuat(StatusReq statusReq, Optional<DcnbQuyetDinhDcCHdr> optional) throws Exception {
+        CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
         // xử lý clone cho chi cục với TYPE là DC
         List<DcnbQuyetDinhDcCDtl> danhSachQuyetDinh = optional.get().getDanhSachQuyetDinh();
         Map<String, List<DcnbKeHoachDcDtl>> groupedByMaCc = new HashMap<>();
-        for(DcnbQuyetDinhDcCDtl qdd: danhSachQuyetDinh){
+        for (DcnbQuyetDinhDcCDtl qdd : danhSachQuyetDinh) {
             List<DcnbKeHoachDcDtl> dcnbKeHoachDcDtls = groupedByMaCc.get(qdd.getDcnbKeHoachDcHdr().getMaDviPq());
-            if(dcnbKeHoachDcDtls == null){
+            if (dcnbKeHoachDcDtls == null) {
                 groupedByMaCc.put(qdd.getDcnbKeHoachDcHdr().getMaDviPq(), qdd.getDanhSachKeHoach());
-            }else {
+            } else {
                 dcnbKeHoachDcDtls.addAll(qdd.getDanhSachKeHoach());
                 groupedByMaCc.put(qdd.getDcnbKeHoachDcHdr().getMaDviPq(), dcnbKeHoachDcDtls);
             }
@@ -655,17 +660,17 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
 
                     return dcnbQuyetDinhDcCDtlClone;
                 }).collect(Collectors.toList());
-                if(quyetDinhDcCDtls.size() > 1){
+                if (quyetDinhDcCDtls.size() > 1) {
                     loiData.set(true);
-                }else{
+                } else {
                     DcnbQuyetDinhDcCDtl quyetDinhDcCDtl = quyetDinhDcCDtls.get(0);
                     quyetDinhDcCDtlsClone.add(quyetDinhDcCDtl);
                 }
             });
             dcnbQuyetDinhDcCHdrCloned.setDanhSachQuyetDinh(quyetDinhDcCDtlsClone);
             dcnbQuyetDinhDcCHdrCloned = dcnbQuyetDinhDcCHdrRepository.save(dcnbQuyetDinhDcCHdrCloned);
-            for(DcnbQuyetDinhDcCDtl ds : dcnbQuyetDinhDcCHdrCloned.getDanhSachQuyetDinh()){
-                for(DcnbKeHoachDcDtl kh : ds.getDanhSachKeHoach()){
+            for (DcnbQuyetDinhDcCDtl ds : dcnbQuyetDinhDcCHdrCloned.getDanhSachQuyetDinh()) {
+                for (DcnbKeHoachDcDtl kh : ds.getDanhSachKeHoach()) {
                     DcnbDataLinkHdr dataLink = new DcnbDataLinkHdr();
                     dataLink.setKeHoachDcDtlId(kh.getId());
                     dataLink.setKeHoachDcHdrId(kh.getHdrId());
@@ -676,7 +681,10 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                     dataLink.setQdCcParentId(dcnbQuyetDinhDcCHdrCloned.getParentId());
                     dataLink.setQdCtcId(dcnbQuyetDinhDcCHdrCloned.getCanCuQdTc());
                     dataLink.setType(Contains.DIEU_CHUYEN);
-                    dcnbDataLinkHdrRepository.save(dataLink);
+                    DcnbDataLinkHdr dataLinkChiCuc = dcnbDataLinkHdrRepository.findDataLinkChiCuc(currentUser.getDvql(), kh.getHdrId(), kh.getMaNganKho(), kh.getMaLoKho());
+                    if(dataLinkChiCuc == null){
+                        dcnbDataLinkHdrRepository.save(dataLink);
+                    }
                 }
             }
             fileDinhKemService.delete(dcnbQuyetDinhDcCHdrCloned.getId(), Lists.newArrayList(DcnbQuyetDinhDcCHdr.TABLE_NAME + "_CAN_CU"));
@@ -687,16 +695,17 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
             dcnbQuyetDinhDcCHdrCloned.setCanCu(canCu);
         });
 
-        if(loiData.get()){
+        if (loiData.get()) {
             throw new Exception("Mỗi DcnbQuyetDinhDcCDtl chỉ có 1 dcnbKeHoachDcHdrId!");
         }
     }
 
     private void cloneQuyetDinhDcCNhan(StatusReq statusReq, Optional<DcnbQuyetDinhDcCHdr> optional, boolean isClone) throws Exception {
+        CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
         // xử lý clone cho chi cục với TYPE là NDC
         List<DcnbQuyetDinhDcCDtl> danhSachQuyetDinh = optional.get().getDanhSachQuyetDinh();
         List<DcnbKeHoachDcDtl> danhSachKeHoachs = new ArrayList<>();
-        for(DcnbQuyetDinhDcCDtl qdd: danhSachQuyetDinh){
+        for (DcnbQuyetDinhDcCDtl qdd : danhSachQuyetDinh) {
             danhSachKeHoachs.addAll(qdd.getDanhSachKeHoach());
         }
         Map<String, List<DcnbKeHoachDcDtl>> groupedByMaCc = danhSachKeHoachs.stream()
@@ -767,9 +776,9 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
 
                     return dcnbQuyetDinhDcCDtlCloned;
                 }).collect(Collectors.toList());
-                if(quyetDinhDcCDtls.size() > 1){
+                if (quyetDinhDcCDtls.size() > 1) {
                     loiData.set(true);
-                }else{
+                } else {
                     DcnbQuyetDinhDcCDtl quyetDinhDcCDtl = quyetDinhDcCDtls.get(0);
                     quyetDinhDcCDtlsClone.add(quyetDinhDcCDtl);
                 }
@@ -777,9 +786,9 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
             dcnbQuyetDinhDcCHdrCloned.setDanhSachQuyetDinh(quyetDinhDcCDtlsClone);
             dcnbQuyetDinhDcCHdrCloned.setTrangThai(Contains.YC_CHICUC_PHANBO_DC);
             dcnbQuyetDinhDcCHdrCloned = dcnbQuyetDinhDcCHdrRepository.save(dcnbQuyetDinhDcCHdrCloned);
-            if(isClone){
-                for(DcnbQuyetDinhDcCDtl ds : dcnbQuyetDinhDcCHdrCloned.getDanhSachQuyetDinh()){
-                    for(DcnbKeHoachDcDtl kh : ds.getDanhSachKeHoach()){
+            if (isClone) {
+                for (DcnbQuyetDinhDcCDtl ds : dcnbQuyetDinhDcCHdrCloned.getDanhSachQuyetDinh()) {
+                    for (DcnbKeHoachDcDtl kh : ds.getDanhSachKeHoach()) {
                         DcnbDataLinkHdr dataLink = new DcnbDataLinkHdr();
                         dataLink.setKeHoachDcDtlId(kh.getId());
                         dataLink.setKeHoachDcHdrId(kh.getHdrId());
@@ -790,7 +799,10 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         dataLink.setQdCcParentId(dcnbQuyetDinhDcCHdrCloned.getParentId());
                         dataLink.setQdCtcId(dcnbQuyetDinhDcCHdrCloned.getCanCuQdTc());
                         dataLink.setType(Contains.NHAN_DIEU_CHUYEN);
-                        dcnbDataLinkHdrRepository.save(dataLink);
+                        DcnbDataLinkHdr dataLinkChiCuc = dcnbDataLinkHdrRepository.findDataLinkChiCucNhan(currentUser.getDvql(), kh.getHdrId(), kh.getMaNganKhoNhan(), kh.getMaLoKhoNhan());
+                        if(dataLinkChiCuc == null){
+                            dcnbDataLinkHdrRepository.save(dataLink);
+                        }
                     }
                 }
             }
@@ -803,7 +815,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
             dcnbQuyetDinhDcCHdrCloned.setCanCu(canCu);
         });
 
-        if(loiData.get()){
+        if (loiData.get()) {
             throw new Exception("Mỗi DcnbQuyetDinhDcCDtl chỉ có 1 dcnbKeHoachDcHdrId!");
         }
     }
@@ -840,7 +852,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
         // 2 trường hợp
         // trường 1: chi cục lấy ra quyết định của cục
         // trường 2: cục lấy ra quyết định của cục nhưng phải được bh biên bản lấy mẫu
-        if(!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)){
+        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             String dvql = currentUser.getDvql();
             req.setMaDvi(dvql);
             req.setTypes(Arrays.asList(Contains.NHAN_DIEU_CHUYEN, Contains.DIEU_CHUYEN));
