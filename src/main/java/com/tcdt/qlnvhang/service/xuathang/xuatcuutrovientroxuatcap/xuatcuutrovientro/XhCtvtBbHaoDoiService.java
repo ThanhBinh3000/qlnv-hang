@@ -104,7 +104,7 @@ public class XhCtvtBbHaoDoiService extends BaseServiceImpl {
   }
 
   @Transactional()
-  void saveCtiet(Long idHdr, XhCtvtBbHaoDoiHdrReq objReq) {
+  public void saveCtiet(Long idHdr, XhCtvtBbHaoDoiHdrReq objReq) {
     for (XhCtvtBbHaoDoiDtlReq listPhieuXuatKhoReq : objReq.getListPhieuXuatKho()) {
       XhCtvtBbHaoDoiDtl listPhieuXuatKho =new XhCtvtBbHaoDoiDtl();
       BeanUtils.copyProperties(listPhieuXuatKhoReq,listPhieuXuatKho);

@@ -36,4 +36,5 @@ public class XhXkTongHopRequest extends BaseRequest {
   private LocalDateTime ngayTaoTu;
   private LocalDateTime ngayTaoDen;
   private List<XhXkTongHopDtl> tongHopDtl = new ArrayList<>();
+  private List<Long> listId;
 }
