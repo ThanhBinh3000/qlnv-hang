@@ -42,7 +42,7 @@ public interface HhNkPhieuNhapKhoHdrRepository extends JpaRepository<HhNkPhieuNh
     List<HhNkPhieuNhapKhoHdrListDTO> searchListChung(@Param("param")HhNkPhieuNhapKhoHdrReq objReq);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.nhaphang.nhapkhac.HhNkPhieuNhapKhoHdrDTO(" +
-            "pnk.id,qdgnv.id,qdgnv.soQd,qdgnv.ngayQd,qdgnv.nam,qdcd.tgianNkho,dtl.maNhaKho,dmdvnhakho.tenDvi, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho," +
+            "pnk.id,qdgnv.id,qdgnv.soQd,qdgnv.ngayQd,qdgnv.nam,hdr.ngayHieuLuc,dtl.maNhaKho,dmdvnhakho.tenDvi, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho," +
             "dmdvlokho.tenDvi,dtl.maNganKho,dmdvngankho.tenDvi,pnk.soPhieuNhapKho, pnk.ngayLap,  bknvt.id, bknvt.soBangKe," +
             "bknvt.loaiVthh,dmvt.ten,dtl.cloaiVthh, dmvt.loaiHang,qdgnv.dvt, dtl.tongSlNhap, " +
             "pnk.idPhieuKtraCluong, pnk.soPhieuKtraCluong, pktcl.ngayGdinh, " +
@@ -50,7 +50,6 @@ public interface HhNkPhieuNhapKhoHdrRepository extends JpaRepository<HhNkPhieuNh
             "FROM HhQdGiaoNvuNhapHangKhacHdr qdgnv " +
             "LEFT JOIN HhQdPdNhapKhacHdr hdr ON hdr.id = qdgnv.idQdPdNk " +
             "LEFT JOIN HhQdPdNhapKhacDtl dtl ON hdr.id = dtl.idHdr " +
-            "LEFT JOIN HhQdGiaoNvuNhapHangKhacDtl qdcd ON qdcd.idHdr =  qdgnv.id " +
             "LEFT JOIN HhNkPhieuNhapKhoHdr pnk On pnk.qdGiaoNvId = qdgnv.id " +
             "LEFT JOIN HhNkPhieuKtcl pktcl On pktcl.id = pnk.idPhieuKtraCluong " +
             "LEFT JOIN HhNkBangKeNhapVTHdr bknvt On bknvt.phieuNhapKhoId = pnk.id " +

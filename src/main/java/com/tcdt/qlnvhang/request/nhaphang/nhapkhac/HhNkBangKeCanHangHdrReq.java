@@ -92,10 +92,6 @@ public class HhNkBangKeCanHangHdrReq {
 
     private LocalDate ngayPDuyet;
 
-    private String loaiDc;
-
-    private String type;
-
     private String maLanhDaoChiCuc;
 
     private String tenLanhDaoChiCuc;
