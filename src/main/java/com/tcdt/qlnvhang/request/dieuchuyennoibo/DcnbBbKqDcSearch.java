@@ -11,8 +11,8 @@ import java.time.LocalDate;
 public class DcnbBbKqDcSearch extends BaseRequest {
     private String maDvi;
     private String soBc;
-    private String soQdinhCuc;
     private String trangThai;
+    private String soQdinhCuc;
     private LocalDate tuNgay;
     private LocalDate denNgay;
 }

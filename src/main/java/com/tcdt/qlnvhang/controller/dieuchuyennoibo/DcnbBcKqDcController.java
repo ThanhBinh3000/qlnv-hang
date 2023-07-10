@@ -31,7 +31,7 @@ import java.util.Map;
 @RequestMapping(value = PathContains.DIEU_CHUYEN_NOI_BO + PathContains.BAO_CAO_KET_QUA)
 @Slf4j
 @Api(tags = "Điều chuyển nội bộ - Biên cáo kết quả điều chuyển")
-public class DcnbBbKqDcController {
+public class DcnbBcKqDcController {
     @Autowired
     private DcnbBbKqDcService service;
 
@@ -198,5 +198,23 @@ public class DcnbBbKqDcController {
             mapper.writeValue(response.getOutputStream(), body);
 
         }
+    }
+
+    @ApiOperation(value = "Lấy thông tin nhập xuất hàng", response = List.class)
+    @PostMapping(value = "thong-tin-nhap-xuat-hang", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity thongTinNhapXuatHang(@Valid @RequestBody DcnbBbKqDcSearch objReq, HttpServletResponse response) throws Exception {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.thongTinNhapXuatHang(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Lấy chi tiết thông tin : {}", e);
+        }
+        return ResponseEntity.ok(resp);
     }
 }

@@ -1,8 +1,7 @@
 package com.tcdt.qlnvhang.repository.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbKqDcSearch;
-import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbKqDcDTO;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbKqDcHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBcKqDcHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,8 +13,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface DcnbBbKqDcHdrRepository extends JpaRepository<DcnbBbKqDcHdr, Long> {
-    @Query(value = "SELECT distinct c FROM DcnbBbKqDcHdr c LEFT JOIN QlnvDmDonvi dvi ON dvi.maDvi = c.maDvi WHERE 1=1 " +
+public interface DcnbBcKqDcHdrRepository extends JpaRepository<DcnbBcKqDcHdr, Long> {
+    @Query(value = "SELECT distinct c FROM DcnbBcKqDcHdr c LEFT JOIN QlnvDmDonvi dvi ON dvi.maDvi = c.maDvi WHERE 1=1 " +
             "AND (:#{#param.soBc} IS NULL OR LOWER(c.soBc) LIKE CONCAT('%',LOWER(:#{#param.soBc}),'%')) " +
             "AND ((:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi})) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR c.ngayBc >= :#{#param.tuNgay})" +
@@ -24,9 +23,9 @@ public interface DcnbBbKqDcHdrRepository extends JpaRepository<DcnbBbKqDcHdr, Lo
             "AND ((:#{#param.tuNgay}  IS NULL OR c.ngayBc >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR c.ngayBc <= :#{#param.denNgay}) ) " +
             "ORDER BY c.soQdDcCuc desc , c.nam desc, c.id desc")
-    Page<DcnbBbKqDcHdr> searchPage(@Param("param") DcnbBbKqDcSearch req, Pageable pageable);
+    Page<DcnbBcKqDcHdr> searchPage(@Param("param") DcnbBbKqDcSearch req, Pageable pageable);
 
-    @Query(value = "SELECT distinct c FROM DcnbBbKqDcHdr c LEFT JOIN QlnvDmDonvi dvi ON dvi.maDvi = c.maDvi WHERE 1=1 " +
+    @Query(value = "SELECT distinct c FROM DcnbBcKqDcHdr c LEFT JOIN QlnvDmDonvi dvi ON dvi.maDvi = c.maDvi WHERE 1=1 " +
             "AND (:#{#param.soBc} IS NULL OR LOWER(c.soBc) LIKE CONCAT('%',LOWER(:#{#param.soBc}),'%')) " +
             "AND ((:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi})) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR c.ngayBc >= :#{#param.tuNgay})" +
@@ -35,7 +34,7 @@ public interface DcnbBbKqDcHdrRepository extends JpaRepository<DcnbBbKqDcHdr, Lo
             "AND ((:#{#param.tuNgay}  IS NULL OR c.ngayBc >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR c.ngayBc <= :#{#param.denNgay}) ) " +
             "ORDER BY c.soQdDcCuc desc , c.nam desc, c.id desc")
-    List<DcnbBbKqDcHdr> searchList(@Param("param")DcnbBbKqDcSearch req);
+    List<DcnbBcKqDcHdr> searchList(@Param("param")DcnbBbKqDcSearch req);
 
-    Optional<DcnbBbKqDcHdr> findFirstBySoBc(String soBc);
+    Optional<DcnbBcKqDcHdr> findFirstBySoBc(String soBc);
 }
