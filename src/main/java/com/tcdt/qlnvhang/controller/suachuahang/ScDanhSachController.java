@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.controller.xuathang.suachuahang;
+package com.tcdt.qlnvhang.controller.suachuahang;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;

@@ -303,6 +303,11 @@ public class HhQdPdNhapKhacServiceImpl extends BaseServiceImpl implements HhQdPd
             case Contains.BAN_HANH + Contains.CHODUYET_LDV:
                 qOptional.get().setNguoiPduyet(getUser().getUsername());
                 qOptional.get().setNgayPduyet(getDateTimeNow());
+                if(qOptional.get().getIdTh() != null){
+                    hhThopKhNhapKhacRepository.updateTrangThai(qOptional.get().getIdTh(), Contains.DABANHANH_QD);
+                }else{
+                    hhDxuatKhNhapKhacHdrRepository.updateStatusInList(Arrays.asList(qOptional.get().getSoDxuat()), Contains.DABANHANH_QD);
+                }
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -354,6 +359,11 @@ public class HhQdPdNhapKhacServiceImpl extends BaseServiceImpl implements HhQdPd
                     && !hdr.getTrangThai().equals(Contains.TUCHOI_TP)
                     && !hdr.getTrangThai().equals(Contains.TUCHOI_LDC)) {
                 throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp hoặc từ chối");
+            }
+            if(hdr.getIdTh() != null){
+                hhThopKhNhapKhacRepository.updateTrangThai(hdr.getIdTh(), Contains.CHUATONGHOP);
+            }else{
+                hhDxuatKhNhapKhacHdrRepository.updateStatusInList(Arrays.asList(hdr.getSoDxuat()), NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId());
             }
             fileDinhKemService.delete(hdr.getId(), Lists.newArrayList(HhQdPdNhapKhacHdr.TABLE_NAME + CAN_CU));
             fileDinhKemService.delete(hdr.getId(), Lists.newArrayList(HhQdPdNhapKhacHdr.TABLE_NAME));

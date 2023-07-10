@@ -1,12 +1,14 @@
 package com.tcdt.qlnvhang.table.xuathang.hosokythuat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tcdt.qlnvhang.entities.BaseEntity;
-import com.tcdt.qlnvhang.table.FileDinhKem;
-import lombok.Data;
+import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -57,12 +59,7 @@ public class XhHoSoKyThuatDtl extends BaseEntity implements Serializable {
   //  BB_KTRA_HOSO_KYTHUAT = "BBKTHSKT",
   private String loaiBb;
   private String thoiDiemLap;
-  @Transient
-  private List<FileDinhKem> fileDinhKem = new ArrayList<>();
-  @Transient
-  private List<FileDinhKem> canCu = new ArrayList<>();
-  @Transient
-  private List<FileDinhKem> vanBanBsung = new ArrayList<>();
+
   private LocalDate tgianBsung;
 
   @OneToMany(mappedBy = "xhHoSoKyThuatDtl", cascade = CascadeType.ALL)
@@ -72,4 +69,52 @@ public class XhHoSoKyThuatDtl extends BaseEntity implements Serializable {
   @JoinColumn(name = "idHdr")
   @JsonIgnore
   private XhHoSoKyThuatHdr xhHoSoKyThuatHdr;
+
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @Fetch(value = FetchMode.SUBSELECT)
+  @JoinColumn(name = "dataId")
+  @JsonManagedReference
+  @Where(clause = "data_type='" + XhHoSoKyThuatDtl.TABLE_NAME + "'")
+  private List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem = new ArrayList<>();
+
+  public void setFileDinhKem(List<FileDKemJoinHoSoKyThuatDtl> children) {
+    this.fileDinhKem.clear();
+    for (FileDKemJoinHoSoKyThuatDtl child : children) {
+      child.setDataType(XhHoSoKyThuatDtl.TABLE_NAME + "_DINH_KEM");
+      child.setParent(this);
+    }
+    this.fileDinhKem.addAll(children);
+  }
+
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @Fetch(value = FetchMode.SUBSELECT)
+  @JoinColumn(name = "dataId")
+  @JsonManagedReference
+  @Where(clause = "data_type='" + XhHoSoKyThuatDtl.TABLE_NAME + "_CAN_CU'")
+  private List<FileDKemJoinHoSoKyThuatDtl> canCu = new ArrayList<>();
+
+  public void setCanCu(List<FileDKemJoinHoSoKyThuatDtl> children) {
+    this.canCu.clear();
+    for (FileDKemJoinHoSoKyThuatDtl child : children) {
+      child.setDataType(XhHoSoKyThuatDtl.TABLE_NAME + "_CAN_CU");
+      child.setParent(this);
+    }
+    this.fileDinhKem.addAll(children);
+  }
+
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @Fetch(value = FetchMode.SUBSELECT)
+  @JoinColumn(name = "dataId")
+  @JsonManagedReference
+  @Where(clause = "data_type='" + XhHoSoKyThuatDtl.TABLE_NAME + "VAN_BAN_BSUNG'")
+  private List<FileDKemJoinHoSoKyThuatDtl> vanBanBsung = new ArrayList<>();
+
+  public void setVanBanBsung(List<FileDKemJoinHoSoKyThuatDtl> children) {
+    this.vanBanBsung.clear();
+    for (FileDKemJoinHoSoKyThuatDtl child : children) {
+      child.setDataType(XhHoSoKyThuatDtl.TABLE_NAME + "_DINH_KEM");
+      child.setParent(this);
+    }
+    this.vanBanBsung.addAll(children);
+  }
 }
