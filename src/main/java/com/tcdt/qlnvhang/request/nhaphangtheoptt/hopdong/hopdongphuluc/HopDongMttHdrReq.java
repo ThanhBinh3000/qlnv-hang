@@ -79,25 +79,25 @@ public class HopDongMttHdrReq extends BaseRequest {
 
   private String ttinGiayUyQuyen;
 
-  private Long idDviMua;
+  private Long idDviBan;
 
-  private String tenDviMua;
+  private String tenDviBan;
 
-  private String diaChiDviMua;
+  private String diaChiDviBan;
 
-  private String mstDviMua;
+  private String mstDviBan;
 
-  private String tenNguoiDdienDviMua;
+  private String tenNguoiDdienDviBan;
 
-  private String chucVuDviMua;
+  private String chucVuDviBan;
 
-  private String sdtDviMua;
+  private String sdtDviBan;
 
-  private String faxDviMua;
+  private String faxDviBan;
 
-  private String stkDviMua;
+  private String stkDviBan;
 
-  private String moLaiDviMua;
+  private String moLaiDviBan;
 
   private String loaiVthh;
 
