@@ -1,22 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE configuration>
+<configuration>
+	<include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+	<springProperty scope="context" name="applicationName" source="spring.application.name"/>
+	<springProperty scope="context" name="loggingPath" source="logging.file.path"/>
 
-<configuration scan="true">
-	<include
-		resource="org/springframework/boot/logging/logback/base.xml" />
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+	</appender>
 
-	<appender name="logstash"
-		class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-		<param name="Encoding" value="UTF-8" />
-		<remoteHost>192.168.1.78</remoteHost>
-		<port>5000</port>
-		<encoder class="net.logstash.logback.encoder.LogstashEncoder">
-			<customFields>{"app_name":"qlnv-hang", "app_port": "8099"}</customFields>
-		</encoder>
+	<appender name="STASH" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${loggingPath}/${applicationName}.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${loggingPath}/${applicationName}.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>7</maxHistory>
+		</rollingPolicy>
+		<encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
 	</appender>
 
 	<root level="INFO">
-		<appender-ref ref="logstash" />
+		<appender-ref ref="CONSOLE"/>
+		<appender-ref ref="STASH"/>
 	</root>
-
 </configuration>
