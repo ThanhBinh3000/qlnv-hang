@@ -75,5 +75,4 @@ public class HhNkPhieuNhapKhoHdrReq extends BaseRequest {
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     private List<HhNkPhieuNhapKhoDtl> children = new ArrayList<>();
     private String tenTrangThai;
-    private List<String> dsLoaiHang = new ArrayList<>();
 }
