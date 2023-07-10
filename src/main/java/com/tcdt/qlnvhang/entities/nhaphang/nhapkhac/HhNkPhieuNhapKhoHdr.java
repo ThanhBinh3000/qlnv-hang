@@ -21,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 public class HhNkPhieuNhapKhoHdr extends BaseEntity implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "HhNk_PHIEU_NHAP_KHO_HDR";
+    public static final String TABLE_NAME = "HHNK_PHIEU_NHAP_KHO_HDR";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = HhNkPhieuNhapKhoHdr.TABLE_NAME + "_SEQ")
