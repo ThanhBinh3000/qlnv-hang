@@ -18,7 +18,6 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
-import com.tcdt.qlnvhang.util.UserUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -457,14 +456,11 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                             dataLink.setKeHoachDcHdrId(kh.getHdrId());
                             dataLink.setKeHoachDcDtlParentId(parentDtl.get().getId());
                             dataLink.setKeHoachDcHdrParentId(parentDtl.get().getHdrId());
-                            dataLink.setQdCcId(optional.get().getId());
-                            dataLink.setQdCcParentId(optional.get().getParentId());
-                            dataLink.setQdCtcId(optional.get().getCanCuQdTc());
+                            dataLink.setQdCcId( optional.get().getId());
+                            dataLink.setQdCcParentId( optional.get().getParentId());
+                            dataLink.setQdCtcId( optional.get().getCanCuQdTc());
                             dataLink.setType(Contains.NHAN_DIEU_CHUYEN);
-                            DcnbDataLinkHdr dataLinkChiCuc = dcnbDataLinkHdrRepository.findDataLinkChiCucNhan(currentUser.getDvql(), kh.getHdrId(), kh.getMaNganKhoNhan(), kh.getMaLoKhoNhan());
-                            if(dataLinkChiCuc == null){
-                                dcnbDataLinkHdrRepository.save(dataLink);
-                            }
+                            dcnbDataLinkHdrRepository.save(dataLink);
                         }
                         kh.setDaXdinhDiemNhap(true);
                         dcnbKeHoachDcDtlRepository.save(kh);
@@ -578,7 +574,6 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
     }
 
     private void cloneQuyetDinhDcCXuat(StatusReq statusReq, Optional<DcnbQuyetDinhDcCHdr> optional) throws Exception {
-        CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
         // xử lý clone cho chi cục với TYPE là DC
         List<DcnbQuyetDinhDcCDtl> danhSachQuyetDinh = optional.get().getDanhSachQuyetDinh();
         Map<String, List<DcnbKeHoachDcDtl>> groupedByMaCc = new HashMap<>();
@@ -681,10 +676,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                     dataLink.setQdCcParentId(dcnbQuyetDinhDcCHdrCloned.getParentId());
                     dataLink.setQdCtcId(dcnbQuyetDinhDcCHdrCloned.getCanCuQdTc());
                     dataLink.setType(Contains.DIEU_CHUYEN);
-                    DcnbDataLinkHdr dataLinkChiCuc = dcnbDataLinkHdrRepository.findDataLinkChiCuc(currentUser.getDvql(), kh.getHdrId(), kh.getMaNganKho(), kh.getMaLoKho());
-                    if(dataLinkChiCuc == null){
-                        dcnbDataLinkHdrRepository.save(dataLink);
-                    }
+                    dcnbDataLinkHdrRepository.save(dataLink);
                 }
             }
             fileDinhKemService.delete(dcnbQuyetDinhDcCHdrCloned.getId(), Lists.newArrayList(DcnbQuyetDinhDcCHdr.TABLE_NAME + "_CAN_CU"));
@@ -701,7 +693,6 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
     }
 
     private void cloneQuyetDinhDcCNhan(StatusReq statusReq, Optional<DcnbQuyetDinhDcCHdr> optional, boolean isClone) throws Exception {
-        CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
         // xử lý clone cho chi cục với TYPE là NDC
         List<DcnbQuyetDinhDcCDtl> danhSachQuyetDinh = optional.get().getDanhSachQuyetDinh();
         List<DcnbKeHoachDcDtl> danhSachKeHoachs = new ArrayList<>();
@@ -799,10 +790,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         dataLink.setQdCcParentId(dcnbQuyetDinhDcCHdrCloned.getParentId());
                         dataLink.setQdCtcId(dcnbQuyetDinhDcCHdrCloned.getCanCuQdTc());
                         dataLink.setType(Contains.NHAN_DIEU_CHUYEN);
-                        DcnbDataLinkHdr dataLinkChiCuc = dcnbDataLinkHdrRepository.findDataLinkChiCucNhan(currentUser.getDvql(), kh.getHdrId(), kh.getMaNganKhoNhan(), kh.getMaLoKhoNhan());
-                        if(dataLinkChiCuc == null){
-                            dcnbDataLinkHdrRepository.save(dataLink);
-                        }
+                        dcnbDataLinkHdrRepository.save(dataLink);
                     }
                 }
             }
