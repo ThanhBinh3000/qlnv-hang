@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.entities.nhaphang.nhapkhac;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanLayMauDtl;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,11 +18,11 @@ import java.math.BigDecimal;
 public class HhNkBangKeCanHangDtl {
 
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "DCNB_BANG_KE_CAN_HANG_DTL";
+    public static final String TABLE_NAME = "HHNK_BANG_KE_CAN_HANG_DTL";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauDtl.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = HhNkBangKeCanHangDtl.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = HhNkBangKeCanHangDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = HhNkBangKeCanHangDtl.TABLE_NAME + "_SEQ")
     @Column(name = "ID")
     private Long id;
 
