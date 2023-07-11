@@ -49,6 +49,7 @@ public class XhXkVtQdGiaonvXhService extends BaseServiceImpl {
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         search.getContent().forEach(s -> {
+            s.setTenLoai(Contains.mapLoaiHinhXuat.get(s.getLoai()));
             s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
             s.getXhXkVtQdGiaonvXhDtl().forEach(item -> {
                 item.setMapVthh(mapVthh);
@@ -72,7 +73,10 @@ public class XhXkVtQdGiaonvXhService extends BaseServiceImpl {
         XhXkVtQdGiaonvXhHdr data = new XhXkVtQdGiaonvXhHdr();
         BeanUtils.copyProperties(objReq, data);
         data.setTrangThai(Contains.DUTHAO);
-        data.getXhXkVtQdGiaonvXhDtl().forEach(s -> s.setXhXkVtQdGiaonvXhHdr(data));
+        data.getXhXkVtQdGiaonvXhDtl().forEach(s -> {
+            s.setXhXkVtQdGiaonvXhHdr(data);
+            s.setId(null);
+        });
         XhXkVtQdGiaonvXhHdr created = xhXkVtQdGiaonvXhRepository.save(data);
         //save file đính kèm
         fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtQdGiaonvXhHdr.TABLE_NAME);
