@@ -55,9 +55,9 @@ public interface HhNkPhieuNhapKhoHdrRepository extends JpaRepository<HhNkPhieuNh
             "LEFT JOIN HhNkBangKeNhapVTHdr bknvt On bknvt.phieuNhapKhoId = pnk.id " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = dtl.cloaiVthh " +
             "LEFT JOIN QlnvDmDonvi dmdvnhakho On dmdvnhakho.maDvi = dtl.maNhaKho " +
-            "LEFT JOIN QlnvDmDonvi dmdvdiemkho On dmdvnhakho.maDvi = dtl.maDiemKho " +
-            "LEFT JOIN QlnvDmDonvi dmdvlokho On dmdvnhakho.maDvi = dtl.maLoKho " +
-            "LEFT JOIN QlnvDmDonvi dmdvngankho On dmdvnhakho.maDvi = dtl.maNganKho " +
+            "LEFT JOIN QlnvDmDonvi dmdvdiemkho On dmdvdiemkho.maDvi = dtl.maDiemKho " +
+            "LEFT JOIN QlnvDmDonvi dmdvlokho On dmdvlokho.maDvi = dtl.maLoKho " +
+            "LEFT JOIN QlnvDmDonvi dmdvngankho On dmdvngankho.maDvi = dtl.maNganKho " +
             "WHERE 1 =1 " +
             "AND qdgnv.trangThai = '29'" +
             "AND (:#{#param.loaiVthh} IS NULL OR dmvt.ma LIKE CONCAT('',LOWER(:#{#param.loaiVthh}),'%')) " +
