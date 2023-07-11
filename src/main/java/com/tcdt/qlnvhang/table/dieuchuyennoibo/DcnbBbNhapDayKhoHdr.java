@@ -42,6 +42,12 @@ public class DcnbBbNhapDayKhoHdr extends BaseEntity implements Serializable, Clo
     private String maLoKho;
     private String loaiVthh;
     private String cloaiVthh;
+    private String tenDiemKho;
+    private String tenNhaKho;
+    private String tenNganKho;
+    private String tenLoKho;
+    private String tenLoaiVthh;
+    private String tenCloaiVthh;
     private String dviTinh;
     private LocalDate ngayBdNhap;
     private LocalDate ngayKtNhap;
