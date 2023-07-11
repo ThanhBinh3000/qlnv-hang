@@ -110,8 +110,8 @@ public class XhHoSoKyThuatHdr extends BaseEntity implements Serializable {
     }
   }
 
-  public void setTrangThai(String trangThai) {
-    this.trangThai = trangThai;
-    this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+  public String getTrangThai() {
+    setTenTrangThai(TrangThaiAllEnum.getLabelById(trangThai));
+    return trangThai;
   }
 }
