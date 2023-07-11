@@ -18,6 +18,7 @@ public interface XhXkLtBbLayMauHdrRepository extends JpaRepository<XhXkLtBbLayMa
   @Query("SELECT c FROM XhXkLtBbLayMauHdr c WHERE 1=1 " +
       "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
       "AND (:#{#param.type} IS NULL OR c.type = :#{#param.type}) " +
+      "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
       "AND (:#{#param.loaiVthh} IS NULL OR c.loaiVthh = :#{#param.loaiVthh}) " +
       "AND (:#{#param.soBienBan} IS NULL OR LOWER(c.soBienBan) LIKE CONCAT('%',LOWER(:#{#param.soBienBan}),'%')) " +
       "AND (:#{#param.maDanhSach} IS NULL OR LOWER(c.maDanhSach) LIKE CONCAT('%',LOWER(:#{#param.maDanhSach}),'%')) " +

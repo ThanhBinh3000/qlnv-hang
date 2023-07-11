@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface DcnbBBNTBQDtlRepository extends JpaRepository<DcnbBBNTBQDtl, Long> {
 
-//    List<DcnbPhieuXuatKhoDtl> findAllByHdrId(Long hdrId);
+//    List<DcnbBBNTBQDtl> findAllByHdrId(Long hdrId);
 //
     void deleteAllByHdrId(Long hdrId);
 

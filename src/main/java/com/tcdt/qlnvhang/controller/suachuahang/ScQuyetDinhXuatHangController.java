@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.DeleteReq;
+import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhXuatHangReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
@@ -46,6 +47,23 @@ public class ScQuyetDinhXuatHangController {
             log.error("Tra cứu thông tin : {}", e);
         }
 
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Danh sách tổng hợp để trình và thẩm định", response = List.class)
+    @PostMapping(value = "/ds-phieu-xuat-kho", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> lístTaoPhieuXuatKho(@RequestBody ScQuyetDinhXuatHangReq objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(scQuyetDinhXuatHangService.dsTaoPhieuXuatKho(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu thông tin : {}", e);
+        }
         return ResponseEntity.ok(resp);
     }
 
@@ -120,10 +138,10 @@ public class ScQuyetDinhXuatHangController {
     @ApiOperation(value = "Xoá thông tin", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> delete(@RequestParam("id") Long id) {
+    public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            scQuyetDinhXuatHangService.delete(id);
+            scQuyetDinhXuatHangService.delete(idSearchReq.getId());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

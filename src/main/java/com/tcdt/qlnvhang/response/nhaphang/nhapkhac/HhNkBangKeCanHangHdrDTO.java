@@ -22,8 +22,8 @@ public class HhNkBangKeCanHangHdrDTO {
     private String tenTrangThai;
     private String maHangHoa;
     private String tenHangHoa;
-    private String maChLoaiHangHoa;
-    private String tenChLoaiHangHoa;
+    private String cloaiVthh;
+    private String tenCloaiVthh;
     private String maNhaKho;
     private String tenNhaKho;
     private String donViTinh;
@@ -31,7 +31,7 @@ public class HhNkBangKeCanHangHdrDTO {
     private String maNganKho;
     private String tenNganKho;
 
-    public HhNkBangKeCanHangHdrDTO(Long id, Long idQdPdNk, Long phieuNhapKhoId, String soQdPdNk, Integer nam, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String soBangKe, String soPhieuNhapKho, LocalDate ngayNhapKho, String trangThai, String tenTrangThai, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String maNhaKho, String tenNhaKho, String donViTinh, String tenDonViTinh, String maNganKho, String tenNganKho) {
+    public HhNkBangKeCanHangHdrDTO(Long id, Long idQdPdNk, Long phieuNhapKhoId, String soQdPdNk, Integer nam, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String soBangKe, String soPhieuNhapKho, LocalDate ngayNhapKho, String trangThai, String tenTrangThai, String maHangHoa, String tenHangHoa, String cloaiVthh, String tenCloaiVthh, String maNhaKho, String tenNhaKho, String donViTinh, String tenDonViTinh, String maNganKho, String tenNganKho) {
         this.id = id;
         this.idQdPdNk = idQdPdNk;
         this.phieuNhapKhoId = phieuNhapKhoId;
@@ -48,8 +48,8 @@ public class HhNkBangKeCanHangHdrDTO {
         this.tenTrangThai = tenTrangThai;
         this.maHangHoa = maHangHoa;
         this.tenHangHoa = tenHangHoa;
-        this.maChLoaiHangHoa = maChLoaiHangHoa;
-        this.tenChLoaiHangHoa = tenChLoaiHangHoa;
+        this.cloaiVthh = cloaiVthh;
+        this.tenCloaiVthh = tenCloaiVthh;
         this.maNhaKho = maNhaKho;
         this.tenNhaKho = tenNhaKho;
         this.donViTinh = donViTinh;

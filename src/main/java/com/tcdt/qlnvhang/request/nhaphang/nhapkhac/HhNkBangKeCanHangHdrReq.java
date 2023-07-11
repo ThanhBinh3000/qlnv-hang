@@ -26,23 +26,13 @@ public class HhNkBangKeCanHangHdrReq {
 
     private String maQhns;
 
-    private Long qDinhDccId;
-
-    private String soQdinhDcc;
-
+    private Long idQdPdNk;
+    String soQdPdNk;
     private LocalDate ngayKyQdinh;
 
     private LocalDate thoiHanDieuChuyen;
 
     private LocalDate thoiGianGiaoNhan;
-
-    private LocalDate ngayKyQdDcc;
-
-    private Long phieuXuatKhoId;
-
-    private LocalDate ngayXuatKho;
-
-    private String soPhieuXuatKho;
 
     private Long phieuNhapKhoId;
 
@@ -51,6 +41,8 @@ public class HhNkBangKeCanHangHdrReq {
     private String soPhieuNhapKho;
 
     private String soBbLayMau;
+
+    private Long soBbLayMauId;
 
     private String loaiVthh;
 
@@ -64,7 +56,7 @@ public class HhNkBangKeCanHangHdrReq {
 
     private String tenDiemKho;
 
-    private String diaDaDiemKho;
+    private String diaDiemKho;
 
     private String maNhaKho;
 
@@ -78,8 +70,6 @@ public class HhNkBangKeCanHangHdrReq {
 
     private String tenLoKho;
 
-    private Boolean thayDoiThuKho;
-
     private String trangThai;
 
     private String lyDoTuChoi;
@@ -91,10 +81,6 @@ public class HhNkBangKeCanHangHdrReq {
     private Long nguoiPDuyet;
 
     private LocalDate ngayPDuyet;
-
-    private String loaiDc;
-
-    private String type;
 
     private String maLanhDaoChiCuc;
 
@@ -119,6 +105,8 @@ public class HhNkBangKeCanHangHdrReq {
     private BigDecimal tongTrongLuongTruBi;
 
     private String tongTrongLuongTruBiText;
+
+    private String tenTrangThai;
 
     private List<HhNkBangKeCanHangDtl> hhNkBangKeCanHangDtl = new ArrayList<>();
 }

@@ -110,7 +110,7 @@ public class XhCtvtPhieuKnClHdrService extends BaseServiceImpl {
   }
 
   @Transactional()
-  void saveCtiet(Long idHdr, XhCtvtPhieuKnClHdrReq objReq) {
+  public void saveCtiet(Long idHdr, XhCtvtPhieuKnClHdrReq objReq) {
     for (XhCtvtPhieuKnClDtlReq ketQuaPhanTichReq : objReq.getKetQuaPhanTich()) {
       XhCtvtPhieuKnClDtl ketQuaPhanTich =new XhCtvtPhieuKnClDtl();
       BeanUtils.copyProperties(ketQuaPhanTichReq,ketQuaPhanTich);

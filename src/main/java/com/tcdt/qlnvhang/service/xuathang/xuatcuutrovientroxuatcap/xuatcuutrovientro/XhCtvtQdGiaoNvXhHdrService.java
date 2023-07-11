@@ -123,7 +123,7 @@ public class XhCtvtQdGiaoNvXhHdrService extends BaseServiceImpl {
   }
 
   @Transactional()
-  void saveCtiet(Long idHdr, XhCtvtQdGiaoNvXhHdrReq objReq) {
+  public void saveCtiet(Long idHdr, XhCtvtQdGiaoNvXhHdrReq objReq) {
     for (XhCtvtQdGiaoNvXhDtlReq noiDungCuuTroReq : objReq.getNoiDungCuuTro()) {
       XhCtvtQdGiaoNvXhDtl noiDungCuuTro = new XhCtvtQdGiaoNvXhDtl();
       BeanUtils.copyProperties(noiDungCuuTroReq, noiDungCuuTro);

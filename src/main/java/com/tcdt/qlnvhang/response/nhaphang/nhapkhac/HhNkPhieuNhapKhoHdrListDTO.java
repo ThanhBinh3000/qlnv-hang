@@ -18,8 +18,8 @@ public class HhNkPhieuNhapKhoHdrListDTO {
     private String soPhieuKiemTraCl;
     private Long bangKeCanHangId;
     private String soBangKeCanHang;
-    private Long bangKeNhapVtId;
-    private String soBangKeNhapVt;
+    private Long bangKeVtId;
+    private String soBangKeVt;
     private Long bbCbiKhoId;
     private String soBbCbiKho;
 

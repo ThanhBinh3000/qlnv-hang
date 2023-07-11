@@ -140,7 +140,7 @@ public class XhCtvtBbLayMauHdrService extends BaseServiceImpl {
   }
 
   @Transactional()
-  void saveCtiet(Long idHdr, XhCtvtBbLayMauHdrReq objReq) {
+  public void saveCtiet(Long idHdr, XhCtvtBbLayMauHdrReq objReq) {
     for (XhCtvtBbLayMauDtlReq nguoiLienQuanReq : objReq.getNguoiLienQuan()) {
       XhCtvtBbLayMauDtl nguoiLienQuan = new XhCtvtBbLayMauDtl();
       BeanUtils.copyProperties(nguoiLienQuanReq, nguoiLienQuan);

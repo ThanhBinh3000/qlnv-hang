@@ -17,18 +17,18 @@ public interface ScBangKeXuatVatTuHdrRepository extends JpaRepository<ScBangKeXu
 
     List<ScBangKeXuatVatTuHdr> findAllByIdIn(List<Long> ids);
 
-    @Query(value = "SELECT new com.tcdt.qlnvhang.response.suachua.ScBangKeXuatVtDTO(" +
-            "hdr.id,qd.id,qd.soQd, hdr.nam, qd.thoiHanXuat, hdr.maDiemKho, hdr.tenDiemKho, hdr.maLoKho, hdr.tenLoKho," +
-            "hdr.phieuXuatKhoId, hdr.soPhieuXuatKho, hdr.soBangKe, pxk.ngayXuatKho, hdr.trangThai" +
-            ") FROM ScQuyetDinhXuatHang qd  " +
-            "LEFT JOIN ScBangKeXuatVatTuHdr hdr on hdr.soQdGiaoNv = qd.soQd " +
-            "LEFT JOIN ScBangKeXuatVatTuDtl dtl on dtl.hdrId = hdr.id " +
-            "LEFT JOIN ScPhieuXuatKhoHdr pxk on pxk.soPhieuXuatKho = hdr.soPhieuXuatKho " +
-            "WHERE 1=1" +
-            "AND (:#{#param.nam} IS NULL OR hdr.nam = :#{#param.nam})" +
-            "AND (:#{#param.soQdGiaoNv} IS NULL OR qd.soQd = :#{#param.soQdGiaoNv})" +
-            "AND (:#{#param.soBangKe} IS NULL OR hdr.soBangKe = :#{#param.soBangKe})"
-    )
-    Page<ScBangKeXuatVtDTO> searchPage(@Param("param") ScBangKeXuatVatTuReq req, Pageable pageable);
+//    @Query(value = "SELECT new com.tcdt.qlnvhang.response.suachua.ScBangKeXuatVtDTO(" +
+//            "hdr.id,qd.id,qd.soQd, hdr.nam, qd.thoiHanXuat, hdr.maDiemKho, hdr.tenDiemKho, hdr.maLoKho, hdr.tenLoKho," +
+//            "hdr.phieuXuatKhoId, hdr.soPhieuXuatKho, hdr.soBangKe, pxk.ngayXuatKho, hdr.trangThai" +
+//            ") FROM ScQuyetDinhXuatHang qd  " +
+//            "LEFT JOIN ScBangKeXuatVatTuHdr hdr on hdr.soQdGiaoNv = qd.soQd " +
+//            "LEFT JOIN ScBangKeXuatVatTuDtl dtl on dtl.hdrId = hdr.id " +
+//            "LEFT JOIN ScPhieuXuatKhoHdr pxk on pxk.soPhieuXuatKho = hdr.soPhieuXuatKho " +
+//            "WHERE 1=1" +
+//            "AND (:#{#param.nam} IS NULL OR hdr.nam = :#{#param.nam})" +
+//            "AND (:#{#param.soQdGiaoNv} IS NULL OR qd.soQd = :#{#param.soQdGiaoNv})" +
+//            "AND (:#{#param.soBangKe} IS NULL OR hdr.soBangKe = :#{#param.soBangKe})"
+//    )
+//    Page<ScBangKeXuatVtDTO> searchPage(@Param("param") ScBangKeXuatVatTuReq req, Pageable pageable);
 
 }

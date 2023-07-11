@@ -50,11 +50,7 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
         }else {
             req.setDsLoaiHang(Arrays.asList("LT","M"));
         }
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            searchDto = hdrRepository.searchPageChiCuc(req, pageable);
-        }else {
-            searchDto = hdrRepository.searchPageCuc(req, pageable);
-        }
+        searchDto = hdrRepository.searchPage(req, pageable);
         return searchDto;
     }
 

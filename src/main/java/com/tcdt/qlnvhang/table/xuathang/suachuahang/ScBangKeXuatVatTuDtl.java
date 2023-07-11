@@ -28,8 +28,7 @@ public class ScBangKeXuatVatTuDtl {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "HDR_ID",insertable = true, updatable = true)
-    private Long hdrId;
+    private Long idHdr;
 
     @Column(name = "SO_SERIAL")
     private String soSerial;
@@ -37,8 +36,5 @@ public class ScBangKeXuatVatTuDtl {
     @Column(name = "SO_LUONG")
     private BigDecimal soLuong;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
-    @JsonIgnore
-    private ScBangKeXuatVatTuHdr scBangKeXuatVatTuHdr;
+
 }

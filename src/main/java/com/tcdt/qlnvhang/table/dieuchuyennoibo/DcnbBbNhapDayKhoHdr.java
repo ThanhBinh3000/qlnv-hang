@@ -36,13 +36,18 @@ public class DcnbBbNhapDayKhoHdr extends BaseEntity implements Serializable, Clo
     private String soQdDcCuc;
     private Long qdDcCucId;
     private LocalDate ngayQdDcCuc;
-    private Long idKeHoachDtl;
     private String maDiemKho;
     private String maNhaKho;
     private String maNganKho;
     private String maLoKho;
     private String loaiVthh;
     private String cloaiVthh;
+    private String tenDiemKho;
+    private String tenNhaKho;
+    private String tenNganKho;
+    private String tenLoKho;
+    private String tenLoaiVthh;
+    private String tenCloaiVthh;
     private String dviTinh;
     private LocalDate ngayBdNhap;
     private LocalDate ngayKtNhap;
@@ -52,6 +57,10 @@ public class DcnbBbNhapDayKhoHdr extends BaseEntity implements Serializable, Clo
     private Long idKeToan;
     private Long idLanhDao;
     private String ghiChu;
+    private String tenThuKho;
+    private String tenKyThuatVien;
+    private String tenKeToan;
+    private String tenLanhDao;
     @Access(value=AccessType.PROPERTY)
     private String trangThai;
     private String lyDoTuChoi;

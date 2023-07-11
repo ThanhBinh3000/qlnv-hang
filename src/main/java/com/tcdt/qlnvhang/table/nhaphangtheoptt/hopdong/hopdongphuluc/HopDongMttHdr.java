@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.HhQdPheduyetKqMttSLDD;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Getter;
 import lombok.Setter;
@@ -98,25 +99,25 @@ public class HopDongMttHdr extends TrangThaiBaseEntity implements Serializable {
 
   private String ttinGiayUyQuyen;
 
-  private Long idDviMua;
+  private Long idDviBan;
 
-  private String tenDviMua;
+  private String tenDviBan;
 
-  private String diaChiDviMua;
+  private String diaChiDviBan;
 
-  private String mstDviMua;
+  private String mstDviBan;
 
-  private String tenNguoiDdienDviMua;
+  private String tenNguoiDdienDviBan;
 
-  private String chucVuDviMua;
+  private String chucVuDviBan;
 
-  private String sdtDviMua;
+  private String sdtDviBan;
 
-  private String faxDviMua;
+  private String faxDviBan;
 
-  private String stkDviMua;
+  private String stkDviBan;
 
-  private String moLaiDviMua;
+  private String moLaiDviBan;
 
   private String loaiVthh;
   @Transient
@@ -151,7 +152,7 @@ public class HopDongMttHdr extends TrangThaiBaseEntity implements Serializable {
   private FileDinhKem fileDinhKem;
 
   @Transient
-  private List<DiaDiemGiaoNhanMtt> children = new ArrayList<>();
+  private List<HhQdPheduyetKqMttSLDD> children = new ArrayList<>();
 
 
 //  Phụ lục
@@ -183,6 +184,10 @@ public class HopDongMttHdr extends TrangThaiBaseEntity implements Serializable {
   private String trangThaiPhuLuc;
   @Transient
   private String tenTrangThaiPhuLuc;
+
+  private String dviCungCap;
+
+  private Long idKqCgia;
 
   @Transient
   private List<HopDongMttHdr> phuLuc = new ArrayList<>();

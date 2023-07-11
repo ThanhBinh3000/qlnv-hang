@@ -6,7 +6,7 @@ import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.olap4j.impl.ArrayMap;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -42,6 +42,7 @@ public class XhHoSoKyThuatHdr extends BaseEntity implements Serializable {
   private String cloaiVthh;
   private String lyDo;
   private String trangThai;
+  private String kqKiemTra;
   private String type;
   @OneToMany(mappedBy = "xhHoSoKyThuatHdr", cascade = CascadeType.ALL)
   private List<XhHoSoKyThuatDtl> xhHoSoKyThuatDtl = new ArrayList<>();
@@ -57,7 +58,7 @@ public class XhHoSoKyThuatHdr extends BaseEntity implements Serializable {
   private String tenTrangThai;
   @JsonIgnore
   @Transient
-  private Map<String, String> mapDmucDvi;
+  private Map<String, String> mapDmucDvi = new ArrayMap<>();
   @Transient
   private String tenDvi;
   @Transient

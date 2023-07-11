@@ -38,10 +38,10 @@ public class ScBangKeXuatVatTuController {
     @ApiOperation(value = "Tra cứu ", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody ScBangKeXuatVatTuReq objReq) {
+    public ResponseEntity<BaseResponse> colection(@RequestBody ScBangKeXuatVatTuReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.searchPage(currentUser, objReq));
+            resp.setData(service.searchPage(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch ( Exception e) {
@@ -110,10 +110,10 @@ public class ScBangKeXuatVatTuController {
 
     @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin", response = List.class)
     @PostMapping(value =  PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser,@Valid @RequestBody StatusReq objReq) {
+    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody ScBangKeXuatVatTuReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            service.approve(currentUser,objReq);
+            service.approve(objReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -144,40 +144,4 @@ public class ScBangKeXuatVatTuController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xoá danh sách ", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PostMapping(value =  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
-        BaseResponse resp = new BaseResponse();
-        try {
-            service.deleteMulti(idSearchReq.getIds());
-            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (Exception e) {
-            e.printStackTrace();
-            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-            resp.setMsg(e.getMessage());
-            log.error("Xoá thông tin : {}", e);
-        }
-        return ResponseEntity.ok(resp);
-    }
-
-    @ApiOperation(value = "Kết xuất", response = List.class)
-    @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public void exportList(@Valid @RequestBody  ScBangKeXuatVatTuReq objReq, HttpServletResponse response) throws Exception {
-        try {
-            service.export(objReq, response);
-        } catch (Exception e) {
-            log.error("Kết xuất danh sách dánh sách mua : {}", e);
-            final Map<String, Object> body = new HashMap<>();
-            body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            body.put("msg", e.getMessage());
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.setCharacterEncoding("UTF-8");
-            final ObjectMapper mapper = new ObjectMapper();
-            mapper.writeValue(response.getOutputStream(), body);
-
-        }
-    }
 }

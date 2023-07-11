@@ -124,6 +124,7 @@ public class XhXkLtPhieuKnClService extends BaseServiceImpl {
     List<XhXkLtPhieuKnClHdr> allById = xhXkLtPhieuKnClRepository.findAllById(ids);
     allById.forEach(data -> {
       data.setMapDmucDvi(mapDmucDvi);
+      data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
       data.setMapVthh(mapVthh);
       data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
       List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhXkLtPhieuKnClHdr.TABLE_NAME));
@@ -170,17 +171,20 @@ public class XhXkLtPhieuKnClService extends BaseServiceImpl {
 
     String status = statusReq.getTrangThai() + optional.get().getTrangThai();
     switch (status) {
-      case Contains.CHODUYET_LDCC + Contains.DUTHAO:
-      case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
+      case Contains.CHODUYET_TP + Contains.DUTHAO:
+      case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+      case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+      case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
         optional.get().setNguoiGduyetId(currentUser.getUser().getId());
         optional.get().setNgayGduyet(LocalDate.now());
         break;
-      case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
+      case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+      case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
         optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
         break;
-      case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
+      case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
         break;
@@ -230,24 +234,26 @@ public class XhXkLtPhieuKnClService extends BaseServiceImpl {
     ex.export();
   }
 
-  public void updateTongHopDtl(XhXkLtPhieuKnClHdr PhieuKnCl, boolean xoa) {
-    if (!DataUtils.isNullObject(PhieuKnCl.getIdTongHop())) {
-      Optional<XhXkTongHopHdr> listTongHop = xhXkTongHopRepository.findById(PhieuKnCl.getIdTongHop());
+  public void updateTongHopDtl(XhXkLtPhieuKnClHdr phieuKnCl, boolean xoa) {
+    if (!DataUtils.isNullObject(phieuKnCl.getIdTongHop())) {
+      Optional<XhXkTongHopHdr> listTongHop = xhXkTongHopRepository.findById(phieuKnCl.getIdTongHop());
       if (listTongHop.isPresent()) {
         XhXkTongHopHdr item = listTongHop.get();
         List<XhXkTongHopDtl> tongHopDtlList = item.getTongHopDtl();
         for (XhXkTongHopDtl f : tongHopDtlList) {
-          if (f.getMaDiaDiem().equals(PhieuKnCl.getMaDiaDiem())) {
+          if (f.getMaDiaDiem().equals(phieuKnCl.getMaDiaDiem())) {
             if (xoa) {
               f.setIdPhieuKnCl(null);
               f.setSoPhieuKnCl(null);
               f.setNgayLayMau(null);
               f.setTrangThaiKnCl(null);
+              f.setKqThamDinh(null);
             } else {
-              f.setIdPhieuKnCl(PhieuKnCl.getId());
-              f.setSoPhieuKnCl(PhieuKnCl.getSoPhieu());
-              f.setNgayLayMau(PhieuKnCl.getNgayLayMau());
-              f.setTrangThaiKnCl(PhieuKnCl.getTrangThai());
+              f.setIdPhieuKnCl(phieuKnCl.getId());
+              f.setSoPhieuKnCl(phieuKnCl.getSoPhieu());
+              f.setNgayLayMau(phieuKnCl.getNgayLayMau());
+              f.setTrangThaiKnCl(phieuKnCl.getTrangThai());
+              f.setKqThamDinh(phieuKnCl.getKqThamDinh());
             }
 
           }

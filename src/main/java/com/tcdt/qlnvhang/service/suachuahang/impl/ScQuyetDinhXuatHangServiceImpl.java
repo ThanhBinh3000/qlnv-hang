@@ -2,8 +2,10 @@ package com.tcdt.qlnvhang.service.suachuahang.impl;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
+import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScPhieuXuatKhoHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhXuatHangRepository;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhScReq;
@@ -16,6 +18,7 @@ import com.tcdt.qlnvhang.service.suachuahang.ScQuyetDinhXuatHangService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhXuatHang;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTongHopHdr;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTrinhThamDinhHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -38,6 +41,9 @@ import java.util.Optional;
 public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements ScQuyetDinhXuatHangService {
     @Autowired
     private ScQuyetDinhXuatHangRepository scQuyetDinhXuatHangRepository;
+
+    @Autowired
+    private ScPhieuXuatKhoHdrRepository scPhieuXuatKhoHdrRepository;
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
@@ -105,6 +111,7 @@ public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements S
         List<FileDinhKem> fileDinhKemList = fileDinhKemService.search(data.getId(), Collections.singleton(ScQuyetDinhXuatHang.TABLE_NAME + "_DINH_KEM"));
         data.setFileDinhKem(fileDinhKemList);
         data.setScQuyetDinhSc(scQuyetDinhScImpl.detail(data.getIdQdSc()));
+        data.setScPhieuXuatKhoHdrList(scPhieuXuatKhoHdrRepository.findAllByIdQdXh(data.getId()));
         return data;
     }
 
@@ -178,5 +185,18 @@ public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements S
     }
 
 
-
+    @Override
+    public List<ScQuyetDinhXuatHang> dsTaoPhieuXuatKho(ScQuyetDinhXuatHangReq req) throws Exception {
+        UserInfo currentUser = SecurityContextService.getUser();
+        if (currentUser == null){
+            throw new Exception("Access denied.");
+        }
+        String dvql = currentUser.getDvql();
+        if (currentUser.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            req.setMaDviSr(dvql.substring(0,6));
+        }
+        req.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
+        List<ScQuyetDinhXuatHang> list = scQuyetDinhXuatHangRepository.listTaoPhieuXuatKho(req);
+        return list;
+    }
 }
