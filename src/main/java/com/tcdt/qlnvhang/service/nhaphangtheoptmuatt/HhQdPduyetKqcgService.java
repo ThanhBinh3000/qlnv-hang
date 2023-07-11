@@ -309,7 +309,6 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
                     break;
                 case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
                 case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
-                case Contains.BAN_HANH + Contains.DADUYET_LDC:
                     data.setNguoiPduyetId(userInfo.getId());
                     data.setNgayPduyet(getDateTimeNow());
                     break;

@@ -43,7 +43,8 @@ public class HhQdGiaoNvNhangDtl {
     @Transient
     private String tenLoKho;
     @Transient
-    private List<HhQdGiaoNvNhDdiem> hhQdGiaoNvNhDdiemList = new ArrayList<>();
+//    private List<HhQdGiaoNvNhDdiem> hhQdGiaoNvNhDdiemList = new ArrayList<>();
+    private List<HhQdGiaoNvNhDdiem> children = new ArrayList<>();
     @Transient
     List<HhBienBanNghiemThu> listBienBanNghiemThuBq;
     @Transient

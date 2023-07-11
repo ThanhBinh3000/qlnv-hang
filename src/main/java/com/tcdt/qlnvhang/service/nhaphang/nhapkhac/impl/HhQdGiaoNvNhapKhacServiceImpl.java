@@ -19,6 +19,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.nhaphang.nhapkhac.HhQdGiaoNvNhapKhacService;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.DmVattuDTO;
 import com.tcdt.qlnvhang.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -203,14 +204,14 @@ public class HhQdGiaoNvNhapKhacServiceImpl extends BaseServiceImpl implements Hh
         if (!qOptional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-        Map<String, String> mapVthh = getListDanhMucHangHoa();
+        Map<String, DmVattuDTO> mapVthh = getListObjectDanhMucHangHoa(qOptional.get().getMaDvi().substring(0, 4));
         Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
         qOptional.get().setTenDvi(mapDmucDvi.get(qOptional.get().getMaDvi()));
         qOptional.get().setTenLoaiHinhNx(mapLoaiHinhNx.get(qOptional.get().getLoaiHinhNx()));
         qOptional.get().setTenKieuNx(mapKieuNx.get(qOptional.get().getKieuNx()));
-        qOptional.get().setTenLoaiVthh(mapVthh.get(qOptional.get().getLoaiVthh()));
+        qOptional.get().setTenLoaiVthh(mapVthh.get(qOptional.get().getLoaiVthh()).getTen());
         qOptional.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThai()));
         qOptional.get().setFileCanCu(fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhQdGiaoNvuNhapHangKhacHdr.TABLE_NAME + CAN_CU)));
         qOptional.get().setFileDinhKems(fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhQdGiaoNvuNhapHangKhacHdr.TABLE_NAME)));
@@ -221,6 +222,9 @@ public class HhQdGiaoNvNhapKhacServiceImpl extends BaseServiceImpl implements Hh
 
         }
         dtls.forEach(dtl -> {
+            dtl.setTenLoaiHangHoa(mapVthh.get(qOptional.get().getLoaiVthh()).getTen());
+            dtl.setTenLoaiVthh(mapVthh.get(qOptional.get().getLoaiVthh()).getTen());
+            dtl.setDvt(mapVthh.get(qOptional.get().getLoaiVthh()).getMaDviTinh());
             dtl.setTenCuc(mapDmucDvi.get(dtl.getMaCuc()));
             dtl.setTenChiCuc(mapDmucDvi.get(dtl.getMaChiCuc()));
             dtl.setTenDiemKho(mapDmucDvi.get(dtl.getMaDiemKho()));
@@ -228,7 +232,7 @@ public class HhQdGiaoNvNhapKhacServiceImpl extends BaseServiceImpl implements Hh
             dtl.setTenNganKho(mapDmucDvi.get(dtl.getMaNganKho()));
             dtl.setTenLoKho(mapDmucDvi.get(dtl.getMaLoKho()));
             dtl.setTenNganLoKho(mapDmucDvi.get(dtl.getMaLoKho()) + " - " + mapDmucDvi.get(dtl.getMaNganKho()));
-            dtl.setTenCloaiVthh(mapVthh.get(dtl.getCloaiVthh()));
+            dtl.setTenCloaiVthh(mapVthh.get(dtl.getCloaiVthh()).getTen());
         });
         qOptional.get().setDtlList(dtls);
         return qOptional.get();

@@ -130,7 +130,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 this.setDataPhieu(null,dDiem);
                  }
             for (HhQdGiaoNvNhangDtl dtl : hhQdGiaoNvNhangDtl ){
-                dtl.setHhQdGiaoNvNhDdiemList(ddiemList);
+                dtl.setChildren(ddiemList);
                 // Set biên bản nghiệm thu bảo quản
                 List<HhBienBanNghiemThu> bbNghiemThuBq = hhBienBanNghiemThuRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
                 bbNghiemThuBq.forEach( item ->  {
@@ -253,7 +253,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
             List<FileDinhKem> fileDinhKem= fileDinhKemService.saveListFileDinhKem(Arrays.asList(objReq.getFileDinhKem()), created.getId(),"HH_QD_GIAO_NV_NHAP_HANG");
             created.setFileDinhKems(fileDinhKem);
         }
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_QD_GIAO_NV_NHAP_HANG");
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),data.getId(),"HH_QD_GIAO_NV_NHAP_HANG");
         created.setFileDinhKems(fileDinhKems);
         if (!DataUtils.isNullObject(data.getIdHd())){
 //            HhHdongBkePmuahangHdr update = hhHdongBkePmuahangRepository.findAllById(data.getIdHdong());
@@ -293,7 +293,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
             List<FileDinhKem> fileDinhKem=fileDinhKemService.saveListFileDinhKem(Arrays.asList(objReq.getFileDinhKem()), created.getId(),"HH_QD_GIAO_NV_NHAP_HANG");
             created.setFileDinhKems(fileDinhKem);
         }
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_QD_GIAO_NV_NHAP_HANG");
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),data.getId(),"HH_QD_GIAO_NV_NHAP_HANG");
         created.setFileDinhKems(fileDinhKems);
 
         List<HhQdGiaoNvNhangDtl> listDtl = hhQdGiaoNvNhangDtlRepository.findAllByIdQdHdr(data.getId());
@@ -311,7 +311,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
             dtl.setIdQdHdr(data.getId());
             dtl.setTrangThai(Contains.CHUACAPNHAT);
             hhQdGiaoNvNhangDtlRepository.save(dtl);
-            for (HhQdGiaoNvNhDdiemReq ddiemReq :req.getHhQdGiaoNvNhDdiemList()){
+            for (HhQdGiaoNvNhDdiemReq ddiemReq :req.getChildren()){
                 HhQdGiaoNvNhDdiem ddiem= new ModelMapper().map(ddiemReq,HhQdGiaoNvNhDdiem.class);
                 ddiem.setId(null);
                 ddiem.setIdDtl(dtl.getId());
@@ -327,7 +327,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         for(HhQdGiaoNvNhangDtlReq dtlReq :listDtl){
             List<HhQdGiaoNvNhDdiem> list = hhQdGiaoNvNhDdiemRepository.findAllByIdDtl(dtlReq.getId());
             hhQdGiaoNvNhDdiemRepository.deleteAll(list);
-            for (HhQdGiaoNvNhDdiemReq ddiemReq :dtlReq.getHhQdGiaoNvNhDdiemList()){
+            for (HhQdGiaoNvNhDdiemReq ddiemReq :dtlReq.getChildren()){
                 HhQdGiaoNvNhDdiem ddiem= new ModelMapper().map(ddiemReq,HhQdGiaoNvNhDdiem.class);
                 ddiem.setId(null);
                 ddiem.setIdDtl(dtlReq.getId());
@@ -363,6 +363,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         List<Long> listId=listDtl.stream().map(HhQdGiaoNvNhangDtl::getId).collect(Collectors.toList());
         List<HhQdGiaoNvNhDdiem> listDd = hhQdGiaoNvNhDdiemRepository.findAllByIdDtlIn(listId);
         for (HhQdGiaoNvNhangDtl dtl : listDtl){
+            List<HhQdGiaoNvNhDdiem> qdGiaoNvNhDdiem = new ArrayList<>();
             dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi())?null:hashMapDmdv.get(dtl.getMaDvi()));
             dtl.setTenDiemKho(StringUtils.isEmpty(dtl.getMaDiemKho())?null:hashMapDmdv.get(dtl.getMaDiemKho()));
             dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
@@ -374,9 +375,11 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 dDiem.setTenNganKho(StringUtils.isEmpty(dDiem.getMaNganKho())?null:hashMapDmdv.get(dDiem.getMaNganKho()));
                 dDiem.setTenLoKho(StringUtils.isEmpty(dDiem.getMaLoKho())?null:hashMapDmdv.get(dDiem.getMaLoKho()));
                 this.setDataPhieu(null,dDiem);
-
+                if(dDiem.getIdDtl().equals(dtl.getId())){
+                    qdGiaoNvNhDdiem.add(dDiem);
+                }
             }
-            dtl.setHhQdGiaoNvNhDdiemList(listDd);
+            dtl.setChildren(qdGiaoNvNhDdiem);
         }
         data.setHhQdGiaoNvNhangDtlList(listDtl);
 
