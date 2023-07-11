@@ -14,6 +14,7 @@ public class HhQdPdNhapKhacHdrReq {
     private Long id;
     private Long IdDx;
     private Long IdTh;
+    private String maTh;
     private Integer namKhoach;
     private String maDvi;
     private String loaiHinhNx;

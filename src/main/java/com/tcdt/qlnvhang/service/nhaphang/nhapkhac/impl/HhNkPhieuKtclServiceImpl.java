@@ -87,7 +87,11 @@ public class HhNkPhieuKtclServiceImpl extends BaseServiceImpl implements HhNkPhi
 
     @Override
     public HhNkPhieuKtcl timKiemPhieuKtclTheoMaNganLo(HhNkPhieuKtclSearch req) throws Exception {
-        return hhNkPhieuKtclRepository.findByIdQdGiaoNvNhAndMaLoKhoAndMaNganKhoAndTrangThai(req.getIdQdGiaoNvnh(), req.getMaLoKho(), req.getMaNganKho(), Contains.DADUYET_LDCC);
+        HhNkPhieuKtcl data = hhNkPhieuKtclRepository.findByIdQdGiaoNvNhAndMaLoKhoAndMaNganKhoAndTrangThai(req.getIdQdGiaoNvnh(), req.getMaLoKho(), req.getMaNganKho(), Contains.DADUYET_LDCC);
+        Map<String, String> mapVthh = getListDanhMucHangHoa();
+        data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
+        data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:mapVthh.get(data.getCloaiVthh()));
+        return data;
     }
 
     @Override
