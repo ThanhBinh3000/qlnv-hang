@@ -67,7 +67,13 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         }else {
             req.setDsLoaiHang(Arrays.asList("LT","M"));
         }
-        Page<DcnbPhieuKtChatLuongHdrDTO> search = dcnbPhieuKtChatLuongHdrRepository.search(req, pageable);
+        Page<DcnbPhieuKtChatLuongHdrDTO> search = null;
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            search = dcnbPhieuKtChatLuongHdrRepository.searchChiCuc(req, pageable);
+        }else {
+            search = dcnbPhieuKtChatLuongHdrRepository.search(req, pageable);
+        }
+
         return search;
     }
 
