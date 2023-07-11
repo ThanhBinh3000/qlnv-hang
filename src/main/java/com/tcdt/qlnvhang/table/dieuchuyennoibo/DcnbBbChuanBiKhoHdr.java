@@ -71,11 +71,17 @@ public class DcnbBbChuanBiKhoHdr extends BaseEntity implements Serializable, Clo
     @Access(value = AccessType.PROPERTY)
     private String trangThai;
     private String lyDoTuChoi;
+    @Column(name = "NGUOI_GDUYET")
     private Long nguoiGDuyet;
+    @Column(name = "NGAY_GDUYET")
     private LocalDate ngayGDuyet;
+    @Column(name = "NGUOI_GDUYET_TK")
     private Long nguoiPDuyetTk;
+    @Column(name = "NGAY_GDUYET_TK")
     private LocalDate ngayPDuyetTk;
+    @Column(name = "NGUOI_PDUYET")
     private Long nguoiPDuyet;
+    @Column(name = "NGAY_PDUYET")
     private LocalDate ngayPDuyet;
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();

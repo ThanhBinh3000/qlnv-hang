@@ -156,8 +156,8 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
             case Contains.TUCHOI_KT + Contains.DUTHAO:
             case Contains.TUCHOI_LDCC + Contains.DUTHAO:
             case Contains.DUTHAO + Contains.CHODUYET_TK:
-                hdr.setNguoiGDuyet(userInfo.getId());
-                hdr.setNgayGDuyet(LocalDate.now());
+                hdr.setNguoiGduyetId(userInfo.getId());
+                hdr.setNgayGduyet(LocalDate.now());
                 break;
             case Contains.CHODUYET_TK + Contains.CHODUYET_KT:
                 hdr.setNgayPDuyetKt(LocalDate.now());
@@ -170,8 +170,8 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
                 hdr.setKeToan(userInfo.getFullName());
                 break;
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
-                hdr.setNgayPDuyet(LocalDate.now());
-                hdr.setNguoiPDuyet(userInfo.getId());
+                hdr.setNgayPduyet(LocalDate.now());
+                hdr.setNguoiPduyetId(userInfo.getId());
                 hdr.setLdChiCuc(userInfo.getFullName());
 //                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(hdr.getMaDvi(),
 //                        hdr.getQdDcCucId(),
@@ -189,8 +189,8 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
-                hdr.setNgayPDuyet(LocalDate.now());
-                hdr.setNguoiPDuyet(userInfo.getId());
+                hdr.setNgayPduyet(LocalDate.now());
+                hdr.setNguoiPduyetId(userInfo.getId());
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             default:
