@@ -85,21 +85,11 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
         }else {
             req.setDsLoaiHang(Arrays.asList("LT","M"));
         }
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            if ("00".equals(req.getType())) { // kiểu xuất
-                searchDto = dcnbBienBanLayMauHdrRepository.searchPageChiCucXuat(req, pageable);
-            }
-            if ("01".equals(req.getType())) { // kiểu nhan
-                searchDto = dcnbBienBanLayMauHdrRepository.searchPageChiCucNhan(req, pageable);
-            }
-        }else{
-            req.setTypeDataLink(Contains.DIEU_CHUYEN);
-            if ("00".equals(req.getType())) { // kiểu xuất
-                searchDto = dcnbBienBanLayMauHdrRepository.searchPageCucNhan(req, pageable);
-            }
-            if ("01".equals(req.getType())) { // kiểu nhan
-                searchDto = dcnbBienBanLayMauHdrRepository.searchPageCucNhan(req, pageable);
-            }
+        if ("00".equals(req.getType())) { // kiểu xuất
+            searchDto = dcnbBienBanLayMauHdrRepository.searchPageXuat(req, pageable);
+        }
+        if ("01".equals(req.getType())) { // kiểu nhan
+            searchDto = dcnbBienBanLayMauHdrRepository.searchPageNhan(req, pageable);
         }
         return searchDto;
     }

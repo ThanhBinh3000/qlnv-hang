@@ -67,40 +67,29 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
 
         Page<DcnbPhieuKnChatLuongHdrDTO> searchDto = null;
 
-        if(req.getIsVatTu() == null){
+        if (req.getIsVatTu() == null) {
             req.setIsVatTu(false);
         }
-        if(req.getIsVatTu()){
+        if (req.getIsVatTu()) {
             req.setDsLoaiHang(Arrays.asList("VT"));
-        }else {
-            req.setDsLoaiHang(Arrays.asList("LT","M"));
+        } else {
+            req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
-
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            if ("00".equals(req.getType())) { // kiểu xuất
-                searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageChiCucXuat(req, pageable);
-            }
-            if ("01".equals(req.getType())) { // kiểu nhan
-                searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageChiCucNhan(req, pageable);
-            }
-        }else{
-            req.setTypeDataLink(Contains.DIEU_CHUYEN);
-            if ("00".equals(req.getType())) { // kiểu xuất
-                searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageCucXuat(req, pageable);
-            }
-            if ("01".equals(req.getType())) { // kiểu nhan
-                searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageCucNhan(req, pageable);
-            }
+        if ("00".equals(req.getType())) { // kiểu xuất
+            searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageXuat(req, pageable);
         }
-
+        if ("01".equals(req.getType())) { // kiểu nhan
+            searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageNhan(req, pageable);
+        }
         return searchDto;
     }
+
     @Transactional
     public DcnbPhieuKnChatLuongHdr save(CustomUserDetails currentUser, DcnbPhieuKnChatLuongHdrReq objReq) throws Exception {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
-        if(!currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)){
+        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
             throw new Exception("Chức năng thêm mới chỉ dành cho cấp cục");
         }
 //        Optional<DcnbPhieuKnChatLuongHdr> optional = dcnbPhieuKnChatLuongHdrRepository.findFirstBySoPhieu(objReq.getSoPhieu());
@@ -118,7 +107,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         data.setLoaiDc(objReq.getLoaiDc());
         objReq.getDcnbPhieuKnChatLuongDtl().forEach(e -> e.setDcnbPhieuKnChatLuongHdr(data));
         DcnbPhieuKnChatLuongHdr created = dcnbPhieuKnChatLuongHdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/PKNCL-"+ currentUser.getUser().getDvqlTenVietTat();
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/PKNCL-" + currentUser.getUser().getDvqlTenVietTat();
         created.setSoPhieu(so);
         dcnbPhieuKnChatLuongHdrRepository.save(created);
         List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU");
@@ -131,7 +120,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
-        if(!currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)){
+        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
             throw new Exception("Chức năng cập nhật chỉ dành cho cấp cục");
         }
         Optional<DcnbPhieuKnChatLuongHdr> optional = dcnbPhieuKnChatLuongHdrRepository.findById(objReq.getId());
@@ -153,7 +142,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         data.setNgaySua(LocalDateTime.now());
         data.setDcnbPhieuKnChatLuongDtl(objReq.getDcnbPhieuKnChatLuongDtl());
         DcnbPhieuKnChatLuongHdr created = dcnbPhieuKnChatLuongHdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/PKNCL-"+ currentUser.getUser().getDvqlTenVietTat();
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/PKNCL-" + currentUser.getUser().getDvqlTenVietTat();
         created.setSoPhieu(so);
         dcnbPhieuKnChatLuongHdrRepository.save(created);
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU"));
@@ -171,7 +160,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         }
         List<DcnbPhieuKnChatLuongHdr> allById = dcnbPhieuKnChatLuongHdrRepository.findAllById(ids);
         allById.forEach(data -> {
-            List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemRepository.findByDataIdAndDataTypeIn(data.getId(),Collections.singleton(DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU"));
+            List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemRepository.findByDataIdAndDataTypeIn(data.getId(), Collections.singleton(DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU"));
             data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
             List<DcnbPhieuKnChatLuongDtl> khs = dcnbPhieuKnChatLuongDtlRepository.findByHdrId(data.getId());
             data.setDcnbPhieuKnChatLuongDtl(khs);
@@ -289,11 +278,11 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
-        Page<DcnbPhieuKnChatLuongHdrDTO> page = dcnbPhieuKnChatLuongHdrRepository.searchPageChiCucXuat(objReq,pageable);
+        Page<DcnbPhieuKnChatLuongHdrDTO> page = dcnbPhieuKnChatLuongHdrRepository.searchPageXuat(objReq, pageable);
         List<DcnbPhieuKnChatLuongHdrDTO> data = page.getContent();
 
         String title = "Danh sách phương án xuất cứu trợ, viện trợ ";
-        String[] rowsName = new String[]{"STT", "Số QĐ ĐC của Cục","Năm KH","Thời hạn điều chuyển", "Điểm kho","Lô kho","Thay đổi thủ kho", "Số phiếu KNCL", "Ngày kiểm nghiệm","Số BBLM/BGM","Ngày lấy mẫu","Số BB tịnh kho", "Trạng thái",};
+        String[] rowsName = new String[]{"STT", "Số QĐ ĐC của Cục", "Năm KH", "Thời hạn điều chuyển", "Điểm kho", "Lô kho", "Thay đổi thủ kho", "Số phiếu KNCL", "Ngày kiểm nghiệm", "Số BBLM/BGM", "Ngày lấy mẫu", "Số BB tịnh kho", "Trạng thái",};
         String fileName = "danh-sach-ke-hoach-dieu-chuyen-noi-bo-hang-dtqg.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
@@ -323,18 +312,18 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
     public List<DcnbPhieuKnChatLuongHdrDTO> danhSach(CustomUserDetails currentUser, SearchPhieuKnChatLuong req) {
         List<DcnbPhieuKnChatLuongHdrDTO> searchDto = null;
 
-        if(req.getIsVatTu() == null){
+        if (req.getIsVatTu() == null) {
             req.setIsVatTu(false);
         }
-        if(req.getIsVatTu()){
+        if (req.getIsVatTu()) {
             req.setDsLoaiHang(Arrays.asList("VT"));
-        }else {
-            req.setDsLoaiHang(Arrays.asList("LT","M"));
+        } else {
+            req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
 
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             searchDto = dcnbPhieuKnChatLuongHdrRepository.searchListChiCuc(req);
-        }else {
+        } else {
             req.setTypeDataLink(Contains.DIEU_CHUYEN);
             searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageListCuc(req);
         }
