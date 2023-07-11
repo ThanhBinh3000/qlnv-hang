@@ -86,6 +86,10 @@ public class DcnbHoSoKyThuatHdr extends BaseEntity implements Serializable, Clon
   private LocalDate ngayPduyet;
   @Column(name = "NGUOI_PDUYET_ID")
   private Long nguoiPduyetId;
+  @Column(name = "NGAY_PDUYET_TVQT")
+  private LocalDate ngayPduyetTvqt;
+  @Column(name = "NGUOI_PDUYET_TVQT")
+  private Long nguoiPduyetIdTvqt;
   @Transient
   private String tenTrangThai;
   @Transient
