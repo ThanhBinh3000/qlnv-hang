@@ -45,12 +45,6 @@ public class DcnbBienBanTinhKhoHdrReq {
 
     private LocalDate ngayKyQdDcc;
 
-    private Long phieuXuatKhoId;
-
-    private String soPhieuXuatKho;
-
-    private String soBbLayMau;
-
     private String loaiVthh;
 
     private String cloaiVthh;

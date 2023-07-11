@@ -25,8 +25,9 @@ public interface DcnbBienBanHaoDoiHdrRepository extends JpaRepository<DcnbBienBa
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
             "LEFT JOIN DcnbBienBanHaoDoiHdr bbhd ON bbhd.qDinhDccId = qdc.id and bbhd.maLoKho = khdcd.maLoKho and bbhd.maNganKho = khdcd.maNganKho " +
             "LEFT JOIN DcnbBienBanTinhKhoHdr bbtk ON bbtk.qDinhDccId = qdc.id and bbtk.maLoKho = khdcd.maLoKho and bbtk.maNganKho = khdcd.maNganKho and bbtk.trangThai = '17' " +
+            "LEFT JOIN DcnbBienBanTinhKhoDtl bbtkd ON bbtkd.hdrId = bbtk.id " +
             "LEFT JOIN DcnbBangKeCanHangHdr bkch ON bkch.qDinhDccId = qdc.id and bbtk.bangKeCanHangId = bkch.id " +
-            "LEFT JOIN DcnbPhieuXuatKhoHdr pxk ON pxk.id = bbtk.phieuXuatKhoId " +
+            "LEFT JOIN DcnbPhieuXuatKhoHdr pxk ON pxk.id = bbtkd.phieuXuatKhoHdrId " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 = 1 " +
             "AND qdc.parentId is not null and qdc.trangThai = '29' AND qdc.loaiDc = :#{#param.loaiDc} " +
