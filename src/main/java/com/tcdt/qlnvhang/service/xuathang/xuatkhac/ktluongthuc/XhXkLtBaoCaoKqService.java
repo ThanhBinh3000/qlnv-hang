@@ -72,6 +72,10 @@ public class XhXkLtBaoCaoKqService extends BaseServiceImpl {
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
     XhXkLtBaoCaoKq created = xhXkLtBaoCaoKqRepository.save(data);
+    if (!DataUtils.isNullObject(data.getIdTongHop())) {
+      List<Long> idTongHopList = Collections.singletonList(data.getIdTongHop());
+      data.setListIdTongHop(idTongHopList);
+    }
     this.updateTongHop(created, false);
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkLtBaoCaoKq.TABLE_NAME);
     created.setFileDinhKems(fileDinhKems);
@@ -98,8 +102,11 @@ public class XhXkLtBaoCaoKqService extends BaseServiceImpl {
     }
     XhXkLtBaoCaoKq data = optional.get();
     BeanUtils.copyProperties(objReq, data, "id", "maDvi");
-
     XhXkLtBaoCaoKq created = xhXkLtBaoCaoKqRepository.save(data);
+    if (!DataUtils.isNullObject(data.getIdTongHop())) {
+      List<Long> idTongHopList = Collections.singletonList(data.getIdTongHop());
+      data.setListIdTongHop(idTongHopList);
+    }
     this.updateTongHop(created, false);
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhXkLtBaoCaoKq.TABLE_NAME));
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkLtBaoCaoKq.TABLE_NAME);

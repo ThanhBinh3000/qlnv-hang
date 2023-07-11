@@ -34,7 +34,7 @@ public class DcnbBbNhapDayKhoController {
     DcnbBbNhapDayKhoServiceImpl service;
 
 
-    @ApiOperation(value = "Tra cứu thông tin đề xuất", response = List.class)
+    @ApiOperation(value = "Tra cứu thông tin", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> colection(@RequestBody DcnbBbNhapDayKhoHdrReq objReq) {
@@ -72,7 +72,7 @@ public class DcnbBbNhapDayKhoController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tạo mới thông tin đề xuất ", response = List.class)
+    @ApiOperation(value = "Tạo mới thông tin ", response = List.class)
     @PostMapping(value =  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<BaseResponse> insert(@Valid @RequestBody DcnbBbNhapDayKhoHdrReq objReq) {
@@ -90,7 +90,7 @@ public class DcnbBbNhapDayKhoController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Cập nhật thông tin đề xuất", response = List.class)
+    @ApiOperation(value = "Cập nhật thông tin", response = List.class)
     @PostMapping(value =  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> update(@Valid @RequestBody DcnbBbNhapDayKhoHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -107,7 +107,7 @@ public class DcnbBbNhapDayKhoController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Lấy chi tiết thông tin đề xuất", response = List.class)
+    @ApiOperation(value = "Lấy chi tiết thông tin", response = List.class)
     @GetMapping(value =  PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
@@ -143,7 +143,7 @@ public class DcnbBbNhapDayKhoController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xoá thông tin đề xuất", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Xoá thông tin", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value =  PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
@@ -162,7 +162,7 @@ public class DcnbBbNhapDayKhoController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xoá danh sách thông tin đề xuất", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Xoá danh sách thông tin", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value =  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
@@ -180,14 +180,14 @@ public class DcnbBbNhapDayKhoController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Kết xuất danh sách mua", response = List.class)
+    @ApiOperation(value = "Kết xuất danh ", response = List.class)
     @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void exportList(@Valid @RequestBody  DcnbBbNhapDayKhoHdrReq objReq, HttpServletResponse response) throws Exception {
         try {
             service.export(objReq, response);
         } catch (Exception e) {
-            log.error("Kết xuất danh sách dánh sách mua : {}", e);
+            log.error("Kết xuất danh sách dánh  : {}", e);
             final Map<String, Object> body = new HashMap<>();
             body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             body.put("msg", e.getMessage());

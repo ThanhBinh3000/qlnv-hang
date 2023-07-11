@@ -47,4 +47,6 @@ public class XhXkVtQdGiaonvXhHdr extends BaseEntity implements Serializable {
     private String tenTrangThai;
     @Transient
     private String tenDvi;
+    @Transient
+    private String tenLoai;
 }

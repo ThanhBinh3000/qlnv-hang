@@ -213,7 +213,7 @@ public class DcnbBcKqDcController {
             e.printStackTrace();
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Lấy chi tiết thông tin : {}", e);
+            log.error("Lấy thông tin nhập xuất hàng : {}", e);
         }
         return ResponseEntity.ok(resp);
     }

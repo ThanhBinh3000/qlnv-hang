@@ -49,6 +49,7 @@ public class XhXkVtQdGiaonvXhService extends BaseServiceImpl {
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         search.getContent().forEach(s -> {
+            s.setTenLoai(Contains.getLoaiHinhXuat(s.getLoai()));
             s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
             s.getXhXkVtQdGiaonvXhDtl().forEach(item -> {
                 item.setMapVthh(mapVthh);
@@ -72,7 +73,10 @@ public class XhXkVtQdGiaonvXhService extends BaseServiceImpl {
         XhXkVtQdGiaonvXhHdr data = new XhXkVtQdGiaonvXhHdr();
         BeanUtils.copyProperties(objReq, data);
         data.setTrangThai(Contains.DUTHAO);
-        data.getXhXkVtQdGiaonvXhDtl().forEach(s -> s.setXhXkVtQdGiaonvXhHdr(data));
+        data.getXhXkVtQdGiaonvXhDtl().forEach(s -> {
+            s.setXhXkVtQdGiaonvXhHdr(data);
+            s.setId(null);
+        });
         XhXkVtQdGiaonvXhHdr created = xhXkVtQdGiaonvXhRepository.save(data);
         //save file đính kèm
         fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtQdGiaonvXhHdr.TABLE_NAME);
@@ -150,97 +154,63 @@ public class XhXkVtQdGiaonvXhService extends BaseServiceImpl {
     }
 
 
-//    public XhXkKhXuatHang pheDuyet(CustomUserDetails currentUser, StatusReq req) throws Exception {
-//        Optional<XhXkKhXuatHang> dx = xhXkKhXuatHangRepository.findById(req.getId());
-//        if (!dx.isPresent()) {
-//            throw new Exception("Không tồn tại bản ghi");
-//        }
-//        XhXkKhXuatHang xhXkKhXuatHang = dx.get();
-//        String status = xhXkKhXuatHang.getTrangThai() + req.getTrangThai();
-//        switch (status) {
-//            case Contains.DU_THAO + Contains.CHO_DUYET_TP:
-//            case Contains.TU_CHOI_TP + Contains.CHO_DUYET_TP:
-//            case Contains.TU_CHOI_LDC + Contains.CHO_DUYET_TP:
-//                break;
-//            case Contains.CHO_DUYET_TP + Contains.TU_CHOI_TP:
-//            case Contains.CHO_DUYET_LDC + Contains.CHO_DUYET_TP:
-//            case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
-//            case Contains.CHO_DUYET_BTC + Contains.TU_CHOI_BTC:
-//            case Contains.CHODUYET_LDTC + Contains.TUCHOI_LDTC:
-//                xhXkKhXuatHang.setLyDoTuChoi(req.getLyDoTuChoi());
-//                break;
-//            case Contains.CHO_DUYET_LDC + Contains.DA_DUYET_LDC:
-//            case Contains.CHO_DUYET_TP + Contains.CHO_DUYET_LDC:
-//            case Contains.CHODUYET_LDV + Contains.CHODUYET_LDTC:
-//            case Contains.CHODUYET_LDTC + Contains.CHO_DUYET_BTC:
-//            case Contains.CHO_DUYET_BTC + Contains.DA_DUYET_BTC:
-//            case Contains.DU_THAO + Contains.CHODUYET_LDV:
-//                xhXkKhXuatHang.setNguoiDuyetId(currentUser.getUser().getId());
-//                xhXkKhXuatHang.setNgayDuyet(LocalDate.now());
-//                break;
-//            default:
-//                throw new Exception("Phê duyệt không thành công.");
-//        }
-//        xhXkKhXuatHang.setTrangThai(req.getTrangThai());
-//        //Check nếu là bản ghi kế hoạch của TỔng cục thì update trang thái bản ghi TH thành đã gửi duyệt KH
-//        if (xhXkKhXuatHang.getCapDvi() == 1 && xhXkKhXuatHang.getLoai().equals("00")) {
-//            Optional<XhXkKhXuatHang> itemTh = xhXkKhXuatHangRepository.findById(xhXkKhXuatHang.getIdCanCu());
-//            if (itemTh.isPresent() && !itemTh.get().getTrangThai().equals(TrangThaiAllEnum.DAGUIDUYET_KH.getId())) {
-//                itemTh.get().setTrangThai(TrangThaiAllEnum.DAGUIDUYET_KH.getId());
-//                xhXkKhXuatHangRepository.save(itemTh.get());
-//            }
-//        }
-//        XhXkKhXuatHang model = xhXkKhXuatHangRepository.save(xhXkKhXuatHang);
-//        return detail(model.getId());
-//    }
+    public XhXkVtQdGiaonvXhHdr pheDuyet(CustomUserDetails currentUser, StatusReq req) throws Exception {
+        Optional<XhXkVtQdGiaonvXhHdr> dx = xhXkVtQdGiaonvXhRepository.findById(req.getId());
+        if (!dx.isPresent()) {
+            throw new Exception("Không tồn tại bản ghi");
+        }
+        XhXkVtQdGiaonvXhHdr xhXkVtQdGiaonvXhHdr = dx.get();
+        String status = xhXkVtQdGiaonvXhHdr.getTrangThai() + req.getTrangThai();
+        switch (status) {
+            case Contains.DU_THAO + Contains.CHO_DUYET_LDC:
+            case Contains.TU_CHOI_LDC + Contains.CHO_DUYET_LDC:
+                break;
+            case Contains.CHO_DUYET_LDC + Contains.TU_CHOI_LDC:
+                xhXkVtQdGiaonvXhHdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                break;
+            case Contains.CHO_DUYET_LDC + Contains.DA_DUYET_LDC:
+                xhXkVtQdGiaonvXhHdr.setNguoiDuyetId(currentUser.getUser().getId());
+                xhXkVtQdGiaonvXhHdr.setNgayDuyet(LocalDate.now());
+                break;
+            default:
+                throw new Exception("Phê duyệt không thành công.");
+        }
+        xhXkVtQdGiaonvXhHdr.setTrangThai(req.getTrangThai());
+        XhXkVtQdGiaonvXhHdr model = xhXkVtQdGiaonvXhRepository.save(xhXkVtQdGiaonvXhHdr);
+        return detail(model.getId());
+    }
 
 
-//    public void export(CustomUserDetails currentUser, XhXkVtQdGiaonvXhRequest objReq, HttpServletResponse response) throws Exception {
-//        PaggingReq paggingReq = new PaggingReq();
-//        paggingReq.setPage(0);
-//        paggingReq.setLimit(Integer.MAX_VALUE);
-//        objReq.setPaggingReq(paggingReq);
-//        List<XhXkVtQdGiaonvXhHdr> data = this.searchPage(currentUser, objReq).getContent();
-//        String title, fileName = "";
-//        String[] rowsName;
-//        Object[] objs;
-//        List<Object[]> dataList = new ArrayList<>();
-//        if (objReq.getLoai().equals("00")) {
-//            title = "Danh sách kế hoạch VT, TB có thời hạn lưu kho lớn hơn 12 tháng của Cục DTNN KV";
-//            fileName = "ds-ke-hoach-vt-tb-co-thoi-han-luu-kho-lon-hon-12-thang-cua-cuc-dtnn-kv.xlsx";
-//            rowsName = new String[]{"STT", "Năm kế hoạch", "Số KH/Tờ trình", "Ngày lập KH", "Ngày duyệt KH", "Trích yếu", "Số ĐV tài sản", "Trạng thái"};
-//            for (int i = 0; i < data.size(); i++) {
-//                XhXkVtQdGiaonvXhHdr dx = data.get(i);
-//                objs = new Object[rowsName.length];
-//                objs[0] = i;
-//                objs[1] = dx.getNamKeHoach();
-//                objs[2] = dx.getSoToTrinh();
-//                objs[3] = dx.getNgayKeHoach();
-//                objs[4] = dx.getNgayDuyetKeHoach();
-//                objs[5] = dx.getTrichYeu();
-//                objs[6] = dx.getSoDviTaiSan();
-//                objs[7] = dx.getTenTrangThai();
-//                dataList.add(objs);
-//            }
-//        } else {
-//            title = "Danh sách tổng hợp kế hoạch xuất vật tư, thiết bị có thời hạn lưu kho lớn hơn 12";
-//            fileName = "ds-tong-hop-ke-hoach-vt-tb-co-thoi-han-luu-kho-lon-hon-12-thang.xlsx";
-//            rowsName = new String[]{"STT", "Mã tổng hợp", "Thời gian tổng hợp", "Nội dung tổng hợp", "Năm kế hoạch", "Trạng thái"};
-//            for (int i = 0; i < data.size(); i++) {
-//                XhXkKhXuatHang dx = data.get(i);
-//                objs = new Object[rowsName.length];
-//                objs[0] = i;
-//                objs[1] = dx.getId();
-//                objs[2] = dx.getThoiGianTh();
-//                objs[3] = dx.getNoiDungTh();
-//                objs[4] = dx.getNamKeHoach();
-//                objs[5] = dx.getTenTrangThai();
-//                dataList.add(objs);
-//            }
-//        }
-//
-//        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
-//        ex.export();
-//    }
+    public void export(CustomUserDetails currentUser, XhXkVtQdGiaonvXhRequest objReq, HttpServletResponse response) throws Exception {
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        objReq.setPaggingReq(paggingReq);
+        List<XhXkVtQdGiaonvXhHdr> data = this.searchPage(currentUser, objReq).getContent();
+        String title, fileName = "";
+        String[] rowsName;
+        Object[] objs;
+        List<Object[]> dataList = new ArrayList<>();
+        title = "Danh sách kế hoạch VT, TB có thời hạn lưu kho lớn hơn 12 tháng của Cục DTNN KV";
+        fileName = "ds-ke-hoach-vt-tb-co-thoi-han-luu-kho-lon-hon-12-thang-cua-cuc-dtnn-kv.xlsx";
+        rowsName = new String[]{"STT", "Năm xuất", "Số quyết định", "Ngày quyết định", "Loại hình nhập xuất", "Mã DS tổng hợp", "Số QĐ xuất giảm TC", "Thời gian xuất hàng", "Trích yếu", "Trạng thái"};
+        for (int i = 0; i < data.size(); i++) {
+            XhXkVtQdGiaonvXhHdr dx = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = dx.getNamKeHoach();
+            objs[2] = dx.getSoQuyetDinh();
+            objs[3] = dx.getNgayKy();
+            objs[4] = dx.getTenLoai();
+            objs[5] = dx.getSoCanCu();
+            objs[6] = dx.getSoCanCu();
+            objs[7] = dx.getThoiHanXuatHang();
+            objs[8] = dx.getTrichYeu();
+            objs[9] = dx.getTenTrangThai();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+        ex.export();
+    }
 
 }

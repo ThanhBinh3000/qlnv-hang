@@ -93,7 +93,7 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
         objReq.getDcnbBienBanTinhKhoDtl().forEach(e -> e.setDcnbBienBanTinhKhoHdr(data));
         DcnbBienBanTinhKhoHdr created = dcnbBienBanTinhKhoHdrRepository.save(data);
         String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBTK-"+ currentUser.getUser().getDvqlTenVietTat();
-        created.setSoBbLayMau(so);
+        created.setSoBbTinhKho(so);
         dcnbBienBanTinhKhoHdrRepository.save(created);
         List<FileDinhKem> bienBanTinhKhoDaKy = fileDinhKemService.saveListFileDinhKem(objReq.getFileBbTinhKhoDaKy(), created.getId(), DcnbBienBanTinhKhoHdr.TABLE_NAME + "_BB_TINH_KHO_DA_KY");
         data.setFileBbTinhKhoDaKy(bienBanTinhKhoDaKy);
@@ -126,7 +126,7 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
         }
         DcnbBienBanTinhKhoHdr created = dcnbBienBanTinhKhoHdrRepository.save(data);
         String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBTK-"+ currentUser.getUser().getDvqlTenVietTat();
-        created.setSoBbLayMau(so);
+        created.setSoBbTinhKho(so);
         dcnbBienBanTinhKhoHdrRepository.save(created);
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbBienBanTinhKhoHdr.TABLE_NAME + "_BB_TINH_KHO_DA_KY"));
         List<FileDinhKem> bienBanTinhKhoDaKy = fileDinhKemService.saveListFileDinhKem(objReq.getFileBbTinhKhoDaKy(), created.getId(), DcnbBienBanTinhKhoHdr.TABLE_NAME + "_BB_TINH_KHO_DA_KY");

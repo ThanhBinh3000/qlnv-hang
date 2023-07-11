@@ -1,18 +1,18 @@
-package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
+package com.tcdt.qlnvhang.service.nhaphang.nhapkhac.impl;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhNkBbNhapDayKhoHdr;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbNhapDayKhoDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbNhapDayKhoHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbNhapDayKhoHdrReq;
-import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbNhapDayKhoHdrDTO;
+import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhNkBbNhapDayKhoDtlRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhNkBbNhapDayKhoHdrRepository;
+import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhNkBbNhapDayKhoHdrReq;
+import com.tcdt.qlnvhang.response.nhaphang.nhapkhac.HhNkBbNhapDayKhoHdrDTO;
 import com.tcdt.qlnvhang.service.SecurityContextService;
-import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBbNhapDayKhoService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
+import com.tcdt.qlnvhang.service.nhaphang.nhapkhac.HhNkBbNhapDayKhoService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbNhapDayKhoHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
@@ -26,13 +26,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 @Service
-public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
+public class HhNkBbNhapDayKhoServiceImpl implements HhNkBbNhapDayKhoService {
 
     @Autowired
-    private DcnbBbNhapDayKhoHdrRepository hdrRepository;
+    private HhNkBbNhapDayKhoHdrRepository hdrRepository;
 
     @Autowired
-    private DcnbBbNhapDayKhoDtlRepository dtlRepository;
+    private HhNkBbNhapDayKhoDtlRepository dtlRepository;
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
@@ -41,30 +41,22 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
     private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
 
     @Override
-    public Page<DcnbBbNhapDayKhoHdr> searchPage(DcnbBbNhapDayKhoHdrReq req) throws Exception {
+    public Page<HhNkBbNhapDayKhoHdr> searchPage(HhNkBbNhapDayKhoHdrReq req) throws Exception {
         return null;
     }
 
-    public Page<DcnbBbNhapDayKhoHdrDTO> search(DcnbBbNhapDayKhoHdrReq req) throws Exception {
+    public Page<HhNkBbNhapDayKhoHdrDTO> search(HhNkBbNhapDayKhoHdrReq req) throws Exception {
         CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
         req.setMaDvi(currentUser.getDvql());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<DcnbBbNhapDayKhoHdrDTO> searchDto = null;
-        if (req.getIsVatTu() == null) {
-            req.setIsVatTu(false);
-        }
-        if (req.getIsVatTu()) {
-            req.setDsLoaiHang(Arrays.asList("VT"));
-        } else {
-            req.setDsLoaiHang(Arrays.asList("LT", "M"));
-        }
+        Page<HhNkBbNhapDayKhoHdrDTO> searchDto = null;
         searchDto = hdrRepository.searchPage(req, pageable);
 
         return searchDto;
     }
 
     @Override
-    public DcnbBbNhapDayKhoHdr create(DcnbBbNhapDayKhoHdrReq req) throws Exception {
+    public HhNkBbNhapDayKhoHdr create(HhNkBbNhapDayKhoHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null) {
             throw new Exception("Access denied.");
@@ -72,34 +64,29 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
         if (!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
         }
-//        Optional<DcnbBbNhapDayKhoHdr> optional = hdrRepository.findBySoBb(req.getSoBb());
+//        Optional<HhNkBbNhapDayKhoHdr> optional = hdrRepository.findBySoBb(req.getSoBb());
 //        if (optional.isPresent()) {
 //            throw new Exception("Số biên bản đã tồn tại");
 //        }
 
-        DcnbBbNhapDayKhoHdr data = new DcnbBbNhapDayKhoHdr();
+        HhNkBbNhapDayKhoHdr data = new HhNkBbNhapDayKhoHdr();
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(userInfo.getDvql());
         data.setId(null);
         req.getChildren().forEach(e -> {
             e.setParent(data);
         });
-        DcnbBbNhapDayKhoHdr created = hdrRepository.save(data);
+        HhNkBbNhapDayKhoHdr created = hdrRepository.save(data);
         String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BBNDK-" + userInfo.getDvqlTenVietTat();
         created.setSoBb(so);
         hdrRepository.save(created);
-        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBbNhapDayKhoHdr.TABLE_NAME);
+        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), HhNkBbNhapDayKhoHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
-//        DcnbKeHoachDcDtlTT kh = new DcnbKeHoachDcDtlTT();
-//        kh.setIdHdr(created.getId());
-//        kh.setTableName(DcnbBbNhapDayKhoHdr.TABLE_NAME);
-//        kh.setIdKhDcDtl(data.getIdKeHoachDtl());
-//        dcnbKeHoachNhapXuatService.saveOrUpdate(kh);
         return created;
     }
 
     @Override
-    public DcnbBbNhapDayKhoHdr update(DcnbBbNhapDayKhoHdrReq req) throws Exception {
+    public HhNkBbNhapDayKhoHdr update(HhNkBbNhapDayKhoHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null) {
             throw new Exception("Access denied.");
@@ -107,26 +94,26 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
         if (!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
         }
-        Optional<DcnbBbNhapDayKhoHdr> optional = hdrRepository.findById(req.getId());
+        Optional<HhNkBbNhapDayKhoHdr> optional = hdrRepository.findById(req.getId());
         if (!optional.isPresent()) {
             throw new Exception("Số biên bản không tồn tại");
         }
-        DcnbBbNhapDayKhoHdr data = optional.get();
+        HhNkBbNhapDayKhoHdr data = optional.get();
         req.setMaDvi(userInfo.getDvql());
         BeanUtils.copyProperties(req, data);
         data.setChildren(req.getChildren());
-        DcnbBbNhapDayKhoHdr update = hdrRepository.save(data);
+        HhNkBbNhapDayKhoHdr update = hdrRepository.save(data);
         String so = update.getId() + "/" + (new Date().getYear() + 1900) + "/BBNDK-" + userInfo.getDvqlTenVietTat();
         update.setSoBb(so);
         hdrRepository.save(update);
-        fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBbNhapDayKhoHdr.TABLE_NAME));
-        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), DcnbBbNhapDayKhoHdr.TABLE_NAME);
+        fileDinhKemService.delete(update.getId(), Lists.newArrayList(HhNkBbNhapDayKhoHdr.TABLE_NAME));
+        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), HhNkBbNhapDayKhoHdr.TABLE_NAME);
         update.setFileDinhKems(canCu);
         return update;
     }
 
     @Override
-    public DcnbBbNhapDayKhoHdr detail(Long id) throws Exception {
+    public HhNkBbNhapDayKhoHdr detail(Long id) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null) {
             throw new Exception("Access denied.");
@@ -134,22 +121,22 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
         if (Objects.isNull(id)) {
             throw new Exception("Id is null");
         }
-        Optional<DcnbBbNhapDayKhoHdr> optional = hdrRepository.findById(id);
+        Optional<HhNkBbNhapDayKhoHdr> optional = hdrRepository.findById(id);
         if (!optional.isPresent()) {
             throw new Exception("Số biên bản không tồn tại");
         }
-        DcnbBbNhapDayKhoHdr data = optional.get();
-        data.setFileDinhKems(fileDinhKemService.search(id, Collections.singleton(DcnbBbNhapDayKhoHdr.TABLE_NAME)));
+        HhNkBbNhapDayKhoHdr data = optional.get();
+        data.setFileDinhKems(fileDinhKemService.search(id, Collections.singleton(HhNkBbNhapDayKhoHdr.TABLE_NAME)));
         return data;
     }
 
     @Override
-    public DcnbBbNhapDayKhoHdr approve(DcnbBbNhapDayKhoHdrReq req) throws Exception {
+    public HhNkBbNhapDayKhoHdr approve(HhNkBbNhapDayKhoHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null) {
             throw new Exception("Access denied.");
         }
-        DcnbBbNhapDayKhoHdr hdr = detail(req.getId());
+        HhNkBbNhapDayKhoHdr hdr = detail(req.getId());
         String status = hdr.getTrangThai() + req.getTrangThai();
         switch (status) {
             // Arena các roll back approve
@@ -179,13 +166,13 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
                 throw new Exception("Phê duyệt không thành công");
         }
         hdr.setTrangThai(req.getTrangThai());
-        DcnbBbNhapDayKhoHdr created = hdrRepository.save(hdr);
+        HhNkBbNhapDayKhoHdr created = hdrRepository.save(hdr);
         return created;
     }
 
     @Override
     public void delete(Long id) throws Exception {
-        DcnbBbNhapDayKhoHdr detail = detail(id);
+        HhNkBbNhapDayKhoHdr detail = detail(id);
         hdrRepository.delete(detail);
         dtlRepository.deleteAllByHdrId(id);
     }
@@ -206,12 +193,12 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
     }
 
     @Override
-    public void export(DcnbBbNhapDayKhoHdrReq req, HttpServletResponse response) throws Exception {
+    public void export(HhNkBbNhapDayKhoHdrReq req, HttpServletResponse response) throws Exception {
 
     }
 
     @Override
-    public List<DcnbBbNhapDayKhoHdrDTO> searchList(CustomUserDetails currentUser, DcnbBbNhapDayKhoHdrReq param) {
+    public List<HhNkBbNhapDayKhoHdrDTO> searchList(CustomUserDetails currentUser, HhNkBbNhapDayKhoHdrReq param) {
         param.setMaDvi(currentUser.getDvql());
         return hdrRepository.searchList(param);
     }

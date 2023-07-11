@@ -145,39 +145,39 @@ public class XhXkVtQdGiaonvXhController {
         return ResponseEntity.ok(resp);
     }
 
-//    @ApiOperation(value = "Kết xuất danh sách", response = List.class)
-//    @PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
-//    @ResponseStatus(HttpStatus.OK)
-//    public void exportList(@Valid @RequestBody XhXkVtQdGiaonvXhRequest objReq, @CurrentUser CustomUserDetails currentUser, HttpServletResponse response) throws Exception {
-//        try {
-//            xhXkVtQdGiaonvXhService.export(currentUser, objReq, response);
-//        } catch (Exception e) {
-//            log.error("Kết xuất danh sách: {}", e);
-//            final Map<String, Object> body = new HashMap<>();
-//            body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//            body.put("msg", e.getMessage());
-//            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-//            response.setCharacterEncoding("UTF-8");
-//            final ObjectMapper mapper = new ObjectMapper();
-//            mapper.writeValue(response.getOutputStream(), body);
-//        }
-//    }
+    @ApiOperation(value = "Kết xuất danh sách", response = List.class)
+    @PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public void exportList(@Valid @RequestBody XhXkVtQdGiaonvXhRequest objReq, @CurrentUser CustomUserDetails currentUser, HttpServletResponse response) throws Exception {
+        try {
+            xhXkVtQdGiaonvXhService.export(currentUser, objReq, response);
+        } catch (Exception e) {
+            log.error("Kết xuất danh sách: {}", e);
+            final Map<String, Object> body = new HashMap<>();
+            body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            body.put("msg", e.getMessage());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.writeValue(response.getOutputStream(), body);
+        }
+    }
 //
-//    @ApiOperation(value = "Trình duyệt", response = List.class)
-//    @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody StatusReq stReq) {
-//        BaseResponse resp = new BaseResponse();
-//        try {
-//            xhXkKhXuatHangService.pheDuyet(currentUser, stReq);
-//            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-//            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-//        } catch (Exception e) {
-//            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-//            resp.setMsg(e.getMessage());
-//            log.error("Phê duyệt thông tin : {}", e);
-//        }
-//        return ResponseEntity.ok(resp);
-//    }
+    @ApiOperation(value = "Trình duyệt", response = List.class)
+    @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody StatusReq stReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            xhXkVtQdGiaonvXhService.pheDuyet(currentUser, stReq);
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Phê duyệt thông tin : {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
 
 
 }

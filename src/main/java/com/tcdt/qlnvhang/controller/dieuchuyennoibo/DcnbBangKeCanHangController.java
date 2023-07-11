@@ -55,7 +55,7 @@ public class DcnbBangKeCanHangController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tạo mới thông tin ban kê cân hàng ", response = List.class)
+    @ApiOperation(value = "Tạo mới thông tin  ", response = List.class)
     @PostMapping(value =  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbBangKeCanHangHdrReq objReq) {
@@ -73,7 +73,7 @@ public class DcnbBangKeCanHangController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Cập nhật thông tin bảng kê cân hàng", response = List.class)
+    @ApiOperation(value = "Cập nhật thông tin ", response = List.class)
     @PostMapping(value =  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody DcnbBangKeCanHangHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
@@ -90,7 +90,7 @@ public class DcnbBangKeCanHangController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Lấy chi tiết thông tin bảng kê cân hàng", response = List.class)
+    @ApiOperation(value = "Lấy chi tiết thông tin ", response = List.class)
     @GetMapping(value =  PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
@@ -126,7 +126,7 @@ public class DcnbBangKeCanHangController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xoá thông tin bảng kê cân hàng", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Xoá thông tin ", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value =  PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
@@ -145,7 +145,7 @@ public class DcnbBangKeCanHangController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Kết xuất danh sách bảng kê cân hàng", response = List.class)
+    @ApiOperation(value = "Kết xuất danh sách ", response = List.class)
     @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody  SearchBangKeCanHang objReq, HttpServletResponse response) throws Exception {
@@ -153,7 +153,7 @@ public class DcnbBangKeCanHangController {
             dcnbBangKeCanHangServiceImpl.export( currentUser,objReq, response);
 
         } catch (Exception e) {
-            log.error("Kết xuất danh sách dánh sách mua : {}", e);
+            log.error("Kết xuất danh sách : {}", e);
             final Map<String, Object> body = new HashMap<>();
             body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             body.put("msg", e.getMessage());
