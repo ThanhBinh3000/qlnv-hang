@@ -24,6 +24,7 @@ public class HhQdGiaoNvNhapHangReq {
     private Long idHd;
     private String soHd;
     private String tenHd;
+    private String loaiQd;
     private Long idQdPdKh;
     private String soQdPdKh;
     private Long idQdPdKq;
@@ -39,6 +40,6 @@ public class HhQdGiaoNvNhapHangReq {
     private BigDecimal soLuong;
 
     private List<HhQdGiaoNvNhangDtlReq> hhQdGiaoNvNhangDtlList= new ArrayList<>();
-    private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
+    private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
     private FileDinhKemReq fileDinhKem;
 }

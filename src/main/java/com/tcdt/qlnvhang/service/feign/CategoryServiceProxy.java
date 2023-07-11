@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.feign;
 
 import com.tcdt.qlnvhang.request.QlnvDmDonviSearchReq;
+import com.tcdt.qlnvhang.request.QlnvDmVattuSearchReq;
 import com.tcdt.qlnvhang.request.object.HhDmDviLquanSearchReq;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +54,11 @@ public interface CategoryServiceProxy {
 	@Headers({ "Accept: application/json; charset=utf-8", "Content-Type: application/x-www-form-urlencoded" })
 	public ResponseEntity<String> getDanhMucHangHoa(
 			@RequestHeader(value = "Authorization", required = true) String authorizationHeader);
+
+	@PostMapping("/dm-hang/search-all")
+	@Headers({ "Accept: application/json; charset=utf-8", "Content-Type: application/x-www-form-urlencoded" })
+	public ResponseEntity<String> getListObjectDanhMucHangHoaByMaDvql(
+			@RequestHeader(value = "Authorization", required = true) String authorizationHeader,@RequestBody QlnvDmVattuSearchReq objReq);
 
 	@PostMapping("/dm-hang/search-all-ma")
 	@Headers({"Accept: application/json; charset=utf-8", "Content-Type: application/x-www-form-urlencoded"})

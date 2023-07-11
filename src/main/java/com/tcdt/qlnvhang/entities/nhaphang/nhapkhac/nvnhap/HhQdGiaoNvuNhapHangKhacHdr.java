@@ -94,6 +94,8 @@ public class HhQdGiaoNvuNhapHangKhacHdr implements Serializable {
 
 	@Transient
 	String tenLoaiVthh;
+	@Transient
+	String tenLoaiHangHoa;
 
 	@Transient
 	String tenCloaiVthh;
