@@ -199,7 +199,7 @@ public class HhNkPhieuNhapKhoServiceImpl implements HhNkPhieuNhapKhoService {
             HhNkPhieuNhapKhoHdrDTO dx = data.get(i);
             objs = new Object[rowsName.length];
             objs[0] = i;
-            objs[1] = dx.getSoQdinh();
+            objs[1] = dx.getSoQdPdNk();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
