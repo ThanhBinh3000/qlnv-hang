@@ -22,7 +22,7 @@ public interface HhNkPhieuNhapKhoHdrRepository extends JpaRepository<HhNkPhieuNh
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = pnk.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdgnv.trangThai = '29'" +
-            "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR dmvt.ma LIKE CONCAT('',LOWER(:#{#param.loaiVthh}),'%')) " +
             "AND ((:#{#param.maDvi} IS NULL OR pnk.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND (:#{#param.nam} IS NULL OR qdgnv.nam = :#{#param.nam}) " +
             "ORDER BY pnk.soPhieuNhapKho desc, pnk.nam desc")
@@ -35,7 +35,7 @@ public interface HhNkPhieuNhapKhoHdrRepository extends JpaRepository<HhNkPhieuNh
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = pnk.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdgnv.trangThai = '29'" +
-            "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR dmvt.ma LIKE CONCAT('',LOWER(:#{#param.loaiVthh}),'%')) " +
             "AND ((:#{#param.maDvi} IS NULL OR pnk.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND (:#{#param.nam} IS NULL OR qdgnv.nam = :#{#param.nam}) " +
             "ORDER BY pnk.soPhieuNhapKho desc, pnk.nam desc")
