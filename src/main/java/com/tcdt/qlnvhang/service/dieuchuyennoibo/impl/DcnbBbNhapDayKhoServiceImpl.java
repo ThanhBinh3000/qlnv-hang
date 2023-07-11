@@ -112,6 +112,7 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
             throw new Exception("Số biên bản không tồn tại");
         }
         DcnbBbNhapDayKhoHdr data = optional.get();
+        req.setMaDvi(userInfo.getDvql());
         BeanUtils.copyProperties(req, data);
         data.setChildren(req.getChildren());
         DcnbBbNhapDayKhoHdr update = hdrRepository.save(data);
