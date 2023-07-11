@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tcdt.qlnvhang.entities.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,8 +24,11 @@ public class DcnbBbNhapDayKhoDtl implements Serializable, Cloneable{
     private Long id;
     @Column(name = "HDR_ID", insertable = true, updatable = true)
     private Long hdrId;
-    private String phieuKtCluong;
-    private Long idPhieuKtCluong;
+
+    @Column(name = "PHIEU_KT_CLUONG")
+    private String soPhieuKiemTraCl;
+    @Column(name = "ID_PHIEU_KT_CLUONG")
+    private Long phieuKiemTraClId;
     private String phieuNhapKho;
     private Long idPhieuNhapKho;
     private String soBangKeCh;
