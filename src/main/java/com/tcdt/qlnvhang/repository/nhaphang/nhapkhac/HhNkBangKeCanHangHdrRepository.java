@@ -37,7 +37,7 @@ public interface HhNkBangKeCanHangHdrRepository extends JpaRepository<HhNkBangKe
             "AND ((:#{#param.maDvi} IS NULL OR dtl.maChiCuc LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND (:#{#param.nam} IS NULL OR qdgnv.nam = :#{#param.nam}) " +
             "AND (:#{#param.soBangKe} IS NULL OR LOWER(bkch.soBangKe) LIKE CONCAT('%',LOWER(:#{#param.soBangKe}),'%')) " +
-            "AND (:#{#param.soQdinhNk} IS NULL OR LOWER(qdgnv.soQd) LIKE CONCAT('%',LOWER(:#{#param.soQdinhNk}),'%')) " +
+            "AND (:#{#param.soQdPdNk} IS NULL OR LOWER(qdgnv.soQd) LIKE CONCAT('%',LOWER(:#{#param.soQdPdNk}),'%')) " +
             "AND (:#{#param.maLoKho} IS NULL OR bkch.maLoKho = :#{#param.maLoKho}) " +
             "AND (:#{#param.maNganKho} IS NULL OR bkch.maNganKho = :#{#param.maNganKho}) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR pnk.ngayLap >= :#{#param.tuNgay})" +

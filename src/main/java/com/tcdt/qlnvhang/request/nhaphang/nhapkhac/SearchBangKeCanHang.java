@@ -11,7 +11,7 @@ import java.time.LocalDate;
 public class SearchBangKeCanHang extends BaseRequest {
     private Integer nam;
     private String loaiVthh;
-    private String soQdinhNk;
+    private String soQdPdNk;
     private String soBangKe;
     private LocalDate tuNgay;
     private LocalDate denNgay;
