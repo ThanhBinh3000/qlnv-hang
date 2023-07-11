@@ -11,6 +11,8 @@ import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeCanHangHdrDTO;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeCanHangDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeCanHangHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuXuatKhoHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -235,6 +237,23 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
 //                } else {
 //                    throw new Exception("Type phải là 00 hoặc 01!");
 //                }
+                if ("00".equals(optional.get().getType())) { // xuất
+                    Optional<DcnbPhieuXuatKhoHdr> dcnbPhieuXuatKhoHdr = dcnbPhieuXuatKhoHdrRepository.findById(optional.get().getPhieuXuatKhoId());
+                    if(dcnbPhieuXuatKhoHdr.isPresent()){
+                        dcnbPhieuXuatKhoHdr.get().setBangKeChId(optional.get().getId());
+                        dcnbPhieuXuatKhoHdr.get().setSoBangKeCh(optional.get().getSoBangKe());
+                        dcnbPhieuXuatKhoHdrRepository.save(dcnbPhieuXuatKhoHdr.get());
+                    }
+                } else if ("01".equals(optional.get().getType())) {
+                    Optional<DcnbPhieuNhapKhoHdr> dcnbPhieuNhapKhoHdr = dcnbPhieuNhapKhoHdrRepository.findById(optional.get().getPhieuXuatKhoId());
+                    if(dcnbPhieuNhapKhoHdr.isPresent()){
+                        dcnbPhieuNhapKhoHdr.get().setBangKeChId(optional.get().getId());
+                        dcnbPhieuNhapKhoHdr.get().setSoBangKeCh(optional.get().getSoBangKe());
+                        dcnbPhieuNhapKhoHdrRepository.save(dcnbPhieuNhapKhoHdr.get());
+                    }
+                } else {
+                    throw new Exception("Type phải là 00 hoặc 01!");
+                }
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
