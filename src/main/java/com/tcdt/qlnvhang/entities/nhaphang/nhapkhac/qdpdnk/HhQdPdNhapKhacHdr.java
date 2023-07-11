@@ -34,6 +34,7 @@ public class HhQdPdNhapKhacHdr {
     private Long idDx;
     private String soDxuat;
     private Long idTh;
+    private String maTh;
     private Integer tongSlNhap;
     private Integer tongThanhTien;
     private String dvt;

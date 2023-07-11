@@ -254,6 +254,7 @@ public class HhQdPdNhapKhacServiceImpl extends BaseServiceImpl implements HhQdPd
             qOptional.get().setChildren(hhDxuatKhNhapKhacHdrRepository.findAllByThopId(qOptional.get().getIdTh()));
             for (HhDxuatKhNhapKhacHdr child : qOptional.get().getChildren()) {
                 dxDtls = new ArrayList<>();
+                child.setTenDvi(mapDmucDvi.get(child.getMaDviDxuat()));
                 dtls = hhQdPdNhapKhacDtlRepository.findAllByIdDxHdr(child.getId());
                 for (HhQdPdNhapKhacDtl dtl : dtls) {
                     HhDxuatKhNhapKhacDtl dxDtl = new HhDxuatKhNhapKhacDtl();

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
@@ -15,6 +16,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = XhHoSoKyThuatDtl.TABLE_NAME)
@@ -59,7 +61,13 @@ public class XhHoSoKyThuatDtl extends BaseEntity implements Serializable {
   //  BB_KTRA_HOSO_KYTHUAT = "BBKTHSKT",
   private String loaiBb;
   private String thoiDiemLap;
-
+  @JsonIgnore
+  @Transient
+  private Map<String, String> mapVthh;
+  @Transient
+  private String tenLoaiVthh;
+  @Transient
+  private String tenCloaiVthh;
   private LocalDate tgianBsung;
 
   @OneToMany(mappedBy = "xhHoSoKyThuatDtl", cascade = CascadeType.ALL)
@@ -74,7 +82,7 @@ public class XhHoSoKyThuatDtl extends BaseEntity implements Serializable {
   @Fetch(value = FetchMode.SUBSELECT)
   @JoinColumn(name = "dataId")
   @JsonManagedReference
-  @Where(clause = "data_type='" + XhHoSoKyThuatDtl.TABLE_NAME + "'")
+  @Where(clause = "data_type='" + XhHoSoKyThuatDtl.TABLE_NAME + "_DINH_KEM'")
   private List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem = new ArrayList<>();
 
   public void setFileDinhKem(List<FileDKemJoinHoSoKyThuatDtl> children) {
@@ -106,15 +114,25 @@ public class XhHoSoKyThuatDtl extends BaseEntity implements Serializable {
   @Fetch(value = FetchMode.SUBSELECT)
   @JoinColumn(name = "dataId")
   @JsonManagedReference
-  @Where(clause = "data_type='" + XhHoSoKyThuatDtl.TABLE_NAME + "VAN_BAN_BSUNG'")
+  @Where(clause = "data_type='" + XhHoSoKyThuatDtl.TABLE_NAME + "_VAN_BAN_BSUNG'")
   private List<FileDKemJoinHoSoKyThuatDtl> vanBanBsung = new ArrayList<>();
 
   public void setVanBanBsung(List<FileDKemJoinHoSoKyThuatDtl> children) {
     this.vanBanBsung.clear();
     for (FileDKemJoinHoSoKyThuatDtl child : children) {
-      child.setDataType(XhHoSoKyThuatDtl.TABLE_NAME + "_DINH_KEM");
+      child.setDataType(XhHoSoKyThuatDtl.TABLE_NAME + "_VAN_BAN_BSUNG");
       child.setParent(this);
     }
     this.vanBanBsung.addAll(children);
   }
+  public void setMapVthh(Map<String, String> mapVthh) {
+    this.mapVthh = mapVthh;
+    if (!DataUtils.isNullObject(getLoaiVthh())) {
+      setTenLoaiVthh(mapVthh.containsKey(getLoaiVthh()) ? mapVthh.get(getLoaiVthh()) : null);
+    }
+    if (!DataUtils.isNullObject(getCloaiVthh())) {
+      setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
+    }
+  }
+
 }

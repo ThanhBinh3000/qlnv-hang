@@ -5,10 +5,12 @@ import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBangKeCanHangHdrReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchBangKeCanHang;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeCanHangHdrDTO;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeCanHangDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeCanHangHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -60,21 +62,11 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
         } else {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            if ("00".equals(req.getType())) { // kiểu xuất
-                searchDto = dcnbBangKeCanHangHdrRepository.searchPageChiCucXuat(req, pageable);
-            }
-            if ("01".equals(req.getType())) { // kiểu nhan
-                searchDto = dcnbBangKeCanHangHdrRepository.searchPageChiCucNhan(req, pageable);
-            }
-        } else {
-            req.setTypeDataLink(Contains.DIEU_CHUYEN);
-            if ("00".equals(req.getType())) { // kiểu xuất
-                searchDto = dcnbBangKeCanHangHdrRepository.searchPageCucXuat(req, pageable);
-            }
-            if ("01".equals(req.getType())) { // kiểu nhan
-                searchDto = dcnbBangKeCanHangHdrRepository.searchPageCucNhan(req, pageable);
-            }
+        if ("00".equals(req.getType())) { // kiểu xuất
+            searchDto = dcnbBangKeCanHangHdrRepository.searchPageXuat(req, pageable);
+        }
+        if ("01".equals(req.getType())) { // kiểu nhan
+            searchDto = dcnbBangKeCanHangHdrRepository.searchPageNhan(req, pageable);
         }
         return searchDto;
     }
@@ -207,42 +199,42 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 optional.get().setNgayPDuyet(LocalDate.now());
                 optional.get().setNguoiPDuyet(currentUser.getUser().getId());
-                DcnbDataLinkHdr dataLink = null;
-                if ("00".equals(optional.get().getType())) { // xuất
-                    dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
-                            optional.get().getQDinhDccId(),
-                            optional.get().getMaNganKho(),
-                            optional.get().getMaLoKho());
-                    Optional<DcnbPhieuXuatKhoHdr> dcnbPhieuXuatKhoHdr = dcnbPhieuXuatKhoHdrRepository.findById(optional.get().getPhieuXuatKhoId());
-                    if(dcnbPhieuXuatKhoHdr.isPresent()){
-                        dcnbPhieuXuatKhoHdr.get().setBangKeChId(optional.get().getId());
-                        dcnbPhieuXuatKhoHdr.get().setSoBangKeCh(optional.get().getSoBangKe());
-                        dcnbPhieuXuatKhoHdrRepository.save(dcnbPhieuXuatKhoHdr.get());
-                    }
-                } else if ("01".equals(optional.get().getType())) {
-                    dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCucNhan(optional.get().getMaDvi(),
-                            optional.get().getQDinhDccId(),
-                            optional.get().getMaNganKho(),
-                            optional.get().getMaLoKho());
-                    Optional<DcnbPhieuNhapKhoHdr> dcnbPhieuNhapKhoHdr = dcnbPhieuNhapKhoHdrRepository.findById(optional.get().getPhieuXuatKhoId());
-                    if(dcnbPhieuNhapKhoHdr.isPresent()){
-                        dcnbPhieuNhapKhoHdr.get().setBangKeChId(optional.get().getId());
-                        dcnbPhieuNhapKhoHdr.get().setSoBangKeCh(optional.get().getSoBangKe());
-                        dcnbPhieuNhapKhoHdrRepository.save(dcnbPhieuNhapKhoHdr.get());
-                    }
-                } else {
-                    throw new Exception("Type phải là 00 hoặc 01!");
-                }
-                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
-                dataLinkDtl.setLinkId(optional.get().getId());
-                dataLinkDtl.setHdrId(dataLink.getId());
-                if ("00".equals(optional.get().getType())) { // xuất
-                    dataLinkDtl.setType("XDC" + DcnbBangKeCanHangHdr.TABLE_NAME);
-                } else if ("01".equals(optional.get().getType())) {
-                    dataLinkDtl.setType("NDC" + DcnbBangKeCanHangHdr.TABLE_NAME);
-                } else {
-                    throw new Exception("Type phải là 00 hoặc 01!");
-                }
+//                DcnbDataLinkHdr dataLink = null;
+//                if ("00".equals(optional.get().getType())) { // xuất
+//                    dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
+//                            optional.get().getQDinhDccId(),
+//                            optional.get().getMaNganKho(),
+//                            optional.get().getMaLoKho());
+//                    Optional<DcnbPhieuXuatKhoHdr> dcnbPhieuXuatKhoHdr = dcnbPhieuXuatKhoHdrRepository.findById(optional.get().getPhieuXuatKhoId());
+//                    if(dcnbPhieuXuatKhoHdr.isPresent()){
+//                        dcnbPhieuXuatKhoHdr.get().setBangKeChId(optional.get().getId());
+//                        dcnbPhieuXuatKhoHdr.get().setSoBangKeCh(optional.get().getSoBangKe());
+//                        dcnbPhieuXuatKhoHdrRepository.save(dcnbPhieuXuatKhoHdr.get());
+//                    }
+//                } else if ("01".equals(optional.get().getType())) {
+//                    dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCucNhan(optional.get().getMaDvi(),
+//                            optional.get().getQDinhDccId(),
+//                            optional.get().getMaNganKho(),
+//                            optional.get().getMaLoKho());
+//                    Optional<DcnbPhieuNhapKhoHdr> dcnbPhieuNhapKhoHdr = dcnbPhieuNhapKhoHdrRepository.findById(optional.get().getPhieuXuatKhoId());
+//                    if(dcnbPhieuNhapKhoHdr.isPresent()){
+//                        dcnbPhieuNhapKhoHdr.get().setBangKeChId(optional.get().getId());
+//                        dcnbPhieuNhapKhoHdr.get().setSoBangKeCh(optional.get().getSoBangKe());
+//                        dcnbPhieuNhapKhoHdrRepository.save(dcnbPhieuNhapKhoHdr.get());
+//                    }
+//                } else {
+//                    throw new Exception("Type phải là 00 hoặc 01!");
+//                }
+//                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
+//                dataLinkDtl.setLinkId(optional.get().getId());
+//                dataLinkDtl.setHdrId(dataLink.getId());
+//                if ("00".equals(optional.get().getType())) { // xuất
+//                    dataLinkDtl.setType("XDC" + DcnbBangKeCanHangHdr.TABLE_NAME);
+//                } else if ("01".equals(optional.get().getType())) {
+//                    dataLinkDtl.setType("NDC" + DcnbBangKeCanHangHdr.TABLE_NAME);
+//                } else {
+//                    throw new Exception("Type phải là 00 hoặc 01!");
+//                }
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -259,7 +251,7 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
-        Page<DcnbBangKeCanHangHdrDTO> page = dcnbBangKeCanHangHdrRepository.searchPageChiCucXuat(objReq, pageable);
+        Page<DcnbBangKeCanHangHdrDTO> page = dcnbBangKeCanHangHdrRepository.searchPageXuat(objReq, pageable);
         List<DcnbBangKeCanHangHdrDTO> data = page.getContent();
 
         String title = "Danh sách bảng kê cân hàng ";

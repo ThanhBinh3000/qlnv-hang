@@ -70,6 +70,23 @@ public class HhHopDongMttHdrController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
+    @ApiOperation(value = "Tạo mới thông tin hợp đồng ", response = List.class)
+    @PostMapping(value =  PathContains.URL_TAO_MOI + "/phu-luc", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<BaseResponse> insertPL(HttpServletRequest request, @Valid @RequestBody HopDongMttHdrReq req) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(hopDongMttHdrService.savePl(req));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tạo mới thông tin  : {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
 
     @ApiOperation(value = "Cập nhật thông tin hợp đồng", response = List.class)
     @PostMapping(value =  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)

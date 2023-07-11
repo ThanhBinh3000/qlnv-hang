@@ -103,7 +103,7 @@ public class XhCtvtBbTinhKhoService extends BaseServiceImpl {
   }
   
   @Transactional()
-  void saveCtiet(Long idHdr, XhCtvtBbTinhKhoHdrReq objReq) {
+  public void saveCtiet(Long idHdr, XhCtvtBbTinhKhoHdrReq objReq) {
     for (XhCtvtBbTinhKhoDtl listPhieuXuatKhoReq : objReq.getListPhieuXuatKho()) {
       XhCtvtBbTinhKhoDtl listPhieuXuatKho =new XhCtvtBbTinhKhoDtl();
       BeanUtils.copyProperties(listPhieuXuatKhoReq,listPhieuXuatKho);

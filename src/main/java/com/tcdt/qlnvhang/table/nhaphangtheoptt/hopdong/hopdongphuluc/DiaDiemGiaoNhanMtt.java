@@ -1,11 +1,14 @@
 package com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -26,7 +29,21 @@ public class DiaDiemGiaoNhanMtt implements Serializable {
   @Transient
   private String tenDvi;
 
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+  private Date ngayPduyet;
+
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+  private Date ngayHlucPhuLuc;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+  private Date thoiGianDuKienSauDc;
+  private String tgianThienHdSauDc;
+
+  private String noiDungPl;
+  private String noiDungDc;
+  private String ghiChu;
+
   private String diaChi;
+  private String trangThaiPhuLuc;
 
   private BigDecimal soLuongChiTieu;
 
