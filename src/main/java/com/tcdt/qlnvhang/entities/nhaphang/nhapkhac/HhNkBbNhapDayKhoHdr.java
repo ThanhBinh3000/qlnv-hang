@@ -1,9 +1,11 @@
-package com.tcdt.qlnvhang.table.dieuchuyennoibo;
+package com.tcdt.qlnvhang.entities.nhaphang.nhapkhac;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,45 +15,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = DcnbBbNhapDayKhoHdr.TABLE_NAME)
+@Table(name = HhNkBbNhapDayKhoHdr.TABLE_NAME)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DcnbBbNhapDayKhoHdr extends BaseEntity implements Serializable, Cloneable{
+public class HhNkBbNhapDayKhoHdr extends BaseEntity implements Serializable, Cloneable{
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "DCNB_BB_NHAP_DAY_KHO_HDR";
+    public static final String TABLE_NAME = "HHNK_BB_NHAP_DAY_KHO_HDR";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBbNhapDayKhoHdr.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbBbNhapDayKhoHdr.TABLE_NAME
-            + "_SEQ", allocationSize = 1, name = DcnbBbNhapDayKhoHdr.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = HhNkBbNhapDayKhoHdr.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = HhNkBbNhapDayKhoHdr.TABLE_NAME
+            + "_SEQ", allocationSize = 1, name = HhNkBbNhapDayKhoHdr.TABLE_NAME + "_SEQ")
     private Long id;
-    private String loaiDc;
     private Integer nam;
     private String maDvi;
     private String tenDvi;
     private String maQhns;
     private String soBb;
     private LocalDate ngayLap;
-    private String soQdDcCuc;
-    private Long qdDcCucId;
-    private LocalDate ngayQdDcCuc;
-    private Long idKeHoachDtl;
+    private String soQdPdNk;
+    private Long qdPdNkId;
+    private LocalDate ngayQdPdNk;
     private String maDiemKho;
     private String maNhaKho;
     private String maNganKho;
     private String maLoKho;
     private String loaiVthh;
     private String cloaiVthh;
-    private String dviTinh;
+    private String donViTinh;
     private LocalDate ngayBdNhap;
     private LocalDate ngayKtNhap;
-    private BigDecimal soLuongQdDcCuc;
+    private BigDecimal soLuongQd;
+    private String ghiChu;
     private Long idThuKho;
     private Long idKyThuatVien;
     private Long idKeToan;
     private Long idLanhDao;
-    private String ghiChu;
+
     private String tenThuKho;
     private String tenKyThuatVien;
     private String tenKeToan;
@@ -63,7 +64,7 @@ public class DcnbBbNhapDayKhoHdr extends BaseEntity implements Serializable, Clo
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
-    private List<DcnbBbNhapDayKhoDtl> children = new ArrayList<>();
+    private List<HhNkBbNhapDayKhoDtl> children = new ArrayList<>();
     @Transient
     private String tenTrangThai;
     public void setTrangThai(String trangThai) {
