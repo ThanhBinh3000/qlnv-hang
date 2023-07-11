@@ -24,4 +24,6 @@ public interface ScPhieuXuatKhoHdrRepository extends JpaRepository<ScPhieuXuatKh
             "AND (:#{#param.idScDanhSachHdr} IS NULL OR qd.idScDanhSachHdr = :#{#param.idScDanhSachHdr}) " +
             "AND (:#{#param.soPhieuXuatKho} IS NULL OR qd.soPhieuXuatKho LIKE CONCAT(:#{#param.soPhieuXuatKho},'%'))")
     List<ScPhieuXuatKhoHdr> searchList(@Param("param") ScPhieuXuatKhoReq req);
+
+    List<ScPhieuXuatKhoHdr> findAllByIdQdXh(Long idQdXh);
 }
