@@ -377,8 +377,8 @@ public class Contains {
     }
 
     // Loai hình xuất
-    public static final String XUAT_MAU = "00";
-    public static final String XUAT_HUY = "01";
+    public static final String XUAT_MAU = "XUAT_MAU";
+    public static final String XUAT_HUY = "XUAT_HUY";
     public static final Map<String, String> mapLoaiHinhXuat;
 
     static {
@@ -386,4 +386,7 @@ public class Contains {
                 .put(Contains.XUAT_HUY, "Xuất hàng bị hủy khỏi kho").get();
     }
 
+    public static String getLoaiHinhXuat(String key) {
+        return Contains.mapLoaiHinhXuat.get(key);
+    }
 }
