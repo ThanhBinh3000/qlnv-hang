@@ -49,6 +49,12 @@ public class HhQdPdNhapKhacDtl {
     private String tenNganLoKho;
     @Transient
     private String tenCloaiVthh;
+    @Transient
+    private String tenLoaiVthh;
+    @Transient
+    private String dvt;
+    @Transient
+    String tenLoaiHangHoa;
     private String cloaiVthh;
     private BigDecimal slTonKho;
     private BigDecimal slHaoDoiDinhMuc;

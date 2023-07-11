@@ -1,8 +1,10 @@
 package com.tcdt.qlnvhang.repository.xuathang.suachuahang;
 
 import com.tcdt.qlnvhang.request.suachua.ScBangKeXuatVatTuReq;
+import com.tcdt.qlnvhang.request.suachua.ScPhieuXuatKhoReq;
 import com.tcdt.qlnvhang.response.suachua.ScBangKeXuatVtDTO;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScBangKeXuatVatTuHdr;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScPhieuXuatKhoHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,5 +32,13 @@ public interface ScBangKeXuatVatTuHdrRepository extends JpaRepository<ScBangKeXu
 //            "AND (:#{#param.soBangKe} IS NULL OR hdr.soBangKe = :#{#param.soBangKe})"
 //    )
 //    Page<ScBangKeXuatVtDTO> searchPage(@Param("param") ScBangKeXuatVatTuReq req, Pageable pageable);
+
+    @Query(value = "SELECT qd FROM ScBangKeXuatVatTuHdr qd " +
+            " LEFT JOIN ScPhieuXuatKhoHdr pxk on qd.idPhieuXuatKho = pxk.id " +
+            " WHERE 1 = 1 " +
+            "AND (:#{#param.nam} IS NULL OR qd.nam = :#{#param.nam}) " +
+            "AND (:#{#param.idScDanhSachHdr} IS NULL OR pxk.idScDanhSachHdr = :#{#param.idScDanhSachHdr}) " +
+            "AND (:#{#param.soPhieuXuatKho} IS NULL OR qd.soPhieuXuatKho LIKE CONCAT(:#{#param.soPhieuXuatKho},'%'))")
+    List<ScBangKeXuatVatTuHdr> searchList(@Param("param") ScBangKeXuatVatTuReq req);
 
 }

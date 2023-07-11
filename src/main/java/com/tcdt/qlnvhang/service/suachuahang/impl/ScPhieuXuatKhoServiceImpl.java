@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.service.suachuahang.impl;
 
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScBangKeXuatVatTuHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScPhieuXuatKhoDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScPhieuXuatKhoHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhXuatHangRepository;
@@ -46,6 +48,9 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
 
     @Autowired
     private ScQuyetDinhScService scQuyetDinhScService;
+
+    @Autowired
+    private ScBangKeXuatVatTuHdrRepository scBangKeXuatVatTuHdrRepository;
 
     @Override
     public Page<ScPhieuXuatKhoHdr> searchPage(ScPhieuXuatKhoReq req) throws Exception {
@@ -134,6 +139,16 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
             throw new Exception("Bản ghi không tồn tại");
         }
         ScPhieuXuatKhoHdr hdr = optional.get();
+
+        if(Objects.isNull(hdr.getIdBangKeCanHang())){
+            throw new Exception("Phiếu xuất kho đang chưa khởi tạo bảng kê xuất vật tư. Vui lòng tạo bảng kê xuất vật tư");
+        } else {
+            ScBangKeXuatVatTuHdr bk = scBangKeXuatVatTuHdrRepository.findById(hdr.getIdBangKeCanHang()).get();
+            if(!bk.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())){
+                throw new Exception("Số bảng kê " +bk.getSoBangKe()+" chưa đc phê duyệt. Vui lòng phê duyệt bảng kê");
+            }
+        }
+
         String status = hdr.getTrangThai() + req.getTrangThai();
         switch (status) {
             // Re approve : gửi lại duyệt
@@ -207,6 +222,13 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
             }
         });
         return search;
+    }
+
+    @Override
+    public List<ScPhieuXuatKhoHdr> searchDanhSachTaoBangKe(ScPhieuXuatKhoReq req) {
+        req.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
+        List<ScPhieuXuatKhoHdr> scPhieuXuatKhoHdrs = hdrRepository.searchListTaoBangKe(req);
+        return scPhieuXuatKhoHdrs;
     }
 
 //    @Override
