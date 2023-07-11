@@ -317,6 +317,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
           maDiaDiem = firstBySoBienBan.get().getMaLoKho();
         }
         xhHskt.setMaDiaDiem(maDiaDiem);
+        xhHskt.setTrangThai(nhHoSoKyThuat.getTrangThai());
         xhHskt.setXhHoSoKyThuatDtl(listDtl);
         xhHskt.setMapDmucDvi(mapDmucDvi);
         xhHskt.setMapVthh(mapVthh);
