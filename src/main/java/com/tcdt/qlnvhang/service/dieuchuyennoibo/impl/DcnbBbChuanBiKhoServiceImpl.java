@@ -86,7 +86,7 @@ public class DcnbBbChuanBiKhoServiceImpl implements DcnbBbChuanBiKhoService {
         DcnbBbChuanBiKhoHdr data = new DcnbBbChuanBiKhoHdr();
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(userInfo.getDvql());
-        data.setId(Long.parseLong(req.getSoBban().split("/")[0]));
+        data.setId(null);
         req.getChildren().forEach(e -> {
             e.setParent(data);
         });

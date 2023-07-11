@@ -78,7 +78,7 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
         DcnbBBKetThucNKHdr data = new DcnbBBKetThucNKHdr();
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(userInfo.getDvql());
-        data.setId(Long.parseLong(req.getSoBb().split("/")[0]));
+        data.setId(null);
         req.getBcnbBBKetThucNKDtl().forEach(e -> {
             e.setDcnbBBKetThucNKHdr(data);
         });

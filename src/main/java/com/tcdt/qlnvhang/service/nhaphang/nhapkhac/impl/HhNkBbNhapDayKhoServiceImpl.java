@@ -72,7 +72,7 @@ public class HhNkBbNhapDayKhoServiceImpl implements HhNkBbNhapDayKhoService {
         HhNkBbNhapDayKhoHdr data = new HhNkBbNhapDayKhoHdr();
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(userInfo.getDvql());
-        data.setId(Long.parseLong(req.getSoBb().split("/")[0]));
+        data.setId(null);
         req.getChildren().forEach(e -> {
             e.setParent(data);
         });
