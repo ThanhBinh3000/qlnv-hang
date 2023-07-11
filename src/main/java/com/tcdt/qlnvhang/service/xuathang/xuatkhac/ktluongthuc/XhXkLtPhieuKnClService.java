@@ -251,7 +251,7 @@ public class XhXkLtPhieuKnClService extends BaseServiceImpl {
             } else {
               f.setIdPhieuKnCl(phieuKnCl.getId());
               f.setSoPhieuKnCl(phieuKnCl.getSoPhieu());
-              f.setNgayLayMau(phieuKnCl.getNgayLayMau());
+              f.setNgayKnMau(phieuKnCl.getNgayKnMau());
               f.setTrangThaiKnCl(phieuKnCl.getTrangThai());
               f.setKqThamDinh(phieuKnCl.getKqThamDinh());
             }
