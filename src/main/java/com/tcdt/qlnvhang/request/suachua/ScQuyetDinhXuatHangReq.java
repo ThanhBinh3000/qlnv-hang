@@ -30,4 +30,8 @@ public class ScQuyetDinhXuatHangReq extends BaseRequest {
     private List<FileDinhKemReq> fileDinhKemReq;
     @Transient
     private List<FileDinhKemReq> fileCanCuReq;
+
+    //Region search
+    private String maDviSr;
+
 }

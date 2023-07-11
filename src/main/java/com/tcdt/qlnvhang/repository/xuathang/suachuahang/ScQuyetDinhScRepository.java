@@ -20,9 +20,9 @@ public interface ScQuyetDinhScRepository extends JpaRepository<ScQuyetDinhSc, Lo
     Page<ScQuyetDinhSc> searchPage(@Param("param") ScQuyetDinhScReq req, Pageable pageable);
 
     @Query(value = "SELECT c FROM ScQuyetDinhSc c " +
-            " LEFT JOIN ScTrinhThamDinhHdr tr on c.id = tr.idThHdr " +
+            " LEFT JOIN ScQuyetDinhXuatHang qd on c.id = qd.idQdSc " +
             " WHERE 1 = 1 " +
-            " AND tr.id is null " +
+            " AND qd.id is null " +
             " AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
             " ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc "
     )
