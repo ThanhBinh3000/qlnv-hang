@@ -82,7 +82,7 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         DcnbBbGiaoNhanHdr data = new DcnbBbGiaoNhanHdr();
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(userInfo.getDvql());
-        data.setId(Long.parseLong(req.getSoBb().split("/")[0]));
+        data.setId(null);
         req.getDanhSachDaiDien().forEach(e -> {
             e.setParent(data);
         });
