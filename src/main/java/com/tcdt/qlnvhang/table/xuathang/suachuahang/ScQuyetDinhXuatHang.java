@@ -46,9 +46,10 @@ public class ScQuyetDinhXuatHang extends BaseEntity implements Serializable {
     private List<FileDinhKem> fileCanCu;
     @Transient
     private List<FileDinhKem> fileDinhKem;
-
     @Transient
     private ScQuyetDinhSc scQuyetDinhSc;
+    @Transient
+    private List<ScDanhSachHdr> scDanhSachHdrList;
 
     public String getTenTrangThai(){
         return TrangThaiAllEnum.getLabelById(getTrangThai());

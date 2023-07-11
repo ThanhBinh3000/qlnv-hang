@@ -24,23 +24,11 @@ public class ScPhieuXuatKhoDtl extends BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = ScPhieuXuatKhoDtl.TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = ScPhieuXuatKhoDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = ScPhieuXuatKhoDtl.TABLE_NAME + "_SEQ")
     private Long id;
-
-    @Column(name = "HDR_ID",insertable = true, updatable = true)
-    private Long hdrId;
-    private String maLoaiHang;
-    private String tenLoaiHang;
-    private String maChungLoai;
-    private String tenChungLoai;
+    private Long idHdr;
+    private String tenMatHang;
     private String maSo;
     private String donViTinh;
-    private BigDecimal slDcThucTe;
-    private BigDecimal kinhPhiDc;
-    private BigDecimal duToanKinhPhi;
-    private BigDecimal kinhPhiDcTt;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
-    @JsonIgnore
-    private ScPhieuXuatKhoHdr parent;
+    private BigDecimal slDaDuyet;
+    private BigDecimal slThucTe;
 
 }

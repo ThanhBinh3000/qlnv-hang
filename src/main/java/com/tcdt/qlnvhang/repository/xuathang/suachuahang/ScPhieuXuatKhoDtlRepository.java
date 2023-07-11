@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 @Repository
 public interface ScPhieuXuatKhoDtlRepository extends JpaRepository<ScPhieuXuatKhoDtl,Long> {
-     List<ScPhieuXuatKhoDtl> findByHdrId(Long id) ;
 
+     List<ScPhieuXuatKhoDtl> findByIdHdr(Long id) ;
+
+     void deleteAllByIdHdr(Long idHdr);
 }
