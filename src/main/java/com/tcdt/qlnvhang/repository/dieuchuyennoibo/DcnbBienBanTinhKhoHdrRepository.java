@@ -17,7 +17,7 @@ import java.util.Optional;
 public interface DcnbBienBanTinhKhoHdrRepository extends JpaRepository<DcnbBienBanTinhKhoHdr, Long> {
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanTinhKhoHdrDTO(" +
-            "bbtk.id,qdc.id,pxk.id,bkch.id,qdc.soQdinh,qdc.nam,bbtk.thoiHanDieuChuyen,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
+            "bbtk.id,qdc.id,pxk.id,bkch.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
             "khdcd.tenLoKho,bbtk.soBbTinhKho,bbtk.ngayBatDauXuat, bbtk.ngayKeThucXuat,pxk.soPhieuXuatKho,bkch.soBangKe,pxk.ngayXuatKho," +
             "bbtk.trangThai,bbtk.trangThai,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.maNhaKho,khdcd.tenNhaKho," +
             "khdcd.maNganKho,khdcd.tenNganKho,qdc.ngayHieuLuc,qdc.ngayKyQdinh) " +
