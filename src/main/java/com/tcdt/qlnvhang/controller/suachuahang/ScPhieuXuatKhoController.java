@@ -55,6 +55,25 @@ public class ScPhieuXuatKhoController {
         return ResponseEntity.ok(resp);
     }
 
+    @ApiOperation(value = "Tra cứu thông tin biên bản", response = List.class)
+    @PostMapping(value = "/ds-bang-ke", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> getDanhSachTaoBangKe(@RequestBody ScPhieuXuatKhoReq objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.searchDanhSachTaoBangKe(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch ( Exception e) {
+            e.printStackTrace();
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu thông tin : {}", e);
+        }
+
+        return ResponseEntity.ok(resp);
+    }
+
     @ApiOperation(value = "Tạo mới thông tin biên bản ", response = List.class)
     @PostMapping(value =  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)

@@ -58,7 +58,7 @@ public class ScPhieuXuatKhoHdr extends BaseEntity implements Serializable {
     private BigDecimal tongSoLuong;
     private String ghiChu;
     private String trangThai;
-
+    private String donViTinh;
     @Transient
     private String tenDvi;
     @Transient

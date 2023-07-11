@@ -111,7 +111,6 @@ public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements S
         List<FileDinhKem> fileDinhKemList = fileDinhKemService.search(data.getId(), Collections.singleton(ScQuyetDinhXuatHang.TABLE_NAME + "_DINH_KEM"));
         data.setFileDinhKem(fileDinhKemList);
         data.setScQuyetDinhSc(scQuyetDinhScImpl.detail(data.getIdQdSc()));
-        data.setScPhieuXuatKhoHdrList(scPhieuXuatKhoHdrRepository.findAllByIdQdXh(data.getId()));
         return data;
     }
 
