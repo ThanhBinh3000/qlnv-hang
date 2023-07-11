@@ -50,6 +50,7 @@ public class XhXkTongHopDtl implements Serializable {
   private String soPhieuKnCl;
   private LocalDate ngayKnMau;
   private String trangThaiKnCl;
+  private Boolean KqThamDinh;
 
   @Transient
   private String tenTrangThaiKnCl;

@@ -62,7 +62,7 @@ public class XhXkLtPhieuKnClHdr extends BaseEntity implements Serializable {
   private Long nguoiPduyetId;
   private String lyDoTuChoi;
   private String type;
-  private boolean KqThamDinh;
+  private Boolean KqThamDinh;
 
   @Transient
   private String tenDvi;
