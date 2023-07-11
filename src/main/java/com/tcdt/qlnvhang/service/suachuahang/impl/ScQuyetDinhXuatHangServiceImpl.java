@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
+import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScPhieuXuatKhoHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhXuatHangRepository;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhScReq;
@@ -40,6 +41,9 @@ import java.util.Optional;
 public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements ScQuyetDinhXuatHangService {
     @Autowired
     private ScQuyetDinhXuatHangRepository scQuyetDinhXuatHangRepository;
+
+    @Autowired
+    private ScPhieuXuatKhoHdrRepository scPhieuXuatKhoHdrRepository;
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
@@ -107,6 +111,7 @@ public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements S
         List<FileDinhKem> fileDinhKemList = fileDinhKemService.search(data.getId(), Collections.singleton(ScQuyetDinhXuatHang.TABLE_NAME + "_DINH_KEM"));
         data.setFileDinhKem(fileDinhKemList);
         data.setScQuyetDinhSc(scQuyetDinhScImpl.detail(data.getIdQdSc()));
+        data.setScPhieuXuatKhoHdrList(scPhieuXuatKhoHdrRepository.findAllByIdQdXh(data.getId()));
         return data;
     }
 

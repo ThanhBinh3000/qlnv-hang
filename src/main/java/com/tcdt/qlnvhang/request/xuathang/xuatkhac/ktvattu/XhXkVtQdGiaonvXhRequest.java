@@ -12,7 +12,8 @@ import java.util.List;
 
 @Data
 public class XhXkVtQdGiaonvXhRequest extends BaseRequest {
-    private Long id;
+
+    Long id;
     Integer namKeHoach;
     String maDvi;
     String loai;
