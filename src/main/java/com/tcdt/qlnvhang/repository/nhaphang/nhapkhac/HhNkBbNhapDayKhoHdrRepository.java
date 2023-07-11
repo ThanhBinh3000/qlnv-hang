@@ -46,15 +46,14 @@ public interface HhNkBbNhapDayKhoHdrRepository extends JpaRepository<HhNkBbNhapD
             "FROM HhQdGiaoNvuNhapHangKhacHdr qdgnv " +
             "LEFT JOIN HhQdPdNhapKhacHdr hdr ON hdr.id = qdgnv.idQdPdNk " +
             "LEFT JOIN HhQdPdNhapKhacDtl dtl ON hdr.id = dtl.idHdr " +
-            "LEFT JOIN HhNkPhieuNhapKhoHdr pnk On pnk.qdGiaoNvId = qdgnv.id and pnk.maLoKho = dtl.maLoKho and pnk.maNganKho = dtl.maNganKho " +
             "LEFT JOIN HhNkBbNhapDayKhoHdr bbndk On bbndk.qdPdNkId = qdgnv.id and dtl.maNganKho = bbndk.maNganKho and dtl.maLoKho = bbndk.maLoKho " +
             "LEFT JOIN HhNkBbNhapDayKhoDtl bbndkd On bbndkd.hdrId = bbndk.id  " +
             "LEFT JOIN HhNkPhieuNhapKhoHdr pnk On pnk.qdGiaoNvId = qdgnv.idQdPdNk and pnk.maLoKho = dtl.maLoKho and pnk.maNganKho = dtl.maNganKho " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = dtl.cloaiVthh " +
             "LEFT JOIN QlnvDmDonvi dmdvnhakho On dmdvnhakho.maDvi = dtl.maNhaKho " +
-            "LEFT JOIN QlnvDmDonvi dmdvdiemkho On dmdvnhakho.maDvi = dtl.maDiemKho " +
-            "LEFT JOIN QlnvDmDonvi dmdvlokho On dmdvnhakho.maDvi = dtl.maLoKho " +
-            "LEFT JOIN QlnvDmDonvi dmdvngankho On dmdvnhakho.maDvi = dtl.maNganKho " +
+            "LEFT JOIN QlnvDmDonvi dmdvdiemkho On dmdvdiemkho.maDvi = dtl.maDiemKho " +
+            "LEFT JOIN QlnvDmDonvi dmdvlokho On dmdvlokho.maDvi = dtl.maLoKho " +
+            "LEFT JOIN QlnvDmDonvi dmdvngankho On dmdvngankho.maDvi = dtl.maNganKho " +
             "WHERE 1 =1 " +
             "AND qdgnv.trangThai = '29'" +
             "AND ((:#{#param.maDvi} IS NULL OR qdgnv.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
