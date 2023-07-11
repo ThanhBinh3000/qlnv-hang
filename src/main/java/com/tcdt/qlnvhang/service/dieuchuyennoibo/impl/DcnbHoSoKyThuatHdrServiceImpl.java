@@ -183,22 +183,22 @@ public class DcnbHoSoKyThuatHdrServiceImpl extends BaseServiceImpl {
                 optional.get().setNguoiGduyetId(currentUser.getUser().getId());
                 break;
             case Contains.CHODUYET_TBP_TVQT + Contains.TUCHOI_TBP_TVQT:
-                optional.get().setNgayPduyet(LocalDate.now());
-                optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+                optional.get().setNgayPduyetTvqt(LocalDate.now());
+                optional.get().setNguoiPduyetIdTvqt(currentUser.getUser().getId());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_TBP_TVQT + Contains.CHODUYET_LDCC:
-                optional.get().setNgayPduyet(LocalDate.now());
-                optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+                optional.get().setNgayPduyetTvqt(LocalDate.now());
+                optional.get().setNguoiPduyetIdTvqt(currentUser.getUser().getId());
                 break;
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
-//                optional.get().setNgayDuyetLdcc(LocalDate.now());
-//                optional.get().setNguoiDuyetLdccId(currentUser.getUser().getId());
+                optional.get().setNgayPduyet(LocalDate.now());
+                optional.get().setNguoiPduyetId(currentUser.getUser().getId());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
-//                optional.get().setNgayDuyetLdcc(LocalDate.now());
-//                optional.get().setNguoiDuyetLdccId(currentUser.getUser().getId());
+                optional.get().setNgayPduyet(LocalDate.now());
+                optional.get().setNguoiPduyetId(currentUser.getUser().getId());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");

@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -155,14 +156,22 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
             case Contains.TUCHOI_KT + Contains.DUTHAO:
             case Contains.TUCHOI_LDCC + Contains.DUTHAO:
             case Contains.DUTHAO + Contains.CHODUYET_TK:
+                hdr.setNguoiGDuyet(userInfo.getId());
+                hdr.setNgayGDuyet(LocalDate.now());
                 break;
             case Contains.CHODUYET_TK + Contains.CHODUYET_KT:
+                hdr.setNgayPDuyetKt(LocalDate.now());
+                hdr.setNguoiPDuyeKt(userInfo.getId());
                 hdr.setThuKho(userInfo.getFullName());
                 break;
             case Contains.CHODUYET_KT + Contains.CHODUYET_LDCC:
+                hdr.setNgayPDuyetKt(LocalDate.now());
+                hdr.setNguoiPDuyeKt(userInfo.getId());
                 hdr.setKeToan(userInfo.getFullName());
                 break;
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
+                hdr.setNgayPDuyet(LocalDate.now());
+                hdr.setNguoiPDuyet(userInfo.getId());
                 hdr.setLdChiCuc(userInfo.getFullName());
 //                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(hdr.getMaDvi(),
 //                        hdr.getQdDcCucId(),
@@ -175,8 +184,13 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
 //                dcnbDataLinkDtlRepository.save(dataLinkDtl);
                 break;
             case Contains.CHODUYET_TK + Contains.TUCHOI_TK:
-            case Contains.CHODUYET_KT + Contains.TUCHOI_KT:
+                hdr.setNgayPDuyetKt(LocalDate.now());
+                hdr.setNguoiPDuyeKt(userInfo.getId());
+                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                break;
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
+                hdr.setNgayPDuyet(LocalDate.now());
+                hdr.setNguoiPDuyet(userInfo.getId());
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             default:

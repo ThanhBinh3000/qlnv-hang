@@ -99,6 +99,10 @@ public class DcnbPhieuNhapKhoHdr extends BaseEntity implements Serializable, Clo
     @Access(value=AccessType.PROPERTY)
     private String trangThai;
     private String lyDoTuChoi;
+    private Long nguoiGDuyet;
+    private LocalDate ngayGDuyet;
+    private Long nguoiPDuyet;
+    private LocalDate ngayPDuyet;
     @Transient
     private List<FileDinhKem> chungTuDinhKem = new ArrayList<>();
     @Transient

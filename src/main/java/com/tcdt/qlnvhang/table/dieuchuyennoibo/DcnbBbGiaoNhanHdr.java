@@ -38,7 +38,6 @@ public class DcnbBbGiaoNhanHdr extends BaseEntity implements Serializable, Clone
     private LocalDate ngayQdDcCuc;
     private String soBbKtNhapKho;
     private Long idBbKtNhapKho;
-    private Long idKeHoachDtl;
     private String maDiemKho;
     private String maNhaKho;
     private String maNganKho;
@@ -62,7 +61,13 @@ public class DcnbBbGiaoNhanHdr extends BaseEntity implements Serializable, Clone
     private String ghiChu;
     private String ketLuan;
     private Long idCanBo;
+    private String tenCanBo;
     private Long idLanhDao;
+    private String tenLanhDao;
+    private Long nguoiGDuyet;
+    private LocalDate ngayGDuyet;
+    private Long nguoiPDuyet;
+    private LocalDate ngayPDuyet;
     @Access(value=AccessType.PROPERTY)
     private String trangThai;
     private String lyDoTuChoi;

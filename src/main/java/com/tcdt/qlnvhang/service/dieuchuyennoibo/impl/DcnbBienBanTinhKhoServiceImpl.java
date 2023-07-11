@@ -209,34 +209,34 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
             case Contains.CHODUYET_KTVBQ + Contains.CHODUYET_KT:
                 optional.get().setNgayPduyetKtvBQ(LocalDate.now());
                 optional.get().setKtvBaoQuanId(currentUser.getUser().getId());
-                optional.get().setKtvBaoQuan(currentUser.getUser().getUsername());
+                optional.get().setKtvBaoQuan(currentUser.getUser().getFullName());
                 break;
             case Contains.CHODUYET_KT + Contains.CHODUYET_LDCC:
                 optional.get().setNgayPduyetKt(LocalDate.now());
                 optional.get().setKeToanId(currentUser.getUser().getId());
-                optional.get().setKeToan(currentUser.getUser().getUsername());
+                optional.get().setKeToan(currentUser.getUser().getFullName());
                 break;
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 optional.get().setNgayPduyetLdcc(LocalDate.now());
                 optional.get().setLanhDaoChiCucId(currentUser.getUser().getId());
-                optional.get().setLanhDaoChiCuc(currentUser.getUser().getUsername());
+                optional.get().setLanhDaoChiCuc(currentUser.getUser().getFullName());
                 break;
             case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_KTVBQ:
                 optional.get().setNgayPduyetKtvBQ(LocalDate.now());
                 optional.get().setKtvBaoQuanId(currentUser.getUser().getId());
-                optional.get().setKtvBaoQuan(currentUser.getUser().getUsername());
+                optional.get().setKtvBaoQuan(currentUser.getUser().getFullName());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_KT + Contains.TUCHOI_KT:
                 optional.get().setNgayPduyetKt(LocalDate.now());
                 optional.get().setKeToanId(currentUser.getUser().getId());
-                optional.get().setKeToan(currentUser.getUser().getUsername());
+                optional.get().setKeToan(currentUser.getUser().getFullName());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
                 optional.get().setNgayPduyetLdcc(LocalDate.now());
                 optional.get().setLanhDaoChiCucId(currentUser.getUser().getId());
-                optional.get().setLanhDaoChiCuc(currentUser.getUser().getUsername());
+                optional.get().setLanhDaoChiCuc(currentUser.getUser().getFullName());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
 //                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
 //                        optional.get().getQDinhDccId(),
