@@ -1,35 +1,26 @@
-package com.tcdt.qlnvhang.request.dieuchuyennoibo;
+package com.tcdt.qlnvhang.request.nhaphang.nhapkhac;
 
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhNkBbNhapDayKhoDtl;
 import com.tcdt.qlnvhang.request.BaseRequest;
-import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbNhapDayKhoDtl;
 import lombok.Data;
 
-import javax.persistence.CascadeType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class DcnbBbNhapDayKhoHdrReq extends BaseRequest {
+public class HhNkBbNhapDayKhoHdrReq extends BaseRequest {
     private Long id;
-    private String loaiQdinh;
-    private String loaiDc;
     private Integer nam;
     private String maDvi;
     private String tenDvi;
     private String maQhns;
     private String soBb;
     private LocalDate ngayLap;
-    private String soQdDcCuc;
-    private Long qdDcCucId;
-    private LocalDate ngayQdDcCuc;
-    private Long idDiaDiemKho;
+    private String soQdPdNk;
+    private Long qdPdNkId;
+    private LocalDate ngayQdPdNk;
     private String maDiemKho;
     private String maNhaKho;
     private String maNganKho;
@@ -42,25 +33,27 @@ public class DcnbBbNhapDayKhoHdrReq extends BaseRequest {
     private String tenLoKho;
     private String tenLoaiVthh;
     private String tenCloaiVthh;
-    private String dviTinh;
+    private String donViTinh;
     private LocalDate ngayBdNhap;
     private LocalDate ngayKtNhap;
-    private BigDecimal soLuongQdDcCuc;
+    private BigDecimal soLuongQd;
+    private String ghiChu;
     private Long idThuKho;
     private Long idKyThuatVien;
     private Long idKeToan;
     private Long idLanhDao;
-    private String ghiChu;
+
+    private String tenThuKho;
+    private String tenKyThuatVien;
+    private String tenKeToan;
+    private String tenLanhDao;
     private String trangThai;
     private String lyDoTuChoi;
-    private List<DcnbBbNhapDayKhoDtl> children = new ArrayList<>();
+    private List<HhNkBbNhapDayKhoDtl> children = new ArrayList<>();
     private LocalDate tuNgayBdNhap;
     private LocalDate denNgayBdNhap;
     private LocalDate tuNgayKtNhap;
     private LocalDate denNgayKtNhap;
     private LocalDate tuNgayThoiHanNh;
     private LocalDate denNgayThoiHanNh;
-
-    private Boolean isVatTu = false;
-    private List<String> dsLoaiHang = new ArrayList<>();
 }
