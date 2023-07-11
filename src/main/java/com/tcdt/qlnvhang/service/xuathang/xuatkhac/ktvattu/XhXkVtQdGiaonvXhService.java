@@ -49,7 +49,7 @@ public class XhXkVtQdGiaonvXhService extends BaseServiceImpl {
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         search.getContent().forEach(s -> {
-            s.setTenLoai(Contains.mapLoaiHinhXuat.get(s.getLoai()));
+            s.setTenLoai(Contains.getLoaiHinhXuat(s.getLoai()));
             s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
             s.getXhXkVtQdGiaonvXhDtl().forEach(item -> {
                 item.setMapVthh(mapVthh);
