@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 @Repository
@@ -25,45 +24,20 @@ public interface DcnbBBNTBQHdrRepository extends JpaRepository<DcnbBBNTBQHdr, Lo
 
     //
     Optional<DcnbBBNTBQHdr> findBySoBban(String soBban);
-    @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBNTBQHdrDTO(" +
-            "bblm.id, qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
-            "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan,khdcd.maDiemKhoNhan, khdcd.tenDiemKhoNhan, khdcd.maLoKhoNhan, khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, bblm.soBban," +
-            "bblm.ngayLap,bblm.ngayKetThucNt , bblm.tongKinhPhiDaTh,bblm.tongKinhPhiDaTh ,bblm.trangThai, bblm.trangThai,khdcd.tenLoaiVthh,khdcd.tenCloaiVthh, khdcd.tichLuongKd, khdcd.tenDonViTinh, khdcd.loaiVthh, khdcd.cloaiVthh) FROM DcnbQuyetDinhDcCHdr qdc " +
-            "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
-            "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
-            "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbBBNTBQHdr bblm On bblm.qdDcCucId = qdc.id and khdcd.maLoKhoNhan =  bblm.maLoKho and  khdcd.maNganKhoNhan = bblm.maNganKho and khdcd.maLoKho =  bblm.maLoKhoXuat and  khdcd.maNganKho = bblm.maNganKhoXuat " +
-            "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
-            "WHERE 1 =1 " +
-            "AND qdc.trangThai = '29'" +
-            "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) "+
-            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}) OR (:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))" +
-            "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
-            "AND (:#{#param.soQdDcCuc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdDcCuc}),'%')) " +
-            "AND (:#{#param.soBban} IS NULL OR LOWER(bblm.soBban) LIKE CONCAT('%',LOWER(:#{#param.soBban}),'%')) " +
-            "AND ((:#{#param.tuNgayLap}  IS NULL OR bblm.ngayLap >= :#{#param.tuNgayLap})" +
-            "AND (:#{#param.denNgayLap}  IS NULL OR bblm.ngayLap <= :#{#param.denNgayLap}) ) " +
-            "AND ((:#{#param.tuNgayKtnt}  IS NULL OR bblm.ngayKetThucNt >= :#{#param.tuNgayKtnt})" +
-            "AND (:#{#param.denNgayKtnt}  IS NULL OR bblm.ngayKetThucNt <= :#{#param.denNgayKtnt}) ) " +
-            "GROUP BY bblm.id, qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
-            "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan,khdcd.maDiemKhoNhan, khdcd.tenDiemKhoNhan, khdcd.maLoKhoNhan, khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, bblm.soBban," +
-            "bblm.ngayLap,bblm.ngayKetThucNt , bblm.tongKinhPhiDaTh,bblm.tongKinhPhiDaTh ,bblm.trangThai, bblm.trangThai,khdcd.tenLoaiVthh,khdcd.tenCloaiVthh, khdcd.tichLuongKd, khdcd.tenDonViTinh, khdcd.loaiVthh, khdcd.cloaiVthh")
-    Page<DcnbBBNTBQHdrDTO> searchPageChiCuc(@Param("param") DcnbBBNTBQHdrReq req, Pageable pageable);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBNTBQHdrDTO(" +
             "bblm.id, qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
-            "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan, khdcd.maDiemKhoNhan, khdcd.tenDiemKhoNhan, khdcd.maLoKhoNhan, khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, bblm.soBban," +
+            "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan,khdcd.maDiemKhoNhan, khdcd.tenDiemKhoNhan, khdcd.maLoKhoNhan, khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, bblm.soBban," +
             "bblm.ngayLap,bblm.ngayKetThucNt , bblm.tongKinhPhiDaTh,bblm.tongKinhPhiDaTh ,bblm.trangThai, bblm.trangThai,khdcd.tenLoaiVthh,khdcd.tenCloaiVthh, khdcd.tichLuongKd, khdcd.tenDonViTinh, khdcd.loaiVthh, khdcd.cloaiVthh) FROM DcnbQuyetDinhDcCHdr qdc " +
-            "LEFT JOIN DcnbQuyetDinhDcCHdr qdc2 On qdc2.id = qdc.parentId " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
             "LEFT JOIN DcnbBBNTBQHdr bblm On bblm.qdDcCucId = qdc.id and khdcd.maLoKhoNhan =  bblm.maLoKho and  khdcd.maNganKhoNhan = bblm.maNganKho and khdcd.maLoKho =  bblm.maLoKhoXuat and  khdcd.maNganKho = bblm.maNganKhoXuat " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
-            "AND qdc.trangThai = '29'" +
-            "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) "+
-            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}) OR (:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))" +
+            "AND qdc.parentId is not null and qdc.trangThai = '29'" +
+            "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
+            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
             "AND (:#{#param.soQdDcCuc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdDcCuc}),'%')) " +
             "AND (:#{#param.soBban} IS NULL OR LOWER(bblm.soBban) LIKE CONCAT('%',LOWER(:#{#param.soBban}),'%')) " +
@@ -71,7 +45,6 @@ public interface DcnbBBNTBQHdrRepository extends JpaRepository<DcnbBBNTBQHdr, Lo
             "AND (:#{#param.denNgayLap}  IS NULL OR bblm.ngayLap <= :#{#param.denNgayLap}) ) " +
             "AND ((:#{#param.tuNgayKtnt}  IS NULL OR bblm.ngayKetThucNt >= :#{#param.tuNgayKtnt})" +
             "AND (:#{#param.denNgayKtnt}  IS NULL OR bblm.ngayKetThucNt <= :#{#param.denNgayKtnt}) ) " +
-            "AND qdc.type IS NULL " +
             "GROUP BY bblm.id, qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
             "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan,khdcd.maDiemKhoNhan, khdcd.tenDiemKhoNhan, khdcd.maLoKhoNhan, khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, bblm.soBban," +
             "bblm.ngayLap,bblm.ngayKetThucNt , bblm.tongKinhPhiDaTh,bblm.tongKinhPhiDaTh ,bblm.trangThai, bblm.trangThai,khdcd.tenLoaiVthh,khdcd.tenCloaiVthh, khdcd.tichLuongKd, khdcd.tenDonViTinh, khdcd.loaiVthh, khdcd.cloaiVthh")

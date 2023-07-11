@@ -13,7 +13,9 @@ import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanHaoDoiHdrDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanHaoDoiDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanHaoDoiHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanHaoDoiTtDtl;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -69,19 +71,15 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbBienBanHaoDoiHdrDTO> searchDto = null;
-        if(req.getIsVatTu() == null){
+        if (req.getIsVatTu() == null) {
             req.setIsVatTu(false);
         }
-        if(req.getIsVatTu()){
+        if (req.getIsVatTu()) {
             req.setDsLoaiHang(Arrays.asList("VT"));
-        }else {
-            req.setDsLoaiHang(Arrays.asList("LT","M"));
+        } else {
+            req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            searchDto = dcnbBienBanHaoDoiHdrRepository.searchPageChiCuc(req, pageable);
-        }else {
-            searchDto = dcnbBienBanHaoDoiHdrRepository.searchPageCuc(req, pageable);
-        }
+        searchDto = dcnbBienBanHaoDoiHdrRepository.searchPage(req, pageable);
         return searchDto;
     }
 
@@ -105,7 +103,7 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
             e.setDcnbBienBanHaoDoiHdr(data);
         });
         DcnbBienBanHaoDoiHdr created = dcnbBienBanHaoDoiHdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBHD-"+ currentUser.getUser().getDvqlTenVietTat();
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BBHD-" + currentUser.getUser().getDvqlTenVietTat();
         created.setSoBienBan(so);
         dcnbBienBanHaoDoiHdrRepository.save(created);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), DcnbBienBanHaoDoiHdr.TABLE_NAME);
@@ -138,7 +136,7 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         data.setDanhSachBangKe(objReq.getDanhSachBangKe());
         data.setThongTinHaoHut(objReq.getThongTinHaoHut());
         DcnbBienBanHaoDoiHdr created = dcnbBienBanHaoDoiHdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBHD-"+ currentUser.getUser().getDvqlTenVietTat();
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BBHD-" + currentUser.getUser().getDvqlTenVietTat();
         created.setSoBienBan(so);
         dcnbBienBanHaoDoiHdrRepository.save(created);
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbBienBanHaoDoiHdr.TABLE_NAME));
@@ -285,7 +283,7 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
-        Page<DcnbBienBanHaoDoiHdrDTO> page = dcnbBienBanHaoDoiHdrRepository.searchPageChiCuc(objReq, pageable);
+        Page<DcnbBienBanHaoDoiHdrDTO> page = dcnbBienBanHaoDoiHdrRepository.searchPage(objReq, pageable);
         List<DcnbBienBanHaoDoiHdrDTO> data = page.getContent();
 
         String title = "Danh sách bảng kê cân hàng ";

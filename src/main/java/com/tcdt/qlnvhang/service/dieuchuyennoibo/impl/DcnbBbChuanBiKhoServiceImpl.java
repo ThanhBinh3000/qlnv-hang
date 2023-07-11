@@ -65,12 +65,7 @@ public class DcnbBbChuanBiKhoServiceImpl implements DcnbBbChuanBiKhoService {
         } else {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            searchDto = hdrRepository.searchPageChiCuc(req, pageable);
-        } else {
-            searchDto = hdrRepository.searchPage(req, pageable);
-        }
-
+        searchDto = hdrRepository.searchPage(req, pageable);
         return searchDto;
     }
 
@@ -96,7 +91,7 @@ public class DcnbBbChuanBiKhoServiceImpl implements DcnbBbChuanBiKhoService {
             e.setParent(data);
         });
         DcnbBbChuanBiKhoHdr created = hdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBCBK-"+ userInfo.getDvqlTenVietTat();
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BBCBK-" + userInfo.getDvqlTenVietTat();
         created.setSoBban(so);
         hdrRepository.save(created);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBbChuanBiKhoHdr.TABLE_NAME);
@@ -121,7 +116,7 @@ public class DcnbBbChuanBiKhoServiceImpl implements DcnbBbChuanBiKhoService {
         BeanUtils.copyProperties(req, data);
         data.setChildren(req.getChildren());
         DcnbBbChuanBiKhoHdr update = hdrRepository.save(data);
-        String so = update.getId() + "/" + (new Date().getYear() + 1900) +"/BBCBK-"+ userInfo.getDvqlTenVietTat();
+        String so = update.getId() + "/" + (new Date().getYear() + 1900) + "/BBCBK-" + userInfo.getDvqlTenVietTat();
         update.setSoBban(so);
         hdrRepository.save(update);
         fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBbChuanBiKhoHdr.TABLE_NAME));

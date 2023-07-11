@@ -8,7 +8,9 @@ import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBangKeNhapVTReq;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeNhapVTHdrDTO;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBangKeNhapVTService;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeNhapVTDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeNhapVTHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -57,12 +59,7 @@ public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService {
         } else {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            searchDto = hdrRepository.searchPage(req, pageable);
-        } else {
-            req.setTypeDataLink(Contains.DIEU_CHUYEN);
-            searchDto = hdrRepository.searchPageCuc(req, pageable);
-        }
+        searchDto = hdrRepository.searchPage(req, pageable);
         return searchDto;
     }
 

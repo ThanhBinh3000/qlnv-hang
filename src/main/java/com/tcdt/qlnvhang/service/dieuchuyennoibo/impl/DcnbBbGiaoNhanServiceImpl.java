@@ -53,29 +53,25 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbBbGiaoNhanHdrDTO> searchDto = null;
-        if(req.getIsVatTu() == null){
+        if (req.getIsVatTu() == null) {
             req.setIsVatTu(false);
         }
-        if(req.getIsVatTu()){
+        if (req.getIsVatTu()) {
             req.setDsLoaiHang(Arrays.asList("VT"));
-        }else {
-            req.setDsLoaiHang(Arrays.asList("LT","M"));
+        } else {
+            req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            searchDto = hdrRepository.searchPageChiCuc(req, pageable);
-        }else{
-            searchDto = hdrRepository.searchPageCuc(req, pageable);
-        }
+        searchDto = hdrRepository.searchPage(req, pageable);
         return searchDto;
     }
 
     @Override
     public DcnbBbGiaoNhanHdr create(DcnbBbGiaoNhanHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
+        if (userInfo == null) {
             throw new Exception("Access denied.");
         }
-        if(!userInfo.getCapDvi().equals(Contains.CAP_CUC)){
+        if (!userInfo.getCapDvi().equals(Contains.CAP_CUC)) {
             throw new Exception("Văn bản này chỉ có thêm ở cấp cục");
         }
 //        Optional<DcnbBbGiaoNhanHdr> optional = hdrRepository.findFirstBySoBb(req.getSoBb());
@@ -94,11 +90,11 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
             e.setParent(data);
         });
         DcnbBbGiaoNhanHdr created = hdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBGN-"+ userInfo.getDvqlTenVietTat();
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BBGN-" + userInfo.getDvqlTenVietTat();
         created.setSoBb(so);
         hdrRepository.save(created);
-        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME +"_CC");
-        List<FileDinhKem> dinhkem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME+"_DK");
+        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME + "_CC");
+        List<FileDinhKem> dinhkem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME + "_DK");
         created.setFileCanCu(canCu);
         created.setFileDinhKems(dinhkem);
         return created;
@@ -107,10 +103,10 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
     @Override
     public DcnbBbGiaoNhanHdr update(DcnbBbGiaoNhanHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
+        if (userInfo == null) {
             throw new Exception("Access denied.");
         }
-        if(!userInfo.getCapDvi().equals(Contains.CAP_CUC)){
+        if (!userInfo.getCapDvi().equals(Contains.CAP_CUC)) {
             throw new Exception("Văn bản này chỉ có thêm ở cấp cục");
         }
         Optional<DcnbBbGiaoNhanHdr> optional = hdrRepository.findById(req.getId());
@@ -118,17 +114,17 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
             throw new Exception("Số biên bản không tồn tại");
         }
         DcnbBbGiaoNhanHdr data = optional.get();
-        BeanUtils.copyProperties(req,data);
+        BeanUtils.copyProperties(req, data);
         data.setDanhSachDaiDien(req.getDanhSachDaiDien());
         data.setDanhSachBangKe(req.getDanhSachBangKe());
         DcnbBbGiaoNhanHdr update = hdrRepository.save(data);
-        String so = update.getId() + "/" + (new Date().getYear() + 1900) +"/BBGN-"+ userInfo.getDvqlTenVietTat();
+        String so = update.getId() + "/" + (new Date().getYear() + 1900) + "/BBGN-" + userInfo.getDvqlTenVietTat();
         update.setSoBb(so);
         hdrRepository.save(update);
-        fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBbGiaoNhanHdr.TABLE_NAME+"_CC"));
-        fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBbGiaoNhanHdr.TABLE_NAME+"_DK"));
-        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), update.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME+"_CC");
-        List<FileDinhKem> dinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME+"_DK");
+        fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBbGiaoNhanHdr.TABLE_NAME + "_CC"));
+        fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBbGiaoNhanHdr.TABLE_NAME + "_DK"));
+        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), update.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME + "_CC");
+        List<FileDinhKem> dinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME + "_DK");
         update.setFileCanCu(canCu);
         update.setFileDinhKems(dinhKem);
         return update;
@@ -137,10 +133,10 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
     @Override
     public DcnbBbGiaoNhanHdr detail(Long id) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
+        if (userInfo == null) {
             throw new Exception("Access denied.");
         }
-        if(Objects.isNull(id)){
+        if (Objects.isNull(id)) {
             throw new Exception("Id is null");
         }
         Optional<DcnbBbGiaoNhanHdr> optional = hdrRepository.findById(id);
@@ -148,15 +144,15 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
             throw new Exception("Số biên bản không tồn tại");
         }
         DcnbBbGiaoNhanHdr data = optional.get();
-        data.setFileCanCu(fileDinhKemService.search(id, Collections.singleton(DcnbBbGiaoNhanHdr.TABLE_NAME +"_CC")));
-        data.setFileDinhKems(fileDinhKemService.search(id, Collections.singleton(DcnbBbGiaoNhanHdr.TABLE_NAME +"_DK")));
+        data.setFileCanCu(fileDinhKemService.search(id, Collections.singleton(DcnbBbGiaoNhanHdr.TABLE_NAME + "_CC")));
+        data.setFileDinhKems(fileDinhKemService.search(id, Collections.singleton(DcnbBbGiaoNhanHdr.TABLE_NAME + "_DK")));
         return data;
     }
 
     @Override
     public DcnbBbGiaoNhanHdr approve(DcnbBbGiaoNhanHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
+        if (userInfo == null) {
             throw new Exception("Access denied.");
         }
         DcnbBbGiaoNhanHdr hdr = detail(req.getId());
@@ -188,15 +184,15 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
 
     @Override
     public void deleteMulti(List<Long> listMulti) throws Exception {
-        if(listMulti != null && !listMulti.isEmpty()){
-            listMulti.forEach( i -> {
+        if (listMulti != null && !listMulti.isEmpty()) {
+            listMulti.forEach(i -> {
                 try {
                     delete(i);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             });
-        }else{
+        } else {
             throw new Exception("List id is null");
         }
     }
@@ -209,7 +205,7 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
-        Page<DcnbBbGiaoNhanHdrDTO> page = searchPage(currentUser,objReq);
+        Page<DcnbBbGiaoNhanHdrDTO> page = searchPage(currentUser, objReq);
         List<DcnbBbGiaoNhanHdrDTO> data = page.getContent();
 
         String title = "Danh sách bảng kê cân hàng ";
