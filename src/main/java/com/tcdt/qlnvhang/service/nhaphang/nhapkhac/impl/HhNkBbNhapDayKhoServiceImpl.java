@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -139,28 +140,43 @@ public class HhNkBbNhapDayKhoServiceImpl implements HhNkBbNhapDayKhoService {
         HhNkBbNhapDayKhoHdr hdr = detail(req.getId());
         String status = hdr.getTrangThai() + req.getTrangThai();
         switch (status) {
-            // Arena các roll back approve
-            case Contains.CHODUYET_KTVBQ + Contains.DUTHAO:
             case Contains.TUCHOI_KT + Contains.DUTHAO:
             case Contains.TUCHOI_LDCC + Contains.DUTHAO:
-                break;
-            // Arena các cấp duuyệt
             case Contains.DUTHAO + Contains.CHODUYET_KTVBQ:
+                hdr.setNguoiGDuyet(userInfo.getId());
+                hdr.setNgayGDuyet(LocalDate.now());
                 break;
             case Contains.CHODUYET_KTVBQ + Contains.CHODUYET_KT:
                 hdr.setIdKyThuatVien(userInfo.getId());
+                hdr.setTenKyThuatVien(userInfo.getFullName());
+                hdr.setNguoiGDuyetKtvbq(userInfo.getId());
+                hdr.setNgayGDuyetKtvbq(LocalDate.now());
                 break;
             case Contains.CHODUYET_KT + Contains.CHODUYET_LDCC:
                 hdr.setIdKeToan(userInfo.getId());
+                hdr.setTenKeToan(userInfo.getFullName());
+                hdr.setNguoiGDuyetKt(userInfo.getId());
+                hdr.setNgayGDuyetKt(LocalDate.now());
                 break;
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 hdr.setIdLanhDao(userInfo.getId());
+                hdr.setTenLanhDao(userInfo.getFullName());
+                hdr.setNguoiPDuyet(userInfo.getId());
+                hdr.setNgayPDuyet(LocalDate.now());
                 break;
-            // Arena từ chối
-            case Contains.CHODUYET_KTVBQ + Contains.CHODUYET_KTVBQ:
             case Contains.CHODUYET_KT + Contains.TUCHOI_KT:
+                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                hdr.setIdKeToan(userInfo.getId());
+                hdr.setTenKeToan(userInfo.getFullName());
+                hdr.setNguoiGDuyetKt(userInfo.getId());
+                hdr.setNgayGDuyetKt(LocalDate.now());
+                break;
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                hdr.setIdLanhDao(userInfo.getId());
+                hdr.setTenLanhDao(userInfo.getFullName());
+                hdr.setNguoiPDuyet(userInfo.getId());
+                hdr.setNgayPDuyet(LocalDate.now());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
