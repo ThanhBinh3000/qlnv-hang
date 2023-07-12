@@ -32,6 +32,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.*;
 
 import static com.tcdt.qlnvhang.util.Contains.HO_SO_KY_THUAT.*;
@@ -112,8 +113,10 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
     XhHoSoKyThuatHdr created = xhHoSoKyThuatRepository.save(data);
     //update sobb
     created.getXhHoSoKyThuatDtl().forEach(s -> {
-      if (s.getThoiDiemLap() == THOI_DIEM_XUAT_HANG) {
-        s.setSoBienBan(s.getId() + "" + s.getNgayTao().getYear() + "" + s.getLoaiBb());
+      System.out.println(s.getThoiDiemLap() == THOI_DIEM_XUAT_HANG);
+      System.out.println(s.getThoiDiemLap() + "--" + THOI_DIEM_XUAT_HANG);
+      if (s.getThoiDiemLap().equals(THOI_DIEM_XUAT_HANG)) {
+        s.setSoBienBan(s.getId() + "/" + s.getNgayTao().getYear() + "/" + s.getLoaiBb());
       }
     });
     created = xhHoSoKyThuatRepository.save(created);
@@ -232,6 +235,8 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
         //map danh sach bien ban
         List<NhHoSoBienBan> listHoSoBienBan = nhHoSoKyThuat.getListHoSoBienBan();
         List<XhHoSoKyThuatDtl> listDtl = new ArrayList<>();
+        String loaiVthh = "";
+        String cloaiVthh = "";
         for (NhHoSoBienBan nhHoSoBienBan : listHoSoBienBan) {
           XhHoSoKyThuatDtl xhHoSoKyThuatDtl = new XhHoSoKyThuatDtl();
           xhHoSoKyThuatDtl.setSoBienBan(nhHoSoBienBan.getSoBienBan());
@@ -250,6 +255,8 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
           xhHoSoKyThuatDtl.setLoaiVthh(nhHoSoBienBan.getLoaiVthh());
           xhHoSoKyThuatDtl.setCloaiVthh(nhHoSoBienBan.getCloaiVthh());
           xhHoSoKyThuatDtl.setTenVthh("");
+          loaiVthh = nhHoSoBienBan.getLoaiVthh();
+          cloaiVthh = nhHoSoBienBan.getCloaiVthh();
           xhHoSoKyThuatDtl.setSoLuongNhap(DataUtils.safeToLong(nhHoSoBienBan.getSoLuongNhap()));
           xhHoSoKyThuatDtl.setTgianNhap(DataUtils.convertToLocalDate(nhHoSoBienBan.getTgianNhap()));
           xhHoSoKyThuatDtl.setPpLayMau(nhHoSoBienBan.getPpLayMau());
@@ -308,6 +315,10 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
           dtlBbKt.setLoaiBb(loaiBb.poll());
           dtlBbKt.setThoiDiemLap(THOI_DIEM_XUAT_HANG);
           dtlBbKt.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
+          dtlBbKt.setSoHskt(nhHoSoKyThuat.getSoHoSoKyThuat());
+          dtlBbKt.setNgayTaoHskt(LocalDate.now());
+          dtlBbKt.setLoaiVthh(loaiVthh);
+          dtlBbKt.setCloaiVthh(cloaiVthh);
           listDtl.add(dtlBbKt);
         }
 
