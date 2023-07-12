@@ -311,7 +311,8 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl implements XhQdNvXhB
                 optionalHd.get().setIdQdNv(data.getId());
                 xhHopDongBttHdrRepository.save(optionalHd.get());
             }
-        } else {
+        }
+        if (req.getTrangThai().equals(Contains.BAN_HANH) && data.getPhanLoai().equals("UQBL")) {
             Optional<XhQdPdKhBttDtl> optionalQdKhDtl = xhQdPdKhBttDtlRepository.findById(data.getIdQdPdDtl());
             if (optionalQdKhDtl.isPresent()) {
                 optionalQdKhDtl.get().setIdQdNv(data.getId());
