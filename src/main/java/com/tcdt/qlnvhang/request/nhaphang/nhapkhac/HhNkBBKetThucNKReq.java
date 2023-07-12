@@ -1,7 +1,7 @@
-package com.tcdt.qlnvhang.request.dieuchuyennoibo;
+package com.tcdt.qlnvhang.request.nhaphang.nhapkhac;
 
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhNkBBKetThucNKDtl;
 import com.tcdt.qlnvhang.request.BaseRequest;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBKetThucNKDtl;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -12,7 +12,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class DcnbBBKetThucNKReq extends BaseRequest {
+public class HhNkBBKetThucNKReq extends BaseRequest {
     private Long id;
     private String loaiDc;
     private String loaiQdinh;
@@ -52,19 +52,15 @@ public class DcnbBBKetThucNKReq extends BaseRequest {
     private Long nguoiGDuyet;
 
     private LocalDate ngayGDuyet;
-
     private Long nguoiPDuyetKtv;
-
     private LocalDate ngayPDuyetKtv;
     private Long nguoiPDuyetKt;
-
     private LocalDate ngayPDuyetKt;
-
     private Long nguoiPDuyet;
 
     private LocalDate ngayPDuyet;
     private String type;
-    private List<DcnbBBKetThucNKDtl> dcnbBBKetThucNKDtl = new ArrayList<>();
+    private List<HhNkBBKetThucNKDtl> hhNkBBKetThucNKDtl = new ArrayList<>();
     private LocalDate tuNgayKtnk;
     private LocalDate denNgayKtnk;
     private LocalDate tuNgayThoiHanNhap;

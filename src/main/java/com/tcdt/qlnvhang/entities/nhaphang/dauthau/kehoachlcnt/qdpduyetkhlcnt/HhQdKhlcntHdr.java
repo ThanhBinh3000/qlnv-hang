@@ -148,6 +148,7 @@ public class HhQdKhlcntHdr implements Serializable {
 	String soTrHdr;
 
 	Boolean lastest;
+	Boolean dieuChinh;
 
 	String soQdCc;
 
@@ -163,30 +164,10 @@ public class HhQdKhlcntHdr implements Serializable {
 	String dienGiaiTongMucDt;
 	String quyMo;
 	BigDecimal tongMucDtDx;
+	BigDecimal tongMucDt;
 
 	@Transient
 	String tenDvi;
-
-
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(value = FetchMode.SUBSELECT)
-	@JoinColumn(name = "dataId")
-	@JsonManagedReference
-	@Where(clause = "data_type='" + HhQdKhlcntHdr.TABLE_NAME + "'")
-	private List<FileDKemJoinQdKhlcntHdr> fileDinhKems = new ArrayList<>();
-
-	public void setFileDinhKems(List<FileDKemJoinQdKhlcntHdr> children) {
-		this.fileDinhKems.clear();
-		for (FileDKemJoinQdKhlcntHdr child : children) {
-			child.setParent(this);
-		}
-		this.fileDinhKems.addAll(children);
-	}
-
-	public void addFileDinhKems(FileDKemJoinQdKhlcntHdr child) {
-		child.setParent(this);
-		this.fileDinhKems.add(child);
-	}
 
 	@Transient
 	private List<HhQdKhlcntDtl> children = new ArrayList<>();
@@ -212,6 +193,8 @@ public class HhQdKhlcntHdr implements Serializable {
 	String soDxuatKhlcnt;
 	@Transient
 	private List<FileDinhKem> listCcPhapLy;
+	@Transient
+	private List<FileDinhKem> fileDinhKems;
 
 	public String getTenTrangThai() {
 		return NhapXuatHangTrangThaiEnum.getTenById(this.getTrangThai());

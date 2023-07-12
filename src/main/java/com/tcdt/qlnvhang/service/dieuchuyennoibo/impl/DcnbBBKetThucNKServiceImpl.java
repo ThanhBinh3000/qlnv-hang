@@ -79,7 +79,7 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(userInfo.getDvql());
         data.setId(null);
-        req.getBcnbBBKetThucNKDtl().forEach(e -> {
+        req.getDcnbBBKetThucNKDtl().forEach(e -> {
             e.setDcnbBBKetThucNKHdr(data);
         });
         DcnbBBKetThucNKHdr created = hdrRepository.save(data);
@@ -104,7 +104,7 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
         }
         DcnbBBKetThucNKHdr data = optional.get();
         BeanUtils.copyProperties(req, data);
-        data.setBcnbBBKetThucNKDtl(req.getBcnbBBKetThucNKDtl());
+        data.setDcnbBBKetThucNKDtl(req.getDcnbBBKetThucNKDtl());
         DcnbBBKetThucNKHdr update = hdrRepository.save(data);
         String so = update.getId() + "/" + (new Date().getYear() + 1900) +"/BBKT-"+ userInfo.getDvqlTenVietTat();
         update.setSoBb(so);

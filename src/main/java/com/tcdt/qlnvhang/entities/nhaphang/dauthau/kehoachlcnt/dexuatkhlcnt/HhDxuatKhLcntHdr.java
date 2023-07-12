@@ -85,6 +85,7 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
 	Date tgianDthau;
 	Integer tgianThien;
+	Integer tgianThienHd;
 	@Temporal(TemporalType.DATE)
 	Date tgianNhang;
 	Integer gtriDthau;
@@ -104,6 +105,9 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String cviecDaTh;
 	String cviecKhongTh;
 	String maDviLapDx;
+	@Temporal(TemporalType.DATE)
+	Date ngayKyQdPdGiaCuThe;
+	String soQdPdGiaCuThe;
 	@Transient
 	String soQdPdKqLcnt;
 	@Transient

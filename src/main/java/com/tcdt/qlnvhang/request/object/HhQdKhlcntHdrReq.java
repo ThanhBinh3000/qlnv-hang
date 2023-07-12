@@ -124,6 +124,7 @@ public class HhQdKhlcntHdrReq {
 	String dienGiaiTongMucDt;
 	String quyMo;
 	BigDecimal tongMucDtDx;
+	BigDecimal tongMucDt;
 	Integer tgianThienHd;
 	Integer vat;
 

@@ -1,8 +1,11 @@
-package com.tcdt.qlnvhang.table.dieuchuyennoibo;
+package com.tcdt.qlnvhang.entities.nhaphang.nhapkhac;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
-import lombok.*;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBKetThucNKDtl;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,20 +15,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = DcnbBBKetThucNKHdr.TABLE_NAME)
+@Table(name = HhNkBBKetThucNKHdr.TABLE_NAME)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Cloneable{
+public class HhNkBBKetThucNKHdr extends BaseEntity implements Serializable, Cloneable{
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "DCNB_BB_KET_THUC_NK_HDR";
+    public static final String TABLE_NAME = "HHNK_BB_KET_THUC_NK_HDR";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBBKetThucNKHdr.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbBBKetThucNKHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBBKetThucNKHdr.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = HhNkBBKetThucNKHdr.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = HhNkBBKetThucNKHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = HhNkBBKetThucNKHdr.TABLE_NAME + "_SEQ")
     private Long id;
-    @Column(name = "LOAI_DC")
-    private String loaiDc;
     @Column(name = "LOAI_VTHH")
     private String loaiVthh;
     @Column(name = "CLOAI_VTHH")
@@ -38,14 +39,11 @@ public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Clon
     private LocalDate ngayLap;
     @Column(name = "MA_DVI")
     private String maDvi;
-    @Column(name = "QHNS_ID")
-    private Long qhnsId;
     @Column(name = "MA_QHNS")
     private String maQhns;
-    @Column(name = "QDINH_DCC_ID")
-    private Long qDinhDccId;
-    @Column(name = "SO_QDINH_DCC")
-    private String soQdinhDcc;
+    private Long qdPdNkId;
+    private String soQdPdNk;
+    private LocalDate ngayQdPdNk;
     @Column(name = "MA_DIEM_KHO")
     private String maDiemKho;
     @Column(name = "TEN_DIEM_KHO")
@@ -98,35 +96,25 @@ public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Clon
 
     @Column(name = "NGAY_GDUYET")
     private LocalDate ngayGDuyet;
-
     @Column(name = "NGUOI_PDUYET_KTV")
     private Long nguoiPDuyetKtv;
-
     @Column(name = "NGAY_GDUYET_KTV")
     private LocalDate ngayPDuyetKtv;
-
     @Column(name = "NGUOI_PDUYET_TVQT")
     private Long nguoiPDuyetTvqt;
-
     @Column(name = "NGAY_GDUYET_TVQT")
     private LocalDate ngayPDuyetTvqt;
-
     @Column(name = "NGUOI_PDUYET_KT")
     private Long nguoiPDuyetKt;
-
     @Column(name = "NGAY_GDUYET_KT")
     private LocalDate ngayPDuyetKt;
-
     @Column(name = "NGUOI_PDUYET")
     private Long nguoiPDuyet;
-
     @Column(name = "NGAY_PDUYET")
     private LocalDate ngayPDuyet;
-    @Column(name = "TYPE")
-    private String type;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
-    private List<DcnbBBKetThucNKDtl> dcnbBBKetThucNKDtl = new ArrayList<>();
+    private List<HhNkBBKetThucNKDtl> hhNkBBKetThucNKDtl = new ArrayList<>();
     @Transient
     private String tenTrangThai;
     public void setTrangThai(String trangThai) {

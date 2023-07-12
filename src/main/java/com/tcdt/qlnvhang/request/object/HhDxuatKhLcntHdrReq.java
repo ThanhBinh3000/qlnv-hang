@@ -112,6 +112,7 @@ public class HhDxuatKhLcntHdrReq {
 
 	@NotNull(message = "Không được để trống")
 	Integer tgianThien;
+	Integer tgianThienHd;
 
 	//	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
@@ -142,6 +143,9 @@ public class HhDxuatKhLcntHdrReq {
 	String tenDviCha;
 	String maDviLapDx;
 	Integer quy;
+	String soQdPdGiaCuThe;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayKyQdPdGiaCuThe;
 	private ReportTemplateRequest reportTemplateRequest;
 	private List<ListDsGthauDTO> listDsGthau;
 
