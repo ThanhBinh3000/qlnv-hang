@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.xuathang.xuatkhac;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopHdr;
 import lombok.Data;
@@ -18,8 +19,7 @@ public class XhXkTongHopRequest extends BaseRequest {
   private String maDvi;
   private String maDanhSach;
   private String tenDanhSach;
-  private LocalDate ngayDeXuatTu;
-  private LocalDate ngayDeXuatDen;
+  private LocalDateTime ngayDeXuat;
   private String trangThai;
   private String trangThaiKtCl;
   private LocalDate ngayGduyet;
@@ -37,4 +37,5 @@ public class XhXkTongHopRequest extends BaseRequest {
   private LocalDateTime ngayTaoDen;
   private List<XhXkTongHopDtl> tongHopDtl = new ArrayList<>();
   private List<Long> listId;
+  private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
 }
