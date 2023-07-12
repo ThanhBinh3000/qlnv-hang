@@ -41,7 +41,7 @@ public class ScKiemTraChatLuongController {
     public ResponseEntity<BaseResponse> colection(@RequestBody ScKiemTraChatLuongReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.searchPage(objReq));
+            resp.setData(service.searchKiemTraChatLuong (objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch ( Exception e) {
@@ -126,12 +126,12 @@ public class ScKiemTraChatLuongController {
     }
 
     @ApiOperation(value = "Xoá ", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-    @DeleteMapping(value =  PathContains.URL_XOA + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            service.delete(id);
+            service.delete(idSearchReq.getId());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
