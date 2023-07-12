@@ -19,7 +19,7 @@ public interface HhNkBBKetThucNKHdrRepository extends JpaRepository<HhNkBBKetThu
     Optional<HhNkBBKetThucNKHdr> findFirstBySoBb(String soBb);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.nhaphang.nhapkhac.HhNkBBKetThucNKHdrDTO(" +
-            "bbkt.id,qdgnv.id,qdgnv.soQd,qdgnv.nam,bblm.ngayQdGiaoNvNh,dtl.maNhaKho,dmdvnhakho.tenDvi, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho," +
+            "bbkt.id,qdgnv.id,qdgnv.soQd,qdgnv.nam,qdgnv.tgianNkMnhat,dtl.maNhaKho,dmdvnhakho.tenDvi, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho," +
             "dmdvlokho.tenDvi,dtl.maNganKho,dmdvngankho.tenDvi,hdr.loaiVthh,dmvt.ten, dtl.cloaiVthh, dmvt.ten,hdr.dvt, hdr.dvt ," +
             "bbkt.soBb, bbkt.ngayKetThucNhap, bbktd.soPhieuNhapKho, bbktd.phieuNhapKhoId,bbktd.ngayNhap, bblm.soBienBan,bblm.id," +
             "bblm.soBienBan,bblm.id, bbkt.trangThai, bbkt.trangThai) " +
@@ -37,13 +37,13 @@ public interface HhNkBBKetThucNKHdrRepository extends JpaRepository<HhNkBBKetThu
             "LEFT JOIN QlnvDmDonvi dmdvngankho On dmdvngankho.maDvi = dtl.maNganKho " +
             "WHERE 1 =1 " +
             "AND qdgnv.trangThai = '29'" +
-            "AND ((:#{#param.maDvi} IS NULL OR qdgnv.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
+            "AND ((:#{#param.maDvi} IS NULL OR dtl.maChiCuc LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND (:#{#param.soQdPdNk} IS NULL OR LOWER(qdgnv.soQd) LIKE CONCAT('%',LOWER(:#{#param.soQdPdNk}),'%')) " +
             "AND (:#{#param.soBb} IS NULL OR LOWER(bbkt.soBb) LIKE CONCAT('%',LOWER(:#{#param.soBb}),'%')) " +
             "AND (:#{#param.nam} IS NULL OR qdgnv.nam = :#{#param.nam}) " +
             "AND ((:#{#param.tuNgayKtnk}  IS NULL OR bbkt.ngayKetThucNhap >= :#{#param.tuNgayKtnk})" +
             "AND (:#{#param.denNgayKtnk}  IS NULL OR bbkt.ngayKetThucNhap <= :#{#param.denNgayKtnk}) ) " +
-            "GROUP BY bbkt.id,qdgnv.id,qdgnv.soQd,qdgnv.nam,bblm.ngayQdGiaoNvNh,dtl.maNhaKho,dmdvnhakho.tenDvi, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho," +
+            "GROUP BY bbkt.id,qdgnv.id,qdgnv.soQd,qdgnv.nam,qdgnv.tgianNkMnhat,dtl.maNhaKho,dmdvnhakho.tenDvi, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho," +
             "dmdvlokho.tenDvi,dtl.maNganKho,dmdvngankho.tenDvi,hdr.loaiVthh,dmvt.ten, dtl.cloaiVthh, dmvt.ten,hdr.dvt, hdr.dvt ," +
             "bbkt.soBb, bbkt.ngayKetThucNhap, bbktd.soPhieuNhapKho, bbktd.phieuNhapKhoId,bbktd.ngayNhap, bblm.soBienBan,bblm.id," +
             "bblm.soBienBan,bblm.id, bbkt.trangThai, bbkt.trangThai")
