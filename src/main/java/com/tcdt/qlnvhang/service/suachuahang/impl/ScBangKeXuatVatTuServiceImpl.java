@@ -10,6 +10,7 @@ import com.tcdt.qlnvhang.request.suachua.ScPhieuXuatKhoReq;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhXuatHangReq;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeNhapVTHdrDTO;
 import com.tcdt.qlnvhang.response.suachua.ScBangKeXuatVtDTO;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.suachuahang.ScBangKeXuatVatTuService;
@@ -64,6 +65,9 @@ public class ScBangKeXuatVatTuServiceImpl extends BaseServiceImpl implements ScB
     @Override
     public ScBangKeXuatVatTuHdr create(ScBangKeXuatVatTuReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
+        if (!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            throw new Exception("Chức năng chỉ dành cho cấp chi cục");
+        }
         String dvql = userInfo.getDvql();
         ScBangKeXuatVatTuHdr data = new ScBangKeXuatVatTuHdr();
         BeanUtils.copyProperties(req, data);
@@ -109,6 +113,10 @@ public class ScBangKeXuatVatTuServiceImpl extends BaseServiceImpl implements ScB
 
     @Override
     public ScBangKeXuatVatTuHdr update(ScBangKeXuatVatTuReq req) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        if (!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            throw new Exception("Chức năng chỉ dành cho cấp chi cục");
+        }
         Optional<ScBangKeXuatVatTuHdr> optional = hdrRepository.findById(req.getId());
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
@@ -181,6 +189,10 @@ public class ScBangKeXuatVatTuServiceImpl extends BaseServiceImpl implements ScB
 
     @Override
     public void delete(Long id) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        if (!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            throw new Exception("Chức năng chỉ dành cho cấp chi cục");
+        }
         Optional<ScBangKeXuatVatTuHdr> optional = hdrRepository.findById(id);
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu");

@@ -24,26 +24,16 @@ public class ScKiemTraChatLuongDtl {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "HDR_ID",insertable = true, updatable = true)
-    private Long hdrId;
+    private Long idHdr;
 
-    @Column(name = "CHI_TIEU_CL")
     private String chiTieuCl;
 
-    @Column(name = "CHI_SO_CL")
     private String chiSoCl;
 
-    @Column(name = "KET_QUA_PHAN_TICH")
-    private String ketQuaPhanTich;
+    private String ketQua;
 
-    @Column(name = "PHUONG_PHAP")
     private String phuongPhap;
 
-    @Column(name = "DANH_GIA")
     private String danhGia;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
-    @JsonIgnore
-    private ScKiemTraChatLuongHdr scKiemTraChatLuongHdr;
 }

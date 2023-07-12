@@ -193,6 +193,8 @@ public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements S
         String dvql = currentUser.getDvql();
         if (currentUser.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             req.setMaDviSr(dvql.substring(0,6));
+        }else{
+            req.setMaDviSr(dvql);
         }
         req.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
         List<ScQuyetDinhXuatHang> list = scQuyetDinhXuatHangRepository.listTaoPhieuXuatKho(req);
