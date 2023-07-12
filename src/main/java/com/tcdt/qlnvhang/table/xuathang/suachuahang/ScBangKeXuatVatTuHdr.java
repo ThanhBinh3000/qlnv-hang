@@ -44,6 +44,12 @@ public class ScBangKeXuatVatTuHdr extends BaseEntity implements Serializable {
     @Transient
     private String tenTrangThai;
     @Transient
+    private String tenDvi;
+    @Transient
+    private String tenThuKho;
+    @Transient
+    private String tenLanhDaoCc;
+    @Transient
     private List<ScBangKeXuatVatTuDtl> children = new ArrayList<>();
 
     public String getTenTrangThai(){

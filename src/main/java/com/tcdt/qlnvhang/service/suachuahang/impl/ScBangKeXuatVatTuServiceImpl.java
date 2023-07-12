@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.service.suachuahang.impl;
 
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.*;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.suachua.ScBangKeXuatVatTuReq;
@@ -14,6 +16,7 @@ import com.tcdt.qlnvhang.service.suachuahang.ScBangKeXuatVatTuService;
 import com.tcdt.qlnvhang.service.suachuahang.ScQuyetDinhScService;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.*;
+import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -49,6 +52,9 @@ public class ScBangKeXuatVatTuServiceImpl extends BaseServiceImpl implements ScB
 
     @Autowired
     private ScPhieuXuatKhoHdrRepository scPhieuXuatKhoHdrRepository;
+
+    @Autowired
+    private UserInfoRepository userInfoRepository;
 
     @Override
     public Page<ScBangKeXuatVatTuHdr> searchPage(ScBangKeXuatVatTuReq req) throws Exception {
@@ -118,12 +124,59 @@ public class ScBangKeXuatVatTuServiceImpl extends BaseServiceImpl implements ScB
 
     @Override
     public ScBangKeXuatVatTuHdr detail(Long id) throws Exception {
-        return null;
+        UserInfo userInfo = UserUtils.getUserInfo();
+        Optional<ScBangKeXuatVatTuHdr> optional = hdrRepository.findById(id);
+        if (!optional.isPresent()) {
+            throw new Exception("Bản ghi không tồn tại");
+        }
+        ScBangKeXuatVatTuHdr data = optional.get();
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        data.setChildren(dtlRepository.findByIdHdr(id));
+        data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
+        if(!Objects.isNull(data.getIdThuKho())){
+            data.setTenThuKho(userInfoRepository.findById(data.getIdThuKho()).get().getFullName());
+        }
+        if(!Objects.isNull(data.getIdLanhDaoCc())){
+            data.setTenLanhDaoCc(userInfoRepository.findById(data.getIdLanhDaoCc()).get().getFullName());
+        }
+        return data;
     }
 
     @Override
     public ScBangKeXuatVatTuHdr approve(ScBangKeXuatVatTuReq req) throws Exception {
-        return null;
+        UserInfo userInfo = UserUtils.getUserInfo();
+        Optional<ScBangKeXuatVatTuHdr> optional = hdrRepository.findById(req.getId());
+        if (!optional.isPresent()) {
+            throw new Exception("Bản ghi không tồn tại");
+        }
+        ScBangKeXuatVatTuHdr hdr = optional.get();
+        String status = hdr.getTrangThai() + req.getTrangThai();
+        switch (status) {
+            // Re approve : gửi lại duyệt
+            case Contains.TUCHOI_LDCC + Contains.DUTHAO:
+                break;
+            // Arena các cấp duuyệt
+            case Contains.DUTHAO + Contains.CHODUYET_LDCC:
+                if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+                    throw new Exception("Đơn vị gửi duyệt phải là cấp cục");
+                }
+                break;
+            case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
+                if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+                    throw new Exception("Đơn vị gửi duyệt phải là cấp cục");
+                }
+                hdr.setIdLanhDaoCc(userInfo.getId());
+                break;
+            // Arena từ chối
+            case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
+                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                break;
+            default:
+                throw new Exception("Phê duyệt không thành công");
+        }
+        hdr.setTrangThai(req.getTrangThai());
+        ScBangKeXuatVatTuHdr save = hdrRepository.save(hdr);
+        return save;
     }
 
     @Override
@@ -178,104 +231,4 @@ public class ScBangKeXuatVatTuServiceImpl extends BaseServiceImpl implements ScB
         });
         return search;
     }
-
-//    public Page<ScBangKeXuatVtDTO> searchPage(CustomUserDetails currentUser, ScBangKeXuatVatTuReq req) throws Exception {
-//        String dvql = currentUser.getDvql();
-//        req.setMaDvi(dvql);
-//        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-//        Page<ScBangKeXuatVtDTO> searchDto = hdrRepository.searchPage(req, pageable);
-//        return searchDto;
-//    }
-//
-//    @Transactional
-//    public ScBangKeXuatVatTuHdr create(ScBangKeXuatVatTuReq objReq) throws Exception {
-//        UserInfo userInfo = UserUtils.getUserInfo();
-//        String dvql = userInfo.getDvql();
-//        Optional<ScBangKeXuatVatTuHdr> optional = hdrRepository.findFirstBySoBangKe(objReq.getSoBangKe());
-//        if (optional.isPresent() && objReq.getSoBangKe().split("/").length == 1) {
-//            throw new Exception("Số bảng kê đã tồn tại");
-//        }
-//        ScBangKeXuatVatTuHdr data = new ScBangKeXuatVatTuHdr();
-//        BeanUtils.copyProperties(objReq, data);
-//        data.setMaDvi(dvql);
-//        ScBangKeXuatVatTuHdr created = hdrRepository.save(data);
-//        return created;
-//    }
-//
-//    @Transactional
-//    public ScBangKeXuatVatTuHdr update(ScBangKeXuatVatTuReq objReq) throws Exception {
-//        Optional<ScBangKeXuatVatTuHdr> optional = hdrRepository.findById(objReq.getId());
-//        if (!optional.isPresent()) {
-//            throw new Exception("Không tìm thấy dữ liệu cần sửa");
-//        }
-//        Optional<ScBangKeXuatVatTuHdr> soDxuat = hdrRepository.findFirstBySoBangKe(objReq.getSoBangKe());
-//        if (StringUtils.isNotEmpty(objReq.getSoBangKe())) {
-//            if (soDxuat.isPresent() && objReq.getSoBangKe().split("/").length == 1) {
-//                if (!soDxuat.get().getId().equals(objReq.getId())) {
-//                    throw new Exception("số bảng kê đã tồn tại");
-//                }
-//            }
-//        }
-//
-//        ScBangKeXuatVatTuHdr data = optional.get();
-//        objReq.setMaDvi(data.getMaDvi());
-//        BeanUtils.copyProperties(objReq, data);
-//        ScBangKeXuatVatTuHdr created = hdrRepository.save(data);
-//        return created;
-//    }
-//
-//
-//    public ScBangKeXuatVatTuHdr detail(Long id) throws Exception {
-//        if (id == null)
-//            throw new Exception("Tham số không hợp lệ.");
-//        Optional<ScBangKeXuatVatTuHdr> optional = hdrRepository.findById(id);
-//        if (!optional.isPresent()) {
-//            throw new Exception("Không tìm thấy dữ liệu");
-//        }
-//        ScBangKeXuatVatTuHdr data = optional.get();
-//        List<ScBangKeXuatVatTuDtl> list = dtlRepository.findByHdrId(id);
-//        return data;
-//    }
-//
-//
-//    @Transactional
-//    public void approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
-//        if (ObjectUtils.isEmpty(statusReq.getId())) {
-//            throw new Exception("Không tìm thấy dữ liệu");
-//        }
-//        ScBangKeXuatVatTuHdr details = detail(Long.valueOf(statusReq.getId()));
-//        Optional<ScBangKeXuatVatTuHdr> optional = Optional.of(details);
-//        if (!optional.isPresent()) {
-//            throw new Exception("Không tìm thấy dữ liệu");
-//        }
-//        ScBangKeXuatVatTuHdr data = optional.get();
-//        hdrRepository.save(data);
-//    }
-//
-//    public void delete(Long id) throws Exception {
-//        Optional<ScBangKeXuatVatTuHdr> optional = hdrRepository.findById(id);
-//        if (!optional.isPresent()) {
-//            throw new Exception("Bản ghi không tồn tại");
-//        }
-//        ScBangKeXuatVatTuHdr data = optional.get();
-//        List<ScBangKeXuatVatTuDtl> list = dtlRepository.findByHdrId(data.getId());
-//        dtlRepository.deleteAll(list);
-//        hdrRepository.delete(data);
-//    }
-//
-//
-//    public void deleteMulti(List<Long> listMulti) throws Exception {
-//        List<ScBangKeXuatVatTuHdr> list = hdrRepository.findAllByIdIn(listMulti);
-//
-//        if (list.isEmpty()) {
-//            throw new Exception("Bản ghi không tồn tại");
-//        }
-//        List<Long> listId = list.stream().map(ScBangKeXuatVatTuHdr::getId).collect(Collectors.toList());
-//        List<ScBangKeXuatVatTuDtl> listBangKe = dtlRepository.findByHdrIdIn(listId);
-//        dtlRepository.deleteAll(listBangKe);
-//    }
-//
-//    public void export(ScBangKeXuatVatTuReq objReq, HttpServletResponse response) throws Exception {
-//
-//    }
 }

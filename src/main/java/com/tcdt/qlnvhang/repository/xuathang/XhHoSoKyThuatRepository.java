@@ -17,8 +17,9 @@ import java.util.Optional;
 public interface XhHoSoKyThuatRepository extends JpaRepository<XhHoSoKyThuatHdr, Long> {
 
   @Query("SELECT new com.tcdt.qlnvhang.response.xuathang.NhHoSoKyThuatDTO(" +
-      "hs.id, hs.idQdGiaoNvNh , hs.soQdGiaoNvNh , hs.soBbLayMau , hs.soHd , hs.maDvi , hs.soHoSoKyThuat , hs.nam , hs.idBbLayMauXuat , hs.kqKiemTra , 'DT' , bb.maDiemKho , bb.maNhaKho , bb.maNganKho , bb.maLoKho, hs.ngayTao) " +
-      "FROM NhHoSoKyThuat hs,BienBanLayMau bb WHERE 1=1 " +
+      "hs.id, hs.idQdGiaoNvNh , hs.soQdGiaoNvNh , hs.soBbLayMau , hs.soHd , hs.maDvi , hs.soHoSoKyThuat , hs.nam , hs.idBbLayMauXuat , hs.kqKiemTra , 'DT' , bb.maDiemKho , bb.maNhaKho , bb.maNganKho , bb.maLoKho, hs.ngayTao,xh.kqKiemTra) " +
+      "FROM NhHoSoKyThuat hs join BienBanLayMau bb on hs.soBbLayMau = bb.soBienBan " +
+      "left join XhHoSoKyThuatHdr xh on xh.idHsktNh = hs.id WHERE 1=1 " +
       "AND hs.soBbLayMau = bb.soBienBan"
       /* "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
        "AND (:#{#param.type} IS NULL OR c.type = :#{#param.type}) " +
@@ -38,24 +39,4 @@ public interface XhHoSoKyThuatRepository extends JpaRepository<XhHoSoKyThuatHdr,
   XhHoSoKyThuatHdr findByMaDiaDiem(String maDiaDiem);
 
   XhHoSoKyThuatHdr findByIdHsktNhAndType(Long id,String type);
-
-  @Query("SELECT new com.tcdt.qlnvhang.response.xuathang.NhHoSoKyThuatDTO(" +
-      "hs.id, hs.idQdGiaoNvNh , hs.soQdGiaoNvNh , hs.soBbLayMau , hs.soHd , hs.maDvi , hs.soHoSoKyThuat , hs.nam , hs.idBbLayMauXuat , hs.kqKiemTra , 'DT' , bb.maDiemKho , bb.maNhaKho , bb.maNganKho , bb.maLoKho, hs.ngayTao) " +
-      "FROM NhHoSoKyThuat hs,BienBanLayMau bb WHERE 1=1 " +
-      "AND hs.soBbLayMau = bb.soBienBan"
-      /* "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
-       "AND (:#{#param.type} IS NULL OR c.type = :#{#param.type}) " +
-       "AND (:#{#param.loaiVthh} IS NULL OR c.loaiVthh = :#{#param.loaiVthh}) " +
-       "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
-       "AND (:#{#param.soPhieu} IS NULL OR LOWER(c.soPhieu) LIKE CONCAT('%',LOWER(:#{#param.soPhieu}),'%')) " +
-       "AND (:#{#param.soQdGiaoNvXh} IS NULL OR LOWER(c.soQdGiaoNvXh) LIKE CONCAT('%',LOWER(:#{#param.soQdGiaoNvXh}),'%')) " +
-       "AND (:#{#param.soBbXuatDocKho} IS NULL OR LOWER(c.soBbXuatDocKho) LIKE CONCAT('%',LOWER(:#{#param.soBbXuatDocKho}),'%')) " +
-       "AND ((:#{#param.ngayKnTu}  IS NULL OR c.ngayLayMau >= :#{#param.ngayKnTu})" +
-       "AND (:#{#param.ngayKnDen}  IS NULL OR c.ngayLayMau <= :#{#param.ngayKnDen}) ) " +
-       "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +*/
-//      "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
-
-  )
-  NhHoSoKyThuatDTO findHoSoKyThuatNh(Long id);
-
 }

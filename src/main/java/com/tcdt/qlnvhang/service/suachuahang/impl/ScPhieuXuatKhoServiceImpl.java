@@ -159,6 +159,7 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
                 if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
                     throw new Exception("Đơn vị gửi duyệt phải là cấp cục");
                 }
+                break;
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
                     throw new Exception("Đơn vị gửi duyệt phải là cấp cục");
@@ -181,6 +182,9 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
         Optional<ScPhieuXuatKhoHdr> optional = hdrRepository.findById(id);
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu");
+        }
+        if(!Objects.isNull(optional.get().getIdBangKeCanHang())){
+            throw new Exception("Phiếu xuất kho "+optional.get().getSoPhieuXuatKho()+" đã tạo số bảng kê cân hàng. Không thể xóa");
         }
         hdrRepository.delete(optional.get());
         fileDinhKemService.delete(optional.get().getId(), Collections.singleton(ScPhieuXuatKhoHdr.TABLE_NAME));
