@@ -14,18 +14,16 @@ import java.util.List;
 @AllArgsConstructor
 public class HhNkBBKetThucNKReq extends BaseRequest {
     private Long id;
-    private String loaiDc;
-    private String loaiQdinh;
     private String loaiVthh;
     private String cloaiVthh;
     private Integer nam;
     private String soBb;
     private LocalDate ngayLap;
     private String maDvi;
-    private Long qhnsId;
     private String maQhns;
-    private Long qDinhDccId;
-    private String soQdinhDcc;
+    private Long qdPdNkId;
+    private String soQdPdNk;
+    private LocalDate ngayQdPdNk;
     private String maDiemKho;
     private String tenDiemKho;
     private String diaDaDiemKho;
@@ -50,22 +48,18 @@ public class HhNkBBKetThucNKReq extends BaseRequest {
     private String trangThai;
     private String lyDoTuChoi;
     private Long nguoiGDuyet;
-
     private LocalDate ngayGDuyet;
     private Long nguoiPDuyetKtv;
     private LocalDate ngayPDuyetKtv;
+    private Long nguoiPDuyetTvqt;
+    private LocalDate ngayPDuyetTvqt;
     private Long nguoiPDuyetKt;
     private LocalDate ngayPDuyetKt;
     private Long nguoiPDuyet;
-
     private LocalDate ngayPDuyet;
-    private String type;
     private List<HhNkBBKetThucNKDtl> hhNkBBKetThucNKDtl = new ArrayList<>();
     private LocalDate tuNgayKtnk;
     private LocalDate denNgayKtnk;
     private LocalDate tuNgayThoiHanNhap;
     private LocalDate denNgayThoiHanNhap;
-
-    private Boolean isVatTu = false;
-    private List<String> dsLoaiHang = new ArrayList<>();
 }
