@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.suachuahang;
 
 import com.tcdt.qlnvhang.request.suachua.ScBangKeXuatVatTuReq;
 import com.tcdt.qlnvhang.request.suachua.ScKiemTraChatLuongReq;
+import com.tcdt.qlnvhang.request.suachua.ScPhieuXuatKhoReq;
 import com.tcdt.qlnvhang.service.BaseService;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScBangKeXuatVatTuHdr;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScKiemTraChatLuongHdr;
@@ -10,5 +11,6 @@ import org.springframework.data.domain.Page;
 
 public interface ScKiemTraChatLuongService extends BaseService<ScKiemTraChatLuongHdr, ScKiemTraChatLuongReq, Long> {
 
+    Page<ScQuyetDinhXuatHang> searchKiemTraChatLuong(ScKiemTraChatLuongReq req);
 
 }

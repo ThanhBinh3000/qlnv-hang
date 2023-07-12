@@ -26,10 +26,12 @@ public class ScKiemTraChatLuongReq extends BaseRequest {
     private LocalDate ngayKiemDinh;
     private String hinhThucBaoQuan;
     private String ketQua;
-    private boolean isDat;
+    private Integer dat;
     private String nhanXet;
 
     private List<FileDinhKemReq> fileDinhKemReq = new ArrayList<>();
 
     private List<ScKiemTraChatLuongDtl> children = new ArrayList<>();
+
+    private Long idScDanhSachHdr;
 }

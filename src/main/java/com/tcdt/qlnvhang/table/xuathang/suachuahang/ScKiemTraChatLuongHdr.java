@@ -39,7 +39,7 @@ public class ScKiemTraChatLuongHdr extends BaseEntity implements Serializable {
     private LocalDate ngayKiemDinh;
     private String hinhThucBaoQuan;
     private String ketQua;
-    private boolean isDat;
+    private Integer dat;
     private String nhanXet;
     private String trangThai;
     @Transient

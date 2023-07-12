@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ScKiemTraChatLuongHdrRepository extends JpaRepository<ScKiemTraChatLuongHdr, Long> {
@@ -26,4 +27,6 @@ public interface ScKiemTraChatLuongHdrRepository extends JpaRepository<ScKiemTra
 
 
 //    Optional<ScKiemTraChatLuongHdr> findBySoPhieuKdcl(String soPhieuKdcl);
+
+    List<ScKiemTraChatLuongHdr> findAllByIdPhieuXuatKhoIn(List<Long> idPhieuXuatKho);
 }
