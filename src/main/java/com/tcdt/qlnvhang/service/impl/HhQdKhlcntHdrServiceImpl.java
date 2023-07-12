@@ -108,22 +108,14 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				throw new Exception("Không tìm thấy đề xuất kế hoạch lựa chọn nhà thầu");
 			}
 		}
-		// Add danh sach file dinh kem o Master
-		List<FileDKemJoinQdKhlcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinQdKhlcntHdr>();
-		if (objReq.getFileDinhKems() != null) {
-			fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinQdKhlcntHdr.class);
-			fileDinhKemList.forEach(f -> {
-				f.setDataType(HhQdKhlcntHdr.TABLE_NAME);
-				f.setCreateDate(new Date());
-			});
-		}
 
 		HhQdKhlcntHdr dataMap = ObjectMapperUtils.map(objReq, HhQdKhlcntHdr.class);
-
+		if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKems())) {
+			fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), dataMap.getId(), HhQdKhlcntHdr.TABLE_NAME);
+		}
 		dataMap.setNgayTao(getDateTimeNow());
 		dataMap.setTrangThai(Contains.DANG_NHAP_DU_LIEU);
 		dataMap.setNguoiTao(getUser().getUsername());
-		dataMap.setFileDinhKems(fileDinhKemList);
 		dataMap.setLastest(objReq.getLastest());
 		dataMap.setMaDvi(getUser().getDvql());
 		hhQdKhlcntHdrRepository.save(dataMap);
@@ -145,28 +137,18 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		if (!checkSoQd.isEmpty()) {
 			throw new Exception("Số quyết định " + objReq.getSoQd() + " đã tồn tại");
 		}
-
-		// Add danh sach file dinh kem o Master
-		List<FileDKemJoinQdKhlcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinQdKhlcntHdr>();
-		if (objReq.getFileDinhKems() != null) {
-			fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinQdKhlcntHdr.class);
-			fileDinhKemList.forEach(f -> {
-				f.setDataType(HhQdKhlcntHdr.TABLE_NAME);
-				f.setCreateDate(new Date());
-			});
-		}
-
 		HhQdKhlcntHdr dataMap = ObjectMapperUtils.map(objReq, HhQdKhlcntHdr.class);
-
 		dataMap.setNgayTao(getDateTimeNow());
 		dataMap.setTrangThai(Contains.DANG_NHAP_DU_LIEU);
 		dataMap.setNguoiTao(getUser().getUsername());
-		dataMap.setFileDinhKems(fileDinhKemList);
-		dataMap.setTrangThaiDt(NhapXuatHangTrangThaiEnum.CHUACAPNHAT.getId());
 		dataMap.setMaDvi(getUser().getDvql());
+		dataMap.setDieuChinh(Boolean.FALSE);
 		hhQdKhlcntHdrRepository.save(dataMap);
 		if (!DataUtils.isNullOrEmpty(objReq.getListCcPhapLy())) {
 			fileDinhKemService.saveListFileDinhKem(objReq.getListCcPhapLy(), dataMap.getId(), HhQdKhlcntHdr.TABLE_NAME + "_CAN_CU");
+		}
+		if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKems())) {
+			fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), dataMap.getId(), HhQdKhlcntHdr.TABLE_NAME);
 		}
 
 		// Update trạng thái tờ trình
@@ -306,15 +288,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			}
 		}
 
-		// Add danh sach file dinh kem o Master
-		List<FileDKemJoinQdKhlcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinQdKhlcntHdr>();
-		if (objReq.getFileDinhKems() != null) {
-			fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinQdKhlcntHdr.class);
-			fileDinhKemList.forEach(f -> {
-				f.setDataType(HhQdKhlcntHdr.TABLE_NAME);
-				f.setCreateDate(new Date());
-			});
-		}
+
 
 		HhQdKhlcntHdr dataDB = qOptional.get();
 		HhQdKhlcntHdr dataMap = ObjectMapperUtils.map(objReq, HhQdKhlcntHdr.class);
@@ -323,7 +297,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 		dataDB.setNgaySua(getDateTimeNow());
 		dataDB.setNguoiSua(getUser().getUsername());
-		dataDB.setFileDinhKems(fileDinhKemList);
+		fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(HhQdKhlcntHdr.TABLE_NAME));
+		if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKems())) {
+			fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), dataDB.getId(), HhQdKhlcntHdr.TABLE_NAME);
+		}
 
 		hhQdKhlcntHdrRepository.save(dataDB);
 
@@ -351,33 +328,21 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				}
 			}
 		}
-
-		// Add danh sach file dinh kem o Master
-		List<FileDKemJoinQdKhlcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinQdKhlcntHdr>();
-		if (objReq.getFileDinhKems() != null) {
-			fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinQdKhlcntHdr.class);
-			fileDinhKemList.forEach(f -> {
-				f.setDataType(HhQdKhlcntHdr.TABLE_NAME);
-				f.setCreateDate(new Date());
-			});
-		}
-
 		HhQdKhlcntHdr dataDB = qOptional.get();
 		HhQdKhlcntHdr dataMap = ObjectMapperUtils.map(objReq, HhQdKhlcntHdr.class);
-
 		updateObjectToObject(dataDB, dataMap);
-
 		dataDB.setNgaySua(getDateTimeNow());
 		dataDB.setNguoiSua(getUser().getUsername());
-		dataDB.setFileDinhKems(fileDinhKemList);
-
 		hhQdKhlcntHdrRepository.save(dataDB);
 		fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(HhQdKhlcntHdr.TABLE_NAME + "_CAN_CU"));
 		if (!DataUtils.isNullOrEmpty(objReq.getListCcPhapLy())) {
 			fileDinhKemService.saveListFileDinhKem(objReq.getListCcPhapLy(), dataMap.getId(), HhQdKhlcntHdr.TABLE_NAME + "_CAN_CU");
 		}
+		fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(HhQdKhlcntHdr.TABLE_NAME));
+		if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKems())) {
+			fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), dataMap.getId(), HhQdKhlcntHdr.TABLE_NAME);
+		}
 		this.saveDetailVt(objReq,dataDB);
-
 		return dataDB;
 	}
 
@@ -394,6 +359,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		if (qOptional.get().getLoaiVthh().startsWith("02")) {
 			List<FileDinhKem> canCu = fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhQdKhlcntHdr.TABLE_NAME + "_CAN_CU"));
 			qOptional.get().setListCcPhapLy(canCu);
+			List<FileDinhKem> fileDinhKems = fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhQdKhlcntHdr.TABLE_NAME));
+			qOptional.get().setFileDinhKems(fileDinhKems);
 			detailVt(qOptional.get());
 		} else {
 			Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
@@ -408,6 +375,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			qOptional.get().setTenLoaiVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
 			qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getCloaiVthh()));
 			qOptional.get().setTenDvi(mapDmucDvi.get(qOptional.get().getMaDvi()));
+			List<FileDinhKem> fileDinhKems = fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhQdKhlcntHdr.TABLE_NAME));
+			qOptional.get().setFileDinhKems(fileDinhKems);
 			List<HhQdKhlcntDtl> hhQdKhlcntDtlList = new ArrayList<>();
 			Optional<HhDxuatKhLcntHdr> hhDxuatKhLcntHdr = Optional.empty();
 			List<HhDxuatKhLcntHdr> listHhDxuatKhLcntHdr = new ArrayList<>();
@@ -527,8 +496,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			Optional<HhDxuatKhLcntHdr> dxuatKhLcntHdr = hhDxuatKhLcntHdrRepository.findById(data.getIdTrHdr());
 			dxuatKhLcntHdr.ifPresent(data::setDxKhlcntHdr);
 		}
-		Optional<HhDchinhDxKhLcntHdr> dchinhDxKhLcntHdr = hhDchinhDxKhLcntHdrRepository.findByIdQdGocAndLastest(data.getId(), Boolean.TRUE);
-		dchinhDxKhLcntHdr.ifPresent(data::setDchinhDxKhLcntHdr);
+		if (data.getDieuChinh().equals(Boolean.TRUE)) {
+			Optional<HhDchinhDxKhLcntHdr> dchinhDxKhLcntHdr = hhDchinhDxKhLcntHdrRepository.findByIdQdGocAndLastest(data.getId(), Boolean.TRUE);
+			dchinhDxKhLcntHdr.ifPresent(data::setDchinhDxKhLcntHdr);
+		}
 	}
 
 	@Override

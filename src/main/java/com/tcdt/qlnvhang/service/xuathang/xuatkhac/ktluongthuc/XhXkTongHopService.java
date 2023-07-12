@@ -96,7 +96,7 @@ public class XhXkTongHopService extends BaseServiceImpl {
     data.setTrangThai(Contains.DUTHAO);
     data.getTongHopDtl().forEach(s -> s.setTongHopHdr(data));
     XhXkTongHopHdr created = xhXkTongHopRepository.save(data);
-    created.setMaDanhSach(created.getMaDanhSach() + created.getId());
+    created.setMaDanhSach(created.getMaDanhSach() +'-'+ created.getId());
     created = xhXkTongHopRepository.save(created);
     Long id = created.getId();
     String ma = created.getMaDanhSach();
