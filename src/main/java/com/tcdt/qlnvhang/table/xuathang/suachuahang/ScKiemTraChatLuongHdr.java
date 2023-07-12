@@ -28,7 +28,7 @@ public class ScKiemTraChatLuongHdr extends BaseEntity implements Serializable {
     private Integer nam;
     private String maDvi;
     private String maQhns;
-    private String soPhieuKdcl;
+    private String soPhieuKtcl;
     private LocalDate ngayLap;
     private Long idTruongPhongKtvq;
     private Long idQdXh;

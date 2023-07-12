@@ -36,7 +36,7 @@ public class ScQuyetDinhNhapHangController {
                                                   @RequestBody ScQuyetDinhNhapHangReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.searchPage(currentUser, objReq));
+//            resp.setData(service.searchPage(currentUser, objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -55,7 +55,7 @@ public class ScQuyetDinhNhapHangController {
     public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ScQuyetDinhNhapHangReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.update(currentUser, objReq));
+//            resp.setData(service.update(currentUser, objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -72,7 +72,7 @@ public class ScQuyetDinhNhapHangController {
     public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ScQuyetDinhNhapHangReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.update(currentUser, objReq));
+//            resp.setData(service.update(currentUser, objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -91,7 +91,7 @@ public class ScQuyetDinhNhapHangController {
             @ApiParam(value = "ID thông tin phụ lục hợp đồng", example = "1", required = true) @PathVariable("id") Long id) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.detail(id));
+//            resp.setData(service.detail(id));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -108,7 +108,7 @@ public class ScQuyetDinhNhapHangController {
     public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody StatusReq stReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            service.approve(currentUser, stReq);
+//            service.approve(currentUser, stReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -126,7 +126,7 @@ public class ScQuyetDinhNhapHangController {
     public ResponseEntity<BaseResponse> delete(@PathVariable(name = "id") Long id) {
         BaseResponse resp = new BaseResponse();
         try {
-            service.delete(id);
+//            service.delete(id);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
