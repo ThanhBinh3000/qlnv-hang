@@ -110,6 +110,13 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
       });
     });
     XhHoSoKyThuatHdr created = xhHoSoKyThuatRepository.save(data);
+    //update sobb
+    created.getXhHoSoKyThuatDtl().forEach(s -> {
+      if (s.getThoiDiemLap() == THOI_DIEM_XUAT_HANG) {
+        s.setSoBienBan(s.getId() + "" + s.getNgayTao().getYear() + "" + s.getLoaiBb());
+      }
+    });
+    created = xhHoSoKyThuatRepository.save(created);
     return created;
   }
 
@@ -252,6 +259,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
           xhHoSoKyThuatDtl.setKetLuan(nhHoSoBienBan.getKetLuan());
           xhHoSoKyThuatDtl.setLoaiBb(nhHoSoBienBan.getLoaiBb());
           xhHoSoKyThuatDtl.setThoiDiemLap(THOI_DIEM_NHAP_HANG);
+          xhHoSoKyThuatDtl.setTrangThai(TrangThaiAllEnum.DA_KY.getId());
           xhHoSoKyThuatDtl.setCanCu(new ArrayList<>());
           xhHoSoKyThuatDtl.setVanBanBsung(new ArrayList<>());
           xhHoSoKyThuatDtl.setTgianBsung(DataUtils.convertToLocalDate(nhHoSoBienBan.getTgianBsung()));
@@ -299,6 +307,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
           XhHoSoKyThuatDtl dtlBbKt = new XhHoSoKyThuatDtl();
           dtlBbKt.setLoaiBb(loaiBb.poll());
           dtlBbKt.setThoiDiemLap(THOI_DIEM_XUAT_HANG);
+          dtlBbKt.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
           listDtl.add(dtlBbKt);
         }
 
