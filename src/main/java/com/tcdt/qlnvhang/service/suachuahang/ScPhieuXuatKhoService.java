@@ -15,4 +15,6 @@ public interface ScPhieuXuatKhoService extends BaseService<ScPhieuXuatKhoHdr, Sc
 
     List<ScPhieuXuatKhoHdr> searchDanhSachTaoBangKe(ScPhieuXuatKhoReq req);
 
+    List<ScPhieuXuatKhoHdr> searchDanhSachTaoKiemTraCl(ScPhieuXuatKhoReq req);
+
 }

@@ -93,6 +93,10 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
 
     @Override
     public ScPhieuXuatKhoHdr update(ScPhieuXuatKhoReq req) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        if (!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            throw new Exception("Chức năng chỉ dành cho cấp chi cục");
+        }
         Optional<ScPhieuXuatKhoHdr> optional = hdrRepository.findById(req.getId());
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu");
@@ -117,7 +121,6 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
         data.setChildren(dtlRepository.findByIdHdr(id));
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
-        System.out.println(getAllHangByBoNganh("02"));
         //set label
         data.setMapDmucDvi(mapDmucDvi);
         data.setMapVthh(mapVthh);
@@ -179,6 +182,10 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
 
     @Override
     public void delete(Long id) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        if (!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            throw new Exception("Chức năng chỉ dành cho cấp chi cục");
+        }
         Optional<ScPhieuXuatKhoHdr> optional = hdrRepository.findById(id);
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu");
@@ -232,6 +239,13 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
     public List<ScPhieuXuatKhoHdr> searchDanhSachTaoBangKe(ScPhieuXuatKhoReq req) {
         req.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
         List<ScPhieuXuatKhoHdr> scPhieuXuatKhoHdrs = hdrRepository.searchListTaoBangKe(req);
+        return scPhieuXuatKhoHdrs;
+    }
+
+    @Override
+    public List<ScPhieuXuatKhoHdr> searchDanhSachTaoKiemTraCl(ScPhieuXuatKhoReq req) {
+        req.setTrangThai(TrangThaiAllEnum.DA_DUYET_LDCC.getId());
+        List<ScPhieuXuatKhoHdr> scPhieuXuatKhoHdrs = hdrRepository.searchListTaoKiemTraCl(req);
         return scPhieuXuatKhoHdrs;
     }
 
