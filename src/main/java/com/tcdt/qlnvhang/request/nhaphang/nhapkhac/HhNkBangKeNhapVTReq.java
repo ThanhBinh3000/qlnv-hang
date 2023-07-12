@@ -15,7 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 public class HhNkBangKeNhapVTReq extends BaseRequest {
     private Long id;
-    private String loaiDc;
     private String loaiVthh;
     private String cloaiVthh;
     private String tenLoaiVthh;

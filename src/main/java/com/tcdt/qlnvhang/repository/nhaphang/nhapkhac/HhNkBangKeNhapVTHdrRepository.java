@@ -20,31 +20,31 @@ public interface HhNkBangKeNhapVTHdrRepository extends JpaRepository<HhNkBangKeN
     List<HhNkBangKeNhapVTHdr> findAllByIdIn(List<Long> listMulti);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.nhaphang.nhapkhac.HhNkBangKeNhapVTHdrDTO(" +
-            "bknvt.id,qdc.id,qdc.soQdinh,qdc.nam,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maNhaKho, khdcd.tenNhaKho,khdcd.maNganKho, khdcd.tenNganKho, khdcd.maLoKho," +
-            "khdcd.tenLoKho,bblm.id,bblm.soBbLayMau, bknvt.soBangKe, bknvt.soBangKe,pnk.soPhieuNhapKho, pnk.id, pnk.ngayLap,bknvt.trangThai ,bknvt.trangThai) " +
-            "FROM DcnbQuyetDinhDcCHdr qdc " +
-            "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
-            "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
-            "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN HhNkBangKeNhapVTHdr bknvt ON bknvt.qdPdNkId = qdc.id and bknvt.maNganKho = khdcd.maNganKhoNhan and bknvt.maLoKho = khdcd.maLoKhoNhan " +
-            "LEFT JOIN DcnbBienBanLayMauHdr bblm ON bblm.qdccId = qdc.id and bblm.maNganKho = bknvt.maNganKho and bblm.maLoKho = bknvt.maLoKho " +
-            "LEFT JOIN DcnbPhieuNhapKhoHdr pnk ON pnk.id = bknvt.phieuNhapKhoId and pnk.maNganKho = bknvt.maNganKho and pnk.maLoKho = bknvt.maLoKho " +
-            "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
+            "bknvt.id,qdgnv.id,qdgnv.soQd,qdgnv.nam,dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maNhaKho, dmdvnhakho.tenDvi,dtl.maNganKho, dmdvngankho.tenDvi, dtl.maLoKho," +
+            "dmdvlokho.tenDvi,bblm.id,bblm.soBienBan, bknvt.soBangKe, bknvt.soBangKe,pnk.soPhieuNhapKho, pnk.id, pnk.ngayLap,bknvt.trangThai ,bknvt.trangThai) " +
+            "FROM HhQdGiaoNvuNhapHangKhacHdr qdgnv " +
+            "LEFT JOIN HhQdPdNhapKhacHdr hdr ON hdr.id = qdgnv.idQdPdNk " +
+            "LEFT JOIN HhQdPdNhapKhacDtl dtl ON hdr.id = dtl.idHdr " +
+            "LEFT JOIN HhNkBangKeNhapVTHdr bknvt ON bknvt.qdPdNkId = qdgnv.id and bknvt.maNganKho = dtl.maNganKho and bknvt.maLoKho = dtl.maLoKho " +
+            "LEFT JOIN HhQdGiaoNvuNhapHangKhacHdr bblmh ON bblmh.idQdPdNk = qdgnv.id " +
+            "LEFT JOIN BienBanLayMauKhac bblm ON bblmh.id = bblm.idQdGiaoNvNh and bblm.maNganKho = bknvt.maNganKho and bblm.maLoKho = bknvt.maLoKho " +
+            "LEFT JOIN HhNkPhieuNhapKhoHdr pnk ON pnk.id = bknvt.phieuNhapKhoId and pnk.maNganKho = bknvt.maNganKho and pnk.maLoKho = bknvt.maLoKho " +
+            "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = dtl.cloaiVthh " +
+            "LEFT JOIN QlnvDmDonvi dmdvnhakho On dmdvnhakho.maDvi = dtl.maNhaKho " +
+            "LEFT JOIN QlnvDmDonvi dmdvdiemkho On dmdvdiemkho.maDvi = dtl.maDiemKho " +
+            "LEFT JOIN QlnvDmDonvi dmdvlokho On dmdvlokho.maDvi = dtl.maLoKho " +
+            "LEFT JOIN QlnvDmDonvi dmdvngankho On dmdvngankho.maDvi = dtl.maNganKho " +
             "WHERE 1 =1 " +
-            "AND qdc.parentId is not null and qdc.trangThai = '29' AND qdc.loaiDc = :#{#param.loaiDc} " +
-            "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
-            "AND (bknvt.type IS NULL OR (:#{#param.type} IS NULL OR bknvt.type = :#{#param.type}))" +
-            "AND (:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho}) " +
-            "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
-            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
-            "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND qdgnv.trangThai = '29'" +
+            "AND ((:#{#param.maDvi} IS NULL OR qdgnv.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
+            "AND (:#{#param.soQdPdNk} IS NULL OR LOWER(qdgnv.soQd) LIKE CONCAT('%',LOWER(:#{#param.soQdPdNk}),'%')) " +
             "AND (:#{#param.soBangKe} IS NULL OR LOWER(bknvt.soBangKe) LIKE CONCAT('%',LOWER(:#{#param.soBangKe}),'%')) " +
-            "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
+            "AND (:#{#param.nam} IS NULL OR qdgnv.nam = :#{#param.nam}) " +
             "AND ((:#{#param.tuNgayThoiHan}  IS NULL OR bknvt.thoiHanGiaoNhan >= :#{#param.tuNgayThoiHan})" +
             "AND (:#{#param.denNgayThoiHan}  IS NULL OR bknvt.thoiHanGiaoNhan <= :#{#param.denNgayThoiHan}) ) " +
             "AND ((:#{#param.tuNgayNhapKho}  IS NULL OR pnk.ngayLap >= :#{#param.tuNgayNhapKho})" +
             "AND (:#{#param.denNgayNhapKho}  IS NULL OR pnk.ngayLap <= :#{#param.denNgayNhapKho}) ) " +
-            "GROUP BY bknvt.id,qdc.id,qdc.soQdinh,qdc.nam,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maNhaKho, khdcd.tenNhaKho,khdcd.maNganKho, khdcd.tenNganKho, khdcd.maLoKho," +
-            "khdcd.tenLoKho,bblm.id,bblm.soBbLayMau, bknvt.soBangKe, bknvt.soBangKe,pnk.soPhieuNhapKho, pnk.id, pnk.ngayLap,bknvt.trangThai ,bknvt.trangThai")
+            "GROUP BY bknvt.id,qdgnv.id,qdgnv.soQd,qdgnv.nam,dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maNhaKho, dmdvnhakho.tenDvi,dtl.maNganKho, dmdvngankho.tenDvi, dtl.maLoKho," +
+            "dmdvlokho.tenDvi,bblm.id,bblm.soBienBan, bknvt.soBangKe, bknvt.soBangKe,pnk.soPhieuNhapKho, pnk.id, pnk.ngayLap,bknvt.trangThai ,bknvt.trangThai")
     Page<HhNkBangKeNhapVTHdrDTO> searchPage(@Param("param") HhNkBangKeNhapVTReq req, Pageable pageable);
 }
