@@ -27,8 +27,8 @@ public class HhNkPhieuNhapKhoHdrDTO {
     private LocalDate ngayNhapKho;
     private Long bangKeVtId;
     private String soBangKeVt;
-    private String maHangHoa;
-    private String tenHangHoa;
+    private String loaiVthh;
+    private String tenLoaiVthh;
     private String cloaiVthh;
     private String tenCloaiVthh;
     private String donViTinh;
@@ -40,7 +40,7 @@ public class HhNkPhieuNhapKhoHdrDTO {
     private String trangThai;
     private String tenTrangThai;
 
-    public HhNkPhieuNhapKhoHdrDTO(Long id, Long idQdPdNk, String soQdPdNk, Date ngayKyQdinh, Integer namKh, Date thoiHanDieuChuyen, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, String soPhieuNhapKho, LocalDate ngayNhapKho, Long bangKeVtId, String soBangKeVt, String maHangHoa, String tenHangHoa, String cloaiVthh, String tenCloaiVthh, String donViTinh, BigDecimal slDienChuyen, Long phieuKiemTraClId, String soPhieuKiemTraCl, Date ngayGiamDinh, String trangThai, String tenTrangThai) {
+    public HhNkPhieuNhapKhoHdrDTO(Long id, Long idQdPdNk, String soQdPdNk, Date ngayKyQdinh, Integer namKh, Date thoiHanDieuChuyen, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, String soPhieuNhapKho, LocalDate ngayNhapKho, Long bangKeVtId, String soBangKeVt, String loaiVthh, String tenLoaiVthh, String cloaiVthh, String tenCloaiVthh, String donViTinh, BigDecimal slDienChuyen, Long phieuKiemTraClId, String soPhieuKiemTraCl, Date ngayGiamDinh, String trangThai, String tenTrangThai) {
         this.id = id;
         this.idQdPdNk = idQdPdNk;
         this.soQdPdNk = soQdPdNk;
@@ -59,8 +59,8 @@ public class HhNkPhieuNhapKhoHdrDTO {
         this.ngayNhapKho = ngayNhapKho;
         this.bangKeVtId = bangKeVtId;
         this.soBangKeVt = soBangKeVt;
-        this.maHangHoa = maHangHoa;
-        this.tenHangHoa = tenHangHoa;
+        this.loaiVthh = loaiVthh;
+        this.tenLoaiVthh = tenLoaiVthh;
         this.cloaiVthh = cloaiVthh;
         this.tenCloaiVthh = tenCloaiVthh;
         this.donViTinh = donViTinh;
