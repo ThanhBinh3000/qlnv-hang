@@ -31,7 +31,7 @@ import java.util.Map;
 @Api(tags = "Điều chuyển nội bộ - Biên bản nhập đầy kho")
 public class DcnbBbNhapDayKhoController {
     @Autowired
-    DcnbBbNhapDayKhoServiceImpl service;
+    private DcnbBbNhapDayKhoServiceImpl service;
 
 
     @ApiOperation(value = "Tra cứu thông tin", response = List.class)

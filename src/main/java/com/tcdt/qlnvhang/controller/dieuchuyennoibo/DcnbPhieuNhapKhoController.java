@@ -29,7 +29,7 @@ import java.util.Map;
 @Api(tags = "Điều chuyển nội bộ - Phiếu nhập kho")
 public class DcnbPhieuNhapKhoController {
     @Autowired
-    DcnbPhieuNhapKhoServiceImpl service;
+    private DcnbPhieuNhapKhoServiceImpl service;
 
 
     @ApiOperation(value = "Tra cứu thông tin ", response = List.class)

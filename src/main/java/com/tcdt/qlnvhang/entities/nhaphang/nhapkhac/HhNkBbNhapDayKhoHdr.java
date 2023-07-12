@@ -70,7 +70,9 @@ public class HhNkBbNhapDayKhoHdr extends BaseEntity implements Serializable, Clo
     private Long nguoiGDuyet;
     @Column(name = "NGAY_GDUYET")
     private LocalDate ngayGDuyet;
+    @Column(name = "NGUOI_GDUYET_KTVBQ")
     private Long nguoiGDuyetKtvbq;
+    @Column(name = "NGAY_GDUYET_KTVBQ")
     private LocalDate ngayGDuyetKtvbq;
     @Column(name = "NGUOI_GDUYET_KT")
     private Long nguoiGDuyetKt;

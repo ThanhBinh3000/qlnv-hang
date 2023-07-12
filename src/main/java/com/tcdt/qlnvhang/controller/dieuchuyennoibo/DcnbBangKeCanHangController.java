@@ -33,7 +33,7 @@ import java.util.Map;
 @Api(tags = "Điều chuyển nội bộ - Bảng kê cân hàng")
 public class DcnbBangKeCanHangController {
     @Autowired
-    DcnbBangKeCanHangServiceImpl dcnbBangKeCanHangServiceImpl;
+    private DcnbBangKeCanHangServiceImpl dcnbBangKeCanHangServiceImpl;
 
     @ApiOperation(value = "Tra cứu thông tin ", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)

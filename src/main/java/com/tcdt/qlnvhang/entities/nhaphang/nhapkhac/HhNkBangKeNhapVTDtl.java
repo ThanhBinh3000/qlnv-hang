@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.table.dieuchuyennoibo;
+package com.tcdt.qlnvhang.entities.nhaphang.nhapkhac;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -14,15 +14,15 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = DcnbBangKeNhapVTDtl.TABLE_NAME)
-public class DcnbBangKeNhapVTDtl {
+@Table(name = HhNkBangKeNhapVTDtl.TABLE_NAME)
+public class HhNkBangKeNhapVTDtl {
 
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "DCNB_BANG_KE_NHAP_VT_DTL";
+    public static final String TABLE_NAME = "HHNK_BANG_KE_NHAP_VT_DTL";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBangKeNhapVTDtl.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbBangKeNhapVTDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBangKeNhapVTDtl.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = HhNkBangKeNhapVTDtl.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = HhNkBangKeNhapVTDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = HhNkBangKeNhapVTDtl.TABLE_NAME + "_SEQ")
     @Column(name = "ID")
     private Long id;
 
@@ -38,5 +38,5 @@ public class DcnbBangKeNhapVTDtl {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
     @JsonIgnore
-    private DcnbBangKeNhapVTHdr dcnbBangKeNhapVTHdr;
+    private HhNkBangKeNhapVTHdr hhNkBangKeNhapVTHdr;
 }

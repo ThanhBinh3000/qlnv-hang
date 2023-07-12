@@ -34,7 +34,7 @@ import java.util.Map;
 @Api(tags = "Điều chuyển nội bộ - Quyết định điều chuyển cục")
 public class DcnbQuyetDinhDcCHdrController extends BaseController {
   @Autowired
-  DcnbQuyetDinhDcCHdrServiceImpl dcnbQuyetDinhDcCHdrServiceImpl;
+  private DcnbQuyetDinhDcCHdrServiceImpl dcnbQuyetDinhDcCHdrServiceImpl;
 
 
   @ApiOperation(value = "Tra cứu thông tin", response = List.class)

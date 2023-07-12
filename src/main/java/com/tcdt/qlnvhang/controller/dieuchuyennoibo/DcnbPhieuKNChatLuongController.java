@@ -33,10 +33,10 @@ import java.util.Map;
 @Api(tags = "Điều chuyển nội bộ - Phiếu kiểm nghiệm chất lượng")
 public class DcnbPhieuKNChatLuongController {
     @Autowired
-    DcnbPhieuKNChatLuongServiceImpl dcnbPhieuKNChatLuongService;
+    private DcnbPhieuKNChatLuongServiceImpl dcnbPhieuKNChatLuongService;
 
     @Autowired
-    DcnbBienBanLayMauHdrRepository dcnbBienBanLayMauHdrRepository;
+    private DcnbBienBanLayMauHdrRepository dcnbBienBanLayMauHdrRepository;
 
     @ApiOperation(value = "Tra cứu thông tin", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
