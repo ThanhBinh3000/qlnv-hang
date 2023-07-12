@@ -28,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -65,12 +66,7 @@ public class DcnbBbChuanBiKhoServiceImpl implements DcnbBbChuanBiKhoService {
         } else {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            searchDto = hdrRepository.searchPageChiCuc(req, pageable);
-        } else {
-            searchDto = hdrRepository.searchPage(req, pageable);
-        }
-
+        searchDto = hdrRepository.searchPage(req, pageable);
         return searchDto;
     }
 
@@ -91,12 +87,12 @@ public class DcnbBbChuanBiKhoServiceImpl implements DcnbBbChuanBiKhoService {
         DcnbBbChuanBiKhoHdr data = new DcnbBbChuanBiKhoHdr();
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(userInfo.getDvql());
-        data.setId(Long.parseLong(req.getSoBban().split("/")[0]));
+        data.setId(null);
         req.getChildren().forEach(e -> {
             e.setParent(data);
         });
         DcnbBbChuanBiKhoHdr created = hdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBCBK-"+ userInfo.getDvqlTenVietTat();
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BBCBK-" + userInfo.getDvqlTenVietTat();
         created.setSoBban(so);
         hdrRepository.save(created);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBbChuanBiKhoHdr.TABLE_NAME);
@@ -121,7 +117,7 @@ public class DcnbBbChuanBiKhoServiceImpl implements DcnbBbChuanBiKhoService {
         BeanUtils.copyProperties(req, data);
         data.setChildren(req.getChildren());
         DcnbBbChuanBiKhoHdr update = hdrRepository.save(data);
-        String so = update.getId() + "/" + (new Date().getYear() + 1900) +"/BBCBK-"+ userInfo.getDvqlTenVietTat();
+        String so = update.getId() + "/" + (new Date().getYear() + 1900) + "/BBCBK-" + userInfo.getDvqlTenVietTat();
         update.setSoBban(so);
         hdrRepository.save(update);
         fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBbChuanBiKhoHdr.TABLE_NAME));
@@ -161,27 +157,43 @@ public class DcnbBbChuanBiKhoServiceImpl implements DcnbBbChuanBiKhoService {
             case Contains.DUTHAO + Contains.CHODUYET_TK:
             case Contains.TUCHOI_LDCC + Contains.CHODUYET_TK:
             case Contains.TUCHOI_TK + Contains.CHODUYET_TK:
+                hdr.setNguoiGDuyet(userInfo.getId());
+                hdr.setNgayGDuyet(LocalDate.now());
                 break;
             case Contains.CHODUYET_TK + Contains.TUCHOI_TK:
                 hdr.setIdThuKho(userInfo.getId());
+                hdr.setTenThuKho(userInfo.getFullName());
+                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                hdr.setNguoiPDuyetTk(userInfo.getId());
+                hdr.setNgayPDuyetTk(LocalDate.now());
                 break;
             case Contains.CHODUYET_TK + Contains.CHODUYET_LDCC:
                 hdr.setIdThuKho(userInfo.getId());
+                hdr.setTenThuKho(userInfo.getFullName());
+                hdr.setNguoiPDuyetTk(userInfo.getId());
+                hdr.setNgayPDuyetTk(LocalDate.now());
                 break;
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
+                hdr.setIdLanhDao(userInfo.getId());
+                hdr.setTenLanhDao(userInfo.getFullName());
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                hdr.setNguoiPDuyet(userInfo.getId());
+                hdr.setNgayPDuyet(LocalDate.now());
                 break;
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 hdr.setIdLanhDao(userInfo.getId());
-                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCucNhan(hdr.getMaDvi(),
-                        hdr.getQdDcCucId(),
-                        hdr.getMaNganKho(),
-                        hdr.getMaLoKho());
-                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
-                dataLinkDtl.setLinkId(hdr.getId());
-                dataLinkDtl.setHdrId(dataLink.getId());
-                dataLinkDtl.setType(DcnbBbChuanBiKhoHdr.TABLE_NAME);
-                dcnbDataLinkDtlRepository.save(dataLinkDtl);
+                hdr.setTenLanhDao(userInfo.getFullName());
+                hdr.setNguoiPDuyet(userInfo.getId());
+                hdr.setNgayPDuyet(LocalDate.now());
+//                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCucNhan(hdr.getMaDvi(),
+//                        hdr.getQdDcCucId(),
+//                        hdr.getMaNganKho(),
+//                        hdr.getMaLoKho());
+//                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
+//                dataLinkDtl.setLinkId(hdr.getId());
+//                dataLinkDtl.setHdrId(dataLink.getId());
+//                dataLinkDtl.setType(DcnbBbChuanBiKhoHdr.TABLE_NAME);
+//                dcnbDataLinkDtlRepository.save(dataLinkDtl);
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");

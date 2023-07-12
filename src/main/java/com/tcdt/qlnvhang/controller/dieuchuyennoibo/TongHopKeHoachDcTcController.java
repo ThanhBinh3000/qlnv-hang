@@ -32,7 +32,7 @@ import java.util.*;
 public class TongHopKeHoachDcTcController extends BaseController {
 
     @Autowired
-    THKeHoachDieuChuyenTongCucServiceImpl thKeHoachDieuChuyenTongCucServiceImpl;
+    private THKeHoachDieuChuyenTongCucServiceImpl thKeHoachDieuChuyenTongCucServiceImpl;
 
     @ApiOperation(value = "Tra cứu thông tin tổng hợp", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -182,7 +182,7 @@ public class TongHopKeHoachDcTcController extends BaseController {
             thKeHoachDieuChuyenTongCucServiceImpl.export( currentUser,objReq, response);
 
         } catch (Exception e) {
-            log.error("Kết xuất danh sách dánh sách mua : {}", e);
+            log.error("Kết xuất danh sách: {}", e);
             final Map<String, Object> body = new HashMap<>();
             body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             body.put("msg", e.getMessage());

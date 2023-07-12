@@ -41,6 +41,7 @@ public class XhXkLtPhieuKnClRequest extends BaseRequest {
     private Long nguoiPduyetId;
     private String lyDoTuChoi;
     private String type;
+    private Boolean KqThamDinh;
 
     private String dvql;
     private LocalDate ngayKnMauTu;

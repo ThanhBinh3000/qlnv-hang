@@ -14,8 +14,6 @@ import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbPhieuNhapKhoService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbDataLinkDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbDataLinkHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoHdr;
 import com.tcdt.qlnvhang.util.Contains;
@@ -28,6 +26,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -65,11 +64,7 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         }else {
             req.setDsLoaiHang(Arrays.asList("LT","M"));
         }
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            searchDto = hdrRepository.searchPageChiCuc(req, pageable);
-        } else {
-            searchDto = hdrRepository.searchPage(req, pageable);
-        }
+        searchDto = hdrRepository.searchPage(req, pageable);
 
         return searchDto;
     }
@@ -91,9 +86,7 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         DcnbPhieuNhapKhoHdr data = new DcnbPhieuNhapKhoHdr();
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(userInfo.getDvql());
-        if (req.getSoPhieuNhapKho() != null) {
-            data.setId(Long.parseLong(req.getSoPhieuNhapKho().split("/")[0]));
-        }
+        data.setId(null);
         req.getChildren().forEach(e -> {
             e.setParent(data);
         });
@@ -162,22 +155,34 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
             // Arena các roll back approve
             case Contains.DUTHAO + Contains.CHODUYET_LDCC:
             case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
+                hdr.setNguoiGDuyet(userInfo.getId());
+                hdr.setNgayGDuyet(LocalDate.now());
                 break;
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
-                hdr.setIdLanhDao(userInfo.getId());
+                if(hdr.getIdLanhDao() ==null){
+                    hdr.setIdLanhDao(userInfo.getId());
+                    hdr.setTenLanhDao(userInfo.getFullName());
+                }
+                hdr.setNguoiPDuyet(userInfo.getId());
+                hdr.setNgayPDuyet(LocalDate.now());
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
-                hdr.setIdLanhDao(userInfo.getId());
-                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCucNhan(hdr.getMaDvi(),
-                        hdr.getQdDcCucId(),
-                        hdr.getMaNganKho(),
-                        hdr.getMaLoKho());
-                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
-                dataLinkDtl.setLinkId(hdr.getId());
-                dataLinkDtl.setHdrId(dataLink.getId());
-                dataLinkDtl.setType(DcnbPhieuNhapKhoHdr.TABLE_NAME);
-                dcnbDataLinkDtlRepository.save(dataLinkDtl);
+                if(hdr.getIdLanhDao() ==null){
+                    hdr.setIdLanhDao(userInfo.getId());
+                    hdr.setTenLanhDao(userInfo.getFullName());
+                }
+                hdr.setNguoiPDuyet(userInfo.getId());
+                hdr.setNgayPDuyet(LocalDate.now());
+//                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCucNhan(hdr.getMaDvi(),
+//                        hdr.getQdDcCucId(),
+//                        hdr.getMaNganKho(),
+//                        hdr.getMaLoKho());
+//                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
+//                dataLinkDtl.setLinkId(hdr.getId());
+//                dataLinkDtl.setHdrId(dataLink.getId());
+//                dataLinkDtl.setType(DcnbPhieuNhapKhoHdr.TABLE_NAME);
+//                dcnbDataLinkDtlRepository.save(dataLinkDtl);
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");

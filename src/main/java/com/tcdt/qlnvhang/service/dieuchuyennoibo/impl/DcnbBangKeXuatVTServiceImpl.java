@@ -1,18 +1,16 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBangKeXuatVTDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBangKeXuatVTHdrRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuXuatKhoHdrRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBangKeXuatVTReq;
-import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeNhapVTHdrDTO;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeXuatVTHdrDTO;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBangKeXuatVTService;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeXuatVTDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeXuatVTHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuXuatKhoHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -39,7 +37,10 @@ public class DcnbBangKeXuatVTServiceImpl implements DcnbBangKeXuatVTService {
     @Autowired
     private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
     @Autowired
+    private DcnbDataLinkDtlRepository dcnbDataLinkDtlRepository;
+    @Autowired
     private DcnbPhieuXuatKhoHdrRepository dcnbPhieuXuatKhoHdrRepository;
+
     @Override
     public Page<DcnbBangKeXuatVTHdr> searchPage(DcnbBangKeXuatVTReq req) throws Exception {
         return null;
@@ -50,19 +51,15 @@ public class DcnbBangKeXuatVTServiceImpl implements DcnbBangKeXuatVTService {
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbBangKeXuatVTHdrDTO> searchDto = null;
-        if(req.getIsVatTu() == null){
+        if (req.getIsVatTu() == null) {
             req.setIsVatTu(false);
         }
-        if(req.getIsVatTu()){
+        if (req.getIsVatTu()) {
             req.setDsLoaiHang(Arrays.asList("VT"));
-        }else {
-            req.setDsLoaiHang(Arrays.asList("LT","M"));
+        } else {
+            req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            searchDto = hdrRepository.searchPageChiCuc(req, pageable);
-        }else {
-            searchDto = hdrRepository.searchPageCuc(req, pageable);
-        }
+        searchDto = hdrRepository.searchPage(req, pageable);
         return searchDto;
     }
 
@@ -78,9 +75,9 @@ public class DcnbBangKeXuatVTServiceImpl implements DcnbBangKeXuatVTService {
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(dvql);
         data.setTenDvi(userInfo.getTenDvi());
-        objReq.getDcnbBangKeXuatVTDtl().forEach(e -> e.setBcnbBangKeXuatVTHdr(data));
+        objReq.getDcnbBangKeXuatVTDtl().forEach(e -> e.setDcnbBangKeXuatVTHdr(data));
         DcnbBangKeXuatVTHdr created = hdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BKXVT-"+ userInfo.getDvqlTenVietTat();
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BKXVT-" + userInfo.getDvqlTenVietTat();
         created.setSoBangKe(so);
         hdrRepository.save(created);
         return created;
@@ -107,7 +104,7 @@ public class DcnbBangKeXuatVTServiceImpl implements DcnbBangKeXuatVTService {
         BeanUtils.copyProperties(objReq, data);
         data.setDcnbBangKeXuatVTDtl(objReq.getDcnbBangKeXuatVTDtl());
         DcnbBangKeXuatVTHdr created = hdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BKXVT-"+ userInfo.getDvqlTenVietTat();
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BKXVT-" + userInfo.getDvqlTenVietTat();
         created.setSoBangKe(so);
         hdrRepository.save(created);
         return created;
@@ -128,6 +125,7 @@ public class DcnbBangKeXuatVTServiceImpl implements DcnbBangKeXuatVTService {
     public DcnbBangKeXuatVTHdr approve(DcnbBangKeXuatVTReq req) throws Exception {
         return null;
     }
+
     @Transactional
     public void approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
         if (StringUtils.isEmpty(statusReq.getId())) {
@@ -157,17 +155,18 @@ public class DcnbBangKeXuatVTServiceImpl implements DcnbBangKeXuatVTService {
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 optional.get().setNgayPDuyet(LocalDate.now());
                 optional.get().setNguoiPDuyet(currentUser.getUser().getId());
-                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
-                        optional.get().getQDinhDccId(),
-                        optional.get().getMaNganKho(),
-                        optional.get().getMaLoKho());
-                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
-                dataLinkDtl.setLinkId(optional.get().getId());
-                dataLinkDtl.setHdrId(dataLink.getId());
-                dataLinkDtl.setType(DcnbBangKeXuatVTHdr.TABLE_NAME);
+//                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
+//                        optional.get().getQDinhDccId(),
+//                        optional.get().getMaNganKho(),
+//                        optional.get().getMaLoKho());
+//                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
+//                dataLinkDtl.setLinkId(optional.get().getId());
+//                dataLinkDtl.setHdrId(dataLink.getId());
+//                dataLinkDtl.setType(DcnbBangKeXuatVTHdr.TABLE_NAME);
+//                dcnbDataLinkDtlRepository.save(dataLinkDtl);
 
                 Optional<DcnbPhieuXuatKhoHdr> dcnbPhieuXuatKhoHdr = dcnbPhieuXuatKhoHdrRepository.findById(optional.get().getPhieuXuatKhoId());
-                if(dcnbPhieuXuatKhoHdr.isPresent()){
+                if (dcnbPhieuXuatKhoHdr.isPresent()) {
                     dcnbPhieuXuatKhoHdr.get().setBangKeVtId(optional.get().getId());
                     dcnbPhieuXuatKhoHdr.get().setSoBangKeVt(optional.get().getSoBangKe());
                     dcnbPhieuXuatKhoHdrRepository.save(dcnbPhieuXuatKhoHdr.get());
@@ -180,6 +179,7 @@ public class DcnbBangKeXuatVTServiceImpl implements DcnbBangKeXuatVTService {
         DcnbBangKeXuatVTHdr created = hdrRepository.save(optional.get());
         return created;
     }
+
     @Override
     public void delete(Long id) throws Exception {
         Optional<DcnbBangKeXuatVTHdr> optional = hdrRepository.findById(id);
@@ -212,7 +212,7 @@ public class DcnbBangKeXuatVTServiceImpl implements DcnbBangKeXuatVTService {
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
-        Page<DcnbBangKeXuatVTHdrDTO> page = searchPage(currentUser,objReq);
+        Page<DcnbBangKeXuatVTHdrDTO> page = searchPage(currentUser, objReq);
         List<DcnbBangKeXuatVTHdrDTO> data = page.getContent();
 
         String title = "Danh sách bảng kê cân hàng ";

@@ -1,7 +1,9 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.hopdong.hopdongphuluc;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhQdPdKqMttSlddDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhQdPduyetKqcgRepository;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhQdPheduyetKqMttSLDDRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.hopdong.hopdongphuluc.DiaDiemGiaoNhanMttCtRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.hopdong.hopdongphuluc.DiaDiemGiaoNhanMttRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.hopdong.hopdongphuluc.HopDongMttHdrRepository;
@@ -12,7 +14,10 @@ import com.tcdt.qlnvhang.request.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMt
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.HhQdPheduyetKqMttSLDD;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhChiTietKqTTinChaoGia;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdPdKQMttSlddDtl;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdPduyetKqcgHdr;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.DiaDiemGiaoNhanMtt;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.DiaDiemGiaoNhanMttCt;
@@ -50,6 +55,10 @@ public class HopDongMttHdrService extends BaseServiceImpl {
 
   @Autowired
   private FileDinhKemService fileDinhKemService;
+  @Autowired
+  private HhQdPdKqMttSlddDtlRepository hhQdPdKqMttSlddDtlRepository;
+  @Autowired
+  private HhQdPheduyetKqMttSLDDRepository hhQdPheduyetKqMttSLDDRepository;
 
 
   public Page<HopDongMttHdr> searchPage(HopDongMttHdrReq req) throws Exception {
@@ -71,6 +80,12 @@ public class HopDongMttHdrService extends BaseServiceImpl {
       f.setTenLoaiHdong(hashMapLoaiHdong.get(f.getLoaiHdong()));
     });
     return page;
+  }
+
+  @Transactional
+  public HopDongMttHdr savePl(HopDongMttHdrReq req) throws Exception {
+    saveDetail(req, req.getIdHd());
+    return hopDongHdrRepository.findById(req.getIdHd()).get();
   }
 
 
@@ -95,6 +110,7 @@ public class HopDongMttHdrService extends BaseServiceImpl {
         throw new Exception("Số quyết định phê duyệt kết quả chào giá " + req.getSoQdKq() + " không tồn tại");
       }else {
         checkSoQdKq.get().setTrangThaiHd(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
+        hhQdPduyetKqcgRepository.save(checkSoQdKq.get());
       }
     }
 
@@ -252,6 +268,17 @@ public class HopDongMttHdrService extends BaseServiceImpl {
     }
     data.setFileDinhKems(fileDinhKem);
 
+    List<HhQdPheduyetKqMttSLDD> listGthau = hhQdPheduyetKqMttSLDDRepository.findAllByIdQdPdKq(data.getIdQdKq());
+    for (HhQdPheduyetKqMttSLDD hhQdPheduyetKqMttSLDD : listGthau) {
+      hhQdPheduyetKqMttSLDD.setTenDvi(hashMapDvi.get(hhQdPheduyetKqMttSLDD.getMaDvi()));
+      List<HhQdPdKQMttSlddDtl> hhQdPdKQMttSlddDtls = new ArrayList<>();
+      for (HhQdPdKQMttSlddDtl hhQdPdKQMttSlddDtl : hhQdPdKqMttSlddDtlRepository.findAllByIdDiaDiem(hhQdPheduyetKqMttSLDD.getId())) {
+        hhQdPdKQMttSlddDtl.setTenDiemKho(hashMapDvi.get(hhQdPdKQMttSlddDtl.getMaDiemKho()));
+        hhQdPdKQMttSlddDtls.add(hhQdPdKQMttSlddDtl);
+      }
+      hhQdPheduyetKqMttSLDD.setChildren(hhQdPdKQMttSlddDtls);
+    }
+
     List<DiaDiemGiaoNhanMtt> allByIdHdr = diaDiemGiaoNhanRepository.findAllByIdHdr(data.getId());
     allByIdHdr.forEach(item ->{
       item.setTenDvi(hashMapDvi.get(item.getMaDvi()));
@@ -263,34 +290,35 @@ public class HopDongMttHdrService extends BaseServiceImpl {
         }
       }
     });
-    data.setChildren(allByIdHdr);
-
-    for (DiaDiemGiaoNhanMtt diaDiem : allByIdHdr){
-      List<DiaDiemGiaoNhanMttCt> diaDiemCt = diaDiemGiaoNhanMttCtRepository.findAllByIdDiaDiem(diaDiem.getId());
-      diaDiemCt.forEach(f ->{
-        f.setTenDiemKho(hashMapDvi.get(f.getMaDiemKho()));
-      });
-      diaDiem.setChildren(diaDiemCt);
-    }
-
-    //        Bắt đầu phụ lục
     data.setPhuLucDtl(allByIdHdr);
-    if (!DataUtils.isNullObject(data.getIdHd())) {
-      List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(HopDongMttHdr.TABLE_NAME));
-      data.setFileDinhKems(fileDinhKems);
-    }
+    data.setChildren(listGthau);
 
-    List<HopDongMttHdr> phuLucList = new ArrayList<>();
-    for (HopDongMttHdr phuLuc : hopDongHdrRepository.findAllByIdHd(id)){
-      List<DiaDiemGiaoNhanMtt> diaDiem = diaDiemGiaoNhanRepository.findAllByIdHdr(phuLuc.getId());
-      diaDiem.forEach(f->{
-        f.setTenDvi(hashMapDvi.get(f.getMaDvi()));
-      });
-      phuLuc.setTenTrangThaiPhuLuc(NhapXuatHangTrangThaiEnum.getTenById(phuLuc.getTrangThaiPhuLuc()));
-      phuLuc.setPhuLucDtl(diaDiem);
-      phuLucList.add(phuLuc);
-    }
-    data.setPhuLuc(phuLucList);
+//    for (DiaDiemGiaoNhanMtt diaDiem : allByIdHdr){
+//      List<DiaDiemGiaoNhanMttCt> diaDiemCt = diaDiemGiaoNhanMttCtRepository.findAllByIdDiaDiem(diaDiem.getId());
+//      diaDiemCt.forEach(f ->{
+//        f.setTenDiemKho(hashMapDvi.get(f.getMaDiemKho()));
+//      });
+//      diaDiem.setChildren(diaDiemCt);
+//    }
+//
+//    //        Bắt đầu phụ lục
+//    data.setPhuLucDtl(allByIdHdr);
+//    if (!DataUtils.isNullObject(data.getIdHd())) {
+//      List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(HopDongMttHdr.TABLE_NAME));
+//      data.setFileDinhKems(fileDinhKems);
+//    }
+//
+//    List<HopDongMttHdr> phuLucList = new ArrayList<>();
+//    for (HopDongMttHdr phuLuc : hopDongHdrRepository.findAllByIdHd(id)){
+//      List<DiaDiemGiaoNhanMtt> diaDiem = diaDiemGiaoNhanRepository.findAllByIdHdr(phuLuc.getId());
+//      diaDiem.forEach(f->{
+//        f.setTenDvi(hashMapDvi.get(f.getMaDvi()));
+//      });
+//      phuLuc.setTenTrangThaiPhuLuc(NhapXuatHangTrangThaiEnum.getTenById(phuLuc.getTrangThaiPhuLuc()));
+//      phuLuc.setPhuLucDtl(diaDiem);
+//      phuLucList.add(phuLuc);
+//    }
+//    data.setPhuLuc(phuLucList);
     return data;
   }
 

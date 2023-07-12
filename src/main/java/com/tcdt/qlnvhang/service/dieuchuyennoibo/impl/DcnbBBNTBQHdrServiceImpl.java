@@ -14,9 +14,6 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanHaoDoiHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbDataLinkDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbDataLinkHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -68,11 +66,7 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
         } else {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            searchDto = hdrRepository.searchPageChiCuc(req, pageable);
-        }else {
-            searchDto = hdrRepository.searchPage(req, pageable);
-        }
+        searchDto = hdrRepository.searchPage(req, pageable);
 
         return searchDto;
     }
@@ -162,28 +156,41 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
             case Contains.TUCHOI_KT + Contains.DUTHAO:
             case Contains.TUCHOI_LDCC + Contains.DUTHAO:
             case Contains.DUTHAO + Contains.CHODUYET_TK:
+                hdr.setNguoiGduyetId(userInfo.getId());
+                hdr.setNgayGduyet(LocalDate.now());
                 break;
             case Contains.CHODUYET_TK + Contains.CHODUYET_KT:
+                hdr.setNgayPDuyetKt(LocalDate.now());
+                hdr.setNguoiPDuyeKt(userInfo.getId());
                 hdr.setThuKho(userInfo.getFullName());
                 break;
             case Contains.CHODUYET_KT + Contains.CHODUYET_LDCC:
+                hdr.setNgayPDuyetKt(LocalDate.now());
+                hdr.setNguoiPDuyeKt(userInfo.getId());
                 hdr.setKeToan(userInfo.getFullName());
                 break;
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
+                hdr.setNgayPduyet(LocalDate.now());
+                hdr.setNguoiPduyetId(userInfo.getId());
                 hdr.setLdChiCuc(userInfo.getFullName());
-                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(hdr.getMaDvi(),
-                        hdr.getQdDcCucId(),
-                        hdr.getMaNganKhoXuat(),
-                        hdr.getMaLoKhoXuat());
-                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
-                dataLinkDtl.setLinkId(hdr.getId());
-                dataLinkDtl.setHdrId(dataLink.getId());
-                dataLinkDtl.setType(DcnbBBNTBQHdr.TABLE_NAME);
-                dcnbDataLinkDtlRepository.save(dataLinkDtl);
+//                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(hdr.getMaDvi(),
+//                        hdr.getQdDcCucId(),
+//                        hdr.getMaNganKhoXuat(),
+//                        hdr.getMaLoKhoXuat());
+//                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
+//                dataLinkDtl.setLinkId(hdr.getId());
+//                dataLinkDtl.setHdrId(dataLink.getId());
+//                dataLinkDtl.setType(DcnbBBNTBQHdr.TABLE_NAME);
+//                dcnbDataLinkDtlRepository.save(dataLinkDtl);
                 break;
             case Contains.CHODUYET_TK + Contains.TUCHOI_TK:
-            case Contains.CHODUYET_KT + Contains.TUCHOI_KT:
+                hdr.setNgayPDuyetKt(LocalDate.now());
+                hdr.setNguoiPDuyeKt(userInfo.getId());
+                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                break;
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
+                hdr.setNgayPduyet(LocalDate.now());
+                hdr.setNguoiPduyetId(userInfo.getId());
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             default:

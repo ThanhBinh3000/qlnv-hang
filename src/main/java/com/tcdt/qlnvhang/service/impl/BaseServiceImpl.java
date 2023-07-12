@@ -16,6 +16,7 @@ import com.tcdt.qlnvhang.repository.DanhMucRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.QlnvDmDonviSearchReq;
+import com.tcdt.qlnvhang.request.QlnvDmVattuSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.request.object.HhDmDviLquanSearchReq;
@@ -28,6 +29,7 @@ import com.tcdt.qlnvhang.table.DmDonViDTO;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.QlnvDanhMuc;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.DmVattuDTO;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanLayMauHdr;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
@@ -196,6 +198,28 @@ public abstract class BaseServiceImpl {
         }.getType());
         for (Map<String, Object> map : retMap) {
             data.put(String.valueOf(map.get("id")), String.valueOf(map.get("tenDvi")));
+        }
+        return data;
+    }
+
+    public Map<String, DmVattuDTO> getListObjectDanhMucHangHoa(String maDvql) {
+        QlnvDmVattuSearchReq objRequest = new QlnvDmVattuSearchReq();
+        objRequest.setDviQly(maDvql);
+        ResponseEntity<String> response = categoryServiceProxy.getListObjectDanhMucHangHoaByMaDvql(getAuthorizationToken(request),
+                objRequest);
+        String str = Request.getAttrFromJson(response.getBody(), "data");
+        HashMap<String, DmVattuDTO> data = new HashMap<String, DmVattuDTO>();
+        List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {
+        }.getType());
+        for (Map<String, Object> map : retMap) {
+            DmVattuDTO dto = new DmVattuDTO();
+            dto.setMa(String.valueOf(map.get("ma")));
+            dto.setTen(String.valueOf(map.get("ten")));
+            dto.setNhomHhBaoHiem(String.valueOf(map.get("nhomHhBaoHiem")));
+            dto.setCap(String.valueOf(map.get("cap")));
+            dto.setMaDviTinh(String.valueOf(map.get("maDviTinh")));
+            dto.setLoaiHang(String.valueOf(map.get("loaiHang")));
+            data.put(String.valueOf(map.get("ma")), dto);
         }
         return data;
     }

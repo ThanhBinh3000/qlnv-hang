@@ -1,28 +1,27 @@
 package com.tcdt.qlnvhang.service.xuathang;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoBienBan;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoBienBanCt;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoKyThuat;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoKyThuatCt;
-import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhThopKhNhapKhac;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
 import com.tcdt.qlnvhang.repository.kiemtrachatluong.NhHoSoBienBanRepository;
 import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatRepository;
 import com.tcdt.qlnvhang.repository.xuathang.XhHoSoKyThuatRepository;
-import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.request.xuathang.SearchHoSoKyThuatReq;
 import com.tcdt.qlnvhang.response.xuathang.NhHoSoKyThuatDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.hosokythuat.NhHoSoKyThuatService;
-import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.hosokythuat.XhHoSoKyThuatDtl;
 import com.tcdt.qlnvhang.table.xuathang.hosokythuat.XhHoSoKyThuatHdr;
 import com.tcdt.qlnvhang.table.xuathang.hosokythuat.XhHoSoKyThuatRow;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import org.springframework.beans.BeanUtils;
@@ -33,6 +32,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.*;
 
 import static com.tcdt.qlnvhang.util.Contains.HO_SO_KY_THUAT.*;
@@ -111,38 +111,15 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
       });
     });
     XhHoSoKyThuatHdr created = xhHoSoKyThuatRepository.save(data);
-
+    //update sobb
     created.getXhHoSoKyThuatDtl().forEach(s -> {
-      if (!DataUtils.isNullOrEmpty((s.getCanCu()))) {
-        List<FileDinhKemReq> listFileReq = new ArrayList<>();
-        s.getCanCu().forEach(canCu -> {
-          FileDinhKemReq fileReq = new FileDinhKemReq();
-          BeanUtils.copyProperties(canCu, fileReq);
-          listFileReq.add(fileReq);
-        });
-        fileDinhKemService.saveListFileDinhKem(listFileReq, s.getId(), XhHoSoKyThuatDtl.TABLE_NAME + "_CAN_CU");
+      System.out.println(s.getThoiDiemLap() == THOI_DIEM_XUAT_HANG);
+      System.out.println(s.getThoiDiemLap() + "--" + THOI_DIEM_XUAT_HANG);
+      if (s.getThoiDiemLap().equals(THOI_DIEM_XUAT_HANG)) {
+        s.setSoBienBan(s.getId() + "/" + s.getNgayTao().getYear() + "/" + s.getLoaiBb());
       }
-      if (!DataUtils.isNullOrEmpty((s.getFileDinhKem()))) {
-        List<FileDinhKemReq> listFileReq = new ArrayList<>();
-        s.getFileDinhKem().forEach(dinhKem -> {
-          FileDinhKemReq fileReq = new FileDinhKemReq();
-          BeanUtils.copyProperties(dinhKem, fileReq);
-          listFileReq.add(fileReq);
-        });
-        fileDinhKemService.saveListFileDinhKem(listFileReq, s.getId(), XhHoSoKyThuatDtl.TABLE_NAME + "_DINH_KEM");
-      }
-      s.getXhHoSoKyThuatRow().forEach(s1 -> {
-        if (!DataUtils.isNullOrEmpty((s1.getFileDinhKem()))) {
-          List<FileDinhKemReq> listFileReq = new ArrayList<>();
-          s1.getFileDinhKem().forEach(dinhKem -> {
-            FileDinhKemReq fileReq = new FileDinhKemReq();
-            BeanUtils.copyProperties(dinhKem, fileReq);
-            listFileReq.add(fileReq);
-          });
-          fileDinhKemService.saveListFileDinhKem(listFileReq, s1.getId(), XhHoSoKyThuatRow.TABLE_NAME + "_DINH_KEM");
-        }
-      });
     });
+    created = xhHoSoKyThuatRepository.save(created);
     return created;
   }
 
@@ -150,9 +127,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
   public XhHoSoKyThuatHdr update(CustomUserDetails currentUser, XhHoSoKyThuatHdr objReq) throws Exception {
     Optional<XhHoSoKyThuatHdr> updateRow = xhHoSoKyThuatRepository.findById(objReq.getId());
     if (updateRow.isPresent()) {
-      final XhHoSoKyThuatHdr xhHoSoKyThuatHdr = updateRow.get();
-      XhHoSoKyThuatHdr xhHoSoKyThuatHdrClone = xhHoSoKyThuatHdr;
-      List<XhHoSoKyThuatDtl> xhHoSoKyThuatDtl = xhHoSoKyThuatHdr.getXhHoSoKyThuatDtl();
+      XhHoSoKyThuatHdr xhHoSoKyThuatHdr = updateRow.get();
 
       xhHoSoKyThuatHdr.getXhHoSoKyThuatDtl().forEach(s -> {
         s.setXhHoSoKyThuatHdr(null);
@@ -164,13 +139,47 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
       BeanUtils.copyProperties(objReq, xhHoSoKyThuatHdr);
       xhHoSoKyThuatHdr.getXhHoSoKyThuatDtl().forEach(s -> {
         s.setXhHoSoKyThuatHdr(xhHoSoKyThuatHdr);
+    /*    if (!DataUtils.isNullOrEmpty(s.getFileDinhKem())) {
+          FileDKemJoinHoSoKyThuatDtl fileDKemJoinHoSoKyThuatDtl = s.getFileDinhKem().get(0);
+          fileDKemJoinHoSoKyThuatDtl.setDataType(XhHoSoKyThuatDtl.TABLE_NAME + "_DINH_KEM");
+          fileDKemJoinHoSoKyThuatDtl.setCreateDate(new Date());
+        }*/
+
         s.getXhHoSoKyThuatRow().forEach(s1 -> {
+
           s1.setXhHoSoKyThuatDtl(s);
         });
       });
-//      xhHoSoKyThuatHdr.setXhHoSoKyThuatDtl(xhHoSoKyThuatDtl);
-      XhHoSoKyThuatHdr updated = xhHoSoKyThuatRepository.save(xhHoSoKyThuatHdr);
-      updated.getXhHoSoKyThuatDtl().forEach(s -> {
+      /*XhHoSoKyThuatHdr cloneHdr = objectMapper.readValue(objectMapper.writeValueAsString(objReq), XhHoSoKyThuatHdr.class);
+      Map<String, FileDinhKem> fileDinhKemMap = new ArrayMap<>();
+      cloneHdr.getXhHoSoKyThuatDtl().forEach(s -> {
+        if (!DataUtils.isNullOrEmpty(s.getFileDinhKem())) {
+          fileDinhKemMap.put(s.getFileDinhKem().get(0).getIdVirtual(), s.getFileDinhKem().get(0));
+        }
+        s.getXhHoSoKyThuatRow().forEach(s1 -> {
+          if (!DataUtils.isNullOrEmpty(s1.getFileDinhKem())) {
+            fileDinhKemMap.put(s1.getFileDinhKem().get(0).getIdVirtual(), s1.getFileDinhKem().get(0));
+          }
+        });
+      });
+      System.out.println("1");
+      cloneHdr.getXhHoSoKyThuatDtl().forEach(s -> {
+        s.getXhHoSoKyThuatRow().forEach(s1 -> {
+          System.out.println(s1.getFileDinhKem().size());
+        });
+      });*/
+
+      xhHoSoKyThuatRepository.save(xhHoSoKyThuatHdr);
+      /*System.out.println("2");
+      cloneHdr.getXhHoSoKyThuatDtl().forEach(s -> {
+        s.getXhHoSoKyThuatRow().forEach(s1 -> {
+          System.out.println(s1.getFileDinhKem().size());
+        });
+      });
+*/
+      System.out.println("a");
+      /*xhHoSoKyThuatHdr.getXhHoSoKyThuatDtl().forEach(s -> {
+        fileDinhKemService.delete(s.getId(), Lists.newArrayList(XhHoSoKyThuatDtl.TABLE_NAME + "_CAN_CU", XhHoSoKyThuatDtl.TABLE_NAME + "_DINH_KEM"));
         if (!DataUtils.isNullOrEmpty((s.getCanCu()))) {
           List<FileDinhKemReq> listFileReq = new ArrayList<>();
           s.getCanCu().forEach(canCu -> {
@@ -178,7 +187,6 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
             BeanUtils.copyProperties(canCu, fileReq);
             listFileReq.add(fileReq);
           });
-          fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhHoSoKyThuatDtl.TABLE_NAME + "_CAN_CU"));
           fileDinhKemService.saveListFileDinhKem(listFileReq, s.getId(), XhHoSoKyThuatDtl.TABLE_NAME + "_CAN_CU");
         }
         if (!DataUtils.isNullOrEmpty((s.getFileDinhKem()))) {
@@ -188,7 +196,6 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
             BeanUtils.copyProperties(dinhKem, fileReq);
             listFileReq.add(fileReq);
           });
-          fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhHoSoKyThuatDtl.TABLE_NAME + "_DINH_KEM"));
           fileDinhKemService.saveListFileDinhKem(listFileReq, s.getId(), XhHoSoKyThuatDtl.TABLE_NAME + "_DINH_KEM");
         }
         s.getXhHoSoKyThuatRow().forEach(s1 -> {
@@ -199,11 +206,11 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
               BeanUtils.copyProperties(dinhKem, fileReq);
               listFileReq.add(fileReq);
             });
-            fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhHoSoKyThuatRow.TABLE_NAME + "_DINH_KEM"));
+            fileDinhKemService.delete(s1.getId(), Lists.newArrayList(XhHoSoKyThuatRow.TABLE_NAME + "_DINH_KEM"));
             fileDinhKemService.saveListFileDinhKem(listFileReq, s1.getId(), XhHoSoKyThuatRow.TABLE_NAME + "_DINH_KEM");
           }
         });
-      });
+      });*/
       return xhHoSoKyThuatHdr;
     }
     return null;
@@ -221,27 +228,35 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
 //      NhHoSoKyThuatDTO nhHoSoKyThuatDTO = xhHoSoKyThuatRepository.findHoSoKyThuatNh(DataUtils.safeToLong(objReq.getId()));
       NhHoSoKyThuat nhHoSoKyThuat = nhHoSoKyThuatService.detail(objReq.getId());
       if (!DataUtils.isNullObject(nhHoSoKyThuat)) {
+        Optional<BienBanLayMau> firstBySoBienBan = bienBanLayMauRepository.findFirstBySoBienBan(nhHoSoKyThuat.getSoBbLayMau());
+        if (!firstBySoBienBan.isPresent()) {
+          throw new Exception("Không tìm thấy biên bản lấy mẫu liên quan.");
+        }
         //map danh sach bien ban
         List<NhHoSoBienBan> listHoSoBienBan = nhHoSoKyThuat.getListHoSoBienBan();
         List<XhHoSoKyThuatDtl> listDtl = new ArrayList<>();
+        String loaiVthh = "";
+        String cloaiVthh = "";
         for (NhHoSoBienBan nhHoSoBienBan : listHoSoBienBan) {
           XhHoSoKyThuatDtl xhHoSoKyThuatDtl = new XhHoSoKyThuatDtl();
           xhHoSoKyThuatDtl.setSoBienBan(nhHoSoBienBan.getSoBienBan());
           xhHoSoKyThuatDtl.setNgayLapBb(DataUtils.convertToLocalDate(nhHoSoBienBan.getNgayTao()));
           xhHoSoKyThuatDtl.setSoHskt(nhHoSoBienBan.getSoHoSoKyThuat());
           xhHoSoKyThuatDtl.setMaDviNhapHskt(nhHoSoBienBan.getMaDvi());
-          xhHoSoKyThuatDtl.setNgayTaoHskt(DataUtils.convertToLocalDate(nhHoSoBienBan.getNgayTao()));
+          xhHoSoKyThuatDtl.setNgayTao(DataUtils.convertToLocalDate(nhHoSoBienBan.getNgayTao()).atStartOfDay());
           xhHoSoKyThuatDtl.setIdBbLayMau(null);
           xhHoSoKyThuatDtl.setSoBbLayMau(nhHoSoBienBan.getSoBbLayMau());
           xhHoSoKyThuatDtl.setSoQdGiaoNvNh(nhHoSoBienBan.getSoQdGiaoNvNh());
           xhHoSoKyThuatDtl.setIdQdGiaoNvNh(nhHoSoBienBan.getIdQdGiaoNvNh());
           xhHoSoKyThuatDtl.setDviCungCap(nhHoSoBienBan.getSoHd());
           xhHoSoKyThuatDtl.setTgianKtra(DataUtils.convertToLocalDate(nhHoSoBienBan.getTgianKtra()));
-          xhHoSoKyThuatDtl.setKquaKtra(null);
+          xhHoSoKyThuatDtl.setKquaKtra("");
           xhHoSoKyThuatDtl.setDiaDiemKtra(nhHoSoBienBan.getDiaDiemKiemTra());
           xhHoSoKyThuatDtl.setLoaiVthh(nhHoSoBienBan.getLoaiVthh());
           xhHoSoKyThuatDtl.setCloaiVthh(nhHoSoBienBan.getCloaiVthh());
-          xhHoSoKyThuatDtl.setTenVthh(null);
+          xhHoSoKyThuatDtl.setTenVthh("");
+          loaiVthh = nhHoSoBienBan.getLoaiVthh();
+          cloaiVthh = nhHoSoBienBan.getCloaiVthh();
           xhHoSoKyThuatDtl.setSoLuongNhap(DataUtils.safeToLong(nhHoSoBienBan.getSoLuongNhap()));
           xhHoSoKyThuatDtl.setTgianNhap(DataUtils.convertToLocalDate(nhHoSoBienBan.getTgianNhap()));
           xhHoSoKyThuatDtl.setPpLayMau(nhHoSoBienBan.getPpLayMau());
@@ -250,12 +265,16 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
           xhHoSoKyThuatDtl.setNoiDung(nhHoSoBienBan.getNoiDung());
           xhHoSoKyThuatDtl.setKetLuan(nhHoSoBienBan.getKetLuan());
           xhHoSoKyThuatDtl.setLoaiBb(nhHoSoBienBan.getLoaiBb());
-          xhHoSoKyThuatDtl.setFileDinhKem(nhHoSoBienBan.getFileDinhKems());
           xhHoSoKyThuatDtl.setThoiDiemLap(THOI_DIEM_NHAP_HANG);
-          xhHoSoKyThuatDtl.setCanCu(null);
-          xhHoSoKyThuatDtl.setVanBanBsung(null);
+          xhHoSoKyThuatDtl.setTrangThai(TrangThaiAllEnum.DA_KY.getId());
+          xhHoSoKyThuatDtl.setCanCu(new ArrayList<>());
+          xhHoSoKyThuatDtl.setVanBanBsung(new ArrayList<>());
           xhHoSoKyThuatDtl.setTgianBsung(DataUtils.convertToLocalDate(nhHoSoBienBan.getTgianBsung()));
-          xhHoSoKyThuatDtl.setFileDinhKem(nhHoSoBienBan.getFileDinhKems());
+          xhHoSoKyThuatDtl.setMapVthh(mapVthh);
+          String sFileDinhKem = objectMapper.writeValueAsString(nhHoSoBienBan.getFileDinhKems());
+          List<FileDKemJoinHoSoKyThuatDtl> listFileDinhKem = objectMapper.readValue(sFileDinhKem, new TypeReference<List<FileDKemJoinHoSoKyThuatDtl>>() {
+          });
+          xhHoSoKyThuatDtl.setFileDinhKem(listFileDinhKem);
 
           //map chi tiet bien ban
           if (nhHoSoBienBan.getLoaiBb().equals(BB_KTRA_HO_SO_KY_THUAT)) {
@@ -295,32 +314,35 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
           XhHoSoKyThuatDtl dtlBbKt = new XhHoSoKyThuatDtl();
           dtlBbKt.setLoaiBb(loaiBb.poll());
           dtlBbKt.setThoiDiemLap(THOI_DIEM_XUAT_HANG);
+          dtlBbKt.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
+          dtlBbKt.setSoHskt(nhHoSoKyThuat.getSoHoSoKyThuat());
+          dtlBbKt.setNgayTaoHskt(LocalDate.now());
+          dtlBbKt.setLoaiVthh(loaiVthh);
+          dtlBbKt.setCloaiVthh(cloaiVthh);
           listDtl.add(dtlBbKt);
         }
 
         xhHskt = new XhHoSoKyThuatHdr();
-
-        xhHskt.setIdHsktNh(objReq.getId());
+        //xhHskt.setIdHsktNh(objReq.getId());
         xhHskt.setIdHsktNh(nhHoSoKyThuat.getId());
-        xhHskt.setSoHskt(nhHoSoKyThuat.getSoHoSoKyThuat());
+        xhHskt.setSoHsktNh(nhHoSoKyThuat.getSoHoSoKyThuat());
         xhHskt.setSoBbLayMauNh(nhHoSoKyThuat.getSoBbLayMau());
+        xhHskt.setSoQdGiaoNvNh(nhHoSoKyThuat.getSoQdGiaoNvNh());
+        xhHskt.setNgayTaoNh(DataUtils.convertToLocalDate(nhHoSoKyThuat.getNgayTao()));
+        xhHskt.setNgayDuyetNh(DataUtils.convertToLocalDate(nhHoSoKyThuat.getNgayPduyet()));
+        String maDiaDiem = "";
+        if (DataUtils.isNullOrEmpty(firstBySoBienBan.get().getMaLoKho())) {
+          maDiaDiem = firstBySoBienBan.get().getMaNganKho();
+        } else {
+          maDiaDiem = firstBySoBienBan.get().getMaLoKho();
+        }
+        xhHskt.setMaDiaDiem(maDiaDiem);
+        xhHskt.setTrangThai(nhHoSoKyThuat.getTrangThai());
         xhHskt.setXhHoSoKyThuatDtl(listDtl);
         xhHskt.setMapDmucDvi(mapDmucDvi);
         xhHskt.setMapVthh(mapVthh);
       }
     } else {
-      xhHskt.getXhHoSoKyThuatDtl().forEach(s -> {
-        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(s.getId(), Arrays.asList(XhHoSoKyThuatDtl.TABLE_NAME + "_DINH_KEM"));
-        List<FileDinhKem> canCu = fileDinhKemService.search(s.getId(), Arrays.asList(XhHoSoKyThuatDtl.TABLE_NAME + "_CAN_CU"));
-        s.setFileDinhKem(fileDinhKem);
-        s.setCanCu(canCu);
-
-        s.getXhHoSoKyThuatRow().forEach(s1 -> {
-          List<FileDinhKem> fileDinhKem1 = fileDinhKemService.search(s1.getId(), Arrays.asList(XhHoSoKyThuatRow.TABLE_NAME + "_DINH_KEM"));
-          s1.setFileDinhKem(fileDinhKem1);
-        });
-      });
-
       xhHskt.setMapDmucDvi(mapDmucDvi);
       xhHskt.setMapVthh(mapVthh);
     }

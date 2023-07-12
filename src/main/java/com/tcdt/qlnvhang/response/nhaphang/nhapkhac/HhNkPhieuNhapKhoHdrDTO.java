@@ -10,8 +10,8 @@ import java.util.Date;
 @Data
 public class HhNkPhieuNhapKhoHdrDTO {
     private Long id;
-    private Long qdDcCucId;
-    private String soQdinh;
+    private Long idQdPdNk;
+    private String soQdPdNk;
     private Date ngayKyQdinh;
     private Integer namKh;
     private Date thoiHanDieuChuyen;
@@ -27,23 +27,23 @@ public class HhNkPhieuNhapKhoHdrDTO {
     private LocalDate ngayNhapKho;
     private Long bangKeVtId;
     private String soBangKeVt;
-    private String maHangHoa;
-    private String tenHangHoa;
-    private String maChLoaiHangHoa;
-    private String tenChLoaiHangHoa;
+    private String loaiVthh;
+    private String tenLoaiVthh;
+    private String cloaiVthh;
+    private String tenCloaiVthh;
     private String donViTinh;
     private BigDecimal slDienChuyen;
 
-    private Long phieuKiemTraId;
+    private Long phieuKiemTraClId;
     private String soPhieuKiemTraCl;
     private Date ngayGiamDinh;
     private String trangThai;
     private String tenTrangThai;
 
-    public HhNkPhieuNhapKhoHdrDTO(Long id, Long qdDcCucId, String soQdinh, Date ngayKyQdinh, Integer namKh, Date thoiHanDieuChuyen, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, String soPhieuNhapKho, LocalDate ngayNhapKho, Long bangKeVtId, String soBangKeVt, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String donViTinh, BigDecimal slDienChuyen, Long phieuKiemTraId, String soPhieuKiemTraCl, Date ngayGiamDinh, String trangThai, String tenTrangThai) {
+    public HhNkPhieuNhapKhoHdrDTO(Long id, Long idQdPdNk, String soQdPdNk, Date ngayKyQdinh, Integer namKh, Date thoiHanDieuChuyen, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, String soPhieuNhapKho, LocalDate ngayNhapKho, Long bangKeVtId, String soBangKeVt, String loaiVthh, String tenLoaiVthh, String cloaiVthh, String tenCloaiVthh, String donViTinh, BigDecimal slDienChuyen, Long phieuKiemTraClId, String soPhieuKiemTraCl, Date ngayGiamDinh, String trangThai, String tenTrangThai) {
         this.id = id;
-        this.qdDcCucId = qdDcCucId;
-        this.soQdinh = soQdinh;
+        this.idQdPdNk = idQdPdNk;
+        this.soQdPdNk = soQdPdNk;
         this.ngayKyQdinh = ngayKyQdinh;
         this.namKh = namKh;
         this.thoiHanDieuChuyen = thoiHanDieuChuyen;
@@ -59,13 +59,13 @@ public class HhNkPhieuNhapKhoHdrDTO {
         this.ngayNhapKho = ngayNhapKho;
         this.bangKeVtId = bangKeVtId;
         this.soBangKeVt = soBangKeVt;
-        this.maHangHoa = maHangHoa;
-        this.tenHangHoa = tenHangHoa;
-        this.maChLoaiHangHoa = maChLoaiHangHoa;
-        this.tenChLoaiHangHoa = tenChLoaiHangHoa;
+        this.loaiVthh = loaiVthh;
+        this.tenLoaiVthh = tenLoaiVthh;
+        this.cloaiVthh = cloaiVthh;
+        this.tenCloaiVthh = tenCloaiVthh;
         this.donViTinh = donViTinh;
         this.slDienChuyen = slDienChuyen;
-        this.phieuKiemTraId = phieuKiemTraId;
+        this.phieuKiemTraClId = phieuKiemTraClId;
         this.soPhieuKiemTraCl = soPhieuKiemTraCl;
         this.ngayGiamDinh = ngayGiamDinh;
         this.trangThai = trangThai;

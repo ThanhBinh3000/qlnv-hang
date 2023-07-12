@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DcnbBbChuanBiKhoHdr extends BaseEntity implements Serializable, Cloneable{
+public class DcnbBbChuanBiKhoHdr extends BaseEntity implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_BB_CHUAN_BI_KHO_HDR";
 
@@ -39,10 +39,13 @@ public class DcnbBbChuanBiKhoHdr extends BaseEntity implements Serializable, Clo
     private LocalDate ngayLap;
     private LocalDate ngayKetThucNt;
     private Long idKyThuatVien;
+    private String tenKyThuatVien;
     private Long idThuKho;
+    private String tenThuKho;
     private Long idKeToan;
+    private String tenKeToan;
     private Long idLanhDao;
-    private Long idKeHoachDtl;
+    private String tenLanhDao;
     private String maDiemKho;
     private String maNhaKho;
     private String maNganKho;
@@ -54,6 +57,8 @@ public class DcnbBbChuanBiKhoHdr extends BaseEntity implements Serializable, Clo
     private String loaiHinhKho;
     private String loaiVthh;
     private String cloaiVthh;
+    private String tenLoaiVthh;
+    private String tenCloaiVthh;
     private BigDecimal tichLuong;
     private Long idPhieuNhapKho;
     private String soPhieuNhapKho;
@@ -63,10 +68,21 @@ public class DcnbBbChuanBiKhoHdr extends BaseEntity implements Serializable, Clo
     private BigDecimal dinhMucGiao;
     private BigDecimal dinhMucThucTe;
     private String nhanXet;
-    @Access(value=AccessType.PROPERTY)
+    @Access(value = AccessType.PROPERTY)
     private String trangThai;
     private String lyDoTuChoi;
-
+    @Column(name = "NGUOI_GDUYET")
+    private Long nguoiGDuyet;
+    @Column(name = "NGAY_GDUYET")
+    private LocalDate ngayGDuyet;
+    @Column(name = "NGUOI_GDUYET_TK")
+    private Long nguoiPDuyetTk;
+    @Column(name = "NGAY_GDUYET_TK")
+    private LocalDate ngayPDuyetTk;
+    @Column(name = "NGUOI_PDUYET")
+    private Long nguoiPDuyet;
+    @Column(name = "NGAY_PDUYET")
+    private LocalDate ngayPDuyet;
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 

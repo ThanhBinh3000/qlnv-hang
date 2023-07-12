@@ -23,4 +23,5 @@ public class HhQdGiaoNvNhangDtlReq {
     private String trangThai;
 
     private List<HhQdGiaoNvNhDdiemReq> hhQdGiaoNvNhDdiemList = new ArrayList<>();
+    private List<HhQdGiaoNvNhDdiemReq> children = new ArrayList<>();
 }

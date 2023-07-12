@@ -21,7 +21,9 @@ public interface HhQdPheduyetKhMttDxRepository extends JpaRepository<HhQdPheduye
             "AND (:#{#param.canhanTochuc} IS NULL OR LOWER(cg.canhanTochuc) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.canhanTochuc}),'%'))) " +
             "AND (:#{#param.maDvi} IS NULL OR dtl.maDvi = :#{#param.maDvi}) " +
             "AND (:#{#param.trangThai} IS NULL OR dtl.trangThai = :#{#param.trangThai}) " +
-            "AND (:#{#param.pthucMuaTrucTiep} IS NULL OR dtl.pthucMuaTrucTiep = :#{#param.pthucMuaTrucTiep}) " +
+            "AND (:#{#param.pthucMuaTrucTiep} IS NULL OR " +
+            "    (:#{#param.pthucMuaTrucTiep} = '01' AND dtl.pthucMuaTrucTiep = '01') OR " +
+            "    (:#{#param.pthucMuaTrucTiep} != '01' AND dtl.pthucMuaTrucTiep != '01')) " +
             "AND (:#{#param.lastest} IS NULL OR LOWER(hdr.lastest) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.lastest}),'%'))) " +
             "AND (:#{#param.loaiVthh } IS NULL OR LOWER(hdr.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) "
     )

@@ -1,17 +1,16 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBangKeNhapVTDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBangKeNhapVTHdrRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuNhapKhoHdrRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBangKeNhapVTReq;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeNhapVTHdrDTO;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBangKeNhapVTService;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeNhapVTDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeNhapVTHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -38,6 +37,8 @@ public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService {
     @Autowired
     private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
     @Autowired
+    private DcnbDataLinkDtlRepository dcnbDataLinkDtlRepository;
+    @Autowired
     private DcnbPhieuNhapKhoHdrRepository dcnbPhieuNhapKhoHdrRepository;
 
     @Override
@@ -58,12 +59,7 @@ public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService {
         } else {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            searchDto = hdrRepository.searchPage(req, pageable);
-        } else {
-            req.setTypeDataLink(Contains.DIEU_CHUYEN);
-            searchDto = hdrRepository.searchPageCuc(req, pageable);
-        }
+        searchDto = hdrRepository.searchPage(req, pageable);
         return searchDto;
     }
 
@@ -79,7 +75,7 @@ public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService {
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(dvql);
         data.setTenDvi(userInfo.getTenDvi());
-        objReq.getDcnbbangkenhapvtdtl().forEach(e -> e.setBcnbBangKeNhapVTHdr(data));
+        objReq.getDcnbbangkenhapvtdtl().forEach(e -> e.setDcnbBangKeNhapVTHdr(data));
         DcnbBangKeNhapVTHdr created = hdrRepository.save(data);
         String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BKNVT-" + userInfo.getDvqlTenVietTat();
         created.setSoBangKe(so);
@@ -169,14 +165,15 @@ public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService {
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 optional.get().setNgayPDuyet(LocalDate.now());
                 optional.get().setNguoiPDuyet(currentUser.getUser().getId());
-                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCucNhan(optional.get().getMaDvi(),
-                        optional.get().getQDinhDccId(),
-                        optional.get().getMaNganKho(),
-                        optional.get().getMaLoKho());
-                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
-                dataLinkDtl.setLinkId(optional.get().getId());
-                dataLinkDtl.setHdrId(dataLink.getId());
-                dataLinkDtl.setType(DcnbBangKeNhapVTHdr.TABLE_NAME);
+//                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCucNhan(optional.get().getMaDvi(),
+//                        optional.get().getQDinhDccId(),
+//                        optional.get().getMaNganKho(),
+//                        optional.get().getMaLoKho());
+//                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
+//                dataLinkDtl.setLinkId(optional.get().getId());
+//                dataLinkDtl.setHdrId(dataLink.getId());
+//                dataLinkDtl.setType(DcnbBangKeNhapVTHdr.TABLE_NAME);
+//                dcnbDataLinkDtlRepository.save(dataLinkDtl);
 
                 Optional<DcnbPhieuNhapKhoHdr> dcnbPhieuNhapKhoHdr = dcnbPhieuNhapKhoHdrRepository.findById(optional.get().getPhieuNhapKhoId());
                 if (dcnbPhieuNhapKhoHdr.isPresent()) {

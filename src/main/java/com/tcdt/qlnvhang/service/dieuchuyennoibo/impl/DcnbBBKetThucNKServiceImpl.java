@@ -50,11 +50,7 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
         }else {
             req.setDsLoaiHang(Arrays.asList("LT","M"));
         }
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            searchDto = hdrRepository.searchPageChiCuc(req, pageable);
-        }else {
-            searchDto = hdrRepository.searchPageCuc(req, pageable);
-        }
+        searchDto = hdrRepository.searchPage(req, pageable);
         return searchDto;
     }
 
@@ -82,8 +78,8 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
         DcnbBBKetThucNKHdr data = new DcnbBBKetThucNKHdr();
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(userInfo.getDvql());
-        data.setId(Long.parseLong(req.getSoBb().split("/")[0]));
-        req.getBcnbBBKetThucNKDtl().forEach(e -> {
+        data.setId(null);
+        req.getDcnbBBKetThucNKDtl().forEach(e -> {
             e.setDcnbBBKetThucNKHdr(data);
         });
         DcnbBBKetThucNKHdr created = hdrRepository.save(data);
@@ -108,7 +104,7 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
         }
         DcnbBBKetThucNKHdr data = optional.get();
         BeanUtils.copyProperties(req, data);
-        data.setBcnbBBKetThucNKDtl(req.getBcnbBBKetThucNKDtl());
+        data.setDcnbBBKetThucNKDtl(req.getDcnbBBKetThucNKDtl());
         DcnbBBKetThucNKHdr update = hdrRepository.save(data);
         String so = update.getId() + "/" + (new Date().getYear() + 1900) +"/BBKT-"+ userInfo.getDvqlTenVietTat();
         update.setSoBb(so);

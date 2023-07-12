@@ -31,8 +31,8 @@ public class DcnbBbNhapDayKhoHdrDTO {
     private LocalDate ngayBatDauNhap;
     private LocalDate ngayBatKetNhap;
 
-    private String soPhieuKnCl;
-    private Long phieuKnClId;
+    private String soPhieuKiemTraCl;
+    private Long phieuKiemTraClId;
 
     private String soPhieuNhapKho;
     private Long phieuNhapKhoId;
@@ -42,7 +42,7 @@ public class DcnbBbNhapDayKhoHdrDTO {
     private String trangThai;
     private String tenTrangThai;
 
-    public DcnbBbNhapDayKhoHdrDTO(Long id, Long qdDcCucId, String soQdinh, Integer namKh, LocalDate thoiHanDieuChuyen, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String donViTinh, String tenDonViTinh, String soBbNhapDayKho, LocalDate ngayBatDauNhap, LocalDate ngayBatKetNhap, String soPhieuKnCl, Long phieuKnClId, String soPhieuNhapKho, Long phieuNhapKhoId, String soBangKe, Long soBangKeId, LocalDate ngayNhapDayKho, String trangThai, String tenTrangThai) {
+    public DcnbBbNhapDayKhoHdrDTO(Long id, Long qdDcCucId, String soQdinh, Integer namKh, LocalDate thoiHanDieuChuyen, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String donViTinh, String tenDonViTinh, String soBbNhapDayKho, LocalDate ngayBatDauNhap, LocalDate ngayBatKetNhap, String soPhieuKiemTraCl, Long phieuKiemTraClId, String soPhieuNhapKho, Long phieuNhapKhoId, String soBangKe, Long soBangKeId, LocalDate ngayNhapDayKho, String trangThai, String tenTrangThai) {
         this.id = id;
         this.qdDcCucId = qdDcCucId;
         this.soQdinh = soQdinh;
@@ -65,8 +65,8 @@ public class DcnbBbNhapDayKhoHdrDTO {
         this.soBbNhapDayKho = soBbNhapDayKho;
         this.ngayBatDauNhap = ngayBatDauNhap;
         this.ngayBatKetNhap = ngayBatKetNhap;
-        this.soPhieuKnCl = soPhieuKnCl;
-        this.phieuKnClId = phieuKnClId;
+        this.soPhieuKiemTraCl = soPhieuKiemTraCl;
+        this.phieuKiemTraClId = phieuKiemTraClId;
         this.soPhieuNhapKho = soPhieuNhapKho;
         this.phieuNhapKhoId = phieuNhapKhoId;
         this.soBangKe = soBangKe;

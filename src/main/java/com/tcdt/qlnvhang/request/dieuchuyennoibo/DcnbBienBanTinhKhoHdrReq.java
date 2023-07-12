@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanTinhKhoDtl;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,12 +44,6 @@ public class DcnbBienBanTinhKhoHdrReq {
     private LocalDate thoiHanDieuChuyen;
 
     private LocalDate ngayKyQdDcc;
-
-    private Long phieuXuatKhoId;
-
-    private String soPhieuXuatKho;
-
-    private String soBbLayMau;
 
     private String loaiVthh;
 
@@ -113,15 +108,15 @@ public class DcnbBienBanTinhKhoHdrReq {
 
     private Long lanhDaoChiCucId;
 
-    private Double tongSlXuatTheoQd;
+    private BigDecimal tongSlXuatTheoQd;
 
-    private Double tongSlXuatTheoTt;
+    private BigDecimal tongSlXuatTheoTt;
 
-    private Double slConLaiTheoSs;
+    private BigDecimal slConLaiTheoSs;
 
-    private Double slConLaiTheoTt;
+    private BigDecimal slConLaiTheoTt;
 
-    private Double chenhLechSlConLai;
+    private BigDecimal chenhLechSlConLai;
 
     private String type;
 

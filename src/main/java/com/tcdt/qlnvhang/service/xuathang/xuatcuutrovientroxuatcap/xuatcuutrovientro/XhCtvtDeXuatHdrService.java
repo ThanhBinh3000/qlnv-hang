@@ -132,7 +132,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
   }
 
   @Transactional()
-  void saveCtiet(Long idHdr, XhCtvtDeXuatHdrReq objReq) {
+  public void saveCtiet(Long idHdr, XhCtvtDeXuatHdrReq objReq) {
     for (XhCtvtDeXuatPa deXuatPhuongAnReq : objReq.getDeXuatPhuongAn()) {
       XhCtvtDeXuatPa deXuatPhuongAn = new XhCtvtDeXuatPa();
       BeanUtils.copyProperties(deXuatPhuongAnReq, deXuatPhuongAn);

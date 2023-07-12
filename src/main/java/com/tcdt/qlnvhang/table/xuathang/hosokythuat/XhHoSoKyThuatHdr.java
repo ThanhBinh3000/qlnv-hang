@@ -6,7 +6,7 @@ import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.olap4j.impl.ArrayMap;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -29,19 +29,20 @@ public class XhHoSoKyThuatHdr extends BaseEntity implements Serializable {
   private Long id;
   private String soHskt;
   private Long idHsktNh;
-  private Long soHsktNh;
+  private String soHsktNh;
   private Long idBbLayMau;
   private String soBbLayMau;
   private String soBbLayMauNh;
   private String soQdGiaoNvNh;
-  private LocalDate ngayTaoHskt;
-  private LocalDate ngayDuyetHskt;
+  private LocalDate ngayTaoNh;
+  private LocalDate ngayDuyetNh;
   private String maDvi;
   private String maDiaDiem;
   private String loaiVthh;
   private String cloaiVthh;
   private String lyDo;
   private String trangThai;
+  private String kqKiemTra;
   private String type;
   @OneToMany(mappedBy = "xhHoSoKyThuatHdr", cascade = CascadeType.ALL)
   private List<XhHoSoKyThuatDtl> xhHoSoKyThuatDtl = new ArrayList<>();
@@ -57,7 +58,7 @@ public class XhHoSoKyThuatHdr extends BaseEntity implements Serializable {
   private String tenTrangThai;
   @JsonIgnore
   @Transient
-  private Map<String, String> mapDmucDvi;
+  private Map<String, String> mapDmucDvi = new ArrayMap<>();
   @Transient
   private String tenDvi;
   @Transient
@@ -109,8 +110,8 @@ public class XhHoSoKyThuatHdr extends BaseEntity implements Serializable {
     }
   }
 
-  public void setTrangThai(String trangThai) {
-    this.trangThai = trangThai;
-    this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+  public String getTrangThai() {
+    setTenTrangThai(TrangThaiAllEnum.getLabelById(trangThai));
+    return trangThai;
   }
 }

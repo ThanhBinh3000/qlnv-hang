@@ -2,13 +2,9 @@ package com.tcdt.qlnvhang.response.dieuChuyenNoiBo;
 
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbKqDcDtl;
-import lombok.AllArgsConstructor;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBcKqDcDtl;
 import lombok.Data;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +28,10 @@ public class DcnbBbKqDcDTO {
     private String trangThai;
     private String lyDoTuChoi;
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
-    private List<DcnbBbKqDcDtl> danhSachDaiDien = new ArrayList<>();
+    private List<DcnbBcKqDcDtl> danhSachKetQua = new ArrayList<>();
     private String tenTrangThai;
 
-    public DcnbBbKqDcDTO(Long id, Integer nam, String maDvi, String tenDvi, String maDviNhan, String soBc, LocalDate ngayBc, String tenBc, Long qdDcCucId, String soQdDcCuc, Long qdDcTcId, String soQdDcTc, LocalDate ngayKyQdTc, String noiDung, String trangThai, String lyDoTuChoi, List<FileDinhKemReq> fileDinhKems, List<DcnbBbKqDcDtl> danhSachDaiDien, String tenTrangThai) {
+    public DcnbBbKqDcDTO(Long id, Integer nam, String maDvi, String tenDvi, String maDviNhan, String soBc, LocalDate ngayBc, String tenBc, Long qdDcCucId, String soQdDcCuc, Long qdDcTcId, String soQdDcTc, LocalDate ngayKyQdTc, String noiDung, String trangThai, String lyDoTuChoi, List<FileDinhKemReq> fileDinhKems, List<DcnbBcKqDcDtl> danhSachKetQua, String tenTrangThai) {
         this.id = id;
         this.nam = nam;
         this.maDvi = maDvi;
@@ -53,7 +49,7 @@ public class DcnbBbKqDcDTO {
         this.trangThai = trangThai;
         this.lyDoTuChoi = lyDoTuChoi;
         this.fileDinhKems = fileDinhKems;
-        this.danhSachDaiDien = danhSachDaiDien;
+        this.danhSachKetQua = danhSachKetQua;
         this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
     }
 }

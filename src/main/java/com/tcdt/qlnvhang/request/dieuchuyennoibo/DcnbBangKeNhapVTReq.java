@@ -5,10 +5,7 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeNhapVTDtl;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +20,10 @@ public class DcnbBangKeNhapVTReq extends BaseRequest {
     private String tenLoaiVthh;
     private String tenCloaiVthh;
     private Integer nam;
-    private String loaiQdinh;
     private String soBangKe;
     private LocalDate ngayNhap;
     private String maDvi;
-    private Long qhnsId;
+    private String tenDvi;
     private String maQhns;
     private Long qDinhDccId;
     private String soQdinhDcc;
@@ -48,8 +44,6 @@ public class DcnbBangKeNhapVTReq extends BaseRequest {
     private String tenLanhDaoChiCuc;
     private Long thuKhoId;
     private String tenThuKho;
-    private Long phuTrachId;
-    private String tenPhuTrach;
     private String tenNguoiGiaoHang;
     private String cccd;
     private String donViNguoiGiaoHang;

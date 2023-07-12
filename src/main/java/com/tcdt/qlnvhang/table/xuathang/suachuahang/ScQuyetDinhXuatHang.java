@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.xuathang.suachuahang;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,13 +27,12 @@ public class ScQuyetDinhXuatHang extends BaseEntity implements Serializable {
     @SequenceGenerator(sequenceName = ScQuyetDinhXuatHang.TABLE_NAME + "_SEQ", allocationSize = 1, name = ScQuyetDinhXuatHang.TABLE_NAME + "_SEQ")
     private Long id;
     private Integer nam;
+    private String maDvi;
     private String soQd;
     private LocalDate ngayKy;
-    private Long qdScTcId;
-    @Column(name = "CAN_CU_QD_SC_TC")
-    private String qdScTc;
-    @Column(name = "NGAY_KY_QD_SC")
-    private LocalDate ngayKyQdScTc;
+    private Long idQdSc;
+    private String soQdSc;
+    private LocalDate ngayKyQdSc;
     private LocalDate thoiHanXuat;
     private LocalDate thoiHanNhap;
     private BigDecimal duToanKinhPhi;
@@ -40,11 +40,20 @@ public class ScQuyetDinhXuatHang extends BaseEntity implements Serializable {
     private String kieuNhapXuat;
     private String trichYeu;
     private String trangThai;
-
     @Transient
-    private List<FileDinhKem> canCu;
+    private String tenTrangThai;
+    @Transient
+    private List<FileDinhKem> fileCanCu;
     @Transient
     private List<FileDinhKem> fileDinhKem;
+    @Transient
+    private ScQuyetDinhSc scQuyetDinhSc;
+    @Transient
+    private List<ScDanhSachHdr> scDanhSachHdrList;
+    @Transient
+    private List<ScPhieuXuatKhoHdr> scPhieuXuatKhoHdrList;
 
-
+    public String getTenTrangThai(){
+        return TrangThaiAllEnum.getLabelById(getTrangThai());
+    }
 }

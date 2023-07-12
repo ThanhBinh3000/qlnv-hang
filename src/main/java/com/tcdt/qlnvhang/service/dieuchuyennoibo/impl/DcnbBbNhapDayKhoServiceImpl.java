@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -44,24 +45,21 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
     public Page<DcnbBbNhapDayKhoHdr> searchPage(DcnbBbNhapDayKhoHdrReq req) throws Exception {
         return null;
     }
+
     public Page<DcnbBbNhapDayKhoHdrDTO> search(DcnbBbNhapDayKhoHdrReq req) throws Exception {
         CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
         req.setMaDvi(currentUser.getDvql());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbBbNhapDayKhoHdrDTO> searchDto = null;
-        if(req.getIsVatTu() == null){
+        if (req.getIsVatTu() == null) {
             req.setIsVatTu(false);
         }
-        if(req.getIsVatTu()){
+        if (req.getIsVatTu()) {
             req.setDsLoaiHang(Arrays.asList("VT"));
-        }else {
-            req.setDsLoaiHang(Arrays.asList("LT","M"));
-        }
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            searchDto = hdrRepository.searchPageChiCuc(req, pageable);
         } else {
-            searchDto = hdrRepository.searchPage(req, pageable);
+            req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
+        searchDto = hdrRepository.searchPage(req, pageable);
 
         return searchDto;
     }
@@ -69,10 +67,10 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
     @Override
     public DcnbBbNhapDayKhoHdr create(DcnbBbNhapDayKhoHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
+        if (userInfo == null) {
             throw new Exception("Access denied.");
         }
-        if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+        if (!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
         }
 //        Optional<DcnbBbNhapDayKhoHdr> optional = hdrRepository.findBySoBb(req.getSoBb());
@@ -83,12 +81,12 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
         DcnbBbNhapDayKhoHdr data = new DcnbBbNhapDayKhoHdr();
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(userInfo.getDvql());
-        data.setId(Long.parseLong(req.getSoBb().split("/")[0]));
+        data.setId(null);
         req.getChildren().forEach(e -> {
             e.setParent(data);
         });
         DcnbBbNhapDayKhoHdr created = hdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBNDK-"+ userInfo.getDvqlTenVietTat();
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BBNDK-" + userInfo.getDvqlTenVietTat();
         created.setSoBb(so);
         hdrRepository.save(created);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBbNhapDayKhoHdr.TABLE_NAME);
@@ -104,10 +102,10 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
     @Override
     public DcnbBbNhapDayKhoHdr update(DcnbBbNhapDayKhoHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
+        if (userInfo == null) {
             throw new Exception("Access denied.");
         }
-        if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+        if (!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             throw new Exception("Văn bản này chỉ có thêm ở cấp chi cục");
         }
         Optional<DcnbBbNhapDayKhoHdr> optional = hdrRepository.findById(req.getId());
@@ -115,10 +113,11 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
             throw new Exception("Số biên bản không tồn tại");
         }
         DcnbBbNhapDayKhoHdr data = optional.get();
-        BeanUtils.copyProperties(req,data);
+        req.setMaDvi(userInfo.getDvql());
+        BeanUtils.copyProperties(req, data);
         data.setChildren(req.getChildren());
         DcnbBbNhapDayKhoHdr update = hdrRepository.save(data);
-        String so = update.getId() + "/" + (new Date().getYear() + 1900) +"/BBNDK-"+ userInfo.getDvqlTenVietTat();
+        String so = update.getId() + "/" + (new Date().getYear() + 1900) + "/BBNDK-" + userInfo.getDvqlTenVietTat();
         update.setSoBb(so);
         hdrRepository.save(update);
         fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBbNhapDayKhoHdr.TABLE_NAME));
@@ -130,10 +129,10 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
     @Override
     public DcnbBbNhapDayKhoHdr detail(Long id) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
+        if (userInfo == null) {
             throw new Exception("Access denied.");
         }
-        if(Objects.isNull(id)){
+        if (Objects.isNull(id)) {
             throw new Exception("Id is null");
         }
         Optional<DcnbBbNhapDayKhoHdr> optional = hdrRepository.findById(id);
@@ -148,33 +147,55 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
     @Override
     public DcnbBbNhapDayKhoHdr approve(DcnbBbNhapDayKhoHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null){
+        if (userInfo == null) {
             throw new Exception("Access denied.");
         }
         DcnbBbNhapDayKhoHdr hdr = detail(req.getId());
         String status = hdr.getTrangThai() + req.getTrangThai();
         switch (status) {
-            // Arena các roll back approve
-            case Contains.CHODUYET_KTVBQ + Contains.DUTHAO:
-            case Contains.TUCHOI_KT + Contains.DUTHAO:
-            case Contains.TUCHOI_LDCC + Contains.DUTHAO:
-                break;
             // Arena các cấp duuyệt
+            case Contains.TUCHOI_KTVBQ + Contains.CHODUYET_KTVBQ:
+            case Contains.TUCHOI_KT + Contains.CHODUYET_KTVBQ:
+            case Contains.TUCHOI_LDCC + Contains.CHODUYET_KTVBQ:
             case Contains.DUTHAO + Contains.CHODUYET_KTVBQ:
+                hdr.setNguoiGDuyet(userInfo.getId());
+                hdr.setNgayGDuyet(LocalDate.now());
                 break;
             case Contains.CHODUYET_KTVBQ + Contains.CHODUYET_KT:
+                hdr.setNgayPDuyetKtvbq(LocalDate.now());
+                hdr.setNguoiPDuyeKtvbq(userInfo.getId());
                 hdr.setIdKyThuatVien(userInfo.getId());
                 break;
             case Contains.CHODUYET_KT + Contains.CHODUYET_LDCC:
                 hdr.setIdKeToan(userInfo.getId());
+                hdr.setTenKeToan(userInfo.getFullName());
+                hdr.setNgayPDuyetKt(LocalDate.now());
+                hdr.setNguoiPDuyeKt(userInfo.getId());
+                hdr.setIdKeToan(userInfo.getId());
                 break;
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 hdr.setIdLanhDao(userInfo.getId());
+                hdr.setTenLanhDao(userInfo.getFullName());
+                hdr.setNgayPDuyet(LocalDate.now());
+                hdr.setNguoiPDuyet(userInfo.getId());
+                hdr.setIdLanhDao(userInfo.getId());
                 break;
             // Arena từ chối
-            case Contains.CHODUYET_KTVBQ + Contains.CHODUYET_KTVBQ:
+            case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_KTVBQ:
+                hdr.setNguoiGDuyet(userInfo.getId());
+                hdr.setNgayGDuyet(LocalDate.now());
+                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                break;
             case Contains.CHODUYET_KT + Contains.TUCHOI_KT:
+                hdr.setNgayPDuyetKt(LocalDate.now());
+                hdr.setNguoiPDuyeKt(userInfo.getId());
+                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                break;
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
+                hdr.setIdLanhDao(userInfo.getId());
+                hdr.setTenLanhDao(userInfo.getFullName());
+                hdr.setNgayPDuyet(LocalDate.now());
+                hdr.setNguoiPDuyet(userInfo.getId());
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             default:
@@ -194,15 +215,15 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
 
     @Override
     public void deleteMulti(List<Long> listMulti) throws Exception {
-        if(listMulti != null && !listMulti.isEmpty()){
-            listMulti.forEach( i -> {
+        if (listMulti != null && !listMulti.isEmpty()) {
+            listMulti.forEach(i -> {
                 try {
                     delete(i);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             });
-        }else{
+        } else {
             throw new Exception("List id is null");
         }
     }

@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -40,6 +41,7 @@ public class ScDanhSachHdr extends BaseEntity implements Serializable {
   private String trangThai;
   private String type;
   private BigDecimal donGiaDk;
+  private BigDecimal donGiaPd;
   private String ketQua;
   @JsonIgnore
   @Transient
@@ -65,6 +67,13 @@ public class ScDanhSachHdr extends BaseEntity implements Serializable {
   private String tenNganKho;
   @Transient
   private String tenLoKho;
+  @Transient
+  private List<ScPhieuXuatKhoHdr> scPhieuXuatKhoList;
+  @Transient
+  private List<ScBangKeXuatVatTuHdr> scBangKeXuatVatTuList;
+
+  @Transient
+  private List<ScKiemTraChatLuongHdr> scKiemTraChatLuongList;
 
   public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
     this.mapDmucDvi = mapDmucDvi;

@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +9,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +19,7 @@ import java.util.List;
 @Setter
 public class XhXkTongHopHdr extends BaseEntity implements Serializable {
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_Xk_TONG_HOP_HDR";
+  public static final String TABLE_NAME = "XH_XK_TONG_HOP_HDR";
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXkTongHopHdr.TABLE_NAME + "_SEQ")
@@ -27,8 +29,7 @@ public class XhXkTongHopHdr extends BaseEntity implements Serializable {
   private String maDvi;
   private String maDanhSach;
   private String tenDanhSach;
-  private LocalDate ngayDeXuatTu;
-  private LocalDate ngayDeXuatDen;
+  private LocalDateTime ngayDeXuat;
   private String trangThai;
   private String trangThaiKtCl;
   private LocalDate ngayGduyet;
@@ -43,6 +44,9 @@ public class XhXkTongHopHdr extends BaseEntity implements Serializable {
   private Long idThTc;
   private String maDanhSachTc;
 
+  private Long idBaoCao;
+  private String soBaoCao;
+
   @Transient
   private String tenTrangThai;
 
@@ -51,8 +55,12 @@ public class XhXkTongHopHdr extends BaseEntity implements Serializable {
 
   @Transient
   private String maDvql;
+
   @Transient
   private String tenDvql;
+
+  @Transient
+  private List<FileDinhKem> fileDinhKems =new ArrayList<>();
 
   @OneToMany(mappedBy = "tongHopHdr", cascade = CascadeType.ALL)
   private List<XhXkTongHopDtl> tongHopDtl = new ArrayList<>();

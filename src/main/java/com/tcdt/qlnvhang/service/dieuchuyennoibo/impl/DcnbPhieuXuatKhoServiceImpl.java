@@ -9,7 +9,6 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuXuatKhoHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuXuatKho;
-import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanLayMauHdrDTO;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuXuatKhoHdrDTO;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuXuatKhoHdrListDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -28,7 +27,6 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -54,19 +52,15 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbPhieuXuatKhoHdrDTO> searchDto = null;
-        if(req.getIsVatTu() == null){
+        if (req.getIsVatTu() == null) {
             req.setIsVatTu(false);
         }
-        if(req.getIsVatTu()){
+        if (req.getIsVatTu()) {
             req.setDsLoaiHang(Arrays.asList("VT"));
-        }else {
-            req.setDsLoaiHang(Arrays.asList("LT","M"));
-        }
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            searchDto = hdrRepository.searchPageChiCuc(req, pageable);
         } else {
-            searchDto = hdrRepository.searchPageCuc(req, pageable);
+            req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
+        searchDto = hdrRepository.searchPage(req, pageable);
         return searchDto;
     }
 
@@ -91,7 +85,7 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
             });
         }
         DcnbPhieuXuatKhoHdr created = hdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/PXK-"+ currentUser.getUser().getDvqlTenVietTat();
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/PXK-" + currentUser.getUser().getDvqlTenVietTat();
         created.setSoPhieuXuatKho(so);
         hdrRepository.save(created);
         saveFileDinhKem(objReq.getFileDinhKems(), created.getId(), DcnbPhieuXuatKhoHdr.TABLE_NAME);
@@ -115,7 +109,7 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data);
         data.setDcnbPhieuXuatKhoDtl(objReq.getDcnbPhieuXuatKhoDtl());
         DcnbPhieuXuatKhoHdr created = hdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/PXK-"+ currentUser.getUser().getDvqlTenVietTat();
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/PXK-" + currentUser.getUser().getDvqlTenVietTat();
         created.setSoPhieuXuatKho(so);
         hdrRepository.save(created);
         saveFileDinhKem(objReq.getFileDinhKems(), created.getId(), DcnbPhieuXuatKhoHdr.TABLE_NAME);
@@ -189,15 +183,15 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 optional.get().setNgayPduyet(LocalDate.now());
                 optional.get().setNguoiPduyetId(currentUser.getUser().getId());
-                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
-                        optional.get().getQddcId(),
-                        optional.get().getMaNganKho(),
-                        optional.get().getMaLoKho());
-                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
-                dataLinkDtl.setLinkId(optional.get().getId());
-                dataLinkDtl.setHdrId(dataLink.getId());
-                dataLinkDtl.setType(DcnbPhieuXuatKhoHdr.TABLE_NAME);
-                dcnbDataLinkDtlRepository.save(dataLinkDtl);
+//                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
+//                        optional.get().getQddcId(),
+//                        optional.get().getMaNganKho(),
+//                        optional.get().getMaLoKho());
+//                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
+//                dataLinkDtl.setLinkId(optional.get().getId());
+//                dataLinkDtl.setHdrId(dataLink.getId());
+//                dataLinkDtl.setType(DcnbPhieuXuatKhoHdr.TABLE_NAME);
+//                dcnbDataLinkDtlRepository.save(dataLinkDtl);
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");

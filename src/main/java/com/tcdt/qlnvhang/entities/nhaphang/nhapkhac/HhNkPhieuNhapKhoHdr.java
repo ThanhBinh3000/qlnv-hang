@@ -21,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 public class HhNkPhieuNhapKhoHdr extends BaseEntity implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "HhNk_PHIEU_NHAP_KHO_HDR";
+    public static final String TABLE_NAME = "HHNK_PHIEU_NHAP_KHO_HDR";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = HhNkPhieuNhapKhoHdr.TABLE_NAME + "_SEQ")
@@ -100,6 +100,14 @@ public class HhNkPhieuNhapKhoHdr extends BaseEntity implements Serializable, Clo
     @Access(value = AccessType.PROPERTY)
     private String trangThai;
     private String lyDoTuChoi;
+    @Column(name = "NGUOI_GDUYET")
+    private Long nguoiGDuyet;
+    @Column(name = "NGAY_GDUYET")
+    private LocalDate ngayGDuyet;
+    @Column(name = "NGUOI_PDUYET")
+    private Long nguoiPDuyet;
+    @Column(name = "NGAY_PDUYET")
+    private LocalDate ngayPDuyet;
     @Transient
     private List<FileDinhKem> chungTuDinhKem = new ArrayList<>();
     @Transient

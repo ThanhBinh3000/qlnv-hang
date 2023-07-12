@@ -171,12 +171,13 @@ public class PathContains {
     public static final String KH_LCNT_VT = "/kh-lcnt/vat-tu";
     public static final String DAU_THAU_VAT_TU = "/dau-thau-vt";
     public static final String THONG_TIN_DAU_THAU = "/tt-dau-thau";
+    public static final String QUYET_DINH_PD_HS_MOI_THAU = "/qd-pd-hsmt";
 
-	// Bien Ban lay mau
-	public static final String BBAN_LAY_MAU = "/bban-lay-mau";
-	public static final String BBAN_LAY_MAU_KHAC = "/bban-lay-mau-khac";
-	// Bien Ban ban giao mau
-	public static final String BBAN_GIAO_MAU = "/bban-giao-mau";
+    // Bien Ban lay mau
+    public static final String BBAN_LAY_MAU = "/bban-lay-mau";
+    public static final String BBAN_LAY_MAU_KHAC = "/bban-lay-mau-khac";
+    // Bien Ban ban giao mau
+    public static final String BBAN_GIAO_MAU = "/bban-giao-mau";
 
     // Phieu kiem nghiem chat luong hang
     public static final String KNGHIEM_CLUONG = "/knghiem-cluong";
@@ -299,6 +300,8 @@ public class PathContains {
     public static final String KTCL_VT_TRUOC_HET_HAN = "/ktcl-vt-truoc-het-han";
 
     public static final String KH_XUAT_HANG = "/kh-xuat-hang";
+
+    public static final String QD_GIAO_NV_XUAT_HANg = "/qd-giao-nv-xuat-hang";
 
 
     public static final String DANH_SACH = "/danh-sach";

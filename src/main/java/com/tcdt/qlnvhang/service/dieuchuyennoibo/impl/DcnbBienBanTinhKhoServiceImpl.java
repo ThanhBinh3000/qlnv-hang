@@ -7,12 +7,14 @@ import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanTinhKhoHdrReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanTinhKho;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanTinhKhoHdrDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanTinhKhoDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanTinhKhoHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -70,11 +72,7 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
         }else {
             req.setDsLoaiHang(Arrays.asList("LT","M"));
         }
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            searchDto = dcnbBienBanTinhKhoHdrRepository.searchPageChiCuc(req, pageable);
-        } else {
-            searchDto = dcnbBienBanTinhKhoHdrRepository.searchPageCuc(req, pageable);
-        }
+        searchDto = dcnbBienBanTinhKhoHdrRepository.searchPage(req, pageable);
         return searchDto;
     }
 
@@ -95,7 +93,7 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
         objReq.getDcnbBienBanTinhKhoDtl().forEach(e -> e.setDcnbBienBanTinhKhoHdr(data));
         DcnbBienBanTinhKhoHdr created = dcnbBienBanTinhKhoHdrRepository.save(data);
         String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBTK-"+ currentUser.getUser().getDvqlTenVietTat();
-        created.setSoBbLayMau(so);
+        created.setSoBbTinhKho(so);
         dcnbBienBanTinhKhoHdrRepository.save(created);
         List<FileDinhKem> bienBanTinhKhoDaKy = fileDinhKemService.saveListFileDinhKem(objReq.getFileBbTinhKhoDaKy(), created.getId(), DcnbBienBanTinhKhoHdr.TABLE_NAME + "_BB_TINH_KHO_DA_KY");
         data.setFileBbTinhKhoDaKy(bienBanTinhKhoDaKy);
@@ -128,7 +126,7 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
         }
         DcnbBienBanTinhKhoHdr created = dcnbBienBanTinhKhoHdrRepository.save(data);
         String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBTK-"+ currentUser.getUser().getDvqlTenVietTat();
-        created.setSoBbLayMau(so);
+        created.setSoBbTinhKho(so);
         dcnbBienBanTinhKhoHdrRepository.save(created);
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbBienBanTinhKhoHdr.TABLE_NAME + "_BB_TINH_KHO_DA_KY"));
         List<FileDinhKem> bienBanTinhKhoDaKy = fileDinhKemService.saveListFileDinhKem(objReq.getFileBbTinhKhoDaKy(), created.getId(), DcnbBienBanTinhKhoHdr.TABLE_NAME + "_BB_TINH_KHO_DA_KY");
@@ -211,44 +209,44 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
             case Contains.CHODUYET_KTVBQ + Contains.CHODUYET_KT:
                 optional.get().setNgayPduyetKtvBQ(LocalDate.now());
                 optional.get().setKtvBaoQuanId(currentUser.getUser().getId());
-                optional.get().setKtvBaoQuan(currentUser.getUser().getUsername());
+                optional.get().setKtvBaoQuan(currentUser.getUser().getFullName());
                 break;
             case Contains.CHODUYET_KT + Contains.CHODUYET_LDCC:
                 optional.get().setNgayPduyetKt(LocalDate.now());
                 optional.get().setKeToanId(currentUser.getUser().getId());
-                optional.get().setKeToan(currentUser.getUser().getUsername());
+                optional.get().setKeToan(currentUser.getUser().getFullName());
                 break;
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 optional.get().setNgayPduyetLdcc(LocalDate.now());
                 optional.get().setLanhDaoChiCucId(currentUser.getUser().getId());
-                optional.get().setLanhDaoChiCuc(currentUser.getUser().getUsername());
+                optional.get().setLanhDaoChiCuc(currentUser.getUser().getFullName());
                 break;
             case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_KTVBQ:
                 optional.get().setNgayPduyetKtvBQ(LocalDate.now());
                 optional.get().setKtvBaoQuanId(currentUser.getUser().getId());
-                optional.get().setKtvBaoQuan(currentUser.getUser().getUsername());
+                optional.get().setKtvBaoQuan(currentUser.getUser().getFullName());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_KT + Contains.TUCHOI_KT:
                 optional.get().setNgayPduyetKt(LocalDate.now());
                 optional.get().setKeToanId(currentUser.getUser().getId());
-                optional.get().setKeToan(currentUser.getUser().getUsername());
+                optional.get().setKeToan(currentUser.getUser().getFullName());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
                 optional.get().setNgayPduyetLdcc(LocalDate.now());
                 optional.get().setLanhDaoChiCucId(currentUser.getUser().getId());
-                optional.get().setLanhDaoChiCuc(currentUser.getUser().getUsername());
+                optional.get().setLanhDaoChiCuc(currentUser.getUser().getFullName());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
-                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
-                        optional.get().getQDinhDccId(),
-                        optional.get().getMaNganKho(),
-                        optional.get().getMaLoKho());
-                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
-                dataLinkDtl.setLinkId(optional.get().getId());
-                dataLinkDtl.setHdrId(dataLink.getId());
-                dataLinkDtl.setType(DcnbBienBanTinhKhoHdr.TABLE_NAME);
-                dcnbDataLinkDtlRepository.save(dataLinkDtl);
+//                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
+//                        optional.get().getQDinhDccId(),
+//                        optional.get().getMaNganKho(),
+//                        optional.get().getMaLoKho());
+//                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
+//                dataLinkDtl.setLinkId(optional.get().getId());
+//                dataLinkDtl.setHdrId(dataLink.getId());
+//                dataLinkDtl.setType(DcnbBienBanTinhKhoHdr.TABLE_NAME);
+//                dcnbDataLinkDtlRepository.save(dataLinkDtl);
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -265,7 +263,7 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
-        Page<DcnbBienBanTinhKhoHdrDTO> page = dcnbBienBanTinhKhoHdrRepository.searchPageChiCuc(objReq, pageable);
+        Page<DcnbBienBanTinhKhoHdrDTO> page = dcnbBienBanTinhKhoHdrRepository.searchPage(objReq, pageable);
         List<DcnbBienBanTinhKhoHdrDTO> data = page.getContent();
 
         String title = "Danh sách bảng kê cân hàng ";

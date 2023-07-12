@@ -20,8 +20,8 @@ public class DcnbBangKeNhapVTHdr extends BaseEntity implements Serializable, Clo
     public static final String TABLE_NAME = "DCNB_BANG_KE_NHAP_VT_HDR";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBangKeNhapVTHdr.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = DcnbBangKeNhapVTHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBangKeNhapVTHdr.TABLE_NAME + "_SEQ")
     private Long id;
     @Column(name = "LOAI_DC")
     private String loaiDc;
@@ -43,8 +43,6 @@ public class DcnbBangKeNhapVTHdr extends BaseEntity implements Serializable, Clo
     private String maDvi;
     @Column(name = "TEN_DVI")
     private String tenDvi;
-    @Column(name = "QHNS_ID")
-    private Long qhnsId;
     @Column(name = "MA_QHNS")
     private String maQhns;
     @Column(name = "QDINH_DCC_ID")
@@ -85,10 +83,6 @@ public class DcnbBangKeNhapVTHdr extends BaseEntity implements Serializable, Clo
     private Long thuKhoId;
     @Column(name = "TEN_THU_KHO")
     private String tenThuKho;
-    @Column(name = "PHU_TRACH_ID")
-    private Long phuTrachId;
-    @Column(name = "TEN_PHU_TRACH")
-    private String tenPhuTrach;
     @Column(name = "TEN_NGUOI_GIAO_HANG")
     private String tenNguoiGiaoHang;
     @Column(name = "CCCD")
@@ -108,19 +102,15 @@ public class DcnbBangKeNhapVTHdr extends BaseEntity implements Serializable, Clo
     private String lyDoTuChoi;
     @Column(name = "NGUOI_GDUYET")
     private Long nguoiGDuyet;
-
     @Column(name = "NGAY_GDUYET")
     private LocalDate ngayGDuyet;
 
     @Column(name = "NGUOI_PDUYET_TVQT")
     private Long nguoiPDuyetTvqt;
-
-    @Column(name = "NGAY_GDUYET_TVQT")
+    @Column(name = "NGAY_PDUYET_TVQT")
     private LocalDate ngayPDuyetTvqt;
-
     @Column(name = "NGUOI_PDUYET")
     private Long nguoiPDuyet;
-
     @Column(name = "NGAY_PDUYET")
     private LocalDate ngayPDuyet;
     @Column(name = "TYPE")
