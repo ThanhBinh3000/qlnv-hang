@@ -1,4 +1,5 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 import javax.persistence.*;
@@ -84,11 +85,29 @@ public class XhQdPdKhBttDtl implements Serializable {
 
     private Long idSoQdKq;
 
+    private String soQdPd;
+
     private String trangThai;
     @Transient
     private String tenTrangThai;
 
     private LocalDate thoiHanBan;
+
+    private String trangThaiHd;
+    @Transient
+    private String tenTrangThaiHd;
+
+    private String trangThaiXh;
+    @Transient
+    private String tenTrangThaiXh;
+
+    private Integer slHdDaKy;
+
+    private Integer slHdChuaKy;
+
+    private Long idQdNv;
+
+    private String soQdNv;
 
     @Transient
     private List<FileDinhKem> fileDinhKemUyQuyen = new ArrayList<>();
@@ -100,11 +119,11 @@ public class XhQdPdKhBttDtl implements Serializable {
     private XhQdPdKhBttHdr xhQdPdKhBttHdr;
 
     @Transient
-    private String soQdPd;
-
-    @Transient
     private String tenLoaiVthh;
 
     @Transient
     private String tenCloaiVthh;
+
+    @Transient
+    private List<XhHopDongBttHdr> listHopDongBtt;
 }

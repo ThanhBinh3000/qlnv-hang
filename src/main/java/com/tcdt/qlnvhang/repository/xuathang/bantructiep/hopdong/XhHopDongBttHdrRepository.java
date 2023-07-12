@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong;
 
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.hopdong.XhHopDongBttHdrReq;
 import org.springframework.data.domain.Page;
@@ -39,5 +38,24 @@ public interface XhHopDongBttHdrRepository extends JpaRepository<XhHopDongBttHdr
 
     @Transactional
     List<XhHopDongBttHdr> findAllByIdHd(Long idHd);
+
+    @Transactional
+    List<XhHopDongBttHdr> findAllByIdQdPdDtl(Long idQdPdDtl);
+
+    @Query(value =  "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '30' AND SO_QD_KQ =:soQdKq",
+            nativeQuery = true)
+    Integer countSlHopDongDaKyKq(String soQdKq);
+
+    @Query(value =  "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '00' AND SO_QD_KQ =:soQdKq",
+            nativeQuery = true)
+    Integer countSlHopDongChuaKykq(String soQdKq);
+
+    @Query(value =  "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '00' AND ID_QD_PD_DTL =:idQdPdDtl",
+            nativeQuery = true)
+    Integer countSlHopDongChuaKyTt(Long idQdPdDtl);
+
+    @Query(value =  "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '30' AND ID_QD_PD_DTL =:idQdPdDtl",
+            nativeQuery = true)
+    Integer countSlHopDongDaKyTt(Long idQdPdDtl);
 
 }

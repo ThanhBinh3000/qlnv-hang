@@ -161,7 +161,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
         if (!optional.isPresent()) throw new Exception("Quyết định phê duyệt kết quả chào giá không tồn tại");
 
         XhKqBttHdr data = optional.get();
-        BeanUtils.copyProperties(req, data, "id");
+        BeanUtils.copyProperties(req, data, "id", "trangThaiHd", "trangThaiXh");
         data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(getUser().getId());
         XhKqBttHdr created = xhKqBttHdrRepository.save(data);

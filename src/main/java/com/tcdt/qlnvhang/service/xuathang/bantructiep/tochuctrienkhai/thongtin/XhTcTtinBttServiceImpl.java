@@ -12,9 +12,11 @@ import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhB
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.thongtin.SearchXhTcTtinBttReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.thongtin.XhCgiaReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBttReq;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -66,6 +68,8 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
                 f.setTenCloaiVthh(StringUtils.isEmpty(hdr.getCloaiVthh())?null:hashMapVthh.get(hdr.getCloaiVthh()));
                 f.setTenDvi(StringUtils.isEmpty(f.getMaDvi())?null:hashMapDvi.get(f.getMaDvi()));
                 f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(f.getTrangThai()));
+                f.setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(f.getTrangThaiHd()));
+                f.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(f.getTrangThaiXh()));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -81,6 +85,8 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         } else {
             dataDtl.setTrangThai(NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId());
+            dataDtl.setTrangThaiHd(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
+            dataDtl.setTrangThaiXh(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
             dataDtl.setPthucBanTrucTiep(req.getPthucBanTrucTiep());
             dataDtl.setDiaDiemChaoGia(req.getDiaDiemChaoGia());
             dataDtl.setNgayNhanCgia(LocalDate.now());
@@ -126,16 +132,31 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
     }
 
     public void approve(XhCgiaReq stReq) throws Exception {
+        UserInfo userInfo= SecurityContextService.getUser();
+        if (userInfo == null){
+            throw new Exception("Bad request.");
+        }
+        if (StringUtils.isEmpty(stReq.getId())){
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+
         Optional<XhQdPdKhBttDtl> optional = xhQdPdKhBttDtlRepository.findById(stReq.getId());
         if (!optional.isPresent()) {
             throw new Exception("Bản ghi không tồn tại");
         }
+
         String status = stReq.getTrangThai() + optional.get().getTrangThai();
-        if ((NhapXuatHangTrangThaiEnum.HOANTHANHCAPNHAT.getId() + NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId()).equals(status)) {
-            optional.get().setTrangThai(stReq.getTrangThai());
+        if(stReq.getTrangThai().equals(NhapXuatHangTrangThaiEnum.DA_HOAN_THANH.getId())
+                && optional.get().getTrangThaiHd().equals(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId())) {
+            optional.get().setTrangThaiHd(stReq.getTrangThai());
         } else {
-            throw new Exception("Cập nhật không thành công");
+            if ((NhapXuatHangTrangThaiEnum.HOANTHANHCAPNHAT.getId() + NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId()).equals(status)) {
+                optional.get().setTrangThai(stReq.getTrangThai());
+            } else {
+                throw new Exception("Cập nhật không thành công");
+            }
         }
+
         xhQdPdKhBttDtlRepository.save(optional.get());
     }
 

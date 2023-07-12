@@ -97,6 +97,10 @@ public class XhKqBttHdr implements Serializable {
 
     private String lyDoTuChoi;
 
+    private Integer slHdDaKy;
+
+    private Integer slHdChuaKy;
+
     @Transient
     private List<FileDinhKem> fileCanCu = new ArrayList<>();
 
