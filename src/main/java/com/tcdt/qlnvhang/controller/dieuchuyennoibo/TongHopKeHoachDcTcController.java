@@ -32,7 +32,7 @@ import java.util.*;
 public class TongHopKeHoachDcTcController extends BaseController {
 
     @Autowired
-    THKeHoachDieuChuyenTongCucServiceImpl thKeHoachDieuChuyenTongCucServiceImpl;
+    private THKeHoachDieuChuyenTongCucServiceImpl thKeHoachDieuChuyenTongCucServiceImpl;
 
     @ApiOperation(value = "Tra cứu thông tin tổng hợp", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)

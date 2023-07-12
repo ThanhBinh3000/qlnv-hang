@@ -33,7 +33,7 @@ import java.util.Map;
 @Api(tags = "Điều chuyển nội bộ - Biên bản lấy mẫu, bàn giao mẫu")
 public class DcnbBienBanLayMauController {
     @Autowired
-    DcnbBienBanLayMauServiceImpl dcnbBienBanLayMauServiceImpl;
+    private DcnbBienBanLayMauServiceImpl dcnbBienBanLayMauServiceImpl;
 
     @ApiOperation(value = "Tra cứu thông tin biên bản", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -33,7 +33,7 @@ import java.util.Map;
 @Api(tags = "Điều chuyển nội bộ - Bảng kê nhập vật tư")
 public class DcnbBangKeNhapVTController {
     @Autowired
-    DcnbBangKeNhapVTService service;
+    private DcnbBangKeNhapVTService service;
 
 
     @ApiOperation(value = "Tra cứu ", response = List.class)

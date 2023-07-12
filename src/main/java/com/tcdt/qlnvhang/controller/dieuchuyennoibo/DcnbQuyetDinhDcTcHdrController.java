@@ -35,7 +35,7 @@ import java.util.Map;
 public class DcnbQuyetDinhDcTcHdrController extends BaseController {
   //    DcnbQuyetDinhDcTcHdr
   @Autowired
-  DcnbQuyetDinhDcTcDtlServiceImpl dcnbQuyetDinhDcTcDtlServiceImpl;
+  private DcnbQuyetDinhDcTcDtlServiceImpl dcnbQuyetDinhDcTcDtlServiceImpl;
 
   @ApiOperation(value = "Tra cứu thông tin", response = List.class)
   @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)

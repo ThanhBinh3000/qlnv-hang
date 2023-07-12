@@ -31,7 +31,7 @@ import java.util.Map;
 @Api(tags = "Điều chuyển nội bộ - Biên bản giao nhận")
 public class DcnbBbGiaoNhanController {
     @Autowired
-    DcnbBbGiaoNhanServiceImpl service;
+    private DcnbBbGiaoNhanServiceImpl service;
 
     @ApiOperation(value = "Tra cứu thông tin ", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)

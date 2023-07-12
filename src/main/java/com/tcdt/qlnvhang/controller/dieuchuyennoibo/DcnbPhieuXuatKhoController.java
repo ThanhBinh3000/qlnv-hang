@@ -34,7 +34,7 @@ import java.util.Map;
 public class DcnbPhieuXuatKhoController {
 
     @Autowired
-    DcnbPhieuXuatKhoServiceImpl service;
+    private DcnbPhieuXuatKhoServiceImpl service;
 
     @ApiOperation(value = "Tra cứu thông tin", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)

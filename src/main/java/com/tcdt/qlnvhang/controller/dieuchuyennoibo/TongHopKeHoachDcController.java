@@ -33,7 +33,7 @@ import java.util.*;
 public class TongHopKeHoachDcController extends BaseController {
 
     @Autowired
-    THKeHoachDieuChuyenCucServiceImpl thKeHoachDieuChuyenService;
+    private THKeHoachDieuChuyenCucServiceImpl thKeHoachDieuChuyenService;
 
 
     @ApiOperation(value = "Tra cứu thông tin", response = List.class)
