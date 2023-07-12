@@ -1,18 +1,19 @@
-package com.tcdt.qlnvhang.request.dieuchuyennoibo;
+package com.tcdt.qlnvhang.request.nhaphang.nhapkhac;
 
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhNkBangKeNhapVTDtl;
 import com.tcdt.qlnvhang.request.BaseRequest;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeNhapVTDtl;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class DcnbBangKeNhapVTReq extends BaseRequest {
+@NoArgsConstructor
+public class HhNkBangKeNhapVTReq extends BaseRequest {
     private Long id;
     private String loaiDc;
     private String loaiVthh;
@@ -24,16 +25,17 @@ public class DcnbBangKeNhapVTReq extends BaseRequest {
     private LocalDate ngayNhap;
     private String maDvi;
     private String tenDvi;
+    private Long qhnsId;
     private String maQhns;
-    private Long qDinhDccId;
-    private String soQdinhDcc;
-    private LocalDate ngayKyQdinhDcc;
+    private Long qdPdNkId;
+    private String soQdPdNk;
+    private LocalDate ngayQdPdNk;
     private String soHopDong;
     private Long phieuNhapKhoId;
     private String soPhieuNhapKho;
     private String maDiemKho;
     private String tenDiemKho;
-    private String diaDaDiemKho;
+    private String diaDiemKho;
     private String maNhaKho;
     private String tenNhaKho;
     private String maNganKho;
@@ -44,6 +46,8 @@ public class DcnbBangKeNhapVTReq extends BaseRequest {
     private String tenLanhDaoChiCuc;
     private Long thuKhoId;
     private String tenThuKho;
+    private Long phuTrachId;
+    private String tenPhuTrach;
     private String tenNguoiGiaoHang;
     private String cccd;
     private String donViNguoiGiaoHang;
@@ -59,16 +63,11 @@ public class DcnbBangKeNhapVTReq extends BaseRequest {
     private Long nguoiPDuyet;
     private LocalDate ngayPDuyet;
     private String type;
-    private String typeDataLink;
-    private  Boolean thayDoiThuKho;
-    private List<DcnbBangKeNhapVTDtl> dcnbbangkenhapvtdtl = new ArrayList<>();
+    private List<HhNkBangKeNhapVTDtl> hhNkBangKeNhapVTDtl = new ArrayList<>();
 
     private LocalDate tuNgayThoiHan;
     private LocalDate denNgayThoiHan;
 
     private LocalDate tuNgayNhapKho;
     private LocalDate denNgayNhapKho;
-
-    private Boolean isVatTu = false;
-    private List<String> dsLoaiHang = new ArrayList<>();
 }

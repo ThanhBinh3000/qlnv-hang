@@ -31,7 +31,7 @@ import java.util.Map;
 @Api(tags = "Điều chuyển nội bộ - Biên bản kết thúc nhập kho")
 public class DcnbBBKetThucNKController {
     @Autowired
-    DcnbBBKetThucNKService service;
+    private DcnbBBKetThucNKService service;
 
 
     @ApiOperation(value = "Tra cứu ", response = List.class)
