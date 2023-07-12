@@ -19,7 +19,7 @@ public class XhXkTongHopRequest extends BaseRequest {
   private String maDvi;
   private String maDanhSach;
   private String tenDanhSach;
-  private LocalDate ngayDeXuat;
+  private LocalDateTime ngayDeXuat;
   private String trangThai;
   private String trangThaiKtCl;
   private LocalDate ngayGduyet;
