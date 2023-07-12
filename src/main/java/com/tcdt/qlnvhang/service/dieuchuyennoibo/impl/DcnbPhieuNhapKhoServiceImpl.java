@@ -26,6 +26,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -85,9 +86,7 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         DcnbPhieuNhapKhoHdr data = new DcnbPhieuNhapKhoHdr();
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(userInfo.getDvql());
-        if (req.getSoPhieuNhapKho() != null) {
-            data.setId(Long.parseLong(req.getSoPhieuNhapKho().split("/")[0]));
-        }
+        data.setId(null);
         req.getChildren().forEach(e -> {
             e.setParent(data);
         });
@@ -156,13 +155,25 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
             // Arena các roll back approve
             case Contains.DUTHAO + Contains.CHODUYET_LDCC:
             case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
+                hdr.setNguoiGDuyet(userInfo.getId());
+                hdr.setNgayGDuyet(LocalDate.now());
                 break;
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
-                hdr.setIdLanhDao(userInfo.getId());
+                if(hdr.getIdLanhDao() ==null){
+                    hdr.setIdLanhDao(userInfo.getId());
+                    hdr.setTenLanhDao(userInfo.getFullName());
+                }
+                hdr.setNguoiPDuyet(userInfo.getId());
+                hdr.setNgayPDuyet(LocalDate.now());
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
-                hdr.setIdLanhDao(userInfo.getId());
+                if(hdr.getIdLanhDao() ==null){
+                    hdr.setIdLanhDao(userInfo.getId());
+                    hdr.setTenLanhDao(userInfo.getFullName());
+                }
+                hdr.setNguoiPDuyet(userInfo.getId());
+                hdr.setNgayPDuyet(LocalDate.now());
 //                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCucNhan(hdr.getMaDvi(),
 //                        hdr.getQdDcCucId(),
 //                        hdr.getMaNganKho(),

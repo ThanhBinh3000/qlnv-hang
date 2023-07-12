@@ -126,7 +126,7 @@ public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Clon
     private String type;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
-    private List<DcnbBBKetThucNKDtl> bcnbBBKetThucNKDtl = new ArrayList<>();
+    private List<DcnbBBKetThucNKDtl> dcnbBBKetThucNKDtl = new ArrayList<>();
     @Transient
     private String tenTrangThai;
     public void setTrangThai(String trangThai) {

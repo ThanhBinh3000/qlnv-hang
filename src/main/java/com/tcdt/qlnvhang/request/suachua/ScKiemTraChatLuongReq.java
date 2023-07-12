@@ -2,50 +2,36 @@ package com.tcdt.qlnvhang.request.suachua;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScKiemTraChatLuongDtl;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 public class ScKiemTraChatLuongReq extends BaseRequest {
     private Long id;
     private Integer nam;
-    private String maDvi;
-    private String tenDvi;
-    private String maQhnsId;
     private String maQhns;
     private String soPhieuKdcl;
-    private LocalDate ngayLapPhieu;
-    private String canBoTaoId;
-    private String canBoTao;
-    private String truongPhongKtbqId;
-    private String truongPhongKqbq;
-    private String soQdGiaoNvId;
-    private String soQdGiaoNv;
-    private String phieuXuatKhoId;
+    private LocalDate ngayLap;
+    private Long idTruongPhongKtvq;
+    private Long idQdXh;
+    private String soQdXh;
+    private Long idPhieuXuatKho;
     private String soPhieuXuatKho;
-    private String maLoKho;
-    private String tenLoKho;
-    private String maNganKho;
-    private String tenNganKho;
-    private String maNhaKho;
-    private String tenNhaKho;
-    private String maDiemKho;
-    private String tenDiemKho;
-    private String thuKhoId;
-    private String thuKho;
-    private String maLoaiHang;
-    private String loaiHang;
-    private String maChungLoaiHang;
-    private String chungLoaiHang;
     private String dviKiemDinh;
-    private LocalDate ngayKiemDinhMau;
+    private LocalDate ngayKiemDinh;
     private String hinhThucBaoQuan;
-    private String danhGia;
-    private Boolean ketQua;
+    private String ketQua;
+    private Integer dat;
     private String nhanXet;
-    private List<ScKiemTraChatLuongDtl> scKiemTraChatLuongDtls;
-    private List<FileDinhKemReq> fileDinhKemReqs;
+
+    private List<FileDinhKemReq> fileDinhKemReq = new ArrayList<>();
+
+    private List<ScKiemTraChatLuongDtl> children = new ArrayList<>();
+
+    private Long idScDanhSachHdr;
 }

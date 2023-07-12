@@ -33,7 +33,7 @@ import java.util.Map;
 @Api(tags = "Điều chuyển nội bộ - Biên bản hao dôi")
 public class DcnbBienBanHaoDoiController {
     @Autowired
-    DcnbBienBanHaoDoiServiceImpl dcnbBienBanHaoDoiServiceImpl;
+    private DcnbBienBanHaoDoiServiceImpl dcnbBienBanHaoDoiServiceImpl;
 
     @ApiOperation(value = "Tra cứu thông tin ", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -153,7 +153,7 @@ public class DcnbBienBanHaoDoiController {
             dcnbBienBanHaoDoiServiceImpl.export( currentUser,objReq, response);
 
         } catch (Exception e) {
-            log.error("Kết xuất danh sách dánh sách mua : {}", e);
+            log.error("Kết xuất danh sách: {}", e);
             final Map<String, Object> body = new HashMap<>();
             body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             body.put("msg", e.getMessage());

@@ -26,8 +26,8 @@ public interface DcnbBangKeCanHangHdrRepository extends JpaRepository<DcnbBangKe
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
             "LEFT JOIN DcnbBangKeCanHangHdr bkch ON bkch.qDinhDccId = qdc.id and khdcd.maLoKho = bkch.maLoKho and khdcd.maNganKho = bkch.maNganKho " +
-            "LEFT JOIN DcnbPhieuXuatKhoHdr pxk ON pxk.qddcId = qdc.id and khdcd.maLoKho = pxk.maLoKho and khdcd.maNganKho = pxk.maNganKho " +
-            "LEFT JOIN DcnbPhieuNhapKhoHdr pnk ON pnk.qdDcCucId = qdc.id and khdcd.maLoKho = pnk.maLoKho and khdcd.maNganKho = pnk.maNganKho " +
+            "LEFT JOIN DcnbPhieuXuatKhoHdr pxk ON pxk.id = bkch.phieuXuatKhoId " +
+            "LEFT JOIN DcnbPhieuNhapKhoHdr pnk ON pnk.id = bkch.phieuNhapKhoId " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.parentId is not null and qdc.trangThai = '29' " +
@@ -66,8 +66,8 @@ public interface DcnbBangKeCanHangHdrRepository extends JpaRepository<DcnbBangKe
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
             "LEFT JOIN DcnbBangKeCanHangHdr bkch ON bkch.qDinhDccId = qdc.id and khdcd.maLoKhoNhan = bkch.maLoKho and khdcd.maNganKhoNhan = bkch.maNganKho " +
-            "LEFT JOIN DcnbPhieuXuatKhoHdr pxk ON pxk.qddcId = qdc.id and khdcd.maLoKhoNhan = pxk.maLoKho and khdcd.maNganKhoNhan = pxk.maNganKho " +
-            "LEFT JOIN DcnbPhieuNhapKhoHdr pnk ON pnk.qdDcCucId = qdc.id and khdcd.maLoKhoNhan = pnk.maLoKho and khdcd.maNganKhoNhan = pnk.maNganKho " +
+            "LEFT JOIN DcnbPhieuXuatKhoHdr pxk ON pxk.id = bkch.phieuXuatKhoId " +
+            "LEFT JOIN DcnbPhieuNhapKhoHdr pnk ON pnk.id = bkch.phieuNhapKhoId " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.parentId is not null and qdc.trangThai = '29' " +

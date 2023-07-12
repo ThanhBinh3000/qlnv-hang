@@ -33,10 +33,10 @@ import java.util.*;
 public class TongHopKeHoachDcController extends BaseController {
 
     @Autowired
-    THKeHoachDieuChuyenCucServiceImpl thKeHoachDieuChuyenService;
+    private THKeHoachDieuChuyenCucServiceImpl thKeHoachDieuChuyenService;
 
 
-    @ApiOperation(value = "Tra cứu thông tin tổng hợp", response = List.class)
+    @ApiOperation(value = "Tra cứu thông tin", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> colectionCuc(@CurrentUser CustomUserDetails currentUser,@RequestBody TongHopKeHoachDieuChuyenSearch objReq) {
@@ -86,7 +86,7 @@ public class TongHopKeHoachDcController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tạo mới thông tin tổng hợp ", response = List.class)
+    @ApiOperation(value = "Tạo mới thông tin ", response = List.class)
     @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ThKeHoachDieuChuyenCucHdrReq objReq) {
@@ -103,7 +103,7 @@ public class TongHopKeHoachDcController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Lấy chi tiết thông tin tổng hợp", response = List.class)
+    @ApiOperation(value = "Lấy chi tiết thông tin", response = List.class)
     @GetMapping(value =  PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> detail(
@@ -154,7 +154,7 @@ public class TongHopKeHoachDcController extends BaseController {
     }
 
 
-    @ApiOperation(value = "Xoá thông tin tổng hợp", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Xoá thông tin", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value =  PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> delete(@CurrentUser CustomUserDetails currentUser,@Valid @RequestBody IdSearchReq idSearchReq) {
@@ -172,7 +172,7 @@ public class TongHopKeHoachDcController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xoá danh sách thông tin tổng hợp", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Xoá danh sách thông tin", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value =  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> deleteMultiCuc(@Valid @RequestBody IdSearchReq idSearchReq) {
@@ -228,7 +228,7 @@ public class TongHopKeHoachDcController extends BaseController {
     }
 
 
-    @ApiOperation(value = "Kết xuất danh sách mua", response = List.class)
+    @ApiOperation(value = "Kết xuất danh sách", response = List.class)
     @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody  TongHopKeHoachDieuChuyenSearch objReq, HttpServletResponse response) throws Exception {
@@ -236,7 +236,7 @@ public class TongHopKeHoachDcController extends BaseController {
             thKeHoachDieuChuyenService.export( currentUser,objReq, response);
 
         } catch (Exception e) {
-            log.error("Kết xuất danh sách dánh sách mua : {}", e);
+            log.error("Kết xuất danh sách: {}", e);
             final Map<String, Object> body = new HashMap<>();
             body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             body.put("msg", e.getMessage());

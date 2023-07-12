@@ -28,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -86,7 +87,7 @@ public class DcnbBbChuanBiKhoServiceImpl implements DcnbBbChuanBiKhoService {
         DcnbBbChuanBiKhoHdr data = new DcnbBbChuanBiKhoHdr();
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(userInfo.getDvql());
-        data.setId(Long.parseLong(req.getSoBban().split("/")[0]));
+        data.setId(null);
         req.getChildren().forEach(e -> {
             e.setParent(data);
         });
@@ -156,18 +157,34 @@ public class DcnbBbChuanBiKhoServiceImpl implements DcnbBbChuanBiKhoService {
             case Contains.DUTHAO + Contains.CHODUYET_TK:
             case Contains.TUCHOI_LDCC + Contains.CHODUYET_TK:
             case Contains.TUCHOI_TK + Contains.CHODUYET_TK:
+                hdr.setNguoiGDuyet(userInfo.getId());
+                hdr.setNgayGDuyet(LocalDate.now());
                 break;
             case Contains.CHODUYET_TK + Contains.TUCHOI_TK:
                 hdr.setIdThuKho(userInfo.getId());
+                hdr.setTenThuKho(userInfo.getFullName());
+                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                hdr.setNguoiPDuyetTk(userInfo.getId());
+                hdr.setNgayPDuyetTk(LocalDate.now());
                 break;
             case Contains.CHODUYET_TK + Contains.CHODUYET_LDCC:
                 hdr.setIdThuKho(userInfo.getId());
+                hdr.setTenThuKho(userInfo.getFullName());
+                hdr.setNguoiPDuyetTk(userInfo.getId());
+                hdr.setNgayPDuyetTk(LocalDate.now());
                 break;
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
+                hdr.setIdLanhDao(userInfo.getId());
+                hdr.setTenLanhDao(userInfo.getFullName());
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                hdr.setNguoiPDuyet(userInfo.getId());
+                hdr.setNgayPDuyet(LocalDate.now());
                 break;
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 hdr.setIdLanhDao(userInfo.getId());
+                hdr.setTenLanhDao(userInfo.getFullName());
+                hdr.setNguoiPDuyet(userInfo.getId());
+                hdr.setNgayPDuyet(LocalDate.now());
 //                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCucNhan(hdr.getMaDvi(),
 //                        hdr.getQdDcCucId(),
 //                        hdr.getMaNganKho(),

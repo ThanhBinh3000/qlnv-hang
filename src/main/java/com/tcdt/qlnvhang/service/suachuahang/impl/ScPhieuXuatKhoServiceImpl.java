@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.service.suachuahang.impl;
 
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScBangKeXuatVatTuHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScPhieuXuatKhoDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScPhieuXuatKhoHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhXuatHangRepository;
@@ -47,6 +49,9 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
     @Autowired
     private ScQuyetDinhScService scQuyetDinhScService;
 
+    @Autowired
+    private ScBangKeXuatVatTuHdrRepository scBangKeXuatVatTuHdrRepository;
+
     @Override
     public Page<ScPhieuXuatKhoHdr> searchPage(ScPhieuXuatKhoReq req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
@@ -88,6 +93,10 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
 
     @Override
     public ScPhieuXuatKhoHdr update(ScPhieuXuatKhoReq req) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        if (!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            throw new Exception("Chức năng chỉ dành cho cấp chi cục");
+        }
         Optional<ScPhieuXuatKhoHdr> optional = hdrRepository.findById(req.getId());
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu");
@@ -112,7 +121,6 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
         data.setChildren(dtlRepository.findByIdHdr(id));
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
-        System.out.println(getAllHangByBoNganh("02"));
         //set label
         data.setMapDmucDvi(mapDmucDvi);
         data.setMapVthh(mapVthh);
@@ -134,6 +142,16 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
             throw new Exception("Bản ghi không tồn tại");
         }
         ScPhieuXuatKhoHdr hdr = optional.get();
+
+        if(Objects.isNull(hdr.getIdBangKeCanHang())){
+            throw new Exception("Phiếu xuất kho đang chưa khởi tạo bảng kê xuất vật tư. Vui lòng tạo bảng kê xuất vật tư");
+        } else {
+            ScBangKeXuatVatTuHdr bk = scBangKeXuatVatTuHdrRepository.findById(hdr.getIdBangKeCanHang()).get();
+            if(!bk.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())){
+                throw new Exception("Số bảng kê " +bk.getSoBangKe()+" chưa đc phê duyệt. Vui lòng phê duyệt bảng kê");
+            }
+        }
+
         String status = hdr.getTrangThai() + req.getTrangThai();
         switch (status) {
             // Re approve : gửi lại duyệt
@@ -144,6 +162,7 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
                 if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
                     throw new Exception("Đơn vị gửi duyệt phải là cấp cục");
                 }
+                break;
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 if(!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
                     throw new Exception("Đơn vị gửi duyệt phải là cấp cục");
@@ -163,9 +182,16 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
 
     @Override
     public void delete(Long id) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        if (!userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            throw new Exception("Chức năng chỉ dành cho cấp chi cục");
+        }
         Optional<ScPhieuXuatKhoHdr> optional = hdrRepository.findById(id);
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu");
+        }
+        if(!Objects.isNull(optional.get().getIdBangKeCanHang())){
+            throw new Exception("Phiếu xuất kho "+optional.get().getSoPhieuXuatKho()+" đã tạo số bảng kê cân hàng. Không thể xóa");
         }
         hdrRepository.delete(optional.get());
         fileDinhKemService.delete(optional.get().getId(), Collections.singleton(ScPhieuXuatKhoHdr.TABLE_NAME));
@@ -207,6 +233,20 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
             }
         });
         return search;
+    }
+
+    @Override
+    public List<ScPhieuXuatKhoHdr> searchDanhSachTaoBangKe(ScPhieuXuatKhoReq req) {
+        req.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
+        List<ScPhieuXuatKhoHdr> scPhieuXuatKhoHdrs = hdrRepository.searchListTaoBangKe(req);
+        return scPhieuXuatKhoHdrs;
+    }
+
+    @Override
+    public List<ScPhieuXuatKhoHdr> searchDanhSachTaoKiemTraCl(ScPhieuXuatKhoReq req) {
+        req.setTrangThai(TrangThaiAllEnum.DA_DUYET_LDCC.getId());
+        List<ScPhieuXuatKhoHdr> scPhieuXuatKhoHdrs = hdrRepository.searchListTaoKiemTraCl(req);
+        return scPhieuXuatKhoHdrs;
     }
 
 //    @Override

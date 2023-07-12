@@ -42,8 +42,9 @@ public class NhHoSoKyThuatDTO {
   private String soBbanKtraNquan;
   private String soBbanKtraVhanh;
   private String soBbanKtraHskt;
+  private String kqKiemTraXh;
 
-  public NhHoSoKyThuatDTO(Long id, Long idQdGiaoNvNh, String soQdGiaoNvNh, String soBbLayMau, String soHd, String maDvi, String soHoSoKyThuat, Integer nam, Integer idBbLayMauXuat, Boolean kqKiemTra, String loaiNhap, String maDiemKho, String maNhaKho, String maNganKho, String maLoKho, Date ngayTao) {
+  public NhHoSoKyThuatDTO(Long id, Long idQdGiaoNvNh, String soQdGiaoNvNh, String soBbLayMau, String soHd, String maDvi, String soHoSoKyThuat, Integer nam, Integer idBbLayMauXuat, Boolean kqKiemTra, String loaiNhap, String maDiemKho, String maNhaKho, String maNganKho, String maLoKho, Date ngayTao,String kqKiemTraXh) {
     this.id = id;
     this.idQdGiaoNvNh = idQdGiaoNvNh;
     this.soQdGiaoNvNh = soQdGiaoNvNh;
@@ -60,5 +61,6 @@ public class NhHoSoKyThuatDTO {
     this.maNganKho = maNganKho;
     this.maLoKho = maLoKho;
     this.ngayTao = DataUtils.convertToLocalDate(ngayTao);
+    this.kqKiemTraXh = kqKiemTraXh;
   }
 }

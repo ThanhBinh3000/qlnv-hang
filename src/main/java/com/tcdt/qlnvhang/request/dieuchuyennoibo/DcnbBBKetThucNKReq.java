@@ -5,10 +5,6 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBKetThucNKDtl;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -68,7 +64,7 @@ public class DcnbBBKetThucNKReq extends BaseRequest {
 
     private LocalDate ngayPDuyet;
     private String type;
-    private List<DcnbBBKetThucNKDtl> bcnbBBKetThucNKDtl = new ArrayList<>();
+    private List<DcnbBBKetThucNKDtl> dcnbBBKetThucNKDtl = new ArrayList<>();
     private LocalDate tuNgayKtnk;
     private LocalDate denNgayKtnk;
     private LocalDate tuNgayThoiHanNhap;

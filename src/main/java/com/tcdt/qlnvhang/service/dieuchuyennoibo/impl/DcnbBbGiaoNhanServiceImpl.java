@@ -25,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -82,7 +83,7 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         DcnbBbGiaoNhanHdr data = new DcnbBbGiaoNhanHdr();
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(userInfo.getDvql());
-        data.setId(Long.parseLong(req.getSoBb().split("/")[0]));
+        data.setId(null);
         req.getDanhSachDaiDien().forEach(e -> {
             e.setParent(data);
         });
@@ -160,12 +161,21 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         switch (status) {
             case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
             case Contains.DUTHAO + Contains.CHODUYET_LDC:
+                hdr.setNguoiGDuyet(userInfo.getId());
+                hdr.setNgayGDuyet(LocalDate.now());
                 break;
             case Contains.CHODUYET_LDC + Contains.DADUYET_LDC:
                 hdr.setIdLanhDao(userInfo.getId());
+                hdr.setTenLanhDao(userInfo.getFullName());
+                hdr.setNguoiPDuyet(userInfo.getId());
+                hdr.setNgayPDuyet(LocalDate.now());
                 break;
             case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                hdr.setIdLanhDao(userInfo.getId());
+                hdr.setTenLanhDao(userInfo.getFullName());
+                hdr.setNguoiPDuyet(userInfo.getId());
+                hdr.setNgayPDuyet(LocalDate.now());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");

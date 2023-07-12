@@ -43,6 +43,12 @@ public class HhNkBbNhapDayKhoHdr extends BaseEntity implements Serializable, Clo
     private String maLoKho;
     private String loaiVthh;
     private String cloaiVthh;
+    private String tenDiemKho;
+    private String tenNhaKho;
+    private String tenNganKho;
+    private String tenLoKho;
+    private String tenLoaiVthh;
+    private String tenCloaiVthh;
     private String donViTinh;
     private LocalDate ngayBdNhap;
     private LocalDate ngayKtNhap;
@@ -60,6 +66,22 @@ public class HhNkBbNhapDayKhoHdr extends BaseEntity implements Serializable, Clo
     @Access(value=AccessType.PROPERTY)
     private String trangThai;
     private String lyDoTuChoi;
+    @Column(name = "NGUOI_GDUYET")
+    private Long nguoiGDuyet;
+    @Column(name = "NGAY_GDUYET")
+    private LocalDate ngayGDuyet;
+    @Column(name = "NGUOI_GDUYET_KTVBQ")
+    private Long nguoiGDuyetKtvbq;
+    @Column(name = "NGAY_GDUYET_KTVBQ")
+    private LocalDate ngayGDuyetKtvbq;
+    @Column(name = "NGUOI_GDUYET_KT")
+    private Long nguoiGDuyetKt;
+    @Column(name = "NGAY_GDUYET_KT")
+    private LocalDate ngayGDuyetKt;
+    @Column(name = "NGUOI_PDUYET")
+    private Long nguoiPDuyet;
+    @Column(name = "NGAY_PDUYET")
+    private LocalDate ngayPDuyet;
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)

@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.entities.nhaphang.nhapkhac;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeNhapVTDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanLayMauHdr;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,38 +26,21 @@ public class HhNkBangKeNhapVTHdr extends BaseEntity implements Serializable, Clo
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = DcnbBienBanLayMauHdr.TABLE_NAME + "_SEQ")
     private Long id;
-    @Column(name = "LOAI_DC")
-    private String loaiDc;
-    @Column(name = "LOAI_VTHH")
-    private String loaiVthh;
-    @Column(name = "CLOAI_VTHH")
-    private String cloaiVthh;
-    @Column(name = "TEN_LOAI_VTHH")
-    private String tenLoaiVthh;
-    @Column(name = "TEN_CLOAI_VTHH")
-    private String tenCloaiVthh;
     @Column(name = "NAM")
     private Integer nam;
-    @Column(name = "SO_BANG_KE")
-    private String soBangKe;
-    @Column(name = "NGAY_NHAP")
-    private LocalDate ngayNhap;
     @Column(name = "MA_DVI")
     private String maDvi;
     @Column(name = "TEN_DVI")
     private String tenDvi;
-    @Column(name = "QHNS_ID")
-    private Long qhnsId;
     @Column(name = "MA_QHNS")
     private String maQhns;
-    @Column(name = "QDINH_DCC_ID")
-    private Long qDinhDccId;
-    @Column(name = "SO_QDINH_DCC")
-    private String soQdinhDcc;
-    @Column(name = "NGAY_KY_QDINH_DCC")
-    private LocalDate ngayKyQdinhDcc;
-    @Column(name = "SO_HOP_DONG")
-    private String soHopDong;
+    @Column(name = "SO_BANG_KE")
+    private String soBangKe;
+    @Column(name = "NGAY_TAO_BK")
+    private LocalDate ngayTaoBk;
+    private Long qdPdNkId;
+    private String soQdPdNk;
+    private LocalDate ngayQdPdNk;
     @Column(name = "PHIEU_NHAP_KHO_ID")
     private Long phieuNhapKhoId;
     @Column(name = "SO_PHIEU_NHAP_KHO")
@@ -67,8 +49,6 @@ public class HhNkBangKeNhapVTHdr extends BaseEntity implements Serializable, Clo
     private String maDiemKho;
     @Column(name = "TEN_DIEM_KHO")
     private String tenDiemKho;
-    @Column(name = "DIA_DIEM_KHO")
-    private String diaDiemKho;
     @Column(name = "MA_NHA_KHO")
     private String maNhaKho;
     @Column(name = "TEN_NHA_KHO")
@@ -81,18 +61,28 @@ public class HhNkBangKeNhapVTHdr extends BaseEntity implements Serializable, Clo
     private String maLoKho;
     @Column(name = "TEN_LO_KHO")
     private String tenLoKho;
-    @Column(name = "MA_LANH_DAO_CHI_CUC")
-    private String maLanhDaoChiCuc;
-    @Column(name = "TEN_LANH_DAO_CHI_CUC")
-    private String tenLanhDaoChiCuc;
+    @Column(name = "DIA_DIEM_KHO")
+    private String diaDiemKho;
+    @Column(name = "LOAI_VTHH")
+    private String loaiVthh;
+    @Column(name = "CLOAI_VTHH")
+    private String cloaiVthh;
+    @Column(name = "TEN_LOAI_VTHH")
+    private String tenLoaiVthh;
+    @Column(name = "TEN_CLOAI_VTHH")
+    private String tenCloaiVthh;
     @Column(name = "THU_KHO_ID")
     private Long thuKhoId;
     @Column(name = "TEN_THU_KHO")
     private String tenThuKho;
-    @Column(name = "PHU_TRACH_ID")
-    private Long phuTrachId;
-    @Column(name = "TEN_PHU_TRACH")
-    private String tenPhuTrach;
+    @Column(name = "NGUOI_PDUYET_TVQT")
+    private Long nguoiPDuyetTvqt;
+    @Column(name = "NGAY_PDUYET_TVQT")
+    private LocalDate ngayPDuyetTvqt;
+    @Column(name = "MA_LANH_DAO_CHI_CUC")
+    private String maLanhDaoChiCuc;
+    @Column(name = "TEN_LANH_DAO_CHI_CUC")
+    private String tenLanhDaoChiCuc;
     @Column(name = "TEN_NGUOI_GIAO_HANG")
     private String tenNguoiGiaoHang;
     @Column(name = "CCCD")
@@ -112,26 +102,17 @@ public class HhNkBangKeNhapVTHdr extends BaseEntity implements Serializable, Clo
     private String lyDoTuChoi;
     @Column(name = "NGUOI_GDUYET")
     private Long nguoiGDuyet;
-
     @Column(name = "NGAY_GDUYET")
     private LocalDate ngayGDuyet;
 
-    @Column(name = "NGUOI_PDUYET_TVQT")
-    private Long nguoiPDuyetTvqt;
-
-    @Column(name = "NGAY_GDUYET_TVQT")
-    private LocalDate ngayPDuyetTvqt;
-
     @Column(name = "NGUOI_PDUYET")
     private Long nguoiPDuyet;
-
     @Column(name = "NGAY_PDUYET")
     private LocalDate ngayPDuyet;
-    @Column(name = "TYPE")
-    private String type;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
-    private List<DcnbBangKeNhapVTDtl> dcnbBangKeNhapVTDtl = new ArrayList<>();
+    private List<HhNkBangKeNhapVTDtl> hhNkBangKeNhapVTDtl = new ArrayList<>();
     @Transient
     private String tenTrangThai;
     public void setTrangThai(String trangThai) {

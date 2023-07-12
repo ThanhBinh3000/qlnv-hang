@@ -10,4 +10,6 @@ import org.springframework.data.domain.Page;
 
 public interface ScBangKeXuatVatTuService extends BaseService<ScBangKeXuatVatTuHdr, ScBangKeXuatVatTuReq, Long> {
 
+    Page<ScQuyetDinhXuatHang> searchBangKeCanHang(ScBangKeXuatVatTuReq req);
+
 }

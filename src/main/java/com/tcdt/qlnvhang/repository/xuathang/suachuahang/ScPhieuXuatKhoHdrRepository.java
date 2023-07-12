@@ -25,5 +25,21 @@ public interface ScPhieuXuatKhoHdrRepository extends JpaRepository<ScPhieuXuatKh
             "AND (:#{#param.soPhieuXuatKho} IS NULL OR qd.soPhieuXuatKho LIKE CONCAT(:#{#param.soPhieuXuatKho},'%'))")
     List<ScPhieuXuatKhoHdr> searchList(@Param("param") ScPhieuXuatKhoReq req);
 
+    @Query(value = "SELECT qd FROM ScPhieuXuatKhoHdr qd " +
+            " LEFT JOIN ScBangKeXuatVatTuHdr bk on qd.id = bk.idPhieuXuatKho " +
+            " WHERE 1 = 1 " +
+            " AND bk.id is null " +
+            " AND (:#{#param.trangThai} IS NULL OR qd.trangThai = :#{#param.trangThai}) " +
+            " AND (:#{#param.idQdXh} IS NULL OR qd.idQdXh = :#{#param.idQdXh}) " )
+    List<ScPhieuXuatKhoHdr> searchListTaoBangKe(@Param("param") ScPhieuXuatKhoReq req);
+
+    @Query(value = "SELECT xk FROM ScPhieuXuatKhoHdr xk " +
+            " LEFT JOIN ScKiemTraChatLuongHdr kt on xk.id = kt.idPhieuXuatKho " +
+            " WHERE 1 = 1 " +
+            " AND kt.id is null " +
+            " AND (:#{#param.trangThai} IS NULL OR xk.trangThai = :#{#param.trangThai}) " +
+            " AND (:#{#param.idQdXh} IS NULL OR xk.idQdXh = :#{#param.idQdXh}) " )
+    List<ScPhieuXuatKhoHdr> searchListTaoKiemTraCl(@Param("param") ScPhieuXuatKhoReq req);
+
     List<ScPhieuXuatKhoHdr> findAllByIdQdXh(Long idQdXh);
 }

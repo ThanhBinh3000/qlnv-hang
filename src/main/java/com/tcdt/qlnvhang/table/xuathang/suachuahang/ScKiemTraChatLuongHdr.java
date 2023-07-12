@@ -1,11 +1,14 @@
 package com.tcdt.qlnvhang.table.xuathang.suachuahang;
 
+import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,56 +18,44 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ScKiemTraChatLuongHdr {
+public class ScKiemTraChatLuongHdr extends BaseEntity implements Serializable {
     public static final String TABLE_NAME = "SC_KIEM_TRA_CL_HDR";
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = ScKiemTraChatLuongHdr.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = ScKiemTraChatLuongHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = ScKiemTraChatLuongHdr.TABLE_NAME + "_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = ScKiemTraChatLuongHdr.TABLE_NAME + "_SEQ")
+//    @SequenceGenerator(sequenceName = ScKiemTraChatLuongHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = ScKiemTraChatLuongHdr.TABLE_NAME + "_SEQ")
     private Long id;
-    @Column(name = "NAM")
     private Integer nam;
-    @Column(name = "MA_DVI")
     private String maDvi;
-    @Column(name = "TEN_DVI")
-    private String tenDvi;
-    @Column(name = "QHNS_ID")
-    private Long qhnsId;
-    @Column(name = "MA_QHNS")
     private String maQhns;
-    @Column(name = "SO_PHIEU_KIEM_DINH_CL")
     private String soPhieuKdcl;
     private LocalDate ngayLap;
-    private String canBoLapPhieuId;
-    private String canBoLapPhieu;
-    private String truongPhongKtbqId;
-    private String truongPhongKtbq;
-    private Long soQdGiaoNvId;
-    private String soQdGiaoNv;
-    private Long phieuXuatKhoId;
+    private Long idTruongPhongKtvq;
+    private Long idQdXh;
+    private String soQdXh;
+    private Long idPhieuXuatKho;
     private String soPhieuXuatKho;
-    private String maLoKho;
-    private String tenLoKho;
-    private String maNganKho;
-    private String tenNganKho;
-    private String maNhaKho;
-    private String tenNhaKho;
-    private String maDiemKho;
-    private String tenDiemKho;
-    private String thuKhoId;
-    private String thuKho;
-    private String maLoaiHang;
-    private String tenLoaiHang;
-    private String maChungLoaiHang;
-    private String tenChungLoaiHang;
     private String dviKiemDinh;
     private LocalDate ngayKiemDinh;
     private String hinhThucBaoQuan;
+    private String ketQua;
+    private Integer dat;
+    private String nhanXet;
     private String trangThai;
     @Transient
+    private String tenDvi;
+    @Transient
+    private String tenTrangThai;
+    @Transient
+    private String tenTruongPhongKtbq;
+    @Transient
+    private String tenNguoiTao;
+    @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+    @Transient
+    private List<ScKiemTraChatLuongDtl> children = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "HDR_ID")
-    private List<ScKiemTraChatLuongDtl> scKiemTraChatLuongDtls = new ArrayList<>();
+    public String getTenTrangThai(){
+        return TrangThaiAllEnum.getLabelById(getTrangThai());
+    }
 }

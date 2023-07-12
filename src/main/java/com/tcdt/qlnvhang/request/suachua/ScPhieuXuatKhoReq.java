@@ -32,10 +32,9 @@ public class ScPhieuXuatKhoReq extends BaseRequest {
     private String dviNguoiGiaoHang;
     private String diaChi;
     private LocalDate thoiGianGiaoNhan;
-    private String soBangKeCanHang;
-    private Long idBangKeCanHang;
     private BigDecimal tongSoLuong;
     private String ghiChu;
+    private String donViTinh;
 
     List<FileDinhKemReq> fileDinhKemReq = new ArrayList<>();
     private List<ScPhieuXuatKhoDtl> children = new ArrayList<>();

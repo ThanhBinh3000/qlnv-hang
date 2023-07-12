@@ -30,10 +30,8 @@ public class ScBangKeXuatVatTuDtl {
 
     private Long idHdr;
 
-    @Column(name = "SO_SERIAL")
     private String soSerial;
 
-    @Column(name = "SO_LUONG")
     private BigDecimal soLuong;
 
 

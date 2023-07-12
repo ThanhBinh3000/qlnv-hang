@@ -69,6 +69,11 @@ public class ScDanhSachHdr extends BaseEntity implements Serializable {
   private String tenLoKho;
   @Transient
   private List<ScPhieuXuatKhoHdr> scPhieuXuatKhoList;
+  @Transient
+  private List<ScBangKeXuatVatTuHdr> scBangKeXuatVatTuList;
+
+  @Transient
+  private List<ScKiemTraChatLuongHdr> scKiemTraChatLuongList;
 
   public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
     this.mapDmucDvi = mapDmucDvi;

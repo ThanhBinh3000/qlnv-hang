@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -80,7 +81,7 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
         DcnbBbNhapDayKhoHdr data = new DcnbBbNhapDayKhoHdr();
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(userInfo.getDvql());
-        data.setId(Long.parseLong(req.getSoBb().split("/")[0]));
+        data.setId(null);
         req.getChildren().forEach(e -> {
             e.setParent(data);
         });
@@ -152,27 +153,49 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
         DcnbBbNhapDayKhoHdr hdr = detail(req.getId());
         String status = hdr.getTrangThai() + req.getTrangThai();
         switch (status) {
-            // Arena các roll back approve
-            case Contains.CHODUYET_KTVBQ + Contains.DUTHAO:
-            case Contains.TUCHOI_KT + Contains.DUTHAO:
-            case Contains.TUCHOI_LDCC + Contains.DUTHAO:
-                break;
             // Arena các cấp duuyệt
+            case Contains.TUCHOI_KTVBQ + Contains.CHODUYET_KTVBQ:
+            case Contains.TUCHOI_KT + Contains.CHODUYET_KTVBQ:
+            case Contains.TUCHOI_LDCC + Contains.CHODUYET_KTVBQ:
             case Contains.DUTHAO + Contains.CHODUYET_KTVBQ:
+                hdr.setNguoiGDuyet(userInfo.getId());
+                hdr.setNgayGDuyet(LocalDate.now());
                 break;
             case Contains.CHODUYET_KTVBQ + Contains.CHODUYET_KT:
+                hdr.setNgayPDuyetKtvbq(LocalDate.now());
+                hdr.setNguoiPDuyeKtvbq(userInfo.getId());
                 hdr.setIdKyThuatVien(userInfo.getId());
                 break;
             case Contains.CHODUYET_KT + Contains.CHODUYET_LDCC:
                 hdr.setIdKeToan(userInfo.getId());
+                hdr.setTenKeToan(userInfo.getFullName());
+                hdr.setNgayPDuyetKt(LocalDate.now());
+                hdr.setNguoiPDuyeKt(userInfo.getId());
+                hdr.setIdKeToan(userInfo.getId());
                 break;
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 hdr.setIdLanhDao(userInfo.getId());
+                hdr.setTenLanhDao(userInfo.getFullName());
+                hdr.setNgayPDuyet(LocalDate.now());
+                hdr.setNguoiPDuyet(userInfo.getId());
+                hdr.setIdLanhDao(userInfo.getId());
                 break;
             // Arena từ chối
-            case Contains.CHODUYET_KTVBQ + Contains.CHODUYET_KTVBQ:
+            case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_KTVBQ:
+                hdr.setNguoiGDuyet(userInfo.getId());
+                hdr.setNgayGDuyet(LocalDate.now());
+                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                break;
             case Contains.CHODUYET_KT + Contains.TUCHOI_KT:
+                hdr.setNgayPDuyetKt(LocalDate.now());
+                hdr.setNguoiPDuyeKt(userInfo.getId());
+                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                break;
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
+                hdr.setIdLanhDao(userInfo.getId());
+                hdr.setTenLanhDao(userInfo.getFullName());
+                hdr.setNgayPDuyet(LocalDate.now());
+                hdr.setNguoiPDuyet(userInfo.getId());
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             default:

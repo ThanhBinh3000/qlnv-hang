@@ -38,10 +38,10 @@ public class ScKiemTraChatLuongController {
     @ApiOperation(value = "Tra cứu ", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody ScKiemTraChatLuongReq objReq) {
+    public ResponseEntity<BaseResponse> colection(@RequestBody ScKiemTraChatLuongReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.searchPage(currentUser, objReq));
+            resp.setData(service.searchKiemTraChatLuong (objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch ( Exception e) {
@@ -57,10 +57,10 @@ public class ScKiemTraChatLuongController {
     @ApiOperation(value = "Tạo mới  ", response = List.class)
     @PostMapping(value =  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @RequestBody ScKiemTraChatLuongReq objReq) {
+    public ResponseEntity<BaseResponse> insert( @RequestBody ScKiemTraChatLuongReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.save(currentUser,objReq));
+            resp.setData(service.create(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -110,10 +110,10 @@ public class ScKiemTraChatLuongController {
 
     @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin", response = List.class)
     @PostMapping(value =  PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser,@Valid @RequestBody StatusReq objReq) {
+    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody ScKiemTraChatLuongReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            service.approve(currentUser,objReq);
+            service.approve(objReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -126,12 +126,12 @@ public class ScKiemTraChatLuongController {
     }
 
     @ApiOperation(value = "Xoá ", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-    @DeleteMapping(value =  PathContains.URL_XOA + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            service.delete(id);
+            service.delete(idSearchReq.getId());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

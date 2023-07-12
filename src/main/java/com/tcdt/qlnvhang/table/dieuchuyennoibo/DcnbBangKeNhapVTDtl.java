@@ -38,5 +38,5 @@ public class DcnbBangKeNhapVTDtl {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
     @JsonIgnore
-    private DcnbBangKeNhapVTHdr bcnbBangKeNhapVTHdr;
+    private DcnbBangKeNhapVTHdr dcnbBangKeNhapVTHdr;
 }

@@ -75,7 +75,7 @@ public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService {
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(dvql);
         data.setTenDvi(userInfo.getTenDvi());
-        objReq.getDcnbbangkenhapvtdtl().forEach(e -> e.setBcnbBangKeNhapVTHdr(data));
+        objReq.getDcnbbangkenhapvtdtl().forEach(e -> e.setDcnbBangKeNhapVTHdr(data));
         DcnbBangKeNhapVTHdr created = hdrRepository.save(data);
         String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BKNVT-" + userInfo.getDvqlTenVietTat();
         created.setSoBangKe(so);

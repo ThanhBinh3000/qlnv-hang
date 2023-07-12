@@ -33,7 +33,7 @@ import java.util.Map;
 @Api(tags = "Điều chuyển nội bộ - Bảng kê xuất vật tư")
 public class DcnbBangKeXuatVTController {
     @Autowired
-    public DcnbBangKeXuatVTServiceImpl service;
+    private DcnbBangKeXuatVTServiceImpl service;
 
 
     @ApiOperation(value = "Tra cứu ", response = List.class)
@@ -170,7 +170,7 @@ public class DcnbBangKeXuatVTController {
         try {
             service.export(objReq, response);
         } catch (Exception e) {
-            log.error("Kết xuất danh sách dánh sách mua : {}", e);
+            log.error("Kết xuất danh sách : {}", e);
             final Map<String, Object> body = new HashMap<>();
             body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             body.put("msg", e.getMessage());

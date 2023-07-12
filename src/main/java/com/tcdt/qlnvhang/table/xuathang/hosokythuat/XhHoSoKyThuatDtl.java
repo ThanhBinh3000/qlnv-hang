@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -56,6 +57,7 @@ public class XhHoSoKyThuatDtl extends BaseEntity implements Serializable {
   private String noiDung;
   private String ketLuan;
   private String trangThai;
+
   //  BB_KTRA_NGOAI_QUAN = "BBKTNQ",
   //  BB_KTRA_VAN_HANH = "BBKTVH",
   //  BB_KTRA_HOSO_KYTHUAT = "BBKTHSKT",
@@ -68,6 +70,8 @@ public class XhHoSoKyThuatDtl extends BaseEntity implements Serializable {
   private String tenLoaiVthh;
   @Transient
   private String tenCloaiVthh;
+  @Transient
+  private String tenTrangThai;
   private LocalDate tgianBsung;
 
   @OneToMany(mappedBy = "xhHoSoKyThuatDtl", cascade = CascadeType.ALL)
@@ -125,6 +129,7 @@ public class XhHoSoKyThuatDtl extends BaseEntity implements Serializable {
     }
     this.vanBanBsung.addAll(children);
   }
+
   public void setMapVthh(Map<String, String> mapVthh) {
     this.mapVthh = mapVthh;
     if (!DataUtils.isNullObject(getLoaiVthh())) {
@@ -135,4 +140,8 @@ public class XhHoSoKyThuatDtl extends BaseEntity implements Serializable {
     }
   }
 
+  public String getTrangThai() {
+    setTenTrangThai(TrangThaiAllEnum.getLabelById(trangThai));
+    return trangThai;
+  }
 }

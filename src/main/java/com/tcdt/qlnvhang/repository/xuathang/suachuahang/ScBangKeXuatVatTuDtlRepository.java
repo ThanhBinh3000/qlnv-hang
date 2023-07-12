@@ -9,4 +9,6 @@ public interface ScBangKeXuatVatTuDtlRepository extends JpaRepository<ScBangKeXu
     List<ScBangKeXuatVatTuDtl> findByIdHdr(Long id);
 
     List<ScBangKeXuatVatTuDtl> findByIdHdrIn(List<Long> ids);
+
+    void deleteAllByIdHdr(Long idHdr);
 }
