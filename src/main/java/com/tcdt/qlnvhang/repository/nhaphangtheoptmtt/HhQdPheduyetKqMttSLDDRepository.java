@@ -14,6 +14,7 @@ public interface HhQdPheduyetKqMttSLDDRepository extends JpaRepository<HhQdPhedu
     void deleteByIdQdPdKq(Long idQdPdKq);
 
     List<HhQdPheduyetKqMttSLDD> findAllByIdQdPdKq(Long idQdPdKq);
+    List<HhQdPheduyetKqMttSLDD> findAllByIdQdPdKqAndMaDvi(Long idQdPdKq, String maDvi);
 
 
 }
