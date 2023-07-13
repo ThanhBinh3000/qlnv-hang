@@ -109,7 +109,7 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
             List<FileDinhKem> fileDinhKem= fileDinhKemService.saveListFileDinhKem(Arrays.asList(objReq.getFileDinhKem()), created.getId(),"HH_PHIEU_KT_CHAT_LUONG");
             created.setFileDinhKems(fileDinhKem);
         }
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_PHIEU_KT_CHAT_LUONG");
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),data.getId(),"HH_PHIEU_KT_CHAT_LUONG");
         created.setFileDinhKems(fileDinhKems);
 
         for (HhPhieuKiemTraChatLuongDtlReq list : objReq.getPhieuKiemTraChatLuongDtlList()){
@@ -146,7 +146,7 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
             List<FileDinhKem> fileDinhKem=fileDinhKemService.saveListFileDinhKem(Arrays.asList(objReq.getFileDinhKem()), created.getId(),"HH_PHIEU_KT_CHAT_LUONG");
             created.setFileDinhKems(fileDinhKem);
         }
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_PHIEU_KT_CHAT_LUONG");
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),data.getId(),"HH_PHIEU_KT_CHAT_LUONG");
         created.setFileDinhKems(fileDinhKems);
 
         List<HhPhieuKiemTraChatLuongDtl> listDtl=hhPhieuKiemTraCluongDtlRepository.findAllByIdHdr(objReq.getId());

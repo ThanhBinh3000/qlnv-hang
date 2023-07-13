@@ -46,7 +46,7 @@ public class HhPhieuKiemTraChatLuongReq {
     private String ldoTuChoi;
     private Long idDdiemGiaoNvNh;
     private FileDinhKemReq fileDinhKem;
-    private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
+    private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
     private List<HhPhieuKiemTraChatLuongDtlReq> phieuKiemTraChatLuongDtlList=new ArrayList<>();
 
 }

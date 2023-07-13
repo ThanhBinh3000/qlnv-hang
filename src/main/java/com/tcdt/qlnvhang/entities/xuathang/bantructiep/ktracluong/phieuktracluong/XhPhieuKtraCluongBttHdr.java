@@ -38,7 +38,7 @@ public class XhPhieuKtraCluongBttHdr implements Serializable {
 
     private String soQdNv;
 
-    private LocalDate ngayQd;
+    private LocalDate ngayQdNv;
 
     private String soPhieu;
 

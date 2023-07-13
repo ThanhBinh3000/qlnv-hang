@@ -276,7 +276,7 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl implements  XhBbLa
             objs[0]=i;
             objs[1]=hdr.getSoQdNv();
             objs[2]=hdr.getNamKh();
-            objs[3]=hdr.getNgayQd();
+            objs[3]=hdr.getNgayQdNv();
             objs[4]=hdr.getTenDiemKho();
             objs[5]=hdr.getTenLoKho();
             objs[6]=hdr.getSoBienBan();

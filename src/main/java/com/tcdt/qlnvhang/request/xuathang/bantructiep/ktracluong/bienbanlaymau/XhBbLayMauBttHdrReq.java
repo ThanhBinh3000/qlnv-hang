@@ -23,7 +23,7 @@ public class XhBbLayMauBttHdrReq extends BaseRequest {
 
     private String soQdNv;
 
-    private LocalDate ngayQd;
+    private LocalDate ngayQdNv;
 
     private Long idHd;
 
