@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.xuathang.xuatkhac.ktluongthuc;
 
+import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktluongthuc.XhXkDanhSachRepository;
@@ -10,6 +11,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatkhac.XhXkTongHopRequest;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkDanhSachHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopHdr;
@@ -72,6 +74,8 @@ public class XhXkTongHopService extends BaseServiceImpl {
       });
       s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
       s.setTenDvi(mapDmucDvi.containsKey(s.getMaDvi()) ? mapDmucDvi.get(s.getMaDvi()) : null);
+      List<FileDinhKem> fileDinhKems= fileDinhKemService.search(s.getId(),Arrays.asList(XhXkTongHopHdr.TABLE_NAME));
+      s.setFileDinhKems(fileDinhKems);
       String maDvql = DataUtils.isNullOrEmpty(s.getMaDvi()) ? s.getMaDvi() : s.getMaDvi().substring(0, s.getMaDvi().length() - 2);
       s.setMaDvql(maDvql);
       s.setTenDvql(mapDmucDvi.containsKey(maDvql) ? mapDmucDvi.get(maDvql) : null);
@@ -100,6 +104,8 @@ public class XhXkTongHopService extends BaseServiceImpl {
     created = xhXkTongHopRepository.save(created);
     Long id = created.getId();
     String ma = created.getMaDanhSach();
+    List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),id,XhXkTongHopHdr.TABLE_NAME);
+    created.setFileDinhKems(fileDinhKems);
     //set ma tong hop cho danh sach
     List<Long> listIdDsHdr = created.getTongHopDtl().stream().map(XhXkTongHopDtl::getIdDsHdr).collect(Collectors.toList());
     List<XhXkDanhSachHdr> listDsHdr = xhXkDanhSachRepository.findByIdIn(listIdDsHdr);
@@ -134,6 +140,9 @@ public class XhXkTongHopService extends BaseServiceImpl {
       s.setTongHopHdr(data);
     });
     XhXkTongHopHdr created = xhXkTongHopRepository.save(data);
+    fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhXkTongHopHdr.TABLE_NAME));
+    List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),created.getId(),XhXkTongHopHdr.TABLE_NAME);
+    created.setFileDinhKems(fileDinhKems);
     return created;
   }
 
@@ -158,6 +167,8 @@ public class XhXkTongHopService extends BaseServiceImpl {
       String maDvql = DataUtils.isNullOrEmpty(data.getMaDvi()) ? data.getMaDvi() : data.getMaDvi().substring(0, data.getMaDvi().length() - 2);
       data.setMaDvql(maDvql);
       data.setTenDvql(mapDmucDvi.containsKey(maDvql) ? mapDmucDvi.get(maDvql) : null);
+      List<FileDinhKem> fileDinhKems= fileDinhKemService.search(data.getId(),Arrays.asList(XhXkTongHopHdr.TABLE_NAME));
+      data.setFileDinhKems(fileDinhKems);
     });
     return allById;
   }
@@ -177,6 +188,7 @@ public class XhXkTongHopService extends BaseServiceImpl {
         xhXkDanhSachRepository.save(item);
       });
     }
+    fileDinhKemService.delete(data.getId(),Lists.newArrayList(XhXkTongHopHdr.TABLE_NAME));
     xhXkTongHopRepository.delete(data);
   }
 
@@ -197,7 +209,7 @@ public class XhXkTongHopService extends BaseServiceImpl {
         });
       }
     });
-
+    fileDinhKemService.deleteMultiple(idSearchReq.getIdList(),Lists.newArrayList(XhXkTongHopHdr.TABLE_NAME));
     xhXkTongHopRepository.deleteAll(list);
 
   }

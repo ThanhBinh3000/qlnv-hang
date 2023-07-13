@@ -13,4 +13,6 @@ import java.util.List;
 public interface ScQuyetDinhXuatHangService extends BaseService<ScQuyetDinhXuatHang, ScQuyetDinhXuatHangReq, Long> {
 
     List<ScQuyetDinhXuatHang> dsTaoPhieuXuatKho(ScQuyetDinhXuatHangReq req) throws Exception;
+
+    List<ScQuyetDinhXuatHang> dsTaoQuyetDinhNh(ScQuyetDinhXuatHangReq req) throws Exception;
 }

@@ -24,6 +24,7 @@ public class XhXkVtQdGiaonvXhRequest extends BaseRequest {
     String soCanCu;
     Long idCanCu;
     String trangThai;
+    List<String> listTrangThaiXh = new ArrayList<>();
     Integer capDvi;
     List<XhXkVtQdGiaonvXhDtl> xhXkVtQdGiaonvXhDtl = new ArrayList<>();
     List<FileDinhKem> fileDinhKems;

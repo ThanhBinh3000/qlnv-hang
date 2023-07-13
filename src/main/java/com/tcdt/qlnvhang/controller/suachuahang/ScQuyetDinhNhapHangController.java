@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.controller.suachuahang;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhNhapHangReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
@@ -32,11 +33,10 @@ public class ScQuyetDinhNhapHangController {
     @ApiOperation(value = "Tra cứu thông tin biên bản", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser,
-                                                  @RequestBody ScQuyetDinhNhapHangReq objReq) {
+    public ResponseEntity<BaseResponse> colection(@RequestBody ScQuyetDinhNhapHangReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.searchPage(currentUser, objReq));
+            resp.setData(service.searchPage(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -52,10 +52,10 @@ public class ScQuyetDinhNhapHangController {
     @ApiOperation(value = "Tạo mới thông tin biên bản ", response = List.class)
     @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ScQuyetDinhNhapHangReq objReq) {
+    public ResponseEntity<BaseResponse> insert(@Valid @RequestBody ScQuyetDinhNhapHangReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.update(currentUser, objReq));
+            resp.setData(service.create( objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -69,10 +69,10 @@ public class ScQuyetDinhNhapHangController {
 
     @ApiOperation(value = "Cập nhật thông tin biên bản", response = List.class)
     @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ScQuyetDinhNhapHangReq objReq) {
+    public ResponseEntity<BaseResponse> update( @Valid @RequestBody ScQuyetDinhNhapHangReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.update(currentUser, objReq));
+            resp.setData(service.update(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -105,10 +105,10 @@ public class ScQuyetDinhNhapHangController {
 
     @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin", response = List.class)
     @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody StatusReq stReq) {
+    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody ScQuyetDinhNhapHangReq stReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            service.approve(currentUser, stReq);
+            service.approve(stReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -121,12 +121,12 @@ public class ScQuyetDinhNhapHangController {
     }
 
     @ApiOperation(value = "Xoá thông tin biên bản", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-    @DeleteMapping(value = PathContains.URL_XOA + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> delete(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            service.delete(id);
+            service.delete(idSearchReq.getId());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

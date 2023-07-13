@@ -10,6 +10,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoK
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoKyThuatCt;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
 import com.tcdt.qlnvhang.repository.kiemtrachatluong.NhHoSoBienBanRepository;
 import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatRepository;
@@ -19,6 +20,7 @@ import com.tcdt.qlnvhang.response.xuathang.NhHoSoKyThuatDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.hosokythuat.NhHoSoKyThuatService;
+import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.xuathang.hosokythuat.XhHoSoKyThuatDtl;
 import com.tcdt.qlnvhang.table.xuathang.hosokythuat.XhHoSoKyThuatHdr;
 import com.tcdt.qlnvhang.table.xuathang.hosokythuat.XhHoSoKyThuatRow;
@@ -52,6 +54,9 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
   private NhHoSoKyThuatService nhHoSoKyThuatService;
   @Autowired
   private BienBanLayMauRepository bienBanLayMauRepository;
+
+  @Autowired
+  private UserInfoRepository userInfoRepository;
 
   public Page<NhHoSoKyThuatDTO> searchPage(CustomUserDetails currentUser, SearchHoSoKyThuatReq req) throws Exception {
 
@@ -112,14 +117,22 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
     });
     XhHoSoKyThuatHdr created = xhHoSoKyThuatRepository.save(data);
     //update sobb
+    XhHoSoKyThuatHdr finalCreated = created;
     created.getXhHoSoKyThuatDtl().forEach(s -> {
-      System.out.println(s.getThoiDiemLap() == THOI_DIEM_XUAT_HANG);
-      System.out.println(s.getThoiDiemLap() + "--" + THOI_DIEM_XUAT_HANG);
       if (s.getThoiDiemLap().equals(THOI_DIEM_XUAT_HANG)) {
-        s.setSoBienBan(s.getId() + "/" + s.getNgayTao().getYear() + "/" + s.getLoaiBb());
+        String soBienBan = s.getId() + "/" + s.getNgayTao().getYear() + "/" + s.getLoaiBb();
+        s.setSoBienBan(soBienBan);
+        if (s.getLoaiBb().equals(BBAN_KTRA_NGOAI_QUAN)) {
+          finalCreated.setSoBbKtNgoaiQuan(soBienBan);
+        } else if (s.getLoaiBb().equals(BB_KTRA_VAN_HANH)) {
+          finalCreated.setSoBbKtVanHanh(soBienBan);
+        } else if (s.getLoaiBb().equals(BB_KTRA_HO_SO_KY_THUAT)) {
+          finalCreated.setSoBbKtHskt(soBienBan);
+        }
       }
     });
-    created = xhHoSoKyThuatRepository.save(created);
+    finalCreated.setXhHoSoKyThuatDtl(created.getXhHoSoKyThuatDtl());
+    created = xhHoSoKyThuatRepository.save(finalCreated);
     return created;
   }
 
@@ -177,7 +190,6 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
         });
       });
 */
-      System.out.println("a");
       /*xhHoSoKyThuatHdr.getXhHoSoKyThuatDtl().forEach(s -> {
         fileDinhKemService.delete(s.getId(), Lists.newArrayList(XhHoSoKyThuatDtl.TABLE_NAME + "_CAN_CU", XhHoSoKyThuatDtl.TABLE_NAME + "_DINH_KEM"));
         if (!DataUtils.isNullOrEmpty((s.getCanCu()))) {
@@ -345,6 +357,10 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
     } else {
       xhHskt.setMapDmucDvi(mapDmucDvi);
       xhHskt.setMapVthh(mapVthh);
+      Optional<UserInfo> user = userInfoRepository.findById(xhHskt.getNguoiTaoId());
+      if (user.isPresent()) {
+        xhHskt.setCanBoTaoHoSo(user.get().getFullName());
+      }
     }
     return xhHskt;
   }

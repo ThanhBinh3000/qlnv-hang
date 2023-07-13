@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
+import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScKiemTraChatLuongHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScPhieuXuatKhoHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhXuatHangRepository;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -17,9 +18,7 @@ import com.tcdt.qlnvhang.service.suachuahang.ScQuyetDinhScService;
 import com.tcdt.qlnvhang.service.suachuahang.ScQuyetDinhXuatHangService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhXuatHang;
-import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTongHopHdr;
-import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTrinhThamDinhHdr;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.apache.commons.collections4.CollectionUtils;
@@ -50,6 +49,9 @@ public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements S
 
     @Autowired
     private ScQuyetDinhScImpl scQuyetDinhScImpl;
+
+    @Autowired
+    private ScKiemTraChatLuongHdrRepository scKiemTraChatLuongHdrRepository;
 
 
     @Override
@@ -111,6 +113,14 @@ public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements S
         List<FileDinhKem> fileDinhKemList = fileDinhKemService.search(data.getId(), Collections.singleton(ScQuyetDinhXuatHang.TABLE_NAME + "_DINH_KEM"));
         data.setFileDinhKem(fileDinhKemList);
         data.setScQuyetDinhSc(scQuyetDinhScImpl.detail(data.getIdQdSc()));
+        List<ScKiemTraChatLuongHdr> allByIdQdXh = scKiemTraChatLuongHdrRepository.findAllByIdQdXh(id);
+        if(!allByIdQdXh.isEmpty()){
+            allByIdQdXh.forEach(item ->{
+                Optional<ScPhieuXuatKhoHdr> byId = scPhieuXuatKhoHdrRepository.findById(item.getIdPhieuXuatKho());
+                byId.ifPresent(item::setScPhieuXuatKhoHdr);
+            });
+            data.setScKiemTraChatLuongHdrList(allByIdQdXh);
+        }
         return data;
     }
 
@@ -198,6 +208,24 @@ public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements S
         }
         req.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
         List<ScQuyetDinhXuatHang> list = scQuyetDinhXuatHangRepository.listTaoPhieuXuatKho(req);
+        return list;
+    }
+
+    @Override
+    public List<ScQuyetDinhXuatHang> dsTaoQuyetDinhNh(ScQuyetDinhXuatHangReq req) throws Exception {
+        UserInfo currentUser = SecurityContextService.getUser();
+        if (currentUser == null){
+            throw new Exception("Access denied.");
+        }
+        String dvql = currentUser.getDvql();
+        if (currentUser.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            req.setMaDviSr(dvql.substring(0,6));
+        }else{
+            req.setMaDviSr(dvql);
+        }
+        req.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
+        req.setTrangThaiKtraCl(TrangThaiAllEnum.DA_DUYET_LDC.getId());
+        List<ScQuyetDinhXuatHang> list = scQuyetDinhXuatHangRepository.listTaoQuyetDinhNh(req);
         return list;
     }
 }

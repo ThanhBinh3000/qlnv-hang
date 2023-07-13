@@ -34,6 +34,9 @@ public class XhHoSoKyThuatHdr extends BaseEntity implements Serializable {
   private String soBbLayMau;
   private String soBbLayMauNh;
   private String soQdGiaoNvNh;
+  private String soBbKtNgoaiQuan;
+  private String soBbKtVanHanh;
+  private String soBbKtHskt;
   private LocalDate ngayTaoNh;
   private LocalDate ngayDuyetNh;
   private String maDvi;
@@ -73,6 +76,8 @@ public class XhHoSoKyThuatHdr extends BaseEntity implements Serializable {
   private String tenNganKho;
   @Transient
   private String tenLoKho;
+  @Transient
+  private String canBoTaoHoSo;
 
   public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
     this.mapDmucDvi = mapDmucDvi;

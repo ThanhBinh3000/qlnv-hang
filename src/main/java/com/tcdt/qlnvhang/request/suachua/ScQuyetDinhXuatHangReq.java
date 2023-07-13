@@ -34,4 +34,6 @@ public class ScQuyetDinhXuatHangReq extends BaseRequest {
     //Region search
     private String maDviSr;
 
+    private String trangThaiKtraCl;
+
 }
