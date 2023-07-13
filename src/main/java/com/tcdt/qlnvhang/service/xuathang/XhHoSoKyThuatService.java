@@ -17,7 +17,6 @@ import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatRepository;
 import com.tcdt.qlnvhang.repository.xuathang.XhHoSoKyThuatRepository;
 import com.tcdt.qlnvhang.request.xuathang.SearchHoSoKyThuatReq;
 import com.tcdt.qlnvhang.response.xuathang.NhHoSoKyThuatDTO;
-import com.tcdt.qlnvhang.service.UserService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.hosokythuat.NhHoSoKyThuatService;
@@ -118,12 +117,22 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
     });
     XhHoSoKyThuatHdr created = xhHoSoKyThuatRepository.save(data);
     //update sobb
+    XhHoSoKyThuatHdr finalCreated = created;
     created.getXhHoSoKyThuatDtl().forEach(s -> {
       if (s.getThoiDiemLap().equals(THOI_DIEM_XUAT_HANG)) {
-        s.setSoBienBan(s.getId() + "/" + s.getNgayTao().getYear() + "/" + s.getLoaiBb());
+        String soBienBan = s.getId() + "/" + s.getNgayTao().getYear() + "/" + s.getLoaiBb();
+        s.setSoBienBan(soBienBan);
+        if (s.getLoaiBb().equals(BBAN_KTRA_NGOAI_QUAN)) {
+          finalCreated.setSoBbKtNgoaiQuan(soBienBan);
+        } else if (s.getLoaiBb().equals(BB_KTRA_VAN_HANH)) {
+          finalCreated.setSoBbKtVanHanh(soBienBan);
+        } else if (s.getLoaiBb().equals(BB_KTRA_HO_SO_KY_THUAT)) {
+          finalCreated.setSoBbKtHskt(soBienBan);
+        }
       }
     });
-    created = xhHoSoKyThuatRepository.save(created);
+    finalCreated.setXhHoSoKyThuatDtl(created.getXhHoSoKyThuatDtl());
+    created = xhHoSoKyThuatRepository.save(finalCreated);
     return created;
   }
 
@@ -349,7 +358,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
       xhHskt.setMapDmucDvi(mapDmucDvi);
       xhHskt.setMapVthh(mapVthh);
       Optional<UserInfo> user = userInfoRepository.findById(xhHskt.getNguoiTaoId());
-      if(user.isPresent()) {
+      if (user.isPresent()) {
         xhHskt.setCanBoTaoHoSo(user.get().getFullName());
       }
     }
