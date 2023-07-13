@@ -53,6 +53,8 @@ public class ScKiemTraChatLuongHdr extends BaseEntity implements Serializable {
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     @Transient
+    private ScPhieuXuatKhoHdr scPhieuXuatKhoHdr;
+    @Transient
     private List<ScKiemTraChatLuongDtl> children = new ArrayList<>();
 
     public String getTenTrangThai(){

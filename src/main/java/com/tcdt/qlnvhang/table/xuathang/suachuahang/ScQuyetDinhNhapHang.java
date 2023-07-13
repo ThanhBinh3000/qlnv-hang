@@ -27,7 +27,7 @@ public class ScQuyetDinhNhapHang extends BaseEntity implements Serializable {
     private Long id;
     private Integer nam;
     private String soQd;
-    private LocalDate ngayKyQd;
+    private LocalDate ngayKy;
     private String soPhieuKtcl;
     private Long idPhieuKtcl;
     private LocalDate ngayKiemDinh;
@@ -44,5 +44,7 @@ public class ScQuyetDinhNhapHang extends BaseEntity implements Serializable {
     private List<FileDinhKem> fileCanCu = new ArrayList<>();
     @Transient
     private List<FileDinhKem> fileDinhKem = new ArrayList<>();
+    @Transient
+    private List<ScQuyetDinhNhapHangDtl> children = new ArrayList<>();
 
 }
