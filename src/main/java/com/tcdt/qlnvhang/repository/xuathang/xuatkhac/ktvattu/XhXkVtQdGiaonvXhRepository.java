@@ -19,7 +19,7 @@ public interface XhXkVtQdGiaonvXhRepository extends JpaRepository<XhXkVtQdGiaonv
             "AND (:#{#param.namKeHoach} IS NULL OR c.namKeHoach = :#{#param.namKeHoach}) " +
             "AND (:#{#param.loai} IS NULL OR c.loai = :#{#param.loai}) " +
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
-            "AND (:#{#param.trangThaiXh} IS NULL OR c.trangThaiXh = :#{#param.trangThaiXh}) " +
+            "AND (:#{#param.listTrangThaiXh.size()}  = 0 OR c.trangThaiXh in :#{#param.listTrangThaiXh}) " +
             "AND ((:#{#param.ngayKyQdTu}  IS NULL OR c.ngayKy >= :#{#param.ngayKyQdTu})" +
             "AND  (:#{#param.ngayKyQdDen}  IS NULL OR c.ngayKy <= :#{#param.ngayKyQdDen})) " +
             "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
