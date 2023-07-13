@@ -12,15 +12,14 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.suachuahang.ScQuyetDinhNhapHangService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScPhieuXuatKhoDtl;
-import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhNhapHang;
-import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhNhapHangDtl;
-import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhXuatHang;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
@@ -40,9 +39,18 @@ public class ScQuyetDinhNhapHangImpl extends BaseServiceImpl implements ScQuyetD
     @Autowired
     private FileDinhKemService fileDinhKemService;
 
+    @Autowired
+    private ScDanhSachServiceImpl scDanhSachServiceImpl;
+
     @Override
     public Page<ScQuyetDinhNhapHang> searchPage(ScQuyetDinhNhapHangReq req) throws Exception {
-        return null;
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+        UserInfo currentUser = SecurityContextService.getUser();
+        if (currentUser.getCapDvi().equals(Contains.CAP_CUC)) {
+            req.setMaDviSr(currentUser.getDvql());
+        }
+        Page<ScQuyetDinhNhapHang> searchPage = hdrRepository.searchPage(req, pageable);
+        return searchPage;
     }
 
     @Override
@@ -57,6 +65,7 @@ public class ScQuyetDinhNhapHangImpl extends BaseServiceImpl implements ScQuyetD
         ScQuyetDinhNhapHang hdr = new ScQuyetDinhNhapHang();
         BeanUtils.copyProperties(req, hdr);
         hdr.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
+        hdr.setMaDvi(currentUser.getDvql());
         ScQuyetDinhNhapHang created = hdrRepository.save(hdr);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), ScQuyetDinhNhapHang.TABLE_NAME + "_CAN_CU");
         created.setFileCanCu(canCu);
@@ -95,6 +104,10 @@ public class ScQuyetDinhNhapHangImpl extends BaseServiceImpl implements ScQuyetD
         fileDinhKemService.delete(req.getId(), Lists.newArrayList(ScQuyetDinhXuatHang.TABLE_NAME + "_DINH_KEM"));
         List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), ScQuyetDinhXuatHang.TABLE_NAME + "_DINH_KEM");
         created.setFileDinhKem(fileDinhKemList);
+        if(req.getChildren() != null && !req.getChildren().isEmpty()){
+            List<ScQuyetDinhNhapHangDtl> scPhieuXuatKhoDtls = saveDtl(req, created.getId());
+            created.setChildren(scPhieuXuatKhoDtls);
+        }
         return created;
     }
 
@@ -109,7 +122,15 @@ public class ScQuyetDinhNhapHangImpl extends BaseServiceImpl implements ScQuyetD
         data.setFileCanCu(canCu);
         List<FileDinhKem> fileDinhKemList = fileDinhKemService.search(data.getId(), Collections.singleton(ScQuyetDinhXuatHang.TABLE_NAME + "_DINH_KEM"));
         data.setFileDinhKem(fileDinhKemList);
-        data.setChildren(dtlRepository.findAllByIdHdr(id));
+        List<ScQuyetDinhNhapHangDtl> allByIdHdr = dtlRepository.findAllByIdHdr(id);
+        allByIdHdr.forEach( item -> {
+            try {
+                item.setScDanhSachHdr(scDanhSachServiceImpl.detail(item.getIdDsHdr()));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        data.setChildren(allByIdHdr);
         return data;
     }
 
@@ -168,6 +189,7 @@ public class ScQuyetDinhNhapHangImpl extends BaseServiceImpl implements ScQuyetD
         fileDinhKemService.delete(id, Lists.newArrayList(ScQuyetDinhXuatHang.TABLE_NAME + "_CAN_CU"));
         fileDinhKemService.delete(id, Lists.newArrayList(ScQuyetDinhXuatHang.TABLE_NAME + "_DINH_KEM"));
         hdrRepository.delete(optional.get());
+        dtlRepository.deleteAllByIdHdr(id);
     }
 
     @Override

@@ -13,23 +13,26 @@ import java.util.List;
 public class ScQuyetDinhNhapHangReq extends BaseRequest {
     private Long id;
     private Integer nam;
-    private String soQdNhapHang;
-    private LocalDate ngayKyQd;
-    private String ketQuaKiemDinh;
+    private String soQd;
+    private LocalDate ngayKy;
+    private String soPhieuKtcl;
+    private String idPhieuKtcl;
     private LocalDate ngayKiemDinh;
-    private Long soQdGiaoNvXhId;
-    private String soQdGiaoNvXh;
-    private LocalDate thoiHanXuatSc;
-    private LocalDate thoiHanNhapSc;
-    private String duToanKinhPhi;
+    private Long idQdXh;
+    private String soQdXh;
+    private LocalDate thoiHanXuat;
+    private LocalDate thoiHanNhap;
+    private String duToanChiPhi;
     private String loaiHinhNhapXuat;
     private String kieuNhapXuat;
     private String trichYeu;
-
+    private String trangThai;
     private List<FileDinhKemReq> fileCanCuReq;
     private List<FileDinhKemReq> fileDinhKemReq;
 
     private List<ScQuyetDinhNhapHangDtl> children = new ArrayList<>();
+
+    private String maDviSr;
 
 
 }
