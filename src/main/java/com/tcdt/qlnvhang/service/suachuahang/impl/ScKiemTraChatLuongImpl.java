@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.suachuahang.impl;
 
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScKiemTraChatLuongDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScKiemTraChatLuongHdrRepository;
@@ -68,7 +69,7 @@ public class ScKiemTraChatLuongImpl extends BaseServiceImpl implements ScKiemTra
         ScKiemTraChatLuongHdr data = new ScKiemTraChatLuongHdr();
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(currentUser.getDvql());
-        data.setId(Long.parseLong(req.getSoPhieuKdcl().split("/")[0]));
+        data.setId(Long.parseLong(req.getSoPhieuKtcl().split("/")[0]));
         ScKiemTraChatLuongHdr created = hdrRepository.save(data);
         saveFileDinhKem(req.getFileDinhKemReq(), created.getId(), ScPhieuXuatKhoHdr.TABLE_NAME);
         List<ScKiemTraChatLuongDtl> dtls = saveDtl(req, data.getId());
@@ -230,90 +231,13 @@ public class ScKiemTraChatLuongImpl extends BaseServiceImpl implements ScKiemTra
         return search;
     }
 
-//    public Page<ScKiemTraChatLuongDTO> searchPage(CustomUserDetails currentUser, ScKiemTraChatLuongReq req) throws Exception {
-//        String dvql = currentUser.getDvql();
-//        req.setMaDvi(dvql);
-//        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-////        Page<ScKiemTraChatLuongDTO> searchDto = hdrRepository.searchPage(req, pageable);
-//
-//        return searchDto;
-//    }
-//
-//    @Transactional
-//    public ScKiemTraChatLuongHdr save(CustomUserDetails currentUser, ScKiemTraChatLuongReq objReq) throws Exception {
-//        if (currentUser == null) {
-//            throw new Exception("Bad request.");
-//        }
-//        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-//            throw new Exception("Chức năng chỉ dành cho cấp chi cục");
-//        }
-//        Optional<ScKiemTraChatLuongHdr> soDxuat = hdrRepository.findBySoPhieuKdcl(objReq.getSoPhieuKdcl());
-//        if (soDxuat.isPresent()) {
-//            throw new Exception("Số phiếu đã tồn tại");
-//        }
-//        ScKiemTraChatLuongHdr data = new ScKiemTraChatLuongHdr();
-//        BeanUtils.copyProperties(objReq, data);
-//        data.setMaDvi(currentUser.getDvql());
-//        objReq.getScKiemTraChatLuongDtls().forEach(e -> {
-//            e.setScKiemTraChatLuongHdr(data);
-//        });
-//        ScKiemTraChatLuongHdr created = hdrRepository.save(data);
-//        saveFileDinhKem(objReq.getFileDinhKemReqs(), created.getId(), ScKiemTraChatLuongHdr.TABLE_NAME);
-//        return created;
-//    }
-//
-//    @Transactional
-//    public ScKiemTraChatLuongHdr update(ScKiemTraChatLuongReq objReq) throws Exception {
-//        Optional<ScKiemTraChatLuongHdr> optional = hdrRepository.findById(objReq.getId());
-//        if (!optional.isPresent()) {
-//            throw new Exception("Không tìm thấy dữ liệu cần sửa");
-//        }
-//
-//        ScKiemTraChatLuongHdr data = optional.get();
-//        objReq.setMaDvi(data.getMaDvi());
-//        BeanUtils.copyProperties(objReq, data);
-//        data.setScKiemTraChatLuongDtls(objReq.getScKiemTraChatLuongDtls());
-//        ScKiemTraChatLuongHdr update = hdrRepository.save(data);
-//        fileDinhKemService.delete(update.getId(), Lists.newArrayList(ScKiemTraChatLuongHdr.TABLE_NAME));
-//        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), update.getId(), ScKiemTraChatLuongHdr.TABLE_NAME);
-//        update.setFileDinhKems(canCu);
-//        return update;
-//    }
-//
-//    public ScKiemTraChatLuongHdr detail(Long id) throws Exception {
-//        if (ObjectUtils.isEmpty(id)) {
-//            throw new Exception("Tham số không hợp lệ.");
-//        }
-//        Optional<ScKiemTraChatLuongHdr> optional = hdrRepository.findById(id);
-//        if (!optional.isPresent()) {
-//            throw new Exception("Không tìm thấy dữ liệu");
-//        }
-//        ScKiemTraChatLuongHdr data = optional.get();
-//        data.setFileDinhKems(fileDinhKemService.search(id, Collections.singletonList(ScKiemTraChatLuongHdr.TABLE_NAME)));
-//        return data;
-//    }
-//
-//    @Transient
-//    public void delete(Long id) throws Exception {
-//        Optional<ScKiemTraChatLuongHdr> optional = hdrRepository.findById(id);
-//        if (!optional.isPresent()) {
-//            throw new Exception("Bản ghi không tồn tại");
-//        }
-//        ScKiemTraChatLuongHdr data = optional.get();
-//        List<ScKiemTraChatLuongDtl> list = dtlRepository.findAllByHdrId(id);
-//        dtlRepository.deleteAll(list);
-//        hdrRepository.delete(data);
-//    }
-//
-//    @Transactional
-//    public void approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
-//        if (ObjectUtils.isEmpty(statusReq.getId())) {
-//            throw new Exception("Không tìm thấy dữ liệu");
-//        }
-//        ScKiemTraChatLuongHdr details = detail(statusReq.getId());
-//        Optional<ScKiemTraChatLuongHdr> optional = Optional.of(details);
-//        ScKiemTraChatLuongHdr data = optional.get();
-//        data.setTrangThai(statusReq.getTrangThai());
-//        hdrRepository.save(data);
-//    }
+    @Override
+    public List<ScKiemTraChatLuongHdr> searchDanhSachTaoQuyetDinhNhapHang(ScKiemTraChatLuongReq req) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        req.setTrangThai(TrangThaiAllEnum.DA_DUYET_LDC.getId());
+        req.setMaDviSr(userInfo.getDvql());
+        List<ScKiemTraChatLuongHdr> scPhieuXuatKhoHdrs = hdrRepository.searchListTaoQuyetDinhNhapHang(req);
+        return scPhieuXuatKhoHdrs;
+    }
+
 }

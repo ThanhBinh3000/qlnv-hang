@@ -15,7 +15,7 @@ public class ScKiemTraChatLuongReq extends BaseRequest {
     private Long id;
     private Integer nam;
     private String maQhns;
-    private String soPhieuKdcl;
+    private String soPhieuKtcl;
     private LocalDate ngayLap;
     private Long idTruongPhongKtvq;
     private Long idQdXh;
@@ -34,4 +34,6 @@ public class ScKiemTraChatLuongReq extends BaseRequest {
     private List<ScKiemTraChatLuongDtl> children = new ArrayList<>();
 
     private Long idScDanhSachHdr;
+
+    private String maDviSr;
 }

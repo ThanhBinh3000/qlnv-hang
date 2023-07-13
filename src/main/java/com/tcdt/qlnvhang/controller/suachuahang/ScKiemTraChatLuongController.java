@@ -54,6 +54,25 @@ public class ScKiemTraChatLuongController {
         return ResponseEntity.ok(resp);
     }
 
+    @ApiOperation(value = "Tra cứu ", response = List.class)
+    @PostMapping(value = "/ds-tao-qd-nh", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> getDanhSachTaoQdNh(@RequestBody ScKiemTraChatLuongReq objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.searchDanhSachTaoQuyetDinhNhapHang(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch ( Exception e) {
+            e.printStackTrace();
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu thông tin : {}", e);
+        }
+
+        return ResponseEntity.ok(resp);
+    }
+
     @ApiOperation(value = "Tạo mới  ", response = List.class)
     @PostMapping(value =  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
