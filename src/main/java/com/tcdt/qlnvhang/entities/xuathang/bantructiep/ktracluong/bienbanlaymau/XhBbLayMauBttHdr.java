@@ -33,7 +33,7 @@ public class XhBbLayMauBttHdr implements Serializable {
 
     private String soQdNv;
 
-    private LocalDate ngayQd;
+    private LocalDate ngayQdNv;
 
     private Long idHd;
 
