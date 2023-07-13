@@ -53,6 +53,7 @@ public class XhXkVtQdGiaonvXhService extends BaseServiceImpl {
         search.getContent().forEach(s -> {
             s.setTenLoai(Contains.getLoaiHinhXuat(s.getLoai()));
             s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
+            s.setTenTrangThaiXh(TrangThaiAllEnum.getLabelById(s.getTrangThaiXh()));
             s.getXhXkVtQdGiaonvXhDtl().forEach(item -> {
                 item.setMapVthh(mapVthh);
                 item.setMapDmucDvi(mapDmucDvi);
