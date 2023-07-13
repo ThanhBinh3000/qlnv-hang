@@ -74,6 +74,8 @@ public class XhXkTongHopService extends BaseServiceImpl {
       });
       s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
       s.setTenDvi(mapDmucDvi.containsKey(s.getMaDvi()) ? mapDmucDvi.get(s.getMaDvi()) : null);
+      List<FileDinhKem> fileDinhKems= fileDinhKemService.search(s.getId(),Arrays.asList(XhXkTongHopHdr.TABLE_NAME));
+      s.setFileDinhKems(fileDinhKems);
       String maDvql = DataUtils.isNullOrEmpty(s.getMaDvi()) ? s.getMaDvi() : s.getMaDvi().substring(0, s.getMaDvi().length() - 2);
       s.setMaDvql(maDvql);
       s.setTenDvql(mapDmucDvi.containsKey(maDvql) ? mapDmucDvi.get(maDvql) : null);
