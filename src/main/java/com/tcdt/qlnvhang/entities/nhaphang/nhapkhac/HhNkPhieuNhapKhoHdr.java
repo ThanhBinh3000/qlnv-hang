@@ -108,6 +108,8 @@ public class HhNkPhieuNhapKhoHdr extends BaseEntity implements Serializable, Clo
     private Long nguoiPDuyet;
     @Column(name = "NGAY_PDUYET")
     private LocalDate ngayPDuyet;
+    private String donViTinh;
+    private String tenDonViTinh;
     @Transient
     private List<FileDinhKem> chungTuDinhKem = new ArrayList<>();
     @Transient
