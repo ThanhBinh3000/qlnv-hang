@@ -42,7 +42,7 @@ public interface HhNkPhieuNhapKhoHdrRepository extends JpaRepository<HhNkPhieuNh
     List<HhNkPhieuNhapKhoHdrListDTO> searchListChung(@Param("param")HhNkPhieuNhapKhoHdrReq objReq);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.nhaphang.nhapkhac.HhNkPhieuNhapKhoHdrDTO(" +
-            "pnk.id,qdgnv.id,qdgnv.soQd,qdgnv.ngayQd,qdgnv.nam,hdr.ngayHieuLuc,dtl.maNhaKho,dmdvnhakho.tenDvi, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho," +
+            "pnk.id,qdgnv.id,qdgnv.soQd,qdgnv.ngayQd,qdgnv.nam,qdgnv.tgianNkMnhat,dtl.maNhaKho,dmdvnhakho.tenDvi, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho," +
             "dmdvlokho.tenDvi,dtl.maNganKho,dmdvngankho.tenDvi,pnk.soPhieuNhapKho, pnk.ngayLap,  bknvt.id, bknvt.soBangKe," +
             "bknvt.loaiVthh,dmvt.ten,dtl.cloaiVthh, dmvt.loaiHang,qdgnv.dvt, dtl.tongSlNhap, " +
             "pnk.idPhieuKtraCluong, pnk.soPhieuKtraCluong, pktcl.ngayGdinh, " +
@@ -63,6 +63,10 @@ public interface HhNkPhieuNhapKhoHdrRepository extends JpaRepository<HhNkPhieuNh
             "AND (:#{#param.loaiVthh} IS NULL OR dmvt.ma LIKE CONCAT('',LOWER(:#{#param.loaiVthh}),'%')) " +
             "AND ((:#{#param.maDvi} IS NULL OR dtl.maChiCuc LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND (:#{#param.nam} IS NULL OR qdgnv.nam = :#{#param.nam}) " +
-            "ORDER BY pnk.soPhieuNhapKho desc, pnk.nam desc")
+            "GROUP BY pnk.id,qdgnv.id,qdgnv.soQd,qdgnv.ngayQd,qdgnv.nam,qdgnv.tgianNkMnhat,dtl.maNhaKho,dmdvnhakho.tenDvi, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho," +
+            "dmdvlokho.tenDvi,dtl.maNganKho,dmdvngankho.tenDvi,pnk.soPhieuNhapKho, pnk.ngayLap,  bknvt.id, bknvt.soBangKe," +
+            "bknvt.loaiVthh,dmvt.ten,dtl.cloaiVthh, dmvt.loaiHang,qdgnv.dvt, dtl.tongSlNhap, " +
+            "pnk.idPhieuKtraCluong, pnk.soPhieuKtraCluong, pktcl.ngayGdinh, " +
+            "pnk.trangThai, pnk.trangThai")
     Page<HhNkPhieuNhapKhoHdrDTO> searchPage(@Param("param") HhNkPhieuNhapKhoHdrReq req, Pageable pageable);
 }

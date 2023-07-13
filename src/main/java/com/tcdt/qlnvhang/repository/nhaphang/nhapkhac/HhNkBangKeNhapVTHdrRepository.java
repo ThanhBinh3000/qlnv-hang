@@ -20,7 +20,7 @@ public interface HhNkBangKeNhapVTHdrRepository extends JpaRepository<HhNkBangKeN
     List<HhNkBangKeNhapVTHdr> findAllByIdIn(List<Long> listMulti);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.nhaphang.nhapkhac.HhNkBangKeNhapVTHdrDTO(" +
-            "bknvt.id,qdgnv.id,qdgnv.soQd,qdgnv.nam,dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maNhaKho, dmdvnhakho.tenDvi,dtl.maNganKho, dmdvngankho.tenDvi, dtl.maLoKho," +
+            "bknvt.id,qdgnv.id,qdgnv.soQd,qdgnv.nam,qdgnv.tgianNkMnhat,dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maNhaKho, dmdvnhakho.tenDvi,dtl.maNganKho, dmdvngankho.tenDvi, dtl.maLoKho," +
             "dmdvlokho.tenDvi,bblm.id,bblm.soBienBan, bknvt.soBangKe, bknvt.soBangKe,pnk.soPhieuNhapKho, pnk.id, pnk.ngayLap,bknvt.trangThai ,bknvt.trangThai) " +
             "FROM HhQdGiaoNvuNhapHangKhacHdr qdgnv " +
             "LEFT JOIN HhQdPdNhapKhacHdr hdr ON hdr.id = qdgnv.idQdPdNk " +
@@ -45,7 +45,7 @@ public interface HhNkBangKeNhapVTHdrRepository extends JpaRepository<HhNkBangKeN
             "AND (:#{#param.denNgayThoiHan}  IS NULL OR bknvt.thoiHanGiaoNhan <= :#{#param.denNgayThoiHan}) ) " +
             "AND ((:#{#param.tuNgayNhapKho}  IS NULL OR pnk.ngayLap >= :#{#param.tuNgayNhapKho})" +
             "AND (:#{#param.denNgayNhapKho}  IS NULL OR pnk.ngayLap <= :#{#param.denNgayNhapKho}) ) " +
-            "GROUP BY bknvt.id,qdgnv.id,qdgnv.soQd,qdgnv.nam,dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maNhaKho, dmdvnhakho.tenDvi,dtl.maNganKho, dmdvngankho.tenDvi, dtl.maLoKho," +
+            "GROUP BY bknvt.id,qdgnv.id,qdgnv.soQd,qdgnv.nam,qdgnv.tgianNkMnhat,dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maNhaKho, dmdvnhakho.tenDvi,dtl.maNganKho, dmdvngankho.tenDvi, dtl.maLoKho," +
             "dmdvlokho.tenDvi,bblm.id,bblm.soBienBan, bknvt.soBangKe, bknvt.soBangKe,pnk.soPhieuNhapKho, pnk.id, pnk.ngayLap,bknvt.trangThai ,bknvt.trangThai")
     Page<HhNkBangKeNhapVTHdrDTO> searchPage(@Param("param") HhNkBangKeNhapVTReq req, Pageable pageable);
 }
