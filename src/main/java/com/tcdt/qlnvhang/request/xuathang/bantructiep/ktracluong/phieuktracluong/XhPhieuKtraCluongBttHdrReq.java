@@ -27,7 +27,7 @@ public class XhPhieuKtraCluongBttHdrReq extends BaseRequest {
 
     private String soQdNv;
 
-    private LocalDate ngayQd;
+    private LocalDate ngayQdNv;
 
     private String soPhieu;
 
