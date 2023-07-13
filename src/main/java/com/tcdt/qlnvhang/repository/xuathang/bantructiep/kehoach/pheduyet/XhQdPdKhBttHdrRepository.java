@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface XhQdPdKhBttHdrRepository extends JpaRepository<XhQdPdKhBttHdr, Long> {
@@ -27,7 +28,7 @@ public interface XhQdPdKhBttHdrRepository extends JpaRepository<XhQdPdKhBttHdr, 
             "AND (:#{#param.maDvi} IS NULL OR QD.maDvi = :#{#param.maDvi})")
     Page<XhQdPdKhBttHdr> searchPage(@Param("param") XhQdPdKhBttHdrReq param, Pageable pageable);
 
-    List<XhQdPdKhBttHdr> findBySoQdPd(String soQdPd);
+    Optional<XhQdPdKhBttHdr> findBySoQdPd(String soQdPd);
 
     List <XhQdPdKhBttHdr> findAllByIdIn(List<Long> ids);
 

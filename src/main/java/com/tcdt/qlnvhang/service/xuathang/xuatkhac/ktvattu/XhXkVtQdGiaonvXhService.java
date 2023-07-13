@@ -44,7 +44,9 @@ public class XhXkVtQdGiaonvXhService extends BaseServiceImpl {
 
     public Page<XhXkVtQdGiaonvXhHdr> searchPage(CustomUserDetails currentUser, XhXkVtQdGiaonvXhRequest req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        req.setDvql(currentUser.getDvql());
+        if (ObjectUtils.isEmpty(req.getDvql())) {
+            req.setDvql(currentUser.getDvql());
+        }
         Page<XhXkVtQdGiaonvXhHdr> search = xhXkVtQdGiaonvXhRepository.searchPage(req, pageable);
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
@@ -73,6 +75,7 @@ public class XhXkVtQdGiaonvXhService extends BaseServiceImpl {
         XhXkVtQdGiaonvXhHdr data = new XhXkVtQdGiaonvXhHdr();
         BeanUtils.copyProperties(objReq, data);
         data.setTrangThai(Contains.DUTHAO);
+        data.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
         data.getXhXkVtQdGiaonvXhDtl().forEach(s -> {
             s.setXhXkVtQdGiaonvXhHdr(data);
             s.setId(null);

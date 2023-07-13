@@ -31,7 +31,6 @@ public class XhXkTongHopHdr extends BaseEntity implements Serializable {
   private String tenDanhSach;
   private LocalDateTime ngayDeXuat;
   private String trangThai;
-  private String trangThaiKtCl;
   private LocalDate ngayGduyet;
   private Long nguoiGduyetId;
   private LocalDate ngayPduyet;

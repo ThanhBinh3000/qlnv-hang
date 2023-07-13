@@ -15,6 +15,7 @@ public interface XhHopDongBttDviRepository extends JpaRepository<XhHopDongBttDvi
     void deleteAllByIdDtl(Long idDtl);
 
     List<XhHopDongBttDvi> findAllByIdDtl (Long idDtl);
+
     @Transactional
     void deleteAllByIdHdr(Long idHdr);
 

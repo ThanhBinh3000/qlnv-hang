@@ -22,19 +22,31 @@ public class XhHopDongBttHdr implements Serializable {
 
     private Long id;
 
+    private String maDvi;
+
     private Integer namHd;
 
     private Long idQdKq;
 
     private String soQdKq;
 
-    private LocalDate ngayKyQd;
+    private LocalDate ngayKyQdKq;
 
-    private LocalDate ngayMkho;
+    private Long idQdNv;
+
+    private String soQdNv;
+
+    private LocalDate thoiHanXuatKho;
+
+    private Long idQdPd;
+
+    private String soQdPd;
+
+    private Long idQdPdDtl;
 
     private LocalDate ngayKyQdPd;
 
-    private String soQdPd;
+    private String tenDviMua;
 
     private String maDviTsan;
 
@@ -46,13 +58,11 @@ public class XhHopDongBttHdr implements Serializable {
 
     private String tenHd;
 
-    private LocalDate ngayHluc;
+    private LocalDate ngayHluc; //Ngày ký hợp đồng
 
     private String ghiChuNgayHluc;
 
     private String loaiHdong;
-    @Transient
-    private String tenLoaiHdong;
 
     private String ghiChuLoaiHdong;
 
@@ -67,10 +77,6 @@ public class XhHopDongBttHdr implements Serializable {
     private String noiDungHdong;
 
     private String dkienHanTtoan;
-
-    private String maDvi;
-    @Transient
-    private String tenDvi;
 
     private String diaChiDvi;
 
@@ -92,8 +98,6 @@ public class XhHopDongBttHdr implements Serializable {
 
     private Long idDviMua;
 
-    private String tenDviMua;
-
     private String diaChiDviMua;
 
     private String mstDviMua;
@@ -111,18 +115,16 @@ public class XhHopDongBttHdr implements Serializable {
     private String moTaiDviMua;
 
     private String loaiVthh;
-    @Transient
-    private String tenLoaiVthh;
 
     private String cloaiVthh;
-    @Transient
-    private String tenCloaiVthh;
 
     private String moTaHangHoa;
 
     private String donViTinh;
 
     private BigDecimal soLuongBanTrucTiep;
+
+    private BigDecimal donGiaBanTrucTiep;
 
     private BigDecimal thanhTien;
 
@@ -135,12 +137,8 @@ public class XhHopDongBttHdr implements Serializable {
     private BigDecimal tongSlBanttQdkhChuakyHd;
 
     private String trangThaiXh;
-    @Transient
-    private String tenTrangThaiXh;
 
     private String trangThai;
-    @Transient
-    private String tenTrangThai;
 
     private LocalDate ngayTao;
 
@@ -169,14 +167,18 @@ public class XhHopDongBttHdr implements Serializable {
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
-    @Transient
-    private List<FileDinhKem> filePhuLuc = new ArrayList<>();
 
+//    Cấp cục
     @Transient
     private List<XhHopDongBttDtl> children = new ArrayList<>();
 
 
-    //    Phụ lục
+//    Cấp chi cục
+   @Transient
+   private List<XhHopDongBttDvi> xhHopDongBttDviList = new ArrayList<>();
+
+
+//    Phụ lục
     private Long idHd;
 
     private String soPhuLuc;
@@ -195,23 +197,29 @@ public class XhHopDongBttHdr implements Serializable {
 
     private String ghiChuPhuLuc;
 
-    private String trangThaiPhuLuc;
-    @Transient
-    private String tenTrangThaiPhuLuc;
-
     @Transient
     private List<XhHopDongBttHdr> phuLuc = new ArrayList<>();
 
     @Transient
     private List<XhHopDongBttDtl> phuLucDtl = new ArrayList<>();
 
-    private BigDecimal donGiaBanTrucTiep;
+    @Transient
+    private List<FileDinhKem> filePhuLuc = new ArrayList<>();
 
-    private String soQdNv;
 
-    private Long idQdNv;
+//    @Transient
+    @Transient
+    private String tenDvi;
 
-//    cấp chi cục
-   @Transient
-   private List<XhHopDongBttDvi> xhHopDongBttDviList = new ArrayList<>();
+    @Transient
+    private String tenLoaiVthh;
+
+    @Transient
+    private String tenCloaiVthh;
+
+    @Transient
+    private String tenTrangThaiXh;
+
+    @Transient
+    private String tenTrangThai;
 }
