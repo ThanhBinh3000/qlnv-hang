@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -29,6 +30,7 @@ public class XhXkVtQdGiaonvXhDtl {
     String donViTinh;
     String cloaiVthh;
     BigDecimal slLayMau;
+    BigDecimal slTonKho;
     String maDviTsan;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -91,5 +93,21 @@ public class XhXkVtQdGiaonvXhDtl {
         if (!DataUtils.isNullObject(getCloaiVthh())) {
             setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
         }
+    }
+
+    public BigDecimal getSlLayMau() {
+        return !ObjectUtils.isEmpty(slLayMau) ? slLayMau : BigDecimal.ZERO;
+    }
+
+    public void setSlLayMau(BigDecimal slLayMau) {
+        this.slLayMau = !ObjectUtils.isEmpty(slLayMau) ? slLayMau : BigDecimal.ZERO;
+    }
+
+    public BigDecimal getSlTonKho() {
+        return !ObjectUtils.isEmpty(slTonKho) ? slTonKho : BigDecimal.ZERO;
+    }
+
+    public void setSlTonKho(BigDecimal slTonKho) {
+        this.slTonKho = !ObjectUtils.isEmpty(slTonKho) ? slTonKho : BigDecimal.ZERO;
     }
 }
