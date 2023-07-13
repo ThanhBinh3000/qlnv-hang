@@ -1,8 +1,10 @@
 package com.tcdt.qlnvhang.repository.xuathang.suachuahang;
 
 import com.tcdt.qlnvhang.request.suachua.ScKiemTraChatLuongReq;
+import com.tcdt.qlnvhang.request.suachua.ScPhieuXuatKhoReq;
 import com.tcdt.qlnvhang.response.suachua.ScKiemTraChatLuongDTO;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScKiemTraChatLuongHdr;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScPhieuXuatKhoHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,4 +31,12 @@ public interface ScKiemTraChatLuongHdrRepository extends JpaRepository<ScKiemTra
 //    Optional<ScKiemTraChatLuongHdr> findBySoPhieuKdcl(String soPhieuKdcl);
 
     List<ScKiemTraChatLuongHdr> findAllByIdPhieuXuatKhoIn(List<Long> idPhieuXuatKho);
+
+    @Query(value = "SELECT qd FROM ScKiemTraChatLuongHdr qd " +
+            " LEFT JOIN ScQuyetDinhNhapHang nh on qd.id = nh.idPhieuKtcl " +
+            " WHERE 1 = 1 " +
+            " AND nh.id is null " +
+            " AND (:#{#param.trangThai} IS NULL OR qd.trangThai = :#{#param.trangThai}) " +
+            " AND (:#{#param.maDviSr} IS NULL OR qd.maDvi = :#{#param.maDviSr}) " )
+    List<ScKiemTraChatLuongHdr> searchListTaoQuyetDinhNhapHang(@Param("param") ScKiemTraChatLuongReq req);
 }

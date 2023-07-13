@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.request.BaseRequest;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -26,4 +27,6 @@ public class SearchDcnbQuyetDinhDcC extends BaseRequest {
   private List<String> types;
   private List<String> loaiVthh;
   private String loaiQdinh;
+  private Boolean isVatTu;
+  private List<String> dsLoaiHang = new ArrayList<>();
 }

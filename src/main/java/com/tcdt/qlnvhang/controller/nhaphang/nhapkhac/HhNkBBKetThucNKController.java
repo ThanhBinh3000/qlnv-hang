@@ -1,15 +1,13 @@
-package com.tcdt.qlnvhang.controller.suachuahang;
+package com.tcdt.qlnvhang.controller.nhaphang.nhapkhac;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.suachua.ScBangKeXuatVatTuReq;
-import com.tcdt.qlnvhang.request.suachua.ScKiemTraChatLuongReq;
+import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhNkBBKetThucNKReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.suachuahang.impl.ScKiemTraChatLuongImpl;
+import com.tcdt.qlnvhang.service.nhaphang.nhapkhac.HhNkBBKetThucNKService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,20 +26,21 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = PathContains.SUA_CHUA + PathContains.KIEM_TRA_CHAT_LUONG)
+@RequestMapping(value = PathContains.NHAP_KHAC +PathContains.BIEN_BAN_KET_THUC_NHAP_KHO_VT)
 @Slf4j
-@Api(tags = "Sửa chữa hàng DTQG - Kiểm tra chất lượng sau SC")
-public class ScKiemTraChatLuongController {
+@Api(tags = "Nhập khác - Biên bản kết thúc nhập kho")
+public class HhNkBBKetThucNKController {
     @Autowired
-    ScKiemTraChatLuongImpl service;
+    private HhNkBBKetThucNKService service;
+
 
     @ApiOperation(value = "Tra cứu ", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> colection(@RequestBody ScKiemTraChatLuongReq objReq) {
+    public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody HhNkBBKetThucNKReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.searchKiemTraChatLuong (objReq));
+            resp.setData(service.search(currentUser, objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch ( Exception e) {
@@ -55,12 +54,12 @@ public class ScKiemTraChatLuongController {
     }
 
     @ApiOperation(value = "Tra cứu ", response = List.class)
-    @PostMapping(value = "/ds-tao-qd-nh", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.DANH_SACH, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> getDanhSachTaoQdNh(@RequestBody ScKiemTraChatLuongReq objReq) {
+    public ResponseEntity<BaseResponse> list(@CurrentUser CustomUserDetails currentUser, @RequestBody HhNkBBKetThucNKReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.searchDanhSachTaoQuyetDinhNhapHang(objReq));
+            resp.setData(service.searchList(currentUser, objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch ( Exception e) {
@@ -76,7 +75,7 @@ public class ScKiemTraChatLuongController {
     @ApiOperation(value = "Tạo mới  ", response = List.class)
     @PostMapping(value =  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BaseResponse> insert( @RequestBody ScKiemTraChatLuongReq objReq) {
+    public ResponseEntity<BaseResponse> insert(@RequestBody HhNkBBKetThucNKReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(service.create(objReq));
@@ -93,7 +92,7 @@ public class ScKiemTraChatLuongController {
 
     @ApiOperation(value = "Cập nhật ", response = List.class)
     @PostMapping(value =  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> update(@Valid @RequestBody ScKiemTraChatLuongReq objReq) {
+    public ResponseEntity<BaseResponse> update(@Valid @RequestBody HhNkBBKetThucNKReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(service.update(objReq));
@@ -129,7 +128,7 @@ public class ScKiemTraChatLuongController {
 
     @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin", response = List.class)
     @PostMapping(value =  PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody ScKiemTraChatLuongReq objReq) {
+    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody HhNkBBKetThucNKReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             service.approve(objReq);
@@ -145,7 +144,7 @@ public class ScKiemTraChatLuongController {
     }
 
     @ApiOperation(value = "Xoá ", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value =  PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
@@ -163,4 +162,40 @@ public class ScKiemTraChatLuongController {
         return ResponseEntity.ok(resp);
     }
 
+    @ApiOperation(value = "Xoá danh sách ", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value =  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            service.deleteMulti(idSearchReq.getIds());
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Xoá thông tin : {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Kết xuất", response = List.class)
+    @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public void exportList(@Valid @RequestBody  HhNkBBKetThucNKReq objReq, HttpServletResponse response) throws Exception {
+        try {
+            service.export(objReq, response);
+        } catch (Exception e) {
+            log.error("Kết xuất danh sách: {}", e);
+            final Map<String, Object> body = new HashMap<>();
+            body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            body.put("msg", e.getMessage());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.writeValue(response.getOutputStream(), body);
+
+        }
+    }
 }

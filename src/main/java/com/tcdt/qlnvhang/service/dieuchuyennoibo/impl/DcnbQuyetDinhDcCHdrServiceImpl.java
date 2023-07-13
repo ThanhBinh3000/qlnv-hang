@@ -180,6 +180,13 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
             String dvql = currentUser.getDvql();
             req.setMaDvi(dvql);
             req.setTypes(Arrays.asList(Contains.NHAN_DIEU_CHUYEN, Contains.DIEU_CHUYEN));
+            if (req.getIsVatTu() != null) {
+                if (req.getIsVatTu()) {
+                    req.setDsLoaiHang(Arrays.asList("VT"));
+                } else {
+                    req.setDsLoaiHang(Arrays.asList("LT", "M"));
+                }
+            }
             List<DcnbQuyetDinhDcCHdrDTO> danhSachSoQdDieuChuyen = dcnbQuyetDinhDcCHdrRepository.searchListChiCuc(req);
             return danhSachSoQdDieuChuyen;
         }
@@ -456,9 +463,9 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                             dataLink.setKeHoachDcHdrId(kh.getHdrId());
                             dataLink.setKeHoachDcDtlParentId(parentDtl.get().getId());
                             dataLink.setKeHoachDcHdrParentId(parentDtl.get().getHdrId());
-                            dataLink.setQdCcId( optional.get().getId());
-                            dataLink.setQdCcParentId( optional.get().getParentId());
-                            dataLink.setQdCtcId( optional.get().getCanCuQdTc());
+                            dataLink.setQdCcId(optional.get().getId());
+                            dataLink.setQdCcParentId(optional.get().getParentId());
+                            dataLink.setQdCtcId(optional.get().getCanCuQdTc());
                             dataLink.setType(Contains.NHAN_DIEU_CHUYEN);
                             dcnbDataLinkHdrRepository.save(dataLink);
                         }
@@ -844,6 +851,13 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
             String dvql = currentUser.getDvql();
             req.setMaDvi(dvql);
             req.setTypes(Arrays.asList(Contains.NHAN_DIEU_CHUYEN, Contains.DIEU_CHUYEN));
+            if (req.getIsVatTu() != null) {
+                if (req.getIsVatTu()) {
+                    req.setDsLoaiHang(Arrays.asList("VT"));
+                } else {
+                    req.setDsLoaiHang(Arrays.asList("LT", "M"));
+                }
+            }
             List<DcnbQuyetDinhDcCHdrDTO> danhSachSoQdDieuChuyen = dcnbQuyetDinhDcCHdrRepository.searchListCuc(req);
             return danhSachSoQdDieuChuyen;
         }

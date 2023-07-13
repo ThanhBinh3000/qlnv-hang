@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,10 +28,11 @@ public class ScQuyetDinhNhapHang extends BaseEntity implements Serializable {
     private Integer nam;
     private String soQd;
     private LocalDate ngayKyQd;
-    private String ketQuaKiemDinh;
+    private String soPhieuKtcl;
+    private Long idPhieuKtcl;
     private LocalDate ngayKiemDinh;
-    private Long soQdGiaoNvXhId;
-    private String soQdGiaoNvXh;
+    private Long idQdXh;
+    private String soQdXh;
     private LocalDate thoiHanXuat;
     private LocalDate thoiHanNhap;
     private String duToanChiPhi;
@@ -39,9 +41,8 @@ public class ScQuyetDinhNhapHang extends BaseEntity implements Serializable {
     private String trichYeu;
     private String trangThai;
     @Transient
-    private List<FileDinhKem> canCu;
-
+    private List<FileDinhKem> fileCanCu = new ArrayList<>();
     @Transient
-    private List<FileDinhKem> fileDinhKems;
+    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
 
 }

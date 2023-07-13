@@ -139,8 +139,7 @@ public class XhDgBbTinhKhoService extends BaseServiceImpl {
       }
     }
     XhDgBbTinhKhoHdr data = optional.get();
-    BeanUtils.copyProperties(objReq,data,"listPhieuXuatKho");
-    data.setIdThuKho(currentUser.getUser().getId());
+    BeanUtils.copyProperties(objReq,data,"listPhieuXuatKho", "idThuKho");
     XhDgBbTinhKhoHdr created=xhDgBbTinhKhoHdrRepository.save(data);
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList( XhDgBbTinhKhoHdr.TABLE_NAME));
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhDgBbTinhKhoHdr.TABLE_NAME );

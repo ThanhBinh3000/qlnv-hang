@@ -131,8 +131,7 @@ public class XhDgBbHaoDoiService extends BaseServiceImpl {
       }
     }
     XhDgBbHaoDoiHdr data = optional.get();
-    BeanUtils.copyProperties(objReq,data);
-    data.setIdThuKho(currentUser.getUser().getId());
+    BeanUtils.copyProperties(objReq,data, "idThuKho");
     XhDgBbHaoDoiHdr created=xhDgBbHaoDoiHdrRepository.save(data);
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList( XhDgBbHaoDoiHdr.TABLE_NAME));
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhDgBbHaoDoiHdr.TABLE_NAME );

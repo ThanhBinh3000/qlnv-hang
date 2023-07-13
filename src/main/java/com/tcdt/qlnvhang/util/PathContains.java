@@ -171,6 +171,7 @@ public class PathContains {
     public static final String KH_LCNT_VT = "/kh-lcnt/vat-tu";
     public static final String DAU_THAU_VAT_TU = "/dau-thau-vt";
     public static final String THONG_TIN_DAU_THAU = "/tt-dau-thau";
+    public static final String QUYET_DINH_PD_HS_MOI_THAU = "/qd-pd-hsmt";
 
     // Bien Ban lay mau
     public static final String BBAN_LAY_MAU = "/bban-lay-mau";
