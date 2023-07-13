@@ -2,9 +2,11 @@ package com.tcdt.qlnvhang.request.suachua;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhNhapHangDtl;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -24,7 +26,10 @@ public class ScQuyetDinhNhapHangReq extends BaseRequest {
     private String kieuNhapXuat;
     private String trichYeu;
 
-    private List<FileDinhKemReq> canCu;
-    private List<FileDinhKemReq> fileDinhKemReqs;
+    private List<FileDinhKemReq> fileCanCuReq;
+    private List<FileDinhKemReq> fileDinhKemReq;
+
+    private List<ScQuyetDinhNhapHangDtl> children = new ArrayList<>();
+
 
 }

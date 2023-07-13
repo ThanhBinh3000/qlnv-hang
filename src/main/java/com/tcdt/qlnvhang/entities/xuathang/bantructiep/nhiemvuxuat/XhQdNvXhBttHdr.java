@@ -73,10 +73,6 @@ public class XhQdNvXhBttHdr implements Serializable {
 
     private String pthucBanTrucTiep; // 01 : chào giá; 02 : Ủy quyền; 03 : Bán lẻ
 
-    private String trangThaiHd;
-    @Transient
-    private String tenTrangThaiHd;
-
     private LocalDate ngayKyHd;
 
     private String trangThai;

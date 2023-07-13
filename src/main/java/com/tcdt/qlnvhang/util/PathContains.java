@@ -295,6 +295,7 @@ public class PathContains {
     // xuất khác
     public static final String XUAT_KHAC = "/xuat-khac";
 
+    public static final String KTCL_VT_TRONG_BAO_HANH = "/ktcl-vt-trong-bao-hanh";
     public static final String KTCL_LT_TRUOC_HET_HAN = "/ktcl-lt-truoc-het-han";
 
     public static final String KTCL_VT_TRUOC_HET_HAN = "/ktcl-vt-truoc-het-han";

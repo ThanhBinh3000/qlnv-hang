@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuXuatKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatKhoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtQdGiaonvXhRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -37,6 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class XhXkVtPhieuXuatKhoService extends BaseServiceImpl {
@@ -44,6 +46,9 @@ public class XhXkVtPhieuXuatKhoService extends BaseServiceImpl {
 
     @Autowired
     private XhXkVtPhieuXuatKhoRepository xhXkVtPhieuXuatKhoRepository;
+
+    @Autowired
+    private XhXkVtQdGiaonvXhRepository xhXkVtQdGiaonvXhRepository;
 
     @Autowired
     private UserInfoRepository userInfoRepository;
@@ -79,6 +84,11 @@ public class XhXkVtPhieuXuatKhoService extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data);
         data.setTrangThai(Contains.DUTHAO);
         XhXkVtPhieuXuatKho created = xhXkVtPhieuXuatKhoRepository.save(data);
+        // cập nhật trạng thái đang thực hiện cho QD giao nv nhập hàng
+        Optional<XhXkVtQdGiaonvXhHdr> qdGiaoNvXh = xhXkVtQdGiaonvXhRepository.findById(created.getIdCanCu());
+        if (qdGiaoNvXh.isPresent()) {
+            qdGiaoNvXh.get().setTrangThaiXh(TrangThaiAllEnum.DANG_THUC_HIEN.getId());
+        }
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtPhieuXuatKho.TABLE_NAME);
         created.setFileDinhKems(fileDinhKems);
         return created;
@@ -134,6 +144,11 @@ public class XhXkVtPhieuXuatKhoService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         XhXkVtPhieuXuatKho data = optional.get();
+        //Update trạng thái chưa thực hiện xuất hàng cho qd giao nv xuất hàng
+        Optional<XhXkVtQdGiaonvXhHdr> qdGiaoNv = xhXkVtQdGiaonvXhRepository.findById(data.getIdCanCu());
+        if (qdGiaoNv.isPresent()) {
+            qdGiaoNv.get().setTrangThaiXh(TrangThaiAllEnum.CHUA_THUC_HIEN.getId());
+        }
         fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhXkVtPhieuXuatKho.TABLE_NAME));
         xhXkVtPhieuXuatKhoRepository.delete(data);
     }
@@ -143,6 +158,14 @@ public class XhXkVtPhieuXuatKhoService extends BaseServiceImpl {
         List<XhXkVtPhieuXuatKho> list = xhXkVtPhieuXuatKhoRepository.findAllByIdIn(idSearchReq.getIdList());
         if (list.isEmpty()) {
             throw new Exception("Bản ghi không tồn tại");
+        }
+        List<Long> idsQdGiaoNv = list.stream().map(XhXkVtPhieuXuatKho::getIdCanCu).collect(Collectors.toList());
+        List<XhXkVtQdGiaonvXhHdr> listQdGiaoNv = xhXkVtQdGiaonvXhRepository.findByIdIn(idsQdGiaoNv);
+        if (!listQdGiaoNv.isEmpty()) {
+            listQdGiaoNv.forEach(item -> {
+                item.setTrangThaiXh(TrangThaiAllEnum.CHUA_THUC_HIEN.getId());
+            });
+            xhXkVtQdGiaonvXhRepository.saveAll(listQdGiaoNv);
         }
         fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhXkVtPhieuXuatKho.TABLE_NAME));
         xhXkVtPhieuXuatKhoRepository.deleteAll(list);

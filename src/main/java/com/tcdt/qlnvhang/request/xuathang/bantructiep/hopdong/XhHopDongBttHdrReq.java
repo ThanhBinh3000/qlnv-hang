@@ -13,19 +13,31 @@ public class XhHopDongBttHdrReq extends BaseRequest {
 
     private Long id;
 
+    private String maDvi;
+
     private Integer namHd;
 
     private Long idQdKq;
 
     private String soQdKq;
 
-    private LocalDate ngayKyQd;
+    private LocalDate ngayKyQdKq;
 
-    private LocalDate ngayMkho;
+    private Long idQdNv;
+
+    private String soQdNv;
+
+    private LocalDate thoiHanXuatKho;
+
+    private Long idQdPd;
+
+    private String soQdPd;
+
+    private Long idQdPdDtl;
 
     private LocalDate ngayKyQdPd;
 
-    private String soQdPd;
+    private String tenDviMua;
 
     private String maDviTsan;
 
@@ -57,8 +69,6 @@ public class XhHopDongBttHdrReq extends BaseRequest {
 
     private String dkienHanTtoan;
 
-    private String maDvi;
-
     private String diaChiDvi;
 
     private String mst;
@@ -78,8 +88,6 @@ public class XhHopDongBttHdrReq extends BaseRequest {
     private String ttinGiayUyQuyen;
 
     private Long idDviMua;
-
-    private String tenDviMua;
 
     private String diaChiDviMua;
 
@@ -107,6 +115,8 @@ public class XhHopDongBttHdrReq extends BaseRequest {
 
     private BigDecimal soLuongBanTrucTiep;
 
+    private BigDecimal donGiaBanTrucTiep;
+
     private BigDecimal thanhTien;
 
     private String ghiChu;
@@ -119,6 +129,26 @@ public class XhHopDongBttHdrReq extends BaseRequest {
 
     private String trangThaiXh;
 
+    private String trangThai;
+
+    private LocalDate ngayTao;
+
+    private Long nguoiTaoId;
+
+    private LocalDate ngaySua;
+
+    private Long nguoiSuaId;
+
+    private LocalDate ngayGuiDuyet;
+
+    private Long nguoiGuiDuyetId;
+
+    private LocalDate ngayPduyet;
+
+    private Long nguoiPduyetId;
+
+    private String lyDoTuChoi;
+
     @Transient
     private List<String> listMaDviTsan = new ArrayList<>();
 
@@ -128,13 +158,18 @@ public class XhHopDongBttHdrReq extends BaseRequest {
     @Transient
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 
-    @Transient
-    private List<FileDinhKemReq> filePhuLuc = new ArrayList<>();
 
+//    Cấp cục
     @Transient
     private List<XhHopDongBttDtlReq> children = new ArrayList<>();
 
-    //    Phụ lục
+
+//    Cấp chi cục
+    @Transient
+    private List<XhHopDongBttDviReq> xhHopDongBttDviList = new ArrayList<>();
+
+
+//    Phụ lục
     private Long idHd;
 
     private String soPhuLuc;
@@ -153,21 +188,12 @@ public class XhHopDongBttHdrReq extends BaseRequest {
 
     private String ghiChuPhuLuc;
 
-    private String trangThaiPhuLuc;
-
     @Transient
     private List<XhHopDongBttHdrReq> phuLuc = new ArrayList<>();
 
     @Transient
     private List<XhHopDongBttDtlReq> phuLucDtl = new ArrayList<>();
 
-    private BigDecimal donGiaBanTrucTiep;
-
-    private String soQdNv;
-
-    private Long idQdNv;
-
-//    cấp chi cục
-   @Transient
-   private List<XhHopDongBttDviReq> xhHopDongBttDviList = new ArrayList<>();
+    @Transient
+    private List<FileDinhKemReq> filePhuLuc = new ArrayList<>();
 }

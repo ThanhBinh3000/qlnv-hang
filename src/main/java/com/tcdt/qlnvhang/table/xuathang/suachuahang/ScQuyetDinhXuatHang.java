@@ -11,6 +11,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -49,9 +50,12 @@ public class ScQuyetDinhXuatHang extends BaseEntity implements Serializable {
     @Transient
     private ScQuyetDinhSc scQuyetDinhSc;
     @Transient
-    private List<ScDanhSachHdr> scDanhSachHdrList;
+    private List<ScDanhSachHdr> scDanhSachHdrList = new ArrayList<>();
     @Transient
-    private List<ScPhieuXuatKhoHdr> scPhieuXuatKhoHdrList;
+
+    private List<ScPhieuXuatKhoHdr> scPhieuXuatKhoHdrList= new ArrayList<>();
+    @Transient
+    private List<ScKiemTraChatLuongHdr> scKiemTraChatLuongHdrList = new ArrayList<>();
 
     public String getTenTrangThai(){
         return TrangThaiAllEnum.getLabelById(getTrangThai());
