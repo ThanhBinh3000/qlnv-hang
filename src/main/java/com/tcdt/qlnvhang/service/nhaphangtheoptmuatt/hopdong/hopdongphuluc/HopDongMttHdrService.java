@@ -196,13 +196,13 @@ public class HopDongMttHdrService extends BaseServiceImpl {
     }
 
     if (DataUtils.isNullObject(req.getIdHd())) {
-      if (!qOptional.get().getSoHd().equals(req.getSoHd())) {
+      if (qOptional.get().getSoHd() != null && !qOptional.get().getSoHd().equals(req.getSoHd())) {
         Optional<HopDongMttHdr> qOpHdong = hopDongHdrRepository.findBySoHd(req.getSoHd());
         if (qOpHdong.isPresent())
           throw new Exception("Hợp đồng số " + req.getSoHd() + " đã tồn tại");
       }
 
-      if (!qOptional.get().getSoQdKq().equals(req.getSoQdKq())) {
+      if (qOptional.get().getSoHd() != null && !qOptional.get().getSoQdKq().equals(req.getSoQdKq())) {
         Optional<HhQdPduyetKqcgHdr> checkSoQdKq = hhQdPduyetKqcgRepository.findBySoQdKq(req.getSoQdKq());
         if (!checkSoQdKq.isPresent())
           throw new Exception("Số quyết định phê duyệt kết quả chào giá " + req.getSoQdKq() + " không tồn tại");
@@ -268,7 +268,7 @@ public class HopDongMttHdrService extends BaseServiceImpl {
     }
     data.setFileDinhKems(fileDinhKem);
 
-    List<HhQdPheduyetKqMttSLDD> listGthau = hhQdPheduyetKqMttSLDDRepository.findAllByIdQdPdKq(data.getIdQdKq());
+    List<HhQdPheduyetKqMttSLDD> listGthau = hhQdPheduyetKqMttSLDDRepository.findAllById(Collections.singleton(data.getIdQdPdSldd()));
     for (HhQdPheduyetKqMttSLDD hhQdPheduyetKqMttSLDD : listGthau) {
       hhQdPheduyetKqMttSLDD.setTenDvi(hashMapDvi.get(hhQdPheduyetKqMttSLDD.getMaDvi()));
       List<HhQdPdKQMttSlddDtl> hhQdPdKQMttSlddDtls = new ArrayList<>();

@@ -3,10 +3,12 @@ package com.tcdt.qlnvhang.controller.suachuahang;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.suachua.ScBangKeNhapVtReq;
 import com.tcdt.qlnvhang.request.suachua.ScKiemTraChatLuongReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
+import com.tcdt.qlnvhang.service.suachuahang.ScBangKeNhapVtService;
 import com.tcdt.qlnvhang.service.suachuahang.impl.ScBangKeNhapVtServiceImpl;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
@@ -32,10 +34,10 @@ public class ScBangKeNhapVtController {
     @ApiOperation(value = "Tra cứu ", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody ScBangKeNhapVtReq objReq) {
+    public ResponseEntity<BaseResponse> colection(@RequestBody ScBangKeNhapVtReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.searchPage(currentUser, objReq));
+            resp.setData(service.searchPage(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch ( Exception e) {
@@ -104,10 +106,10 @@ public class ScBangKeNhapVtController {
 
     @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin", response = List.class)
     @PostMapping(value =  PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser,@Valid @RequestBody StatusReq objReq) {
+    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody ScBangKeNhapVtReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            service.approve(currentUser,objReq);
+            service.approve(objReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -120,12 +122,12 @@ public class ScBangKeNhapVtController {
     }
 
     @ApiOperation(value = "Xoá ", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-    @DeleteMapping(value =  PathContains.URL_XOA + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            service.delete(id);
+            service.delete(idSearchReq.getId());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

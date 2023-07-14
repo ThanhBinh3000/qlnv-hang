@@ -42,6 +42,10 @@ public class XhXkVtPhieuXuatKhoRequest  extends BaseRequest {
     private String lyDoTuChoi;
     private Long nguoiDuyetId;
     private LocalDate ngayDuyet;
+    private String maSo;
+    private BigDecimal slTonKho;
+    private BigDecimal slLayMau;
+    private String donViTinh;
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 
     //search params

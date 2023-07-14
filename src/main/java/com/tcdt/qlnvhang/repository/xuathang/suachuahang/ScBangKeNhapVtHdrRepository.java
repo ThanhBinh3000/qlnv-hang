@@ -17,16 +17,4 @@ public interface ScBangKeNhapVtHdrRepository extends JpaRepository<ScBangKeNhapV
 
     List<ScBangKeNhapVtHdr> findAllByIdIn(List<Long> id);
 
-    @Query(value = "SELECT new com.tcdt.qlnvhang.response.suachua.ScBangKeNhapVtDTO ( " +
-            "hdr.id, qdn.id, qdn.soQd, hdr.nam, qdn.thoiHanNhap, hdr.maLoKho, hdr.tenLoKho, hdr.maDiemKho," +
-            "hdr.tenDiemKho, hdr.soBangKe, hdr.phieuNhapKhoId, hdr.soPhieuNhapKho, pnk.ngayNhapKho, hdr.trangThai) " +
-            "FROM ScQuyetDinhNhapHang qdn " +
-            "LEFT JOIN ScBangKeNhapVtHdr hdr on hdr.qdGiaoNvNhapId = qdn.id " +
-            "LEFT JOIN ScBangKeNhapVtDtl dtl ON dtl.hdrId = hdr.id " +
-            "LEFT JOIN ScPhieuNhapKhoHdr pnk ON pnk.bangKeNhapVtId = hdr.id " +
-            "WHERE 1=1 " +
-            "AND (:#{#param.nam} IS NULL OR hdr.nam = :#{#param.nam}) " +
-            "AND (:#{#param.soQdGiaoNvNhap} IS NULL OR qdn.soQd = :#{#param.soQdGiaoNvNhap}) " +
-            "AND (:#{#param.soBangKe} IS NULL OR hdr.soBangKe = :#{#param.soBangKe}) ")
-    Page<ScBangKeNhapVtDTO> searchPage(@Param("param") ScBangKeNhapVtReq req, Pageable pageable);
 }

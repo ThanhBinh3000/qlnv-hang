@@ -35,9 +35,8 @@ public interface ScKiemTraChatLuongHdrRepository extends JpaRepository<ScKiemTra
     List<ScKiemTraChatLuongHdr> findAllByIdQdXh(Long idQdXh);
 
     @Query(value = "SELECT qd FROM ScKiemTraChatLuongHdr qd " +
-            " LEFT JOIN ScQuyetDinhNhapHang nh on qd.id = nh.idPhieuKtcl " +
             " WHERE 1 = 1 " +
-            " AND nh.id is null " +
+            " AND (:#{#param.idQdXh} IS NULL OR qd.idQdXh = :#{#param.idQdXh}) " +
             " AND (:#{#param.trangThai} IS NULL OR qd.trangThai = :#{#param.trangThai}) " +
             " AND (:#{#param.maDviSr} IS NULL OR qd.maDvi = :#{#param.maDviSr}) " )
     List<ScKiemTraChatLuongHdr> searchListTaoQuyetDinhNhapHang(@Param("param") ScKiemTraChatLuongReq req);

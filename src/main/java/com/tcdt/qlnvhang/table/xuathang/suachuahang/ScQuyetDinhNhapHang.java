@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.xuathang.suachuahang;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,10 +27,11 @@ public class ScQuyetDinhNhapHang extends BaseEntity implements Serializable {
     @SequenceGenerator(sequenceName = ScQuyetDinhNhapHang.TABLE_NAME + "_SEQ", allocationSize = 1, name = ScQuyetDinhNhapHang.TABLE_NAME + "_SEQ")
     private Long id;
     private Integer nam;
+    private String maDvi;
     private String soQd;
     private LocalDate ngayKy;
     private String soPhieuKtcl;
-    private Long idPhieuKtcl;
+    private String idPhieuKtcl;
     private LocalDate ngayKiemDinh;
     private Long idQdXh;
     private String soQdXh;
@@ -46,5 +48,9 @@ public class ScQuyetDinhNhapHang extends BaseEntity implements Serializable {
     private List<FileDinhKem> fileDinhKem = new ArrayList<>();
     @Transient
     private List<ScQuyetDinhNhapHangDtl> children = new ArrayList<>();
+
+    public String getTenTrangThai(){
+        return TrangThaiAllEnum.getLabelById(getTrangThai());
+    }
 
 }
