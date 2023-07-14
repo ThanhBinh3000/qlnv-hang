@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan;
 
+import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaDtl;
 import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaHdr;
 import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.SearchQuyChuanQgReq;
 import org.springframework.data.domain.Page;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface QuyChuanQuocGiaHdrRepository extends JpaRepository<QuyChuanQuocGiaHdr,Long> {
+public interface QuyChuanQuocGiaHdrRepository extends JpaRepository<QuyChuanQuocGiaHdr, Long> {
 
     @Query(value = "select c from QuyChuanQuocGiaHdr c WHERE 1=1 " +
             " AND (:#{#param.soVanBan} IS NULL OR LOWER(c.soVanBan) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soVanBan}),'%' ) ) ) " +
@@ -34,4 +35,10 @@ public interface QuyChuanQuocGiaHdrRepository extends JpaRepository<QuyChuanQuoc
     Optional<QuyChuanQuocGiaHdr> findAllBySoVanBan(String maDetai);
 
     List<QuyChuanQuocGiaHdr> findAllByIdIn(List<Long> ids);
+
+    @Query(value = "select  dtl.* from KHCN_QUY_CHUAN_QG_DTL dtl,KHCN_QUY_CHUAN_QG_HDR hdr where dtl.id_hdr = hdr.id and hdr.trang_thai_hl = '01'" +
+            "and hdr.trang_thai = '29'" +
+            "and dtl.cloai_vthh = :cloaiVthh" +
+            "and trunc(ngay_hieu_luc) < trunc(sysdate)", nativeQuery = true)
+    List<QuyChuanQuocGiaDtl> getAllQuyChuanByCloaiVthh(String cloaiVthh);
 }
