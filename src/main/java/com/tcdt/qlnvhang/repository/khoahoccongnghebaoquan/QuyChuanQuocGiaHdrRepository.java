@@ -36,9 +36,4 @@ public interface QuyChuanQuocGiaHdrRepository extends JpaRepository<QuyChuanQuoc
 
     List<QuyChuanQuocGiaHdr> findAllByIdIn(List<Long> ids);
 
-    @Query(value = "select  dtl.* from KHCN_QUY_CHUAN_QG_DTL dtl,KHCN_QUY_CHUAN_QG_HDR hdr where dtl.id_hdr = hdr.id and hdr.trang_thai_hl = '01' " +
-            " and hdr.trang_thai = '29'" +
-            " and dtl.cloai_vthh = :cloaiVthh" +
-            " and trunc(hdr.ngay_hieu_luc) < trunc(sysdate)", nativeQuery = true)
-    List<QuyChuanQuocGiaDtl> getAllQuyChuanByCloaiVthh(String cloaiVthh);
 }
