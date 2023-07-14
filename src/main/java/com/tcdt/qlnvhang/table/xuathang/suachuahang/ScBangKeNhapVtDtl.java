@@ -24,20 +24,9 @@ public class ScBangKeNhapVtDtl {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = ScBangKeNhapVtDtl.TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = ScBangKeNhapVtDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = ScBangKeNhapVtDtl.TABLE_NAME + "_SEQ")
-    @Column(name = "ID")
-    private Long id;
+    private Long idHdr;
 
-    @Column(name = "HDR_ID",insertable = true, updatable = true)
-    private Long hdrId;
-
-    @Column(name = "SO_SERIAL")
     private String soSerial;
 
-    @Column(name = "SO_LUONG")
-    private BigDecimal soBaoBi;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
-    @JsonIgnore
-    private ScBangKeNhapVtHdr scBangKeNhapVtHdr;
+    private BigDecimal soLuong;
 }

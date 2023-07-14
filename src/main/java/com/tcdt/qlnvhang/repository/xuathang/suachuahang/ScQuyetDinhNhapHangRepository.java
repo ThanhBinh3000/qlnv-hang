@@ -1,7 +1,9 @@
 package com.tcdt.qlnvhang.repository.xuathang.suachuahang;
 
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhNhapHangReq;
+import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhXuatHangReq;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhNhapHang;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhXuatHang;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,6 +19,12 @@ public interface ScQuyetDinhNhapHangRepository extends JpaRepository<ScQuyetDinh
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
             " AND (:#{#param.trichYeu} IS NULL OR c.trichYeu LIKE CONCAT(:#{#param.trichYeu},'%')) ")
     Page<ScQuyetDinhNhapHang> searchPage(@Param("param") ScQuyetDinhNhapHangReq req, Pageable pageable);
+
+    @Query(value = "SELECT a FROM ScQuyetDinhNhapHang a WHERE 1=1 " +
+            " AND (:#{#param.trangThai} IS NULL OR a.trangThai = :#{#param.trangThai}) " +
+            "AND (:#{#param.nam} IS NULL OR a.nam = :#{#param.nam} )" +
+            "AND (:#{#param.soQd} IS NULL OR a.soQd LIKE CONCAT(:#{#param.soQd},'%'))")
+    Page<ScQuyetDinhNhapHang> searchPageViewFromAnother(@Param("param") ScQuyetDinhXuatHangReq req, Pageable pageable);
 
 
     List<ScQuyetDinhNhapHang> findAllByIdQdXh(Long idQdXh);

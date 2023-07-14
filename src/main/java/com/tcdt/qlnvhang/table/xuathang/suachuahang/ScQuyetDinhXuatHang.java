@@ -52,7 +52,6 @@ public class ScQuyetDinhXuatHang extends BaseEntity implements Serializable {
     @Transient
     private List<ScDanhSachHdr> scDanhSachHdrList = new ArrayList<>();
     @Transient
-
     private List<ScPhieuXuatKhoHdr> scPhieuXuatKhoHdrList= new ArrayList<>();
     @Transient
     private List<ScKiemTraChatLuongHdr> scKiemTraChatLuongHdrList = new ArrayList<>();

@@ -38,10 +38,10 @@ public class ScPhieuNhapKhoController {
     @ApiOperation(value = "Tra cứu thông tin đề xuất", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody ScPhieuNhapKhoReq objReq) {
+    public ResponseEntity<BaseResponse> colection( @RequestBody ScPhieuNhapKhoReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.searchPage(currentUser,objReq));
+            resp.setData(service.searchPhieuNhapKho(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -110,7 +110,7 @@ public class ScPhieuNhapKhoController {
 
     @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin", response = List.class)
     @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq objReq) {
+    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody ScPhieuNhapKhoReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             service.approve(objReq);
