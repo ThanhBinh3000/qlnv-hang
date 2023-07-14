@@ -19,6 +19,7 @@ public interface XhHoSoKyThuatRepository extends JpaRepository<XhHoSoKyThuatHdr,
       "left join XhHoSoKyThuatHdr xh on xh.idHsktNh = hs.id WHERE 1=1 " +
       "AND (hs.soBbLayMau = bb.soBienBan)" +
       "AND (:#{#param.type} IS NULL OR xh.type = :#{#param.type}) " +
+      "AND (:#{#param.dvql} IS NULL OR hs.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
       "AND (:#{#param.soHoSoKyThuat} IS NULL OR hs.soHoSoKyThuat LIKE CONCAT('%',LOWER(:#{#param.soHoSoKyThuat}),'%')) "
       /* "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
        "AND (:#{#param.type} IS NULL OR c.type = :#{#param.type}) " +
