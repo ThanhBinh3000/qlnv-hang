@@ -24,7 +24,15 @@ public interface ScQuyetDinhNhapHangRepository extends JpaRepository<ScQuyetDinh
             " AND (:#{#param.trangThai} IS NULL OR a.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.nam} IS NULL OR a.nam = :#{#param.nam} )" +
             "AND (:#{#param.soQd} IS NULL OR a.soQd LIKE CONCAT(:#{#param.soQd},'%'))")
-    Page<ScQuyetDinhNhapHang> searchPageViewFromAnother(@Param("param") ScQuyetDinhXuatHangReq req, Pageable pageable);
+    Page<ScQuyetDinhNhapHang> searchPageViewFromAnother(@Param("param") ScQuyetDinhNhapHangReq req, Pageable pageable);
+
+    @Query(value = "SELECT c FROM ScQuyetDinhNhapHang c " +
+            " WHERE 1 = 1 " +
+            " AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
+            " AND (:#{#param.maDviSr} IS NULL OR c.maDvi = :#{#param.maDviSr}) " +
+            " ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc "
+    )
+    List<ScQuyetDinhNhapHang> listTaoPhieuNhapKho(@Param("param") ScQuyetDinhNhapHangReq param);
 
 
     List<ScQuyetDinhNhapHang> findAllByIdQdXh(Long idQdXh);

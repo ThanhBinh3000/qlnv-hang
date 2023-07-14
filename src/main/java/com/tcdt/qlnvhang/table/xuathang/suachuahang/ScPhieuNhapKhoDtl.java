@@ -32,6 +32,7 @@ public class ScPhieuNhapKhoDtl extends BaseEntity implements Serializable {
     private String donViTinh;
     private BigDecimal slDaDuyet;
     private BigDecimal slThucTe;
+    private BigDecimal donGiaPd;
     private BigDecimal kinhPhiThucTe;
 
 }
