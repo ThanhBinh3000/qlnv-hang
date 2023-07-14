@@ -45,7 +45,8 @@ public class XhXkTongHopHdr extends BaseEntity implements Serializable {
 
   private Long idBaoCao;
   private String soBaoCao;
-
+  // Ktra cl vt-tb trongh thời gian bảo hành theo hđ
+  private Integer soLanLm;
   @Transient
   private String tenTrangThai;
 
