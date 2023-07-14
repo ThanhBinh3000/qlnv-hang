@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.suachuahang.impl;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScKiemTraChatLuongHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhNhapHangDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhNhapHangRepository;
 import com.tcdt.qlnvhang.request.suachua.ScPhieuXuatKhoReq;
@@ -41,6 +42,9 @@ public class ScQuyetDinhNhapHangImpl extends BaseServiceImpl implements ScQuyetD
 
     @Autowired
     private ScDanhSachServiceImpl scDanhSachServiceImpl;
+    
+    @Autowired
+    private ScKiemTraChatLuongHdrRepository scKiemTraChatLuongHdrRepository;
 
     @Override
     public Page<ScQuyetDinhNhapHang> searchPage(ScQuyetDinhNhapHangReq req) throws Exception {
@@ -83,6 +87,15 @@ public class ScQuyetDinhNhapHangImpl extends BaseServiceImpl implements ScQuyetD
             dtlRepository.save(item);
         });
         return req.getChildren();
+    }
+
+    void savePhieuKtcl(ScQuyetDinhNhapHangReq req,Long idHdr){
+        String[] idPhieu = req.getIdPhieuKtcl().split(",");
+        for (String s : idPhieu) {
+            Long id = Long.parseLong(s);
+            scKiemTraChatLuongHdrRepository.findById(id);
+        }
+//        if(req.getIdPhieuKtcl() != )
     }
 
     @Override

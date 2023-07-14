@@ -52,6 +52,9 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
     @Autowired
     private ScDanhSachRepository scDanhSachRepository;
 
+    @Autowired
+    private ScDanhSachServiceImpl scDanhSachServiceImpl;
+
     @Override
     public Page<ScPhieuXuatKhoHdr> searchPage(ScPhieuXuatKhoReq req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
@@ -132,8 +135,8 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
             data.setTenLanhDaoCc(userInfoRepository.findById(data.getIdLanhDaoCc()).get().getFullName());
         }
         if(data.getIdScDanhSachHdr() != null){
-            Optional<ScDanhSachHdr> byId = scDanhSachRepository.findById(data.getIdScDanhSachHdr());
-            byId.ifPresent(data::setScDanhSachHdr);
+            ScDanhSachHdr byId = scDanhSachServiceImpl.detail(data.getIdScDanhSachHdr());
+            data.setScDanhSachHdr(byId);
         }
         return data;
     }

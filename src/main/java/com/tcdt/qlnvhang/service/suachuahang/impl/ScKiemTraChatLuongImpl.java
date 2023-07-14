@@ -2,10 +2,7 @@ package com.tcdt.qlnvhang.service.suachuahang.impl;
 
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
-import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScKiemTraChatLuongDtlRepository;
-import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScKiemTraChatLuongHdrRepository;
-import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScPhieuXuatKhoHdrRepository;
-import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhXuatHangRepository;
+import com.tcdt.qlnvhang.repository.xuathang.suachuahang.*;
 import com.tcdt.qlnvhang.request.suachua.ScKiemTraChatLuongReq;
 import com.tcdt.qlnvhang.request.suachua.ScPhieuXuatKhoReq;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhXuatHangReq;
@@ -13,6 +10,7 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.suachuahang.ScKiemTraChatLuongService;
+import com.tcdt.qlnvhang.service.suachuahang.ScPhieuXuatKhoService;
 import com.tcdt.qlnvhang.service.suachuahang.ScQuyetDinhScService;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.*;
@@ -51,6 +49,11 @@ public class ScKiemTraChatLuongImpl extends BaseServiceImpl implements ScKiemTra
 
     @Autowired
     private ScPhieuXuatKhoHdrRepository scPhieuXuatKhoHdrRepository;
+
+    @Autowired
+    private ScQuyetDinhNhapHangRepository scQuyetDinhNhapHangRepository;
+    @Autowired
+    private ScPhieuXuatKhoService scPhieuXuatKhoService;
 
     @Override
     public Page<ScKiemTraChatLuongHdr> searchPage(ScKiemTraChatLuongReq req) throws Exception {
@@ -237,7 +240,29 @@ public class ScKiemTraChatLuongImpl extends BaseServiceImpl implements ScKiemTra
         req.setTrangThai(TrangThaiAllEnum.DA_DUYET_LDC.getId());
         req.setMaDviSr(userInfo.getDvql());
         List<ScKiemTraChatLuongHdr> scPhieuXuatKhoHdrs = hdrRepository.searchListTaoQuyetDinhNhapHang(req);
-        return scPhieuXuatKhoHdrs;
+
+        List<ScQuyetDinhNhapHang> allByIdQdXh = scQuyetDinhNhapHangRepository.findAllByIdQdXh(req.getIdQdXh());
+
+        List<Long> listIdUsed = new ArrayList<>();
+        allByIdQdXh.forEach( item ->{
+            String[] split = item.getIdPhieuKtcl().split(",");
+            // Check danh sách kiểm tra chất lượng đã sử dụng và check nếu trùng id với request thì không thêm vào danh sách đã sử dụng
+            if(req.getId() == null || !req.getId().equals(item.getId())){
+                for (String s : split) {
+                    listIdUsed.add(Long.parseLong(s));
+                }
+            }
+        });
+
+        List<ScKiemTraChatLuongHdr> collect = scPhieuXuatKhoHdrs.stream().filter(item -> !listIdUsed.contains(item.getId())).collect(Collectors.toList());
+        collect.forEach(item -> {
+            try {
+                item.setScPhieuXuatKhoHdr(scPhieuXuatKhoService.detail(item.getIdPhieuXuatKho()));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        return collect;
     }
 
 }
