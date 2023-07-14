@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = ScQuyetDinhNhapHangDtl.TABLE_NAME)
@@ -18,6 +19,7 @@ public class ScQuyetDinhNhapHangDtl implements Serializable {
   private Long id;
   private Long idHdr;
   private Long idDsHdr;
+  private BigDecimal soLuongNhap;
   @Transient
   private ScDanhSachHdr scDanhSachHdr;
 

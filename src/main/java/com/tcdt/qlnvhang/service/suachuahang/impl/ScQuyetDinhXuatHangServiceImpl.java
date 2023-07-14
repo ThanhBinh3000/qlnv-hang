@@ -14,6 +14,7 @@ import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhXuatHangReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.service.suachuahang.ScPhieuXuatKhoService;
 import com.tcdt.qlnvhang.service.suachuahang.ScQuyetDinhScService;
 import com.tcdt.qlnvhang.service.suachuahang.ScQuyetDinhXuatHangService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -52,6 +53,9 @@ public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements S
 
     @Autowired
     private ScKiemTraChatLuongHdrRepository scKiemTraChatLuongHdrRepository;
+
+    @Autowired
+    private ScPhieuXuatKhoService scPhieuXuatKhoService;
 
 
     @Override
@@ -116,8 +120,12 @@ public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements S
         List<ScKiemTraChatLuongHdr> allByIdQdXh = scKiemTraChatLuongHdrRepository.findAllByIdQdXh(id);
         if(!allByIdQdXh.isEmpty()){
             allByIdQdXh.forEach(item ->{
-                Optional<ScPhieuXuatKhoHdr> byId = scPhieuXuatKhoHdrRepository.findById(item.getIdPhieuXuatKho());
-                byId.ifPresent(item::setScPhieuXuatKhoHdr);
+                try {
+                    ScPhieuXuatKhoHdr byId = scPhieuXuatKhoService.detail(item.getIdPhieuXuatKho());
+                    item.setScPhieuXuatKhoHdr(byId);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             });
             data.setScKiemTraChatLuongHdrList(allByIdQdXh);
         }

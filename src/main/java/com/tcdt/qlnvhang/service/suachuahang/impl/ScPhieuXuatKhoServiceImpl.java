@@ -2,10 +2,7 @@ package com.tcdt.qlnvhang.service.suachuahang.impl;
 
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
-import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScBangKeXuatVatTuHdrRepository;
-import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScPhieuXuatKhoDtlRepository;
-import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScPhieuXuatKhoHdrRepository;
-import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhXuatHangRepository;
+import com.tcdt.qlnvhang.repository.xuathang.suachuahang.*;
 import com.tcdt.qlnvhang.request.suachua.ScPhieuXuatKhoReq;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhXuatHangReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -51,6 +48,12 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
 
     @Autowired
     private ScBangKeXuatVatTuHdrRepository scBangKeXuatVatTuHdrRepository;
+
+    @Autowired
+    private ScDanhSachRepository scDanhSachRepository;
+
+    @Autowired
+    private ScDanhSachServiceImpl scDanhSachServiceImpl;
 
     @Override
     public Page<ScPhieuXuatKhoHdr> searchPage(ScPhieuXuatKhoReq req) throws Exception {
@@ -130,6 +133,10 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
         }
         if(!Objects.isNull(data.getIdLanhDaoCc())){
             data.setTenLanhDaoCc(userInfoRepository.findById(data.getIdLanhDaoCc()).get().getFullName());
+        }
+        if(data.getIdScDanhSachHdr() != null){
+            ScDanhSachHdr byId = scDanhSachServiceImpl.detail(data.getIdScDanhSachHdr());
+            data.setScDanhSachHdr(byId);
         }
         return data;
     }

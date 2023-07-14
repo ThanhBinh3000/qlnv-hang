@@ -33,6 +33,7 @@ public interface HhBienBanNghiemThuRepository extends JpaRepository<HhBienBanNgh
     Optional<HhBienBanNghiemThu> findAllBySoBb(String soBb);
 
     List<HhBienBanNghiemThu> findByIdQdGiaoNvNhAndMaDvi(Long idQdGiaoNvNh, String maDvi);
+    List<HhBienBanNghiemThu> findByIdDdiemGiaoNvNh(Long idDdiemGnvNh);
 
 
 }

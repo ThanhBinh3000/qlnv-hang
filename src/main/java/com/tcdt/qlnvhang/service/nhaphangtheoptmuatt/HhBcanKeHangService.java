@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhBcanKeHangDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhBcanKeHangHdrRepository;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhPhieuNhapKhoHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -43,6 +44,8 @@ public class HhBcanKeHangService extends BaseServiceImpl {
     private HhBcanKeHangHdrRepository hhBcanKeHangHdrRepository;
     @Autowired
     private HhBcanKeHangDtlRepository hhBcanKeHangDtlRepository;
+    @Autowired
+    private HhPhieuNhapKhoHdrRepository hhPhieuNhapKhoHdrRepository;
 
     public Page<HhBcanKeHangHdr> searchPage(SearchHhBcanKeHangReq objReq) throws Exception{
         UserInfo userInfo = SecurityContextService.getUser();
@@ -89,6 +92,10 @@ public class HhBcanKeHangService extends BaseServiceImpl {
         data.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));
         data.setId(Long.valueOf(data.getSoBangKeCanHang().split("/")[0]));
         hhBcanKeHangHdrRepository.save(data);
+
+        Optional<HhPhieuNhapKhoHdr> hhPhieuNhapKhoHdr = hhPhieuNhapKhoHdrRepository.findById(data.getIdPhieuNhapKho());
+        hhPhieuNhapKhoHdr.get().setSoBangKeCanHang(data.getSoBangKeCanHang());
+        hhPhieuNhapKhoHdrRepository.save(hhPhieuNhapKhoHdr.get());
         this.saveCtiet(data.getId(), objReq);
         return data;
     }
