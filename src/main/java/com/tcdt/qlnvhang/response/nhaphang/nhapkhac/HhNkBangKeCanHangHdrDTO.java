@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.response.nhaphang.nhapkhac;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 public class HhNkBangKeCanHangHdrDTO {
@@ -11,6 +12,7 @@ public class HhNkBangKeCanHangHdrDTO {
     private Long phieuNhapKhoId;
     private String soQdPdNk;
     private Integer nam;
+    private Date thoiHanDieuChuyen;
     private String maDiemKho;
     private String tenDiemKho;
     private String maLoKho;
@@ -31,12 +33,13 @@ public class HhNkBangKeCanHangHdrDTO {
     private String maNganKho;
     private String tenNganKho;
 
-    public HhNkBangKeCanHangHdrDTO(Long id, Long idQdPdNk, Long phieuNhapKhoId, String soQdPdNk, Integer nam, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String soBangKe, String soPhieuNhapKho, LocalDate ngayNhapKho, String trangThai, String tenTrangThai, String loaiVthh, String tenLoaiVthh, String cloaiVthh, String tenCloaiVthh, String maNhaKho, String tenNhaKho, String donViTinh, String tenDonViTinh, String maNganKho, String tenNganKho) {
+    public HhNkBangKeCanHangHdrDTO(Long id, Long idQdPdNk, Long phieuNhapKhoId, String soQdPdNk, Integer nam,Date thoiHanDieuChuyen, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String soBangKe, String soPhieuNhapKho, LocalDate ngayNhapKho, String trangThai, String tenTrangThai, String loaiVthh, String tenLoaiVthh, String cloaiVthh, String tenCloaiVthh, String maNhaKho, String tenNhaKho, String donViTinh, String tenDonViTinh, String maNganKho, String tenNganKho) {
         this.id = id;
         this.idQdPdNk = idQdPdNk;
         this.phieuNhapKhoId = phieuNhapKhoId;
         this.soQdPdNk = soQdPdNk;
         this.nam = nam;
+        this.thoiHanDieuChuyen=thoiHanDieuChuyen;
         this.maDiemKho = maDiemKho;
         this.tenDiemKho = tenDiemKho;
         this.maLoKho = maLoKho;

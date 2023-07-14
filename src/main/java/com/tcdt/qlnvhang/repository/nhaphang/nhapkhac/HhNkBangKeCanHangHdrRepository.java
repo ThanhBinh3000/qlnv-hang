@@ -16,7 +16,7 @@ import java.util.Optional;
 @Repository
 public interface HhNkBangKeCanHangHdrRepository extends JpaRepository<HhNkBangKeCanHangHdr, Long> {
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.nhaphang.nhapkhac.HhNkBangKeCanHangHdrDTO(" +
-            "bkch.id,qdgnv.id,pnk.id,qdgnv.soQd,qdgnv.nam, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho," +
+            "bkch.id,qdgnv.id,pnk.id,qdgnv.soQd,qdgnv.nam,qdgnv.tgianNkMnhat, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho," +
             "dmdvlokho.tenDvi,bkch.soBangKe,pnk.soPhieuNhapKho, pnk.ngayLap ,bkch.trangThai,bkch.trangThai,hdr.loaiVthh," +
             "dmvt.ten,dtl.cloaiVthh,dmvt.loaiHang,dtl.maNhaKho,dmdvnhakho.tenDvi,hdr.dvt,hdr.dvt," +
             "dtl.maNganKho,dmdvngankho.tenDvi) " +
@@ -42,7 +42,7 @@ public interface HhNkBangKeCanHangHdrRepository extends JpaRepository<HhNkBangKe
             "AND (:#{#param.maNganKho} IS NULL OR bkch.maNganKho = :#{#param.maNganKho}) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR pnk.ngayLap >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR pnk.ngayLap <= :#{#param.denNgay}) ) " +
-            "GROUP BY bkch.id,qdgnv.id,pnk.id,qdgnv.soQd,qdgnv.nam, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho," +
+            "GROUP BY bkch.id,qdgnv.id,pnk.id,qdgnv.soQd,qdgnv.nam,qdgnv.tgianNkMnhat, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho," +
             "dmdvlokho.tenDvi,bkch.soBangKe,pnk.soPhieuNhapKho, pnk.ngayLap ,bkch.trangThai,bkch.trangThai,hdr.loaiVthh," +
             "dmvt.ten,dtl.cloaiVthh,dmvt.loaiHang,dtl.maNhaKho,dmdvnhakho.tenDvi,hdr.dvt,hdr.dvt," +
             "dtl.maNganKho,dmdvngankho.tenDvi")
