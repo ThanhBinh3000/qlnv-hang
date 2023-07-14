@@ -16,9 +16,8 @@ public interface XhHoSoKyThuatRepository extends JpaRepository<XhHoSoKyThuatHdr,
   @Query("SELECT new com.tcdt.qlnvhang.response.xuathang.NhHoSoKyThuatDTO(" +
       "hs.id, hs.idQdGiaoNvNh , hs.soQdGiaoNvNh , hs.soBbLayMau , hs.soHd , hs.maDvi , hs.soHoSoKyThuat , hs.nam , hs.idBbLayMauXuat , hs.kqKiemTra , 'DT' , bb.maDiemKho , bb.maNhaKho , bb.maNganKho , bb.maLoKho, hs.ngayTao,xh.kqKiemTra) " +
       "FROM NhHoSoKyThuat hs join BienBanLayMau bb on hs.soBbLayMau = bb.soBienBan " +
-      "left join XhHoSoKyThuatHdr xh on xh.idHsktNh = hs.id WHERE 1=1 " +
+      "left join XhHoSoKyThuatHdr xh on xh.idHsktNh = hs.id AND xh.type = :#{#param.type} WHERE 1=1 " +
       "AND (hs.soBbLayMau = bb.soBienBan)" +
-      "AND (:#{#param.type} IS NULL OR xh.type = :#{#param.type}) " +
       "AND (:#{#param.dvql} IS NULL OR hs.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
       "AND (:#{#param.soHoSoKyThuat} IS NULL OR hs.soHoSoKyThuat LIKE CONCAT('%',LOWER(:#{#param.soHoSoKyThuat}),'%')) "
       /* "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +

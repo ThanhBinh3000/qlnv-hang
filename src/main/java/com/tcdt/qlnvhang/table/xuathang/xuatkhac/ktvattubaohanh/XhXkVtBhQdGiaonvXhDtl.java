@@ -1,46 +1,39 @@
-package com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa;
+package com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.util.DataUtils;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.util.ObjectUtils;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Map;
 
+@Getter
+@Setter
 @Entity
-@Table(name = XhXkDanhSachHdr.TABLE_NAME)
-@Data
-public class XhXkDanhSachHdr extends BaseEntity implements Serializable {
-    private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "XH_XK_DANH_SACH_HDR";
+@Table(name = XhXkVtBhQdGiaonvXhDtl.TABLE_NAME)
+public class XhXkVtBhQdGiaonvXhDtl {
+
+    public static final String TABLE_NAME = "XH_XK_VT_BH_QD_GNV_XH_DTL";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXkDanhSachHdr.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = XhXkDanhSachHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhXkDanhSachHdr.TABLE_NAME + "_SEQ")
-    private Long id;
-    private String maDvi;
-    private Long idTongHop;
-    private String maTongHop;
-    private String maDiaDiem;
-    private String loaiVthh;
-    private String cloaiVthh;
-    private String donViTinh;
-    private BigDecimal slHetHan;
-    private BigDecimal slTonKho;
-    private Integer thoiHanLk;
-    private LocalDate ngayNhapKho;
-    private LocalDate ngayDeXuat;
-    private LocalDateTime ngayTongHop;
-    private String lyDo;
-    private String trangThai;
-    private String loai;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_XK_VT_BH_QD_GNV_XH_DTL_SEQ")
+    @SequenceGenerator(sequenceName = "XH_XK_VT_BH_QD_GNV_XH_DTL_SEQ", allocationSize = 1, name = "XH_XK_VT_BH_QD_GNV_XH_DTL_SEQ")
+    Long id;
+    String maDiaDiem;
+    String loaiVthh;
+    String donViTinh;
+    String cloaiVthh;
+    BigDecimal slLayMau;
+    BigDecimal slTonKho;
+    String maDviTsan;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idHdr")
+    @JsonIgnore
+    private XhXkVtBhQdGiaonvXhHdr qdGiaonvXhHdr;
 
     @JsonIgnore
     @Transient
@@ -49,8 +42,6 @@ public class XhXkDanhSachHdr extends BaseEntity implements Serializable {
     private String tenLoaiVthh;
     @Transient
     private String tenCloaiVthh;
-    @Transient
-    private String tenTrangThai;
     @JsonIgnore
     @Transient
     private Map<String, String> mapDmucDvi;
@@ -101,11 +92,19 @@ public class XhXkDanhSachHdr extends BaseEntity implements Serializable {
         }
     }
 
-    public void setSlHetHan(BigDecimal slHetHan) {
-        this.slHetHan = ObjectUtils.isEmpty(slHetHan) ? BigDecimal.ZERO : slHetHan;
+    public BigDecimal getSlLayMau() {
+        return !ObjectUtils.isEmpty(slLayMau) ? slLayMau : BigDecimal.ZERO;
+    }
+
+    public void setSlLayMau(BigDecimal slLayMau) {
+        this.slLayMau = !ObjectUtils.isEmpty(slLayMau) ? slLayMau : BigDecimal.ZERO;
+    }
+
+    public BigDecimal getSlTonKho() {
+        return !ObjectUtils.isEmpty(slTonKho) ? slTonKho : BigDecimal.ZERO;
     }
 
     public void setSlTonKho(BigDecimal slTonKho) {
-        this.slTonKho = ObjectUtils.isEmpty(slTonKho) ? BigDecimal.ZERO : slTonKho;
+        this.slTonKho = !ObjectUtils.isEmpty(slTonKho) ? slTonKho : BigDecimal.ZERO;
     }
 }
