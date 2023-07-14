@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.request.xuathang.xuatkhac;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopDtl;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopHdr;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -32,9 +31,10 @@ public class XhXkTongHopRequest extends BaseRequest {
   private String maCuc;
   private String maChiCuc;
   private String loai;
+  private Integer soLanLm;
   private LocalDateTime ngayTaoTu;
   private LocalDateTime ngayTaoDen;
   private List<XhXkTongHopDtl> tongHopDtl = new ArrayList<>();
   private List<Long> listId;
-  private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
+  private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 }

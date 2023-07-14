@@ -54,6 +54,8 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
 
     @Autowired
     private ScDanhSachServiceImpl scDanhSachServiceImpl;
+    @Autowired
+    private ScBangKeNhapVtHdrRepository scBangKeNhapVtHdrRepository;
 
     @Override
     public Page<ScPhieuXuatKhoHdr> searchPage(ScPhieuXuatKhoReq req) throws Exception {
@@ -153,7 +155,7 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
         if(Objects.isNull(hdr.getIdBangKeCanHang())){
             throw new Exception("Phiếu xuất kho đang chưa khởi tạo bảng kê xuất vật tư. Vui lòng tạo bảng kê xuất vật tư");
         } else {
-            ScBangKeXuatVatTuHdr bk = scBangKeXuatVatTuHdrRepository.findById(hdr.getIdBangKeCanHang()).get();
+            ScBangKeNhapVtHdr bk = scBangKeNhapVtHdrRepository.findById(hdr.getIdBangKeCanHang()).get();
             if(!bk.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())){
                 throw new Exception("Số bảng kê " +bk.getSoBangKe()+" chưa đc phê duyệt. Vui lòng phê duyệt bảng kê");
             }

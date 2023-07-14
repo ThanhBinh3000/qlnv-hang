@@ -1,71 +1,40 @@
-package com.tcdt.qlnvhang.table.xuathang.suachuahang;
+package com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tcdt.qlnvhang.entities.BaseEntity;
-import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
-import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
+@Getter
+@Setter
 @Entity
-@Table(name = ScPhieuNhapKhoHdr.TABLE_NAME)
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class ScPhieuNhapKhoHdr extends BaseEntity implements Serializable {
-    public static final String TABLE_NAME = "SC_PHIEU_NHAP_KHO_HDR";
-    private static final long serialVersionUID = 1L;
+@Table(name = XhXkVtBhQdGiaonvXhDtl.TABLE_NAME)
+public class XhXkVtBhQdGiaonvXhDtl {
+
+    public static final String TABLE_NAME = "XH_XK_VT_BH_QD_GNV_XH_DTL";
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = ScPhieuNhapKhoHdr.TABLE_NAME + "_SEQ")
-//    @SequenceGenerator(sequenceName = ScPhieuNhapKhoHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = ScPhieuNhapKhoHdr.TABLE_NAME + "_SEQ")
-    private Long id;
-    private Integer nam;
-    private String maDvi;
-    private String maQhns;
-    private String soPhieuNhapKho;
-    private LocalDate ngayNhapKho;
-    private Integer soNo;
-    private Integer soCo;
-    private String soQdNh;
-    private Long idQdNh;
-    private LocalDate ngayQdNh;
-    private Long idScDanhSachHdr;
-    private String maDiaDiem;
-    private String loaiVthh;
-    private String cloaiVthh;
-    private String soPhieuKtcl;
-    private Long idThuKho;
-    private Long idLanhDaoCc;
-    private String kyThuatVien;
-    private String keToanTruong;
-    private String nguoiGiaoHang;
-    private String soCmt;
-    private String dviNguoiGiaoHang;
-    private String diaChi;
-    private LocalDate thoiGianGiaoNhan;
-    private String soBangKeCanHang;
-    private Long idBangKeCanHang;
-    private BigDecimal tongSoLuong;
-    private String ghiChu;
-    private String trangThai;
-    private String donViTinh;
-    @Transient
-    private String tenDvi;
-    @Transient
-    List<FileDinhKem> fileDinhKems = new ArrayList<>();
-    @Transient
-    private List<ScPhieuNhapKhoDtl> children = new ArrayList<>();
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_XK_VT_BH_QD_GNV_XH_DTL_SEQ")
+    @SequenceGenerator(sequenceName = "XH_XK_VT_BH_QD_GNV_XH_DTL_SEQ", allocationSize = 1, name = "XH_XK_VT_BH_QD_GNV_XH_DTL_SEQ")
+    Long id;
+    String maDiaDiem;
+    String loaiVthh;
+    String donViTinh;
+    String cloaiVthh;
+    BigDecimal slLayMau;
+    BigDecimal slTonKho;
+    String maDviTsan;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idHdr")
+    @JsonIgnore
+    private XhXkVtBhQdGiaonvXhHdr qdGiaonvXhHdr;
+
     @JsonIgnore
     @Transient
     private Map<String, String> mapVthh;
@@ -73,8 +42,6 @@ public class ScPhieuNhapKhoHdr extends BaseEntity implements Serializable {
     private String tenLoaiVthh;
     @Transient
     private String tenCloaiVthh;
-    @Transient
-    private String tenTrangThai;
     @JsonIgnore
     @Transient
     private Map<String, String> mapDmucDvi;
@@ -90,12 +57,6 @@ public class ScPhieuNhapKhoHdr extends BaseEntity implements Serializable {
     private String tenNganKho;
     @Transient
     private String tenLoKho;
-    @Transient
-    private String tenThuKho;
-    @Transient
-    private String tenLanhDaoCc;
-    @Transient
-    private ScDanhSachHdr scDanhSachHdr;
 
     public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
         this.mapDmucDvi = mapDmucDvi;
@@ -131,8 +92,19 @@ public class ScPhieuNhapKhoHdr extends BaseEntity implements Serializable {
         }
     }
 
-    public String getTenTrangThai(){
-        return TrangThaiAllEnum.getLabelById(getTrangThai());
+    public BigDecimal getSlLayMau() {
+        return !ObjectUtils.isEmpty(slLayMau) ? slLayMau : BigDecimal.ZERO;
     }
 
+    public void setSlLayMau(BigDecimal slLayMau) {
+        this.slLayMau = !ObjectUtils.isEmpty(slLayMau) ? slLayMau : BigDecimal.ZERO;
+    }
+
+    public BigDecimal getSlTonKho() {
+        return !ObjectUtils.isEmpty(slTonKho) ? slTonKho : BigDecimal.ZERO;
+    }
+
+    public void setSlTonKho(BigDecimal slTonKho) {
+        this.slTonKho = !ObjectUtils.isEmpty(slTonKho) ? slTonKho : BigDecimal.ZERO;
+    }
 }
