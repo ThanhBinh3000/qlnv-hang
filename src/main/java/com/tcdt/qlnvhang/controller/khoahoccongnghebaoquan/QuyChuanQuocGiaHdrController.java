@@ -176,7 +176,7 @@ public class QuyChuanQuocGiaHdrController extends BaseController {
 
 
     @ApiOperation(value = "Lấy all quy chuẩn theo chủng loại hàng hóa", response = List.class)
-    @GetMapping(value = "quy-chuan" + "/{cloaiVthh}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "quy-chuan-theo-loai-hang" + "/{cloaiVthh}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> allQuyChuanByCloaiVthh(
             @ApiParam(value = "cloaiVthh ", example = "010101", required = true) @PathVariable("cloaiVthh") String cloaiVthh) {
