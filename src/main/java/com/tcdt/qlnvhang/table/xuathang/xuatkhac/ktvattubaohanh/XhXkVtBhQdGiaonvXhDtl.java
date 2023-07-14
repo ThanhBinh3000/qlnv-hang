@@ -16,11 +16,11 @@ import java.util.Map;
 @Table(name = XhXkVtBhQdGiaonvXhDtl.TABLE_NAME)
 public class XhXkVtBhQdGiaonvXhDtl {
 
-    public static final String TABLE_NAME = "XH_XK_VT_BH_QD_GIAONV_XH_DTL";
+    public static final String TABLE_NAME = "XH_XK_VT_BH_QD_GNV_XH_DTL";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_XK_VT_BH_QD_GIAONV_XH_DTL_SEQ")
-    @SequenceGenerator(sequenceName = "XH_XK_VT_BH_QD_GIAONV_XH_DTL_SEQ", allocationSize = 1, name = "XH_XK_VT_BH_QD_GIAONV_XH_DTL_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_XK_VT_BH_QD_GNV_XH_DTL_SEQ")
+    @SequenceGenerator(sequenceName = "XH_XK_VT_BH_QD_GNV_XH_DTL_SEQ", allocationSize = 1, name = "XH_XK_VT_BH_QD_GNV_XH_DTL_SEQ")
     Long id;
     String maDiaDiem;
     String loaiVthh;
