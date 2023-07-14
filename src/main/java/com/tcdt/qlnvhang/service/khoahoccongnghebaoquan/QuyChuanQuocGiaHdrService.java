@@ -280,6 +280,6 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
 
 
     public List<QuyChuanQuocGiaDtl> getAllQuyChuanByCloaiVthh(String loaiVthh) throws Exception {
-        return quyChuanQuocGiaHdrRepository.getAllQuyChuanByCloaiVthh(loaiVthh).isEmpty() ? new ArrayList<>() : quyChuanQuocGiaHdrRepository.getAllQuyChuanByCloaiVthh(loaiVthh);
+        return quyChuanQuocGiaDtlRepository.getAllQuyChuanByCloaiVthh(loaiVthh).isEmpty() ? new ArrayList<>() : quyChuanQuocGiaDtlRepository.getAllQuyChuanByCloaiVthh(loaiVthh);
     }
 }
