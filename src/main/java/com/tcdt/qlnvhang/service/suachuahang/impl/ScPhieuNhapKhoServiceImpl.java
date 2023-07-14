@@ -38,6 +38,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ScPhieuNhapKhoServiceImpl extends BaseServiceImpl implements ScPhieuNhapKhoService {
@@ -220,9 +221,9 @@ public class ScPhieuNhapKhoServiceImpl extends BaseServiceImpl implements ScPhie
     @Override
     public Page<ScQuyetDinhNhapHang> searchPhieuNhapKho(ScPhieuNhapKhoReq req) {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        ScQuyetDinhXuatHangReq reqQd = new ScQuyetDinhXuatHangReq();
+        ScQuyetDinhNhapHangReq reqQd = new ScQuyetDinhNhapHangReq();
         reqQd.setNam(req.getNam());
-        reqQd.setSoQd(req.getSoQdGiaoNvNhap());
+        reqQd.setSoQd(req.getSoQdNh());
         reqQd.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
         Page<ScQuyetDinhNhapHang> search = scQuyetDinhNhapHangRepository.searchPageViewFromAnother(reqQd, pageable);
         search.getContent().forEach(item -> {
@@ -230,9 +231,12 @@ public class ScPhieuNhapKhoServiceImpl extends BaseServiceImpl implements ScPhie
                 List<ScQuyetDinhNhapHangDtl> dtlList = scQuyetDinhNhapHangDtlRepository.findAllByIdHdr(item.getId());
                 dtlList.forEach(dtl -> {
                     try {
+                        ScDanhSachHdr newDtl = new ScDanhSachHdr();
                         ScDanhSachHdr detail = scDanhSachServiceImpl.detail(dtl.getIdDsHdr());
-                        detail.setScPhieuNhapKhoList(hdrRepository.findAllByIdScDanhSachHdr(detail.getId()));
-                        dtl.setScDanhSachHdr(detail);
+                        BeanUtils.copyProperties(detail,newDtl);
+                        List<ScPhieuNhapKhoHdr> allByIdScDanhSachHdr = hdrRepository.findAllByIdScDanhSachHdrAndIdQdNh(detail.getId(),dtl.getIdHdr());
+                        newDtl.setScPhieuNhapKhoList(allByIdScDanhSachHdr);
+                        dtl.setScDanhSachHdr(newDtl);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }

@@ -16,6 +16,6 @@ public interface ScPhieuNhapKhoHdrRepository extends JpaRepository<ScPhieuNhapKh
 
     Optional<ScPhieuNhapKhoHdr> findBySoPhieuNhapKho(String soPhieuNhapKho);
 
-    List<ScPhieuNhapKhoHdr> findAllByIdScDanhSachHdr(Long idScDanhSachHdr);
+    List<ScPhieuNhapKhoHdr> findAllByIdScDanhSachHdrAndIdQdNh(Long idScDanhSachHdr,Long idQdNh);
 
 }

@@ -31,9 +31,9 @@ import java.util.stream.Collectors;
 @Service
 public class DcnbBangKeXuatVTServiceImpl implements DcnbBangKeXuatVTService {
     @Autowired
-    DcnbBangKeXuatVTHdrRepository hdrRepository;
+    private DcnbBangKeXuatVTHdrRepository hdrRepository;
     @Autowired
-    DcnbBangKeXuatVTDtlRepository dtlRepository;
+    private DcnbBangKeXuatVTDtlRepository dtlRepository;
     @Autowired
     private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
     @Autowired

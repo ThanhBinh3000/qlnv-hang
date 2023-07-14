@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class XhXkDanhSachRequest extends BaseRequest {
@@ -40,7 +41,7 @@ public class XhXkDanhSachRequest extends BaseRequest {
   private LocalDate ngayDeXuat;
   private LocalDate ngayDeXuatTu;
   private LocalDate ngayDeXuatDen;
-  private LocalDate ngayTongHop;
+  private LocalDateTime ngayTongHop;
   private String lyDo;
   private String loai;
   private String dvql;

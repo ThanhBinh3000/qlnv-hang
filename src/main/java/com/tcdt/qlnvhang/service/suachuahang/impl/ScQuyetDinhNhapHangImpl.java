@@ -2,11 +2,13 @@ package com.tcdt.qlnvhang.service.suachuahang.impl;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScKiemTraChatLuongHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhNhapHangDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhNhapHangRepository;
 import com.tcdt.qlnvhang.request.suachua.ScPhieuXuatKhoReq;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhNhapHangReq;
+import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhXuatHangReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -87,15 +89,6 @@ public class ScQuyetDinhNhapHangImpl extends BaseServiceImpl implements ScQuyetD
             dtlRepository.save(item);
         });
         return req.getChildren();
-    }
-
-    void savePhieuKtcl(ScQuyetDinhNhapHangReq req,Long idHdr){
-        String[] idPhieu = req.getIdPhieuKtcl().split(",");
-        for (String s : idPhieu) {
-            Long id = Long.parseLong(s);
-            scKiemTraChatLuongHdrRepository.findById(id);
-        }
-//        if(req.getIdPhieuKtcl() != )
     }
 
     @Override
@@ -215,4 +208,20 @@ public class ScQuyetDinhNhapHangImpl extends BaseServiceImpl implements ScQuyetD
 
     }
 
+    @Override
+    public List<ScQuyetDinhNhapHang> dsTaoPhieuNhapKho(ScQuyetDinhNhapHangReq req) throws Exception {
+        UserInfo currentUser = SecurityContextService.getUser();
+        if (currentUser == null){
+            throw new Exception("Access denied.");
+        }
+        String dvql = currentUser.getDvql();
+        if (currentUser.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            req.setMaDviSr(dvql.substring(0,6));
+        }else{
+            req.setMaDviSr(dvql);
+        }
+        req.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
+        List<ScQuyetDinhNhapHang> list = hdrRepository.listTaoPhieuNhapKho(req);
+        return list;
+    }
 }

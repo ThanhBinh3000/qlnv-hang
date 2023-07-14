@@ -40,20 +40,16 @@ import java.util.stream.Collectors;
 public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
 
     @Autowired
-    DcnbPhieuKtChatLuongHdrRepository dcnbPhieuKtChatLuongHdrRepository;
-    @Autowired
-    DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
-    @Autowired
-    DcnbDataLinkDtlRepository dcnbDataLinkDtlRepository;
+    private DcnbPhieuKtChatLuongHdrRepository dcnbPhieuKtChatLuongHdrRepository;
 
     @Autowired
-    DcnbPhieuKtChatLuongDtlRepository dcnbPhieuKtChatLuongDtlRepository;
+    private DcnbPhieuKtChatLuongDtlRepository dcnbPhieuKtChatLuongDtlRepository;
 
     @Autowired
-    FileDinhKemService fileDinhKemService;
+    private FileDinhKemService fileDinhKemService;
 
     @Autowired
-    FileDinhKemRepository fileDinhKemRepository;
+    private FileDinhKemRepository fileDinhKemRepository;
 
     public Page<DcnbPhieuKtChatLuongHdrDTO> searchPage(CustomUserDetails currentUser, SearchPhieuKtChatLuong req) throws Exception {
         String dvql = currentUser.getDvql();
