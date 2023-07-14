@@ -59,7 +59,10 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
   private UserInfoRepository userInfoRepository;
 
   public Page<NhHoSoKyThuatDTO> searchPage(CustomUserDetails currentUser, SearchHoSoKyThuatReq req) throws Exception {
-
+    String dvql = currentUser.getDvql();
+    if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
+      req.setDvql(dvql.substring(0, 6));
+    }
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<NhHoSoKyThuatDTO> search = xhHoSoKyThuatRepository.search(req, pageable);
     Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
