@@ -20,6 +20,7 @@ public interface HhDchinhDxKhLcntHdrRepository extends CrudRepository<HhDchinhDx
     Optional<HhDchinhDxKhLcntHdr> findByIdQdGocAndLastest(Long idQdGoc, Boolean lastest);
 
     List<HhDchinhDxKhLcntHdr> findAllByIdIn (List<Long> ids);
+    List<HhDchinhDxKhLcntHdr> findAllByIdQdGocAndTrangThaiNot (Long idQdGoc, String trangThai);
 
     @Transactional
     @Modifying
