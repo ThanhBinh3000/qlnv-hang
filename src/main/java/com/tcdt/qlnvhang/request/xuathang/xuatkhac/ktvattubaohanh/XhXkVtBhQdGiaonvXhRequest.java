@@ -29,6 +29,7 @@ public class XhXkVtBhQdGiaonvXhRequest extends BaseRequest {
   LocalDate ngayPduyet;
   Long nguoiPduyetId;
   String lyDoTuChoi;
+  private String loaCanCu;
   List<String> listTrangThaiXh = new ArrayList<>();
   Integer capDvi;
   List<XhXkVtBhQdGiaonvXhDtl> qdGiaonvXhDtl = new ArrayList<>();
