@@ -6,6 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ScPhieuNhapKhoDtlRepository extends JpaRepository<ScPhieuNhapKhoDtl,Long> {
-    List<ScPhieuNhapKhoDtl> findByHdrId(Long id);
+
+    List<ScPhieuNhapKhoDtl> findByIdHdr(Long idHdr);
+
+    void deleteAllByIdHdr(Long idHdr);
 
 }

@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
+import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhPhieuKnCluongDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhPhieuKngiemCluongRepository;
@@ -10,11 +11,14 @@ import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhPhieuKnCluongDtlReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhPhieuKngiemCluongReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhPhieuKnCluong;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuKnCluongDtl;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuKngiemCluong;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import org.modelmapper.ModelMapper;
@@ -39,6 +43,9 @@ public class HhPhieuKngiemCluongService extends BaseServiceImpl {
     
     @Autowired
     HhPhieuKnCluongDtlRepository hhPhieuKnCluongDtlRepository;
+
+    @Autowired
+    private FileDinhKemService fileDinhKemService;
 
     public Page<HhPhieuKngiemCluong> searchPage(SearchHhPhieuKnCluong objReq)throws Exception{
         UserInfo userInfo= SecurityContextService.getUser();
@@ -83,6 +90,8 @@ public class HhPhieuKngiemCluongService extends BaseServiceImpl {
         data.setTrangThai(Contains.DUTHAO);
          data.setMaDvi(userInfo.getDvql());
         HhPhieuKngiemCluong created=hhPhieuKngiemCluongRepository.save(data);
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),data.getId(),"HH_PHIEU_KNGHIEM_CLUONG");
+        created.setFileDinhKems(fileDinhKems);
   
         for (HhPhieuKnCluongDtlReq list : objReq.getPhieuKnCluongDtlReqList()){
             HhPhieuKnCluongDtl dtl = ObjectMapperUtils.map(list,HhPhieuKnCluongDtl.class);
@@ -113,6 +122,10 @@ public class HhPhieuKngiemCluongService extends BaseServiceImpl {
         data.setNguoiSuaId(userInfo.getId());
 
         HhPhieuKngiemCluong created=hhPhieuKngiemCluongRepository.save(data);
+        fileDinhKemService.delete(objReq.getId(),  Lists.newArrayList("HH_PHIEU_KNGHIEM_CLUONG"));
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),data.getId(),"HH_PHIEU_KNGHIEM_CLUONG");
+        created.setFileDinhKems(fileDinhKems);
+
         List<HhPhieuKnCluongDtl> listDtl=hhPhieuKnCluongDtlRepository.findAllByIdHdr(objReq.getId());
         hhPhieuKnCluongDtlRepository.deleteAll(listDtl);
         for (HhPhieuKnCluongDtlReq list : objReq.getPhieuKnCluongDtlReqList()){
@@ -134,7 +147,7 @@ public class HhPhieuKngiemCluongService extends BaseServiceImpl {
         Map<String,String> hashMapDmhh = getListDanhMucHangHoa();
         Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
 
-     data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         data.setTenDvi(StringUtils.isEmpty(data.getMaDvi())?null:hashMapDmdv.get(data.getMaDiemKho()));
         data.setTenDiemKho(StringUtils.isEmpty(data.getMaDiemKho())?null:hashMapDmdv.get(data.getMaDiemKho()));
         data.setTenNhaKho(StringUtils.isEmpty(data.getMaNhaKho())?null:hashMapDmdv.get(data.getMaNhaKho()));
@@ -142,6 +155,11 @@ public class HhPhieuKngiemCluongService extends BaseServiceImpl {
         data.setTenLoKho(StringUtils.isEmpty(data.getMaLoKho())?null:hashMapDmdv.get(data.getMaLoKho()));
         List<HhPhieuKnCluongDtl> listDtl=hhPhieuKnCluongDtlRepository.findAllByIdHdr(data.getId());
         data.setHhPhieuKnCluongDtlList(listDtl);
+
+        List<FileDinhKem> fileDinhkems = fileDinhKemService.search(data.getId(), Arrays.asList("HH_PHIEU_KNGHIEM_CLUONG"));
+        if (!DataUtils.isNullOrEmpty(fileDinhkems)) {
+            data.setFileDinhKems(fileDinhkems);
+        }
         return data;
     }
 

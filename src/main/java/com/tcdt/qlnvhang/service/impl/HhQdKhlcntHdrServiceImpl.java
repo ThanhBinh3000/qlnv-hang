@@ -73,6 +73,16 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 	@Autowired
 	private HhDchinhDxKhLcntHdrRepository hhDchinhDxKhLcntHdrRepository;
+
+	@Autowired
+	private HhDchinhDxKhLcntDsgthauRepository gThauRepository;
+
+	@Autowired
+	private HhDchinhDxKhLcntDsgthauCtietRepository gThauCietRepository;
+
+	@Autowired
+	private HhDchinhDxKhLcntDsgthauCtietVtRepository gThauCietVtRepository;
+
 	@Override
 	@Transactional
 	public HhQdKhlcntHdr create(HhQdKhlcntHdrReq objReq) throws Exception {
@@ -498,7 +508,26 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		}
 		if (data.getDieuChinh().equals(Boolean.TRUE)) {
 			Optional<HhDchinhDxKhLcntHdr> dchinhDxKhLcntHdr = hhDchinhDxKhLcntHdrRepository.findByIdQdGocAndLastest(data.getId(), Boolean.TRUE);
-			dchinhDxKhLcntHdr.ifPresent(data::setDchinhDxKhLcntHdr);
+			if (dchinhDxKhLcntHdr.isPresent()) {
+				List<HhDchinhDxKhLcntDsgthau> gThauList = gThauRepository.findAllByIdDcDxHdr(dchinhDxKhLcntHdr.get().getId());
+				for(HhDchinhDxKhLcntDsgthau gThau : gThauList){
+					List<HhDchinhDxKhLcntDsgthauCtiet> gthauCtietList = gThauCietRepository.findAllByIdGoiThau(gThau.getId());
+					gthauCtietList.forEach(f -> {
+						f.setTenDvi(mapDmucDvi.get(f.getMaDvi()));
+						f.setTenDiemKho(mapDmucDvi.get(f.getMaDiemKho()));
+						List<HhDchinhDxKhLcntDsgthauCtietVt> gthauCtietVtList = gThauCietVtRepository.findAllByIdGoiThauCtiet(f.getId());
+						gthauCtietVtList.forEach(ct ->{
+							ct.setTenDvi(mapDmucDvi.get(ct.getMaDvi()));
+						});
+						f.setChildren(gthauCtietVtList);
+					});
+					gThau.setTenCloaiVthh(hashMapDmHh.get(gThau.getCloaiVthh()));
+					gThau.setChildren(gthauCtietList);
+				}
+				dchinhDxKhLcntHdr.get().setDsGthau(gThauList);
+				data.setDchinhDxKhLcntHdr(dchinhDxKhLcntHdr.get());
+				data.setSoQdDc(dchinhDxKhLcntHdr.get().getSoQdDc());
+			}
 		}
 	}
 
@@ -924,10 +953,17 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	public List<HhQdKhlcntHdr> getAll(HhQdKhlcntSearchReq req) throws Exception {
 		List<HhQdKhlcntHdr> listData =  hhQdKhlcntHdrRepository.selectAll(req.getNamKhoach(),req.getLoaiVthh(),req.getCloaiVthh(), req.getSoQd(), convertDateToString(req.getTuNgayQd()),convertDateToString(req.getDenNgayQd()),req.getTrangThai());
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
-		listData.forEach(f -> {
-			f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
-			f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
-		});
+		if (req.getLoaiVthh() != null && req.getLoaiVthh().startsWith("02")) {
+			listData.forEach(qd -> {
+				qd.setTenLoaiVthh(StringUtils.isEmpty(qd.getLoaiVthh()) ? null : hashMapDmHh.get(qd.getLoaiVthh()));
+				detailVt(qd);
+			});
+		} else {
+			listData.forEach(f -> {
+				f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
+				f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
+			});
+		}
 		return listData;
 	}
 	@Override

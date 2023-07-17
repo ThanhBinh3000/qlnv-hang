@@ -37,7 +37,7 @@ public class QuyChuanQuocGiaHdrController extends BaseController {
 
 
     @ApiOperation(value = "Tra cứu ", response = List.class)
-    @PostMapping(value=  PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody SearchQuyChuanQgReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -53,7 +53,7 @@ public class QuyChuanQuocGiaHdrController extends BaseController {
     }
 
     @ApiOperation(value = "Tạo mới ", response = List.class)
-    @PostMapping(value=  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> save(@Valid @RequestBody QuyChuanQuocGiaHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -70,7 +70,7 @@ public class QuyChuanQuocGiaHdrController extends BaseController {
     }
 
     @ApiOperation(value = "Sửa ", response = List.class)
-    @PostMapping(value=  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> update(@Valid @RequestBody QuyChuanQuocGiaHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -104,7 +104,7 @@ public class QuyChuanQuocGiaHdrController extends BaseController {
     }
 
     @ApiOperation(value = "Xóa ", response = List.class)
-    @PostMapping(value=  PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -120,7 +120,7 @@ public class QuyChuanQuocGiaHdrController extends BaseController {
     }
 
     @ApiOperation(value = "Xóa dánh sách ", response = List.class)
-    @PostMapping(value=  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -136,12 +136,12 @@ public class QuyChuanQuocGiaHdrController extends BaseController {
     }
 
     @ApiOperation(value = "Kết xuất danh sách ", response = List.class)
-    @PostMapping(value= PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportListQdBtcBnToExcel(@Valid @RequestBody SearchQuyChuanQgReq objReq, HttpServletResponse response) throws Exception{
+    public void exportListQdBtcBnToExcel(@Valid @RequestBody SearchQuyChuanQgReq objReq, HttpServletResponse response) throws Exception {
 
         try {
-            quyChuanQuocGiaHdrService.export(objReq,response);
+            quyChuanQuocGiaHdrService.export(objReq, response);
         } catch (Exception e) {
 
             log.error("Kết xuất danh sách : {}", e);
@@ -159,7 +159,7 @@ public class QuyChuanQuocGiaHdrController extends BaseController {
     }
 
     @ApiOperation(value = "Phê duyêt  ", response = List.class)
-    @PostMapping(value=PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> updateStatusUbtvqh(@Valid @RequestBody StatusReq statusReq, HttpServletRequest req) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -173,4 +173,24 @@ public class QuyChuanQuocGiaHdrController extends BaseController {
         }
         return ResponseEntity.ok(resp);
     }
+
+
+    @ApiOperation(value = "Lấy all quy chuẩn theo chủng loại hàng hóa", response = List.class)
+    @GetMapping(value = "quy-chuan-theo-loai-hang" + "/{cloaiVthh}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> allQuyChuanByCloaiVthh(
+            @ApiParam(value = "cloaiVthh ", example = "010101", required = true) @PathVariable("cloaiVthh") String cloaiVthh) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(quyChuanQuocGiaHdrService.getAllQuyChuanByCloaiVthh(cloaiVthh));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Chi tiết: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
 }

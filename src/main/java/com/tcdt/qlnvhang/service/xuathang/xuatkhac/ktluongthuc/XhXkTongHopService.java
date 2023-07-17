@@ -30,6 +30,7 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -104,6 +105,7 @@ public class XhXkTongHopService extends BaseServiceImpl {
     created = xhXkTongHopRepository.save(created);
     Long id = created.getId();
     String ma = created.getMaDanhSach();
+    LocalDateTime ngay= created.getNgayTao();
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),id,XhXkTongHopHdr.TABLE_NAME);
     created.setFileDinhKems(fileDinhKems);
     //set ma tong hop cho danh sach
@@ -112,6 +114,7 @@ public class XhXkTongHopService extends BaseServiceImpl {
     listDsHdr.forEach(s -> {
       s.setIdTongHop(id);
       s.setMaTongHop(ma);
+      s.setNgayTongHop(ngay);
     });
     xhXkDanhSachRepository.saveAll(listDsHdr);
 
@@ -185,6 +188,7 @@ public class XhXkTongHopService extends BaseServiceImpl {
       items.forEach(item -> {
         item.setIdTongHop(null);
         item.setMaTongHop(null);
+        item.setNgayTongHop(null);
         xhXkDanhSachRepository.save(item);
       });
     }
@@ -205,6 +209,7 @@ public class XhXkTongHopService extends BaseServiceImpl {
         items.forEach(item -> {
           item.setIdTongHop(null);
           item.setMaTongHop(null);
+          item.setNgayTongHop(null);
           xhXkDanhSachRepository.save(item);
         });
       }

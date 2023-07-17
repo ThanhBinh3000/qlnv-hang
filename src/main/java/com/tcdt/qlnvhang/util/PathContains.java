@@ -302,7 +302,7 @@ public class PathContains {
 
     public static final String KH_XUAT_HANG = "/kh-xuat-hang";
 
-    public static final String QD_GIAO_NV_XUAT_HANg = "/qd-giao-nv-xuat-hang";
+    public static final String QD_GIAO_NV_XUAT_HANG = "/qd-giao-nv-xuat-hang";
 
 
     public static final String DANH_SACH = "/danh-sach";

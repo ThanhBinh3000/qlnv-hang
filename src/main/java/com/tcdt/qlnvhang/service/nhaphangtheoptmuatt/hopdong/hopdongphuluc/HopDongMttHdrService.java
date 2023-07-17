@@ -268,7 +268,7 @@ public class HopDongMttHdrService extends BaseServiceImpl {
     }
     data.setFileDinhKems(fileDinhKem);
 
-    List<HhQdPheduyetKqMttSLDD> listGthau = hhQdPheduyetKqMttSLDDRepository.findAllByIdQdPdKq(data.getIdQdKq());
+    List<HhQdPheduyetKqMttSLDD> listGthau = hhQdPheduyetKqMttSLDDRepository.findAllById(Collections.singleton(data.getIdQdPdSldd()));
     for (HhQdPheduyetKqMttSLDD hhQdPheduyetKqMttSLDD : listGthau) {
       hhQdPheduyetKqMttSLDD.setTenDvi(hashMapDvi.get(hhQdPheduyetKqMttSLDD.getMaDvi()));
       List<HhQdPdKQMttSlddDtl> hhQdPdKQMttSlddDtls = new ArrayList<>();

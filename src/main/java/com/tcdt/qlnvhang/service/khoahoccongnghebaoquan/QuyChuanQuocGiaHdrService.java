@@ -43,20 +43,20 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
 
     @Autowired
     private QuyChuanQuocGiaDtlRepository quyChuanQuocGiaDtlRepository;
-    
+
     @Autowired
     private FileDinhKemService fileDinhKemService;
 
-    public Page<QuyChuanQuocGiaHdr> searchPage(SearchQuyChuanQgReq objReq) throws Exception{
-        UserInfo userInfo= SecurityContextService.getUser();
+    public Page<QuyChuanQuocGiaHdr> searchPage(SearchQuyChuanQgReq objReq) throws Exception {
+        UserInfo userInfo = SecurityContextService.getUser();
 //        objReq.setMaDvi(userInfo.getDvql());
-        Pageable pageable= PageRequest.of(objReq.getPaggingReq().getPage(),
+        Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
-        Page<QuyChuanQuocGiaHdr> data = quyChuanQuocGiaHdrRepository.search(objReq,pageable);
-        Map<String, String> hashMapDmHh= getListDanhMucHangHoa();
-        data.getContent().forEach( f -> {
-            f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh())?null:hashMapDmHh.get(f.getLoaiVthh()));
-            f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh())?null:hashMapDmHh.get(f.getCloaiVthh()));
+        Page<QuyChuanQuocGiaHdr> data = quyChuanQuocGiaHdrRepository.search(objReq, pageable);
+        Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
+        data.getContent().forEach(f -> {
+            f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
+            f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenTrangThaiHl(f.getTrangThaiHl().equals(Contains.CON_HIEU_LUC) ? "Còn hiệu lực" : "Hết hiệu lực");
         });
@@ -65,13 +65,13 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
     }
 
     @Transactional
-    public QuyChuanQuocGiaHdr save(QuyChuanQuocGiaHdrReq objReq)throws Exception{
+    public QuyChuanQuocGiaHdr save(QuyChuanQuocGiaHdrReq objReq) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        if(userInfo== null){
+        if (userInfo == null) {
             throw new Exception("Bad request.");
         }
         Optional<QuyChuanQuocGiaHdr> optional = quyChuanQuocGiaHdrRepository.findAllBySoVanBan(objReq.getSoVanBan());
-        if (optional.isPresent()){
+        if (optional.isPresent()) {
             throw new Exception("Số văn bản đã tồn tại");
         }
         if (objReq.getTieuChuanKyThuat().isEmpty()) {
@@ -83,29 +83,29 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         if (!listCloai.isEmpty()) {
             throw new Exception("Có chủng loại hàng hóa đã được tạo tiêu chuẩn kỹ thuật ở bản ghi khác");
         }
-        QuyChuanQuocGiaHdr data= new ModelMapper().map(objReq,QuyChuanQuocGiaHdr.class);
+        QuyChuanQuocGiaHdr data = new ModelMapper().map(objReq, QuyChuanQuocGiaHdr.class);
         data.setMaDvi(userInfo.getDvql());
         data.setTrangThai(Contains.DUTHAO);
-        if(DataUtils.isNullObject(objReq.getIdVanBanThayThe())){
+        if (DataUtils.isNullObject(objReq.getIdVanBanThayThe())) {
             data.setIdVanBanThayThe(data.getId());
         }
-        QuyChuanQuocGiaHdr created= quyChuanQuocGiaHdrRepository.save(data);
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),data.getId(),"KHCN_QUY_CHUAN_QG_HDR");
+        QuyChuanQuocGiaHdr created = quyChuanQuocGiaHdrRepository.save(data);
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), data.getId(), "KHCN_QUY_CHUAN_QG_HDR");
         created.setFileDinhKems(fileDinhKems);
-        this.saveCtiet(data,objReq);
+        this.saveCtiet(data, objReq);
         return created;
     }
 
     @Transactional
-    public QuyChuanQuocGiaHdr update(QuyChuanQuocGiaHdrReq objReq)throws Exception{
+    public QuyChuanQuocGiaHdr update(QuyChuanQuocGiaHdrReq objReq) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        if(userInfo== null){
+        if (userInfo == null) {
             throw new Exception("Bad request.");
         }
         Optional<QuyChuanQuocGiaHdr> optional = quyChuanQuocGiaHdrRepository.findById(objReq.getId());
         Optional<QuyChuanQuocGiaHdr> soQd = quyChuanQuocGiaHdrRepository.findAllBySoVanBan(objReq.getSoVanBan());
-        if (soQd.isPresent()){
-            if (!soQd.get().getId().equals(objReq.getId())){
+        if (soQd.isPresent()) {
+            if (!soQd.get().getId().equals(objReq.getId())) {
                 throw new Exception("Số văn bản đã tồn tại");
             }
         }
@@ -118,16 +118,17 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         if (!listCloai.isEmpty()) {
             throw new Exception("Có chủng loại hàng hóa đã được tạo tiêu chuẩn kỹ thuật ở bản ghi khác");
         }
-        QuyChuanQuocGiaHdr data=optional.get();
-        BeanUtils.copyProperties(objReq,data,"id","maDvi");
-        QuyChuanQuocGiaHdr created= quyChuanQuocGiaHdrRepository.save(data);
+        QuyChuanQuocGiaHdr data = optional.get();
+        BeanUtils.copyProperties(objReq, data, "id", "maDvi");
+        QuyChuanQuocGiaHdr created = quyChuanQuocGiaHdrRepository.save(data);
         List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
         quyChuanQuocGiaDtlRepository.deleteAll(dtlList);
-        this.saveCtiet(data,objReq);
+        this.saveCtiet(data, objReq);
         return created;
     }
-    public void saveCtiet(QuyChuanQuocGiaHdr data,QuyChuanQuocGiaHdrReq objReq){
-        for(QuyChuanQuocGiaDtlReq dtlReq :objReq.getTieuChuanKyThuat()) {
+
+    public void saveCtiet(QuyChuanQuocGiaHdr data, QuyChuanQuocGiaHdrReq objReq) {
+        for (QuyChuanQuocGiaDtlReq dtlReq : objReq.getTieuChuanKyThuat()) {
             QuyChuanQuocGiaDtl dtl = new ModelMapper().map(dtlReq, QuyChuanQuocGiaDtl.class);
             dtl.setId(null);
             dtl.setIdHdr(data.getId());
@@ -135,30 +136,30 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         }
     }
 
-    public QuyChuanQuocGiaHdr detail(String ids) throws Exception{
+    public QuyChuanQuocGiaHdr detail(String ids) throws Exception {
         Optional<QuyChuanQuocGiaHdr> optional = quyChuanQuocGiaHdrRepository.findById(Long.valueOf(ids));
-        if (!optional.isPresent()){
+        if (!optional.isPresent()) {
             throw new Exception("Bản ghi không tồn tại");
         }
-        QuyChuanQuocGiaHdr data= optional.get();
-        Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
-        Map<String,String> hashMapDvi = getListDanhMucDvi(null,null,"01");
-        data.setTenDvi(StringUtils.isEmpty(data.getMaDvi())?null:hashMapDvi.get(data.getMaDvi()));
-        data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:hashMapDmHh.get(data.getLoaiVthh()));
-        data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:hashMapDmHh.get(data.getCloaiVthh()));
+        QuyChuanQuocGiaHdr data = optional.get();
+        Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
+        Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
+        data.setTenDvi(StringUtils.isEmpty(data.getMaDvi()) ? null : hashMapDvi.get(data.getMaDvi()));
+        data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : hashMapDmHh.get(data.getLoaiVthh()));
+        data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh()) ? null : hashMapDmHh.get(data.getCloaiVthh()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Collections.singleton(QuyChuanQuocGiaHdr.TABLE_NAME));
         data.setFileDinhKems(fileDinhKems);
-        List<QuyChuanQuocGiaDtl> dtlList  = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
+        List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
         if (!dtlList.isEmpty()) {
             if (data.isApDungCloaiVthh() == false) {
-                for(QuyChuanQuocGiaDtl dtl: dtlList){
+                for (QuyChuanQuocGiaDtl dtl : dtlList) {
                     dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh()) ? null : hashMapDmHh.get(dtl.getLoaiVthh()));
                     dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh()) ? null : hashMapDmHh.get(dtl.getCloaiVthh()));
                 }
                 data.setTieuChuanKyThuat(dtlList);
             } else {
-                List<QuyChuanQuocGiaDtl> listQuyChuan  = new ArrayList<>();
+                List<QuyChuanQuocGiaDtl> listQuyChuan = new ArrayList<>();
                 List<String> listTenChiTieu = dtlList.stream().map(QuyChuanQuocGiaDtl::getTenChiTieu).collect(Collectors.toList());
                 if (!listTenChiTieu.isEmpty()) {
                     dtlList.forEach(item -> {
@@ -177,76 +178,76 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
     }
 
     @Transient
-    public void delete(IdSearchReq idSearchReq) throws Exception{
+    public void delete(IdSearchReq idSearchReq) throws Exception {
         Optional<QuyChuanQuocGiaHdr> optional = quyChuanQuocGiaHdrRepository.findById(idSearchReq.getId());
-        if (!optional.isPresent()){
+        if (!optional.isPresent()) {
             throw new Exception("Bản ghi không tồn tại");
         }
         QuyChuanQuocGiaHdr data = optional.get();
         List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
         quyChuanQuocGiaDtlRepository.deleteAll(dtlList);
-        fileDinhKemService.delete(data.getId(),  Lists.newArrayList("KHCN_QUY_CHUAN_QG_HDR"));
+        fileDinhKemService.delete(data.getId(), Lists.newArrayList("KHCN_QUY_CHUAN_QG_HDR"));
         quyChuanQuocGiaHdrRepository.delete(data);
 
     }
 
     @Transient
-    public void deleteMulti(IdSearchReq idSearchReq) throws Exception{
+    public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
         List<QuyChuanQuocGiaHdr> list = quyChuanQuocGiaHdrRepository.findAllByIdIn(idSearchReq.getIdList());
-        if (list.isEmpty()){
+        if (list.isEmpty()) {
             throw new Exception("Bản ghi không tồn tại");
         }
-        List<Long> listIdHdr=list.stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList());
+        List<Long> listIdHdr = list.stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList());
         List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdrIn(listIdHdr);
         quyChuanQuocGiaDtlRepository.deleteAll(dtlList);
-        fileDinhKemService.deleteMultiple(idSearchReq.getIdList(),  Lists.newArrayList("HH_QD_GIAO_NV_NHAP_HANG"));
+        fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList("HH_QD_GIAO_NV_NHAP_HANG"));
         quyChuanQuocGiaHdrRepository.deleteAll(list);
 
     }
 
-    public  void export(SearchQuyChuanQgReq objReq, HttpServletResponse response) throws Exception{
+    public void export(SearchQuyChuanQgReq objReq, HttpServletResponse response) throws Exception {
         PaggingReq paggingReq = new PaggingReq();
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
-        Page<QuyChuanQuocGiaHdr> page=this.searchPage(objReq);
-        List<QuyChuanQuocGiaHdr> data=page.getContent();
+        Page<QuyChuanQuocGiaHdr> page = this.searchPage(objReq);
+        List<QuyChuanQuocGiaHdr> data = page.getContent();
 
-        String title="Danh sách quy chuẩn kỹ thuật quốc gia";
-        String[] rowsName=new String[]{"STT","Số văn bản","Số hiệu quy chuẩn,tiêu chuẩn văn bản","Áp dụng tại","Loại hàng hóa","Ngày quyết dịnh","Ngày hiệu lực","Trạng thái","Hiệu lực"};
-        String fileName="danh-sach-quy-chuan-ky-thuat-quoc-gia.xlsx";
+        String title = "Danh sách quy chuẩn kỹ thuật quốc gia";
+        String[] rowsName = new String[]{"STT", "Số văn bản", "Số hiệu quy chuẩn,tiêu chuẩn văn bản", "Áp dụng tại", "Loại hàng hóa", "Ngày quyết dịnh", "Ngày hiệu lực", "Trạng thái", "Hiệu lực"};
+        String fileName = "danh-sach-quy-chuan-ky-thuat-quoc-gia.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
-        Object[] objs=null;
-        for (int i=0;i<data.size();i++){
-            QuyChuanQuocGiaHdr dx=data.get(i);
-            objs=new Object[rowsName.length];
-            objs[0]=i;
-            objs[1]=dx.getSoVanBan();
-            objs[2]=dx.getSoHieuQuyChuan();
-            objs[3]=dx.getApDungTai();
-            objs[4]=dx.getListTenLoaiVthh();
-            objs[5]=dx.getNgayKy();
-            objs[6]=dx.getNgayHieuLuc();
-            objs[7]=dx.getTenTrangThai();
-            objs[8]=dx.getTrangThaiHl();
+        Object[] objs = null;
+        for (int i = 0; i < data.size(); i++) {
+            QuyChuanQuocGiaHdr dx = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = dx.getSoVanBan();
+            objs[2] = dx.getSoHieuQuyChuan();
+            objs[3] = dx.getApDungTai();
+            objs[4] = dx.getListTenLoaiVthh();
+            objs[5] = dx.getNgayKy();
+            objs[6] = dx.getNgayHieuLuc();
+            objs[7] = dx.getTenTrangThai();
+            objs[8] = dx.getTrangThaiHl();
             dataList.add(objs);
         }
-        ExportExcel ex =new ExportExcel(title,fileName,rowsName,dataList,response);
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
     }
 
-    public QuyChuanQuocGiaHdr approve(StatusReq statusReq) throws Exception{
-        UserInfo userInfo=SecurityContextService.getUser();
-        if(StringUtils.isEmpty(statusReq.getId())){
+    public QuyChuanQuocGiaHdr approve(StatusReq statusReq) throws Exception {
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (StringUtils.isEmpty(statusReq.getId())) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
-        Optional<QuyChuanQuocGiaHdr> optional =quyChuanQuocGiaHdrRepository.findById(Long.valueOf(statusReq.getId()));
-        if (!optional.isPresent()){
+        Optional<QuyChuanQuocGiaHdr> optional = quyChuanQuocGiaHdrRepository.findById(Long.valueOf(statusReq.getId()));
+        if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
 
-        String status= statusReq.getTrangThai()+optional.get().getTrangThai();
-        switch (status){
+        String status = statusReq.getTrangThai() + optional.get().getTrangThai();
+        switch (status) {
             case Contains.CHODUYET_LDV + Contains.DUTHAO:
             case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
                 optional.get().setNguoiGduyetId(userInfo.getId());
@@ -266,15 +267,19 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         }
         optional.get().setTrangThai(statusReq.getTrangThai());
         QuyChuanQuocGiaHdr created = quyChuanQuocGiaHdrRepository.save(optional.get());
-        if (created.getIdVanBanThayThe() != null && created.getTrangThai().equals(Contains.BAN_HANH) ) {
+        if (created.getIdVanBanThayThe() != null && created.getTrangThai().equals(Contains.BAN_HANH)) {
             quyChuanQuocGiaHdrRepository.findById(created.getIdVanBanThayThe())
-                .ifPresent(vanBanThayThe -> {
-                    vanBanThayThe.setNgayHetHieuLuc(LocalDate.now());
-                    vanBanThayThe.setTrangThaiHl(Contains.HET_HIEU_LUC);
-                    quyChuanQuocGiaHdrRepository.save(vanBanThayThe);
-                });
+                    .ifPresent(vanBanThayThe -> {
+                        vanBanThayThe.setNgayHetHieuLuc(LocalDate.now());
+                        vanBanThayThe.setTrangThaiHl(Contains.HET_HIEU_LUC);
+                        quyChuanQuocGiaHdrRepository.save(vanBanThayThe);
+                    });
         }
         return created;
     }
 
+
+    public List<QuyChuanQuocGiaDtl> getAllQuyChuanByCloaiVthh(String loaiVthh) throws Exception {
+        return quyChuanQuocGiaDtlRepository.getAllQuyChuanByCloaiVthh(loaiVthh).isEmpty() ? new ArrayList<>() : quyChuanQuocGiaDtlRepository.getAllQuyChuanByCloaiVthh(loaiVthh);
+    }
 }

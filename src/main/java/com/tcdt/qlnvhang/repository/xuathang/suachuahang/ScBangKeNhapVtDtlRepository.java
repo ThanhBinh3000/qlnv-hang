@@ -6,8 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ScBangKeNhapVtDtlRepository extends JpaRepository<ScBangKeNhapVtDtl, Long> {
-    List<ScBangKeNhapVtDtl> findByHdrId(Long id);
 
-    List<ScBangKeNhapVtDtl> findByHdrIdIn(List<Long> listId);
+    List<ScBangKeNhapVtDtl> findByIdHdr(Long id);
+
+    List<ScBangKeNhapVtDtl> findByIdHdrIn(List<Long> listId);
 
 }

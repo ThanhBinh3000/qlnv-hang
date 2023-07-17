@@ -93,6 +93,8 @@ public class ScPhieuXuatKhoHdr extends BaseEntity implements Serializable {
     private String tenThuKho;
     @Transient
     private String tenLanhDaoCc;
+    @Transient
+    private ScDanhSachHdr scDanhSachHdr;
 
     public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
         this.mapDmucDvi = mapDmucDvi;
