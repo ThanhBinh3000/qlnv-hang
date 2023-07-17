@@ -61,10 +61,6 @@ public class XhXkVtPhieuXuatKho extends BaseEntity implements Serializable {
     private BigDecimal slTonKho;
     private BigDecimal slLayMau;
     private String donViTinh;
-    //Bb lấy mẫu / bàn giao mẫu
-    private String soBbLayMau;
-    private Long idBbLayMau;
-    private LocalDate ngayLayMau;
 
     @Transient
     private List<FileDinhKem> fileDinhKems;
