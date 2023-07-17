@@ -313,6 +313,8 @@ public class PathContains {
 
     public static final String THONG_BAO_KET_QUA = "/thong-bao-ket-qua";
 
+    public static final String TO_CHUC_THUC_HIEN = "/to-chuc-thuc-hien";
+
     public static final String BAO_CAO_KET_QUA = "/bao-cao-ket-qua";
 
     public static final String XUAT_TIEU_HUY = "/xuat-tieu-huy";
