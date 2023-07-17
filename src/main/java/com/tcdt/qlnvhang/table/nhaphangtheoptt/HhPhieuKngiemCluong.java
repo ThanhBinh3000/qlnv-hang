@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.table.nhaphangtheoptt;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -72,4 +73,6 @@ public class HhPhieuKngiemCluong  extends TrangThaiBaseEntity implements Seriali
     @Transient
     List<HhPhieuKnCluongDtl> hhPhieuKnCluongDtlList= new ArrayList<>();
 
+    @Transient
+    private List<FileDinhKem> fileDinhKems =new ArrayList<>();
 }

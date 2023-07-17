@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.table.nhaphangtheoptt;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -22,6 +24,8 @@ public class HhBienBanNghiemThu implements Serializable {
     @SequenceGenerator(sequenceName = "HH_BIEN_BAN_NGHIEM_THU_SEQ", allocationSize = 1, name = "HH_BIEN_BAN_NGHIEM_THU_SEQ")
     private Long id;
     private String soBb;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Column(columnDefinition = "Date")
     @Temporal(TemporalType.DATE)
     private Date ngayNghiemThu;
     private String thuTruong;
@@ -52,12 +56,20 @@ public class HhBienBanNghiemThu implements Serializable {
     @Transient
     private String tenCloaiVthh;
     private String moTaHangHoa;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Column(columnDefinition = "Date")
     private Date ngayTao;
     private String nguoiTao;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Column(columnDefinition = "Date")
     private Date ngaySua;
     private String nguoiSua;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Column(columnDefinition = "Date")
     private Date ngayGuiDuyet;
     private String nguoiGuiDuyet;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Column(columnDefinition = "Date")
     private Date ngayPduyet;
     private String nguoiPduyet;
 

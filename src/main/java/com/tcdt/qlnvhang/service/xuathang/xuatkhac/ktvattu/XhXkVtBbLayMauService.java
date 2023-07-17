@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtBbLayMauHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtQdGiaonvXhRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -14,6 +15,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtBbLayMauHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatKho;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
@@ -40,6 +42,10 @@ public class XhXkVtBbLayMauService extends BaseServiceImpl {
 
     @Autowired
     private XhXkVtQdGiaonvXhRepository xhXkVtQdGiaonvXhRepository;
+
+
+    @Autowired
+    private XhXkVtPhieuXuatKhoRepository xhXkVtPhieuXuatKhoRepository;
 
     @Autowired
     private UserInfoRepository userInfoRepository;
@@ -168,17 +174,17 @@ public class XhXkVtBbLayMauService extends BaseServiceImpl {
         }
         String status = statusReq.getTrangThai() + optional.get().getTrangThai();
         switch (status) {
-            case Contains.CHODUYET_LDCC + Contains.DUTHAO:
-            case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
+            case Contains.CHODUYET_LDC + Contains.DUTHAO:
+            case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
                 optional.get().setNguoiGduyetId(currentUser.getUser().getId());
                 optional.get().setNgayGduyet(LocalDate.now());
                 break;
-            case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
+            case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
                 optional.get().setNguoiPduyetId(currentUser.getUser().getId());
                 optional.get().setNgayPduyet(LocalDate.now());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
-            case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
+            case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
                 optional.get().setNguoiPduyetId(currentUser.getUser().getId());
                 optional.get().setNgayPduyet(LocalDate.now());
                 break;

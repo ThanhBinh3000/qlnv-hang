@@ -17,17 +17,15 @@ import java.util.Optional;
 @Repository
 public interface DcnbBbGiaoNhanHdrRepository extends JpaRepository<DcnbBbGiaoNhanHdr, Long> {
 
-    @Query(value = "SELECT distinct c FROM DcnbBangKeCanHangHdr c LEFT JOIN QlnvDmDonvi dvi ON dvi.maDvi = c.maDvi WHERE 1=1 " +
-            "AND (:#{#param.soBangKe} IS NULL OR LOWER(c.soBangKe) LIKE CONCAT('%',LOWER(:#{#param.soBangKe}),'%')) " +
+    @Query(value = "SELECT distinct c FROM DcnbBbGiaoNhanHdr c LEFT JOIN QlnvDmDonvi dvi ON dvi.maDvi = c.maDvi WHERE 1=1 " +
+            "AND (:#{#param.soBb} IS NULL OR LOWER(c.soBb) LIKE CONCAT('%',LOWER(:#{#param.soBb}),'%')) " +
             "AND ((:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi}) " +
-            "OR (:#{#param.maDvi} IS NULL OR dvi.parent.maDvi = :#{#param.maDvi}))" +
+            "OR (:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi}))" +
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
-            "AND ((:#{#param.tuNgay}  IS NULL OR c.ngayXuatKho >= :#{#param.tuNgay})" +
-            "AND (:#{#param.denNgay}  IS NULL OR c.ngayXuatKho <= :#{#param.denNgay}) ) " +
-            "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(c.soQdinhDcc) LIKE CONCAT('%',LOWER(:#{#param.soBbLayMau}),'%')) " +
+            "AND (:#{#param.soQdDcCuc} IS NULL OR LOWER(c.soQdDcCuc) LIKE CONCAT('%',LOWER(:#{#param.soQdDcCuc}),'%')) " +
             "AND (:#{#param.loaiDc} IS NULL OR c.loaiDc = :#{#param.loaiDc}) " +
-            "ORDER BY c.soQdinhDcc desc , c.nam desc, c.id desc")
-    Page<DcnbBbGiaoNhanHdr> search(@Param("param") SearchBangKeCanHang req, Pageable pageable);
+            "ORDER BY c.soQdDcCuc desc , c.nam desc, c.id desc")
+    Page<DcnbBbGiaoNhanHdr> search(@Param("param") DcnbBbGiaoNhanHdrReq req, Pageable pageable);
 
     Optional<DcnbBbGiaoNhanHdr> findFirstBySoBb(String soBb);
 

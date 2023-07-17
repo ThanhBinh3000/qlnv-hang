@@ -198,7 +198,7 @@ public class BienBanLayMauKhacServiceImpl extends BaseServiceImpl implements Bie
 		UserInfo userInfo = UserUtils.getUserInfo();
 
 		if (!Contains.CAP_CHI_CUC.equals(userInfo.getCapDvi())){
-			throw new Exception("Bad Request");
+			throw new Exception("Không có quyền gửi phê duyệt");
 		}
 
 		if (StringUtils.isEmpty(req.getId())){

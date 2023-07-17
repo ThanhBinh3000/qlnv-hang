@@ -37,39 +37,22 @@ import java.util.*;
 public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
 
     @Autowired
-    DcnbBienBanLayMauHdrRepository dcnbBienBanLayMauHdrRepository;
+    private DcnbBienBanLayMauHdrRepository dcnbBienBanLayMauHdrRepository;
 
     @Autowired
-    DcnbBienBanLayMauDtlRepository dcnbBienBanLayMauDtlRepository;
+    private DcnbBienBanLayMauDtlRepository dcnbBienBanLayMauDtlRepository;
 
     @Autowired
-    QlnvDmDonviRepository qlnvDmDonviRepository;
+    private QlnvDmDonviRepository qlnvDmDonviRepository;
 
     @Autowired
-    FileDinhKemRepository fileDinhKemRepository;
+    private FileDinhKemRepository fileDinhKemRepository;
 
     @Autowired
-    FileDinhKemService fileDinhKemService;
+    private FileDinhKemService fileDinhKemService;
 
     @Autowired
-    private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
-    @Autowired
-    private DcnbDataLinkDtlRepository dcnbDataLinkDtlRepository;
-
-    @Autowired
-    HhBbNghiemthuKlstRepository hhBbNghiemthuKlstRepository;
-
-    @Autowired
-    DcnbPhieuKtChatLuongHdrRepository dcnbPhieuKtChatLuongHdrRepository;
-
-    @Autowired
-    DcnbQuyetDinhDcCHdrServiceImpl dcnbQuyetDinhDcCHdrServiceImpl;
-
-    @Autowired
-    DcnbQuyetDinhDcCHdrRepository dcnbQuyetDinhDcCHdrRepository;
-
-    @Autowired
-    DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
+    private DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
 
 
     public Page<DcnbBienBanLayMauHdrDTO> searchPage(CustomUserDetails currentUser, SearchDcnbBienBanLayMau req) throws Exception {

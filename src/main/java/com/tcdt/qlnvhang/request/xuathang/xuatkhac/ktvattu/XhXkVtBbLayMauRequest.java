@@ -21,8 +21,11 @@ public class XhXkVtBbLayMauRequest extends BaseRequest {
     private String maQhNs;
     private Long idQdGiaoNvXh;
     private String soQdGiaoNvXh;
+    private Long idPhieuXuatKho;
+    private String soPhieuXuatKho;
     private String soBienBan;
     private LocalDate ngayLayMau;
+    private LocalDate ngayXuatLayMau;
     private String dviKiemNghiem;
     private String diaDiemLayMau;
     private String loaiVthh;

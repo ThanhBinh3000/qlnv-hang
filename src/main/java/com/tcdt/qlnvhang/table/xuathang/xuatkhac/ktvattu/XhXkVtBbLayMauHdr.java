@@ -33,8 +33,11 @@ public class XhXkVtBbLayMauHdr extends BaseEntity implements Serializable {
     private String maQhNs;
     private Long idQdGiaoNvXh;
     private String soQdGiaoNvXh;
+    private Long idPhieuXuatKho;
+    private String soPhieuXuatKho;
     private String soBienBan;
     private LocalDate ngayLayMau;
+    private LocalDate ngayXuatLayMau;
     private String dviKiemNghiem;
     private String diaDiemLayMau;
     private String loaiVthh;
@@ -81,10 +84,6 @@ public class XhXkVtBbLayMauHdr extends BaseEntity implements Serializable {
     private String tenThuKho;
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
-    @Transient
-    private List<FileDinhKem> canCu = new ArrayList<>();
-    @Transient
-    private List<FileDinhKem> fileDinhKemNiemPhong = new ArrayList<>();
 
     @JsonIgnore
     @Transient

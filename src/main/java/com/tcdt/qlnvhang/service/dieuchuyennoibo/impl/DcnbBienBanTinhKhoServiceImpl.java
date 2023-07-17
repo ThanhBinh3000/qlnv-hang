@@ -37,27 +37,16 @@ import java.util.*;
 public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
 
     @Autowired
-    DcnbBienBanTinhKhoHdrRepository dcnbBienBanTinhKhoHdrRepository;
+    private DcnbBienBanTinhKhoHdrRepository dcnbBienBanTinhKhoHdrRepository;
 
     @Autowired
-    DcnbBienBanTinhKhoDtlRepository dcnbBienBanTinhKhoDtlRepository;
+    private DcnbBienBanTinhKhoDtlRepository dcnbBienBanTinhKhoDtlRepository;
 
     @Autowired
-    FileDinhKemService fileDinhKemService;
+    private FileDinhKemService fileDinhKemService;
 
     @Autowired
-    FileDinhKemRepository fileDinhKemRepository;
-
-    @Autowired
-    DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
-
-    @Autowired
-    private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
-    @Autowired
-    private DcnbDataLinkDtlRepository dcnbDataLinkDtlRepository;
-
-    @Autowired
-    DcnbQuyetDinhDcCHdrServiceImpl dcnbQuyetDinhDcCHdrServiceImpl;
+    private FileDinhKemRepository fileDinhKemRepository;
 
     public Page<DcnbBienBanTinhKhoHdrDTO> searchPage(CustomUserDetails currentUser, SearchDcnbBienBanTinhKho req) throws Exception {
         String dvql = currentUser.getDvql();

@@ -68,7 +68,9 @@ public enum NhapXuatHangTrangThaiEnum {
 	DA_DUYET_CBV("53", "Đã duyệt - CB Vụ", "Đã duyệt - CB Vụ"),
 
 	TU_CHOI_CBV("54", "Từ chối - CB Vụ", "Từ chối - CB Vụ"),
-	DANG_NHAP_DU_LIEU("78", "Đang nhập dữ liệu", "Đang nhập dữ liệu")
+	DANG_NHAP_DU_LIEU("78", "Đang nhập dữ liệu", "Đang nhập dữ liệu"),
+	TU_CHOI_BAN_HANH_QD("79", "Từ chối ban hành QĐ", "Từ chối ban hành QĐ"),
+	DA_LAP("80", "Đã lập", "Đã lập"),
 
 	;
 
