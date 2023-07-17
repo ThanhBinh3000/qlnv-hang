@@ -1,52 +1,51 @@
 package com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @Entity
-@Table(name = XhTlQuyetDinhDtl.TABLE_NAME)
+@Table(name = XhTlToChucDtl.TABLE_NAME)
 @Data
-public class XhTlQuyetDinhDtl extends BaseEntity implements Serializable {
-
+public class XhTlToChucDtl implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "XH_TL_QUYET_DINH_DTL";
+    public static final String TABLE_NAME = "XH_TL_TO_CHUC_DTL";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlQuyetDinhDtl.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = XhTlQuyetDinhDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlQuyetDinhDtl.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlToChucDtl.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = XhTlToChucDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlToChucDtl.TABLE_NAME + "_SEQ")
     private Long id;
-    private Long idTongHop;
-    private String maTongHop;
-    private String maDiaDiem;
-    private String loaiVthh;
-    private String cloaiVthh;
-    private String donViTinh;
-    private BigDecimal slHienTai;
-    private BigDecimal slDeXuat;
-    private BigDecimal slDaDuyet;
-    private BigDecimal slCon;
-    private BigDecimal donGia;
-    private BigDecimal thanhTien;
-    private LocalDate ngayNhapKho;
-    private LocalDate ngayDeXuat;
-    private LocalDate ngayTongHop;
-    private String lyDo;
-    private String ketQua;
-    private String type;
 
-    private String trangThaiThucHien;
-    @Transient
-    private String tenTrangThaiThucHien;
+    private String maDiaDiem;
+
+    private String loaiVthh;
+
+    private String cloaiVthh;
+
+    private String maDviTsan;
+
+    private BigDecimal slDauGia;
+
+    private String donViTinh;
+
+    private BigDecimal giaTlKhongVat;
+
+    private BigDecimal giaKhoiDiem;
+
+    private BigDecimal soTienDatTruoc;
+
+    private Integer soLanTraGia;
+
+    private BigDecimal donGiaCaoNhat;
+
+    private BigDecimal thanhTien;
+
+    private String toChucCaNhan;
 
     @JsonIgnore
     @Transient
@@ -108,8 +107,5 @@ public class XhTlQuyetDinhDtl extends BaseEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idHdr")
     @JsonIgnore
-    private XhTlQuyetDinhHdr quyetDinhHdr;
-
-    @Transient
-    List<XhTlToChucHdr> xhTlToChucHdr = new ArrayList<>();
+    private XhTlToChucHdr toChucHdr;
 }
