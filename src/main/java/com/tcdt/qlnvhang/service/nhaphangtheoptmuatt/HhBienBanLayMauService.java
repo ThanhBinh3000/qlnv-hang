@@ -154,6 +154,42 @@ public class HhBienBanLayMauService extends BaseServiceImpl {
         return created;
     }
 
+    public HhBienBanLayMau detaiBySoQd(HhBienBanLayMauReq obj) throws Exception{
+        UserInfo userInfo= SecurityContextService.getUser();
+        Optional<HhBienBanLayMau> optional=hhBienBanLayMauRepository.findBySoBienBan(obj.getSoBbLayMau() != null ? obj.getSoBbLayMau() : obj.getSoBienBan());
+
+        if (!optional.isPresent()){
+            throw new Exception("Không tồn tại bản ghi");
+        }
+        HhBienBanLayMau data = optional.get();
+        Map<String,String> hashMapDmhh = getListDanhMucHangHoa();
+        Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
+
+        data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:hashMapDmhh.get(data.getLoaiVthh()));
+        data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:hashMapDmhh.get(data.getCloaiVthh()));
+        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+        data.setTenDvi(StringUtils.isEmpty(data.getMaDvi()) ? null : hashMapDmdv.get(userInfo.getTenDvi()));
+        data.setTenDiemKho(StringUtils.isEmpty(data.getMaDiemKho()) ? null : hashMapDmdv.get(data.getMaDiemKho()));
+        data.setTenNhaKho(StringUtils.isEmpty(data.getMaNhaKho()) ? null : hashMapDmdv.get(data.getMaNhaKho()));
+        data.setTenNganKho(StringUtils.isEmpty(data.getMaNganKho()) ? null : hashMapDmdv.get(data.getMaNganKho()));
+        data.setTenLoKho(StringUtils.isEmpty(data.getMaLoKho()) ? null : hashMapDmdv.get(data.getMaLoKho()));
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList("HH_BIEN_BAN_LAY_MAU"));
+        if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
+            data.setFileDinhKem(fileDinhKem.get(0));
+        }
+        List<FileDinhKem> fileDinhkems = fileDinhKemService.search(data.getId(), Arrays.asList("HH_BIEN_BAN_LAY_MAU"));
+        if (!DataUtils.isNullOrEmpty(fileDinhkems)) {
+            data.setFileDinhKems(fileDinhkems);
+        }
+        if(!ObjectUtils.isEmpty(data.getIdBbNhapDayKho())){
+            Optional<HhBienBanDayKhoHdr> byId = hhBienBanDayKhoHdrRepository.findById(data.getIdBbNhapDayKho());
+            byId.ifPresent(data::setBbNhapDayKho);
+        }
+        List<HhBbanLayMauDtl> listDtl = hhBbanLayMauDtlRepository.findAllByIdHdr(data.getId());
+        data.setBbanLayMauDtlList(listDtl);
+        return data;
+    }
+
     public HhBienBanLayMau detail(String ids) throws Exception{
         UserInfo userInfo= SecurityContextService.getUser();
         Optional<HhBienBanLayMau> optional=hhBienBanLayMauRepository.findById(Long.valueOf(ids));
