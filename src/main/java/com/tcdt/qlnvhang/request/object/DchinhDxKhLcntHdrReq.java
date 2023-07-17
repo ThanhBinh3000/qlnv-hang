@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.request.object;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +27,8 @@ public class DchinhDxKhLcntHdrReq extends BaseRequest {
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayQd;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayQdDc;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayHluc;
@@ -110,9 +113,20 @@ public class DchinhDxKhLcntHdrReq extends BaseRequest {
 	String blanhDthau;
 
 	String maTrHdr;
+	String noiDungQd;
+	String tenDuAn;
+	String dienGiaiTongMucDt;
+	String dienGiai;
+	String quyMo;
+	BigDecimal tongMucDtDx;
+	BigDecimal tongMucDt;
+	Integer tgianThienHd;
+	Integer vat;
 
 	private List<HhQdKhlcntDtlReq> children = new ArrayList<>();
 
 	private List<FileDinhKemReq> fileDinhKems;
+	private List<FileDinhKemReq> fileDinhKemsTtr;
+	private List<FileDinhKemReq> listCcPhapLy;
 	private List<HhQdKhlcntDsgthauReq> dsGoiThau;
 }

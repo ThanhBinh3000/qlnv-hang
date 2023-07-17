@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -40,8 +41,10 @@ public class HhDchinhDxKhLcntHdr extends TrangThaiBaseEntity implements Serializ
 
 	Integer nam;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	@Temporal(TemporalType.DATE)
 	Date ngayQd;
+	@Temporal(TemporalType.DATE)
+	Date ngayQdDc;
 
 	String loaiVthh;
 
@@ -51,7 +54,7 @@ public class HhDchinhDxKhLcntHdr extends TrangThaiBaseEntity implements Serializ
 
 	String trichYeu;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	@Temporal(TemporalType.DATE)
 	Date ngayHluc;
 
 	String loaiDieuChinh;
@@ -86,6 +89,15 @@ public class HhDchinhDxKhLcntHdr extends TrangThaiBaseEntity implements Serializ
 	Integer gtriHdong;
 	private Boolean lastest;
 	private Integer lanDieuChinh;
+	String noiDungQd;
+	String tenDuAn;
+	String dienGiaiTongMucDt;
+	String dienGiai;
+	String quyMo;
+	BigDecimal tongMucDtDx;
+	BigDecimal tongMucDt;
+	Integer tgianThienHd;
+	Integer vat;
 	@Transient
 	Integer gthauTrung;
 	@Transient
@@ -123,5 +135,10 @@ public class HhDchinhDxKhLcntHdr extends TrangThaiBaseEntity implements Serializ
 
 	@Transient
 	String tenNguonVon;
-
+	@Transient
+	private List<FileDinhKem> listCcPhapLy;
+	@Transient
+	private List<FileDinhKem> fileDinhKems;
+	@Transient
+	private List<FileDinhKem> fileDinhKemsTtr;
 }
