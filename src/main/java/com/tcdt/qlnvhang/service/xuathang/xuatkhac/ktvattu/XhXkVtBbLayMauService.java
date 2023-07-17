@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtBbLayMauHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtQdGiaonvXhRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -14,6 +15,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtBbLayMauHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatKho;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
@@ -40,6 +42,10 @@ public class XhXkVtBbLayMauService extends BaseServiceImpl {
 
     @Autowired
     private XhXkVtQdGiaonvXhRepository xhXkVtQdGiaonvXhRepository;
+
+
+    @Autowired
+    private XhXkVtPhieuXuatKhoRepository xhXkVtPhieuXuatKhoRepository;
 
     @Autowired
     private UserInfoRepository userInfoRepository;
@@ -83,6 +89,14 @@ public class XhXkVtBbLayMauService extends BaseServiceImpl {
         XhXkVtBbLayMauHdr created = xhXkVtBbLayMauHdrRepository.save(data);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtBbLayMauHdr.TABLE_NAME);
         created.setFileDinhKems(fileDinhKems);
+        //Lưu lại số bb lấy mẫu, ngày lấy mẫu cho phiếu xuất kho
+        Optional<XhXkVtPhieuXuatKho> byId = xhXkVtPhieuXuatKhoRepository.findById(created.getIdPhieuXuatKho());
+        if (byId.isPresent()) {
+            byId.get().setSoBbLayMau(created.getSoBienBan());
+            byId.get().setNgayLayMau(created.getNgayLayMau());
+            byId.get().setIdBbLayMau(created.getId());
+            xhXkVtPhieuXuatKhoRepository.save(byId.get());
+        }
         return created;
     }
 
@@ -109,6 +123,14 @@ public class XhXkVtBbLayMauService extends BaseServiceImpl {
         fileDinhKemService.delete(dx.getId(), Collections.singleton(XhXkVtBbLayMauHdr.TABLE_NAME));
         //save file đính kèm
         fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtBbLayMauHdr.TABLE_NAME);
+        //Lưu lại số bb lấy mẫu, ngày lấy mẫu cho phiếu xuất kho
+        Optional<XhXkVtPhieuXuatKho> byId = xhXkVtPhieuXuatKhoRepository.findById(created.getIdPhieuXuatKho());
+        if (byId.isPresent()) {
+            byId.get().setSoBbLayMau(created.getSoBienBan());
+            byId.get().setNgayLayMau(created.getNgayLayMau());
+            byId.get().setIdBbLayMau(created.getId());
+            xhXkVtPhieuXuatKhoRepository.save(byId.get());
+        }
         return detail(created.getId());
     }
 
@@ -143,6 +165,14 @@ public class XhXkVtBbLayMauService extends BaseServiceImpl {
         }
         XhXkVtBbLayMauHdr data = optional.get();
         fileDinhKemService.deleteMultiple(Collections.singleton(data.getId()), Collections.singleton(XhXkVtBbLayMauHdr.TABLE_NAME));
+        //Update lại số bb lấy mẫu, ngày lấy mẫu cho phiếu xuất kho thành null
+        Optional<XhXkVtPhieuXuatKho> byId = xhXkVtPhieuXuatKhoRepository.findById(data.getIdPhieuXuatKho());
+        if (byId.isPresent()) {
+            byId.get().setSoBbLayMau(null);
+            byId.get().setNgayLayMau(null);
+            byId.get().setIdBbLayMau(null);
+            xhXkVtPhieuXuatKhoRepository.save(byId.get());
+        }
         xhXkVtBbLayMauHdrRepository.delete(data);
     }
 
