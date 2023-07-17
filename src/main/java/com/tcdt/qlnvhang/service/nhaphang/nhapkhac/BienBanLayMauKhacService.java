@@ -9,4 +9,6 @@ public interface BienBanLayMauKhacService extends BaseService<BienBanLayMauKhac,
     BienBanLayMauKhac create(BienBanLayMauKhacReq req) throws Exception;
 
     void delete(Long id) throws Exception;
+
+    BienBanLayMauKhac approve(BienBanLayMauKhacReq req) throws Exception;
 }
