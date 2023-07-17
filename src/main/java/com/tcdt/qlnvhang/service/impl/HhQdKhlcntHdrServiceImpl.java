@@ -956,9 +956,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		if (req.getLoaiVthh() != null && req.getLoaiVthh().startsWith("02")) {
 			listData.forEach(qd -> {
 				qd.setTenLoaiVthh(StringUtils.isEmpty(qd.getLoaiVthh()) ? null : hashMapDmHh.get(qd.getLoaiVthh()));
-				if (qd.getDieuChinh()) {
-					detailVt(qd);
-				}
+				detailVt(qd);
 			});
 		} else {
 			listData.forEach(f -> {
