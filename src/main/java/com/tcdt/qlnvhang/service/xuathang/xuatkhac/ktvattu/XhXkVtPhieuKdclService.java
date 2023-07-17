@@ -208,7 +208,7 @@ public class XhXkVtPhieuKdclService extends BaseServiceImpl {
             objs[0] = i;
             objs[1] = dx.getSoQdGiaoNvXh();
             objs[2] = dx.getNam();
-            objs[3] = dx.getNgayLauMau();
+            objs[3] = dx.getNgayLayMau();
             objs[4] = dx.getTenDiemKho();
             objs[5] = dx.getTenLoKho();
             objs[6] = dx.getTenCloaiVthh();
