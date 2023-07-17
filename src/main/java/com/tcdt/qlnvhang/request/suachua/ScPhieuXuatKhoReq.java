@@ -38,4 +38,5 @@ public class ScPhieuXuatKhoReq extends BaseRequest {
 
     List<FileDinhKemReq> fileDinhKemReq = new ArrayList<>();
     private List<ScPhieuXuatKhoDtl> children = new ArrayList<>();
+
 }

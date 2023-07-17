@@ -11,4 +11,6 @@ public interface ScBangKeNhapVtDtlRepository extends JpaRepository<ScBangKeNhapV
 
     List<ScBangKeNhapVtDtl> findByIdHdrIn(List<Long> listId);
 
+    void deleteAllByIdHdr(Long idHdr);
+
 }

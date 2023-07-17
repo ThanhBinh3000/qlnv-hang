@@ -25,7 +25,6 @@ public class ScBangKeXuatVatTuDtl {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = ScBangKeXuatVatTuDtl.TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = ScBangKeXuatVatTuDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = ScBangKeXuatVatTuDtl.TABLE_NAME + "_SEQ")
-    @Column(name = "ID")
     private Long id;
 
     private Long idHdr;

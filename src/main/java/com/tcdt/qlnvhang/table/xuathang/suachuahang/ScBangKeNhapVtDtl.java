@@ -24,6 +24,8 @@ public class ScBangKeNhapVtDtl {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = ScBangKeNhapVtDtl.TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = ScBangKeNhapVtDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = ScBangKeNhapVtDtl.TABLE_NAME + "_SEQ")
+    private Long id;
+
     private Long idHdr;
 
     private String soSerial;

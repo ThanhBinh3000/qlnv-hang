@@ -77,20 +77,20 @@ public class ScBangKeXuatVatTuServiceImpl extends BaseServiceImpl implements ScB
         ScBangKeXuatVatTuHdr created = hdrRepository.save(data);
         List<ScBangKeXuatVatTuDtl> scBangKeXuatVatTuDtls = saveDtl(req, created.getId());
         created.setChildren(scBangKeXuatVatTuDtls);
-        this.updatePhieuNhapKho(data,data.getIdPhieuXuatKho(),null);
+        this.updatePhieuXuatKho(data,data.getIdPhieuXuatKho(),null);
         return created;
     }
 
-    private void updatePhieuNhapKho(ScBangKeXuatVatTuHdr data,Long idPhieuNhapKho,Long idPhieuNhapKhoOld){
-        if(!Objects.isNull(idPhieuNhapKhoOld) && !idPhieuNhapKho.equals(idPhieuNhapKhoOld)){
-            Optional<ScPhieuXuatKhoHdr> byId = scPhieuXuatKhoHdrRepository.findById(idPhieuNhapKhoOld);
+    private void updatePhieuXuatKho(ScBangKeXuatVatTuHdr data,Long idPhieuXuatKho,Long idPhieuXuatKhoOld){
+        if(!Objects.isNull(idPhieuXuatKhoOld) && !idPhieuXuatKho.equals(idPhieuXuatKhoOld)){
+            Optional<ScPhieuXuatKhoHdr> byId = scPhieuXuatKhoHdrRepository.findById(idPhieuXuatKhoOld);
             if(byId.isPresent()){
                 byId.get().setIdBangKeCanHang(null);
                 byId.get().setSoBangKeCanHang(null);
                 scPhieuXuatKhoHdrRepository.save(byId.get());
             }
         }else{
-            Optional<ScPhieuXuatKhoHdr> byId = scPhieuXuatKhoHdrRepository.findById(idPhieuNhapKho);
+            Optional<ScPhieuXuatKhoHdr> byId = scPhieuXuatKhoHdrRepository.findById(idPhieuXuatKho);
             if(byId.isPresent()){
                 byId.get().setIdBangKeCanHang(data.getId());
                 byId.get().setSoBangKeCanHang(data.getSoBangKe());
@@ -122,7 +122,7 @@ public class ScBangKeXuatVatTuServiceImpl extends BaseServiceImpl implements ScB
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
         ScBangKeXuatVatTuHdr data = optional.get();
-        this.updatePhieuNhapKho(data,req.getIdPhieuXuatKho(),data.getIdPhieuXuatKho());
+        this.updatePhieuXuatKho(data,req.getIdPhieuXuatKho(),data.getIdPhieuXuatKho());
         BeanUtils.copyProperties(req, data);
         ScBangKeXuatVatTuHdr created = hdrRepository.save(data);
         List<ScBangKeXuatVatTuDtl> scBangKeXuatVatTuDtls = saveDtl(req, created.getId());
