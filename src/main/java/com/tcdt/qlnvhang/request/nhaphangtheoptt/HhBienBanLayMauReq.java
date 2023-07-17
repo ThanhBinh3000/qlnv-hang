@@ -18,6 +18,7 @@ public class HhBienBanLayMauReq {
     private String loaiBienBan;
     private String maDvi;
     private String soBienBan;
+    private String soBbLayMau;
     private String maQhns;
     private Long idQdGiaoNvNh;
     private String soQdGiaoNvNh;

@@ -102,6 +102,25 @@ public class HhBienBanLayMauController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
+
+    @ApiOperation(value = "Lấy chi tiết thông tin ", response = List.class)
+    @PostMapping(value =PathContains.BB_LM+ PathContains.URL_CHI_TIET + "/detail-by-so-qd", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> detail(
+            @ApiParam(value = "ID ", example = "1", required = true) @RequestBody HhBienBanLayMauReq objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(hhBienBanLayMauService.detaiBySoQd(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Chi tiết: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
     @ApiOperation(value = "Xóa ", response = List.class)
     @PostMapping(value=  PathContains.BB_LM + PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
