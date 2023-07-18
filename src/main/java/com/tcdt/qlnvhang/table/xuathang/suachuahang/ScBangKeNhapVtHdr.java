@@ -33,10 +33,12 @@ public class ScBangKeNhapVtHdr extends BaseEntity implements Serializable {
     private String maQhns;
     private String soBangKe;
     private LocalDate ngayNhap;
-    private String soQdXh;
-    private Long idQdXh;
-    private String soPhieuXuatKho;
-    private Long idPhieuXuatKho;
+    private String soQdNh;
+    private Long idQdNh;
+    private String soPhieuNhapKho;
+    private LocalDate ngayNhapKho;
+
+    private Long idPhieuNhapKho;
     private Long idThuKho;
     private Long idLanhDaoCc;
     private String lyDoTuChoi;
@@ -51,4 +53,8 @@ public class ScBangKeNhapVtHdr extends BaseEntity implements Serializable {
     private String tenLanhDaoCc;
     @Transient
     private List<ScBangKeNhapVtDtl> children = new ArrayList<>();
+
+    public String getTenTrangThai(){
+        return TrangThaiAllEnum.getLabelById(getTrangThai());
+    }
 }

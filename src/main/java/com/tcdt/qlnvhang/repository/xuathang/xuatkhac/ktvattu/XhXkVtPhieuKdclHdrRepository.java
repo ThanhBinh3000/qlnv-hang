@@ -24,8 +24,8 @@ public interface XhXkVtPhieuKdclHdrRepository extends JpaRepository<XhXkVtPhieuK
             "AND (:#{#param.soPhieu} IS NULL OR LOWER(c.soPhieu) LIKE CONCAT('%',LOWER(:#{#param.soPhieu}),'%')) " +
             "AND (:#{#param.soQdGiaoNvXh} IS NULL OR LOWER(c.soQdGiaoNvXh) LIKE CONCAT('%',LOWER(:#{#param.soQdGiaoNvXh}),'%')) " +
             "AND (:#{#param.dviKiemNghiem} IS NULL OR LOWER(c.dviKiemNghiem) LIKE CONCAT('%',LOWER(:#{#param.dviKiemNghiem}),'%')) " +
-            "AND ((:#{#param.ngayKiemDinhTu}  IS NULL OR c.ngayLapPhieu >= :#{#param.ngayKiemDinhTu})" +
-            "AND (:#{#param.ngayKiemDinhDen}  IS NULL OR c.ngayLapPhieu <= :#{#param.ngayKiemDinhDen}) ) " +
+            "AND ((:#{#param.ngayKiemDinhTu}  IS NULL OR c.ngayKiemDinh >= :#{#param.ngayKiemDinhTu})" +
+            "AND (:#{#param.ngayKiemDinhDen}  IS NULL OR c.ngayKiemDinh <= :#{#param.ngayKiemDinhDen}) ) " +
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
             "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
     )

@@ -36,7 +36,6 @@ public class ScPhieuNhapKhoReq extends BaseRequest {
     private String diaChi;
     private LocalDate thoiGianGiaoNhan;
     private String soBangKeCanHang;
-    private Long idBangKeCanHang;
     private BigDecimal tongSoLuong;
     private String ghiChu;
     private String trangThai;

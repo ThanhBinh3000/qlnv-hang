@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.repository.xuathang.suachuahang;
 import com.tcdt.qlnvhang.request.suachua.ScBangKeNhapVtReq;
 import com.tcdt.qlnvhang.response.suachua.ScBangKeNhapVtDTO;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScBangKeNhapVtHdr;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScPhieuNhapKhoHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,5 +17,7 @@ public interface ScBangKeNhapVtHdrRepository extends JpaRepository<ScBangKeNhapV
     Optional<ScBangKeNhapVtHdr> findFirstBySoBangKe(String soBangKe);
 
     List<ScBangKeNhapVtHdr> findAllByIdIn(List<Long> id);
+
+    List<ScBangKeNhapVtHdr> findAllByIdPhieuNhapKhoIn(List<Long> idPhieuNhapKho);
 
 }

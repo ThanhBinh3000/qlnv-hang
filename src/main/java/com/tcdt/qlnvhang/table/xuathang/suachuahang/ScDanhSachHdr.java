@@ -73,6 +73,8 @@ public class ScDanhSachHdr extends BaseEntity implements Serializable {
   private List<ScPhieuNhapKhoHdr> scPhieuNhapKhoList;
   @Transient
   private List<ScBangKeXuatVatTuHdr> scBangKeXuatVatTuList;
+  @Transient
+  private List<ScBangKeNhapVtHdr> scBangKeNhapVtList;
 
   @Transient
   private List<ScKiemTraChatLuongHdr> scKiemTraChatLuongList;

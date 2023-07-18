@@ -4,10 +4,7 @@ import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
-import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScPhieuNhapKhoDtlRepository;
-import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScPhieuNhapKhoHdrRepository;
-import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhNhapHangDtlRepository;
-import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhNhapHangRepository;
+import com.tcdt.qlnvhang.repository.xuathang.suachuahang.*;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuNhapKhoHdrReq;
 import com.tcdt.qlnvhang.request.suachua.ScPhieuNhapKhoReq;
@@ -60,6 +57,8 @@ public class ScPhieuNhapKhoServiceImpl extends BaseServiceImpl implements ScPhie
 
     @Autowired
     private ScQuyetDinhNhapHangDtlRepository scQuyetDinhNhapHangDtlRepository;
+    @Autowired
+    private ScBangKeNhapVtHdrRepository scBangKeNhapVtHdrRepository;
 
     @Override
     public Page<ScPhieuNhapKhoHdr> searchPage(ScPhieuNhapKhoReq req) throws Exception {
@@ -154,12 +153,12 @@ public class ScPhieuNhapKhoServiceImpl extends BaseServiceImpl implements ScPhie
         ScPhieuNhapKhoHdr hdr = optional.get();
 
         if(Objects.isNull(hdr.getIdBangKeCanHang())){
-            throw new Exception("Phiếu xuất kho đang chưa khởi tạo bảng kê xuất vật tư. Vui lòng tạo bảng kê xuất vật tư");
+            throw new Exception("Phiếu xuất kho đang chưa khởi tạo bảng kê nhập vật tư. Vui lòng tạo bảng kê nhâp vật tư");
         } else {
-//            ScBangKeXuatVatTuHdr bk = scBangKeXuatVatTuHdrRepository.findById(hdr.getIdBangKeCanHang()).get();
-//            if(!bk.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())){
-//                throw new Exception("Số bảng kê " +bk.getSoBangKe()+" chưa đc phê duyệt. Vui lòng phê duyệt bảng kê");
-//            }
+            ScBangKeNhapVtHdr bk = scBangKeNhapVtHdrRepository.findById(hdr.getIdBangKeCanHang()).get();
+            if(!bk.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())){
+                throw new Exception("Số bảng kê " +bk.getSoBangKe()+" chưa đc phê duyệt. Vui lòng phê duyệt bảng kê");
+            }
         }
 
         String status = hdr.getTrangThai() + req.getTrangThai();
@@ -251,7 +250,9 @@ public class ScPhieuNhapKhoServiceImpl extends BaseServiceImpl implements ScPhie
 
     @Override
     public List<ScPhieuNhapKhoHdr> searchDanhSachTaoBangKe(ScPhieuNhapKhoReq req) {
-        return null;
+        req.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
+        List<ScPhieuNhapKhoHdr> scPhieuXuatKhoHdrs = hdrRepository.searchListTaoBangKe(req);
+        return scPhieuXuatKhoHdrs;
     }
 
 //    public Page<ScPhieuNhapKhoDTO> searchPage(CustomUserDetails currentUser, ScPhieuNhapKhoReq req) throws Exception {
