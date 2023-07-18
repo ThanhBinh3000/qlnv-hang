@@ -14,8 +14,8 @@ import java.util.Optional;
 
 public interface XhTlQuyetDinhQdPdRepository extends JpaRepository<XhTlQuyetDinhPdKqHdr, Long> {
 
-//  @Query("SELECT DISTINCT  c FROM XhTlQuyetDinhPdKqHdr c " +
-//      " WHERE 1=1 " +
+  @Query("SELECT c FROM XhTlQuyetDinhPdKqHdr c " +
+      " WHERE 1=1 " +
 //      "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
 //      "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
 //      "AND (:#{#param.soQd} IS NULL OR LOWER(c.soQd) LIKE CONCAT('%',LOWER(:#{#param.soQd}),'%')) " +
@@ -23,8 +23,8 @@ public interface XhTlQuyetDinhQdPdRepository extends JpaRepository<XhTlQuyetDinh
 //      "AND ((:#{#param.ngayKyTu}  IS NULL OR c.ngayKy >= :#{#param.ngayKyTu})" +
 //      "AND (:#{#param.ngayKyDen}  IS NULL OR c.ngayKy <= :#{#param.ngayKyDen}) ) " +
 //      "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
-//      "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
-//  )
+      "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
+  )
   Page<XhTlQuyetDinhPdKqHdr> search(@Param("param") XhTlQuyetDinhPdKqHdrReq param, Pageable pageable);
 
 
