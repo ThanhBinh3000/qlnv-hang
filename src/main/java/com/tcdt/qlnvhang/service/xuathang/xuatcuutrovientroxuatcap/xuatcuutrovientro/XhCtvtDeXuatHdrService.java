@@ -229,7 +229,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     xhCtvtDeXuatHdrRepository.delete(data);
   }
 
-  @Transient
+  @Transactional
   public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
     List<XhCtvtDeXuatHdr> list = xhCtvtDeXuatHdrRepository.findAllByIdIn(idSearchReq.getIdList());
 

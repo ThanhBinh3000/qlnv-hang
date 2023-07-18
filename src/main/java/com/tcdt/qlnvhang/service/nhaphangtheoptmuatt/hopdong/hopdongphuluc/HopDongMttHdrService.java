@@ -354,7 +354,7 @@ public class HopDongMttHdrService extends BaseServiceImpl {
     fileDinhKemService.delete(optional.get().getId(), Collections.singleton(HopDongMttHdr.TABLE_NAME));
   }
 
-  @Transient
+  @Transactional
   public void deleteMulti(List<Long> listMulti) throws Exception {
     if (Objects.isNull(listMulti)) {
       throw new Exception("Xoá thất bại, không tìm thấy dữ liệu");

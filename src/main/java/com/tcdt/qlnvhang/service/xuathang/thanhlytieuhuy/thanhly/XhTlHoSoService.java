@@ -172,7 +172,7 @@ public class XhTlHoSoService extends BaseServiceImpl {
 
   }
 
-  @Transient
+  @Transactional
   public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
     List<XhTlHoSoHdr> list = xhTlHoSoRepository.findAllByIdIn(idSearchReq.getIdList());
 
