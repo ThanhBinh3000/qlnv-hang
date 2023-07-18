@@ -36,6 +36,7 @@ public class XhXkVtPhieuKdclHdr extends BaseEntity implements Serializable {
     private String soPhieu;
     private LocalDate ngayLapPhieu;
     private LocalDate ngayLayMau;
+    private LocalDate ngayKiemDinh;
     private String dviKiemNghiem;
     private String loaiVthh;
     private String cloaiVthh;
@@ -49,6 +50,7 @@ public class XhXkVtPhieuKdclHdr extends BaseEntity implements Serializable {
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
     private String lyDoTuChoi;
+    private String tenNguoiTao;
 
     @OneToMany(mappedBy = "xhXkVtPhieuKdclHdr", cascade = CascadeType.ALL)
     private List<XhXkVtPhieuKdclDtl> xhXkVtPhieuKdclDtl = new ArrayList<>();
@@ -75,6 +77,8 @@ public class XhXkVtPhieuKdclHdr extends BaseEntity implements Serializable {
     private String tenLoKho;
     @Transient
     private String tenThuKho;
+    @Transient
+    private LocalDate ngayXuatLayMau;
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
