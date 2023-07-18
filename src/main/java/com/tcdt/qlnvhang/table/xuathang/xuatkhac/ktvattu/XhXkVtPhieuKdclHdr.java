@@ -50,6 +50,7 @@ public class XhXkVtPhieuKdclHdr extends BaseEntity implements Serializable {
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
     private String lyDoTuChoi;
+    private String tenNguoiTao;
 
     @OneToMany(mappedBy = "xhXkVtPhieuKdclHdr", cascade = CascadeType.ALL)
     private List<XhXkVtPhieuKdclDtl> xhXkVtPhieuKdclDtl = new ArrayList<>();
