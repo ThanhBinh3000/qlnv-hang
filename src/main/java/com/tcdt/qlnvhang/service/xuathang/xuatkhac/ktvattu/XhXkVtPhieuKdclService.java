@@ -34,6 +34,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class XhXkVtPhieuKdclService extends BaseServiceImpl {
@@ -50,6 +52,9 @@ public class XhXkVtPhieuKdclService extends BaseServiceImpl {
     private XhXkVtPhieuXuatKhoRepository xhXkVtPhieuXuatKhoRepository;
 
     @Autowired
+    private XhXkVtBbLayMauHdrRepository xhXkVtBbLayMauHdrRepository;
+
+    @Autowired
     private UserInfoRepository userInfoRepository;
 
     @Autowired
@@ -61,9 +66,12 @@ public class XhXkVtPhieuKdclService extends BaseServiceImpl {
         Page<XhXkVtPhieuKdclHdr> search = xhXkVtPhieuKdclHdrRepository.search(req, pageable);
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
+        List<Long> idsBbLayMau = search.getContent().stream().map(XhXkVtPhieuKdclHdr::getIdBbLayMau).collect(Collectors.toList());
+        Map<Long, XhXkVtBbLayMauHdr> mapBbLayMau = xhXkVtBbLayMauHdrRepository.findAllByIdIn(idsBbLayMau).stream().collect(Collectors.toMap(XhXkVtBbLayMauHdr::getId, Function.identity()));
         search.getContent().forEach(s -> {
             s.setMapDmucDvi(mapDmucDvi);
             s.setMapVthh(mapVthh);
+            s.setNgayXuatLayMau(mapBbLayMau.get(s.getIdBbLayMau()).getNgayXuatLayMau());
             if (s.getNguoiPduyetId() != null) {
                 s.setTenThuKho(ObjectUtils.isEmpty(s.getNguoiPduyetId()) ? null : userInfoRepository.findById(s.getNguoiPduyetId()).get().getFullName());
             }

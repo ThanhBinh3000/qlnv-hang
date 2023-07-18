@@ -77,6 +77,8 @@ public class XhXkVtPhieuKdclHdr extends BaseEntity implements Serializable {
     @Transient
     private String tenThuKho;
     @Transient
+    private LocalDate ngayXuatLayMau;
+    @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
     @JsonIgnore
