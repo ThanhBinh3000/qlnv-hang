@@ -18,6 +18,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtBbLayMauHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuKdclHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatKho;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
@@ -99,6 +100,18 @@ public class XhXkVtPhieuKdclService extends BaseServiceImpl {
         XhXkVtPhieuKdclHdr created = xhXkVtPhieuKdclHdrRepository.save(data);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtPhieuKdclHdr.TABLE_NAME);
         created.setFileDinhKems(fileDinhKems);
+        //update phiếu kdcl vào phiếu xuất kho
+        // tìm số bb lấy mẫu -> tìm phiếu xuất kho
+        Optional<XhXkVtBbLayMauHdr> bbLayMauById = xhXkVtBbLayMauHdrRepository.findById(created.getIdBbLayMau());
+        if (bbLayMauById.isPresent()) {
+            Long idPxk = bbLayMauById.get().getIdPhieuXuatKho();
+            Optional<XhXkVtPhieuXuatKho> pxkById = xhXkVtPhieuXuatKhoRepository.findById(idPxk);
+            if (pxkById.isPresent()) {
+                pxkById.get().setSoPhieuKncl(created.getSoPhieu());
+                pxkById.get().setIdPhieuKncl(created.getId());
+                xhXkVtPhieuXuatKhoRepository.save(pxkById.get());
+            }
+        }
         return created;
     }
 
@@ -159,6 +172,18 @@ public class XhXkVtPhieuKdclService extends BaseServiceImpl {
         }
         XhXkVtPhieuKdclHdr data = optional.get();
         fileDinhKemService.deleteMultiple(Collections.singleton(data.getId()), Collections.singleton(XhXkVtPhieuKdclHdr.TABLE_NAME));
+        //Update pxk
+        // tìm số bb lấy mẫu -> tìm phiếu xuất kho
+        Optional<XhXkVtBbLayMauHdr> bbLayMauById = xhXkVtBbLayMauHdrRepository.findById(data.getIdBbLayMau());
+        if (bbLayMauById.isPresent()) {
+            Long idPxk = bbLayMauById.get().getIdPhieuXuatKho();
+            Optional<XhXkVtPhieuXuatKho> pxkById = xhXkVtPhieuXuatKhoRepository.findById(idPxk);
+            if (pxkById.isPresent()) {
+                pxkById.get().setSoPhieuKncl(null);
+                pxkById.get().setIdPhieuKncl(null);
+                xhXkVtPhieuXuatKhoRepository.save(pxkById.get());
+            }
+        }
         xhXkVtPhieuKdclHdrRepository.delete(data);
     }
 
@@ -176,10 +201,12 @@ public class XhXkVtPhieuKdclService extends BaseServiceImpl {
         switch (status) {
             case Contains.CHODUYET_LDC + Contains.DUTHAO:
             case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
+            case Contains.CHODUYET_LDC + Contains.CHO_DUYET_TP:
                 optional.get().setNguoiGduyetId(currentUser.getUser().getId());
                 optional.get().setNgayGduyet(LocalDate.now());
                 break;
             case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
+            case Contains.TUCHOI_TP + Contains.TUCHOI_TP:
                 optional.get().setNguoiPduyetId(currentUser.getUser().getId());
                 optional.get().setNgayPduyet(LocalDate.now());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
