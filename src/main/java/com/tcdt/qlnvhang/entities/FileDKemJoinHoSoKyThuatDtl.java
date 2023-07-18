@@ -2,7 +2,9 @@ package com.tcdt.qlnvhang.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.table.xuathang.hosokythuat.XhHoSoKyThuatDtl;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhPdKqHdr;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -30,7 +32,13 @@ public class FileDKemJoinHoSoKyThuatDtl implements Serializable {
   Date createDate;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "dataId")
-  @JsonBackReference
+  @JoinColumn(name = "dataId", insertable = false, updatable = false)
+//  @JsonBackReference
+  @JsonIgnore
   private XhHoSoKyThuatDtl parent;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "dataId", insertable = false, updatable = false)
+  @JsonIgnore
+  private XhTlQuyetDinhPdKqHdr xhTlQuyetDinhPdKqHdr;
 }

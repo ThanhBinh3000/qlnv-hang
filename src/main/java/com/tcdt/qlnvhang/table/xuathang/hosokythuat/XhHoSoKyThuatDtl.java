@@ -101,7 +101,6 @@ public class XhHoSoKyThuatDtl extends BaseEntity implements Serializable {
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   @Fetch(value = FetchMode.SUBSELECT)
   @JoinColumn(name = "dataId")
-  @JsonManagedReference
   @Where(clause = "data_type='" + XhHoSoKyThuatDtl.TABLE_NAME + "_CAN_CU'")
   private List<FileDKemJoinHoSoKyThuatDtl> canCu = new ArrayList<>();
 
@@ -117,7 +116,6 @@ public class XhHoSoKyThuatDtl extends BaseEntity implements Serializable {
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   @Fetch(value = FetchMode.SUBSELECT)
   @JoinColumn(name = "dataId")
-  @JsonManagedReference
   @Where(clause = "data_type='" + XhHoSoKyThuatDtl.TABLE_NAME + "_VAN_BAN_BSUNG'")
   private List<FileDKemJoinHoSoKyThuatDtl> vanBanBsung = new ArrayList<>();
 
