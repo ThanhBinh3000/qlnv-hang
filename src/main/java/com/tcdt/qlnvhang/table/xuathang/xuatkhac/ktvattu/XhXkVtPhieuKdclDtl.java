@@ -24,7 +24,7 @@ public class XhXkVtPhieuKdclDtl implements Serializable {
     private String chiSo;
     private String ketQua;
     private String ppKiemTra;
-    private String danhGia; // Đạt/ Không đạt
+    private Integer danhGia; //1  Đạt/0 Không đạt
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idHdr")
