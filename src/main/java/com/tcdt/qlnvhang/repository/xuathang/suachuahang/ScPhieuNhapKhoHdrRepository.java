@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.repository.xuathang.suachuahang;
 
 import com.tcdt.qlnvhang.request.suachua.ScPhieuNhapKhoReq;
 import com.tcdt.qlnvhang.request.suachua.ScPhieuXuatKhoReq;
+import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachRequest;
 import com.tcdt.qlnvhang.response.suachua.ScPhieuNhapKhoDTO;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScPhieuNhapKhoHdr;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScPhieuXuatKhoHdr;
@@ -27,5 +28,7 @@ public interface ScPhieuNhapKhoHdrRepository extends JpaRepository<ScPhieuNhapKh
             " AND (:#{#param.trangThai} IS NULL OR qd.trangThai = :#{#param.trangThai}) " +
             " AND (:#{#param.idQdNh} IS NULL OR qd.idQdNh = :#{#param.idQdNh}) " )
     List<ScPhieuNhapKhoHdr> searchListTaoBangKe(@Param("param") ScPhieuNhapKhoReq req);
+
+
 
 }
