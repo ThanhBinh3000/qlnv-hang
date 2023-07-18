@@ -19,8 +19,8 @@ public class XhTlQuyetDinhPdKqDtl extends BaseEntity implements Serializable {
   public static final String TABLE_NAME = "XH_TL_QUYET_DINH_PD_KQ_DTL";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlToChucDtl.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhTlToChucDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlToChucDtl.TABLE_NAME + "_SEQ")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlQuyetDinhPdKqDtl.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = XhTlQuyetDinhPdKqDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlQuyetDinhPdKqDtl.TABLE_NAME + "_SEQ")
   private Long id;
 
   private String maDiaDiem;
