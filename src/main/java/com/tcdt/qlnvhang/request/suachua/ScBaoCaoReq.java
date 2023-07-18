@@ -2,34 +2,33 @@ package com.tcdt.qlnvhang.request.suachua;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScBaoCaoDtl;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
+import javax.persistence.Transient;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class ScBaoCaoReq extends BaseRequest {
 
-    // #Region Entity
     private Long id;
     private Integer nam;
-    private String maDanhSach;
-    private String tenDanhSach;
-    private LocalDate thoiHanXuat;
-    private LocalDate thoiHanNhap;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
-    private Date thoiGianTh;
+    private String maDviNhan;
+    private String soBaoCao;
+    private LocalDate ngayBaoCao;
+    private String tenBaoCao;
+    private String soQdXh;
+    private Long idQdXh;
+    private LocalDate ngayQdXh;
+    private String soQdTc;
+    private LocalDate ngayQdTc;
+    private String noiDung;
+    private String trangThai;
 
-    // #Region Search
-    private String maDviSr;
-
-    private int namSr;
-
-    private LocalDate ngayTu;
-
-    private LocalDate ngayDen;
-
-    private String maDanhSachSr;
+    private List<ScBaoCaoDtl> children = new ArrayList<>();
 
 }

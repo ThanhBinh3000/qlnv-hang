@@ -14,4 +14,6 @@ public interface ScBaoCaoDtlRepository extends JpaRepository<ScBaoCaoDtl, Long> 
 
   List<ScBaoCaoDtl> findAllByIdHdr(Long idHdr);
 
+
+
 }

@@ -34,8 +34,10 @@ public interface ScQuyetDinhXuatHangRepository extends JpaRepository<ScQuyetDinh
 
     @Query(value = "SELECT distinct xh FROM ScQuyetDinhXuatHang xh " +
             " LEFT JOIN ScQuyetDinhNhapHang nh on xh.id = nh.idQdXh " +
+            " LEFT JOIN ScBaoCaoHdr bc on xh.id = bc.idQdXh " +
             " WHERE 1 = 1 " +
             " AND nh.id is not null " +
+            " AND bc.id is null " +
             " AND (:#{#param.trangThai} IS NULL OR xh.trangThai = :#{#param.trangThai}) " +
             " AND (:#{#param.trangThai} IS NULL OR nh.trangThai = :#{#param.trangThai}) " +
             " AND (:#{#param.maDviSr} IS NULL OR xh.maDvi = :#{#param.maDviSr}) " +

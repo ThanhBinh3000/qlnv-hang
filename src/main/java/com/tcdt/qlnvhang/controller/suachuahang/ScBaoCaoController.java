@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.controller.suachuahang;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.suachua.ScBaoCaoReq;
+import com.tcdt.qlnvhang.request.suachua.ScBienBanKtReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.suachuahang.ScBaoCaoService;
 import com.tcdt.qlnvhang.service.suachuahang.impl.ScTongHopServiceImpl;
@@ -58,6 +59,23 @@ public class ScBaoCaoController {
       resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
       resp.setMsg(e.getMessage());
       log.error("Tạo mới thông tin  : {}", e);
+    }
+    return ResponseEntity.ok(resp);
+  }
+
+  @ApiOperation(value = "Cập nhật thông tin biên bản", response = List.class)
+  @PostMapping(value =  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<BaseResponse> update(@Valid @RequestBody ScBaoCaoReq objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(service.update(objReq));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      e.printStackTrace();
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Cập nhật thông tin : {}", e);
     }
     return ResponseEntity.ok(resp);
   }

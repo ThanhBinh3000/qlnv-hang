@@ -2,10 +2,9 @@ package com.tcdt.qlnvhang.service.suachuahang.impl;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
-import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScDanhSachRepository;
-import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScTongHopDtlRepository;
-import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScTongHopHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.suachuahang.*;
 import com.tcdt.qlnvhang.request.suachua.ScBaoCaoReq;
+import com.tcdt.qlnvhang.request.suachua.ScPhieuNhapKhoReq;
 import com.tcdt.qlnvhang.request.suachua.ScTongHopReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachRequest;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -14,10 +13,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.suachuahang.ScBaoCaoService;
 import com.tcdt.qlnvhang.service.suachuahang.ScTongHopService;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScBaoCaoHdr;
-import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScDanhSachHdr;
-import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTongHopDtl;
-import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTongHopHdr;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
@@ -36,45 +32,145 @@ import java.util.stream.Collectors;
 public class ScBaoCaoServiceImpl extends BaseServiceImpl implements ScBaoCaoService {
 
   @Autowired
-  private ScTongHopHdrRepository hdrRepository;
+  private ScBaoCaoHdrRepository hdrRepository;
 
   @Autowired
-  private ScTongHopDtlRepository dtlRepository;
+  private ScBaoCaoDtlRepository dtlRepository;
   @Autowired
   private ScDanhSachRepository scDanhSachRepository;
   @Autowired
   private FileDinhKemService fileDinhKemService;
+
   @Autowired
   private ScDanhSachServiceImpl scDanhSachServiceImpl;
 
   @Override
   public Page<ScBaoCaoHdr> searchPage(ScBaoCaoReq req) throws Exception {
-    return null;
+    Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+    Page<ScBaoCaoHdr> search = hdrRepository.searchPage(req, pageable);
+    return search;
   }
 
   @Override
   public ScBaoCaoHdr create(ScBaoCaoReq req) throws Exception {
-    return null;
+    UserInfo userInfo = UserUtils.getUserInfo();
+    if (!userInfo.getCapDvi().equals(Contains.CAP_CUC)) {
+      throw new Exception("Chức năng chỉ dành cho cấp cục");
+    }
+    ScBaoCaoHdr hdr = new ScBaoCaoHdr();
+    BeanUtils.copyProperties(req,hdr);
+    hdr.setNam(LocalDate.now().getYear());
+    hdr.setMaDvi(userInfo.getDvql());
+    hdr.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
+    ScBaoCaoHdr save = hdrRepository.save(hdr);
+    saveFileDinhKem(req.getFileDinhKemReq(), save.getId(), ScBaoCaoHdr.TABLE_NAME);
+    List<ScBaoCaoDtl> dtlList = saveDtl(req, save.getId());
+    save.setChildren(dtlList);
+    return save;
+  }
+
+  public List<ScBaoCaoDtl> saveDtl(ScBaoCaoReq req, Long idHdr){
+    dtlRepository.deleteAllByIdHdr(idHdr);
+    req.getChildren().forEach(item -> {
+      item.setId(null);
+      item.setIdHdr(idHdr);
+      dtlRepository.save(item);
+    });
+    return req.getChildren();
   }
 
   @Override
   public ScBaoCaoHdr update(ScBaoCaoReq req) throws Exception {
-    return null;
+    UserInfo userInfo = UserUtils.getUserInfo();
+    if (!userInfo.getCapDvi().equals(Contains.CAP_CUC)) {
+      throw new Exception("Chức năng chỉ dành cho cấp cục");
+    }
+    Optional<ScBaoCaoHdr> optional = hdrRepository.findById(req.getId());
+    if (!optional.isPresent()) {
+      throw new Exception("Không tìm thấy dữ liệu");
+    }
+    ScBaoCaoHdr data = optional.get();
+    BeanUtils.copyProperties(req, data);
+    fileDinhKemService.delete(data.getId(), Collections.singleton(ScBaoCaoHdr.TABLE_NAME));
+    saveFileDinhKem(req.getFileDinhKemReq(), data.getId(), ScBaoCaoHdr.TABLE_NAME);
+    List<ScBaoCaoDtl> dtlList = saveDtl(req, data.getId());
+    data.setChildren(dtlList);
+    return data;
   }
 
   @Override
   public ScBaoCaoHdr detail(Long id) throws Exception {
-    return null;
+    Optional<ScBaoCaoHdr> optional = hdrRepository.findById(id);
+    if (!optional.isPresent()) {
+      throw new Exception("Không tìm thấy dữ liệu");
+    }
+    ScBaoCaoHdr data = optional.get();
+    data.setFileDinhKems(fileDinhKemService.search(id, Collections.singleton(ScBaoCaoHdr.TABLE_NAME)));
+    List<ScBaoCaoDtl> allByIdHdr = dtlRepository.findAllByIdHdr(id);
+    allByIdHdr.forEach(item -> {
+      try {
+        item.setScDanhSachHdr(scDanhSachServiceImpl.detail(item.getIdDanhSachHdr()));
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+    });
+    data.setChildren(allByIdHdr);
+    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    Map<String, String> mapVthh = getListDanhMucHangHoa();
+    //set label
+    data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
+    data.setTenDviNhan(mapDmucDvi.get(data.getMaDviNhan()));
+    return data;
   }
 
   @Override
   public ScBaoCaoHdr approve(ScBaoCaoReq req) throws Exception {
-    return null;
+    UserInfo userInfo = UserUtils.getUserInfo();
+    Optional<ScBaoCaoHdr> optional = hdrRepository.findById(req.getId());
+    if (!optional.isPresent()) {
+      throw new Exception("Bản ghi không tồn tại");
+    }
+    ScBaoCaoHdr hdr = optional.get();
+
+    String status = hdr.getTrangThai() + req.getTrangThai();
+    switch (status) {
+      // Re approve : gửi lại duyệt
+      case Contains.TUCHOI_TP + Contains.DUTHAO:
+      case Contains.TUCHOI_LDC + Contains.DUTHAO:
+        break;
+      // Arena các cấp duuyệt
+      case Contains.DUTHAO + Contains.CHODUYET_TP:
+      case Contains.CHODUYET_TP + Contains.CHODUYET_LDC:
+      case Contains.CHODUYET_LDC + Contains.DADUYET_LDC:
+        if(!userInfo.getCapDvi().equals(Contains.CAP_CUC)){
+          throw new Exception("Đơn vị gửi duyệt phải là cấp cục");
+        }
+        break;
+      // Arena từ chối
+      case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+      case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
+        break;
+      default:
+        throw new Exception("Phê duyệt không thành công");
+    }
+    hdr.setTrangThai(req.getTrangThai());
+    ScBaoCaoHdr save = hdrRepository.save(hdr);
+    return save;
   }
 
   @Override
   public void delete(Long id) throws Exception {
-
+    UserInfo userInfo = UserUtils.getUserInfo();
+    if (!userInfo.getCapDvi().equals(Contains.CAP_CUC)) {
+      throw new Exception("Chức năng chỉ dành cho cấp chi cục");
+    }
+    Optional<ScBaoCaoHdr> optional = hdrRepository.findById(id);
+    if (!optional.isPresent()) {
+      throw new Exception("Không tìm thấy dữ liệu");
+    }
+    hdrRepository.delete(optional.get());
+    fileDinhKemService.delete(optional.get().getId(), Collections.singleton(ScPhieuXuatKhoHdr.TABLE_NAME));
+    dtlRepository.deleteAllByIdHdr(optional.get().getId());
   }
 
   @Override
@@ -129,34 +225,7 @@ public class ScBaoCaoServiceImpl extends BaseServiceImpl implements ScBaoCaoServ
 //
 //  @Override
 //  public ScTongHopHdr create(ScTongHopReq req) throws Exception {
-//    UserInfo userInfo = UserUtils.getUserInfo();
-//    if (!userInfo.getCapDvi().equals(Contains.CAP_CUC)) {
-//      throw new Exception("Tổng hợp danh sách hàng chỉ được thực hiện ở cấp cục");
-//    }
-//    XhTlDanhSachRequest reqTh = new XhTlDanhSachRequest();
-//    reqTh.setDvql(userInfo.getDvql());
-//    List<ScDanhSachHdr> listTh = scDanhSachRepository.listTongHop(reqTh);
-//    if(listTh == null || listTh.isEmpty()){
-//      throw new Exception("Không có dữ liệu để tổng hợp");
-//    }
-//    ScTongHopHdr hdr = new ScTongHopHdr();
-//    BeanUtils.copyProperties(req,hdr);
-//    hdr.setNam(LocalDate.now().getYear());
-//    hdr.setMaDvi(userInfo.getDvql());
-//    hdr.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
-//    hdr.setId(Long.parseLong(req.getMaDanhSach().split("-")[1]));
-//    ScTongHopHdr save = hdrRepository.save(hdr);
-//
-//    List<ScTongHopDtl> listDtl = new ArrayList<>();
-//    listTh.forEach(item -> {
-//      ScTongHopDtl dtl = new ScTongHopDtl();
-//      dtl.setIdHdr(hdr.getId());
-//      dtl.setIdDsHdr(item.getId());
-//      listDtl.add(dtl);
-//    });
-//    List<ScTongHopDtl> scTongHopDtls = dtlRepository.saveAll(listDtl);
-//    save.setChildren(scTongHopDtls);
-//    return save;
+
 //  }
 //
 //  @Override
