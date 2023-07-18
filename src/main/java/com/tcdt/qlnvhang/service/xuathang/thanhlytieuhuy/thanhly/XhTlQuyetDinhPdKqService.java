@@ -41,13 +41,6 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
   @Autowired
   private FileDinhKemService fileDinhKemService;
 
-  public XhTlQuyetDinhPdKqHdr test(CustomUserDetails currentUser, XhTlQuyetDinhPdKqHdrReq objReq) {
-    XhTlQuyetDinhPdKqHdr byId = xhTlQuyetDinhQdPdRepository.findById(1L).get();
-    BeanUtils.copyProperties(objReq, byId);
-    XhTlQuyetDinhPdKqHdr save = xhTlQuyetDinhQdPdRepository.save(byId);
-    return save;
-  }
-
   public Page<XhTlQuyetDinhPdKqHdr> searchPage(CustomUserDetails currentUser, XhTlQuyetDinhPdKqHdrReq req) throws Exception {
     String dvql = currentUser.getDvql();
     if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
