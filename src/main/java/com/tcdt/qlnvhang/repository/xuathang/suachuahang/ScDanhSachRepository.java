@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.repository.xuathang.suachuahang;
 
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachRequest;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScDanhSachHdr;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScPhieuNhapKhoHdr;
 import feign.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface ScDanhSachRepository extends JpaRepository<ScDanhSachHdr, Long> {
+
   @Query("SELECT c FROM ScDanhSachHdr c WHERE 1=1 " +
       "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
       "AND (:#{#param.loaiVthh} IS NULL OR c.loaiVthh = :#{#param.loaiVthh}) " +
@@ -28,6 +30,16 @@ public interface ScDanhSachRepository extends JpaRepository<ScDanhSachHdr, Long>
           "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
   List<ScDanhSachHdr> listTongHop(@Param("param") XhTlDanhSachRequest param);
+
+  @Query("SELECT c FROM ScDanhSachHdr c  " +
+          " LEFT JOIN ScQuyetDinhNhapHangDtl qdDtl on c.id = qdDtl.idDsHdr " +
+          " LEFT JOIN ScBienBanKtHdr bbKt on c.id = bbKt.idScDanhSachHdr " +
+          " WHERE 1=1 " +
+          " AND bbKt.id is null " +
+          " AND (:#{#param.idQdNh} IS NULL OR qdDtl.idHdr = :#{#param.idQdNh}) " +
+          "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
+  )
+  List<ScDanhSachHdr> searchListTaoBienBanKt(@Param("param") XhTlDanhSachRequest param);
 
 
   void deleteAllByIdIn(List<Long> listId);

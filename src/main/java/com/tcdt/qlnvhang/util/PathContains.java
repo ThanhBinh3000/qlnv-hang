@@ -228,6 +228,8 @@ public class PathContains {
 
     public static final String BIEN_BAN_GIAO_NHAN_VT = "/bien-ban-giao-nhan-vt";
 
+    public static final String BIEN_BAN_KET_THUC = "/bien-ban-ket-thuc";
+
     public static final String BIEN_BAN_NHAP_DAY_KHO = "/bien-ban-nhap-day-kho";
 
     public static final String BIEN_BAN_GIAO_NHAN = "/bien-ban-giao-nhan";
@@ -310,6 +312,7 @@ public class PathContains {
     public static final String HO_SO = "/ho-so";
     public static final String TRINH_THAM_DINH = "/trinh-tham-dinh";
     public static final String QUYET_DINH_THANH_LY = "/quyet-dinh-thanh-ly";
+    public static final String QUYET_DINH_PDKQ = "/quyet-dinh-pdkq";
 
     public static final String THONG_BAO_KET_QUA = "/thong-bao-ket-qua";
 

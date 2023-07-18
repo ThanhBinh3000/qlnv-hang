@@ -202,7 +202,7 @@ public class XhDgBangKeService extends BaseServiceImpl {
 
   }
 
-  @Transient
+  @Transactional
   public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
 
   }

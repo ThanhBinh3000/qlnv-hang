@@ -178,7 +178,7 @@ public class XhTlTongHopService extends BaseServiceImpl {
     xhTlTongHopRepository.delete(data);
   }
 
-  @Transient
+  @Transactional
   public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
     List<XhTlTongHopHdr> list = xhTlTongHopRepository.findByIdIn(idSearchReq.getIdList());
 
