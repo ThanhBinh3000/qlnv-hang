@@ -210,7 +210,7 @@ public class XhCtvtBangKeService extends BaseServiceImpl {
     }
   }
 
-  @Transient
+  @Transactional
   public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
     List<XhCtvtBangKeHdr> list = xhCtvtBangKeHdrRepository.findAllByIdIn(idSearchReq.getIdList());
 
