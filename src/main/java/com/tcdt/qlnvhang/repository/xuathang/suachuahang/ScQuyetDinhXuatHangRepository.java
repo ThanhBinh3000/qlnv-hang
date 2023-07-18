@@ -32,15 +32,15 @@ public interface ScQuyetDinhXuatHangRepository extends JpaRepository<ScQuyetDinh
     )
     List<ScQuyetDinhXuatHang> listTaoPhieuXuatKho(@Param("param") ScQuyetDinhXuatHangReq param);
 
-    @Query(value = "SELECT c FROM ScQuyetDinhXuatHang c " +
-            " LEFT JOIN ScKiemTraChatLuongHdr ktra on c.id = ktra.idQdXh " +
+    @Query(value = "SELECT distinct xh FROM ScQuyetDinhXuatHang xh " +
+            " LEFT JOIN ScQuyetDinhNhapHang nh on xh.id = nh.idQdXh " +
             " WHERE 1 = 1 " +
-            " AND ktra.id is not null " +
-            " AND (:#{#param.trangThaiKtraCl} IS NULL OR ktra.trangThai = :#{#param.trangThaiKtraCl}) " +
-            " AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
-            " AND (:#{#param.maDviSr} IS NULL OR c.maDvi = :#{#param.maDviSr}) " +
-            " ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc "
+            " AND nh.id is not null " +
+            " AND (:#{#param.trangThai} IS NULL OR xh.trangThai = :#{#param.trangThai}) " +
+            " AND (:#{#param.trangThai} IS NULL OR nh.trangThai = :#{#param.trangThai}) " +
+            " AND (:#{#param.maDviSr} IS NULL OR xh.maDvi = :#{#param.maDviSr}) " +
+            " AND (:#{#param.maDviSr} IS NULL OR nh.maDvi = :#{#param.maDviSr}) " +
+            " ORDER BY xh.ngaySua desc , xh.ngayTao desc, xh.id desc "
     )
-    List<ScQuyetDinhXuatHang> listTaoQuyetDinhNh(@Param("param") ScQuyetDinhXuatHangReq param);
-
+    List<ScQuyetDinhXuatHang> listTaoBaoCao(@Param("param") ScQuyetDinhXuatHangReq param);
 }

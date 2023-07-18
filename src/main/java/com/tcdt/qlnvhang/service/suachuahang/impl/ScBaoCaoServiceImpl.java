@@ -1,0 +1,231 @@
+package com.tcdt.qlnvhang.service.suachuahang.impl;
+
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScDanhSachRepository;
+import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScTongHopDtlRepository;
+import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScTongHopHdrRepository;
+import com.tcdt.qlnvhang.request.suachua.ScBaoCaoReq;
+import com.tcdt.qlnvhang.request.suachua.ScTongHopReq;
+import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachRequest;
+import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
+import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.service.suachuahang.ScBaoCaoService;
+import com.tcdt.qlnvhang.service.suachuahang.ScTongHopService;
+import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScBaoCaoHdr;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScDanhSachHdr;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTongHopDtl;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTongHopHdr;
+import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.UserUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
+
+@Service
+public class ScBaoCaoServiceImpl extends BaseServiceImpl implements ScBaoCaoService {
+
+  @Autowired
+  private ScTongHopHdrRepository hdrRepository;
+
+  @Autowired
+  private ScTongHopDtlRepository dtlRepository;
+  @Autowired
+  private ScDanhSachRepository scDanhSachRepository;
+  @Autowired
+  private FileDinhKemService fileDinhKemService;
+  @Autowired
+  private ScDanhSachServiceImpl scDanhSachServiceImpl;
+
+  @Override
+  public Page<ScBaoCaoHdr> searchPage(ScBaoCaoReq req) throws Exception {
+    return null;
+  }
+
+  @Override
+  public ScBaoCaoHdr create(ScBaoCaoReq req) throws Exception {
+    return null;
+  }
+
+  @Override
+  public ScBaoCaoHdr update(ScBaoCaoReq req) throws Exception {
+    return null;
+  }
+
+  @Override
+  public ScBaoCaoHdr detail(Long id) throws Exception {
+    return null;
+  }
+
+  @Override
+  public ScBaoCaoHdr approve(ScBaoCaoReq req) throws Exception {
+    return null;
+  }
+
+  @Override
+  public void delete(Long id) throws Exception {
+
+  }
+
+  @Override
+  public void deleteMulti(List<Long> listMulti) throws Exception {
+
+  }
+
+  @Override
+  public void export(ScBaoCaoReq req, HttpServletResponse response) throws Exception {
+
+  }
+
+//  @Override
+//  public Page<ScTongHopHdr> searchPage(ScTongHopReq req) throws Exception {
+//    UserInfo currentUser = SecurityContextService.getUser();
+//    if (currentUser == null){
+//      throw new Exception("Access denied.");
+//    }
+//    String dvql = currentUser.getDvql();
+//    if (currentUser.getCapDvi().equals(Contains.CAP_CUC)) {
+//      req.setMaDviSr(dvql);
+//    }
+//    Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+//    Page<ScTongHopHdr> search = hdrRepository.searchPage(req, pageable);
+//
+//    List<Long> idsList = search.getContent().stream().map(ScTongHopHdr::getId).collect(Collectors.toList());
+//
+//    HashMap<Long, List<ScTongHopDtl>> dataChilren = getDataChilren(idsList);
+//    //set label
+//    search.getContent().forEach(s -> {
+//      s.setChildren(dataChilren.get(s.getId()));
+//      s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
+//    });
+//    return search;
+//  }
+//
+//  private HashMap<Long,List<ScTongHopDtl>> getDataChilren(List<Long> idHdr){
+//    HashMap<Long,List<ScTongHopDtl>> hashMap = new HashMap<>();
+//    idHdr.forEach(item -> {
+//        List<ScTongHopDtl> dtl = dtlRepository.findAllByIdHdr(item);
+//        dtl.forEach( dataChilren -> {
+//          try {
+//            dataChilren.setScDanhSachHdr(scDanhSachServiceImpl.detail(dataChilren.getIdDsHdr()));
+//          } catch (Exception e) {
+//            throw new RuntimeException(e);
+//          }
+//        });
+//        hashMap.put(item,dtl);
+//    });
+//    return hashMap;
+//  }
+//
+//  @Override
+//  public ScTongHopHdr create(ScTongHopReq req) throws Exception {
+//    UserInfo userInfo = UserUtils.getUserInfo();
+//    if (!userInfo.getCapDvi().equals(Contains.CAP_CUC)) {
+//      throw new Exception("Tổng hợp danh sách hàng chỉ được thực hiện ở cấp cục");
+//    }
+//    XhTlDanhSachRequest reqTh = new XhTlDanhSachRequest();
+//    reqTh.setDvql(userInfo.getDvql());
+//    List<ScDanhSachHdr> listTh = scDanhSachRepository.listTongHop(reqTh);
+//    if(listTh == null || listTh.isEmpty()){
+//      throw new Exception("Không có dữ liệu để tổng hợp");
+//    }
+//    ScTongHopHdr hdr = new ScTongHopHdr();
+//    BeanUtils.copyProperties(req,hdr);
+//    hdr.setNam(LocalDate.now().getYear());
+//    hdr.setMaDvi(userInfo.getDvql());
+//    hdr.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
+//    hdr.setId(Long.parseLong(req.getMaDanhSach().split("-")[1]));
+//    ScTongHopHdr save = hdrRepository.save(hdr);
+//
+//    List<ScTongHopDtl> listDtl = new ArrayList<>();
+//    listTh.forEach(item -> {
+//      ScTongHopDtl dtl = new ScTongHopDtl();
+//      dtl.setIdHdr(hdr.getId());
+//      dtl.setIdDsHdr(item.getId());
+//      listDtl.add(dtl);
+//    });
+//    List<ScTongHopDtl> scTongHopDtls = dtlRepository.saveAll(listDtl);
+//    save.setChildren(scTongHopDtls);
+//    return save;
+//  }
+//
+//  @Override
+//  public ScTongHopHdr update(ScTongHopReq req) throws Exception {
+//    return null;
+//  }
+//
+//  @Override
+//  public ScTongHopHdr detail(Long id) throws Exception {
+//    Optional<ScTongHopHdr> optional = hdrRepository.findById(id);
+//    if(!optional.isPresent()){
+//      throw new Exception("Bản ghi không tồn tại");
+//    }
+//    HashMap<Long, List<ScTongHopDtl>> dataChilren = getDataChilren(Collections.singletonList(optional.get().getId()));
+//    optional.get().setChildren(dataChilren.get(optional.get().getId()));
+//
+//    return optional.get();
+//  }
+//
+//  @Override
+//  public ScTongHopHdr approve(ScTongHopReq req) throws Exception {
+//    Optional<ScTongHopHdr> optional = hdrRepository.findById(req.getId());
+//    if(!optional.isPresent()){
+//      throw new Exception("Thông tin tổng hợp không tồn tại");
+//    }
+//    String status = req.getTrangThai() + optional.get().getTrangThai();
+//    if ((TrangThaiAllEnum.GUI_DUYET.getId() + TrangThaiAllEnum.DU_THAO.getId()).equals(status)) {
+//      optional.get().setTrangThai(req.getTrangThai());
+//    } else {
+//      throw new Exception("Gửi duyệt không thành công");
+//    }
+//    hdrRepository.save(optional.get());
+//
+//
+//    return optional.get();
+//  }
+//
+//  @Override
+//  public void delete(Long id) throws Exception {
+//    Optional<ScTongHopHdr> optional = hdrRepository.findById(id);
+//    if (!optional.isPresent()) {
+//      throw new Exception("Bản ghi không tồn tại");
+//    }
+//    hdrRepository.delete(optional.get());
+//    dtlRepository.deleteAllByIdHdr(optional.get().getId());
+//  }
+//
+//  @Override
+//  public void deleteMulti(List<Long> listMulti) throws Exception {
+//
+//  }
+//
+//  @Override
+//  public void export(ScTongHopReq req, HttpServletResponse response) throws Exception {
+//
+//  }
+//
+//  @Override
+//  public List<ScTongHopHdr> dsTongHopTrinhVaThamDinh(ScTongHopReq req) throws Exception {
+//    UserInfo currentUser = SecurityContextService.getUser();
+//    if (currentUser == null){
+//      throw new Exception("Access denied.");
+//    }
+//    String dvql = currentUser.getDvql();
+//    if (currentUser.getCapDvi().equals(Contains.CAP_CUC)) {
+//      req.setMaDviSr(dvql);
+//    }
+//    req.setTrangThai(TrangThaiAllEnum.GUI_DUYET.getId());
+//    List<ScTongHopHdr> list = hdrRepository.listTongHopTrinhThamDinh(req);
+//    return list;
+//  }
+}

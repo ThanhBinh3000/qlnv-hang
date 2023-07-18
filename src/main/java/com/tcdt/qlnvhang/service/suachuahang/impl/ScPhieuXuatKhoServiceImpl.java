@@ -258,62 +258,6 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
         return scPhieuXuatKhoHdrs;
     }
 
-//    @Override
-//    public ScPhieuXuatKhoHdr create(ScPhieuXuatKhoReq req) throws Exception {
 
-//    }
-//
-//    @Override
-//    public ScPhieuXuatKhoHdr update(ScPhieuXuatKhoReq req) throws Exception {
-//        if (currentUser == null) {
-//            throw new Exception("Bad request.");
-//        }
-//        Optional<ScPhieuXuatKhoHdr> optional = scPhieuXuatKhoHdrRepository.findById(objReq.getId());
-//        if (!optional.isPresent()) {
-//            throw new Exception("Không tìm thấy dữ liệu cần sửa");
-//        }
-//        if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-//            throw new Exception("Chức năng chỉ dành cho cấp chi cục");
-//        }
-//
-//        ScPhieuXuatKhoHdr data = optional.get();
-//        BeanUtils.copyProperties(objReq, data);
-//        data.setChildren(objReq.getChildren());
-//        ScPhieuXuatKhoHdr update = scPhieuXuatKhoHdrRepository.save(data);
-//        fileDinhKemService.delete(update.getId(), Lists.newArrayList(ScPhieuXuatKhoHdr.TABLE_NAME));
-//        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), update.getId(), ScPhieuXuatKhoHdr.TABLE_NAME);
-//        update.setFileDinhKems(canCu);
-//        return update;
-//    }
-//
-//    @Override
-//    public ScPhieuXuatKhoHdr approve(ScPhieuXuatKhoReq req) throws Exception {
-//        if (StringUtils.isEmpty(statusReq.getId())) {
-//            throw new Exception("Không tìm thấy dữ liệu");
-//        }
-//        ScPhieuXuatKhoHdr details = detail(statusReq.getId());
-//        Optional<ScPhieuXuatKhoHdr> optional = Optional.of(details);
-//        if (!optional.isPresent()) {
-//            throw new Exception("Không tìm thấy dữ liệu");
-//        }
-//        optional.get().setTrangThai(statusReq.getTrangThai());
-//        scPhieuXuatKhoHdrRepository.save(optional.get());
-//        return optional.get();
-//    }
-//
-//    @Override
-//    public void delete(Long id) throws Exception {
-//
-//    }
-//
-//    @Override
-//    public void deleteMulti(List<Long> listMulti) throws Exception {
-//
-//    }
-//
-//    @Override
-//    public void export(ScPhieuXuatKhoReq req, HttpServletResponse response) throws Exception {
-//
-//    }
 
 }
