@@ -276,7 +276,7 @@ public class XhCtvtBbLayMauHdrService extends BaseServiceImpl {
     xhCtvtBbLayMauHdrRepository.delete(data);
   }
 
-  @Transient
+  @Transactional
   public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
     List<XhCtvtBbLayMauHdr> list = xhCtvtBbLayMauHdrRepository.findAllByIdIn(idSearchReq.getIdList());
 

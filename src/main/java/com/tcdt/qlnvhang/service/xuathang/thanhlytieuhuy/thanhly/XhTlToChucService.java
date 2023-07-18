@@ -118,10 +118,18 @@ public class XhTlToChucService extends BaseServiceImpl {
         BeanUtils.copyProperties(req, data, "id", "maDvi");
         data.getToChucDtl().forEach(f -> {
             f.setToChucHdr(data);
+            if (req.getKetQua().equals(0)){
+                f.setGiaKhoiDiem(null);
+                f.setDonGiaCaoNhat(null);
+                f.setSoLanTraGia(null);
+                f.setToChucCaNhan(null);
+            }
         });
-        data.getToChucNlq().forEach(f -> {
-            f.setToChucHdr(data);
-        });
+        if (req.getKetQua().equals(1)){
+            data.getToChucNlq().forEach(f -> {
+                f.setToChucHdr(data);
+            });
+        }
 
         XhTlToChucHdr created = xhTlToChucRepository.save(data);
 

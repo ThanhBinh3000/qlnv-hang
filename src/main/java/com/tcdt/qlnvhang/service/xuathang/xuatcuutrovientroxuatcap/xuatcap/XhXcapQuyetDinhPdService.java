@@ -230,7 +230,7 @@ public class XhXcapQuyetDinhPdService extends BaseServiceImpl {
 
   }
 
-  @Transient
+  @Transactional
   public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
     List<XhXcapQuyetDinhPdHdr> list = xhXcapQuyetDinhPdHdrRepository.findAllByIdIn(idSearchReq.getIdList());
 

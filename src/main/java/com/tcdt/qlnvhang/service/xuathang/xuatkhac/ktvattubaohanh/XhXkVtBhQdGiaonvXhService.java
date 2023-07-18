@@ -42,10 +42,13 @@ public class XhXkVtBhQdGiaonvXhService extends BaseServiceImpl {
   private XhXkTongHopRepository xhXkTongHopRepository;
 
   public Page<XhXkVtBhQdGiaonvXhHdr> searchPage(CustomUserDetails currentUser, XhXkVtBhQdGiaonvXhRequest req) throws Exception {
-    Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-    if (ObjectUtils.isEmpty(req.getDvql())) {
-      req.setDvql(currentUser.getDvql());
+    String dvql = currentUser.getDvql();
+    if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+      req.setDvql(dvql.substring(0, 6));
+    } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
+      req.setDvql(dvql);
     }
+    Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<XhXkVtBhQdGiaonvXhHdr> search = xhXkVtBhQdGiaonvXhRepository.searchPage(req, pageable);
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
@@ -152,7 +155,7 @@ public class XhXkVtBhQdGiaonvXhService extends BaseServiceImpl {
     xhXkVtBhQdGiaonvXhRepository.delete(data);
   }
 
-  @Transient
+  @Transactional
   public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
     List<XhXkVtBhQdGiaonvXhHdr> list = xhXkVtBhQdGiaonvXhRepository.findByIdIn(idSearchReq.getIdList());
     if (list.isEmpty()) {
