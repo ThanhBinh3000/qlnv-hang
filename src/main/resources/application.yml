@@ -53,4 +53,4 @@ management:
 
 #path font pdf
 path:
-  url: "src/main/resources/font/times.ttf"
+  url: "u01/QLNV/font/times.ttf"
