@@ -22,9 +22,12 @@ public interface DcnbBangKeXuatVTHdrRepository extends JpaRepository<DcnbBangKeX
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbBangKeXuatVTHdr bkxvt ON bkxvt.qDinhDccId = qdc.id and bkxvt.maLoKho = khdcd.maLoKho and bkxvt.maNganKho = khdcd.maNganKho " +
-            "LEFT JOIN DcnbBienBanTinhKhoHdr bbtk ON bbtk.qDinhDccId = qdc.id and bbtk.maLoKho = khdcd.maLoKho and bbtk.maNganKho = khdcd.maNganKho " +
-            "LEFT JOIN DcnbPhieuXuatKhoHdr pxk ON pxk.id = bkxvt.phieuXuatKhoId and pxk.maLoKho = khdcd.maLoKho and pxk.maNganKho = khdcd.maNganKho " +
+            "LEFT JOIN DcnbBangKeXuatVTHdr bkxvt ON bkxvt.qDinhDccId = qdc.id " +
+            "and ((khdcd.maLoKho is not null and  bkxvt.maLoKho = khdcd.maLoKho and bkxvt.maNganKho = khdcd.maNganKho ) or (khdcd.maLoKho is null and bkxvt.maNganKho = khdcd.maNganKho))" +
+            "LEFT JOIN DcnbBienBanTinhKhoHdr bbtk ON bbtk.qDinhDccId = qdc.id " +
+            "and ((khdcd.maLoKho is not null and  bbtk.maLoKho = khdcd.maLoKho and bbtk.maNganKho = khdcd.maNganKho ) or (khdcd.maLoKho is null and bbtk.maNganKho = khdcd.maNganKho ))" +
+            "LEFT JOIN DcnbPhieuXuatKhoHdr pxk ON pxk.id = bkxvt.phieuXuatKhoId " +
+            "and ((khdcd.maLoKho is not null and  pxk.maLoKho = khdcd.maLoKho and pxk.maNganKho = khdcd.maNganKho ) or (khdcd.maLoKho is null and pxk.maNganKho = khdcd.maNganKho ))" +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 = 1 " +
             "AND qdc.parentId is not null and qdc.trangThai = '29' AND qdc.loaiDc = :#{#param.loaiDc} " +

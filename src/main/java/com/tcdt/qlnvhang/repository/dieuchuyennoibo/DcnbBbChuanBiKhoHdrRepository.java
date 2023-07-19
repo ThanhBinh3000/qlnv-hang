@@ -44,9 +44,12 @@ public interface DcnbBbChuanBiKhoHdrRepository extends JpaRepository<DcnbBbChuan
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbBbChuanBiKhoHdr bbcb On bbcb.qdDcCucId = qdc.id and khdcd.maLoKhoNhan = bbcb.maLoKho and khdcd.maNganKhoNhan = bbcb.maNganKho " +
-            "LEFT JOIN DcnbPhieuNhapKhoHdr pnk On pnk.id = bbcb.idPhieuNhapKho and khdcd.maLoKhoNhan = pnk.maLoKho and khdcd.maNganKhoNhan = pnk.maNganKho " +
-            "LEFT JOIN DcnbBBKetThucNKHdr bbktnk On bbktnk.qDinhDccId = qdc.id  and khdcd.maLoKhoNhan = bbktnk.maLoKho and khdcd.maNganKhoNhan = bbktnk.maNganKho " +
+            "LEFT JOIN DcnbBbChuanBiKhoHdr bbcb On bbcb.qdDcCucId = qdc.id " +
+            "and ((khdcd.maLoKhoNhan is not null and  khdcd.maLoKhoNhan = bbcb.maLoKho and khdcd.maNganKhoNhan = bbcb.maNganKho ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = bbcb.maNganKho ))" +
+            "LEFT JOIN DcnbPhieuNhapKhoHdr pnk On pnk.id = bbcb.idPhieuNhapKho " +
+            "and ((khdcd.maLoKhoNhan is not null and khdcd.maLoKhoNhan = pnk.maLoKho and khdcd.maNganKhoNhan = pnk.maNganKho ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = pnk.maNganKho ))" +
+            "LEFT JOIN DcnbBBKetThucNKHdr bbktnk On bbktnk.qDinhDccId = qdc.id  " +
+            "and ((khdcd.maLoKhoNhan is not null and khdcd.maLoKhoNhan = bbktnk.maLoKho and khdcd.maNganKhoNhan = bbktnk.maNganKho ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = bbktnk.maNganKho ))" +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.parentId is not null and qdc.trangThai = '29'" +
