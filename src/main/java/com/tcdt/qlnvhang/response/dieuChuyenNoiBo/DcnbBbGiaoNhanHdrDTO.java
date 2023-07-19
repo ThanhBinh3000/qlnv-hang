@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.response.dieuChuyenNoiBo;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
@@ -10,6 +11,7 @@ public class DcnbBbGiaoNhanHdrDTO {
     private Long id;
     private Long qdDcCucId;
     private String soQdinh;
+    private LocalDate ngayKyQd;
     private Integer namKh;
     private LocalDate thoiHanDieuChuyen;
     private String maNhaKho;
@@ -24,6 +26,7 @@ public class DcnbBbGiaoNhanHdrDTO {
     private String tenHangHoa;
     private String maChLoaiHangHoa;
     private String tenChLoaiHangHoa;
+    private BigDecimal soLuongDc;
     private String donViTinh;
     private String tenDonViTinh;
 
@@ -38,10 +41,11 @@ public class DcnbBbGiaoNhanHdrDTO {
     private String trangThai;
     private String tenTrangThai;
 
-    public DcnbBbGiaoNhanHdrDTO(Long id, Long qdDcCucId, String soQdinh, Integer namKh, LocalDate thoiHanDieuChuyen, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String donViTinh, String tenDonViTinh, String soHoSoKt, Long hoSoKtId, String soBienBanGiaoNhan, String soBienBanKetThucNk, Long bienBanKetThucNkId, LocalDate ngayKetThucNk, String soBienBanLayMau, Long bienBanLayMauId, String trangThai, String tenTrangThai) {
+    public DcnbBbGiaoNhanHdrDTO(Long id, Long qdDcCucId, String soQdinh,LocalDate ngayKyQd, Integer namKh, LocalDate thoiHanDieuChuyen, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa,BigDecimal soLuongDc, String donViTinh, String tenDonViTinh, String soHoSoKt, Long hoSoKtId, String soBienBanGiaoNhan, String soBienBanKetThucNk, Long bienBanKetThucNkId, LocalDate ngayKetThucNk, String soBienBanLayMau, Long bienBanLayMauId, String trangThai, String tenTrangThai) {
         this.id = id;
         this.qdDcCucId = qdDcCucId;
         this.soQdinh = soQdinh;
+        this.ngayKyQd = ngayKyQd;
         this.namKh = namKh;
         this.thoiHanDieuChuyen = thoiHanDieuChuyen;
         this.maNhaKho = maNhaKho;
@@ -56,6 +60,7 @@ public class DcnbBbGiaoNhanHdrDTO {
         this.tenHangHoa = tenHangHoa;
         this.maChLoaiHangHoa = maChLoaiHangHoa;
         this.tenChLoaiHangHoa = tenChLoaiHangHoa;
+        this.soLuongDc = soLuongDc;
         this.donViTinh = donViTinh;
         this.tenDonViTinh = tenDonViTinh;
         this.soHoSoKt = soHoSoKt;
