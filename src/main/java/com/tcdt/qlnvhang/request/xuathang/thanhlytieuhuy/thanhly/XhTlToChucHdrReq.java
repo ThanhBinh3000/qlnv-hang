@@ -74,7 +74,12 @@ public class XhTlToChucHdrReq {
     private String pthucThanhtoanKhac;
     private LocalDate thoiHanGiaoNhan;
     private String pthucGnhan;
-
+    private Long idQdPdKq;
+    private String soQdPdKq;
+    private Long idHopDong;
+    private String soHopDong;
+    private Long idQdGnv;
+    private String soQdGnv;
     private List<FileDinhKemReq> fileCanCu = new ArrayList<>();
     private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();
     private List<FileDinhKemReq> fileDinhKemDaKy = new ArrayList<>();

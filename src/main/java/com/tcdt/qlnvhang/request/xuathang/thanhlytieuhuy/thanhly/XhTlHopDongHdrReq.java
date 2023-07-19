@@ -13,18 +13,18 @@ import java.util.List;
 @Data
 public class XhTlHopDongHdrReq extends BaseRequest {
     private Long id;
+    private String dvql;
     private Integer nam;
     private String maDvi;
     private Long idQdKqTl;
     private String soQdKqTl;
-    private LocalDate ngayKyQdKqTl;
+    private LocalDate ngayKyQdkqTl;
     private String soQdTl;
-    private String ToChucCaNhan;
+    private String toChucCaNhan;
     private String maDviTsan;
     private LocalDate thoiHanXuatKho;
     private String loaiHinhNx;
     private String kieuNx;
-    private Long idHd;
     private String soHd;
     private String tenHd;
     private LocalDate ngayHieuLuc;
@@ -39,10 +39,9 @@ public class XhTlHopDongHdrReq extends BaseRequest {
     private String chucVuBenBan;
     private String sdtBenBan;
     private String faxBenBan;
-    private String stkBanBan;
+    private String stkBenBan;
     private String moTaiBenBan;
     private String thongTinUyQuyen;
-    private String dviBenMua;
     private String diaChiBenMua;
     private String mstBenMua;
     private String daiDienBenMua;
@@ -62,5 +61,4 @@ public class XhTlHopDongHdrReq extends BaseRequest {
     private List<FileDinhKemReq> fileCanCu = new ArrayList<>();
     private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();
     private List<XhTlHopDongDtl> hopDongDtl = new ArrayList<>();
-    private String dvql;
 }

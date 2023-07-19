@@ -51,11 +51,15 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
     Page<XhKqBdgHdr> page = xhKqBdgHdrRepository.search(req, pageable);
     Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    Map<String,String> mapHinhThuDg = getListDanhMucChung("HINH_THUC_DG");
+    Map<String,String> mapPhuongThucDg = getListDanhMucChung("PHUONG_THUC_DG");
     page.getContent().forEach(f -> {
       try {
         f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
         f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapDmucVthh.get(f.getLoaiVthh()));
         f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : mapDmucVthh.get(f.getCloaiVthh()));
+        f.setTenHinhThucDauGia(StringUtils.isEmpty(f.getHinhThucDauGia()) ? null : mapHinhThuDg.get(f.getHinhThucDauGia()));
+        f.setTenPthucDauGia(StringUtils.isEmpty(f.getPthucDauGia())? null : mapPhuongThucDg.get(f.getPthucDauGia()));
       }catch (Exception e){
         throw new RuntimeException(e);
       }
@@ -140,6 +144,18 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
       throw new Exception("Không tìm thấy dữ liệu");
     }
     XhKqBdgHdr data = byId.get();
+
+    Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
+    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    Map<String,String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
+    Map<String,String> mapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
+
+    data.setTenDvi(StringUtils.isEmpty(data.getMaDvi()) ? null : mapDmucDvi.get(data.getMaDvi()));
+    data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : mapDmucVthh.get(data.getLoaiVthh()));
+    data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh()) ? null : mapDmucVthh.get(data.getCloaiVthh()));
+    data.setTenLoaiHinhNx(StringUtils.isEmpty(data.getLoaiHinhNx())? null : mapLoaiHinhNx.get(data.getLoaiHinhNx()));
+    data.setTenKieuNx(StringUtils.isEmpty(data.getKieuNx())? null : mapKieuNx.get(data.getKieuNx()));
+    data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
 
     data.setListHopDong(xhHopDongHdrRepository.findAllBySoQdKq(data.getSoQdKq()));
     Map<String, String> listDanhMucDvi = getListDanhMucDvi("2", null, "01");
