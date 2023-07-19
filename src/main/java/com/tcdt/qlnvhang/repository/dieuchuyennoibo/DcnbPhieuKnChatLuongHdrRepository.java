@@ -20,10 +20,11 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "khdcd.tenLoKho, khdcd.thayDoiThuKho,pkncl.soPhieu,pkncl.ngayKiem,bblm.soBbLayMau,bblm.ngayLayMau,bblm.soBbTinhKho,bblm.ngayXuatDocKho," +
             "bblm.soBbHaoDoi,pkncl.trangThai,pkncl.trangThai,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.thuKho,khdcd.maNganKho,khdcd.tenNganKho, qdc.ngayHieuLuc,khdcd.donViTinh,khdcd.tenDonViTinh," +
             " khdcd.thuKhoId, khdcd.thuKhoNhanId, khdcd.thuKhoNhan) FROM DcnbQuyetDinhDcCHdr qdc " +
-            "LEFT JOIN DcnbBbNhapDayKhoHdr bbndk On bbndk.qdDcCucId = qdc.id " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
+            "LEFT JOIN DcnbBbNhapDayKhoHdr bbndk On bbndk.qdDcCucId = qdc.id " +
+            "and ((khdcd.maLoKho is not null and bbndk.maLoKho = khdcd.maLoKho and bbndk.maNganKho = khdcd.maNganKho ) or (khdcd.maLoKho is null and bbndk.maNganKho = khdcd.maNganKho))" +
             "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qdccId = qdc.id " +
             "and ((khdcd.maLoKho is not null and bblm.maLoKho = khdcd.maLoKho and bblm.maNganKho = khdcd.maNganKho ) or (khdcd.maLoKho is null and bblm.maNganKho = khdcd.maNganKho))" +
             "LEFT JOIN DcnbBienBanTinhKhoHdr bbtkh On bbtkh.qDinhDccId = qdc.id and bbtkh.maLoKho = khdcd.maLoKho and bbtkh.maNganKho = khdcd.maNganKho  " +
@@ -59,10 +60,10 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "pkncl.id,bblm.id,qdc.id,qdc.soQdinh,qdc.ngayHieuLuc,qdc.nam,bblm.thoiHanDieuChuyen,bblm.maDiemKho,bblm.tenDiemKho,bblm.maLoKho," +
             "bblm.tenLoKho, bblm.thayDoiThuKho,pkncl.soPhieu,pkncl.ngayKiem,bblm.soBbLayMau,bblm.ngayLayMau,bblm.soBbTinhKho,bblm.ngayXuatDocKho," +
             "bblm.soBbHaoDoi,pkncl.trangThai,pkncl.trangThai,bblm.loaiVthh,bblm.tenLoaiVthh,bblm.cloaiVthh,bblm.tenCloaiVthh,bblm.maNhaKho," +
-            "bblm.tenNhaKho,bblm.tenThuKho,bblm.maNganKho,bblm.tenNganKho, qdc.ngayHieuLuc,bblm.donViTinh,bblm.tenDonViTinh, bblm.thuKho) FROM DcnbBienBanLayMauHdr bblm " +
-            "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On pkncl.bbLayMauId = bblm.id " +
+            "bblm.tenNhaKho,bblm.tenThuKho,bblm.maNganKho,bblm.tenNganKho, qdc.ngayHieuLuc,bblm.donViTinh,bblm.tenDonViTinh, bblm.thuKho) " +
+            "FROM DcnbPhieuKnChatLuongHdr pkncl " +
+            "LEFT JOIN DcnbBienBanLayMauHdr bblm On pkncl.bbLayMauId = bblm.id " +
             "LEFT JOIN DcnbQuyetDinhDcCHdr qdc On qdc.id = bblm.qdccId " +
-            "LEFT JOIN DcnbBbNhapDayKhoHdr bbndk On bbndk.qdDcCucId = qdc.id " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = bblm.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.trangThai = '29' AND qdc.loaiDc = :#{#param.loaiDc} AND (:#{#param.type} IS NULL OR pkncl.type = :#{#param.type}) " +
@@ -81,7 +82,7 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "GROUP BY pkncl.id,bblm.id,qdc.id,qdc.soQdinh,qdc.ngayHieuLuc,qdc.nam,bblm.thoiHanDieuChuyen,bblm.maDiemKho,bblm.tenDiemKho,bblm.maLoKho," +
             "bblm.tenLoKho, bblm.thayDoiThuKho,pkncl.soPhieu,pkncl.ngayKiem,bblm.soBbLayMau,bblm.ngayLayMau,bblm.soBbTinhKho,bblm.ngayXuatDocKho," +
             "bblm.soBbHaoDoi,pkncl.trangThai,pkncl.trangThai,bblm.loaiVthh,bblm.tenLoaiVthh,bblm.cloaiVthh,bblm.tenCloaiVthh,bblm.maNhaKho," +
-            "bblm.tenNhaKho,bblm.thuKho,bblm.maNganKho,bblm.tenNganKho, qdc.ngayHieuLuc,bblm.donViTinh,bblm.tenDonViTinh")
+            "bblm.tenNhaKho,bblm.tenThuKho,bblm.maNganKho,bblm.tenNganKho, qdc.ngayHieuLuc,bblm.donViTinh,bblm.tenDonViTinh, bblm.thuKho")
     List<DcnbPhieuKnChatLuongHdrDTO> searchList(@Param("param") SearchPhieuKnChatLuong objReq);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKnChatLuongHdrDTO(" +
@@ -97,6 +98,7 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "and ((khdcd.maLoKhoNhan is not null and bblm.maLoKho = khdcd.maLoKhoNhan and bblm.maNganKho = khdcd.maNganKhoNhan ) or (khdcd.maLoKhoNhan is null and bblm.maNganKho = khdcd.maNganKhoNhan))" +
             "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On pkncl.bbLayMauId = bblm.id " +
             "LEFT JOIN DcnbBbNhapDayKhoHdr bbndk On bbndk.qdDcCucId = qdc.id " +
+            "and ((khdcd.maLoKhoNhan is not null and bbndk.maLoKho = khdcd.maLoKhoNhan and bbndk.maNganKho = khdcd.maNganKhoNhan ) or (khdcd.maLoKhoNhan is null and bbndk.maNganKho = khdcd.maNganKhoNhan))" +
             "LEFT JOIN DcnbBienBanTinhKhoHdr bbtkh On bbtkh.qDinhDccId = qdc.id and bbtkh.maLoKho = khdcd.maLoKho and bbtkh.maNganKho = khdcd.maNganKho " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
