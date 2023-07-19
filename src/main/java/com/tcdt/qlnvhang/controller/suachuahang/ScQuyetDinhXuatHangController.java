@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.suachua.ScPhieuXuatKhoReq;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhXuatHangReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.suachuahang.impl.ScQuyetDinhXuatHangServiceImpl;
@@ -81,6 +82,44 @@ public class ScQuyetDinhXuatHangController {
             resp.setMsg(e.getMessage());
             log.error("Tra cứu thông tin : {}", e);
         }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Tra cứu thông tin biên bản", response = List.class)
+    @PostMapping(value = "/ds-tao-bao-cao", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> getDsTaoBaoCao(@RequestBody ScQuyetDinhXuatHangReq objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(scQuyetDinhXuatHangService.searchDanhSachTaoBaoCao(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch ( Exception e) {
+            e.printStackTrace();
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu thông tin : {}", e);
+        }
+
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Tra cứu thông tin biên bản", response = List.class)
+    @GetMapping(value = "/chi-tiet-bao-cao/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> getDsTaoBaoCao(@PathVariable("id") Long id) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(scQuyetDinhXuatHangService.getDetailBaoCao(id));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch ( Exception e) {
+            e.printStackTrace();
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu thông tin : {}", e);
+        }
+
         return ResponseEntity.ok(resp);
     }
 

@@ -5,10 +5,9 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
-import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScKiemTraChatLuongHdrRepository;
-import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScPhieuXuatKhoHdrRepository;
-import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhXuatHangRepository;
+import com.tcdt.qlnvhang.repository.xuathang.suachuahang.*;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.suachua.ScPhieuXuatKhoReq;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhScReq;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhXuatHangReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -33,6 +32,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +41,9 @@ import java.util.Optional;
 public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements ScQuyetDinhXuatHangService {
     @Autowired
     private ScQuyetDinhXuatHangRepository scQuyetDinhXuatHangRepository;
+
+    @Autowired
+    private ScQuyetDinhNhapHangRepository scQuyetDinhNhapHangRepository;
 
     @Autowired
     private ScPhieuXuatKhoHdrRepository scPhieuXuatKhoHdrRepository;
@@ -56,6 +59,10 @@ public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements S
 
     @Autowired
     private ScPhieuXuatKhoService scPhieuXuatKhoService;
+
+    @Autowired
+    private ScPhieuNhapKhoHdrRepository scPhieuNhapKhoHdrRepository;
+
 
 
     @Override
@@ -220,7 +227,7 @@ public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements S
     }
 
     @Override
-    public List<ScQuyetDinhXuatHang> dsTaoQuyetDinhNh(ScQuyetDinhXuatHangReq req) throws Exception {
+    public List<ScQuyetDinhXuatHang> searchDanhSachTaoBaoCao(ScQuyetDinhXuatHangReq req) throws Exception {
         UserInfo currentUser = SecurityContextService.getUser();
         if (currentUser == null){
             throw new Exception("Access denied.");
@@ -232,8 +239,42 @@ public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements S
             req.setMaDviSr(dvql);
         }
         req.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
-        req.setTrangThaiKtraCl(TrangThaiAllEnum.DA_DUYET_LDC.getId());
-        List<ScQuyetDinhXuatHang> list = scQuyetDinhXuatHangRepository.listTaoQuyetDinhNh(req);
+        List<ScQuyetDinhXuatHang> list = scQuyetDinhXuatHangRepository.listTaoBaoCao(req);
         return list;
     }
+
+    @Override
+    public List<ScDanhSachHdr> getDetailBaoCao(Long idQdXh) throws Exception {
+        List<ScDanhSachHdr> listDs = new ArrayList<>();
+        // get danh sách sữa chữa
+        ScQuyetDinhXuatHang detail = detail(idQdXh);
+        detail.getScQuyetDinhSc().getScTrinhThamDinhHdr().getChildren().forEach((item)->{
+            listDs.add(item.getScDanhSachHdr());
+        });
+
+
+        // get qd nhập hang
+        List<ScPhieuNhapKhoHdr> listMaster = new ArrayList<>();
+        List<ScQuyetDinhNhapHang> listQdNh = scQuyetDinhNhapHangRepository.findAllByIdQdXh(idQdXh);
+        listQdNh.forEach( qdNh -> {
+            List<ScPhieuNhapKhoHdr> listPnk = scPhieuNhapKhoHdrRepository.findAllByIdQdNh(qdNh.getId());
+            listMaster.addAll(listPnk);
+        });
+
+        listDs.forEach(item -> {
+            // Binding tổng số lượng xuất
+            List<ScPhieuXuatKhoHdr> listPxk = scPhieuXuatKhoHdrRepository.findAllByIdQdXhAndIdScDanhSachHdr(idQdXh,item.getId());
+            int sumSoLongXuat = listPxk.stream().mapToInt(o -> o.getTongSoLuong().intValue()).sum();
+            item.setSoLuongXuat(sumSoLongXuat);
+
+            int sumSoLongNhap = listMaster.stream().filter(o -> o.getIdScDanhSachHdr().equals(item.getId())).mapToInt(o -> o.getTongSoLuong().intValue()).sum();
+            item.setSoLuongNhap(sumSoLongNhap);
+
+            int kinhPhiThucTe = listMaster.stream().filter(o -> o.getIdScDanhSachHdr().equals(item.getId())).mapToInt(o -> o.getTongKinhPhiThucTe().intValue()).sum();
+            item.setTongKinhPhiThucTe(kinhPhiThucTe);
+
+        });
+        return listDs;
+    }
+
 }

@@ -57,6 +57,7 @@ public class ScPhieuNhapKhoHdr extends BaseEntity implements Serializable {
     private String soBangKeCanHang;
     private Long idBangKeCanHang;
     private BigDecimal tongSoLuong;
+    private BigDecimal tongKinhPhiThucTe;
     private String ghiChu;
     private String trangThai;
     private String donViTinh;

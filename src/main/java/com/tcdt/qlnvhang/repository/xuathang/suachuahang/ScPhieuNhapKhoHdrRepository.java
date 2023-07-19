@@ -29,6 +29,7 @@ public interface ScPhieuNhapKhoHdrRepository extends JpaRepository<ScPhieuNhapKh
             " AND (:#{#param.idQdNh} IS NULL OR qd.idQdNh = :#{#param.idQdNh}) " )
     List<ScPhieuNhapKhoHdr> searchListTaoBangKe(@Param("param") ScPhieuNhapKhoReq req);
 
+    List<ScPhieuNhapKhoHdr> findAllByIdQdNh(Long id);
 
 
 }

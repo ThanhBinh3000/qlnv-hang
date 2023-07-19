@@ -37,4 +37,5 @@ public interface ScQuyetDinhNhapHangRepository extends JpaRepository<ScQuyetDinh
 
     List<ScQuyetDinhNhapHang> findAllByIdQdXh(Long idQdXh);
 
+
 }
