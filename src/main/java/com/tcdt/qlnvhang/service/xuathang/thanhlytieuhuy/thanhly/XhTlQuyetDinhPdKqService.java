@@ -115,6 +115,10 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
     allById.forEach(data -> {
       data.setMapDmucDvi(mapDmucDvi);
       data.setMapVthh(mapVthh);
+      data.getQuyetDinhDtl().forEach(d1 -> {
+        d1.setMapDmucDvi(mapDmucDvi);
+        d1.setMapVthh(mapVthh);
+      });
     });
     return allById;
   }
@@ -188,8 +192,7 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
     List<XhTlQuyetDinhPdKqHdr> data = page.getContent();
 
     String title = "Danh sách quyết định thanh lý hàng DTQG ";
-    String[] rowsName = new String[]{"STT", "Số quyết định", "Trích yếu", "Ngày ký",
-        "Hồ sơ đề nghị thanh lý", "Trạng thái"};
+    String[] rowsName = new String[]{"STT", "Số quyết định", "Trích yếu", "Ngày ký", "Hồ sơ đề nghị thanh lý", "Trạng thái"};
     String fileName = "danh-sach-quyet-dinh-thanh-ly-hang-dtqg.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs = null;
