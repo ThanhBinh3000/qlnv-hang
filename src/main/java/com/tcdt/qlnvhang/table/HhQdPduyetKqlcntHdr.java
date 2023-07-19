@@ -119,4 +119,9 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 		this.children.add(child);
 	}
 
+	@Transient
+	private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+
+	@Transient
+	private List<FileDinhKem> canCuPhapLy = new ArrayList<>();
 }

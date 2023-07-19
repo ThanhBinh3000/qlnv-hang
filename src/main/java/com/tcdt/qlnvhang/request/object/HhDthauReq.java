@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.request.object;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,8 @@ public class HhDthauReq {
 	private String loaiVthh;
 
 	private String trangThai;
+	private String type;
+	private BigDecimal donGia;
 
 //	@NotNull(message = "Không được để trống")
 //	@Size(max = 20, message = "Số hợp đồng không được vượt quá 20 ký tự")

@@ -76,6 +76,8 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String loaiHdong;
 	String tchuanCluong;
 	String nguonVon;
+	@Transient
+	String tenNguonVon;
 	String hthucLcnt;
 	String pthucLcnt;
 	@Temporal(TemporalType.DATE)

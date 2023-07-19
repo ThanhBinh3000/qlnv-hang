@@ -11,6 +11,7 @@ import java.util.Optional;
 
 public interface QdPdHsmtRepository extends BaseRepository<QdPdHsmt, Long> {
     Optional<QdPdHsmt> findBySoQd (String soQd);
+    Optional<QdPdHsmt> findByIdQdPdKhlcnt (Long id);
     List<QdPdHsmt> findAllByIdIn(List<Long> ids);
     @Query(
             value = " SELECT * " +

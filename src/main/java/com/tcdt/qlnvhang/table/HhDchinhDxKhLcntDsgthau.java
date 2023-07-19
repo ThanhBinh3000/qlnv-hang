@@ -44,7 +44,14 @@ public class HhDchinhDxKhLcntDsgthau implements Serializable {
 	String diaDiemNhap;
 
 	String tgianBdauThien;
-
+	private String tenNhaThau;
+	private Long idNhaThau;
+	private BigDecimal donGiaNhaThau;
+	private String trangThaiDt;
+	@Transient
+	String tenTrangThai;
+	@Transient
+	String tenTrangThaiDt;
 	@Transient
 	String tenCloaiVthh;
 	@Transient
@@ -63,6 +70,9 @@ public class HhDchinhDxKhLcntDsgthau implements Serializable {
 
 	@Transient
 	private HhQdKhlcntHdr hhQdKhlcntHdr;
+
+	@Transient
+	HhQdPduyetKqlcntDtl kqlcntDtl;
 
 	@Transient
 	private List<HhDchinhDxKhLcntDsgthauCtiet> children = new ArrayList<>();

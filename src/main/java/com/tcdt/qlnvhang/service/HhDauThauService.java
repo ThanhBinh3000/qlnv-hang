@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
 import com.tcdt.qlnvhang.request.search.HhDthauSearchReq;
 import com.tcdt.qlnvhang.request.search.HhQdKhlcntSearchReq;
 import com.tcdt.qlnvhang.table.HhDthauNthauDuthau;
@@ -20,15 +21,17 @@ public interface HhDauThauService {
 
 	@Transactional(rollbackOn = Exception.class)
     List<HhDthauNthauDuthau> create(HhDthauReq objReq) throws Exception;
-//
+    void updateKqLcnt(HhDthauReq objReq) throws Exception;
+
 	Page<HhQdKhlcntDtl> selectPage(HhQdKhlcntSearchReq objReq) throws Exception;
+	Page<HhQdKhlcntHdr> selectPageVt(HhQdKhlcntSearchReq objReq) throws Exception;
 //
 //	List<ThongTinDauThauRes> selectAll(HhDthauSearchReq objReq) throws Exception;
 //
 //	@Transactional(rollbackOn = Exception.class)
 //	HhDthau update(HhDthauReq objReq) throws Exception;
 //
-    List<HhDthauNthauDuthau> detail(String ids,String loaiVthh) throws Exception;
+    List<HhDthauNthauDuthau> detail(String ids,String loaiVthh, String type) throws Exception;
 //
 ////	Page<HhDthau2> colection(HhDthauSearchReq objReq, HttpServletRequest req) throws Exception;
 //
