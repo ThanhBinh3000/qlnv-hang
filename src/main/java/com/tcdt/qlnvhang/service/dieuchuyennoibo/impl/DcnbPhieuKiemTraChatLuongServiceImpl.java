@@ -203,10 +203,20 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
     public DcnbPhieuKtChatLuongHdr approve(CustomUserDetails currentUser, StatusReq statusReq, Optional<DcnbPhieuKtChatLuongHdr> optional) throws Exception {
         String status = optional.get().getTrangThai() + statusReq.getTrangThai();
         switch (status) {
-            case Contains.DUTHAO + Contains.CHODUYET_LDC:
-            case Contains.TU_CHOI_LDC + Contains.CHODUYET_LDC:
+            case Contains.DUTHAO + Contains.CHODUYET_TP:
+            case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+            case Contains.TU_CHOI_LDC + Contains.CHODUYET_TP:
                 optional.get().setNguoiGDuyet(currentUser.getUser().getId());
                 optional.get().setNgayGDuyet(LocalDate.now());
+                break;
+            case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+                optional.get().setNguoiDuyetTp(currentUser.getUser().getId());
+                optional.get().setNgayDuyetTp(LocalDate.now());
+                optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
+                break;
+            case Contains.CHODUYET_TP + Contains.CHODUYET_LDC:
+                optional.get().setNguoiDuyetTp(currentUser.getUser().getId());
+                optional.get().setNgayDuyetTp(LocalDate.now());
                 break;
             case Contains.CHODUYET_LDC + Contains.TU_CHOI_LDC:
                 optional.get().setNguoiPDuyet(currentUser.getUser().getId());
