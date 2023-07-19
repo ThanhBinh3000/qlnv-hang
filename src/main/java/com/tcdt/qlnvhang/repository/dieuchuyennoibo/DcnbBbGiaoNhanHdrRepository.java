@@ -42,10 +42,12 @@ public interface DcnbBbGiaoNhanHdrRepository extends JpaRepository<DcnbBbGiaoNha
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbBbGiaoNhanHdr bbgn On bbgn.qdDcCucId = qdc.id and khdcd.maLoKhoNhan = bbgn.maLoKho and khdcd.maNganKhoNhan = bbgn.maNganKho " +
+            "LEFT JOIN DcnbBbGiaoNhanHdr bbgn On bbgn.qdDcCucId = qdc.id " +
+            "and ((khdcd.maLoKhoNhan is not null and  khdcd.maLoKhoNhan = bbgn.maLoKho and khdcd.maNganKhoNhan = bbgn.maNganKho ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = bbgn.maNganKho ))" +
             "LEFT JOIN DcnbHoSoKyThuatHdr hskt On hskt.idQdnh = qdc.id and bbgn.idHoSoKyThuat = hskt.id " +
             "LEFT JOIN DcnbBBKetThucNKHdr bbktnk On bbktnk.qDinhDccId = qdc.id and bbgn.idBbKtNhapKho =  bbktnk.id " +
-            "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qdccId = qdc.id and bblm.maLoKho = khdcd.maLoKhoNhan and bblm.maNganKho = khdcd.maNganKhoNhan " +
+            "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qdccId = qdc.id " +
+            "and ((khdcd.maLoKhoNhan is not null and bblm.maLoKho = khdcd.maLoKhoNhan and bblm.maNganKho = khdcd.maNganKhoNhan ) or (khdcd.maLoKhoNhan is null and bblm.maNganKho = khdcd.maNganKhoNhan ))" +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.parentId is not null and qdc.trangThai = '29'" +
