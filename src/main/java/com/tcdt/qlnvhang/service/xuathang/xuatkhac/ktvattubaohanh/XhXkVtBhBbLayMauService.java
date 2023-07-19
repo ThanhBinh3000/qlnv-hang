@@ -202,8 +202,8 @@ public class XhXkVtBhBbLayMauService extends BaseServiceImpl {
     List<XhXkVtBhBbLayMauHdr> data = page.getContent();
 
     String title = "Danh sách biên bản lấy mẫu bàn giao mẫu ";
-    String[] rowsName = new String[]{"STT", "Số QĐ giao nhiệm vụ XH", "Năm", "Số BB LM/BGM", "Ngày lấy mẫu", "Điểm Kho",
-        "Lô kho", "Trạng thái"};
+    String[] rowsName = new String[]{"STT", "Số QĐ giao nhiệm vụ XH", "Năm","Thời gian xuất lấy mẫu","Điểm kho","Ngăn/Lô kho",
+        "Chủng loại hàng hóa", "Số BB LM/BGM", "Ngày lấy mẫu", "Lần lấy mẫu", "Trạng thái"};
     String fileName = "danh-sach-bien-ban-lay-mau-ban-giao-mau.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs = null;
@@ -213,11 +213,14 @@ public class XhXkVtBhBbLayMauService extends BaseServiceImpl {
       objs[0] = i;
       objs[1] = dx.getSoQdGiaoNvXh();
       objs[2] = dx.getNam();
-      objs[3] = dx.getSoBienBan();
-      objs[4] = dx.getNgayLayMau();
-      objs[5] = dx.getTenDiemKho();
-      objs[6] = dx.getTenLoKho();
-      objs[7] = dx.getTenTrangThai();
+      objs[3] = dx.getNgayXuatLayMau();
+      objs[4] = dx.getTenDiemKho();
+      objs[5] =(dx.getTenLoKho() != null && !dx.getTenLoKho().isEmpty()) ? (dx.getTenLoKho() +' '+dx.getTenNganKho()): dx.getTenNganKho();
+      objs[6] = dx.getTenCloaiVthh();
+      objs[7] = dx.getSoBienBan();
+      objs[8] = dx.getNgayLayMau();
+      objs[9] = dx.getSoLanLm();
+      objs[10] = dx.getTenTrangThai();
       dataList.add(objs);
     }
     ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
