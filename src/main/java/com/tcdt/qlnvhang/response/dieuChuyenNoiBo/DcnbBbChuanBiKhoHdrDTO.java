@@ -19,16 +19,22 @@ public class DcnbBbChuanBiKhoHdrDTO {
     private Long bbKetThucNKId;
     private String soBbKetThucNK;
     private LocalDate ngayKtNhapKho;
+    private String maNhaKho;
+    private String tenNhaKho;
     private String maDiemKho;
     private String tenDiemKho;
     private String maLoKho;
     private String tenLoKho;
     private String maNganKho;
     private String tenNganKho;
+    private String maHangHoa;
+    private String tenHangHoa;
+    private String maChLoaiHangHoa;
+    private String tenChLoaiHangHoa;
     private String trangThai;
     private String tenTrangThai;
 
-    public DcnbBbChuanBiKhoHdrDTO(Long id, Long qDinhDccId, String soQdinh, Integer namKh, LocalDate thoiGianNhapKhoMuonNhat, String soBbChuanBiKho, LocalDate ngayBbChuanBiKho, Long phieuNhapKhoId, String soPhieuNhapKho, Long bbKetThucNKId, String soBbKetThucNK, LocalDate ngayKtNhapKho, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, String trangThai, String tenTrangThai) {
+    public DcnbBbChuanBiKhoHdrDTO(Long id, Long qDinhDccId, String soQdinh, Integer namKh, LocalDate thoiGianNhapKhoMuonNhat, String soBbChuanBiKho, LocalDate ngayBbChuanBiKho, Long phieuNhapKhoId, String soPhieuNhapKho, Long bbKetThucNKId, String soBbKetThucNK, LocalDate ngayKtNhapKho, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String trangThai) {
         this.id = id;
         this.qDinhDccId = qDinhDccId;
         this.soQdinh = soQdinh;
@@ -41,12 +47,18 @@ public class DcnbBbChuanBiKhoHdrDTO {
         this.bbKetThucNKId = bbKetThucNKId;
         this.soBbKetThucNK = soBbKetThucNK;
         this.ngayKtNhapKho = ngayKtNhapKho;
+        this.maNhaKho = maNhaKho;
+        this.tenNhaKho = tenNhaKho;
         this.maDiemKho = maDiemKho;
         this.tenDiemKho = tenDiemKho;
         this.maLoKho = maLoKho;
         this.tenLoKho = tenLoKho;
         this.maNganKho = maNganKho;
         this.tenNganKho = tenNganKho;
+        this.maHangHoa = maHangHoa;
+        this.tenHangHoa = tenHangHoa;
+        this.maChLoaiHangHoa = maChLoaiHangHoa;
+        this.tenChLoaiHangHoa = tenChLoaiHangHoa;
         this.trangThai = trangThai;
         this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
     }

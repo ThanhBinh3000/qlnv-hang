@@ -84,7 +84,10 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "AND (:#{#param.maLoKho} IS NULL OR pkncl.maLoKho = :#{#param.maLoKho}) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR pkncl.ngayKiem >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR pkncl.ngayKiem <= :#{#param.denNgay}) ) " +
-            "ORDER BY pkncl.soQdinhDc desc, pkncl.nam desc")
+            "GROUP BY pkncl.id,bblm.id,qdc.id,qdc.soQdinh,qdc.ngayHieuLuc,qdc.nam,khdcd.thoiGianDkDc,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
+            "khdcd.tenLoKho, khdcd.thayDoiThuKho,pkncl.soPhieu,pkncl.ngayKiem,bblm.soBbLayMau,bblm.ngayLayMau,bblm.soBbTinhKho,bblm.ngayXuatDocKho," +
+            "bblm.soBbHaoDoi,pkncl.trangThai,pkncl.trangThai,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.thuKho,khdcd.maNganKho,khdcd.tenNganKho, qdc.ngayHieuLuc,khdcd.donViTinh,khdcd.tenDonViTinh," +
+            " khdcd.thuKhoId, khdcd.thuKhoNhanId, khdcd.thuKhoNhan")
     List<DcnbPhieuKnChatLuongHdrDTO> searchListChiCuc(@Param("param") SearchPhieuKnChatLuong objReq);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKnChatLuongHdrDTO(" +
@@ -116,7 +119,10 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "AND (:#{#param.maLoKho} IS NULL OR pkncl.maLoKho = :#{#param.maLoKho}) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR pkncl.ngayKiem >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR pkncl.ngayKiem <= :#{#param.denNgay}) ) " +
-            "ORDER BY pkncl.soQdinhDc desc, pkncl.nam desc")
+            "GROUP BY pkncl.id,bblm.id,qdc.id,qdc.soQdinh,qdc.ngayHieuLuc,qdc.nam,khdcd.thoiGianDkDc,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
+            "khdcd.tenLoKho, khdcd.thayDoiThuKho,pkncl.soPhieu,pkncl.ngayKiem,bblm.soBbLayMau,bblm.ngayLayMau,bblm.soBbTinhKho,bblm.ngayXuatDocKho," +
+            "bblm.soBbHaoDoi,pkncl.trangThai,pkncl.trangThai,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.thuKho,khdcd.maNganKho,khdcd.tenNganKho, qdc.ngayHieuLuc,khdcd.donViTinh,khdcd.tenDonViTinh," +
+            " khdcd.thuKhoId, khdcd.thuKhoNhanId, khdcd.thuKhoNhan")
     List<DcnbPhieuKnChatLuongHdrDTO> searchPageListCuc(@Param("param") SearchPhieuKnChatLuong req);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKnChatLuongHdrDTO(" +

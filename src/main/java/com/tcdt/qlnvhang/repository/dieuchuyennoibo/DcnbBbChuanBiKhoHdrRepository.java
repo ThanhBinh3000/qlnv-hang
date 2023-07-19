@@ -39,8 +39,8 @@ public interface DcnbBbChuanBiKhoHdrRepository extends JpaRepository<DcnbBbChuan
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbChuanBiKhoHdrDTO(" +
             "bbcb.id, qdc.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc, bbcb.soBban, bbcb.ngayLap, pnk.id, pnk.soPhieuNhapKho, bbktnk.id," +
-            "bbktnk.soBb,bbktnk.ngayKetThucNhap,khdcd.maDiemKho, khdcd.tenDiemKho, khdcd.maLoKho, " +
-            "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, bbcb.trangThai, bbcb.trangThai) FROM DcnbQuyetDinhDcCHdr qdc " +
+            "bbktnk.soBb,bbktnk.ngayKetThucNhap,khdcd.maNhaKho, khdcd.tenNhaKho, khdcd.maDiemKho, khdcd.tenDiemKho, khdcd.maLoKho, " +
+            "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,bbcb.trangThai) FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
