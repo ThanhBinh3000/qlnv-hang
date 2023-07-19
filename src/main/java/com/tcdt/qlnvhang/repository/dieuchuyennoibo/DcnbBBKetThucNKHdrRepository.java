@@ -27,10 +27,13 @@ public interface DcnbBBKetThucNKHdrRepository extends JpaRepository<DcnbBBKetThu
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbBBKetThucNKHdr bbkt On bbkt.qDinhDccId = qdc.id and bbkt.maLoKho = khdcd.maLoKhoNhan and bbkt.maNganKho = khdcd.maNganKhoNhan " +
+            "LEFT JOIN DcnbBBKetThucNKHdr bbkt On bbkt.qDinhDccId = qdc.id " +
+            "and ((khdcd.maLoKhoNhan is not null and  bbkt.maLoKho = khdcd.maLoKhoNhan and bbkt.maNganKho = khdcd.maNganKhoNhan ) or (khdcd.maLoKhoNhan is null and bbkt.maNganKho = khdcd.maNganKhoNhan ))" +
             "LEFT JOIN DcnbBBKetThucNKDtl bbktd On bbktd.hdrId = bbkt.id " +
-            "LEFT JOIN DcnbHoSoKyThuatHdr hskt On hskt.idQdnh = qdc.id  and bbkt.maLoKho = hskt.maLoKho and bbkt.maNganKho = hskt.maNganKho " +
-            "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qdccId = qdc.id and bbkt.maLoKho = bblm.maLoKho and bbkt.maNganKho = bblm.maNganKho " +
+            "LEFT JOIN DcnbHoSoKyThuatHdr hskt On hskt.idQdnh = qdc.id  " +
+            "and ((bbkt.maLoKho is not null and  bbkt.maLoKho = hskt.maLoKho and bbkt.maNganKho = hskt.maNganKho ) or (bbkt.maLoKho is null and bbkt.maNganKho = hskt.maNganKho ))" +
+            "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qdccId = qdc.id " +
+            "and ((bbkt.maLoKho is not null and  bbkt.maLoKho = bblm.maLoKho and bbkt.maNganKho = bblm.maNganKho ) or (bbkt.maLoKho is null and bbkt.maNganKho = bblm.maNganKho ))" +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.parentId is not null and qdc.trangThai = '29'" +

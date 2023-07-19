@@ -28,9 +28,12 @@ public interface DcnbPhieuKtChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbPhieuKtChatLuongHdr pktcl On pktcl.qdDcId = qdc.id and khdcd.maLoKhoNhan = pktcl.maLoKho and khdcd.maNganKhoNhan = pktcl.maNganKho and khdcd.maLoKho = pktcl.maLoKhoXuat and khdcd.maNganKho = pktcl.maNganKhoXuat " +
-            "LEFT JOIN DcnbBBNTBQHdr bbntbq On bbntbq.qdDcCucId = qdc.id and khdcd.maLoKhoNhan = bbntbq.maLoKho and khdcd.maNganKhoNhan = bbntbq.maNganKho " +
-            "LEFT JOIN DcnbPhieuNhapKhoHdr pnk On pnk.qdDcCucId = qdc.id and khdcd.maLoKhoNhan = pnk.maLoKho and khdcd.maNganKhoNhan = pnk.maNganKho " +
+            "LEFT JOIN DcnbPhieuKtChatLuongHdr pktcl On pktcl.qdDcId = qdc.id " +
+            "and ((khdcd.maLoKhoNhan is not null and khdcd.maLoKhoNhan = pktcl.maLoKho and khdcd.maNganKhoNhan = pktcl.maNganKho and khdcd.maLoKho = pktcl.maLoKhoXuat and khdcd.maNganKho = pktcl.maNganKhoXuat ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = pktcl.maNganKho and khdcd.maNganKho = pktcl.maNganKhoXuat))" +
+            "LEFT JOIN DcnbBBNTBQHdr bbntbq On bbntbq.qdDcCucId = qdc.id " +
+            "and ((khdcd.maLoKhoNhan is not null and khdcd.maLoKhoNhan = bbntbq.maLoKho and khdcd.maNganKhoNhan = bbntbq.maNganKho ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = bbntbq.maNganKho))" +
+            "LEFT JOIN DcnbPhieuNhapKhoHdr pnk On pnk.qdDcCucId = qdc.id " +
+            "and ((khdcd.maLoKhoNhan is not null and khdcd.maLoKhoNhan = pnk.maLoKho and khdcd.maNganKhoNhan = pnk.maNganKho ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = pnk.maNganKho))" +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.parentId is null and qdc.trangThai = '29' AND qdc.loaiDc = :#{#param.loaiDc} " +
@@ -83,9 +86,12 @@ public interface DcnbPhieuKtChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbPhieuKtChatLuongHdr pktcl On pktcl.qdDcId = qdc.id and khdcd.maLoKhoNhan = pktcl.maLoKho and khdcd.maNganKhoNhan = pktcl.maNganKho and khdcd.maLoKho = pktcl.maLoKhoXuat and khdcd.maNganKho = pktcl.maNganKhoXuat " +
-            "LEFT JOIN DcnbBBNTBQHdr bbntbq On bbntbq.qdDcCucId = qdc.id and khdcd.maLoKhoNhan = bbntbq.maLoKho and khdcd.maNganKhoNhan = bbntbq.maNganKho " +
-            "LEFT JOIN DcnbPhieuNhapKhoHdr pnk On pnk.qdDcCucId = qdc.id and khdcd.maLoKhoNhan = pnk.maLoKho and khdcd.maNganKhoNhan = pnk.maNganKho " +
+            "LEFT JOIN DcnbPhieuKtChatLuongHdr pktcl On pktcl.qdDcId = qdc.id " +
+            "and ((khdcd.maLoKhoNhan is not null and khdcd.maLoKhoNhan = pktcl.maLoKho and khdcd.maNganKhoNhan = pktcl.maNganKho and khdcd.maLoKho = pktcl.maLoKhoXuat and khdcd.maNganKho = pktcl.maNganKhoXuat ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = pktcl.maNganKho and khdcd.maNganKho = pktcl.maNganKhoXuat))" +
+            "LEFT JOIN DcnbBBNTBQHdr bbntbq On bbntbq.qdDcCucId = qdc.id " +
+            "and ((khdcd.maLoKhoNhan is not null and khdcd.maLoKhoNhan = bbntbq.maLoKho and khdcd.maNganKhoNhan = bbntbq.maNganKho ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = bbntbq.maNganKho))" +
+            "LEFT JOIN DcnbPhieuNhapKhoHdr pnk On pnk.qdDcCucId = qdc.id " +
+            "and ((khdcd.maLoKhoNhan is not null and khdcd.maLoKhoNhan = pnk.maLoKho and khdcd.maNganKhoNhan = pnk.maNganKho ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = pnk.maNganKho))" +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.parentId is null and qdc.trangThai = '29' AND qdc.loaiDc = :#{#param.loaiDc} " +
