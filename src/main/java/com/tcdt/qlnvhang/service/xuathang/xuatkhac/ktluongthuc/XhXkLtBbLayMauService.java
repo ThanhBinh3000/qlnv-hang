@@ -231,7 +231,7 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
       objs[1] = dx.getNam();
       objs[2] = dx.getMaDanhSach();
       objs[3] = dx.getTenDiemKho();
-      objs[4] = (dx.getTenLoKho() != null && !dx.getTenLoKho().isEmpty()) ? dx.getTenLoKho() : dx.getTenNganKho();
+      objs[4] = (dx.getTenLoKho() != null && !dx.getTenLoKho().isEmpty()) ? (dx.getTenLoKho() +' '+dx.getTenNganKho()): dx.getTenNganKho();
       objs[5] = dx.getSlTon();
       objs[6] = dx.getSlHetHan();
       objs[7] = dx.getDonViTinh();
