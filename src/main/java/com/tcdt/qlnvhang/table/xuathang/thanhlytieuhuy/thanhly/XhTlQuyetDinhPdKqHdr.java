@@ -97,8 +97,8 @@ public class XhTlQuyetDinhPdKqHdr extends BaseEntity implements Serializable {
   private List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem = new ArrayList<>();
 
   public void setFileDinhKem(List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem) {
+    this.fileDinhKem.clear();
     if (!DataUtils.isNullObject(fileDinhKem)) {
-      this.fileDinhKem.clear();
       fileDinhKem.forEach(s -> {
         s.setDataType(XhTlQuyetDinhPdKqHdr.TABLE_NAME + "_DINH_KEM");
         s.setXhTlQuyetDinhPdKqHdr(this);
@@ -115,8 +115,8 @@ public class XhTlQuyetDinhPdKqHdr extends BaseEntity implements Serializable {
   private List<FileDKemJoinHoSoKyThuatDtl> canCu = new ArrayList<>();
 
   public void setCanCu(List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem) {
+    this.canCu.clear();
     if (!DataUtils.isNullObject(fileDinhKem)) {
-      this.canCu.clear();
       fileDinhKem.forEach(s -> {
         s.setDataType(XhTlQuyetDinhPdKqHdr.TABLE_NAME + "_CAN_CU");
         s.setXhTlQuyetDinhPdKqHdr(this);
@@ -129,13 +129,12 @@ public class XhTlQuyetDinhPdKqHdr extends BaseEntity implements Serializable {
   private List<XhTlQuyetDinhPdKqDtl> quyetDinhDtl = new ArrayList<>();
 
   public void setQuyetDinhDtl(List<XhTlQuyetDinhPdKqDtl> quyetDinhDtl) {
+    this.getQuyetDinhDtl().clear();
     if (!DataUtils.isNullOrEmpty(quyetDinhDtl)) {
       quyetDinhDtl.forEach(s -> {
-        s.setMapDmucDvi(this.mapDmucDvi);
-        s.setMapVthh(this.mapVthh);
         s.setQuyetDinhHdr(this);
       });
+      this.quyetDinhDtl.addAll(quyetDinhDtl);
     }
-    this.quyetDinhDtl = quyetDinhDtl;
   }
 }
