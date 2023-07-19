@@ -47,7 +47,8 @@ public class XhXkVtBhPhieuXuatKhoRequest extends BaseRequest {
     private BigDecimal slLayMau;
     private String donViTinh;
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
-
+    private Long idBienBanLm;
+    private String soBienBanLm;
     //search params
     private LocalDate ngayXuatTu;
     private LocalDate ngayXuatDen;
