@@ -68,12 +68,12 @@ public class XhXkVtPhieuXuatKhoService extends BaseServiceImpl {
         List<Long> idsPhieuKncl = search.getContent().stream().map(XhXkVtPhieuXuatKho::getIdPhieuKncl).collect(Collectors.toList());
         List<Long> idsQdGiaoNvXh = search.getContent().stream().map(XhXkVtPhieuXuatKho::getIdCanCu).collect(Collectors.toList());
         Map<Long, Boolean> mapKetQuanKiemDinh = xhXkVtPhieuKdclHdrRepository.findByIdIn(idsPhieuKncl).stream().collect(Collectors.toMap(XhXkVtPhieuKdclHdr::getId, XhXkVtPhieuKdclHdr::getIsDat));
-        Map<Long, String> mapQdGiaoNvXh = xhXkVtQdGiaonvXhRepository.findByIdIn(idsQdGiaoNvXh).stream().collect(Collectors.toMap(XhXkVtQdGiaonvXhHdr::getId, XhXkVtQdGiaonvXhHdr::getTenTrangThaiXh));
+        Map<Long, String> mapQdGiaoNvXh = xhXkVtQdGiaonvXhRepository.findByIdIn(idsQdGiaoNvXh).stream().collect(Collectors.toMap(XhXkVtQdGiaonvXhHdr::getId, XhXkVtQdGiaonvXhHdr::getTrangThaiXh));
         search.getContent().forEach(s -> {
             s.setMapDmucDvi(mapDmucDvi);
             s.setMapVthh(mapVthh);
             s.setKetQuaKiemDinh(mapKetQuanKiemDinh.get(s.getIdPhieuKncl()));
-            s.setTenTrangThaiXhQdGiaoNvXh(mapQdGiaoNvXh.get(s.getIdCanCu()));
+            s.setTenTrangThaiXhQdGiaoNvXh(TrangThaiAllEnum.getLabelById(mapQdGiaoNvXh.get(s.getIdCanCu())));
             s.setTenLoai(Contains.getLoaiHinhXuat(s.getLoai()));
             s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
         });
