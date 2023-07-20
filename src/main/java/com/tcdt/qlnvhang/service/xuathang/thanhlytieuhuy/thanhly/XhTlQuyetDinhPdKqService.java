@@ -113,6 +113,7 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     List<XhTlQuyetDinhPdKqHdr> allById = xhTlQuyetDinhQdPdRepository.findAllById(ids);
     allById.forEach(data -> {
+      data.setTrangThai(data.getTrangThai());
       data.setMapDmucDvi(mapDmucDvi);
       data.setMapVthh(mapVthh);
       data.getQuyetDinhDtl().forEach(d1 -> {
