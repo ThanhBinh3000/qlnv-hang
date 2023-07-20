@@ -13,6 +13,7 @@ public class DcnbBangKeNhapVTHdrDTO {
     private Long id;
     private Long qDinhDcId;
     private String soQdinh;
+    private LocalDate ngayKyQd;
     private Integer nam;
     private String maDiemKho;
     private String tenDiemKho;
@@ -22,6 +23,13 @@ public class DcnbBangKeNhapVTHdrDTO {
     private String tenNganKho;
     private String maLoKho;
     private String tenLoKho;
+    private String maHangHoa;
+    private String tenHangHoa;
+    private String maChLoaiHangHoa;
+    private String tenChLoaiHangHoa;
+    private String donViTinh;
+    private String tenDonViTinh;
+
     private Long bBLayMauId;
     private String soBBLayMau;
     private String soBangKe;
@@ -32,10 +40,11 @@ public class DcnbBangKeNhapVTHdrDTO {
     private String trangThai;
     private String tenTrangThai;
 
-    public DcnbBangKeNhapVTHdrDTO(Long id, Long qDinhDcId, String soQdinh, Integer nam, String maDiemKho, String tenDiemKho, String maNhaKho, String tenNhaKho, String maNganKho, String tenNganKho, String maLoKho, String tenLoKho, Long bBLayMauId, String soBBLayMau, String soBangKe, String soBBGuiHang, String soPhieuNhapKho, Long phieuNhapKhoId, LocalDate ngayNhapKho, String trangThai, String tenTrangThai) {
+    public DcnbBangKeNhapVTHdrDTO(Long id, Long qDinhDcId, String soQdinh,LocalDate ngayKyQd, Integer nam, String maDiemKho, String tenDiemKho, String maNhaKho, String tenNhaKho, String maNganKho, String tenNganKho, String maLoKho, String tenLoKho,String maHangHoa,String tenHangHoa,String maChLoaiHangHoa,String tenChLoaiHangHoa,String donViTinh,String tenDonViTinh, Long bBLayMauId, String soBBLayMau, String soBangKe, String soBBGuiHang, String soPhieuNhapKho, Long phieuNhapKhoId, LocalDate ngayNhapKho, String trangThai, String tenTrangThai) {
         this.id = id;
         this.qDinhDcId = qDinhDcId;
         this.soQdinh = soQdinh;
+        this.ngayKyQd=ngayKyQd;
         this.nam = nam;
         this.maDiemKho = maDiemKho;
         this.tenDiemKho = tenDiemKho;
@@ -45,6 +54,12 @@ public class DcnbBangKeNhapVTHdrDTO {
         this.tenNganKho = tenNganKho;
         this.maLoKho = maLoKho;
         this.tenLoKho = tenLoKho;
+        this.maHangHoa = maHangHoa;
+        this.tenHangHoa=tenHangHoa;
+        this.maChLoaiHangHoa=maChLoaiHangHoa;
+        this.tenChLoaiHangHoa=tenChLoaiHangHoa;
+        this.donViTinh=donViTinh;
+        this.tenDonViTinh=tenDonViTinh;
         this.bBLayMauId = bBLayMauId;
         this.soBBLayMau = soBBLayMau;
         this.soBangKe = soBangKe;
