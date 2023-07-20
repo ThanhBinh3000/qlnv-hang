@@ -64,6 +64,7 @@ public class DcnbBbNhapDayKhoHdrDTO {
         this.tenHangHoa = tenHangHoa;
         this.maChLoaiHangHoa = maChLoaiHangHoa;
         this.tenChLoaiHangHoa = tenChLoaiHangHoa;
+        this.soLuongDc = soLuongDc;
         this.donViTinh = donViTinh;
         this.tenDonViTinh = tenDonViTinh;
         this.soBbNhapDayKho = soBbNhapDayKho;
