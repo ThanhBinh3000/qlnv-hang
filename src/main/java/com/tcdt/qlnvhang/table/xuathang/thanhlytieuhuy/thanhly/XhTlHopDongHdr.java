@@ -29,14 +29,13 @@ public class XhTlHopDongHdr extends BaseEntity implements Serializable {
     private String maDvi;
     private Long idQdKqTl;
     private String soQdKqTl;
-    private LocalDate ngayKyQdKqTl;
+    private LocalDate ngayKyQdkqTl;
     private String soQdTl;
-    private String ToChucCaNhan;
+    private String toChucCaNhan;
     private String maDviTsan;
     private LocalDate thoiHanXuatKho;
     private String loaiHinhNx;
     private String kieuNx;
-    private Long idHd;
     private String soHd;
     private String tenHd;
     private LocalDate ngayHieuLuc;
@@ -51,10 +50,9 @@ public class XhTlHopDongHdr extends BaseEntity implements Serializable {
     private String chucVuBenBan;
     private String sdtBenBan;
     private String faxBenBan;
-    private String stkBanBan;
+    private String stkBenBan;
     private String moTaiBenBan;
     private String thongTinUyQuyen;
-    private String dviBenMua;
     private String diaChiBenMua;
     private String mstBenMua;
     private String daiDienBenMua;

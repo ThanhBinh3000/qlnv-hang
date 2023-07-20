@@ -92,7 +92,11 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
         req,
         pageable);
     Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
+    Map<String,String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
+    Map<String,String> mapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
     data.getContent().forEach(f -> {
+      f.setTenLoaiHinhNx(StringUtils.isEmpty(f.getLoaiHinhNx())? null : mapLoaiHinhNx.get(f.getLoaiHinhNx()));
+      f.setTenKieuNx(StringUtils.isEmpty(f.getKieuNx())? null : mapKieuNx.get(f.getKieuNx()));
       f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapDmucVthh.get(f.getLoaiVthh()));
       f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : mapDmucVthh.get(f.getCloaiVthh()));
       f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
@@ -261,6 +265,8 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
 
     Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    Map<String,String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
+    Map<String,String> mapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
 
     XhQdPdKhBdg data = optional.get();
 
@@ -291,6 +297,8 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl implements XhQdPdKhB
     data.setTenDvi(StringUtils.isEmpty(data.getMaDvi()) ? null : mapDmucDvi.get(data.getMaDvi()));
     data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : mapDmucVthh.get(data.getLoaiVthh()));
     data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh()) ? null : mapDmucVthh.get(data.getCloaiVthh()));
+    data.setTenLoaiHinhNx(StringUtils.isEmpty(data.getLoaiHinhNx())? null : mapLoaiHinhNx.get(data.getLoaiHinhNx()));
+    data.setTenKieuNx(StringUtils.isEmpty(data.getKieuNx())? null : mapKieuNx.get(data.getKieuNx()));
     data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
 
     List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBdg.TABLE_NAME + "_BAN_HANH"));
