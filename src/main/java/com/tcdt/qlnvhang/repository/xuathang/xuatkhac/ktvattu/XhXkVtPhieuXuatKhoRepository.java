@@ -22,6 +22,7 @@ public interface XhXkVtPhieuXuatKhoRepository extends JpaRepository<XhXkVtPhieuX
             "AND (:#{#param.loai} IS NULL OR c.loai = :#{#param.loai}) " +
             "AND (:#{#param.namKeHoach} IS NULL OR c.namKeHoach = :#{#param.namKeHoach}) " +
             "AND (:#{#param.loaiVthh} IS NULL OR c.loaiVthh = :#{#param.loaiVthh}) " +
+            "AND (:#{#param.canCus.size() }  = 0 OR c.idCanCu IN (:#{#param.canCus})) " +
             "AND (:#{#param.soCanCu} IS NULL OR LOWER(c.soCanCu) LIKE CONCAT('%',LOWER(:#{#param.soCanCu}),'%')) " +
             "AND (:#{#param.soPhieu} IS NULL OR LOWER(c.soPhieu) LIKE CONCAT('%',LOWER(:#{#param.soPhieu}),'%')) " +
             "AND ((:#{#param.ngayXuatTu}  IS NULL OR c.ngayXuat >= :#{#param.ngayXuatTu})" +
