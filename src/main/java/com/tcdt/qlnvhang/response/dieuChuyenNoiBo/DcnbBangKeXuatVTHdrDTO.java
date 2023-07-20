@@ -10,6 +10,7 @@ public class DcnbBangKeXuatVTHdrDTO {
     private Long id;
     private Long qDinhDccId;
     private String soQdinh;
+    private LocalDate ngayKyQd;
     private Integer namKh;
     private LocalDate thoiHanDieuChuyen;
     private String maNhaKho;
@@ -20,17 +21,25 @@ public class DcnbBangKeXuatVTHdrDTO {
     private String tenLoKho;
     private String maNganKho;
     private String tenNganKho;
+    private String maHangHoa;
+    private String tenHangHoa;
+    private String maChLoaiHangHoa;
+    private String tenChLoaiHangHoa;
+    private String donViTinh;
+    private String tenDonViTinh;
 
     private String soPhieuXuat;
+    private Long phieuNhapKhoId;
     private String soBangKe;
     private LocalDate ngayXuatKho;
     private String trangThai;
     private String tenTrangThai;
 
-    public DcnbBangKeXuatVTHdrDTO(Long id, Long qDinhDccId, String soQdinh, Integer namKh, LocalDate thoiHanDieuChuyen, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, String soPhieuXuat, String soBangKe, LocalDate ngayXuatKho, String trangThai, String tenTrangThai) {
+    public DcnbBangKeXuatVTHdrDTO(Long id, Long qDinhDccId, String soQdinh, LocalDate ngayKyQd, Integer namKh, LocalDate thoiHanDieuChuyen, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String donViTinh, String tenDonViTinh, String soPhieuXuat, Long phieuNhapKhoId, String soBangKe, LocalDate ngayXuatKho, String trangThai, String tenTrangThai) {
         this.id = id;
         this.qDinhDccId = qDinhDccId;
         this.soQdinh = soQdinh;
+        this.ngayKyQd = ngayKyQd;
         this.namKh = namKh;
         this.thoiHanDieuChuyen = thoiHanDieuChuyen;
         this.maNhaKho = maNhaKho;
@@ -41,7 +50,14 @@ public class DcnbBangKeXuatVTHdrDTO {
         this.tenLoKho = tenLoKho;
         this.maNganKho = maNganKho;
         this.tenNganKho = tenNganKho;
+        this.maHangHoa = maHangHoa;
+        this.tenHangHoa = tenHangHoa;
+        this.maChLoaiHangHoa = maChLoaiHangHoa;
+        this.tenChLoaiHangHoa = tenChLoaiHangHoa;
+        this.donViTinh = donViTinh;
+        this.tenDonViTinh = tenDonViTinh;
         this.soPhieuXuat = soPhieuXuat;
+        this.phieuNhapKhoId = phieuNhapKhoId;
         this.soBangKe = soBangKe;
         this.ngayXuatKho = ngayXuatKho;
         this.trangThai = trangThai;
