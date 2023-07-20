@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
+import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class NhHoSoBienBanReq extends BaseRequest {
     private String soHoSoKyThuat;
 
     private String soBbLayMau;
+    private Long idBbLayMau;
 
     private String soQdGiaoNvNh;
 
