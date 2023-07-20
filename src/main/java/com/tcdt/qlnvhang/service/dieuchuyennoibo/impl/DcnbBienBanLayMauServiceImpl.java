@@ -60,13 +60,13 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbBienBanLayMauHdrDTO> searchDto = null;
-        if(req.getIsVatTu() == null){
+        if (req.getIsVatTu() == null) {
             req.setIsVatTu(false);
         }
-        if(req.getIsVatTu()){
+        if (req.getIsVatTu()) {
             req.setDsLoaiHang(Arrays.asList("VT"));
-        }else {
-            req.setDsLoaiHang(Arrays.asList("LT","M"));
+        } else {
+            req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         if ("00".equals(req.getType())) { // kiểu xuất
             searchDto = dcnbBienBanLayMauHdrRepository.searchPageXuat(req, pageable);
@@ -105,7 +105,7 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
             e.setDcnbBienBanLayMauHdr(data);
         });
         DcnbBienBanLayMauHdr created = dcnbBienBanLayMauHdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBLM-"+ currentUser.getUser().getDvqlTenVietTat();
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BBLM-" + currentUser.getUser().getDvqlTenVietTat();
         created.setSoBbLayMau(so);
         dcnbBienBanLayMauHdrRepository.save(created);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), DcnbBienBanLayMauHdr.TABLE_NAME + "_CAN_CU");
@@ -139,7 +139,7 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data);
         data.setDcnbBienBanLayMauDtl(objReq.getDcnbBienBanLayMauDtl());
         DcnbBienBanLayMauHdr created = dcnbBienBanLayMauHdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBLM-"+ currentUser.getUser().getDvqlTenVietTat();
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BBLM-" + currentUser.getUser().getDvqlTenVietTat();
         created.setSoBbLayMau(so);
         dcnbBienBanLayMauHdrRepository.save(created);
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbBienBanLayMauHdr.TABLE_NAME + "_MAU_DA_NIEM_PHONG"));
