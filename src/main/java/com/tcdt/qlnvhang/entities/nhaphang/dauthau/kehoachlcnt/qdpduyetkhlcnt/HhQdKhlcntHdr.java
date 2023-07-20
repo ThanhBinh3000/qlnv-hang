@@ -11,6 +11,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.tochuctrienkhai.QdPdHsmt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.HhDchinhDxKhLcntHdr;
@@ -193,6 +194,8 @@ public class HhQdKhlcntHdr implements Serializable {
 	String soDxuatKhlcnt;
 	@Transient
 	String soQdDc;
+	@Transient
+	private QdPdHsmt qdPdHsmt;
 	@Transient
 	private List<FileDinhKem> listCcPhapLy;
 	@Transient

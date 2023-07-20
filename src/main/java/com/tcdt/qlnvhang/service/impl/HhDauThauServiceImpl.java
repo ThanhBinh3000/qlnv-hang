@@ -60,6 +60,12 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
     @Autowired
     HhQdPduyetKqlcntHdrRepository hhQdPduyetKqlcntHdrRepository;
 
+    @Autowired
+    private HhDchinhDxKhLcntDsgthauRepository dchinhDxKhLcntDsgthauRepository;
+
+    @Autowired
+    private HhDchinhDxKhLcntHdrRepository hhDchinhDxKhLcntHdrRepository;
+
 
     @Override
     @Transactional
@@ -71,48 +77,75 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
         }
     }
 
+    @Override
+    @Transactional
+    public void updateKqLcnt(HhDthauReq objReq) throws Exception {
+        Optional<HhDthauNthauDuthau> nhaThau = nhaThauDuthauRepository.findById(objReq.getId());
+        if(!nhaThau.isPresent()){
+            throw new Exception("Nhà thầu không tồn tại");
+        }
+        if (objReq.getType().equals("DC")) {
+            Optional<HhDchinhDxKhLcntDsgthau> byId = dchinhDxKhLcntDsgthauRepository.findById(objReq.getIdGoiThau());
+            if(!byId.isPresent()){
+                throw new Exception("Gói thầu không tồn tại");
+            }
+            Optional<HhDchinhDxKhLcntHdr> dchinhDxKhLcntHdr = hhDchinhDxKhLcntHdrRepository.findById(byId.get().getIdDcDxHdr());
+            if (!dchinhDxKhLcntHdr.isPresent()) {
+                throw new Exception("Quyết định điều chỉnh KH LCNT không tồn tại");
+            }
+            byId.get().setIdNhaThau(objReq.getId());
+            byId.get().setDonGiaNhaThau(objReq.getDonGia());
+            byId.get().setTrangThaiDt(objReq.getTrangThai());
+            byId.get().setTenNhaThau(nhaThau.get().getTenNhaThau());
+            dchinhDxKhLcntDsgthauRepository.save(byId.get());
+        } else {
+            Optional<HhQdKhlcntDsgthau> byId = goiThauRepository.findById(objReq.getIdGoiThau());
+            if (!byId.isPresent()) {
+                throw new Exception("Gói thầu không tồn tại");
+            }
+            byId.get().setIdNhaThau(objReq.getId());
+            byId.get().setDonGiaNhaThau(objReq.getDonGia());
+            byId.get().setTrangThaiDt(objReq.getTrangThai());
+            byId.get().setTenNhaThau(nhaThau.get().getTenNhaThau());
+            goiThauRepository.save(byId.get());
+        }
+    }
+
     List<HhDthauNthauDuthau> createVatTu(HhDthauReq objReq) throws Exception {
-        Optional<HhQdKhlcntDtl> byId = dtlRepository.findById(objReq.getIdGoiThau());
-        if(!byId.isPresent()){
-            throw new Exception("Gói thầu không tồn tại");
+        if (objReq.getType().equals("DC")) {
+            Optional<HhDchinhDxKhLcntDsgthau> byId = dchinhDxKhLcntDsgthauRepository.findById(objReq.getIdGoiThau());
+            if(!byId.isPresent()){
+                throw new Exception("Gói thầu không tồn tại");
+            }
+            Optional<HhDchinhDxKhLcntHdr> dchinhDxKhLcntHdr = hhDchinhDxKhLcntHdrRepository.findById(byId.get().getIdDcDxHdr());
+            if (!dchinhDxKhLcntHdr.isPresent()) {
+                throw new Exception("Quyết định điều chỉnh KH LCNT không tồn tại");
+            }
+            Optional<HhQdKhlcntHdr> byId1 = hhQdKhlcntHdrRepository.findById(dchinhDxKhLcntHdr.get().getIdQdGoc());
+            if(byId1.isPresent()){
+                byId1.get().setTrangThaiDt(NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId());
+                hhQdKhlcntHdrRepository.save(byId1.get());
+            }
+        } else {
+            Optional<HhQdKhlcntDsgthau> byId = goiThauRepository.findById(objReq.getIdGoiThau());
+            if (!byId.isPresent()) {
+                throw new Exception("Gói thầu không tồn tại");
+            }
+            Optional<HhQdKhlcntHdr> byId1 = hhQdKhlcntHdrRepository.findById(byId.get().getIdQdHdr());
+            if(byId1.isPresent()){
+                byId1.get().setTrangThaiDt(NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId());
+                hhQdKhlcntHdrRepository.save(byId1.get());
+            }
         }
-
-        Optional<HhQdKhlcntHdr> byId1 = hhQdKhlcntHdrRepository.findById(byId.get().getIdQdHdr());
-        if(byId1.isPresent()){
-            byId1.get().setTrangThaiDt(NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId());
-            hhQdKhlcntHdrRepository.save(byId1.get());
-        }
-
-        HhQdKhlcntDtl hhQdKhlcntDsgthau = byId.get();
         nhaThauDuthauRepository.deleteAllByIdDtGt(objReq.getIdGoiThau());
         List<HhDthauNthauDuthau> listDuThau = new ArrayList<>();
-        HhDthauNthauDuthau nhaThauTt = new HhDthauNthauDuthau();
-        boolean isTrungThau = false;
-        for (HhDthauNthauDuthauReq req : objReq.getNthauDuThauList()){
+        for (HhDthauNthauDuthauReq req : objReq.getNthauDuThauList()) {
             HhDthauNthauDuthau nthauDthau = new HhDthauNthauDuthau();
-            BeanUtils.copyProperties(req,nthauDthau,"id");
+            BeanUtils.copyProperties(req, nthauDthau, "id");
             nthauDthau.setIdDtGt(objReq.getIdGoiThau());
             HhDthauNthauDuthau save = nhaThauDuthauRepository.save(nthauDthau);
-            if(!isTrungThau){
-                isTrungThau = save.getTrangThai().equals(NhapXuatHangTrangThaiEnum.TRUNGTHAU.getId());
-                if(isTrungThau){
-                    nhaThauTt = save;
-                }
-            }
             listDuThau.add(nthauDthau);
         }
-        if(isTrungThau){
-            hhQdKhlcntDsgthau.setTrangThai(NhapXuatHangTrangThaiEnum.THANH_CONG.getId());
-            hhQdKhlcntDsgthau.setIdNhaThau(nhaThauTt.getId());
-            hhQdKhlcntDsgthau.setTenNhaThau(nhaThauTt.getTenNhaThau());
-            hhQdKhlcntDsgthau.setDonGiaNhaThau(nhaThauTt.getDonGia());
-        }else{
-            hhQdKhlcntDsgthau.setTrangThai(NhapXuatHangTrangThaiEnum.THAT_BAI.getId());
-            hhQdKhlcntDsgthau.setIdNhaThau(null);
-            hhQdKhlcntDsgthau.setTenNhaThau(null);
-            hhQdKhlcntDsgthau.setDonGiaNhaThau(null);
-        }
-        dtlRepository.save(hhQdKhlcntDsgthau);
         return listDuThau;
     }
 
@@ -201,23 +234,53 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
     }
 
     @Override
-    public List<HhDthauNthauDuthau> detail(String ids,String loaiVthh) throws Exception {
+    public Page<HhQdKhlcntHdr> selectPageVt(HhQdKhlcntSearchReq req) throws Exception {
+        int page = req.getPaggingReq().getPage();
+        int limit = req.getPaggingReq().getLimit();
+        Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
+//        Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+//        Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
+        Page<HhQdKhlcntHdr> data = hhQdKhlcntHdrRepository.selectPage(req.getNamKhoach(), req.getLoaiVthh(), req.getSoQd(), req.getTrichYeu(),
+                convertDateToString(req.getTuNgayQd()),
+                convertDateToString(req.getDenNgayQd()),
+                req.getTrangThai(), req.getLastest(),
+                req.getMaDvi(),
+                req.getTrangThaiDtl(),
+                req.getTrangThaiDt(),
+                pageable);
+        return data;
+    }
+
+    @Override
+    public List<HhDthauNthauDuthau> detail(String ids,String loaiVthh, String type) throws Exception {
+        List<HhDthauNthauDuthau> byIdDtGt = new ArrayList<>();
         if(loaiVthh.startsWith("02")){
-            Optional<HhQdKhlcntDtl> byId = dtlRepository.findById(Long.parseLong(ids));
-            if(!byId.isPresent()){
-                throw new Exception("Gói thầu không tồn tại");
+            if (type.equals("DC")) {
+                Optional<HhDchinhDxKhLcntDsgthau> byId = dchinhDxKhLcntDsgthauRepository.findById(Long.parseLong(ids));
+                if(!byId.isPresent()){
+                    throw new Exception("Gói thầu không tồn tại");
+                }
+                byIdDtGt = nhaThauDuthauRepository.findByIdDtGt(Long.parseLong(ids));
+            } else if (type.equals("GOC")) {
+                Optional<HhQdKhlcntDsgthau> byId = goiThauRepository.findById(Long.parseLong(ids));
+                if(!byId.isPresent()){
+                    throw new Exception("Gói thầu không tồn tại");
+                }
+                byIdDtGt = nhaThauDuthauRepository.findByIdDtGt(Long.parseLong(ids));
             }
+            byIdDtGt.forEach(f -> {
+                f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+            });
         }else{
             Optional<HhQdKhlcntDsgthau> byId = goiThauRepository.findById(Long.parseLong(ids));
             if(!byId.isPresent()){
                 throw new Exception("Gói thầu không tồn tại");
             }
+            byIdDtGt = nhaThauDuthauRepository.findByIdDtGt(Long.parseLong(ids));
+            byIdDtGt.forEach(f -> {
+                f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+            });
         }
-
-        List<HhDthauNthauDuthau> byIdDtGt = nhaThauDuthauRepository.findByIdDtGt(Long.parseLong(ids));
-        byIdDtGt.forEach(f -> {
-            f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
-        });
         return byIdDtGt;
     }
 
@@ -296,13 +359,6 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
         if(!optional.isPresent()){
             throw new Exception("Thông tin đấu thầu không tồn tại");
         }
-        List<HhQdKhlcntDtl> byIdQdDtl = dtlRepository.findAllByIdQdHdr(stReq.getId());
-
-        List<HhQdKhlcntDtl> collect = byIdQdDtl.stream().filter(item -> item.getTrangThai().equals(NhapXuatHangTrangThaiEnum.CHUACAPNHAT.getId())).collect(Collectors.toList());
-        if(!collect.isEmpty()){
-            throw new Exception("Vui lòng cập nhật thông tin các gói thầu");
-        }
-
         String status = stReq.getTrangThai() + optional.get().getTrangThaiDt();
         if ((NhapXuatHangTrangThaiEnum.HOANTHANHCAPNHAT.getId() + NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId()).equals(status)) {
             optional.get().setTrangThaiDt(stReq.getTrangThai());

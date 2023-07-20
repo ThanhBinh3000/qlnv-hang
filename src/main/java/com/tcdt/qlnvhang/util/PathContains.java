@@ -165,6 +165,7 @@ public class PathContains {
     public static final String Ql_QC_KT = "/ql-qc-kt";
 
     public static final String NH_HS_BB = "/nh-hs-bb";
+    public static final String NH_HS_BB_NK = "/nh-hs-bb-nk";
 
 
     // Dau thau vat tu
@@ -213,6 +214,7 @@ public class PathContains {
 
     // Nhập kho vật tư: Hồ sơ kỹ thuật
     public static final String HO_SO_KY_THUAT = "/ho-so-ky-thuat";
+    public static final String HO_SO_KY_THUAT_NK = "/ho-so-ky-thuat-nk";
 
     // Nhập kho vật tư: Biên bản chuẩn bị kho
     public static final String BIEN_BAN_CHUAN_BI_KHO = "/bien-ban-chuan-bi-kho";

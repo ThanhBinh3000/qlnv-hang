@@ -52,6 +52,9 @@ public class HhQdPduyetKqlcntHdrReq {
 
 	String cloaiVthh;
 
+	private List<HhQdPduyetKqlcntDtlReq> detailList;
+
 	private List<FileDinhKemReq> fileDinhKems;
+	private List<FileDinhKemReq> listCcPhapLy;
 
 }
