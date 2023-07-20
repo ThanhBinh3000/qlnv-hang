@@ -157,20 +157,21 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
 
     String status = statusReq.getTrangThai() + optional.get().getTrangThai();
     switch (status) {
-      case Contains.CHODUYET_LDV + Contains.DUTHAO:
-      case Contains.CHODUYET_LDTC + Contains.CHODUYET_LDV:
-      case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
-      case Contains.CHODUYET_LDV + Contains.TUCHOI_LDTC:
+      case Contains.CHODUYET_TP + Contains.DUTHAO:
+      case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+      case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+      case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
         optional.get().setNguoiGduyetId(currentUser.getUser().getId());
         optional.get().setNgayGduyet(LocalDate.now());
         break;
-      case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
-      case Contains.TUCHOI_LDTC + Contains.CHODUYET_LDTC:
+      case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+      case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
         optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
         break;
-      case Contains.BAN_HANH + Contains.CHODUYET_LDTC:
+      case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
+      case Contains.BAN_HANH + Contains.DADUYET_LDC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
         break;
