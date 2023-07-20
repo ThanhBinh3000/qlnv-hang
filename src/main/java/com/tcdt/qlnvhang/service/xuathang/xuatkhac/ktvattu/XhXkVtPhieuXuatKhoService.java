@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuXuatKhoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtPhieuKdclHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtQdGiaonvXhRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -18,9 +19,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuXuatKho;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkKhXuatHang;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatKho;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtQdGiaonvXhHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -38,6 +37,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,20 +51,29 @@ public class XhXkVtPhieuXuatKhoService extends BaseServiceImpl {
     private XhXkVtQdGiaonvXhRepository xhXkVtQdGiaonvXhRepository;
 
     @Autowired
+    private XhXkVtPhieuKdclHdrRepository xhXkVtPhieuKdclHdrRepository;
+
+    @Autowired
     private UserInfoRepository userInfoRepository;
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
 
     public Page<XhXkVtPhieuXuatKho> searchPage(CustomUserDetails currentUser, XhXkVtPhieuXuatKhoRequest req) throws Exception {
-        req.setDvql(currentUser.getDvql());
+        req.setDvql(ObjectUtils.isEmpty(req.getDvql()) ? currentUser.getDvql() : req.getDvql());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhXkVtPhieuXuatKho> search = xhXkVtPhieuXuatKhoRepository.search(req, pageable);
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
+        List<Long> idsPhieuKncl = search.getContent().stream().map(XhXkVtPhieuXuatKho::getIdPhieuKncl).collect(Collectors.toList());
+        List<Long> idsQdGiaoNvXh = search.getContent().stream().map(XhXkVtPhieuXuatKho::getIdCanCu).collect(Collectors.toList());
+        Map<Long, Boolean> mapKetQuanKiemDinh = xhXkVtPhieuKdclHdrRepository.findByIdIn(idsPhieuKncl).stream().collect(Collectors.toMap(XhXkVtPhieuKdclHdr::getId, XhXkVtPhieuKdclHdr::getIsDat));
+        Map<Long, String> mapQdGiaoNvXh = xhXkVtQdGiaonvXhRepository.findByIdIn(idsQdGiaoNvXh).stream().collect(Collectors.toMap(XhXkVtQdGiaonvXhHdr::getId, XhXkVtQdGiaonvXhHdr::getTenTrangThaiXh));
         search.getContent().forEach(s -> {
             s.setMapDmucDvi(mapDmucDvi);
             s.setMapVthh(mapVthh);
+            s.setKetQuaKiemDinh(mapKetQuanKiemDinh.get(s.getIdPhieuKncl()));
+            s.setTenTrangThaiXhQdGiaoNvXh(mapQdGiaoNvXh.get(s.getIdCanCu()));
             s.setTenLoai(Contains.getLoaiHinhXuat(s.getLoai()));
             s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
         });
