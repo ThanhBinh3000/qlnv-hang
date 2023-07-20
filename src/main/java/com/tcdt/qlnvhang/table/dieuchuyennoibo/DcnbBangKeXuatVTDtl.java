@@ -33,7 +33,7 @@ public class DcnbBangKeXuatVTDtl {
     private String soSerial;
 
     @Column(name = "SO_LUONG")
-    private BigDecimal soBaoBi;
+    private BigDecimal soLuong;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
