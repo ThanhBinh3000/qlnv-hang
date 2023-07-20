@@ -94,6 +94,8 @@ public class XhXkVtPhieuXuatKho extends BaseEntity implements Serializable {
     private String tenLoKho;
     @Transient
     private Boolean ketQuaKiemDinh;
+    @Transient
+    private String tenTrangThaiXhQdGiaoNvXh;
 
     public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
         this.mapDmucDvi = mapDmucDvi;
