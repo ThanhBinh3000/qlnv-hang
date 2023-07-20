@@ -49,7 +49,7 @@ public class HhQdPduyetKqlcntHdrController extends BaseController {
 	@PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<BaseResponse> insert(HttpServletRequest request,
-			@Valid @RequestBody HhQdPduyetKqlcntHdrReq objReq) {
+			@RequestBody HhQdPduyetKqlcntHdrReq objReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
 			resp.setData(service.create(objReq));

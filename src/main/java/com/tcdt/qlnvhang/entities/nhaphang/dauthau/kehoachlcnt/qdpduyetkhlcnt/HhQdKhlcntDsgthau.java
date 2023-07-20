@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.table.HhQdPduyetKqlcntDtl;
 import lombok.Data;
 
 @Entity
@@ -70,6 +71,9 @@ public class HhQdKhlcntDsgthau implements Serializable {
 
 	@Transient
 	private HhQdKhlcntHdr hhQdKhlcntHdr;
+
+	@Transient
+	HhQdPduyetKqlcntDtl kqlcntDtl;
 
 	@Transient
 	private List<HhQdKhlcntDsgthauCtiet> children = new ArrayList<>();

@@ -68,13 +68,47 @@ public class HhDauThauController {
 		return ResponseEntity.ok(resp);
 	}
 
+	@ApiOperation(value = "Update kết quả đấu thầu", response = List.class)
+	@PostMapping(value = "/update-kq-dt", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> updateKqLcnt(HttpServletRequest request, @RequestBody HhDthauReq objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			service.updateKqLcnt(objReq);
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Tạo mới thông tin đấu thầu gạo trace: {}", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
+
 	@ApiOperation(value = "Lấy chi tiết thông tin đấu thầu gạo", response = List.class)
 	@GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}/{loaiVthh}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> detail(@PathVariable("ids") String ids, @PathVariable("loaiVthh") String loaiVthh) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(service.detail(ids,loaiVthh));
+			resp.setData(service.detail(ids,loaiVthh, ""));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Lấy chi tiết thông tin đấu thầu gạo trace: {}", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Lấy chi tiết thông tin đấu thầu gạo", response = List.class)
+	@GetMapping(value = PathContains.URL_CHI_TIET + "/vt/{ids}/{loaiVthh}/{type}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> detailVt(@PathVariable("ids") String ids, @PathVariable("loaiVthh") String loaiVthh, @PathVariable("type") String type) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.detail(ids,loaiVthh, type));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
@@ -127,7 +161,7 @@ public class HhDauThauController {
 		BaseResponse resp = new BaseResponse();
 		try {
 			if(objReq.getLoaiVthh().startsWith("02")){
-				resp.setData(hhQdKhlcntHdrService.getAllPage(objReq));
+				resp.setData(service.selectPageVt(objReq));
 			}else{
 				resp.setData(service.selectPage(objReq));
 			}
