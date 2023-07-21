@@ -28,7 +28,7 @@ public class XhTlToChucHdrReq {
     private String nganHangToChuc;
     private String chiNhanhNhangToChuc;
     private String soHd;
-    private String ngayKyHd;
+    private LocalDate ngayKyHd;
     private String hthucTchuc;
     private LocalDate tgianDkyTu;
     private LocalDate tgianDkyDen;
@@ -73,6 +73,7 @@ public class XhTlToChucHdrReq {
     private LocalDate thoiHanThanhToan;
     private String pthucThanhtoanKhac;
     private LocalDate thoiHanGiaoNhan;
+    private String thoiHanGiaoNhanGhiChu;
     private String pthucGnhan;
     private Long idQdPdKq;
     private String soQdPdKq;
