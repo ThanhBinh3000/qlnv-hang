@@ -61,6 +61,7 @@ public class XhXkVtPhieuXuatKho extends BaseEntity implements Serializable {
     private BigDecimal slTonKho;
     private BigDecimal slLayMau;
     private String donViTinh;
+    private Boolean mauBiHuy;
 
     @Transient
     private List<FileDinhKem> fileDinhKems;

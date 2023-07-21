@@ -46,6 +46,7 @@ public class XhXkVtPhieuXuatKhoRequest extends BaseRequest {
     private BigDecimal slTonKho;
     private BigDecimal slLayMau;
     private String donViTinh;
+    private Boolean mauBiHuy;
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 
     //search params

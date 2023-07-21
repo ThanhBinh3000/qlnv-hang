@@ -18,6 +18,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtBbLayMauHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtBckqKiemDinhMau;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtQdGiaonvXhHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
@@ -34,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Stream;
 
 @Service
 public class XhXkVtBckqKiemDinhMauService extends BaseServiceImpl {
@@ -82,6 +84,21 @@ public class XhXkVtBckqKiemDinhMauService extends BaseServiceImpl {
         XhXkVtBckqKiemDinhMau created = xhXkVtBckqKiemDinhMauRepository.save(data);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtBckqKiemDinhMau.TABLE_NAME);
         created.setFileDinhKems(fileDinhKems);
+        //save lại pxk -- update mẫu bị hủy hay ko
+        xhXkVtPhieuXuatKhoRepository.saveAll(objReq.getListDetailPxk());
+        //lưu lại số báo cáo vào qd giao nv xh
+        Long[] idsQdGiaoNvXh = Arrays.stream(objReq.getIdQdGiaoNvXh().split(","))
+                .map(String::trim)
+                .map(Long::valueOf)
+                .toArray(Long[]::new);
+        List<XhXkVtQdGiaonvXhHdr> listQdGiaoNvXh = xhXkVtQdGiaonvXhRepository.findByIdIn(Arrays.asList(idsQdGiaoNvXh));
+        if (!listQdGiaoNvXh.isEmpty()) {
+            listQdGiaoNvXh.forEach(item -> {
+                item.setSoBaoCaoKdm(created.getSoBaoCao());
+                item.setIdBaoCaoKdm(created.getId());
+            });
+            xhXkVtQdGiaonvXhRepository.saveAll(listQdGiaoNvXh);
+        }
         return created;
     }
 
@@ -136,6 +153,18 @@ public class XhXkVtBckqKiemDinhMauService extends BaseServiceImpl {
         }
         XhXkVtBckqKiemDinhMau data = optional.get();
         fileDinhKemService.deleteMultiple(Collections.singleton(data.getId()), Collections.singleton(XhXkVtBckqKiemDinhMau.TABLE_NAME));
+        Long[] idsQdGiaoNvXh = Arrays.stream(data.getIdQdGiaoNvXh().split(","))
+                .map(String::trim)
+                .map(Long::valueOf)
+                .toArray(Long[]::new);
+        List<XhXkVtQdGiaonvXhHdr> listQdGiaoNvXh = xhXkVtQdGiaonvXhRepository.findByIdIn(Arrays.asList(idsQdGiaoNvXh));
+        if (!listQdGiaoNvXh.isEmpty()) {
+            listQdGiaoNvXh.forEach(item -> {
+                item.setSoBaoCaoKdm(null);
+                item.setIdBaoCaoKdm(null);
+            });
+            xhXkVtQdGiaonvXhRepository.saveAll(listQdGiaoNvXh);
+        }
         xhXkVtBckqKiemDinhMauRepository.delete(data);
     }
 
