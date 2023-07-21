@@ -18,6 +18,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtBbLayMauHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtBckqKiemDinhMau;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatKho;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtQdGiaonvXhHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -153,17 +154,24 @@ public class XhXkVtBckqKiemDinhMauService extends BaseServiceImpl {
         }
         XhXkVtBckqKiemDinhMau data = optional.get();
         fileDinhKemService.deleteMultiple(Collections.singleton(data.getId()), Collections.singleton(XhXkVtBckqKiemDinhMau.TABLE_NAME));
+        //update mẫu bị hủy cho phiếu xuất kho
         Long[] idsQdGiaoNvXh = Arrays.stream(data.getIdQdGiaoNvXh().split(","))
                 .map(String::trim)
                 .map(Long::valueOf)
                 .toArray(Long[]::new);
+
+        List<XhXkVtPhieuXuatKho> allByIdCanCuIn = xhXkVtPhieuXuatKhoRepository.findAllByIdCanCuIn(Arrays.asList(idsQdGiaoNvXh));
+        if (!allByIdCanCuIn.isEmpty()) {
+            allByIdCanCuIn.forEach(item -> {
+                item.setMauBiHuy(Boolean.FALSE);
+            });
+        }
         List<XhXkVtQdGiaonvXhHdr> listQdGiaoNvXh = xhXkVtQdGiaonvXhRepository.findByIdIn(Arrays.asList(idsQdGiaoNvXh));
         if (!listQdGiaoNvXh.isEmpty()) {
             listQdGiaoNvXh.forEach(item -> {
                 item.setSoBaoCaoKdm(null);
                 item.setIdBaoCaoKdm(null);
             });
-            xhXkVtQdGiaonvXhRepository.saveAll(listQdGiaoNvXh);
         }
         xhXkVtBckqKiemDinhMauRepository.delete(data);
     }
