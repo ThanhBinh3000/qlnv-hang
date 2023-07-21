@@ -17,7 +17,7 @@ import java.util.Optional;
 
 
 @Repository
-public interface XhXkVtBhBbLayMauHdrRepository extends JpaRepository<XhXkVtBhBbLayMauHdr, Long> {
+public interface XhXkVtBhBbLayMauRepository extends JpaRepository<XhXkVtBhBbLayMauHdr, Long> {
 
   @Query("SELECT c FROM XhXkVtBhBbLayMauHdr c WHERE 1=1 " +
       "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +

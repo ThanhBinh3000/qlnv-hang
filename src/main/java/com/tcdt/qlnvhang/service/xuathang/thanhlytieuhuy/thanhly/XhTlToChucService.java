@@ -51,12 +51,14 @@ public class XhTlToChucService extends BaseServiceImpl {
         }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhTlToChucHdr> search = xhTlToChucRepository.search(req, pageable);
-        Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        Map<String, String> mapVthh = getListDanhMucHangHoa();
         search.getContent().forEach(f -> {
-            if (mapDmucDvi.containsKey((f.getMaDvi()))) {
-                Map<String, Object> objDonVi = mapDmucDvi.get(f.getMaDvi());
-                f.setTenDvi(objDonVi.get("tenDvi").toString());
-            }
+            f.getToChucDtl().forEach(s ->{
+                s.setMapDmucDvi(mapDmucDvi);
+                s.setMapVthh(mapVthh);
+            });
+            f.setTenDvi(mapDmucDvi.containsKey(f.getMaDvi()) ? mapDmucDvi.get(f.getMaDvi()) : null);
             f.setTenTrangThai(TrangThaiAllEnum.getLabelById(f.getTrangThai()));
         });
         return search;
@@ -161,9 +163,7 @@ public class XhTlToChucService extends BaseServiceImpl {
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
         List<XhTlToChucHdr> listAllById = xhTlToChucRepository.findAllById(ids);
         listAllById.forEach(data -> {
-            if (mapDmucDvi.get((data.getMaDvi())) != null) {
-                data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
-            }
+            data.setTenDvi(mapDmucDvi.containsKey(data.getMaDvi()) ? mapDmucDvi.get(data.getMaDvi()) : null);
             data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
 
             List<FileDinhKem> fileCanCu = fileDinhKemService.search(data.getId(), Arrays.asList(XhTlToChucHdr.TABLE_NAME));
@@ -177,8 +177,7 @@ public class XhTlToChucService extends BaseServiceImpl {
 
             data.getToChucDtl().forEach(f -> {
                 f.setMapDmucDvi(mapDmucDvi);
-                f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapDmucVthh.get(f.getLoaiVthh()));
-                f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : mapDmucVthh.get(f.getCloaiVthh()));
+                f.setMapVthh(mapDmucVthh);
             });
         });
         return listAllById;
