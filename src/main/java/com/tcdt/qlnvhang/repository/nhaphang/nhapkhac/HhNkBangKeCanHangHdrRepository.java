@@ -23,9 +23,11 @@ public interface HhNkBangKeCanHangHdrRepository extends JpaRepository<HhNkBangKe
             "FROM HhQdGiaoNvuNhapHangKhacHdr qdgnv " +
             "LEFT JOIN HhQdPdNhapKhacHdr hdr ON hdr.id = qdgnv.idQdPdNk " +
             "LEFT JOIN HhQdPdNhapKhacDtl dtl ON hdr.id = dtl.idHdr " +
-            "LEFT JOIN HhNkPhieuNhapKhoHdr pnk On pnk.qdGiaoNvId = qdgnv.id and pnk.maLoKho = dtl.maLoKho and pnk.maNganKho = dtl.maNganKho " +
+            "LEFT JOIN HhNkPhieuNhapKhoHdr pnk On pnk.qdGiaoNvId = qdgnv.id " +
+            "and ((dtl.maLoKho is not null and pnk.maLoKho = dtl.maLoKho and pnk.maNganKho = dtl.maNganKho) or (dtl.maLoKho is null and pnk.maNganKho = dtl.maNganKho)) " +
             "LEFT JOIN HhNkPhieuKtcl pktcl On pktcl.id = pnk.idPhieuKtraCluong " +
-            "LEFT JOIN HhNkBangKeCanHangHdr bkch ON bkch.idQdPdNk = qdgnv.id  and bkch.maLoKho = dtl.maLoKho and bkch.maNganKho = dtl.maNganKho " +
+            "LEFT JOIN HhNkBangKeCanHangHdr bkch ON bkch.idQdPdNk = qdgnv.id  " +
+            "and ((dtl.maLoKho is not null and bkch.maLoKho = dtl.maLoKho and bkch.maNganKho = dtl.maNganKho) or (dtl.maLoKho is null and bkch.maNganKho = dtl.maNganKho)) " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = dtl.cloaiVthh " +
             "LEFT JOIN QlnvDmDonvi dmdvnhakho On dmdvnhakho.maDvi = dtl.maNhaKho " +
             "LEFT JOIN QlnvDmDonvi dmdvdiemkho On dmdvdiemkho.maDvi = dtl.maDiemKho " +

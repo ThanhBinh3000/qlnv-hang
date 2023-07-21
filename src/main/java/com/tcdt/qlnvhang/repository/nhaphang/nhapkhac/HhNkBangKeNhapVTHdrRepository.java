@@ -25,10 +25,13 @@ public interface HhNkBangKeNhapVTHdrRepository extends JpaRepository<HhNkBangKeN
             "FROM HhQdGiaoNvuNhapHangKhacHdr qdgnv " +
             "LEFT JOIN HhQdPdNhapKhacHdr hdr ON hdr.id = qdgnv.idQdPdNk " +
             "LEFT JOIN HhQdPdNhapKhacDtl dtl ON hdr.id = dtl.idHdr " +
-            "LEFT JOIN HhNkBangKeNhapVTHdr bknvt ON bknvt.qdPdNkId = qdgnv.id and bknvt.maNganKho = dtl.maNganKho and bknvt.maLoKho = dtl.maLoKho " +
+            "LEFT JOIN HhNkBangKeNhapVTHdr bknvt ON bknvt.qdPdNkId = qdgnv.id " +
+            "and ((dtl.maLoKho is not null and bknvt.maNganKho = dtl.maNganKho and bknvt.maLoKho = dtl.maLoKho) or (dtl.maLoKho is null and bknvt.maNganKho = dtl.maNganKho)) " +
             "LEFT JOIN HhQdGiaoNvuNhapHangKhacHdr bblmh ON bblmh.idQdPdNk = qdgnv.id " +
-            "LEFT JOIN BienBanLayMauKhac bblm ON bblmh.id = bblm.idQdGiaoNvNh and bblm.maNganKho = bknvt.maNganKho and bblm.maLoKho = bknvt.maLoKho " +
-            "LEFT JOIN HhNkPhieuNhapKhoHdr pnk ON pnk.id = bknvt.phieuNhapKhoId and pnk.maNganKho = bknvt.maNganKho and pnk.maLoKho = bknvt.maLoKho " +
+            "LEFT JOIN BienBanLayMauKhac bblm ON bblmh.id = bblm.idQdGiaoNvNh " +
+            "and ((bblm.maLoKho is not null and bblm.maNganKho = bknvt.maNganKho and bblm.maLoKho = bknvt.maLoKho) or (bblm.maLoKho is null and bblm.maNganKho = bknvt.maNganKho)) " +
+            "LEFT JOIN HhNkPhieuNhapKhoHdr pnk ON pnk.id = bknvt.phieuNhapKhoId " +
+            "and ((pnk.maLoKho is not null and pnk.maNganKho = bknvt.maNganKho and pnk.maLoKho = bknvt.maLoKho) or (pnk.maLoKho is null and pnk.maNganKho = bknvt.maNganKho)) " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = dtl.cloaiVthh " +
             "LEFT JOIN QlnvDmDonvi dmdvnhakho On dmdvnhakho.maDvi = dtl.maNhaKho " +
             "LEFT JOIN QlnvDmDonvi dmdvdiemkho On dmdvdiemkho.maDvi = dtl.maDiemKho " +
