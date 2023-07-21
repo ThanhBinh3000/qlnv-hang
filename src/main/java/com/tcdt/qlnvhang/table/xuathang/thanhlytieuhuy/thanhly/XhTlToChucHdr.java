@@ -82,6 +82,7 @@ public class XhTlToChucHdr extends BaseEntity implements Serializable {
     private LocalDate thoiHanThanhToan;
     private String pthucThanhtoanKhac;
     private LocalDate thoiHanGiaoNhan;
+    private String thoiHanGiaoNhanGhiChu;
     private String pthucGnhan;
     private Long idQdPdKq;
     private String soQdPdKq;
