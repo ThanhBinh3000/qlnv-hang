@@ -177,16 +177,6 @@ public class XhXkVtBckqKiemDinhMauService extends BaseServiceImpl {
         }
     }
 
-//    @Transient
-//    public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
-//        List<XhXkVtQdGiaonvXhHdr> list = xhXkVtQdGiaonvXhRepository.findByIdIn(idSearchReq.getIdList());
-//        if (list.isEmpty()) {
-//            throw new Exception("Bản ghi không tồn tại");
-//        }
-//        fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Collections.singleton(XhXkVtQdGiaonvXhHdr.TABLE_NAME));
-//        xhXkVtQdGiaonvXhRepository.deleteAll(list);
-//    }
-
     @Transient
     public XhXkVtBckqKiemDinhMau approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
 
