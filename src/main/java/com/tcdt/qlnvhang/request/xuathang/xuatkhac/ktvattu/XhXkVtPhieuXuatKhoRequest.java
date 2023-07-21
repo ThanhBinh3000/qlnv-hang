@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class XhXkVtPhieuXuatKhoRequest  extends BaseRequest {
+public class XhXkVtPhieuXuatKhoRequest extends BaseRequest {
     private Long id;
     private Integer namKeHoach;
     private String maDvi;
@@ -52,4 +52,5 @@ public class XhXkVtPhieuXuatKhoRequest  extends BaseRequest {
     private LocalDate ngayXuatTu;
     private LocalDate ngayXuatDen;
     private String dvql;
+    private List<Long> canCus = new ArrayList<>();
 }

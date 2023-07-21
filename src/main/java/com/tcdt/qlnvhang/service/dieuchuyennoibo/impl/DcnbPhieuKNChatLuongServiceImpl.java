@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKnChatLuongDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKnChatLuongHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -309,13 +308,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         } else {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
-
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            searchDto = dcnbPhieuKnChatLuongHdrRepository.searchListChiCuc(req);
-        } else {
-            req.setTypeDataLink(Contains.DIEU_CHUYEN);
-            searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageListCuc(req);
-        }
+        searchDto = dcnbPhieuKnChatLuongHdrRepository.searchList(req);
 
         return searchDto;
     }

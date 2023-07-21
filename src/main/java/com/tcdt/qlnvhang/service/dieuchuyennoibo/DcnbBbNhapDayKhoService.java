@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface DcnbBbNhapDayKhoService extends BaseService<DcnbBbNhapDayKhoHdr, DcnbBbNhapDayKhoHdrReq,Long> {
 
-    List<DcnbBbNhapDayKhoHdrDTO> searchList(CustomUserDetails currentUser, DcnbBbNhapDayKhoHdrReq param);
+    List<DcnbBbNhapDayKhoHdr> searchList(CustomUserDetails currentUser, DcnbBbNhapDayKhoHdrReq param);
 }

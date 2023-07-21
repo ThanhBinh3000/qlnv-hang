@@ -2,6 +2,9 @@ package com.tcdt.qlnvhang.service.impl;
 
 import java.util.*;
 
+import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.tochuctrienkhai.QdPdHsmt;
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhDxuatKhNhapKhacHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.*;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthau;
@@ -13,8 +16,10 @@ import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.object.HhQdPduyetKqlcntDtlReq;
 import com.tcdt.qlnvhang.response.dauthauvattu.HhQdPduyetKqlcntRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.util.*;
 import org.springframework.beans.BeanUtils;
@@ -43,6 +48,8 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 	@Autowired
 	private HhQdPduyetKqlcntHdrRepository hhQdPduyetKqlcntHdrRepository;
+	@Autowired
+	private HhQdPduyetKqlcntDtlRepository hhQdPduyetKqlcntDtlRepository;
 
 	@Autowired
 	private HhQdKhlcntHdrRepository hhQdKhlcntHdrRepository;
@@ -60,6 +67,13 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 	private HhHopDongRepository hhHopDongRepository;
 	@Autowired
 	private HttpServletRequest request;
+	@Autowired
+	private FileDinhKemService fileDinhKemService;
+	@Autowired
+	private HhDchinhDxKhLcntDsgthauRepository dchinhDxKhLcntDsgthauRepository;
+
+	@Autowired
+	private HhDchinhDxKhLcntHdrRepository hhDchinhDxKhLcntHdrRepository;
 
 	@Override
 	public HhQdPduyetKqlcntHdr create(HhQdPduyetKqlcntHdrReq objReq) throws Exception {
@@ -78,26 +92,30 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			}
 		}
 
-		// Add danh sach file dinh kem o Master
-		List<FileDKemJoinKquaLcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinKquaLcntHdr>();
-		if (objReq.getFileDinhKems() != null) {
-			fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinKquaLcntHdr.class);
-			fileDinhKemList.forEach(f -> {
-				f.setDataType(HhQdPduyetKqlcntHdr.TABLE_NAME);
-				f.setCreateDate(new Date());
-			});
+		if (objReq.getLoaiVthh().startsWith("02")) {
+			return createVatTu(objReq);
+		} else {
+			// Add danh sach file dinh kem o Master
+			List<FileDKemJoinKquaLcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinKquaLcntHdr>();
+			if (objReq.getFileDinhKems() != null) {
+				fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinKquaLcntHdr.class);
+				fileDinhKemList.forEach(f -> {
+					f.setDataType(HhQdPduyetKqlcntHdr.TABLE_NAME);
+					f.setCreateDate(new Date());
+				});
+			}
+			HhQdPduyetKqlcntHdr dataMap = new HhQdPduyetKqlcntHdr();
+			BeanUtils.copyProperties(objReq,dataMap);
+
+			dataMap.setNguoiTao(getUser().getUsername());
+			dataMap.setNgayTao(getDateTimeNow());
+			dataMap.setTrangThai(Contains.DUTHAO);
+			dataMap.setTrangThaiHd(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
+			dataMap.setMaDvi(getUser().getDvql());
+			dataMap.setChildren(fileDinhKemList);
+
+			return hhQdPduyetKqlcntHdrRepository.save(dataMap);
 		}
-		HhQdPduyetKqlcntHdr dataMap = new HhQdPduyetKqlcntHdr();
-		BeanUtils.copyProperties(objReq,dataMap);
-
-		dataMap.setNguoiTao(getUser().getUsername());
-		dataMap.setNgayTao(getDateTimeNow());
-		dataMap.setTrangThai(Contains.DUTHAO);
-		dataMap.setTrangThaiHd(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
-		dataMap.setMaDvi(getUser().getDvql());
-		dataMap.setChildren(fileDinhKemList);
-
-		return hhQdPduyetKqlcntHdrRepository.save(dataMap);
 	}
 
 	@Override
@@ -125,26 +143,33 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 				}
 			}
 		}
-
-		// Add danh sach file dinh kem o Master
-		List<FileDKemJoinKquaLcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinKquaLcntHdr>();
-		if (objReq.getFileDinhKems() != null) {
-			fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinKquaLcntHdr.class);
-			fileDinhKemList.forEach(f -> {
-				f.setDataType(HhQdPduyetKqlcntHdr.TABLE_NAME);
-				f.setCreateDate(new Date());
-			});
-		}
-
 		HhQdPduyetKqlcntHdr dataDB = qOptional.get();
 		BeanUtils.copyProperties(objReq,dataDB,"id");
 
 		dataDB.setNgaySua(getDateTimeNow());
 		dataDB.setNguoiSua(getUser().getUsername());
-		dataDB.setChildren(fileDinhKemList);
-
+		if (objReq.getLoaiVthh().startsWith("02")) {
+			fileDinhKemService.delete(dataDB.getId(), Lists.newArrayList(HhQdPduyetKqlcntHdr.TABLE_NAME + "_CAN_CU"));
+			if (!DataUtils.isNullOrEmpty(objReq.getListCcPhapLy())) {
+				fileDinhKemService.saveListFileDinhKem(objReq.getListCcPhapLy(), dataDB.getId(), HhQdPduyetKqlcntHdr.TABLE_NAME + "_CAN_CU");
+			}
+			fileDinhKemService.delete(dataDB.getId(), Lists.newArrayList(HhQdPduyetKqlcntHdr.TABLE_NAME));
+			if (!DataUtils.isNullObject(objReq.getFileDinhKems())) {
+				fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), dataDB.getId(), HhQdPduyetKqlcntHdr.TABLE_NAME);
+			}
+		} else{
+			// Add danh sach file dinh kem o Master
+			List<FileDKemJoinKquaLcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinKquaLcntHdr>();
+			if (objReq.getFileDinhKems() != null) {
+				fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinKquaLcntHdr.class);
+				fileDinhKemList.forEach(f -> {
+					f.setDataType(HhQdPduyetKqlcntHdr.TABLE_NAME);
+					f.setCreateDate(new Date());
+				});
+			}
+			dataDB.setChildren(fileDinhKemList);
+		}
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(dataDB);
-
 		return createCheck;
 	}
 
@@ -164,6 +189,8 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		qOptional.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThai()));
 		if(qOptional.get().getLoaiVthh().startsWith("02")){
 			qOptional.get().setHhQdKhlcntHdr(Objects.isNull(qOptional.get().getIdQdPdKhlcnt()) ? null : qdKhLcntService.detail(String.valueOf(qOptional.get().getIdQdPdKhlcnt())));
+			qOptional.get().setCanCuPhapLy(fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhQdPduyetKqlcntHdr.TABLE_NAME + "_CAN_CU")));
+			qOptional.get().setFileDinhKems(fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhQdPduyetKqlcntHdr.TABLE_NAME)));
 		}else{
 			qOptional.get().setQdKhlcntDtl(Objects.isNull(qOptional.get().getIdQdPdKhlcntDtl()) ? null : qdKhLcntService.detailDtl(qOptional.get().getIdQdPdKhlcntDtl()));
 		}
@@ -224,9 +251,9 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 		String status = stReq.getTrangThai() + optional.get().getTrangThai();
 		switch (status) {
-			case Contains.BAN_HANH + Contains.DUTHAO:
+			case Contains.BAN_HANH + Contains.DANG_NHAP_DU_LIEU:
 				if(optional.get().getLoaiVthh().startsWith("02")){
-					this.updateDataApproveVt(optional);
+					this.updateDataApproveVt(optional.get());
 				}else{
 					this.updateDataApproveLt(optional);
 				}
@@ -245,16 +272,44 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		return createCheck;
 	}
 
-	void updateDataApproveVt(Optional<HhQdPduyetKqlcntHdr> optional) throws Exception {
-		Optional<HhQdKhlcntHdr> byId = hhQdKhlcntHdrRepository.findById(optional.get().getIdQdPdKhlcnt());
+	void updateDataApproveVt(HhQdPduyetKqlcntHdr qdPduyetKqlcntHdr) throws Exception {
+		Optional<HhQdKhlcntHdr> byId = hhQdKhlcntHdrRepository.findById(qdPduyetKqlcntHdr.getIdQdPdKhlcnt());
 		if(byId.isPresent()){
 			HhQdKhlcntHdr hdr = byId.get();
 			if(!StringUtils.isEmpty(hdr.getSoQdPdKqLcnt())){
 				throw new Exception(
 						"Thông tin gói thầu đã được ban hành quyết định phê duyệt kế quả lựa chọn nhà thầu, xin vui lòng chọn thông tin gối thầu khác");
 			}
-			hdr.setSoQdPdKqLcnt(optional.get().getSoQd());
+			hdr.setSoQdPdKqLcnt(qdPduyetKqlcntHdr.getSoQd());
 			hhQdKhlcntHdrRepository.save(hdr);
+			if (hdr.getDieuChinh().equals(Boolean.TRUE)) {
+				Optional<HhDchinhDxKhLcntHdr> dchinhDxKhLcntHdr = hhDchinhDxKhLcntHdrRepository.findByIdQdGocAndLastest(hdr.getId(), Boolean.TRUE);
+				if (dchinhDxKhLcntHdr.isPresent()) {
+				List<HhDchinhDxKhLcntDsgthau> gThauList = dchinhDxKhLcntDsgthauRepository.findAllByIdDcDxHdr(dchinhDxKhLcntHdr.get().getId());
+				for(HhDchinhDxKhLcntDsgthau gThau : gThauList) {
+					HhQdPduyetKqlcntDtl hhQdPduyetKqlcntDtl = hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndType(gThau.getId(), "DC");
+					if (hhQdPduyetKqlcntDtl != null) {
+						gThau.setTrangThaiDt(hhQdPduyetKqlcntDtl.getTrangThai());
+						gThau.setTenNhaThau(hhQdPduyetKqlcntDtl.getTenNhaThau());
+						gThau.setDonGiaNhaThau(hhQdPduyetKqlcntDtl.getDonGiaVat());
+						gThau.setIdNhaThau(hhQdPduyetKqlcntDtl.getIdNhaThau());
+						dchinhDxKhLcntDsgthauRepository.save(gThau);
+					}
+				}
+				}
+			} else {
+				List<HhQdKhlcntDsgthau> listDsgThau = hhQdKhlcntDsgthauRepository.findByIdQdHdr(hdr.getId());
+				for (HhQdKhlcntDsgthau dsgthau : listDsgThau) {
+					HhQdPduyetKqlcntDtl hhQdPduyetKqlcntDtl = hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndType(dsgthau.getId(), "GOC");
+					if (hhQdPduyetKqlcntDtl != null) {
+						dsgthau.setTrangThaiDt(hhQdPduyetKqlcntDtl.getTrangThai());
+						dsgthau.setTenNhaThau(hhQdPduyetKqlcntDtl.getTenNhaThau());
+						dsgthau.setDonGiaNhaThau(hhQdPduyetKqlcntDtl.getDonGiaVat());
+						dsgthau.setIdNhaThau(hhQdPduyetKqlcntDtl.getIdNhaThau());
+						hhQdKhlcntDsgthauRepository.save(dsgthau);
+					}
+				}
+			}
 			List<HhQdKhlcntDtl> dtl = hhQdKhlcntDtlRepository.findAllByIdQdHdr(hdr.getId());
 			dtl.forEach(item ->{
 				List<HhQdKhlcntDsgthau> listDsgThau = hhQdKhlcntDsgthauRepository.findByIdQdDtl(item.getId());
@@ -265,7 +320,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			});
 		}else{
 			throw new Exception(
-					"Số quyết định phê duyệt kế hoạch lựa chọn nhà thầu " + optional.get().getSoQdPdKhlcnt() + " không tồn tại");
+					"Số quyết định phê duyệt kế hoạch lựa chọn nhà thầu " + qdPduyetKqlcntHdr.getSoQdPdKhlcnt() + " không tồn tại");
 		}
 	}
 
@@ -587,50 +642,33 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 //		return createCheck;
 //	}
 //
-//	private HhQdPduyetKqlcntHdr createVatTu(HhQdPduyetKqlcntHdrReq objReq) throws Exception {
-//
-//		List<HhQdKhlcntHdr> checkSoCc = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQdPdKhlcnt());
-//		if (checkSoCc.isEmpty()){
-//			throw new Exception(
-//					"Số quyết định phê duyệt kế hoạch lựa chọn nhà thầu " + objReq.getSoQdPdKhlcnt() + " không tồn tại");
-//		}
-//
-//		Optional<HhQdPduyetKqlcntHdr> checkSoQd = hhQdPduyetKqlcntHdrRepository.findBySoQd(objReq.getSoQd());
-//		if (checkSoQd.isPresent()){
-//			throw new Exception(
-//					"Số quyết định phê duyệt kết quả lựa chọn nhà thầu " + objReq.getSoQd() + " đã tồn tại");
-//		}
-//
-//		// Add danh sach file dinh kem o Master
-//		List<FileDKemJoinKquaLcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinKquaLcntHdr>();
-//		if (objReq.getFileDinhKems() != null) {
-//			fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinKquaLcntHdr.class);
-//			fileDinhKemList.forEach(f -> {
-//				f.setDataType(HhPaKhlcntHdr.TABLE_NAME);
-//				f.setCreateDate(new Date());
-//			});
-//		}
-//
-//		HhQdPduyetKqlcntHdr dataMap = ObjectMapperUtils.map(objReq, HhQdPduyetKqlcntHdr.class);
-//
-//		dataMap.setNguoiTao(getUser().getUsername());
-//		dataMap.setMaDvi(getUser().getDvql());
-//		dataMap.setNgayTao(getDateTimeNow());
-//		dataMap.setTrangThai(Contains.DUTHAO);
-//		dataMap.setChildren(fileDinhKemList);
-//
-//		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(dataMap);
-//
-//		for (HhQdPduyetKqlcntDtlReq qdPdKq : objReq.getDetailList()){
-//			HhQdPduyetKqlcntDtl qdPdKqDtl = ObjectMapperUtils.map(qdPdKq, HhQdPduyetKqlcntDtl.class);
-//			qdPdKqDtl.setId(null);
-//			qdPdKqDtl.setIdQdPdHdr(dataMap.getId());
-//			qdPdKqDtl.setIdGoiThau(qdPdKq.getIdGt());
-//			hhQdPduyetKqlcntDtlRepository.save(qdPdKqDtl);
-//		}
-//
-//		return createCheck;
-//	}
+	private HhQdPduyetKqlcntHdr createVatTu(HhQdPduyetKqlcntHdrReq objReq) throws Exception {
+		Optional<HhQdPduyetKqlcntHdr> checkSoQd = hhQdPduyetKqlcntHdrRepository.findBySoQd(objReq.getSoQd());
+		if (checkSoQd.isPresent()){
+			throw new Exception(
+					"Số quyết định phê duyệt kết quả lựa chọn nhà thầu " + objReq.getSoQd() + " đã tồn tại");
+		}
+		HhQdPduyetKqlcntHdr dataMap = ObjectMapperUtils.map(objReq, HhQdPduyetKqlcntHdr.class);
+		dataMap.setNguoiTao(getUser().getUsername());
+		dataMap.setMaDvi(getUser().getDvql());
+		dataMap.setNgayTao(getDateTimeNow());
+		dataMap.setTrangThai(Contains.DANG_NHAP_DU_LIEU);
+		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(dataMap);
+		if (!DataUtils.isNullOrEmpty(objReq.getListCcPhapLy())) {
+			fileDinhKemService.saveListFileDinhKem(objReq.getListCcPhapLy(), createCheck.getId(), HhQdPduyetKqlcntHdr.TABLE_NAME + "_CAN_CU");
+		}
+		if (!DataUtils.isNullObject(objReq.getFileDinhKems())) {
+			fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), createCheck.getId(), HhQdPduyetKqlcntHdr.TABLE_NAME);
+		}
+
+		for (HhQdPduyetKqlcntDtlReq qdPdKq : objReq.getDetailList()){
+			HhQdPduyetKqlcntDtl qdPdKqDtl = ObjectMapperUtils.map(qdPdKq, HhQdPduyetKqlcntDtl.class);
+			qdPdKqDtl.setId(null);
+			qdPdKqDtl.setIdQdPdHdr(dataMap.getId());
+			hhQdPduyetKqlcntDtlRepository.save(qdPdKqDtl);
+		}
+		return createCheck;
+	}
 //
 //	@Override
 //	@Transactional

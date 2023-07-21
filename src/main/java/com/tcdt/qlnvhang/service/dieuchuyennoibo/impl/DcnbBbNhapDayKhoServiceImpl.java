@@ -234,7 +234,7 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
     }
 
     @Override
-    public List<DcnbBbNhapDayKhoHdrDTO> searchList(CustomUserDetails currentUser, DcnbBbNhapDayKhoHdrReq param) {
+    public List<DcnbBbNhapDayKhoHdr> searchList(CustomUserDetails currentUser, DcnbBbNhapDayKhoHdrReq param) {
         param.setMaDvi(currentUser.getDvql());
         return hdrRepository.searchList(param);
     }

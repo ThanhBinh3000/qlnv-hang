@@ -301,7 +301,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
               xhHoSoKyThuatRow.setLoai(child.getLoaiTaiLieu());
               xhHoSoKyThuatRow.setSoLuong(DataUtils.safeToLong(child.getSoLuong()));
               xhHoSoKyThuatRow.setGhiChu(child.getGhiChu());
-              xhHoSoKyThuatRow.setTrangThai("Đã Ký");
+              xhHoSoKyThuatRow.setTrangThai(TrangThaiAllEnum.DA_KY.getTen());
               xhHoSoKyThuatRow.setType(HO_SO);
               xhHoSoKyThuatRow.setFileDinhKem(Lists.newArrayList());
               listHoSo.add(xhHoSoKyThuatRow);

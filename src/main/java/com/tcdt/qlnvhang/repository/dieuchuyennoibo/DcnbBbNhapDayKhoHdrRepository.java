@@ -40,7 +40,7 @@ public interface DcnbBbNhapDayKhoHdrRepository extends JpaRepository<DcnbBbNhapD
             "AND c.trangThai = '17' " +
             "AND (:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDvi},'%')) " +
             "ORDER BY c.soQdDcCuc desc , c.nam desc, c.id desc")
-    List<DcnbBbNhapDayKhoHdrDTO> searchList(@Param("param") DcnbBbNhapDayKhoHdrReq param);
+    List<DcnbBbNhapDayKhoHdr> searchList(@Param("param") DcnbBbNhapDayKhoHdrReq param);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbNhapDayKhoHdrDTO(" +
             "bbndk.id,qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKho,khdcd.tenNhaKho, khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
