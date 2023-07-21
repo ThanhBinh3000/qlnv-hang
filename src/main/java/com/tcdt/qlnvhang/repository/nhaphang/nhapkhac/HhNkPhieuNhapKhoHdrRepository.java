@@ -50,7 +50,8 @@ public interface HhNkPhieuNhapKhoHdrRepository extends JpaRepository<HhNkPhieuNh
             "FROM HhQdGiaoNvuNhapHangKhacHdr qdgnv " +
             "LEFT JOIN HhQdPdNhapKhacHdr hdr ON hdr.id = qdgnv.idQdPdNk " +
             "LEFT JOIN HhQdPdNhapKhacDtl dtl ON hdr.id = dtl.idHdr " +
-            "LEFT JOIN HhNkPhieuNhapKhoHdr pnk On pnk.qdGiaoNvId = qdgnv.id and pnk.maLoKho = dtl.maLoKho and pnk.maNganKho = dtl.maNganKho " +
+            "LEFT JOIN HhNkPhieuNhapKhoHdr pnk On pnk.qdGiaoNvId = qdgnv.id " +
+            "and ((dtl.maLoKho is not null and pnk.maLoKho = dtl.maLoKho and pnk.maNganKho = dtl.maNganKho) or (dtl.maLoKho is null and pnk.maNganKho = dtl.maNganKho)) " +
             "LEFT JOIN HhNkPhieuKtcl pktcl On pktcl.id = pnk.idPhieuKtraCluong " +
             "LEFT JOIN HhNkBangKeNhapVTHdr bknvt On bknvt.phieuNhapKhoId = pnk.id " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = dtl.cloaiVthh " +

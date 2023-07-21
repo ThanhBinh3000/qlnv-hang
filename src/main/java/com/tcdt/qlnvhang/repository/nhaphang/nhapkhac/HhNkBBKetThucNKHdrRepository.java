@@ -26,10 +26,12 @@ public interface HhNkBBKetThucNKHdrRepository extends JpaRepository<HhNkBBKetThu
             "FROM HhQdGiaoNvuNhapHangKhacHdr qdgnv " +
             "LEFT JOIN HhQdPdNhapKhacHdr hdr ON hdr.id = qdgnv.idQdPdNk " +
             "LEFT JOIN HhQdPdNhapKhacDtl dtl ON hdr.id = dtl.idHdr " +
-            "LEFT JOIN HhNkBBKetThucNKHdr bbkt On bbkt.qdPdNkId = qdgnv.id and bbkt.maLoKho = dtl.maLoKho and bbkt.maNganKho = dtl.maNganKho " +
+            "LEFT JOIN HhNkBBKetThucNKHdr bbkt On bbkt.qdPdNkId = qdgnv.id " +
+            "and ((dtl.maLoKho is not null and bbkt.maLoKho = dtl.maLoKho and bbkt.maNganKho = dtl.maNganKho) or (dtl.maLoKho is null and  bbkt.maNganKho = dtl.maNganKho)) " +
             "LEFT JOIN HhNkBBKetThucNKDtl bbktd On bbktd.hdrId = bbkt.id " +
             "LEFT JOIN HhQdGiaoNvuNhapHangKhacHdr bblmh ON bblmh.idQdPdNk = qdgnv.id " +
-            "LEFT JOIN BienBanLayMauKhac bblm ON bblmh.id = bblm.idQdGiaoNvNh and bblm.maNganKho = bbkt.maNganKho and bblm.maLoKho = bbkt.maLoKho " +
+            "LEFT JOIN BienBanLayMauKhac bblm ON bblmh.id = bblm.idQdGiaoNvNh " +
+            "and ((bblm.maLoKho is not null and bblm.maNganKho = bbkt.maNganKho and bblm.maLoKho = bbkt.maLoKho) or (bblm.maLoKho is null and bblm.maNganKho = bbkt.maNganKho)) " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = dtl.cloaiVthh " +
             "LEFT JOIN QlnvDmDonvi dmdvnhakho On dmdvnhakho.maDvi = dtl.maNhaKho " +
             "LEFT JOIN QlnvDmDonvi dmdvdiemkho On dmdvdiemkho.maDvi = dtl.maDiemKho " +
