@@ -25,7 +25,7 @@ public class XhXkVtBhPhieuKdclRequest extends BaseRequest {
     private String soPhieu;
     private LocalDate ngayLapPhieu;
     private LocalDate ngayKiemDinh;
-    private String dviKiemNghiem;
+    private String dviKiemDinh;
     private String loaiVthh;
     private String cloaiVthh;
     private String maDiaDiem;
