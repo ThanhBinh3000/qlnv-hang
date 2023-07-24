@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu;
 
-import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatKhoRequest;
+import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatNhapKhoRequest;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatNhapKho;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface XhXkVtPhieuXuatKhoRepository extends JpaRepository<XhXkVtPhieuXuatNhapKho, Long> {
+public interface XhXkVtPhieuXuatNhapKhoRepository extends JpaRepository<XhXkVtPhieuXuatNhapKho, Long> {
 
     @Query("SELECT c FROM XhXkVtPhieuXuatNhapKho c WHERE 1=1 " +
             "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
@@ -29,7 +29,7 @@ public interface XhXkVtPhieuXuatKhoRepository extends JpaRepository<XhXkVtPhieuX
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
             "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
     )
-    Page<XhXkVtPhieuXuatNhapKho> search(@Param("param") XhXkVtPhieuXuatKhoRequest param, Pageable pageable);
+    Page<XhXkVtPhieuXuatNhapKho> search(@Param("param") XhXkVtPhieuXuatNhapKhoRequest param, Pageable pageable);
 
     Optional<XhXkVtPhieuXuatNhapKho> findBySoPhieu(String soPhieu);
 

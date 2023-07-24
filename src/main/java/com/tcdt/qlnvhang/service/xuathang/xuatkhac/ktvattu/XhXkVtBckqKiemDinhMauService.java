@@ -5,7 +5,7 @@ import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtBckqKiemDinhMauRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatKhoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtQdGiaonvXhRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -46,7 +46,7 @@ public class XhXkVtBckqKiemDinhMauService extends BaseServiceImpl {
 
 
     @Autowired
-    private XhXkVtPhieuXuatKhoRepository xhXkVtPhieuXuatKhoRepository;
+    private XhXkVtPhieuXuatNhapKhoRepository xhXkVtPhieuXuatNhapKhoRepository;
 
     @Autowired
     private UserInfoRepository userInfoRepository;
@@ -82,7 +82,7 @@ public class XhXkVtBckqKiemDinhMauService extends BaseServiceImpl {
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtBckqKiemDinhMau.TABLE_NAME);
         created.setFileDinhKems(fileDinhKems);
         //save lại pxk -- update mẫu bị hủy hay ko
-        xhXkVtPhieuXuatKhoRepository.saveAll(objReq.getListDetailPxk());
+        xhXkVtPhieuXuatNhapKhoRepository.saveAll(objReq.getListDetailPxk());
         //lưu lại số báo cáo vào qd giao nv xh
         Long[] idsQdGiaoNvXh = Arrays.stream(objReq.getIdQdGiaoNvXh().split(","))
                 .map(String::trim)
@@ -154,7 +154,7 @@ public class XhXkVtBckqKiemDinhMauService extends BaseServiceImpl {
                     .map(Long::valueOf)
                     .toArray(Long[]::new);
 
-            List<XhXkVtPhieuXuatNhapKho> allByIdCanCuIn = xhXkVtPhieuXuatKhoRepository.findAllByIdCanCuIn(Arrays.asList(idsQdGiaoNvXh));
+            List<XhXkVtPhieuXuatNhapKho> allByIdCanCuIn = xhXkVtPhieuXuatNhapKhoRepository.findAllByIdCanCuIn(Arrays.asList(idsQdGiaoNvXh));
             if (!allByIdCanCuIn.isEmpty()) {
                 allByIdCanCuIn.forEach(item -> {
                     item.setMauBiHuy(Boolean.FALSE);

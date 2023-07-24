@@ -6,12 +6,12 @@ import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtPhieuKdclHdrRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatKhoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtQdGiaonvXhRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatKhoRequest;
+import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatNhapKhoRequest;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -34,11 +34,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class XhXkVtPhieuXuatKhoService extends BaseServiceImpl {
+public class XhXkVtPhieuXuatNhapKhoService extends BaseServiceImpl {
 
 
     @Autowired
-    private XhXkVtPhieuXuatKhoRepository xhXkVtPhieuXuatKhoRepository;
+    private XhXkVtPhieuXuatNhapKhoRepository xhXkVtPhieuXuatNhapKhoRepository;
 
     @Autowired
     private XhXkVtQdGiaonvXhRepository xhXkVtQdGiaonvXhRepository;
@@ -52,10 +52,10 @@ public class XhXkVtPhieuXuatKhoService extends BaseServiceImpl {
     @Autowired
     private FileDinhKemService fileDinhKemService;
 
-    public Page<XhXkVtPhieuXuatNhapKho> searchPage(CustomUserDetails currentUser, XhXkVtPhieuXuatKhoRequest req) throws Exception {
+    public Page<XhXkVtPhieuXuatNhapKho> searchPage(CustomUserDetails currentUser, XhXkVtPhieuXuatNhapKhoRequest req) throws Exception {
         req.setDvql(ObjectUtils.isEmpty(req.getDvql()) ? currentUser.getDvql() : req.getDvql());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<XhXkVtPhieuXuatNhapKho> search = xhXkVtPhieuXuatKhoRepository.search(req, pageable);
+        Page<XhXkVtPhieuXuatNhapKho> search = xhXkVtPhieuXuatNhapKhoRepository.search(req, pageable);
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         List<Long> idsPhieuKncl = search.getContent().stream().map(XhXkVtPhieuXuatNhapKho::getIdPhieuKncl).collect(Collectors.toList());
@@ -74,22 +74,24 @@ public class XhXkVtPhieuXuatKhoService extends BaseServiceImpl {
     }
 
     @Transactional
-    public XhXkVtPhieuXuatNhapKho save(CustomUserDetails currentUser, XhXkVtPhieuXuatKhoRequest objReq) throws Exception {
+    public XhXkVtPhieuXuatNhapKho save(CustomUserDetails currentUser, XhXkVtPhieuXuatNhapKhoRequest objReq) throws Exception {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
-        Optional<XhXkVtPhieuXuatNhapKho> optional = xhXkVtPhieuXuatKhoRepository.findBySoPhieu(objReq.getSoPhieu());
+        Optional<XhXkVtPhieuXuatNhapKho> optional = xhXkVtPhieuXuatNhapKhoRepository.findBySoPhieu(objReq.getSoPhieu());
         if (optional.isPresent()) {
             throw new Exception("số số phiếu đã tồn tại");
         }
         XhXkVtPhieuXuatNhapKho data = new XhXkVtPhieuXuatNhapKho();
         BeanUtils.copyProperties(objReq, data);
         data.setTrangThai(Contains.DUTHAO);
-        XhXkVtPhieuXuatNhapKho created = xhXkVtPhieuXuatKhoRepository.save(data);
+        XhXkVtPhieuXuatNhapKho created = xhXkVtPhieuXuatNhapKhoRepository.save(data);
         // cập nhật trạng thái đang thực hiện cho QD giao nv nhập hàng
-        Optional<XhXkVtQdGiaonvXhHdr> qdGiaoNvXh = xhXkVtQdGiaonvXhRepository.findById(created.getIdCanCu());
-        if (qdGiaoNvXh.isPresent()) {
-            qdGiaoNvXh.get().setTrangThaiXh(TrangThaiAllEnum.DANG_THUC_HIEN.getId());
+        if (objReq.getLoaiPhieu().equals("XUAT")) {
+            Optional<XhXkVtQdGiaonvXhHdr> qdGiaoNvXh = xhXkVtQdGiaonvXhRepository.findById(created.getIdCanCu());
+            if (qdGiaoNvXh.isPresent()) {
+                qdGiaoNvXh.get().setTrangThaiXh(TrangThaiAllEnum.DANG_THUC_HIEN.getId());
+            }
         }
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtPhieuXuatNhapKho.TABLE_NAME);
         created.setFileDinhKems(fileDinhKems);
@@ -97,15 +99,15 @@ public class XhXkVtPhieuXuatKhoService extends BaseServiceImpl {
     }
 
     @Transactional
-    public XhXkVtPhieuXuatNhapKho update(CustomUserDetails currentUser, XhXkVtPhieuXuatKhoRequest objReq) throws Exception {
+    public XhXkVtPhieuXuatNhapKho update(CustomUserDetails currentUser, XhXkVtPhieuXuatNhapKhoRequest objReq) throws Exception {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
-        Optional<XhXkVtPhieuXuatNhapKho> optional = xhXkVtPhieuXuatKhoRepository.findById(objReq.getId());
+        Optional<XhXkVtPhieuXuatNhapKho> optional = xhXkVtPhieuXuatNhapKhoRepository.findById(objReq.getId());
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-        Optional<XhXkVtPhieuXuatNhapKho> soDx = xhXkVtPhieuXuatKhoRepository.findBySoPhieu(objReq.getSoPhieu());
+        Optional<XhXkVtPhieuXuatNhapKho> soDx = xhXkVtPhieuXuatNhapKhoRepository.findBySoPhieu(objReq.getSoPhieu());
         if (soDx.isPresent()) {
             if (!soDx.get().getId().equals(objReq.getId())) {
                 throw new Exception("số số phiếu đã tồn tại");
@@ -113,7 +115,7 @@ public class XhXkVtPhieuXuatKhoService extends BaseServiceImpl {
         }
         XhXkVtPhieuXuatNhapKho data = optional.get();
         BeanUtils.copyProperties(objReq, data);
-        XhXkVtPhieuXuatNhapKho created = xhXkVtPhieuXuatKhoRepository.save(data);
+        XhXkVtPhieuXuatNhapKho created = xhXkVtPhieuXuatNhapKhoRepository.save(data);
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhXkVtPhieuXuatNhapKho.TABLE_NAME));
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtPhieuXuatNhapKho.TABLE_NAME);
         created.setFileDinhKems(fileDinhKems);
@@ -122,7 +124,7 @@ public class XhXkVtPhieuXuatKhoService extends BaseServiceImpl {
 
     public XhXkVtPhieuXuatNhapKho detail(Long id) throws Exception {
         if (ObjectUtils.isEmpty(id)) throw new Exception("Tham số không hợp lệ.");
-        Optional<XhXkVtPhieuXuatNhapKho> optional = xhXkVtPhieuXuatKhoRepository.findById(id);
+        Optional<XhXkVtPhieuXuatNhapKho> optional = xhXkVtPhieuXuatNhapKhoRepository.findById(id);
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
@@ -141,23 +143,25 @@ public class XhXkVtPhieuXuatKhoService extends BaseServiceImpl {
 
     @Transactional
     public void delete(IdSearchReq idSearchReq) throws Exception {
-        Optional<XhXkVtPhieuXuatNhapKho> optional = xhXkVtPhieuXuatKhoRepository.findById(idSearchReq.getId());
+        Optional<XhXkVtPhieuXuatNhapKho> optional = xhXkVtPhieuXuatNhapKhoRepository.findById(idSearchReq.getId());
         if (!optional.isPresent()) {
             throw new Exception("Bản ghi không tồn tại");
         }
         XhXkVtPhieuXuatNhapKho data = optional.get();
         //Update trạng thái chưa thực hiện xuất hàng cho qd giao nv xuất hàng
-        Optional<XhXkVtQdGiaonvXhHdr> qdGiaoNv = xhXkVtQdGiaonvXhRepository.findById(data.getIdCanCu());
-        if (qdGiaoNv.isPresent()) {
-            qdGiaoNv.get().setTrangThaiXh(TrangThaiAllEnum.CHUA_THUC_HIEN.getId());
+        if (data.getLoaiPhieu().equals("XUAT")) {
+            Optional<XhXkVtQdGiaonvXhHdr> qdGiaoNv = xhXkVtQdGiaonvXhRepository.findById(data.getIdCanCu());
+            if (qdGiaoNv.isPresent()) {
+                qdGiaoNv.get().setTrangThaiXh(TrangThaiAllEnum.CHUA_THUC_HIEN.getId());
+            }
         }
         fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhXkVtPhieuXuatNhapKho.TABLE_NAME));
-        xhXkVtPhieuXuatKhoRepository.delete(data);
+        xhXkVtPhieuXuatNhapKhoRepository.delete(data);
     }
 
     @Transactional
     public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
-        List<XhXkVtPhieuXuatNhapKho> list = xhXkVtPhieuXuatKhoRepository.findAllByIdIn(idSearchReq.getIdList());
+        List<XhXkVtPhieuXuatNhapKho> list = xhXkVtPhieuXuatNhapKhoRepository.findAllByIdIn(idSearchReq.getIdList());
         if (list.isEmpty()) {
             throw new Exception("Bản ghi không tồn tại");
         }
@@ -170,7 +174,7 @@ public class XhXkVtPhieuXuatKhoService extends BaseServiceImpl {
             xhXkVtQdGiaonvXhRepository.saveAll(listQdGiaoNv);
         }
         fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhXkVtPhieuXuatNhapKho.TABLE_NAME));
-        xhXkVtPhieuXuatKhoRepository.deleteAll(list);
+        xhXkVtPhieuXuatNhapKhoRepository.deleteAll(list);
     }
 
     @Transactional
@@ -178,7 +182,7 @@ public class XhXkVtPhieuXuatKhoService extends BaseServiceImpl {
         if (StringUtils.isEmpty(statusReq.getId())) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
-        Optional<XhXkVtPhieuXuatNhapKho> optional = xhXkVtPhieuXuatKhoRepository.findById(Long.valueOf(statusReq.getId()));
+        Optional<XhXkVtPhieuXuatNhapKho> optional = xhXkVtPhieuXuatNhapKhoRepository.findById(Long.valueOf(statusReq.getId()));
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
@@ -203,11 +207,11 @@ public class XhXkVtPhieuXuatKhoService extends BaseServiceImpl {
                 throw new Exception("Phê duyệt không thành công");
         }
         optional.get().setTrangThai(statusReq.getTrangThai());
-        XhXkVtPhieuXuatNhapKho model = xhXkVtPhieuXuatKhoRepository.save(optional.get());
+        XhXkVtPhieuXuatNhapKho model = xhXkVtPhieuXuatNhapKhoRepository.save(optional.get());
         return model;
     }
 
-    public void export(CustomUserDetails currentUser, XhXkVtPhieuXuatKhoRequest objReq, HttpServletResponse response) throws Exception {
+    public void export(CustomUserDetails currentUser, XhXkVtPhieuXuatNhapKhoRequest objReq, HttpServletResponse response) throws Exception {
         PaggingReq paggingReq = new PaggingReq();
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);
