@@ -55,7 +55,7 @@ public class XhXkVtBckqKiemDinhMauService extends BaseServiceImpl {
     private FileDinhKemService fileDinhKemService;
 
     public Page<XhXkVtBckqKiemDinhMau> searchPage(CustomUserDetails currentUser, XhXkVtBckqKiemDinhMauRequest req) throws Exception {
-        req.setDvql(currentUser.getDvql());
+        req.setDvql(ObjectUtils.isEmpty(req.getDvql()) ? currentUser.getDvql() : req.getDvql());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhXkVtBckqKiemDinhMau> search = xhXkVtBckqKiemDinhMauRepository.search(req, pageable);
 //        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");

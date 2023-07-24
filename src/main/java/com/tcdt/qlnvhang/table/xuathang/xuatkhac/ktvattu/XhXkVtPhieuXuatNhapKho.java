@@ -62,6 +62,9 @@ public class XhXkVtPhieuXuatNhapKho extends BaseEntity implements Serializable {
     private String donViTinh;
     private Boolean mauBiHuy;
     private String loaiPhieu; // XUAT,NHAP
+    // Số báo cáo kết quả kd mẫu
+    private String soBcKqkdMau;
+    private Long idBcKqkdMau;
 
     @Transient
     private List<FileDinhKem> fileDinhKems;
