@@ -11,17 +11,16 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Getter
 @Setter
 @Entity
-@Table(name = XhXkVtPhieuXuatKho.TABLE_NAME)
-public class XhXkVtPhieuXuatKho extends BaseEntity implements Serializable {
+@Table(name = XhXkVtPhieuXuatNhapKho.TABLE_NAME)
+public class XhXkVtPhieuXuatNhapKho extends BaseEntity implements Serializable {
 
-    public static final String TABLE_NAME = "XH_XK_VT_PHIEU_XUAT_KHO";
+    public static final String TABLE_NAME = "XH_XK_VT_PHIEU_XUAT_NHAP_KHO";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_XK_VT_PHIEU_XUAT_KHO_SEQ")
@@ -32,7 +31,7 @@ public class XhXkVtPhieuXuatKho extends BaseEntity implements Serializable {
     private String soPhieu;
     private String loai;
     private String maQhns;
-    private LocalDate ngayXuat;
+    private LocalDate ngayXuatNhap;
     private LocalDate thoiGianGiaoHang;
     private BigDecimal duNo;
     private BigDecimal duCo;
@@ -51,7 +50,7 @@ public class XhXkVtPhieuXuatKho extends BaseEntity implements Serializable {
     private String cccdNgh;
     private String donViNgh;
     private String diaChiNgh;
-    private BigDecimal slThucXuat;
+    private BigDecimal slThucTe;
     private String ghiChu;
     private String trangThai;
     private String lyDoTuChoi;
@@ -62,6 +61,10 @@ public class XhXkVtPhieuXuatKho extends BaseEntity implements Serializable {
     private BigDecimal slLayMau;
     private String donViTinh;
     private Boolean mauBiHuy;
+    private String loaiPhieu; // XUAT,NHAP
+    // Số báo cáo kết quả kd mẫu
+    private String soBcKqkdMau;
+    private Long idBcKqkdMau;
 
     @Transient
     private List<FileDinhKem> fileDinhKems;

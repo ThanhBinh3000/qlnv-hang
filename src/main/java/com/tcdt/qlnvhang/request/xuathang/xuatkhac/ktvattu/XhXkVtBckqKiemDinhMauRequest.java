@@ -2,8 +2,7 @@ package com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattu;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtBbLayMauDtl;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatKho;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatNhapKho;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -28,7 +27,7 @@ public class XhXkVtBckqKiemDinhMauRequest extends BaseRequest {
     private Long nguoiPduyetId;
     private String lyDoTuChoi;
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
-    private List<XhXkVtPhieuXuatKho> listDetailPxk = new ArrayList<>();
+    private List<XhXkVtPhieuXuatNhapKho> listDetailPxk = new ArrayList<>();
 
     //search params
     private LocalDate ngayBaoCaoTu;
