@@ -18,7 +18,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtBbLayMauHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuKdclHdr;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatKho;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatNhapKho;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
@@ -105,7 +105,7 @@ public class XhXkVtPhieuKdclService extends BaseServiceImpl {
         Optional<XhXkVtBbLayMauHdr> bbLayMauById = xhXkVtBbLayMauHdrRepository.findById(created.getIdBbLayMau());
         if (bbLayMauById.isPresent()) {
             Long idPxk = bbLayMauById.get().getIdPhieuXuatKho();
-            Optional<XhXkVtPhieuXuatKho> pxkById = xhXkVtPhieuXuatKhoRepository.findById(idPxk);
+            Optional<XhXkVtPhieuXuatNhapKho> pxkById = xhXkVtPhieuXuatKhoRepository.findById(idPxk);
             if (pxkById.isPresent()) {
                 pxkById.get().setSoPhieuKncl(created.getSoPhieu());
                 pxkById.get().setIdPhieuKncl(created.getId());
@@ -177,7 +177,7 @@ public class XhXkVtPhieuKdclService extends BaseServiceImpl {
         Optional<XhXkVtBbLayMauHdr> bbLayMauById = xhXkVtBbLayMauHdrRepository.findById(data.getIdBbLayMau());
         if (bbLayMauById.isPresent()) {
             Long idPxk = bbLayMauById.get().getIdPhieuXuatKho();
-            Optional<XhXkVtPhieuXuatKho> pxkById = xhXkVtPhieuXuatKhoRepository.findById(idPxk);
+            Optional<XhXkVtPhieuXuatNhapKho> pxkById = xhXkVtPhieuXuatKhoRepository.findById(idPxk);
             if (pxkById.isPresent()) {
                 pxkById.get().setSoPhieuKncl(null);
                 pxkById.get().setIdPhieuKncl(null);
