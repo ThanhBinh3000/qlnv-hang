@@ -44,10 +44,6 @@ public class XhTlQuyetDinhDtl extends BaseEntity implements Serializable {
     private String ketQua;
     private String type;
 
-    private String trangThaiThucHien;
-    @Transient
-    private String tenTrangThaiThucHien;
-
     @JsonIgnore
     @Transient
     private Map<String, String> mapVthh;
@@ -112,4 +108,15 @@ public class XhTlQuyetDinhDtl extends BaseEntity implements Serializable {
 
     @Transient
     List<XhTlToChucHdr> xhTlToChucHdr = new ArrayList<>();
+
+//    Tổ chức triển khai
+
+    private Integer tongSoDviTsan;
+    private Integer soDviTsanThanhCong;
+    private Integer soDviTsanThatBai;
+    private String trangThaiThucHien;
+    @Transient
+    private String tenTrangThaiThucHien;
+    private LocalDate thoiGianGiaoNhan;
+    private String ketQuaDauGia;
 }
