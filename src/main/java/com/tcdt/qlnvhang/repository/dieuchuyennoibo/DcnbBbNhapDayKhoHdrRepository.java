@@ -73,7 +73,8 @@ public interface DcnbBbNhapDayKhoHdrRepository extends JpaRepository<DcnbBbNhapD
             "GROUP BY bbndk.id,qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKho,khdcd.tenNhaKho, khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
             "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho,khdcd.loaiVthh,khdcd.tenLoaiVthh, khdcd.cloaiVthh, khdcd.tenCloaiVthh,khdcd.soLuongDc ,khdcd.donViTinh, khdcd.tenDonViTinh ," +
             "bbndk.soBb, bbndk.ngayBdNhap, bbndk.ngayKtNhap,bbndkd.soPhieuKiemTraCl,bbndkd.phieuKiemTraClId, bbndkd.phieuNhapKho, bbndkd.idPhieuNhapKho,bbndkd.soBangKeCh,bbndkd.idBangKeCh," +
-            "bbndk.ngayLap, bbndk.trangThai,  bbndk.trangThai")
+            "bbndk.ngayLap, bbndk.trangThai,  bbndk.trangThai "+
+            "ORDER BY qdc.soQdinh DESC")
     Page<DcnbBbNhapDayKhoHdrDTO> searchPage(@Param("param") DcnbBbNhapDayKhoHdrReq req, Pageable pageable);
 
 }

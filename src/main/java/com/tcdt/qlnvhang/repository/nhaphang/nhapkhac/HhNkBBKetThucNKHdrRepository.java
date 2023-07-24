@@ -48,7 +48,8 @@ public interface HhNkBBKetThucNKHdrRepository extends JpaRepository<HhNkBBKetThu
             "GROUP BY bbkt.id,qdgnv.id,qdgnv.soQd,qdgnv.nam,qdgnv.tgianNkMnhat,dtl.maNhaKho,dmdvnhakho.tenDvi, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho," +
             "dmdvlokho.tenDvi,dtl.maNganKho,dmdvngankho.tenDvi,hdr.loaiVthh,dmvt.ten, dtl.cloaiVthh, dmvt.ten,hdr.dvt, hdr.dvt ," +
             "bbkt.soBb, bbkt.ngayKetThucNhap, bbktd.soPhieuNhapKho, bbktd.phieuNhapKhoId,bbktd.ngayNhap, bblm.soBienBan,bblm.id," +
-            "bblm.soBienBan,bblm.id, bbkt.trangThai, bbkt.trangThai")
+            "bblm.soBienBan,bblm.id, bbkt.trangThai, bbkt.trangThai "+
+            "ORDER BY qdgnv.soQd DESC")
     Page<HhNkBBKetThucNKHdrDTO> searchPage(@Param("param") HhNkBBKetThucNKReq req, Pageable pageable);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.nhaphang.nhapkhac.HhNkBBKetThucNKHdrListDTO(" +

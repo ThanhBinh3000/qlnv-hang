@@ -51,6 +51,7 @@ public interface DcnbBangKeNhapVTHdrRepository extends JpaRepository<DcnbBangKeN
             "AND (:#{#param.denNgayNhapKho}  IS NULL OR pnk.ngayLap <= :#{#param.denNgayNhapKho}) ) " +
             "GROUP BY bknvt.id,qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,qdc.nam,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maNhaKho, khdcd.tenNhaKho," +
             "khdcd.maNganKho, khdcd.tenNganKho, khdcd.maLoKho,khdcd.tenLoKho,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.donViTinh,khdcd.tenDonViTinh," +
-            "bblm.id,bblm.soBbLayMau, bknvt.soBangKe, bknvt.soBangKe,pnk.soPhieuNhapKho, pnk.id, pnk.ngayLap,bknvt.trangThai ,bknvt.trangThai")
+            "bblm.id,bblm.soBbLayMau, bknvt.soBangKe, bknvt.soBangKe,pnk.soPhieuNhapKho, pnk.id, pnk.ngayLap,bknvt.trangThai ,bknvt.trangThai "+
+            "ORDER BY qdc.soQdinh DESC")
     Page<DcnbBangKeNhapVTHdrDTO> searchPage(@Param("param") DcnbBangKeNhapVTReq req, Pageable pageable);
 }

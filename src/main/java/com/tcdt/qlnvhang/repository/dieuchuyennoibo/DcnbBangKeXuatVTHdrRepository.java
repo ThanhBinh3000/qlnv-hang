@@ -46,7 +46,8 @@ public interface DcnbBangKeXuatVTHdrRepository extends JpaRepository<DcnbBangKeX
             "GROUP BY bkxvt.id,qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,khdch.nam,khdcd.thoiGianDkDc,khdcd.maNhaKho,khdcd.tenNhaKho," +
             "khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho,khdcd.tenLoKho," +
             "khdcd.maNganKho,khdcd.tenNganKho,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.donViTinh,khdcd.tenDonViTinh," +
-            "pxk.soPhieuXuatKho,pxk.id,bkxvt.soBangKe,pxk.ngayXuatKho, bkxvt.trangThai,bkxvt.trangThai")
+            "pxk.soPhieuXuatKho,pxk.id,bkxvt.soBangKe,pxk.ngayXuatKho, bkxvt.trangThai,bkxvt.trangThai "+
+            "ORDER BY qdc.soQdinh DESC")
     Page<DcnbBangKeXuatVTHdrDTO> searchPage(@Param("param") DcnbBangKeXuatVTReq req, Pageable pageable);
 
     Optional<DcnbBangKeXuatVTHdr> findFirstBySoBangKe(String soBangKe);

@@ -50,7 +50,8 @@ public interface DcnbBienBanHaoDoiHdrRepository extends JpaRepository<DcnbBienBa
             "AND (:#{#param.denNgayXhXuat}  IS NULL OR bbtk.thoiHanXuatHang <= :#{#param.denNgayXhXuat}) ) " +
             "GROUP BY bbhd.id,bkch.id,bbtk.id,qdc.id,pxk.id,qdc.soQdinh,qdc.nam,qdc.ngayHieuLuc,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho,khdcd.tenLoKho," +
             "bbhd.soBienBan,pxk.soPhieuXuatKho,bkch.soBangKe,pxk.ngayXuatKho,bbhd.trangThai,bbhd.trangThai,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.donViTinh,khdcd.tenDonViTinh," +
-            "khdcd.maNganKho,khdcd.tenNganKho,qdc.ngayKyQdinh")
+            "khdcd.maNganKho,khdcd.tenNganKho,qdc.ngayKyQdinh "+
+            "ORDER BY qdc.soQdinh DESC")
     Page<DcnbBienBanHaoDoiHdrDTO> searchPage(@Param("param") SearchDcnbBienBanHaoDoi req, Pageable pageable);
 
     Optional<DcnbBienBanHaoDoiHdr> findFirstBySoBienBan(String soBbHaoDoi);

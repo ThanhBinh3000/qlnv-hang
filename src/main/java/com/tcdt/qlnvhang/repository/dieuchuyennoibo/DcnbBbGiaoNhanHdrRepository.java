@@ -65,7 +65,8 @@ public interface DcnbBbGiaoNhanHdrRepository extends JpaRepository<DcnbBbGiaoNha
             "AND (:#{#param.denNgayThoiHanNhap}  IS NULL OR khdcd.thoiGianDkDc <= :#{#param.denNgayThoiHanNhap}) ) " +
             "GROUP BY bbgn.id,qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKho,khdcd.tenNhaKho, khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
             "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho,khdcd.loaiVthh,khdcd.tenLoaiVthh, khdcd.cloaiVthh, khdcd.tenCloaiVthh,khdcd.soLuongDc,khdcd.donViTinh, khdcd.tenDonViTinh ," +
-            "hskt.soHoSoKyThuat, hskt.id, bbgn.soBb,bbktnk.soBb,bbktnk.id, bbktnk.ngayKetThucNhap, bblm.soBbLayMau,bblm.id, bbgn.trangThai, bbgn.trangThai")
+            "hskt.soHoSoKyThuat, hskt.id, bbgn.soBb,bbktnk.soBb,bbktnk.id, bbktnk.ngayKetThucNhap, bblm.soBbLayMau,bblm.id, bbgn.trangThai, bbgn.trangThai "+
+            "ORDER BY qdc.soQdinh DESC")
     Page<DcnbBbGiaoNhanHdrDTO> searchPage(@Param("param") DcnbBbGiaoNhanHdrReq req, Pageable pageable);
 
 }

@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuNhapKhoDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuNhapKhoHdrRepository;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuNhapKhoHdrReq;
+import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuNhapKhoHdrDTO;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuNhapKhoHdrListDTO;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -26,6 +27,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -90,6 +92,8 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         req.getChildren().forEach(e -> {
             e.setParent(data);
         });
+        double sum = req.getChildren().stream().map(DcnbPhieuNhapKhoDtl::getThucTeKinhPhi).mapToDouble(BigDecimal::doubleValue).sum();
+        data.setTongKinhPhi(new BigDecimal(sum));
         DcnbPhieuNhapKhoHdr created = hdrRepository.save(data);
         String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/PNK-"+ userInfo.getDvqlTenVietTat();
         created.setSoPhieuNhapKho(so);
@@ -118,6 +122,8 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         DcnbPhieuNhapKhoHdr update = hdrRepository.save(data);
         String so = update.getId() + "/" + (new Date().getYear() + 1900) +"/PNK-"+ userInfo.getDvqlTenVietTat();
         update.setSoPhieuNhapKho(so);
+        double sum = req.getChildren().stream().map(DcnbPhieuNhapKhoDtl::getThucTeKinhPhi).mapToDouble(BigDecimal::doubleValue).sum();
+        data.setTongKinhPhi(new BigDecimal(sum));
         hdrRepository.save(update);
         fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbPhieuNhapKhoHdr.TABLE_NAME));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), DcnbPhieuNhapKhoHdr.TABLE_NAME);

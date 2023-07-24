@@ -47,7 +47,8 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "GROUP BY  pkncl.id,bblm.id,qdc.id,qdc.soQdinh,qdc.ngayHieuLuc,qdc.nam,khdcd.thoiGianDkDc,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
             "khdcd.tenLoKho, khdcd.thayDoiThuKho,pkncl.soPhieu,pkncl.ngayKiem,bblm.soBbLayMau,bblm.ngayLayMau,bblm.soBbTinhKho,bblm.ngayXuatDocKho," +
             "bblm.soBbHaoDoi,pkncl.trangThai,pkncl.trangThai,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.thuKho,khdcd.maNganKho,khdcd.tenNganKho, qdc.ngayHieuLuc,khdcd.donViTinh,khdcd.tenDonViTinh," +
-            " khdcd.thuKhoId, khdcd.thuKhoNhanId, khdcd.thuKhoNhan")
+            " khdcd.thuKhoId, khdcd.thuKhoNhanId, khdcd.thuKhoNhan "+
+            "ORDER BY qdc.soQdinh DESC")
     Page<DcnbPhieuKnChatLuongHdrDTO> searchPageXuat(@Param("param") SearchPhieuKnChatLuong req, Pageable pageable);
 
     Optional<DcnbPhieuKnChatLuongHdr> findFirstBySoPhieu(String soPhieu);
@@ -82,7 +83,8 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "GROUP BY pkncl.id,bblm.id,qdc.id,qdc.soQdinh,qdc.ngayHieuLuc,qdc.nam,bblm.thoiHanDieuChuyen,bblm.maDiemKho,bblm.tenDiemKho,bblm.maLoKho," +
             "bblm.tenLoKho, bblm.thayDoiThuKho,pkncl.soPhieu,pkncl.ngayKiem,bblm.soBbLayMau,bblm.ngayLayMau,bblm.soBbTinhKho,bblm.ngayXuatDocKho," +
             "bblm.soBbHaoDoi,pkncl.trangThai,pkncl.trangThai,bblm.loaiVthh,bblm.tenLoaiVthh,bblm.cloaiVthh,bblm.tenCloaiVthh,bblm.maNhaKho," +
-            "bblm.tenNhaKho,bblm.tenThuKho,bblm.maNganKho,bblm.tenNganKho, qdc.ngayHieuLuc,bblm.donViTinh,bblm.tenDonViTinh, bblm.thuKho")
+            "bblm.tenNhaKho,bblm.tenThuKho,bblm.maNganKho,bblm.tenNganKho, qdc.ngayHieuLuc,bblm.donViTinh,bblm.tenDonViTinh, bblm.thuKho "+
+            "ORDER BY qdc.soQdinh DESC")
     List<DcnbPhieuKnChatLuongHdrDTO> searchList(@Param("param") SearchPhieuKnChatLuong objReq);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKnChatLuongHdrDTO(" +
@@ -119,7 +121,8 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "khdcd.tenLoKhoNhan, khdcd.thayDoiThuKho,pkncl.soPhieu,pkncl.ngayKiem,bblm.soBbLayMau,bblm.ngayLayMau,bblm.soBbTinhKho,bblm.ngayXuatDocKho," +
             "bblm.soBbHaoDoi,pkncl.trangThai,pkncl.trangThai,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan," +
             "khdcd.thuKho,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, qdc.ngayHieuLuc,khdcd.donViTinh,khdcd.tenDonViTinh," +
-            " khdcd.thuKhoId, khdcd.thuKhoNhanId, khdcd.thuKhoNhan")
+            " khdcd.thuKhoId, khdcd.thuKhoNhanId, khdcd.thuKhoNhan "+
+            "ORDER BY qdc.soQdinh DESC")
     Page<DcnbPhieuKnChatLuongHdrDTO> searchPageNhan(@Param("param") SearchPhieuKnChatLuong req, Pageable pageable);
 
 }
