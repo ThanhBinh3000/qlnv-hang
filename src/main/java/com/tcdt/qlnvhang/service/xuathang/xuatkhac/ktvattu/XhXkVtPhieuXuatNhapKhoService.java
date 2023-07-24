@@ -80,7 +80,7 @@ public class XhXkVtPhieuXuatNhapKhoService extends BaseServiceImpl {
         }
         Optional<XhXkVtPhieuXuatNhapKho> optional = xhXkVtPhieuXuatNhapKhoRepository.findBySoPhieu(objReq.getSoPhieu());
         if (optional.isPresent()) {
-            throw new Exception("số số phiếu đã tồn tại");
+            throw new Exception("Số phiếu đã tồn tại");
         }
         XhXkVtPhieuXuatNhapKho data = new XhXkVtPhieuXuatNhapKho();
         BeanUtils.copyProperties(objReq, data);
@@ -110,7 +110,7 @@ public class XhXkVtPhieuXuatNhapKhoService extends BaseServiceImpl {
         Optional<XhXkVtPhieuXuatNhapKho> soDx = xhXkVtPhieuXuatNhapKhoRepository.findBySoPhieu(objReq.getSoPhieu());
         if (soDx.isPresent()) {
             if (!soDx.get().getId().equals(objReq.getId())) {
-                throw new Exception("số số phiếu đã tồn tại");
+                throw new Exception("Số phiếu đã tồn tại");
             }
         }
         XhXkVtPhieuXuatNhapKho data = optional.get();
