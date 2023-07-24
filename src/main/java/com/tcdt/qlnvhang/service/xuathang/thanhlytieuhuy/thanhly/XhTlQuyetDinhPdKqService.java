@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhQdPdRepository;
+import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlToChucRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -10,6 +11,7 @@ import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhPd
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhPdKqHdr;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlToChucHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -37,7 +39,11 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
   private XhTlQuyetDinhQdPdRepository xhTlQuyetDinhQdPdRepository;
 
   @Autowired
+  private XhTlToChucRepository xhTlToChucRepository;
+
+  @Autowired
   private XhTlHoSoRepository xhTlHoSoRepository;
+
   @Autowired
   private FileDinhKemService fileDinhKemService;
 
@@ -51,12 +57,16 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
     }
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<XhTlQuyetDinhPdKqHdr> search = xhTlQuyetDinhQdPdRepository.search(req, pageable);
+    Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-
-    Map<String, String> mapVthh = getListDanhMucHangHoa();
+    Map<String,String> mapHinhThuDg = getListDanhMucChung("HINH_THUC_DG");
+    Map<String,String> mapPhuongThucDg = getListDanhMucChung("PHUONG_THUC_DG");
     search.getContent().forEach(s -> {
-      s.setMapVthh(mapVthh);
+      s.setMapVthh(mapDmucVthh);
       s.setMapDmucDvi(mapDmucDvi);
+      s.setTrangThai(s.getTrangThai());
+      s.setTenHthucDgia(StringUtils.isEmpty(s.getHthucDgia()) ? null : mapHinhThuDg.get(s.getHthucDgia()));
+      s.setTenPthucDgia(StringUtils.isEmpty(s.getPthucDgia())? null : mapPhuongThucDg.get(s.getPthucDgia()));
     });
     return search;
   }
@@ -180,6 +190,14 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
         throw new Exception("Phê duyệt không thành công");
     }
     optional.get().setTrangThai(statusReq.getTrangThai());
+    if (statusReq.getTrangThai().equals(Contains.BAN_HANH)) {
+      Optional<XhTlToChucHdr> xhTlToChucHdr = xhTlToChucRepository.findById(optional.get().getIdThongBao());
+      if (xhTlToChucHdr.isPresent()){
+        xhTlToChucHdr.get().setIdQdPdKq(optional.get().getId());
+        xhTlToChucHdr.get().setSoQdPdKq(optional.get().getSoQd());
+        xhTlToChucRepository.save(xhTlToChucHdr.get());
+      }
+    }
     XhTlQuyetDinhPdKqHdr created = xhTlQuyetDinhQdPdRepository.save(optional.get());
     return created;
   }

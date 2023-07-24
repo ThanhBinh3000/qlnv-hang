@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
@@ -75,8 +76,6 @@ public class XhTlHopDongHdr extends BaseEntity implements Serializable {
     private Long nguoiGduyetId;
     @Transient
     private String tenDvi;
-    @Transient
-    private String tenTrangThai;
     @JsonIgnore
     @Transient
     private Map<String, String> mapVthh;
@@ -96,9 +95,18 @@ public class XhTlHopDongHdr extends BaseEntity implements Serializable {
     }
 
     @Transient
+    private String tenTrangThai;
+
+    public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
+        this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+    }
+
+    @Transient
     private List<FileDinhKem> fileCanCu = new ArrayList<>();
     @Transient
     private List<FileDinhKem> fileDinhKem = new ArrayList<>();
+
     @OneToMany(mappedBy = "hopDongHdr", cascade = CascadeType.ALL)
     private List<XhTlHopDongDtl> hopDongDtl = new ArrayList<>();
 

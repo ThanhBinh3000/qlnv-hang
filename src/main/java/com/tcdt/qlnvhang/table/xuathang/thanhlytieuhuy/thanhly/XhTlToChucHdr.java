@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 
@@ -79,9 +80,9 @@ public class XhTlToChucHdr extends BaseEntity implements Serializable {
     private Long nguoiPduyetId;
     private LocalDate ngayGduyet;
     private Long nguoiGduyetId;
-    private LocalDate thoiHanThanhToan;
+    private Integer thoiHanThanhToan;
     private String pthucThanhtoanKhac;
-    private LocalDate thoiHanGiaoNhan;
+    private Integer thoiHanGiaoNhan;
     private String thoiHanGiaoNhanGhiChu;
     private String pthucGnhan;
     private Long idQdPdKq;
@@ -94,8 +95,15 @@ public class XhTlToChucHdr extends BaseEntity implements Serializable {
     //  @Transient
     @Transient
     private String tenDvi;
+
     @Transient
     private String tenTrangThai;
+
+    public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
+        this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+    }
+
     @Transient
     private List<FileDinhKem> fileCanCu = new ArrayList<>();
     @Transient
