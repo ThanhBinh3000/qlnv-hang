@@ -6,12 +6,11 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtBbLayMauHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtPhieuKdclHdrRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatKhoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtQdGiaonvXhRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattu.XhXkVtBbLayMauRequest;
 import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattu.XhXkVtPhieuKdclRequest;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -50,7 +49,7 @@ public class XhXkVtPhieuKdclService extends BaseServiceImpl {
 
 
     @Autowired
-    private XhXkVtPhieuXuatKhoRepository xhXkVtPhieuXuatKhoRepository;
+    private XhXkVtPhieuXuatNhapKhoRepository xhXkVtPhieuXuatNhapKhoRepository;
 
     @Autowired
     private XhXkVtBbLayMauHdrRepository xhXkVtBbLayMauHdrRepository;
@@ -105,11 +104,11 @@ public class XhXkVtPhieuKdclService extends BaseServiceImpl {
         Optional<XhXkVtBbLayMauHdr> bbLayMauById = xhXkVtBbLayMauHdrRepository.findById(created.getIdBbLayMau());
         if (bbLayMauById.isPresent()) {
             Long idPxk = bbLayMauById.get().getIdPhieuXuatKho();
-            Optional<XhXkVtPhieuXuatNhapKho> pxkById = xhXkVtPhieuXuatKhoRepository.findById(idPxk);
+            Optional<XhXkVtPhieuXuatNhapKho> pxkById = xhXkVtPhieuXuatNhapKhoRepository.findById(idPxk);
             if (pxkById.isPresent()) {
                 pxkById.get().setSoPhieuKncl(created.getSoPhieu());
                 pxkById.get().setIdPhieuKncl(created.getId());
-                xhXkVtPhieuXuatKhoRepository.save(pxkById.get());
+                xhXkVtPhieuXuatNhapKhoRepository.save(pxkById.get());
             }
         }
         return created;
@@ -177,11 +176,11 @@ public class XhXkVtPhieuKdclService extends BaseServiceImpl {
         Optional<XhXkVtBbLayMauHdr> bbLayMauById = xhXkVtBbLayMauHdrRepository.findById(data.getIdBbLayMau());
         if (bbLayMauById.isPresent()) {
             Long idPxk = bbLayMauById.get().getIdPhieuXuatKho();
-            Optional<XhXkVtPhieuXuatNhapKho> pxkById = xhXkVtPhieuXuatKhoRepository.findById(idPxk);
+            Optional<XhXkVtPhieuXuatNhapKho> pxkById = xhXkVtPhieuXuatNhapKhoRepository.findById(idPxk);
             if (pxkById.isPresent()) {
                 pxkById.get().setSoPhieuKncl(null);
                 pxkById.get().setIdPhieuKncl(null);
-                xhXkVtPhieuXuatKhoRepository.save(pxkById.get());
+                xhXkVtPhieuXuatNhapKhoRepository.save(pxkById.get());
             }
         }
         xhXkVtPhieuKdclHdrRepository.delete(data);

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class XhXkVtPhieuXuatKhoRequest extends BaseRequest {
+public class XhXkVtPhieuXuatNhapKhoRequest extends BaseRequest {
     private Long id;
     private Integer namKeHoach;
     private String maDvi;
