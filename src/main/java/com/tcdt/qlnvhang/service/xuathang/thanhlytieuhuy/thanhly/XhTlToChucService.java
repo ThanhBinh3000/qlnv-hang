@@ -59,7 +59,7 @@ public class XhTlToChucService extends BaseServiceImpl {
                 s.setMapVthh(mapVthh);
             });
             f.setTenDvi(mapDmucDvi.containsKey(f.getMaDvi()) ? mapDmucDvi.get(f.getMaDvi()) : null);
-            f.setTenTrangThai(TrangThaiAllEnum.getLabelById(f.getTrangThai()));
+            f.setTrangThai(f.getTrangThai());
         });
         return search;
     }
@@ -164,7 +164,7 @@ public class XhTlToChucService extends BaseServiceImpl {
         List<XhTlToChucHdr> listAllById = xhTlToChucRepository.findAllById(ids);
         listAllById.forEach(data -> {
             data.setTenDvi(mapDmucDvi.containsKey(data.getMaDvi()) ? mapDmucDvi.get(data.getMaDvi()) : null);
-            data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
+            data.setTrangThai(data.getTrangThai());
 
             List<FileDinhKem> fileCanCu = fileDinhKemService.search(data.getId(), Arrays.asList(XhTlToChucHdr.TABLE_NAME));
             data.setFileCanCu(fileCanCu);
