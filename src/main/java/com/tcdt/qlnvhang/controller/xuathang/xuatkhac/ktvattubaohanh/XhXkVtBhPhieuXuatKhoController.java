@@ -7,9 +7,9 @@ import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuXuatKhoRequest;
+import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuXuatNhapKhoRequest;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuXuatKhoService;
+import com.tcdt.qlnvhang.service.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuXuatNhapKhoService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,17 +30,17 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.XUAT_KHAC + PathContains.KTCL_VT_TRONG_BAO_HANH + PathContains.PHIEU_XUAT_KHO)
 @Slf4j
-@Api(tags = "Xuất hàng DTQG - Xuất khác - Kiểm tra chất lượng vật tư - Phiếu xuất kho")
+@Api(tags = "Xuất hàng DTQG - Xuất khác - Ktcl Vt,Tb trong thời gian bảo hành - Phiếu xuất kho")
 public class XhXkVtBhPhieuXuatKhoController extends BaseController {
 
   @Autowired
-  XhXkVtBhPhieuXuatKhoService xhXkVtPhieuXuatKhoService;
+  XhXkVtBhPhieuXuatNhapKhoService xhXkVtPhieuXuatKhoService;
 
   @ApiOperation(value = "Tra cứu", response = List.class)
   @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser,
-                                                @RequestBody XhXkVtBhPhieuXuatKhoRequest objReq) {
+                                                @RequestBody XhXkVtBhPhieuXuatNhapKhoRequest objReq) {
     BaseResponse resp = new BaseResponse();
     try {
       resp.setData(xhXkVtPhieuXuatKhoService.searchPage(currentUser, objReq));
@@ -60,7 +60,7 @@ public class XhXkVtBhPhieuXuatKhoController extends BaseController {
   @ApiOperation(value = "Tạo mới", response = List.class)
   @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhXkVtBhPhieuXuatKhoRequest objReq) {
+  public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhXkVtBhPhieuXuatNhapKhoRequest objReq) {
     BaseResponse resp = new BaseResponse();
     try {
       resp.setData(xhXkVtPhieuXuatKhoService.save(currentUser, objReq));
@@ -78,7 +78,7 @@ public class XhXkVtBhPhieuXuatKhoController extends BaseController {
 
   @ApiOperation(value = "Cập nhật", response = List.class)
   @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhXkVtBhPhieuXuatKhoRequest objReq) {
+  public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhXkVtBhPhieuXuatNhapKhoRequest objReq) {
     BaseResponse resp = new BaseResponse();
     try {
       resp.setData(xhXkVtPhieuXuatKhoService.update(currentUser, objReq));
@@ -170,7 +170,7 @@ public class XhXkVtBhPhieuXuatKhoController extends BaseController {
   @ApiOperation(value = "Kết xuất danh sách", response = List.class)
   @PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public void exportList(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhXkVtBhPhieuXuatKhoRequest objReq, HttpServletResponse response) throws Exception {
+  public void exportList(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhXkVtBhPhieuXuatNhapKhoRequest objReq, HttpServletResponse response) throws Exception {
     try {
       xhXkVtPhieuXuatKhoService.export(currentUser, objReq, response);
 

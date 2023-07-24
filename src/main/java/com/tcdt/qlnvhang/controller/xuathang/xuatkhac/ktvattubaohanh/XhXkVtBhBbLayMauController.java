@@ -30,7 +30,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.XUAT_KHAC + PathContains.KTCL_VT_TRONG_BAO_HANH + PathContains.BIEN_BAN_LAY_MAU)
 @Slf4j
-@Api(tags = "Xuất hàng DTQG - Xuất khác - Kiểm tra chất lượng vật tư - Biên bản lấy mẫu.")
+@Api(tags = "Xuất hàng DTQG - Xuất khác - Ktcl Vt,Tb trong thời gian bảo hành - Biên bản lấy mẫu.")
 public class XhXkVtBhBbLayMauController extends BaseController {
 
     @Autowired

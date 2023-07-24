@@ -5,7 +5,7 @@ import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhBbLayMauRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhPhieuXuatKhoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhPhieuXuatNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhQdGiaonvXhRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -15,7 +15,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhBbLayMauHdr;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuXuatKho;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuXuatNhapKho;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -46,7 +46,7 @@ public class XhXkVtBhBbLayMauService extends BaseServiceImpl {
 
 
   @Autowired
-  private XhXkVtBhPhieuXuatKhoRepository xhXkVtBhPhieuXuatKhoRepository;
+  private XhXkVtBhPhieuXuatNhapKhoRepository xhXkVtBhPhieuXuatNhapKhoRepository;
 
   @Autowired
   private UserInfoRepository userInfoRepository;
@@ -228,9 +228,9 @@ public class XhXkVtBhBbLayMauService extends BaseServiceImpl {
 
   public void updatePhieuXk(XhXkVtBhBbLayMauHdr bbLayMau, boolean xoa) {
     if (!DataUtils.isNullObject(bbLayMau.getIdPhieuXuatKho())) {
-      Optional<XhXkVtBhPhieuXuatKho> phieuXuatKho = xhXkVtBhPhieuXuatKhoRepository.findById(bbLayMau.getIdPhieuXuatKho());
+      Optional<XhXkVtBhPhieuXuatNhapKho> phieuXuatKho = xhXkVtBhPhieuXuatNhapKhoRepository.findById(bbLayMau.getIdPhieuXuatKho());
       if (phieuXuatKho.isPresent()) {
-        XhXkVtBhPhieuXuatKho item = phieuXuatKho.get();
+        XhXkVtBhPhieuXuatNhapKho item = phieuXuatKho.get();
         if (xoa) {
           item.setIdBienBanLm(null);
           item.setSoBienBanLm(null);
@@ -238,7 +238,7 @@ public class XhXkVtBhBbLayMauService extends BaseServiceImpl {
           item.setIdBienBanLm(bbLayMau.getId());
           item.setSoBienBanLm(bbLayMau.getSoBienBan());
         }
-        xhXkVtBhPhieuXuatKhoRepository.save(item);
+        xhXkVtBhPhieuXuatNhapKhoRepository.save(item);
       }
     }
   }
