@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.response.nhaphang.nhapkhac;
 
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -48,7 +49,7 @@ public class HhNkBangKeCanHangHdrDTO {
         this.soPhieuNhapKho = soPhieuNhapKho;
         this.ngayNhapKho = ngayNhapKho;
         this.trangThai = trangThai;
-        this.tenTrangThai = tenTrangThai;
+        this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
         this.loaiVthh = loaiVthh;
         this.tenLoaiVthh = tenLoaiVthh;
         this.cloaiVthh = cloaiVthh;
