@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,16 +34,20 @@ public interface HhNkBbGiaoNhanHdrRepository extends JpaRepository<HhNkBbGiaoNha
     List<HhNkBbGiaoNhanHdr> findAllByIdIn(List<Long> idList);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.nhaphang.nhapkhac.HhNkBbGiaoNhanHdrDTO(" +
-            "bbgn.id,qdgnv.id,qdgnv.soQd,qdgnv.nam,qdgnv.tgianNkMnhat,dtl.maNhaKho,dmdvnhakho.tenDvi, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho," +
-            "dmdvlokho.tenDvi,dtl.maNganKho,dmdvngankho.tenDvi,hdr.loaiVthh,dmvt.ten, dtl.cloaiVthh, dmvt.loaiHang, qdgnv.dvt, qdgnv.dvt ," +
-            "bbgn.soBb,bbktnk.soBb,bbktnk.id, bbktnk.ngayKetThucNhap, bblm.soBienBan,bblm.id, bbgn.trangThai, bbgn.trangThai) " +
+            "bbgn.id,bbgn.ngayLap, qdgnv.id,qdgnv.soQd,qdgnv.nam,qdgnv.tgianNkMnhat,dtl.maNhaKho,dmdvnhakho.tenDvi, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho," +
+            "dmdvlokho.tenDvi,dtl.maNganKho,dmdvngankho.tenDvi,hdr.loaiVthh,dmvt.ten, dtl.cloaiVthh, dmvt.loaiHang,hdr.tongSlNhap, qdgnv.dvt, qdgnv.dvt ," +
+            "bbgn.soBb,bbktnk.soBb,bbktnk.id, bbktnk.ngayKetThucNhap,pnkh.id,pnkh.soPhieuNhapKho, pnkh.ngayLap, bbktnk.ngayKetThucNhap,bblm.soBienBan,bblm.id, bbgn.trangThai, bbgn.trangThai) " +
             "FROM HhQdGiaoNvuNhapHangKhacHdr qdgnv " +
             "LEFT JOIN HhQdPdNhapKhacHdr hdr ON hdr.id = qdgnv.idQdPdNk " +
             "LEFT JOIN HhQdPdNhapKhacDtl dtl ON hdr.id = dtl.idHdr " +
-            "LEFT JOIN HhNkBbGiaoNhanHdr bbgn On bbgn.qdPdNkId = qdgnv.id and dtl.maLoKho = bbgn.maLoKho and dtl.maNganKho = bbgn.maNganKho " +
+            "LEFT JOIN HhNkPhieuNhapKhoHdr pnkh On pnkh.qdGiaoNvId = qdgnv.id " +
+            "and ((dtl.maLoKho is not null and dtl.maLoKho = pnkh.maLoKho and dtl.maNganKho = pnkh.maNganKho) or (dtl.maLoKho is null and dtl.maNganKho = pnkh.maNganKho)) " +
+            "LEFT JOIN HhNkBbGiaoNhanHdr bbgn On bbgn.qdPdNkId = qdgnv.id " +
+            "and ((dtl.maLoKho is not null and dtl.maLoKho = bbgn.maLoKho and dtl.maNganKho = bbgn.maNganKho) or (dtl.maLoKho is null and dtl.maNganKho = bbgn.maNganKho)) " +
             "LEFT JOIN HhNkBBKetThucNKHdr bbktnk On bbktnk.qdPdNkId = qdgnv.id and bbgn.idBbKtNhapKho =  bbktnk.id " +
             "LEFT JOIN HhQdGiaoNvuNhapHangKhacHdr bblmh ON bblmh.idQdPdNk = qdgnv.id " +
-            "LEFT JOIN BienBanLayMauKhac bblm ON bblmh.id = bblm.idQdGiaoNvNh and bblm.maNganKho = bbgn.maNganKho and bblm.maLoKho = bbgn.maLoKho " +
+            "LEFT JOIN BienBanLayMauKhac bblm ON bblmh.id = bblm.idQdGiaoNvNh " +
+            "and ((bblm.maLoKho is not null and bblm.maNganKho = bbgn.maNganKho and bblm.maLoKho = bbgn.maLoKho) or (bblm.maLoKho is null and bblm.maNganKho = bbgn.maNganKho)) " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = dtl.cloaiVthh " +
             "LEFT JOIN QlnvDmDonvi dmdvnhakho On dmdvnhakho.maDvi = dtl.maNhaKho " +
             "LEFT JOIN QlnvDmDonvi dmdvdiemkho On dmdvdiemkho.maDvi = dtl.maDiemKho " +
@@ -59,9 +64,9 @@ public interface HhNkBbGiaoNhanHdrRepository extends JpaRepository<HhNkBbGiaoNha
             "AND (:#{#param.denNgayKtnk}  IS NULL OR bbgn.ngayKtNhap <= :#{#param.denNgayKtnk}) ) " +
             "AND ((:#{#param.tuNgayThoiHanNhap}  IS NULL OR qdgnv.tgianNkMnhat >= :#{#param.tuNgayThoiHanNhap})" +
             "AND (:#{#param.denNgayThoiHanNhap}  IS NULL OR qdgnv.tgianNkMnhat <= :#{#param.denNgayThoiHanNhap}) ) " +
-            "GROUP BY bbgn.id,qdgnv.id,qdgnv.soQd,qdgnv.nam,qdgnv.tgianNkMnhat,dtl.maNhaKho,dmdvnhakho.tenDvi, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho," +
+            "GROUP BY bbgn.id,bbgn.ngayLap, qdgnv.id,qdgnv.soQd,qdgnv.nam,qdgnv.tgianNkMnhat,dtl.maNhaKho,dmdvnhakho.tenDvi, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho," +
             "dmdvlokho.tenDvi,dtl.maNganKho,dmdvngankho.tenDvi,hdr.loaiVthh,dmvt.ten, dtl.cloaiVthh, dmvt.loaiHang, qdgnv.dvt, qdgnv.dvt ," +
-            "bbgn.soBb,bbktnk.soBb,bbktnk.id, bbktnk.ngayKetThucNhap, bblm.soBienBan,bblm.id, bbgn.trangThai, bbgn.trangThai")
+            "bbgn.soBb,bbktnk.soBb,bbktnk.id, bbktnk.ngayKetThucNhap,pnkh.id,pnkh.soPhieuNhapKho, pnkh.ngayLap, bbktnk.ngayKetThucNhap,bblm.soBienBan,bblm.id, bbgn.trangThai, bbgn.trangThai")
     Page<HhNkBbGiaoNhanHdrDTO> searchPage(@Param("param") HhNkBbGiaoNhanHdrReq req, Pageable pageable);
 
 }

@@ -4,20 +4,18 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhBbLayMauRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhPhieuKdclRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhPhieuXuatKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhQdGiaonvXhRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhBbLayMauRequest;
+import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuKdclRequest;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhBbLayMauHdr;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuXuatKho;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuKdclHdr;
 import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +33,11 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Service
-public class XhXkVtBhBbLayMauService extends BaseServiceImpl {
+public class XhXkVtBhPhieuKdclService extends BaseServiceImpl {
 
 
   @Autowired
-  private XhXkVtBhBbLayMauRepository xhXkVtBhBbLayMauRepository;
+  private XhXkVtBhPhieuKdclRepository xhXkVtBhPhieuKdclRepository;
 
   @Autowired
   private XhXkVtBhQdGiaonvXhRepository xhXkVtBhQdGiaonvXhRepository;
@@ -54,10 +52,10 @@ public class XhXkVtBhBbLayMauService extends BaseServiceImpl {
   @Autowired
   private FileDinhKemService fileDinhKemService;
 
-  public Page<XhXkVtBhBbLayMauHdr> searchPage(CustomUserDetails currentUser, XhXkVtBhBbLayMauRequest req) throws Exception {
+  public Page<XhXkVtBhPhieuKdclHdr> searchPage(CustomUserDetails currentUser, XhXkVtBhPhieuKdclRequest req) throws Exception {
     req.setDvql(currentUser.getDvql());
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-    Page<XhXkVtBhBbLayMauHdr> search = xhXkVtBhBbLayMauRepository.search(req, pageable);
+    Page<XhXkVtBhPhieuKdclHdr> search = xhXkVtBhPhieuKdclRepository.search(req, pageable);
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     search.getContent().forEach(s -> {
@@ -72,69 +70,65 @@ public class XhXkVtBhBbLayMauService extends BaseServiceImpl {
   }
 
   @Transactional
-  public XhXkVtBhBbLayMauHdr save(CustomUserDetails currentUser, XhXkVtBhBbLayMauRequest objReq) throws Exception {
+  public XhXkVtBhPhieuKdclHdr save(CustomUserDetails currentUser, XhXkVtBhPhieuKdclRequest objReq) throws Exception {
     if (currentUser == null) {
       throw new Exception("Bad request.");
     }
-    Optional<XhXkVtBhBbLayMauHdr> optional = xhXkVtBhBbLayMauRepository.findBySoBienBan(objReq.getSoBienBan());
+    Optional<XhXkVtBhPhieuKdclHdr> optional = xhXkVtBhPhieuKdclRepository.findBySoPhieu(objReq.getSoPhieu());
     if (optional.isPresent()) {
-      throw new Exception("Số biên bản đã tồn tại");
+      throw new Exception("Số phiếu đã tồn tại");
     }
-    XhXkVtBhBbLayMauHdr data = new XhXkVtBhBbLayMauHdr();
+    XhXkVtBhPhieuKdclHdr data = new XhXkVtBhPhieuKdclHdr();
     BeanUtils.copyProperties(objReq, data);
     data.setTrangThai(Contains.DUTHAO);
-    data.getBbLayMauDtl().forEach(s -> {
-      s.setBbLayMauHdr(data);
+    data.getPhieuKdclDtl().forEach(s -> {
+      s.setPhieuKdclHdr(data);
       s.setId(null);
     });
-    XhXkVtBhBbLayMauHdr created = xhXkVtBhBbLayMauRepository.save(data);
-    //update số lần lấy mẫu
-    this.updatePhieuXk(created, false);
-    List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtBhBbLayMauHdr.TABLE_NAME);
+    XhXkVtBhPhieuKdclHdr created = xhXkVtBhPhieuKdclRepository.save(data);
+    List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtBhPhieuKdclHdr.TABLE_NAME);
     created.setFileDinhKems(fileDinhKems);
     return created;
   }
 
   @Transactional()
-  public XhXkVtBhBbLayMauHdr update(CustomUserDetails currentUser, XhXkVtBhBbLayMauRequest objReq) throws Exception {
+  public XhXkVtBhPhieuKdclHdr update(CustomUserDetails currentUser, XhXkVtBhPhieuKdclRequest objReq) throws Exception {
     if (objReq.getId() == null) {
       throw new Exception("Bad request!");
     }
-    Optional<XhXkVtBhBbLayMauHdr> optional = xhXkVtBhBbLayMauRepository.findById(objReq.getId());
+    Optional<XhXkVtBhPhieuKdclHdr> optional = xhXkVtBhPhieuKdclRepository.findById(objReq.getId());
     if (!optional.isPresent()) throw new Exception("Không tồn tại bản ghi!");
 
-    if (objReq.getSoBienBan().contains("/") && !ObjectUtils.isEmpty(objReq.getSoBienBan().split("/")[0])) {
-      Optional<XhXkVtBhBbLayMauHdr> optionalBySoBb = xhXkVtBhBbLayMauRepository.findBySoBienBan(objReq.getSoBienBan());
-      if (optionalBySoBb.isPresent() && optionalBySoBb.get().getId() != objReq.getId()) {
-        if (!optionalBySoBb.isPresent()) throw new Exception("Số biên bản đã tồn tại!");
+    if (objReq.getSoPhieu().contains("/") && !ObjectUtils.isEmpty(objReq.getSoPhieu().split("/")[0])) {
+      Optional<XhXkVtBhPhieuKdclHdr> optionalBySoPhieu = xhXkVtBhPhieuKdclRepository.findBySoPhieu(objReq.getSoPhieu());
+      if (optionalBySoPhieu.isPresent() && optionalBySoPhieu.get().getId() != objReq.getId()) {
+        if (!optionalBySoPhieu.isPresent()) throw new Exception("Số phiếu đã tồn tại!");
       }
     }
-    XhXkVtBhBbLayMauHdr dx = optional.get();
-    dx.getBbLayMauDtl().forEach(e -> e.setBbLayMauHdr(null));
+    XhXkVtBhPhieuKdclHdr dx = optional.get();
+    dx.getPhieuKdclDtl().forEach(e -> e.setPhieuKdclHdr(null));
     BeanUtils.copyProperties(objReq, dx);
-    dx.getBbLayMauDtl().forEach(e -> e.setBbLayMauHdr(dx));
-    dx.setBbLayMauDtl(objReq.getBbLayMauDtl());
-    XhXkVtBhBbLayMauHdr created = xhXkVtBhBbLayMauRepository.save(dx);
-    this.updatePhieuXk(created, false);
-    fileDinhKemService.delete(dx.getId(), Collections.singleton(XhXkVtBhBbLayMauHdr.TABLE_NAME));
+    dx.getPhieuKdclDtl().forEach(e -> e.setPhieuKdclHdr(dx));
+    dx.setPhieuKdclDtl(objReq.getPhieuKdclDtl());
+    XhXkVtBhPhieuKdclHdr created = xhXkVtBhPhieuKdclRepository.save(dx);
+    fileDinhKemService.delete(dx.getId(), Collections.singleton(XhXkVtBhPhieuKdclHdr.TABLE_NAME));
     //save file đính kèm
-    List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtBhBbLayMauHdr.TABLE_NAME);
-    created.setFileDinhKems(fileDinhKems);
+    fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtBhPhieuKdclHdr.TABLE_NAME);
     return detail(created.getId());
   }
 
 
   @Transactional()
-  public XhXkVtBhBbLayMauHdr detail(Long id) throws Exception {
+  public XhXkVtBhPhieuKdclHdr detail(Long id) throws Exception {
     if (ObjectUtils.isEmpty(id)) throw new Exception("Tham số không hợp lệ.");
-    Optional<XhXkVtBhBbLayMauHdr> optional = xhXkVtBhBbLayMauRepository.findById(id);
+    Optional<XhXkVtBhPhieuKdclHdr> optional = xhXkVtBhPhieuKdclRepository.findById(id);
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
-    XhXkVtBhBbLayMauHdr model = optional.get();
+    XhXkVtBhPhieuKdclHdr model = optional.get();
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
-    List<FileDinhKem> fileDinhKem = fileDinhKemService.search(model.getId(), Arrays.asList(XhXkVtBhBbLayMauHdr.TABLE_NAME));
+    List<FileDinhKem> fileDinhKem = fileDinhKemService.search(model.getId(), Arrays.asList(XhXkVtBhPhieuKdclHdr.TABLE_NAME));
     model.setFileDinhKems(fileDinhKem);
     model.setMapDmucDvi(mapDmucDvi);
     model.setMapVthh(mapVthh);
@@ -145,26 +139,25 @@ public class XhXkVtBhBbLayMauService extends BaseServiceImpl {
 
   @Transactional
   public void delete(IdSearchReq idSearchReq) throws Exception {
-    Optional<XhXkVtBhBbLayMauHdr> optional = xhXkVtBhBbLayMauRepository.findById(idSearchReq.getId());
+    Optional<XhXkVtBhPhieuKdclHdr> optional = xhXkVtBhPhieuKdclRepository.findById(idSearchReq.getId());
     if (!optional.isPresent()) {
       throw new Exception("Bản ghi không tồn tại");
     }
     if (!optional.get().getTrangThai().equals(TrangThaiAllEnum.DU_THAO.getId())) {
       throw new Exception("Bản ghi có trạng thái khác dự thảo, không thể xóa.");
     }
-    XhXkVtBhBbLayMauHdr data = optional.get();
-    this.updatePhieuXk(data, true);
-    fileDinhKemService.deleteMultiple(Collections.singleton(data.getId()), Collections.singleton(XhXkVtBhBbLayMauHdr.TABLE_NAME));
-    xhXkVtBhBbLayMauRepository.delete(data);
+    XhXkVtBhPhieuKdclHdr data = optional.get();
+    fileDinhKemService.deleteMultiple(Collections.singleton(data.getId()), Collections.singleton(XhXkVtBhPhieuKdclHdr.TABLE_NAME));
+    xhXkVtBhPhieuKdclRepository.delete(data);
   }
 
   @Transient
-  public XhXkVtBhBbLayMauHdr approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
+  public XhXkVtBhPhieuKdclHdr approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
 
     if (StringUtils.isEmpty(statusReq.getId())) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
-    Optional<XhXkVtBhBbLayMauHdr> optional = xhXkVtBhBbLayMauRepository.findById(Long.valueOf(statusReq.getId()));
+    Optional<XhXkVtBhPhieuKdclHdr> optional = xhXkVtBhPhieuKdclRepository.findById(Long.valueOf(statusReq.getId()));
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
@@ -188,59 +181,42 @@ public class XhXkVtBhBbLayMauService extends BaseServiceImpl {
         throw new Exception("Phê duyệt không thành công");
     }
     optional.get().setTrangThai(statusReq.getTrangThai());
-    XhXkVtBhBbLayMauHdr created = xhXkVtBhBbLayMauRepository.save(optional.get());
+    XhXkVtBhPhieuKdclHdr created = xhXkVtBhPhieuKdclRepository.save(optional.get());
     return created;
   }
 
-  public void export(CustomUserDetails currentUser, XhXkVtBhBbLayMauRequest objReq, HttpServletResponse response) throws Exception {
+  public void export(CustomUserDetails currentUser, XhXkVtBhPhieuKdclRequest objReq, HttpServletResponse response) throws Exception {
     PaggingReq paggingReq = new PaggingReq();
     paggingReq.setPage(0);
     paggingReq.setLimit(Integer.MAX_VALUE);
     objReq.setPaggingReq(paggingReq);
-    Page<XhXkVtBhBbLayMauHdr> page = this.searchPage(currentUser, objReq);
-    List<XhXkVtBhBbLayMauHdr> data = page.getContent();
+    Page<XhXkVtBhPhieuKdclHdr> page = this.searchPage(currentUser, objReq);
+    List<XhXkVtBhPhieuKdclHdr> data = page.getContent();
 
-    String title = "Danh sách biên bản lấy mẫu bàn giao mẫu ";
-    String[] rowsName = new String[]{"STT", "Số QĐ giao nhiệm vụ XH", "Năm", "Thời gian xuất lấy mẫu", "Điểm kho", "Ngăn/Lô kho",
-        "Chủng loại hàng hóa", "Số BB LM/BGM", "Ngày lấy mẫu", "Lần lấy mẫu", "Trạng thái"};
-    String fileName = "danh-sach-bien-ban-lay-mau-ban-giao-mau.xlsx";
+    String title = "Danh sách phiếu kiểm định chất lượng";
+    String[] rowsName = new String[]{"STT", "Số QĐ giao nhiệm vụ XH", "Năm KH", "Ngày lấy mẫu", "Điểm Kho",
+        "Lô kho", "Chủng loại hàng hóa", "Số phiếu KĐCL", "Ngày kiểm định", "Số BB LM/BGM", "Trạng thái"};
+    String fileName = "danh-sach-phieu-kiem-dinh-chat-luong.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs = null;
     for (int i = 0; i < data.size(); i++) {
-      XhXkVtBhBbLayMauHdr dx = data.get(i);
+      XhXkVtBhPhieuKdclHdr dx = data.get(i);
       objs = new Object[rowsName.length];
       objs[0] = i;
       objs[1] = dx.getSoQdGiaoNvXh();
       objs[2] = dx.getNam();
-      objs[3] = dx.getNgayXuatLayMau();
+      objs[3] = dx.getNgayLayMau();
       objs[4] = dx.getTenDiemKho();
-      objs[5] = (dx.getTenLoKho() != null && !dx.getTenLoKho().isEmpty()) ? (dx.getTenLoKho() + ' ' + dx.getTenNganKho()) : dx.getTenNganKho();
+      objs[5] = dx.getTenLoKho();
       objs[6] = dx.getTenCloaiVthh();
-      objs[7] = dx.getSoBienBan();
-      objs[8] = dx.getNgayLayMau();
-      objs[9] = dx.getSoLanLm();
+      objs[7] = dx.getSoPhieu();
+      objs[8] = dx.getNgayLapPhieu();
+      objs[9] = dx.getSoBbLayMau();
       objs[10] = dx.getTenTrangThai();
       dataList.add(objs);
     }
     ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
     ex.export();
-  }
-
-  public void updatePhieuXk(XhXkVtBhBbLayMauHdr bbLayMau, boolean xoa) {
-    if (!DataUtils.isNullObject(bbLayMau.getIdPhieuXuatKho())) {
-      Optional<XhXkVtBhPhieuXuatKho> phieuXuatKho = xhXkVtBhPhieuXuatKhoRepository.findById(bbLayMau.getIdPhieuXuatKho());
-      if (phieuXuatKho.isPresent()) {
-        XhXkVtBhPhieuXuatKho item = phieuXuatKho.get();
-        if (xoa) {
-          item.setIdBienBanLm(null);
-          item.setSoBienBanLm(null);
-        } else {
-          item.setIdBienBanLm(bbLayMau.getId());
-          item.setSoBienBanLm(bbLayMau.getSoBienBan());
-        }
-        xhXkVtBhPhieuXuatKhoRepository.save(item);
-      }
-    }
   }
 }
 
