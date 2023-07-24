@@ -1,8 +1,8 @@
-package com.tcdt.qlnvhang.repository.xuathang;
+package com.tcdt.qlnvhang.repository.xuathang.kiemtrachatluong;
 
-import com.tcdt.qlnvhang.request.xuathang.SearchHoSoKyThuatReq;
+import com.tcdt.qlnvhang.request.xuathang.kiemtrachatluong.SearchHoSoKyThuatReq;
 import com.tcdt.qlnvhang.response.xuathang.NhHoSoKyThuatDTO;
-import com.tcdt.qlnvhang.table.xuathang.hosokythuat.XhHoSoKyThuatHdr;
+import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThuatHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

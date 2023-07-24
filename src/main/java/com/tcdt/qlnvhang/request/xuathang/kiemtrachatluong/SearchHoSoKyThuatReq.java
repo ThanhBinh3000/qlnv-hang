@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.request.xuathang;
+package com.tcdt.qlnvhang.request.xuathang.kiemtrachatluong;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
 import lombok.Data;
