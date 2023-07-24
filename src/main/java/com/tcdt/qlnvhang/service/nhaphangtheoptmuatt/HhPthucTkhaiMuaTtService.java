@@ -117,7 +117,7 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
         if (!hdr.isPresent()){
             throw new Exception("Bản ghi không tồn tại");
         }else {
-            Optional<HhQdPheduyetKhMttHdr> hdrOptional = hhQdPheduyetKhMttHdrRepository.findById(qdHdr.getIdGoc());
+            Optional<HhQdPheduyetKhMttHdr> hdrOptional = hhQdPheduyetKhMttHdrRepository.findById(qdHdr.getId());
             hdrOptional.get().setPtMuaTrucTiep(objReq.getPthucMuaTrucTiep());
             hhQdPheduyetKhMttHdrRepository.save(hdrOptional.get());
         }
