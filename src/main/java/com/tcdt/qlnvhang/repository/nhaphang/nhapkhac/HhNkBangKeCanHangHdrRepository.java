@@ -47,7 +47,8 @@ public interface HhNkBangKeCanHangHdrRepository extends JpaRepository<HhNkBangKe
             "GROUP BY bkch.id,qdgnv.id,pnk.id,qdgnv.soQd,qdgnv.nam,qdgnv.tgianNkMnhat, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho," +
             "dmdvlokho.tenDvi,bkch.soBangKe,pnk.soPhieuNhapKho, pnk.ngayLap ,bkch.trangThai,bkch.trangThai,hdr.loaiVthh," +
             "dmvt.ten,dtl.cloaiVthh,dmvt.loaiHang,dtl.maNhaKho,dmdvnhakho.tenDvi,hdr.dvt,hdr.dvt," +
-            "dtl.maNganKho,dmdvngankho.tenDvi")
+            "dtl.maNganKho,dmdvngankho.tenDvi "+
+            "ORDER BY qdgnv.soQd DESC")
     Page<HhNkBangKeCanHangHdrDTO> searchPage(@Param("param") SearchBangKeCanHang req, Pageable pageable);
 
     Optional<HhNkBangKeCanHangHdr> findFirstBySoBangKe(String soBangKe);

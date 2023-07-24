@@ -49,6 +49,7 @@ public interface HhNkBangKeNhapVTHdrRepository extends JpaRepository<HhNkBangKeN
             "AND ((:#{#param.tuNgayNhapKho}  IS NULL OR pnk.ngayLap >= :#{#param.tuNgayNhapKho})" +
             "AND (:#{#param.denNgayNhapKho}  IS NULL OR pnk.ngayLap <= :#{#param.denNgayNhapKho}) ) " +
             "GROUP BY bknvt.id,qdgnv.id,qdgnv.soQd,qdgnv.nam,qdgnv.tgianNkMnhat,dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maNhaKho, dmdvnhakho.tenDvi,dtl.maNganKho, dmdvngankho.tenDvi, dtl.maLoKho," +
-            "dmdvlokho.tenDvi,bblm.id,bblm.soBienBan, bknvt.soBangKe, bknvt.soBangKe,pnk.soPhieuNhapKho, pnk.id, pnk.ngayLap,bknvt.trangThai ,bknvt.trangThai")
+            "dmdvlokho.tenDvi,bblm.id,bblm.soBienBan, bknvt.soBangKe, bknvt.soBangKe,pnk.soPhieuNhapKho, pnk.id, pnk.ngayLap,bknvt.trangThai ,bknvt.trangThai "+
+            "ORDER BY qdgnv.soQd DESC")
     Page<HhNkBangKeNhapVTHdrDTO> searchPage(@Param("param") HhNkBangKeNhapVTReq req, Pageable pageable);
 }

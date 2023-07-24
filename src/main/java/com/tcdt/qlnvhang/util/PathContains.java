@@ -332,6 +332,7 @@ public class PathContains {
     // điều chuyển nội bộ
 
     public static final String DIEU_CHUYEN_NOI_BO = "/dieu-chuyen-noi-bo";
+    public static final String BIEN_BAN_THUA_THIEU = "/bien-ban-thua-thieu";
     public static final String KE_HOACH_DIEU_CHUYEN = "/ke-hoach-dieu-chuyen";
     public static final String TONG_HOP_KE_HOACH_DIEU_CHUYEN_TC = "/tong-hop-ke-hoach-dieu-chuyen-tc";
     public static final String TONG_HOP_KE_HOACH_DIEU_CHUYEN_C = "/tong-hop-ke-hoach-dieu-chuyen-c";

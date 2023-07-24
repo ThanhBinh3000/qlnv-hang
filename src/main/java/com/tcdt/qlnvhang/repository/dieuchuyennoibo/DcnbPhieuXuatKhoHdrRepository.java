@@ -52,7 +52,8 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
             "khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh, khdcd.tenCloaiVthh,pkncl.nguoiKt,khdcd.donViTinh,khdcd.soLuongDc,khdcd.duToanKphi," +
             "pxk.bangKeChId, pxk.soBangKeCh," +
             "pxk.bangKeVtId, pxk.soBangKeVt," +
-            "pxk.trangThai, pxk.trangThai")
+            "pxk.trangThai, pxk.trangThai "+
+            "ORDER BY qdc.soQdinh DESC")
     Page<DcnbPhieuXuatKhoHdrDTO> searchPage(@Param("param") SearchPhieuXuatKho req, Pageable pageable);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuXuatKhoHdrListDTO(" +

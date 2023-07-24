@@ -68,6 +68,7 @@ public interface HhNkPhieuNhapKhoHdrRepository extends JpaRepository<HhNkPhieuNh
             "dmdvlokho.tenDvi,dtl.maNganKho,dmdvngankho.tenDvi,pnk.soPhieuNhapKho, pnk.ngayLap,  bknvt.id, bknvt.soBangKe," +
             "bknvt.loaiVthh,dmvt.ten,dtl.cloaiVthh, dmvt.loaiHang,qdgnv.dvt, dtl.tongSlNhap, " +
             "pnk.idPhieuKtraCluong, pnk.soPhieuKtraCluong, pktcl.ngayGdinh, " +
-            "pnk.trangThai, pnk.trangThai")
+            "pnk.trangThai, pnk.trangThai "+
+            "ORDER BY qdgnv.soQd DESC")
     Page<HhNkPhieuNhapKhoHdrDTO> searchPage(@Param("param") HhNkPhieuNhapKhoHdrReq req, Pageable pageable);
 }

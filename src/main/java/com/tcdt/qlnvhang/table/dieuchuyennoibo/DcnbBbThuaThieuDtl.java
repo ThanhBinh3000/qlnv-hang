@@ -1,31 +1,27 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tcdt.qlnvhang.entities.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-
 
 @Entity
-@Table(name = DcnbBcKqDcDtl.TABLE_NAME)
+@Table(name = DcnbBbThuaThieuDtl.TABLE_NAME)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DcnbBcKqDcDtl extends BaseEntity implements Serializable, Cloneable {
+public class DcnbBbThuaThieuDtl {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "DCNB_BB_KQ_DC_DTL";
+    public static final String TABLE_NAME = "DCNB_BB_THUA_THIEU_DTL";
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBcKqDcDtl.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = DcnbBcKqDcDtl.TABLE_NAME
-            + "_SEQ", allocationSize = 1, name = DcnbBcKqDcDtl.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBbThuaThieuDtl.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = DcnbBbThuaThieuDtl.TABLE_NAME
+            + "_SEQ", allocationSize = 1, name = DcnbBbThuaThieuDtl.TABLE_NAME + "_SEQ")
     private Long id;
     @Column(name = "HDR_ID", insertable = true, updatable = true)
     private Long hdrId;
@@ -71,17 +67,17 @@ public class DcnbBcKqDcDtl extends BaseEntity implements Serializable, Cloneable
     private BigDecimal kinhPhiXuatTt;
     @Column(name = "KINH_PHI_NHAP_TT")
     private BigDecimal kinhPhiNhapTt;
-    @Column(name = "TRICH_YEU")
-    private BigDecimal trichYeu;
-    @Column(name = "KET_QUA")
-    private Boolean ketQua;
-    @Column(name = "TINH_TRANG")
-    private Boolean tinhTrang;
-    @Column(name = "TYPE")
-    private String type; // CHI_CUC, CUC
+    @Column(name = "SL_THUA")
+    private BigDecimal slThua;
+    @Column(name = "KP_THUA")
+    private BigDecimal kpThua;
+    @Column(name = "SL_THIEU")
+    private BigDecimal slThieu;
+    @Column(name = "KP_THIEU")
+    private BigDecimal kpThieu;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
     @JsonIgnore
-    private DcnbBcKqDcHdr dcnbBcKqDcHdr;
+    private DcnbBbThuaThieuHdr dcnbBbThuaThieuHdr;
 }
