@@ -4,21 +4,18 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtBbLayMauHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtBckqKiemDinhMauRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtQdGiaonvXhRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattu.XhXkVtBbLayMauRequest;
 import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattu.XhXkVtBckqKiemDinhMauRequest;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtBbLayMauHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtBckqKiemDinhMau;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatKho;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatNhapKho;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtQdGiaonvXhHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -36,7 +33,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Stream;
 
 @Service
 public class XhXkVtBckqKiemDinhMauService extends BaseServiceImpl {
@@ -158,7 +154,7 @@ public class XhXkVtBckqKiemDinhMauService extends BaseServiceImpl {
                     .map(Long::valueOf)
                     .toArray(Long[]::new);
 
-            List<XhXkVtPhieuXuatKho> allByIdCanCuIn = xhXkVtPhieuXuatKhoRepository.findAllByIdCanCuIn(Arrays.asList(idsQdGiaoNvXh));
+            List<XhXkVtPhieuXuatNhapKho> allByIdCanCuIn = xhXkVtPhieuXuatKhoRepository.findAllByIdCanCuIn(Arrays.asList(idsQdGiaoNvXh));
             if (!allByIdCanCuIn.isEmpty()) {
                 allByIdCanCuIn.forEach(item -> {
                     item.setMauBiHuy(Boolean.FALSE);
