@@ -89,9 +89,9 @@ public class XhTlQuyetDinhPdKqHdr extends BaseEntity implements Serializable {
   @Transient
   private String tenTrangThai;
 
-  public void setTrangThai(String trangThai) {
-    this.trangThai = trangThai;
-    this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+  public String getTrangThai() {
+    setTenTrangThai(TrangThaiAllEnum.getLabelById(trangThai));
+    return trangThai;
   }
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

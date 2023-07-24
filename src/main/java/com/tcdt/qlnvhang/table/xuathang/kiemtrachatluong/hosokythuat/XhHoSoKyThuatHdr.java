@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.table.xuathang.hosokythuat;
+package com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;

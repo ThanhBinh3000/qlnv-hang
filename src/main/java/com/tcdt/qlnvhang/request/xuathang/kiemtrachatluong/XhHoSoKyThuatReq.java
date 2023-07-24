@@ -1,7 +1,6 @@
-package com.tcdt.qlnvhang.request.xuathang;
+package com.tcdt.qlnvhang.request.xuathang.kiemtrachatluong;
 
-import com.tcdt.qlnvhang.table.xuathang.hosokythuat.XhHoSoKyThuatDtl;
-import lombok.Data;
+import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThuatDtl;
 import lombok.Getter;
 import lombok.Setter;
 

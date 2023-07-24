@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.service.xuathang;
+package com.tcdt.qlnvhang.service.xuathang.kiemtrachatluong;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
@@ -14,16 +14,16 @@ import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
 import com.tcdt.qlnvhang.repository.kiemtrachatluong.NhHoSoBienBanRepository;
 import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatRepository;
-import com.tcdt.qlnvhang.repository.xuathang.XhHoSoKyThuatRepository;
-import com.tcdt.qlnvhang.request.xuathang.SearchHoSoKyThuatReq;
+import com.tcdt.qlnvhang.repository.xuathang.kiemtrachatluong.XhHoSoKyThuatRepository;
+import com.tcdt.qlnvhang.request.xuathang.kiemtrachatluong.SearchHoSoKyThuatReq;
 import com.tcdt.qlnvhang.response.xuathang.NhHoSoKyThuatDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.hosokythuat.NhHoSoKyThuatService;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.xuathang.hosokythuat.XhHoSoKyThuatDtl;
-import com.tcdt.qlnvhang.table.xuathang.hosokythuat.XhHoSoKyThuatHdr;
-import com.tcdt.qlnvhang.table.xuathang.hosokythuat.XhHoSoKyThuatRow;
+import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThuatDtl;
+import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThuatHdr;
+import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThuatRow;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import org.springframework.beans.BeanUtils;
