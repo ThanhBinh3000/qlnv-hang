@@ -30,6 +30,8 @@ public class XhXkVtBhQdGiaonvXhRequest extends BaseRequest {
   Long nguoiPduyetId;
   String lyDoTuChoi;
   String loaiCanCu;
+  private String soBaoCaoKdm;
+  private Long idBaoCaoKdm;
   List<String> listTrangThaiXh = new ArrayList<>();
   Integer capDvi;
   List<XhXkVtBhQdGiaonvXhDtl> qdGiaonvXhDtl = new ArrayList<>();

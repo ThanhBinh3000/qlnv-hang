@@ -29,7 +29,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.XUAT_KHAC + PathContains.KTCL_LT_TRUOC_HET_HAN + PathContains.TONG_HOP)
 @Slf4j
-@Api(tags = "Xuất hàng DTQG - Xuất khác - Kiểm tra chất lượng LT trước hết hạn - Tổng hợp")
+@Api(tags = "Xuất hàng DTQG - Xuất khác - Ktcl Lt trước khi hết hạn lưu kho - Tổng hợp")
 public class XhXkTongHopController {
   @Autowired
   XhXkTongHopService xhXkTongHopService;

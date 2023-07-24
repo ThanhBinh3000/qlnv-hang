@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.XUAT_KHAC + PathContains.KTCL_LT_TRUOC_HET_HAN + PathContains.DANH_SACH)
 @Slf4j
-@Api(tags = "Xuất hàng DTQG - Xuất khác - Danh sách hàng DTQG còn 6 tháng hết hạn lưu kho nhưng chưa có kế hoạch xuất")
+@Api(tags = "Xuất hàng DTQG - Xuất khác - Ktcl Lt trước khi hết hạn lưu kho - Danh sách")
 public class XhXkDanhSachController {
   @Autowired
   XhXkDanhSachService xhXkDanhSachService;
