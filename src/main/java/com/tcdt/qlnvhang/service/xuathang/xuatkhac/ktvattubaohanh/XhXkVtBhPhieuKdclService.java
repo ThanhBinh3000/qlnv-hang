@@ -5,7 +5,7 @@ import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhPhieuKdclRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhPhieuXuatKhoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhPhieuXuatNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhQdGiaonvXhRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -14,8 +14,14 @@ import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuK
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopDtl;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktluongthuc.XhXkLtPhieuKnClHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuKdclHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhQdGiaonvXhDtl;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhQdGiaonvXhHdr;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +50,7 @@ public class XhXkVtBhPhieuKdclService extends BaseServiceImpl {
 
 
   @Autowired
-  private XhXkVtBhPhieuXuatKhoRepository xhXkVtBhPhieuXuatKhoRepository;
+  private XhXkVtBhPhieuXuatNhapKhoRepository xhXkVtBhPhieuXuatNhapKhoRepository;
 
   @Autowired
   private UserInfoRepository userInfoRepository;
@@ -86,6 +92,7 @@ public class XhXkVtBhPhieuKdclService extends BaseServiceImpl {
       s.setId(null);
     });
     XhXkVtBhPhieuKdclHdr created = xhXkVtBhPhieuKdclRepository.save(data);
+    this.updateQdGiaoNvXh(created,false);
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtBhPhieuKdclHdr.TABLE_NAME);
     created.setFileDinhKems(fileDinhKems);
     return created;
@@ -111,6 +118,7 @@ public class XhXkVtBhPhieuKdclService extends BaseServiceImpl {
     dx.getPhieuKdclDtl().forEach(e -> e.setPhieuKdclHdr(dx));
     dx.setPhieuKdclDtl(objReq.getPhieuKdclDtl());
     XhXkVtBhPhieuKdclHdr created = xhXkVtBhPhieuKdclRepository.save(dx);
+    this.updateQdGiaoNvXh(created,false);
     fileDinhKemService.delete(dx.getId(), Collections.singleton(XhXkVtBhPhieuKdclHdr.TABLE_NAME));
     //save file đính kèm
     fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtBhPhieuKdclHdr.TABLE_NAME);
@@ -147,6 +155,7 @@ public class XhXkVtBhPhieuKdclService extends BaseServiceImpl {
       throw new Exception("Bản ghi có trạng thái khác dự thảo, không thể xóa.");
     }
     XhXkVtBhPhieuKdclHdr data = optional.get();
+    this.updateQdGiaoNvXh(data,true);
     fileDinhKemService.deleteMultiple(Collections.singleton(data.getId()), Collections.singleton(XhXkVtBhPhieuKdclHdr.TABLE_NAME));
     xhXkVtBhPhieuKdclRepository.delete(data);
   }
@@ -217,6 +226,33 @@ public class XhXkVtBhPhieuKdclService extends BaseServiceImpl {
     }
     ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
     ex.export();
+  }
+
+  public void updateQdGiaoNvXh(XhXkVtBhPhieuKdclHdr phieuKdcl, boolean xoa) {
+    if (!DataUtils.isNullObject(phieuKdcl.getIdQdGiaoNvXh())) {
+      Optional<XhXkVtBhQdGiaonvXhHdr> qdGiaonvXhHdr = xhXkVtBhQdGiaonvXhRepository.findById(phieuKdcl.getIdQdGiaoNvXh());
+      if (qdGiaonvXhHdr.isPresent()) {
+        XhXkVtBhQdGiaonvXhHdr item = qdGiaonvXhHdr.get();
+        List<XhXkVtBhQdGiaonvXhDtl> qdGiaonvXhDtl = item.getQdGiaonvXhDtl();
+        for (XhXkVtBhQdGiaonvXhDtl f : qdGiaonvXhDtl) {
+          if (f.getMaDiaDiem().equals(phieuKdcl.getMaDiaDiem())) {
+            if (xoa) {
+              f.setIdPhieuKdcl(null);
+              f.setSoPhieuKdcl(null);
+              f.setIsDat(null);
+              f.setMauBiHuy(null);
+            } else {
+              f.setIdPhieuKdcl(phieuKdcl.getId());
+              f.setSoPhieuKdcl(phieuKdcl.getSoPhieu());
+              f.setIsDat(phieuKdcl.getIsDat());
+              f.setMauBiHuy(phieuKdcl.getMauBiHuy());
+            }
+
+          }
+        }
+        xhXkVtBhQdGiaonvXhRepository.save(item);
+      }
+    }
   }
 }
 

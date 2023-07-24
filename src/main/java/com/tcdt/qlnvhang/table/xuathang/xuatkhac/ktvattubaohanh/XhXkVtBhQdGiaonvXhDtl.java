@@ -29,7 +29,10 @@ public class XhXkVtBhQdGiaonvXhDtl {
   BigDecimal slLayMau;
   BigDecimal slTonKho;
   String maDviTsan;
-
+  String soPhieuKdcl;
+  Long idPhieuKdcl;
+  Boolean isDat;
+  Boolean mauBiHuy;
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "idHdr")
   @JsonIgnore

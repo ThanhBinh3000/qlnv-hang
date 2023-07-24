@@ -10,7 +10,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 
 @Entity
@@ -22,33 +21,6 @@ public class DcnbBcKqDcDtl extends BaseEntity implements Serializable, Cloneable
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_BB_KQ_DC_DTL";
 
-    public DcnbBcKqDcDtl(Long qdDcCucId, String soQdDcCuc, LocalDate ngayKyQdCuc, String loaiVthh, String cloaiVthh, String tenLoaiVthh, String tenCloaiVthh, String maDiemKho, String tenDiemKho, String maNhaKho, String tenNhaKho, String maNganKho, String tenNganKho, String maLoKho, String tenLoKho, String donViTinh, String tenDonViTinh, BigDecimal slTon, BigDecimal slDieuChuyenQd, BigDecimal slDieuChuyenTt, BigDecimal kinhPhiTheoQd, BigDecimal kinhPhiTheoTt, Boolean ketQua, Boolean tinhTrang) {
-        super();
-        this.qdDcCucId = qdDcCucId;
-        this.soQdDcCuc = soQdDcCuc;
-        this.ngayKyQdCuc = ngayKyQdCuc;
-        this.loaiVthh = loaiVthh;
-        this.cloaiVthh = cloaiVthh;
-        this.tenLoaiVthh = tenLoaiVthh;
-        this.tenCloaiVthh = tenCloaiVthh;
-        this.maDiemKho = maDiemKho;
-        this.tenDiemKho = tenDiemKho;
-        this.maNhaKho = maNhaKho;
-        this.tenNhaKho = tenNhaKho;
-        this.maNganKho = maNganKho;
-        this.tenNganKho = tenNganKho;
-        this.maLoKho = maLoKho;
-        this.tenLoKho = tenLoKho;
-        this.donViTinh = donViTinh;
-        this.tenDonViTinh = tenDonViTinh;
-        this.slTon = slTon;
-        this.slDieuChuyenQd = slDieuChuyenQd;
-        this.slDieuChuyenTt = slDieuChuyenTt;
-        this.kinhPhiTheoQd = kinhPhiTheoQd;
-        this.kinhPhiTheoTt = kinhPhiTheoTt;
-        this.ketQua = ketQua;
-        this.tinhTrang = tinhTrang;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = DcnbBcKqDcDtl.TABLE_NAME + "_SEQ")
@@ -57,12 +29,6 @@ public class DcnbBcKqDcDtl extends BaseEntity implements Serializable, Cloneable
     private Long id;
     @Column(name = "HDR_ID", insertable = true, updatable = true)
     private Long hdrId;
-    @Column(name = "QD_DC_CUC_ID")
-    private Long qdDcCucId;
-    @Column(name = "SO_QD_DC_CUC")
-    private String soQdDcCuc;
-    @Column(name = "NGAY_KY_QD_CUC")
-    private LocalDate ngayKyQdCuc;
     @Column(name = "LOAI_VTHH")
     private String loaiVthh;
     @Column(name = "CLOAI_VTHH")
@@ -95,18 +61,24 @@ public class DcnbBcKqDcDtl extends BaseEntity implements Serializable, Cloneable
     private BigDecimal slTon;
     @Column(name = "SL_DIEU_CHUYEN_QD")
     private BigDecimal slDieuChuyenQd;
-    @Column(name = "SL_DIEU_CHUYEN_TT")
-    private BigDecimal slDieuChuyenTt;
+    @Column(name = "SL_XUAT_TT")
+    private BigDecimal slXuatTt;
+    @Column(name = "SL_NHAP_TT")
+    private BigDecimal slNhapTt;
     @Column(name = "KINH_PHI_THEO_QD")
     private BigDecimal kinhPhiTheoQd;
-    @Column(name = "KINH_PHI_THEO_TT")
-    private BigDecimal kinhPhiTheoTt;
+    @Column(name = "KINH_PHI_XUAT_TT")
+    private BigDecimal kinhPhiXuatTt;
+    @Column(name = "KINH_PHI_NHAP_TT")
+    private BigDecimal kinhPhiNhapTt;
     @Column(name = "TRICH_YEU")
     private BigDecimal trichYeu;
     @Column(name = "KET_QUA")
     private Boolean ketQua;
     @Column(name = "TINH_TRANG")
     private Boolean tinhTrang;
+    @Column(name = "TYPE")
+    private String type; // CHI_CUC, CUC
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)

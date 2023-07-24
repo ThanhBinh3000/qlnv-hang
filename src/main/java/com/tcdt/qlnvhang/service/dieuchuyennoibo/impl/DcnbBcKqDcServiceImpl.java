@@ -228,8 +228,15 @@ public class DcnbBcKqDcServiceImpl implements DcnbBbKqDcService {
     }
 
     @Override
-    public List<DcnbBcKqDcDtl> thongTinNhapXuatHang(DcnbBbKqDcSearch objReq) throws Exception {
+    public List<DcnbBcKqDcDtl> thongTinNhapXuatHangChiCuc(DcnbBbKqDcSearch objReq) throws Exception {
         CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
-        return dtlRepository.thongTinNhapXuatHang(objReq);
+//        return dtlRepository.thongTinNhapXuatHang(objReq);
+        return null;
+    }
+
+    @Override
+    public List<DcnbBcKqDcDtl> thongTinNhapXuatHangCuc(DcnbBbKqDcSearch objReq) throws Exception {
+        CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
+        return null;
     }
 }

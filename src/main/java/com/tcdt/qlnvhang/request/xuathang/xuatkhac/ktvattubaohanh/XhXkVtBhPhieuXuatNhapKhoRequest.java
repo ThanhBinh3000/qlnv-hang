@@ -1,4 +1,4 @@
-package com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattu;
+package com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattubaohanh;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class XhXkVtPhieuXuatKhoRequest extends BaseRequest {
+public class XhXkVtBhPhieuXuatNhapKhoRequest extends BaseRequest {
     private Long id;
     private Integer namKeHoach;
     private String maDvi;
     private String soPhieu;
     private String loai;
     private String maQhns;
-    private LocalDate ngayXuat;
+    private LocalDate ngayXuatNhap;
     private LocalDate thoiGianGiaoHang;
     private BigDecimal duNo;
     private BigDecimal duCo;
@@ -36,7 +36,7 @@ public class XhXkVtPhieuXuatKhoRequest extends BaseRequest {
     private String cccdNgh;
     private String donViNgh;
     private String diaChiNgh;
-    private BigDecimal slThucXuat;
+    private BigDecimal slThucTe;
     private String ghiChu;
     private String trangThai;
     private String lyDoTuChoi;
@@ -47,11 +47,16 @@ public class XhXkVtPhieuXuatKhoRequest extends BaseRequest {
     private BigDecimal slLayMau;
     private String donViTinh;
     private Boolean mauBiHuy;
+    private String loaiPhieu;
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
+    private Long idBienBanLm;
+    private String soBienBanLm;
+    private String soBcKqkdMau;
+    private Long idBcKqkdMau;
 
     //search params
-    private LocalDate ngayXuatTu;
-    private LocalDate ngayXuatDen;
+    private LocalDate ngayXuatNhapTu;
+    private LocalDate ngayXuatNhapDen;
     private String dvql;
     private List<Long> canCus = new ArrayList<>();
 }

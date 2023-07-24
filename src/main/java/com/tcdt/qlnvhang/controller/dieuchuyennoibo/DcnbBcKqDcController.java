@@ -201,12 +201,30 @@ public class DcnbBcKqDcController {
     }
 
     @ApiOperation(value = "Lấy thông tin nhập xuất hàng", response = List.class)
-    @PostMapping(value = "/nhap-xuat-hang", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/nhap-xuat-hang-chi-cuc", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity thongTinNhapXuatHang(@Valid @RequestBody DcnbBbKqDcSearch objReq) throws Exception {
+    public ResponseEntity thongTinNhapXuatHangChiCuc(@Valid @RequestBody DcnbBbKqDcSearch objReq) throws Exception {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.thongTinNhapXuatHang(objReq));
+            resp.setData(service.thongTinNhapXuatHangChiCuc(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Lấy thông tin nhập xuất hàng : {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Lấy thông tin nhập xuất hàng", response = List.class)
+    @PostMapping(value = "/nhap-xuat-hang-cuc", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity thongTinNhapXuatHangCuc(@Valid @RequestBody DcnbBbKqDcSearch objReq) throws Exception {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.thongTinNhapXuatHangCuc(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

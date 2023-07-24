@@ -1,14 +1,13 @@
-package com.tcdt.qlnvhang.controller.xuathang;
+package com.tcdt.qlnvhang.controller.xuathang.kiemtrachatluong;
 
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.request.xuathang.SearchHoSoKyThuatReq;
-import com.tcdt.qlnvhang.request.xuathang.XhHoSoKyThuatReq;
+import com.tcdt.qlnvhang.request.xuathang.kiemtrachatluong.SearchHoSoKyThuatReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.xuathang.XhHoSoKyThuatService;
-import com.tcdt.qlnvhang.table.xuathang.hosokythuat.XhHoSoKyThuatHdr;
+import com.tcdt.qlnvhang.service.xuathang.kiemtrachatluong.XhHoSoKyThuatService;
+import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThuatHdr;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,7 +24,7 @@ import java.util.List;
 @RequestMapping(value = PathContains.KIEM_TRA_CHAT_LUONG + PathContains.HO_SO_KY_THUAT)
 @Slf4j
 @Api(tags = "Xuất hàng DTQG - Xuất cứu trợ viện trợ - Phiếu kiểm nghiệm chất lượng")
-public class XhHoSoKyThuatController extends BaseController {
+public class XhBienBanLayMauController extends BaseController {
 
   @Autowired
   XhHoSoKyThuatService xhHoSoKyThuatService;

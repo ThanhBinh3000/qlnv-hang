@@ -17,21 +17,21 @@ import java.util.Map;
 @Getter
 @Setter
 @Entity
-@Table(name = XhXkVtBhPhieuXuatKho.TABLE_NAME)
-public class XhXkVtBhPhieuXuatKho extends BaseEntity implements Serializable {
+@Table(name = XhXkVtBhPhieuXuatNhapKho.TABLE_NAME)
+public class XhXkVtBhPhieuXuatNhapKho extends BaseEntity implements Serializable {
 
-  public static final String TABLE_NAME = "XH_XK_VT_BH_PHIEU_XUAT_KHO";
+  public static final String TABLE_NAME = "XH_XK_VT_BH_PHIEU_XN_KHO";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXkVtBhPhieuXuatKho.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhXkVtBhPhieuXuatKho.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhXkVtBhPhieuXuatKho.TABLE_NAME + "_SEQ")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXkVtBhPhieuXuatNhapKho.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = XhXkVtBhPhieuXuatNhapKho.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhXkVtBhPhieuXuatNhapKho.TABLE_NAME + "_SEQ")
   private Long id;
   private Integer namKeHoach;
   private String maDvi;
   private String soPhieu;
   private String loai;
   private String maQhns;
-  private LocalDate ngayXuat;
+  private LocalDate ngayXuatNhap;
   private LocalDate thoiGianGiaoHang;
   private BigDecimal duNo;
   private BigDecimal duCo;
@@ -50,7 +50,7 @@ public class XhXkVtBhPhieuXuatKho extends BaseEntity implements Serializable {
   private String cccdNgh;
   private String donViNgh;
   private String diaChiNgh;
-  private BigDecimal slThucXuat;
+  private BigDecimal slThucTe;
   private String ghiChu;
   private String trangThai;
   private String lyDoTuChoi;
@@ -63,6 +63,11 @@ public class XhXkVtBhPhieuXuatKho extends BaseEntity implements Serializable {
 
   private Long idBienBanLm;
   private String soBienBanLm;
+
+  private Boolean mauBiHuy;
+  private String loaiPhieu; // XUAT,NHAP
+  private String soBcKqkdMau;
+  private Long idBcKqkdMau;
 
   @Transient
   private List<FileDinhKem> fileDinhKems;

@@ -78,6 +78,6 @@ public class DcnbPhieuNhapKhoHdrDTO {
         this.bKCanHangId = bKCanHangId;
         this.soBKCanHang = soBKCanHang;
         this.trangThai = trangThai;
-        this.tenTrangThai = tenTrangThai;
+        this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
     }
 }

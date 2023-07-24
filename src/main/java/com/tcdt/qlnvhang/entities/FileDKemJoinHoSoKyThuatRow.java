@@ -2,8 +2,7 @@ package com.tcdt.qlnvhang.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.table.xuathang.hosokythuat.XhHoSoKyThuatDtl;
-import com.tcdt.qlnvhang.table.xuathang.hosokythuat.XhHoSoKyThuatRow;
+import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThuatRow;
 import lombok.Data;
 
 import javax.persistence.*;

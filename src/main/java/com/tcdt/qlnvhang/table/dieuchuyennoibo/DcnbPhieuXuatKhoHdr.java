@@ -74,7 +74,7 @@ public class DcnbPhieuXuatKhoHdr extends BaseEntity implements Serializable, Clo
     private BigDecimal tongSoLuong;
     private String tongSoLuongBc;
     private BigDecimal donGia;
-    private BigDecimal thanhTien;
+    private BigDecimal thanhTien; // tổng kinh phí
     private String thanhTienBc;
     private String ghiChu;
     @Access(value=AccessType.PROPERTY)

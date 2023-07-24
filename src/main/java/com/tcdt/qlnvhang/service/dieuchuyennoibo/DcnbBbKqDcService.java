@@ -30,5 +30,7 @@ public interface DcnbBbKqDcService {
 
     void deleteMulti(List<Long> ids);
 
-    List<DcnbBcKqDcDtl> thongTinNhapXuatHang(DcnbBbKqDcSearch objReq) throws Exception;
+    List<DcnbBcKqDcDtl> thongTinNhapXuatHangChiCuc(DcnbBbKqDcSearch objReq) throws Exception;
+
+    List<DcnbBcKqDcDtl> thongTinNhapXuatHangCuc(DcnbBbKqDcSearch objReq) throws Exception;
 }

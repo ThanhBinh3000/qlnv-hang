@@ -35,6 +35,10 @@ public class DcnbPhieuNhapKhoHdrReq extends BaseRequest {
     private String maNhaKho;
     private String maNganKho;
     private String maLoKho;
+    private String tenDiemKho;
+    private String tenNhaKho;
+    private String tenNganKho;
+    private String tenLoKho;
     private String soPhieuKtraCluong;
     private Long idPhieuKtraCluong;
     private String loaiVthh;

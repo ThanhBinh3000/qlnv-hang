@@ -6,62 +6,52 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Getter
 @Setter
 @Entity
-@Table(name = XhXkVtPhieuXuatKho.TABLE_NAME)
-public class XhXkVtPhieuXuatKho extends BaseEntity implements Serializable {
+@Table(name = XhXkVtBbKtNhapKho.TABLE_NAME)
+public class XhXkVtBbKtNhapKho extends BaseEntity implements Serializable {
 
-    public static final String TABLE_NAME = "XH_XK_VT_PHIEU_XUAT_KHO";
+    public static final String TABLE_NAME = "XH_XK_VT_BB_KT_NHAP_KHO";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_XK_VT_PHIEU_XUAT_KHO_SEQ")
-    @SequenceGenerator(sequenceName = "XH_XK_VT_PHIEU_XUAT_KHO_SEQ", allocationSize = 1, name = "XH_XK_VT_PHIEU_XUAT_KHO_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_XK_VT_BB_KT_NHAP_KHO_SEQ")
+    @SequenceGenerator(sequenceName = "XH_XK_VT_BB_KT_NHAP_KHO_SEQ", allocationSize = 1, name = "XH_XK_VT_BB_KT_NHAP_KHO_SEQ")
     private Long id;
     private Integer namKeHoach;
     private String maDvi;
-    private String soPhieu;
-    private String loai;
+    private String soBienBan;
     private String maQhns;
-    private LocalDate ngayXuat;
-    private LocalDate thoiGianGiaoHang;
-    private BigDecimal duNo;
-    private BigDecimal duCo;
+    private LocalDate ngayLapBienBan;
     private String soCanCu;
     private Long idCanCu;
     private String maDiaDiem; // mã địa điểm (mã lô/ngăn kho)
-    private String soPhieuKncl;
-    private Long idPhieuKncl;
     private String loaiVthh;
     private String cloaiVthh;
-    private String canBoLapPhieu;
+    private String canBoLapBb;
     private String ldChiCuc;
     private String ktvBaoQuan;
     private String keToanTruong;
-    private String hoTenNgh;
-    private String cccdNgh;
-    private String donViNgh;
-    private String diaChiNgh;
-    private BigDecimal slThucXuat;
     private String ghiChu;
     private String trangThai;
     private String lyDoTuChoi;
     private Long nguoiDuyetId;
     private LocalDate ngayDuyet;
-    private String maSo;
-    private BigDecimal slTonKho;
-    private BigDecimal slLayMau;
-    private String donViTinh;
-    private Boolean mauBiHuy;
+    private LocalDate ngayBatDauNhap;
+    private LocalDate ngayKetThucNhap;
+    private LocalDate ngayHetHanLuuKho;
+    // Số báo cáo kết quả kd mẫu
+    private String soBbLayMau;
+    private Long idBbLayMau;
 
     @Transient
     private List<FileDinhKem> fileDinhKems;
@@ -93,10 +83,6 @@ public class XhXkVtPhieuXuatKho extends BaseEntity implements Serializable {
     private String tenNganKho;
     @Transient
     private String tenLoKho;
-    @Transient
-    private Boolean ketQuaKiemDinh;
-    @Transient
-    private String tenTrangThaiXhQdGiaoNvXh;
 
     public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
         this.mapDmucDvi = mapDmucDvi;
@@ -131,4 +117,5 @@ public class XhXkVtPhieuXuatKho extends BaseEntity implements Serializable {
             setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
         }
     }
+
 }
