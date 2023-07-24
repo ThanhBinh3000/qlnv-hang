@@ -81,7 +81,11 @@ public class XhXkVtBckqKiemDinhMauService extends BaseServiceImpl {
         XhXkVtBckqKiemDinhMau created = xhXkVtBckqKiemDinhMauRepository.save(data);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtBckqKiemDinhMau.TABLE_NAME);
         created.setFileDinhKems(fileDinhKems);
-        //save lại pxk -- update mẫu bị hủy hay ko
+        //save lại pxk -- update mẫu bị hủy hay ko và số bc,id bc
+        objReq.getListDetailPxk().forEach(item -> {
+            item.setSoBcKqkdMau(created.getSoBaoCao());
+            item.setIdBcKqkdMau(created.getId());
+        });
         xhXkVtPhieuXuatNhapKhoRepository.saveAll(objReq.getListDetailPxk());
         //lưu lại số báo cáo vào qd giao nv xh
         Long[] idsQdGiaoNvXh = Arrays.stream(objReq.getIdQdGiaoNvXh().split(","))
@@ -158,6 +162,8 @@ public class XhXkVtBckqKiemDinhMauService extends BaseServiceImpl {
             if (!allByIdCanCuIn.isEmpty()) {
                 allByIdCanCuIn.forEach(item -> {
                     item.setMauBiHuy(Boolean.FALSE);
+                    item.setSoBcKqkdMau(null);
+                    item.setIdBcKqkdMau(null);
                 });
             }
             List<XhXkVtQdGiaonvXhHdr> listQdGiaoNvXh = xhXkVtQdGiaonvXhRepository.findByIdIn(Arrays.asList(idsQdGiaoNvXh));
