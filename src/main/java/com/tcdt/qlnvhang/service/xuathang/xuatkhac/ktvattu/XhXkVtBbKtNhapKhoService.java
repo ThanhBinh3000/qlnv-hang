@@ -166,9 +166,9 @@ public class XhXkVtBbKtNhapKhoService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         XhXkVtBbKtNhapKho data = optional.get();
-        fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhXkVtPhieuXuatNhapKho.TABLE_NAME));
+        fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhXkVtBbKtNhapKho.TABLE_NAME));
         List<XhXkVtPhieuXuatNhapKho> allByIdBbKetThucNhapKho = xhXkVtPhieuXuatNhapKhoRepository.findAllByIdBbKetThucNhapKho(data.getId());
-        if (allByIdBbKetThucNhapKho.isEmpty()) {
+        if (!allByIdBbKetThucNhapKho.isEmpty()) {
             allByIdBbKetThucNhapKho.forEach(it -> {
                 it.setSoBbKetThucNhapKho(null);
                 it.setIdBbKetThucNhapKho(null);
