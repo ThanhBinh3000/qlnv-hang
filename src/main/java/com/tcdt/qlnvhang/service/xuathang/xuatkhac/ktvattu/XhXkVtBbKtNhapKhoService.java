@@ -175,6 +175,7 @@ public class XhXkVtBbKtNhapKhoService extends BaseServiceImpl {
         model.setMapVthh(mapVthh);
         model.setTenDvi(mapDmucDvi.get(model.getMaDvi()));
         model.setTenTrangThai(TrangThaiAllEnum.getLabelById(model.getTrangThai()));
+        model.setListPhieuNhapKho(xhXkVtPhieuXuatNhapKhoRepository.findAllByIdBbKtNhapKho(id).stream().filter(item -> item.getLoaiPhieu().equals("NHAP")).collect(Collectors.toList()));
         return model;
     }
 
