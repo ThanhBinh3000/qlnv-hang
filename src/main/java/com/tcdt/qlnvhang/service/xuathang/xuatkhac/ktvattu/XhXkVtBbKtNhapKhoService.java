@@ -49,6 +49,9 @@ public class XhXkVtBbKtNhapKhoService extends BaseServiceImpl {
     private XhXkVtQdGiaonvXhRepository xhXkVtQdGiaonvXhRepository;
 
     @Autowired
+    private XhXkVtPhieuXuatNhapKhoRepository xhXkVtPhieuXuatNhapKhoRepository;
+
+    @Autowired
     private XhXkVtPhieuKdclHdrRepository xhXkVtPhieuKdclHdrRepository;
 
     @Autowired
@@ -87,6 +90,14 @@ public class XhXkVtBbKtNhapKhoService extends BaseServiceImpl {
         // cập nhật trạng thái đang thực hiện cho QD giao nv nhập hàng
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtBbKtNhapKho.TABLE_NAME);
         created.setFileDinhKems(fileDinhKems);
+        //save lại số bb vào phiếu xuất kho
+        if (!objReq.getListPhieuNhapKho().isEmpty()) {
+            objReq.getListPhieuNhapKho().forEach(it -> {
+                it.setSoBbKetThucNhapKho(data.getSoBienBan());
+                it.setIdBbKetThucNhapKho(data.getId());
+            });
+            xhXkVtPhieuXuatNhapKhoRepository.saveAll(objReq.getListPhieuNhapKho());
+        }
         return created;
     }
 
@@ -106,12 +117,28 @@ public class XhXkVtBbKtNhapKhoService extends BaseServiceImpl {
             }
         }
         XhXkVtBbKtNhapKho data = optional.get();
+        Long idBcKqKdMauOld = data.getIdCanCu() != objReq.getIdCanCu() ? data.getIdCanCu() : null;
         BeanUtils.copyProperties(objReq, data);
-        XhXkVtBbKtNhapKho created = xhXkVtBbKtNhapKhoRepository.save(data);
+        XhXkVtBbKtNhapKho updated = xhXkVtBbKtNhapKhoRepository.save(data);
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhXkVtBbKtNhapKho.TABLE_NAME));
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtBbKtNhapKho.TABLE_NAME);
-        created.setFileDinhKems(fileDinhKems);
-        return created;
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), updated.getId(), XhXkVtBbKtNhapKho.TABLE_NAME);
+        updated.setFileDinhKems(fileDinhKems);
+        //Update lại phiếu nhập kho khi sửa số BC kết quả kiểm định mẫu
+        if (!ObjectUtils.isEmpty(idBcKqKdMauOld)) {
+            List<XhXkVtPhieuXuatNhapKho> listOld = xhXkVtPhieuXuatNhapKhoRepository.findAllByIdBcKqkdMau(idBcKqKdMauOld).stream().filter(item -> item.getLoaiPhieu().equals("NHAP")).map(item -> {
+                item.setIdBbKetThucNhapKho(null);
+                item.setSoBbKetThucNhapKho(null);
+                return item;
+            }).collect(Collectors.toList());
+            List<XhXkVtPhieuXuatNhapKho> listNew = xhXkVtPhieuXuatNhapKhoRepository.findAllByIdBcKqkdMau(updated.getIdCanCu()).stream().filter(item -> item.getLoaiPhieu().equals("NHAP")).map(item -> {
+                item.setIdBbKetThucNhapKho(updated.getId());
+                item.setSoBbKetThucNhapKho(updated.getSoBienBan());
+                return item;
+            }).collect(Collectors.toList());
+            listNew.addAll(listOld);
+            xhXkVtPhieuXuatNhapKhoRepository.saveAll(listNew);
+        }
+        return updated;
     }
 
     public XhXkVtBbKtNhapKho detail(Long id) throws Exception {
@@ -140,6 +167,14 @@ public class XhXkVtBbKtNhapKhoService extends BaseServiceImpl {
         }
         XhXkVtBbKtNhapKho data = optional.get();
         fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhXkVtPhieuXuatNhapKho.TABLE_NAME));
+        List<XhXkVtPhieuXuatNhapKho> allByIdBbKetThucNhapKho = xhXkVtPhieuXuatNhapKhoRepository.findAllByIdBbKetThucNhapKho(data.getId());
+        if (allByIdBbKetThucNhapKho.isEmpty()) {
+            allByIdBbKetThucNhapKho.forEach(it -> {
+                it.setSoBbKetThucNhapKho(null);
+                it.setIdBbKetThucNhapKho(null);
+            });
+            xhXkVtPhieuXuatNhapKhoRepository.saveAll(allByIdBbKetThucNhapKho);
+        }
         xhXkVtBbKtNhapKhoRepository.delete(data);
     }
 
