@@ -59,7 +59,10 @@ public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, L
     @Query(value = " SELECT NVL(SUM(SLDD.SO_LUONG),0) FROM HH_QD_PHE_DUYET_KHMTT_HDR HDR " +
             " INNER JOIN HH_QD_PHE_DUYET_KHMTT_DX DX on HDR.ID = DX.ID_QD_HDR " +
             " LEFT JOIN HH_QD_PHE_DUYET_KHMTT_SLDD SLDD ON SLDD.ID_QD_DTL = DX.ID " +
-            "WHERE HDR.NAM_KH = :namKh AND HDR.LOAI_VTHH = :loaiVthh AND SLDD.MA_DVI = :maDvi AND HDR.TRANG_THAI = :trangThai",
+            "WHERE (:#{#namKh} IS NULL OR HDR.NAM_KH = :#{#namKh})" +
+            " AND (:#{#loaiVthh} IS NULL OR HDR.LOAI_VTHH = :#{#loaiVthh}) " +
+            " AND (:#{#maDvi} IS NULL OR SLDD.MA_DVI = :#{#maDvi}) " +
+            " AND (:#{#trangThai} IS NULL OR HDR.TRANG_THAI = :#{#trangThai}) ",
             nativeQuery = true)
     BigDecimal countSLDalenKh(Integer namKh, String loaiVthh, String maDvi, String trangThai);
 
@@ -67,7 +70,7 @@ public interface HhDxuatKhMttRepository extends JpaRepository<HhDxuatKhMttHdr, L
 
     @Transactional()
     @Modifying
-    @Query(value = "UPDATE HH_DX_KHMTT_HDR SET ID_SO_QD_PDDUYET = NULL WHERE ID = :idDxuat", nativeQuery = true)
-    void updateIdSoQdPd(Long idDxuat);
+    @Query(value = "UPDATE HH_DX_KHMTT_HDR SET ID_SO_QD_PDUYET = NULL, TRANG_THAI = :trangThai, TRANG_THAI_TH = :trangThaiTh, SO_QD_PDUYET = NULL WHERE ID = :idDxuat", nativeQuery = true)
+    void updateIdSoQdPd(Long idDxuat, String trangThai, String trangThaiTh);
 
 }

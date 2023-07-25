@@ -21,5 +21,13 @@ public class HhDcQdPduyetKhmttSlddReq {
     private BigDecimal soLuongDxmtt;
     private BigDecimal donGiaVat;
     private BigDecimal thanhTien;
+    private String diaChi;
+    private String tenGoiThau;
+    private BigDecimal soLuongChiTieu;
+    private BigDecimal donGia;
+    private BigDecimal tongSoLuong;
+    private BigDecimal tongThanhTien;
+    private BigDecimal tongThanhTienVat;
+    private BigDecimal soLuong;
     List<HhDcQdPdKhmttSlddDtlReq> children= new ArrayList<>();
 }
