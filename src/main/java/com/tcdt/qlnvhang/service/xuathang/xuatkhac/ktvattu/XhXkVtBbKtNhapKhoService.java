@@ -125,12 +125,12 @@ public class XhXkVtBbKtNhapKhoService extends BaseServiceImpl {
         updated.setFileDinhKems(fileDinhKems);
         //Update lại phiếu nhập kho khi sửa số BC kết quả kiểm định mẫu
         if (!ObjectUtils.isEmpty(idBcKqKdMauOld)) {
-            List<XhXkVtPhieuXuatNhapKho> listOld = xhXkVtPhieuXuatNhapKhoRepository.findAllByIdBcKqkdMau(idBcKqKdMauOld).stream().map(item -> {
+            List<XhXkVtPhieuXuatNhapKho> listOld = xhXkVtPhieuXuatNhapKhoRepository.findAllByIdBcKqkdMau(idBcKqKdMauOld).stream().filter(item -> item.getLoaiPhieu().equals("NHAP")).map(item -> {
                 item.setIdBbKetThucNhapKho(null);
                 item.setSoBbKetThucNhapKho(null);
                 return item;
             }).collect(Collectors.toList());
-            List<XhXkVtPhieuXuatNhapKho> listNew = xhXkVtPhieuXuatNhapKhoRepository.findAllByIdBcKqkdMau(updated.getIdCanCu()).stream().map(item -> {
+            List<XhXkVtPhieuXuatNhapKho> listNew = xhXkVtPhieuXuatNhapKhoRepository.findAllByIdBcKqkdMau(updated.getIdCanCu()).stream().filter(item -> item.getLoaiPhieu().equals("NHAP")).map(item -> {
                 item.setIdBbKetThucNhapKho(updated.getId());
                 item.setSoBbKetThucNhapKho(updated.getSoBienBan());
                 return item;
