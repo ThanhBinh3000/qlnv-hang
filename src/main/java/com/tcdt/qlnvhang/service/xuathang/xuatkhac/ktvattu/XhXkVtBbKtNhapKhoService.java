@@ -78,13 +78,14 @@ public class XhXkVtBbKtNhapKhoService extends BaseServiceImpl {
         Page<XhXkVtPhieuXuatNhapKho> search = xhXkVtPhieuXuatNhapKhoRepository.searchPageBbKetThucNhapKho(req, pageable);
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
-        List<Long> idsPhieuXuatKho = search.getContent().stream().map(XhXkVtPhieuXuatNhapKho::getId).collect(Collectors.toList());
-        Map<Long, XhXkVtBbLayMauHdr> mapBbLayMauBanGiaoMau = xhXkVtBbLayMauHdrRepository.findAllByIdPhieuXuatKhoIn(idsPhieuXuatKho).stream().collect(Collectors.toMap(XhXkVtBbLayMauHdr::getIdPhieuXuatKho, Function.identity()));
+        List<Long> idsBbKetThucNhapKho = search.getContent().stream().map(XhXkVtPhieuXuatNhapKho::getIdBbKtNhapKho).collect(Collectors.toList());
+        Map<Long, XhXkVtBbKtNhapKho> mapBbketThucNhapKho = xhXkVtBbKtNhapKhoRepository.findAllByIdIn(idsBbKetThucNhapKho).stream().collect(Collectors.toMap(XhXkVtBbKtNhapKho::getId, Function.identity()));
         search.getContent().forEach(s -> {
             s.setMapDmucDvi(mapDmucDvi);
             s.setMapVthh(mapVthh);
             s.setTenLoai(Contains.getLoaiHinhXuat(s.getLoai()));
             s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
+            s.setNgayKtNhapKho(mapBbketThucNhapKho.get(s.getIdBbKtNhapKho()).getNgayKetThucNhap());
         });
         return search;
     }
