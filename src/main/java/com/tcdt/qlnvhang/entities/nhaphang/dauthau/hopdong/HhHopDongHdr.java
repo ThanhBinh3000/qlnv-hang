@@ -102,7 +102,6 @@ public class HhHopDongHdr extends BaseEntity implements Serializable  {
 	String ghiChu;
 	String namKhoach;
 
-	@Transient
 	String donViTinh;
 
 	String noiDung;

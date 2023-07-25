@@ -136,9 +136,9 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 	BigDecimal getGiaBanToiDaVt(String cloaiVthh, String namKhoach);
 
 	@Query(value = " select ct.id from KH_CHI_TIEU_KE_HOACH_NAM ct join HH_DX_KHLCNT_HDR hdr ON ct.SO_QUYET_DINH = hdr.SO_QD " +
-			" WHERE hdr.id = :khlcntId ",
+			" WHERE hdr.id = :khlcntId AND ct.NAM_KE_HOACH = :namKhoach ",
 			nativeQuery = true)
-	BigDecimal getIdByKhLcnt (Long khlcntId);
+	BigDecimal getIdByKhLcnt (Long khlcntId, Integer namKhoach);
 
 	@Query(value = "SELECT DX.* FROM HH_DX_KHLCNT_HDR DX " +
 			" JOIN HH_DX_KHLCNT_THOP_DTL dtl ON dx.id = dtl.ID_DX_HDR "+

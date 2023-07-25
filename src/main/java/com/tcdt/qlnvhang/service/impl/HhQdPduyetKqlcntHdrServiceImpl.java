@@ -260,6 +260,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 				optional.get().setNguoiPduyet(userInfo.getUsername());
 				optional.get().setNgayPduyet(new Date());
 				optional.get().setTrangThai(stReq.getTrangThai());
+				optional.get().setTrangThaiHd(Contains.CHUA_THUC_HIEN);
 				break;
 			case Contains.DA_HOAN_THANH + Contains.BAN_HANH:
 				optional.get().setTrangThaiHd(stReq.getTrangThai());
@@ -643,10 +644,12 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 //	}
 //
 	private HhQdPduyetKqlcntHdr createVatTu(HhQdPduyetKqlcntHdrReq objReq) throws Exception {
-		Optional<HhQdPduyetKqlcntHdr> checkSoQd = hhQdPduyetKqlcntHdrRepository.findBySoQd(objReq.getSoQd());
-		if (checkSoQd.isPresent()){
-			throw new Exception(
-					"Số quyết định phê duyệt kết quả lựa chọn nhà thầu " + objReq.getSoQd() + " đã tồn tại");
+		if (objReq.getSoQd() != null && !objReq.getSoQd().equals("")) {
+			Optional<HhQdPduyetKqlcntHdr> checkSoQd = hhQdPduyetKqlcntHdrRepository.findBySoQd(objReq.getSoQd());
+			if (checkSoQd.isPresent()){
+				throw new Exception(
+						"Số quyết định phê duyệt kết quả lựa chọn nhà thầu " + objReq.getSoQd() + " đã tồn tại");
+			}
 		}
 		HhQdPduyetKqlcntHdr dataMap = ObjectMapperUtils.map(objReq, HhQdPduyetKqlcntHdr.class);
 		dataMap.setNguoiTao(getUser().getUsername());
