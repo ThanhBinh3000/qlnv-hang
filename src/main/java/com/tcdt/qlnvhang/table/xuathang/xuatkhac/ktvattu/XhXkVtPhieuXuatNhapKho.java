@@ -108,6 +108,8 @@ public class XhXkVtPhieuXuatNhapKho extends BaseEntity implements Serializable {
     private String soBbLayMau;
     @Transient
     private Long idBbLayMau;
+    @Transient
+    private LocalDate ngayKtNhapKho;
 
     public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
         this.mapDmucDvi = mapDmucDvi;
