@@ -93,8 +93,8 @@ public class XhXkVtBbKtNhapKhoService extends BaseServiceImpl {
         //save lại số bb vào phiếu xuất kho
         if (!objReq.getListPhieuNhapKho().isEmpty()) {
             objReq.getListPhieuNhapKho().forEach(it -> {
-                it.setSoBbKetThucNhapKho(data.getSoBienBan());
-                it.setIdBbKetThucNhapKho(data.getId());
+                it.setSoBbKtNhapKho(data.getSoBienBan());
+                it.setIdBbKtNhapKho(data.getId());
             });
             xhXkVtPhieuXuatNhapKhoRepository.saveAll(objReq.getListPhieuNhapKho());
         }
@@ -126,13 +126,13 @@ public class XhXkVtBbKtNhapKhoService extends BaseServiceImpl {
         //Update lại phiếu nhập kho khi sửa số BC kết quả kiểm định mẫu
         if (!ObjectUtils.isEmpty(idBcKqKdMauOld)) {
             List<XhXkVtPhieuXuatNhapKho> listOld = xhXkVtPhieuXuatNhapKhoRepository.findAllByIdBcKqkdMau(idBcKqKdMauOld).stream().filter(item -> item.getLoaiPhieu().equals("NHAP")).map(item -> {
-                item.setIdBbKetThucNhapKho(null);
-                item.setSoBbKetThucNhapKho(null);
+                item.setIdBbKtNhapKho(null);
+                item.setSoBbKtNhapKho(null);
                 return item;
             }).collect(Collectors.toList());
             List<XhXkVtPhieuXuatNhapKho> listNew = xhXkVtPhieuXuatNhapKhoRepository.findAllByIdBcKqkdMau(updated.getIdCanCu()).stream().filter(item -> item.getLoaiPhieu().equals("NHAP")).map(item -> {
-                item.setIdBbKetThucNhapKho(updated.getId());
-                item.setSoBbKetThucNhapKho(updated.getSoBienBan());
+                item.setIdBbKtNhapKho(updated.getId());
+                item.setSoBbKtNhapKho(updated.getSoBienBan());
                 return item;
             }).collect(Collectors.toList());
             listNew.addAll(listOld);
@@ -170,8 +170,8 @@ public class XhXkVtBbKtNhapKhoService extends BaseServiceImpl {
         List<XhXkVtPhieuXuatNhapKho> allByIdBbKetThucNhapKho = xhXkVtPhieuXuatNhapKhoRepository.findAllByIdBbKetThucNhapKho(data.getId());
         if (!allByIdBbKetThucNhapKho.isEmpty()) {
             allByIdBbKetThucNhapKho.forEach(it -> {
-                it.setSoBbKetThucNhapKho(null);
-                it.setIdBbKetThucNhapKho(null);
+                it.setSoBbKtNhapKho(null);
+                it.setIdBbKtNhapKho(null);
             });
             xhXkVtPhieuXuatNhapKhoRepository.saveAll(allByIdBbKetThucNhapKho);
         }

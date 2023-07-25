@@ -67,8 +67,8 @@ public class XhXkVtPhieuXuatNhapKho extends BaseEntity implements Serializable {
     private String soBcKqkdMau;
     private Long idBcKqkdMau;
     // Số id biên bản kết thúc nhập kho - cho loaiPhieu = NHAP
-    private String soBbKetThucNhapKho;
-    private Long idBbKetThucNhapKho;
+    private String soBbKtNhapKho;
+    private Long idBbKtNhapKho;
 
     @Transient
     private List<FileDinhKem> fileDinhKems;
