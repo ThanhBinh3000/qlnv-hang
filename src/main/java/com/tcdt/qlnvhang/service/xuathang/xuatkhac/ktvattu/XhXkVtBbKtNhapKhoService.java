@@ -93,8 +93,8 @@ public class XhXkVtBbKtNhapKhoService extends BaseServiceImpl {
         //save lại số bb vào phiếu xuất kho
         if (!objReq.getListPhieuNhapKho().isEmpty()) {
             objReq.getListPhieuNhapKho().forEach(it -> {
-                it.setSoBbKtNhapKho(data.getSoBienBan());
-                it.setIdBbKtNhapKho(data.getId());
+                it.setSoBbKtNhapKho(created.getSoBienBan());
+                it.setIdBbKtNhapKho(created.getId());
             });
             xhXkVtPhieuXuatNhapKhoRepository.saveAll(objReq.getListPhieuNhapKho());
         }
