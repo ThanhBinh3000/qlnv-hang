@@ -40,4 +40,7 @@ public interface XhXkVtBbLayMauHdrRepository extends JpaRepository<XhXkVtBbLayMa
 
     List<XhXkVtBbLayMauHdr> findByIdQdGiaoNvXh(Long ids);
 
+    List<XhXkVtBbLayMauHdr> findAllByIdPhieuXuatKhoIn(List<Long> idList);
+
+
 }
