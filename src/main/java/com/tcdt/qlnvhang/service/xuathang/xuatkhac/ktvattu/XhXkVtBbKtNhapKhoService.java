@@ -86,6 +86,8 @@ public class XhXkVtBbKtNhapKhoService extends BaseServiceImpl {
             s.setTenLoai(Contains.getLoaiHinhXuat(s.getLoai()));
             s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
             s.setNgayKtNhapKho(mapBbketThucNhapKho.get(s.getIdBbKtNhapKho()).getNgayKetThucNhap());
+            s.setTrangThaiKtNk(mapBbketThucNhapKho.get(s.getIdBbKtNhapKho()).getTrangThai());
+            s.setTenTrangThaiKtNk(TrangThaiAllEnum.getLabelById(mapBbketThucNhapKho.get(s.getIdBbKtNhapKho()).getTrangThai()));
         });
         return search;
     }
