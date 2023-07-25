@@ -167,7 +167,7 @@ public class XhXkVtBbKtNhapKhoService extends BaseServiceImpl {
         }
         XhXkVtBbKtNhapKho data = optional.get();
         fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhXkVtBbKtNhapKho.TABLE_NAME));
-        List<XhXkVtPhieuXuatNhapKho> allByIdBbKetThucNhapKho = xhXkVtPhieuXuatNhapKhoRepository.findAllByIdBbKetThucNhapKho(data.getId());
+        List<XhXkVtPhieuXuatNhapKho> allByIdBbKetThucNhapKho = xhXkVtPhieuXuatNhapKhoRepository.findAllByIdBbKtNhapKho(data.getId());
         if (!allByIdBbKetThucNhapKho.isEmpty()) {
             allByIdBbKetThucNhapKho.forEach(it -> {
                 it.setSoBbKtNhapKho(null);
