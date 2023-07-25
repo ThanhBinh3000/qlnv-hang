@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattu;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatNhapKho;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -38,6 +39,7 @@ public class XhXkVtBbKtNhapKhoRequest extends BaseRequest {
     private String soBbLayMau;
     private Long idBbLayMau;
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
+    private List<XhXkVtPhieuXuatNhapKho> listPhieuNhapKho = new ArrayList<>();
 
     //search params
     private LocalDate ngayKetThucNhapKhoTu;
