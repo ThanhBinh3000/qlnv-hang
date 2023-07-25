@@ -50,6 +50,8 @@ public class XhXkVtPhieuXuatNhapKhoRequest extends BaseRequest {
     private String loaiPhieu;
     private String soBcKqkdMau;
     private Long idBcKqkdMau;
+    private String soBbKtNhapKho;
+    private Long idBbKtNhapKho;
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 
     //search params
