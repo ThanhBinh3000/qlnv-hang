@@ -106,6 +106,8 @@ public class XhXkVtPhieuXuatNhapKho extends BaseEntity implements Serializable {
     private String tenTrangThaiXhQdGiaoNvXh;
     @Transient
     private String soBbLayMau;
+    @Transient
+    private Long idBbLayMau;
 
     public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
         this.mapDmucDvi = mapDmucDvi;

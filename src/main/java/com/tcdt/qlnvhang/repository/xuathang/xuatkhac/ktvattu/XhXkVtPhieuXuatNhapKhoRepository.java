@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu;
 
+import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattu.XhXkVtBbKtNhapKhoRequest;
 import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatNhapKhoRequest;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatNhapKho;
 import org.springframework.data.domain.Page;
@@ -44,4 +45,23 @@ public interface XhXkVtPhieuXuatNhapKhoRepository extends JpaRepository<XhXkVtPh
     List<XhXkVtPhieuXuatNhapKho> findAllByIdBbKtNhapKho(Long idBbNhapKho);
 
     List<XhXkVtPhieuXuatNhapKho> findAllByIdBcKqkdMau(Long idBcKqKdMau);
+
+
+    @Query("SELECT c FROM XhXkVtPhieuXuatNhapKho c, XhXkVtBbKtNhapKho b WHERE 1=1 " +
+            "AND (c.idBbKtNhapKho = b.id) " +
+            "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
+            "AND (c.loai = 'NHAP_MAU') " +
+            "AND (c.loaiPhieu ='NHAP') " +
+            "AND (c.soBcKqkdMau is not null) " +
+            "AND (c.soBbKtNhapKho is not null) " +
+            "AND (:#{#param.namKeHoach} IS NULL OR c.namKeHoach = :#{#param.namKeHoach}) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR c.loaiVthh = :#{#param.loaiVthh}) " +
+            "AND (:#{#param.soBcKqKdMau} IS NULL OR LOWER(c.soBcKqkdMau) LIKE CONCAT('%',LOWER(:#{#param.soBcKqKdMau}),'%')) " +
+            "AND (:#{#param.soBienBan}  IS NULL OR b.soBienBan >= :#{#param.soBienBan})" +
+            "AND ((:#{#param.ngayKetThucNhapKhoTu}  IS NULL OR b.ngayKetThucNhap >= :#{#param.ngayKetThucNhapKhoTu})" +
+            "AND (:#{#param.ngayKetThucNhapKhoDen}  IS NULL OR b.ngayKetThucNhap  <= :#{#param.ngayKetThucNhapKhoDen}) ) " +
+            "AND (:#{#param.trangThai} IS NULL OR b.trangThai = :#{#param.trangThai}) " +
+            "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
+    )
+    Page<XhXkVtPhieuXuatNhapKho> searchPageBbKetThucNhapKho(@Param("param") XhXkVtBbKtNhapKhoRequest param, Pageable pageable);
 }
