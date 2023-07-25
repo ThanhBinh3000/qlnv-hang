@@ -367,9 +367,9 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 	@Override
 	public HhQdKhlcntHdr detail(String ids) throws Exception {
-		if (StringUtils.isEmpty(ids))
+		if (StringUtils.isEmpty(ids)) {
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
-		System.out.println("id loi " + ids);
+		}
 		Optional<HhQdKhlcntHdr> qOptional = hhQdKhlcntHdrRepository.findById(Long.parseLong(ids));
 
 
@@ -523,7 +523,6 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		data.setTenTrangThaiDt(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiDt()));
 		if (data.getIdTrHdr() != null) {
 			Optional<HhDxuatKhLcntHdr> dxuatKhLcntHdr = hhDxuatKhLcntHdrRepository.findById(data.getIdTrHdr());
-			dxuatKhLcntHdr.ifPresent(data::setDxKhlcntHdr);
 			if (dxuatKhLcntHdr.isPresent()) {
 				dxuatKhLcntHdr.get().setTenLoaiHinhNx(hashMapLoaiNx.get(dxuatKhLcntHdr.get().getLoaiHinhNx()));
 				dxuatKhLcntHdr.get().setTenKieuNx(hashMapKieuNx.get(dxuatKhLcntHdr.get().getKieuNx()));
