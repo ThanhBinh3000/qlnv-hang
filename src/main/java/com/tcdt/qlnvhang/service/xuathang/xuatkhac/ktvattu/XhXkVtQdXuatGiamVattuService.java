@@ -50,10 +50,11 @@ public class XhXkVtQdXuatGiamVattuService extends BaseServiceImpl {
         }
         Page<XhXkVtQdXuatGiamVattu> search = xhXkVtQdXuatGiamVattuRepository.searchPage(req, pageable);
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-        Map<String, String> mapVthh = getListDanhMucHangHoa();
         search.getContent().forEach(s -> {
             s.setTenLoai(Contains.getLoaiHinhXuat(s.getLoai()));
             s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
+            s.setTenDvi(mapDmucDvi.get(s.getMaDvi()));
+            s.setTenDviNhan(mapDmucDvi.get(s.getMaDviNhan()));
         });
         return search;
     }
