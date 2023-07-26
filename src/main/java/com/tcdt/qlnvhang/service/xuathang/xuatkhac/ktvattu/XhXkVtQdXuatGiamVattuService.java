@@ -128,7 +128,14 @@ public class XhXkVtQdXuatGiamVattuService extends BaseServiceImpl {
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(model.getId(), Arrays.asList(XhXkVtQdXuatGiamVattu.TABLE_NAME));
         model.setFileDinhKems(fileDinhKem);
-        model.setXhXkVtPhieuXuatNhapKho(xhXkVtPhieuXuatNhapKhoRepository.findAllByIdQdXuatGiamVt(id));
+        List<XhXkVtPhieuXuatNhapKho> allByIdQdXuatGiamVt = xhXkVtPhieuXuatNhapKhoRepository.findAllByIdQdXuatGiamVt(id);
+        if (!allByIdQdXuatGiamVt.isEmpty()) {
+            allByIdQdXuatGiamVt.stream().forEach(item -> {
+                item.setMapVthh(mapVthh);
+                item.setMapVthh(mapDmucDvi);
+            });
+        }
+        model.setXhXkVtPhieuXuatNhapKho(allByIdQdXuatGiamVt);
         model.setTenDvi(mapDmucDvi.get(model.getMaDvi()));
         model.setTenDviNhan(mapDmucDvi.get(model.getMaDviNhan()));
         model.setTenTrangThai(TrangThaiAllEnum.getLabelById(model.getTrangThai()));
