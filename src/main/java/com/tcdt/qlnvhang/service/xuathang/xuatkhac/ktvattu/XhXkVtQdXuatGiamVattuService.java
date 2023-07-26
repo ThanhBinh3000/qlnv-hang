@@ -69,7 +69,7 @@ public class XhXkVtQdXuatGiamVattuService extends BaseServiceImpl {
                 throw new Exception("Số quyết định đã tồn tại");
             }
         }
-        if(objReq.getXhXkVtPhieuXuatNhapKho().isEmpty()){
+        if (objReq.getXhXkVtPhieuXuatNhapKho().isEmpty()) {
             throw new Exception("Danh sách hàng hóa xuất giảm trống, không thể tạo quyết định.");
         }
         XhXkVtQdXuatGiamVattu data = new XhXkVtQdXuatGiamVattu();
@@ -104,7 +104,7 @@ public class XhXkVtQdXuatGiamVattuService extends BaseServiceImpl {
                 if (!optionalBySoTt.isPresent()) throw new Exception("Số quyết định đã tồn tại!");
             }
         }
-        if(objReq.getXhXkVtPhieuXuatNhapKho().isEmpty()){
+        if (objReq.getXhXkVtPhieuXuatNhapKho().isEmpty()) {
             throw new Exception("Danh sách hàng hóa xuất giảm trống, không thể tạo quyết định.");
         }
         XhXkVtQdXuatGiamVattu dx = optional.get();
@@ -175,13 +175,7 @@ public class XhXkVtQdXuatGiamVattuService extends BaseServiceImpl {
         XhXkVtQdXuatGiamVattu xhXkVtQdXuatGiamVattu = dx.get();
         String status = xhXkVtQdXuatGiamVattu.getTrangThai() + req.getTrangThai();
         switch (status) {
-            case Contains.DU_THAO + Contains.CHO_DUYET_LDC:
-            case Contains.TU_CHOI_LDC + Contains.CHO_DUYET_LDC:
-                break;
-            case Contains.CHO_DUYET_LDC + Contains.TU_CHOI_LDC:
-                xhXkVtQdXuatGiamVattu.setLyDoTuChoi(req.getLyDoTuChoi());
-                break;
-            case Contains.CHO_DUYET_LDC + Contains.DA_DUYET_LDC:
+            case Contains.DU_THAO + Contains.BAN_HANH:
                 xhXkVtQdXuatGiamVattu.setNguoiDuyetId(currentUser.getUser().getId());
                 xhXkVtQdXuatGiamVattu.setNgayDuyet(LocalDate.now());
                 break;
