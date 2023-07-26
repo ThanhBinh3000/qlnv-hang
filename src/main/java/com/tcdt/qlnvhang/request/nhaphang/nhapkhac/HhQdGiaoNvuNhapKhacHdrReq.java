@@ -20,6 +20,7 @@ public class HhQdGiaoNvuNhapKhacHdrReq {
     Date ngayQd;
     String maDvi;
     String trangThai;
+    String dvt;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     Date ngayTao;
     String nguoiTao;

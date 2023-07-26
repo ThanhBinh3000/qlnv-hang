@@ -40,21 +40,28 @@ public class XhTlQuyetDinhPdKqHdr extends BaseEntity implements Serializable {
   private String kieuNhapXuat;
   private Long idThongBao;
   private String maThongBao;
+  private String soBienBan;
   private String thongBaoKhongThanh;
   private String loaiVthh;
   private String cloaiVthh;
   private String pthucGnhan;
   private String thoiHanGiaoNhan;
   private String thoiHanGiaoNhanGhiChu;
+  private String ghiChu;
   private String trangThai;
   private String lyDoTuChoi;
-
   private Long nguoiKyQdId;
   private LocalDate ngayKyQd;
   private LocalDate ngayGduyet;
   private Long nguoiGduyetId;
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
+  private String hthucDgia;
+  private String pthucDgia;
+  @Transient
+  private String tenHthucDgia;
+  @Transient
+  private String tenPthucDgia;
   @Transient
   private String tenLoaiVthh;
   @Transient
@@ -89,9 +96,9 @@ public class XhTlQuyetDinhPdKqHdr extends BaseEntity implements Serializable {
   @Transient
   private String tenTrangThai;
 
-  public void setTrangThai(String trangThai) {
-    this.trangThai = trangThai;
-    this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+  public String getTrangThai() {
+    setTenTrangThai(TrangThaiAllEnum.getLabelById(trangThai));
+    return trangThai;
   }
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -136,6 +143,7 @@ public class XhTlQuyetDinhPdKqHdr extends BaseEntity implements Serializable {
     this.getQuyetDinhDtl().clear();
     if (!DataUtils.isNullOrEmpty(quyetDinhDtl)) {
       quyetDinhDtl.forEach(s -> {
+        s.setId(null);
         s.setQuyetDinhHdr(this);
       });
       this.quyetDinhDtl.addAll(quyetDinhDtl);

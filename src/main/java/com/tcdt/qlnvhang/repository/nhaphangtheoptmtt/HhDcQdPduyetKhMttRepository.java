@@ -26,4 +26,6 @@ public interface HhDcQdPduyetKhMttRepository extends JpaRepository<HhDcQdPduyetK
     Optional<HhDcQdPduyetKhmttHdr> findBySoQdDc(String soQdDc);
 
     List<HhDcQdPduyetKhmttHdr> findAllByIdIn(List<Long> listId);
+
+    List<HhDcQdPduyetKhmttHdr> findAllByIdQdGocOrderByIdDesc(Long id);
 }

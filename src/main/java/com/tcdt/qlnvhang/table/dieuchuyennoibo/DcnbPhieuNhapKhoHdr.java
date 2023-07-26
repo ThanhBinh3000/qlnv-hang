@@ -107,6 +107,11 @@ public class DcnbPhieuNhapKhoHdr extends BaseEntity implements Serializable, Clo
     private Long nguoiPDuyet;
     @Column(name = "NGAY_PDUYET")
     private LocalDate ngayPDuyet;
+    private String tenDiemKho;
+    private String tenNhaKho;
+    private String tenNganKho;
+    private String tenLoKho;
+
     @Transient
     private List<FileDinhKem> chungTuDinhKem = new ArrayList<>();
     @Transient

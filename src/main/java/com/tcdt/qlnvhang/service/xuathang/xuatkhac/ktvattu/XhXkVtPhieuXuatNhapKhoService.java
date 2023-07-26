@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtBbLayMauHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtPhieuKdclHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtQdGiaonvXhRepository;
@@ -47,7 +48,8 @@ public class XhXkVtPhieuXuatNhapKhoService extends BaseServiceImpl {
     private XhXkVtPhieuKdclHdrRepository xhXkVtPhieuKdclHdrRepository;
 
     @Autowired
-    private UserInfoRepository userInfoRepository;
+    private XhXkVtBbLayMauHdrRepository xhXkVtBbLayMauHdrRepository;
+
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
@@ -60,8 +62,10 @@ public class XhXkVtPhieuXuatNhapKhoService extends BaseServiceImpl {
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         List<Long> idsPhieuKncl = search.getContent().stream().map(XhXkVtPhieuXuatNhapKho::getIdPhieuKncl).collect(Collectors.toList());
         List<Long> idsQdGiaoNvXh = search.getContent().stream().map(XhXkVtPhieuXuatNhapKho::getIdCanCu).collect(Collectors.toList());
+        List<Long> idsPhieuXuatKho = search.getContent().stream().map(XhXkVtPhieuXuatNhapKho::getId).collect(Collectors.toList());
         Map<Long, Boolean> mapKetQuanKiemDinh = xhXkVtPhieuKdclHdrRepository.findByIdIn(idsPhieuKncl).stream().collect(Collectors.toMap(XhXkVtPhieuKdclHdr::getId, XhXkVtPhieuKdclHdr::getIsDat));
         Map<Long, String> mapQdGiaoNvXh = xhXkVtQdGiaonvXhRepository.findByIdIn(idsQdGiaoNvXh).stream().collect(Collectors.toMap(XhXkVtQdGiaonvXhHdr::getId, XhXkVtQdGiaonvXhHdr::getTrangThaiXh));
+        Map<Long, String> mapBbLayMauBanGiaoMau = xhXkVtBbLayMauHdrRepository.findAllByIdPhieuXuatKhoIn(idsPhieuXuatKho).stream().collect(Collectors.toMap(XhXkVtBbLayMauHdr::getIdPhieuXuatKho, XhXkVtBbLayMauHdr::getSoBienBan));
         search.getContent().forEach(s -> {
             s.setMapDmucDvi(mapDmucDvi);
             s.setMapVthh(mapVthh);
@@ -69,6 +73,7 @@ public class XhXkVtPhieuXuatNhapKhoService extends BaseServiceImpl {
             s.setTenTrangThaiXhQdGiaoNvXh(TrangThaiAllEnum.getLabelById(mapQdGiaoNvXh.get(s.getIdCanCu())));
             s.setTenLoai(Contains.getLoaiHinhXuat(s.getLoai()));
             s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
+            s.setSoBbLayMau(mapBbLayMauBanGiaoMau.get(s.getId()));
         });
         return search;
     }
@@ -80,7 +85,7 @@ public class XhXkVtPhieuXuatNhapKhoService extends BaseServiceImpl {
         }
         Optional<XhXkVtPhieuXuatNhapKho> optional = xhXkVtPhieuXuatNhapKhoRepository.findBySoPhieu(objReq.getSoPhieu());
         if (optional.isPresent()) {
-            throw new Exception("số số phiếu đã tồn tại");
+            throw new Exception("Số phiếu đã tồn tại");
         }
         XhXkVtPhieuXuatNhapKho data = new XhXkVtPhieuXuatNhapKho();
         BeanUtils.copyProperties(objReq, data);
@@ -110,7 +115,7 @@ public class XhXkVtPhieuXuatNhapKhoService extends BaseServiceImpl {
         Optional<XhXkVtPhieuXuatNhapKho> soDx = xhXkVtPhieuXuatNhapKhoRepository.findBySoPhieu(objReq.getSoPhieu());
         if (soDx.isPresent()) {
             if (!soDx.get().getId().equals(objReq.getId())) {
-                throw new Exception("số số phiếu đã tồn tại");
+                throw new Exception("Số phiếu đã tồn tại");
             }
         }
         XhXkVtPhieuXuatNhapKho data = optional.get();

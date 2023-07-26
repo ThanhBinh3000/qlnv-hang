@@ -144,6 +144,11 @@ public class HhDxuatKhLcntHdrReq {
 	String maDviLapDx;
 	Integer quy;
 	String soQdPdGiaCuThe;
+	Integer namSxuat;
+	Integer namThuHoach;
+	String vu;
+	String thuHoachVu;
+	String ctietTccl;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayKyQdPdGiaCuThe;
 	private ReportTemplateRequest reportTemplateRequest;

@@ -31,6 +31,17 @@ public class HhDcQdPduyetKhmttSldd implements Serializable {
     private BigDecimal soLuongDxmtt;
     private BigDecimal donGiaVat;
     private BigDecimal thanhTien;
+
+    private String diaChi;
+    private String tenGoiThau;
+    private BigDecimal soLuongChiTieu;
+    private BigDecimal donGia;
+    private BigDecimal tongSoLuong;
+    private BigDecimal tongThanhTien;
+    private BigDecimal tongThanhTienVat;
+    private BigDecimal soLuong;
     @Transient
     List<HhDcQdPdKhmttSlddDtl> children= new ArrayList<>();
+    @Transient
+    private List<HhChiTietTTinChaoGia> listChaoGia = new ArrayList<>();
 }

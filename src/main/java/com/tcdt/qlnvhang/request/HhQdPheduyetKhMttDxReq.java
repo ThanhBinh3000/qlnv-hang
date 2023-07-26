@@ -67,6 +67,12 @@ public class HhQdPheduyetKhMttDxReq {
 
     private Integer namKh;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date tgianMkho;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date tgianKthuc;
+
     @Transient
     private List<HhQdPheduyetKhMttSLDDReq> children = new ArrayList<>();
 

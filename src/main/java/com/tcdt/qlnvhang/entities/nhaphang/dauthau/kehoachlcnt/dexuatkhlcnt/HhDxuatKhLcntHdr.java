@@ -65,6 +65,11 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	@Temporal(TemporalType.DATE)
 	Date ngayKy;
 	Integer namKhoach;
+	Integer namSxuat;
+	Integer namThuHoach;
+	String vu;
+	String thuHoachVu;
+	String ctietTccl;
 	String ghiChu;
 	String cloaiVthh;
 	@Transient

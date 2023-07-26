@@ -2,10 +2,7 @@ package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhDcQdPdKhmttSlddDtlRepository;
-import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhDcQdPduyetKhMttDxRepository;
-import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhDcQdPduyetKhMttRepository;
-import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhDcQdPduyetKhmttSlddRepository;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -46,6 +43,9 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
 
     @Autowired
     private HhDcQdPdKhmttSlddDtlRepository  hhDcQdPdKhmttSlddDtlRepository;
+
+    @Autowired
+    private HhQdPheduyetKhMttHdrRepository hhQdPheduyetKhMttHdrRepository;
 
     @Autowired
     FileDinhKemService fileDinhKemService;
@@ -89,6 +89,8 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         data.setTrangThai(Contains.DUTHAO);
         data.setMaDvi(userInfo.getDvql());
         HhDcQdPduyetKhmttHdr created=hhDcQdPduyetKhMttRepository.save(data);
+//        objReq.setIsChange(true);
+//        updateQdPduyet(created, objReq);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_DC_QD_PDUYET_KHMTT_HDR");
         created.setFileDinhKems(fileDinhKems);
         for (HhDcQdPduyetKhmttDxReq listDx :objReq.getHhDcQdPduyetKhmttDxList()){
@@ -112,6 +114,13 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
             }
         }
         return created;
+    }
+
+
+    private void updateQdPduyet(HhDcQdPduyetKhmttHdr dcHdr, HhDcQdPduyetKhmttHdrReq objReq){
+        Optional<HhQdPheduyetKhMttHdr> qdHdr = hhQdPheduyetKhMttHdrRepository.findById(dcHdr.getIdQdGoc());
+        qdHdr.get().setIsChange(objReq.getIsChange());
+        hhQdPheduyetKhMttHdrRepository.save(qdHdr.get());
     }
 
     @Transactional
@@ -198,8 +207,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
                 sldd.setTenDvi(StringUtils.isEmpty(sldd.getMaDvi()) ? null : hashMapDmdv.get(sldd.getMaDvi()));
                 List<HhDcQdPdKhmttSlddDtl> listSlddDtl =hhDcQdPdKhmttSlddDtlRepository.findAllByIdDiaDiem(sldd.getId());
                 for (HhDcQdPdKhmttSlddDtl slddDtl :listSlddDtl){
-                    slddDtl.setTenDvi(StringUtils.isEmpty(slddDtl.getMaDvi())? null:hashMapDmdv.get(slddDtl.getMaDvi()));
-                    slddDtl.setDiaDiemNhap(StringUtils.isEmpty(slddDtl.getMaDiemKho()) ? null : hashMapDmdv.get(slddDtl.getMaDiemKho()));
+                    slddDtl.setTenDiemKho(StringUtils.isEmpty(slddDtl.getMaDiemKho())? null:hashMapDmdv.get(slddDtl.getMaDiemKho()));
                     sldd.setChildren(listSlddDtl);
                 }
             }
@@ -220,6 +228,14 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
             throw new Exception("Chỉ thực hiện xóa bản ghi ở trạng thái bản nháp hoặc từ chối");
         }
         HhDcQdPduyetKhmttHdr data = optional.get();
+        HhDcQdPduyetKhmttHdrReq hhDcQdPduyetKhmttHdrReq = new HhDcQdPduyetKhmttHdrReq();
+        List<HhDcQdPduyetKhmttHdr> listCheckQd = hhDcQdPduyetKhMttRepository.findAllByIdQdGocOrderByIdDesc(data.getIdQdGoc());
+        if(listCheckQd.size() == 1){
+            hhDcQdPduyetKhmttHdrReq.setIsChange(false);
+            updateQdPduyet(data, hhDcQdPduyetKhmttHdrReq);
+        }
+
+
         List<HhDcQdPduyetKhmttDx> dcQdPduyetKhmttDxList =hhDcQdPduyetKhMttDxRepository.findAllByIdDcHdr(data.getId());
         List<Long>  listIdDx=dcQdPduyetKhmttDxList.stream().map(HhDcQdPduyetKhmttDx::getId).collect(Collectors.toList());
         List<HhDcQdPduyetKhmttSldd> listSlDd=hhDcQdPduyetKhmttSlddRepository.findAllByIdDcKhmttIn(listIdDx);
@@ -300,6 +316,8 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         if (!optional.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu");
         }
+        HhDcQdPduyetKhmttHdrReq objReq = new HhDcQdPduyetKhmttHdrReq();
+        objReq.setIsChange(true);
 
         String status= statusReq.getTrangThai()+optional.get().getTrangThai();
         switch (status){
@@ -323,6 +341,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         }
         optional.get().setTrangThai(statusReq.getTrangThai());
         HhDcQdPduyetKhmttHdr created = hhDcQdPduyetKhMttRepository.save(optional.get());
+        updateQdPduyet(created, objReq);
 
         return created;
     }

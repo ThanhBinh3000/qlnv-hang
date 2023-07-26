@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -65,6 +66,12 @@ public class XhXkVtPhieuXuatNhapKho extends BaseEntity implements Serializable {
     // Số báo cáo kết quả kd mẫu
     private String soBcKqkdMau;
     private Long idBcKqkdMau;
+    // Số id biên bản kết thúc nhập kho - cho loaiPhieu = NHAP
+    private String soBbKtNhapKho;
+    private Long idBbKtNhapKho;
+    // Số id qd xuat giam vat tu - loaiPhieu = XUAT
+    private String soQdXuatGiamVt;
+    private Long idQdXuatGiamVt;
 
     @Transient
     private List<FileDinhKem> fileDinhKems;
@@ -85,6 +92,14 @@ public class XhXkVtPhieuXuatNhapKho extends BaseEntity implements Serializable {
     @Transient
     private Map<String, String> mapDmucDvi;
     @Transient
+    private String maCuc;
+    @Transient
+    private String maChiCuc;
+    @Transient
+    private String maDiemKho;
+    @Transient
+    private String maNhaKho;
+    @Transient
     private String tenCuc;
     @Transient
     private String tenChiCuc;
@@ -100,6 +115,16 @@ public class XhXkVtPhieuXuatNhapKho extends BaseEntity implements Serializable {
     private Boolean ketQuaKiemDinh;
     @Transient
     private String tenTrangThaiXhQdGiaoNvXh;
+    @Transient
+    private String soBbLayMau;
+    @Transient
+    private Long idBbLayMau;
+    @Transient
+    private LocalDate ngayKtNhapKho;
+    @Transient
+    private String tenTrangThaiKtNk;
+    @Transient
+    private String trangThaiKtNk;
 
     public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
         this.mapDmucDvi = mapDmucDvi;
@@ -122,6 +147,10 @@ public class XhXkVtPhieuXuatNhapKho extends BaseEntity implements Serializable {
             setTenNhaKho(tenNhaKho);
             setTenNganKho(tenNganKho);
             setTenLoKho(tenLoKho);
+            setMaCuc(maCuc);
+            setMaChiCuc(maChiCuc);
+            setMaDiemKho(maDiemKho);
+            setMaNhaKho(maNhaKho);
         }
     }
 
@@ -133,5 +162,9 @@ public class XhXkVtPhieuXuatNhapKho extends BaseEntity implements Serializable {
         if (!DataUtils.isNullObject(getCloaiVthh())) {
             setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
         }
+    }
+
+    public void setMauBiHuy(Boolean mauBiHuy) {
+        this.mauBiHuy = ObjectUtils.isEmpty(mauBiHuy) ? Boolean.FALSE : mauBiHuy;
     }
 }

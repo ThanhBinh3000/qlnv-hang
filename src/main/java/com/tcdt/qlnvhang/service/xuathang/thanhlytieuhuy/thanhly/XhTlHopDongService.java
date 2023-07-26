@@ -54,7 +54,7 @@ public class XhTlHopDongService extends BaseServiceImpl {
                 f.setTenDvi(objDonVi.get("tenDvi").toString());
             }
             f.setMapVthh(mapVthh);
-            f.setTenTrangThai(TrangThaiAllEnum.getLabelById(f.getTrangThai()));
+            f.setTrangThai(f.getTrangThai());
         });
         return search;
     }
@@ -130,7 +130,7 @@ public class XhTlHopDongService extends BaseServiceImpl {
                 data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
             }
             data.setMapVthh(mapVthh);
-            data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
+            data.setTrangThai(data.getTrangThai());
 
             List<FileDinhKem> fileCanCu = fileDinhKemService.search(data.getId(), Arrays.asList(XhTlHopDongHdr.TABLE_NAME + "_CAN_CU"));
             data.setFileCanCu(fileCanCu);

@@ -17,6 +17,7 @@ public class HhQdPdNhapKhacHdrReq {
     private String maTh;
     private Integer namKhoach;
     private String maDvi;
+    private String dvt;
     private String loaiHinhNx;
     private String kieuNx;
     private String soDxuat;

@@ -214,6 +214,7 @@ public class PathContains {
 
     // Nhập kho vật tư: Hồ sơ kỹ thuật
     public static final String HO_SO_KY_THUAT = "/ho-so-ky-thuat";
+
     public static final String HO_SO_KY_THUAT_NK = "/ho-so-ky-thuat-nk";
 
     // Nhập kho vật tư: Biên bản chuẩn bị kho
@@ -309,6 +310,8 @@ public class PathContains {
     public static final String KH_XUAT_HANG = "/kh-xuat-hang";
 
     public static final String QD_GIAO_NV_XUAT_HANG = "/qd-giao-nv-xuat-hang";
+
+    public static final String QD_XUAT_GIAM_VT = "/qd-xuat-giam-vt";
 
     public static final String QD_GIAO_NV_NHAP_HANG = "/qd-giao-nv-nhap-hang";
 

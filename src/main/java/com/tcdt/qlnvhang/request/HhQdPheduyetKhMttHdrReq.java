@@ -46,6 +46,9 @@ public class HhQdPheduyetKhMttHdrReq {
     private String tchuanCluong;
 
     private Integer lastest ;
+    private Integer isChange ;
+    private Long idSoQdCc;
+    private String soQdCc;
 
     private String phanLoai;
 

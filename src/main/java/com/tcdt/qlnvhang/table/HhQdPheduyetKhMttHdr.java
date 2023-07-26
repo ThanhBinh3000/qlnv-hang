@@ -60,10 +60,13 @@ public class HhQdPheduyetKhMttHdr extends TrangThaiBaseEntity implements Seriali
     private String tchuanCluong;
 
     private Boolean lastest;
+    private Boolean isChange;
 
     private String phanLoai;
 
     private Long idGoc;
+    private Long idSoQdCc;
+    private String soQdCc;
 
     private String ptMuaTrucTiep;
 

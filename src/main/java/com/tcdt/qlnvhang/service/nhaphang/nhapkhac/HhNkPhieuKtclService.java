@@ -9,9 +9,11 @@ import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhNkPhieuKtclSearch;
 import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 public interface HhNkPhieuKtclService {
     Page<HhQdGiaoNvuNhapHangKhacHdr> timKiem(HhNkPhieuKtclSearch req) throws Exception;
+    List<HhQdGiaoNvuNhapHangKhacHdr> dsQdNvuDuocLapPhieuKtcl(HhNkPhieuKtclSearch req) throws Exception;
     HhNkPhieuKtcl timKiemPhieuKtclTheoMaNganLo(HhNkPhieuKtclSearch req) throws Exception;
     HhNkPhieuKtcl themMoi (HhNkPhieuKtclReq objReq) throws Exception;
     HhNkPhieuKtcl capNhat (HhNkPhieuKtclReq objReq) throws Exception;

@@ -1,8 +1,8 @@
-package com.tcdt.qlnvhang.repository.xuathang;
+package com.tcdt.qlnvhang.repository.xuathang.kiemtrachatluong;
 
-import com.tcdt.qlnvhang.request.xuathang.SearchHoSoKyThuatReq;
+import com.tcdt.qlnvhang.request.xuathang.kiemtrachatluong.SearchHoSoKyThuatReq;
 import com.tcdt.qlnvhang.response.xuathang.NhHoSoKyThuatDTO;
-import com.tcdt.qlnvhang.table.xuathang.hosokythuat.XhHoSoKyThuatHdr;
+import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThuatHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +15,7 @@ public interface XhHoSoKyThuatRepository extends JpaRepository<XhHoSoKyThuatHdr,
 
   @Query("SELECT new com.tcdt.qlnvhang.response.xuathang.NhHoSoKyThuatDTO(" +
       "hs.id, hs.idQdGiaoNvNh , hs.soQdGiaoNvNh , hs.soBbLayMau , hs.soHd , hs.maDvi , hs.soHoSoKyThuat , hs.nam , hs.idBbLayMauXuat , hs.kqKiemTra , 'DT' , bb.maDiemKho , bb.maNhaKho , bb.maNganKho , bb.maLoKho, hs.ngayTao,xh.kqKiemTra,xh.soBbKtNgoaiQuan,xh.soBbKtVanHanh,xh.soBbKtHskt) " +
-      "FROM NhHoSoKyThuatNk hs join BienBanLayMau bb on hs.soBbLayMau = bb.soBienBan " +
+      "FROM NhHoSoKyThuat hs join BienBanLayMau bb on hs.soBbLayMau = bb.soBienBan " +
       "left join XhHoSoKyThuatHdr xh on xh.idHsktNh = hs.id AND xh.type = :#{#param.type} WHERE 1=1 " +
       "AND (hs.soBbLayMau = bb.soBienBan)" +
       "AND (:#{#param.dvql} IS NULL OR hs.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
