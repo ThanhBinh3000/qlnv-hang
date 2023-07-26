@@ -69,6 +69,9 @@ public class XhXkVtQdXuatGiamVattuService extends BaseServiceImpl {
                 throw new Exception("Số quyết định đã tồn tại");
             }
         }
+        if(objReq.getXhXkVtPhieuXuatNhapKho().isEmpty()){
+            throw new Exception("Danh sách hàng hóa xuất giảm trống, không thể tạo quyết định.");
+        }
         XhXkVtQdXuatGiamVattu data = new XhXkVtQdXuatGiamVattu();
         BeanUtils.copyProperties(objReq, data);
         XhXkVtQdXuatGiamVattu created = xhXkVtQdXuatGiamVattuRepository.save(data);
@@ -100,6 +103,9 @@ public class XhXkVtQdXuatGiamVattuService extends BaseServiceImpl {
             if (optionalBySoTt.isPresent() && optionalBySoTt.get().getId() != objReq.getId()) {
                 if (!optionalBySoTt.isPresent()) throw new Exception("Số quyết định đã tồn tại!");
             }
+        }
+        if(objReq.getXhXkVtPhieuXuatNhapKho().isEmpty()){
+            throw new Exception("Danh sách hàng hóa xuất giảm trống, không thể tạo quyết định.");
         }
         XhXkVtQdXuatGiamVattu dx = optional.get();
         BeanUtils.copyProperties(objReq, dx);

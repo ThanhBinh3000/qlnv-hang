@@ -70,6 +70,7 @@ public class XhXkVtBckqKiemDinhMauService extends BaseServiceImpl {
         Map<Long, List<XhXkVtPhieuXuatNhapKho>> mapPxk = allByIdBcKqkdMauIn.stream()
                 .collect(groupingBy(XhXkVtPhieuXuatNhapKho::getIdBcKqkdMau));
         search.getContent().forEach(s -> {
+            s.setTenDvi(mapDmucDvi.get(s.getMaDvi()));
             s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
             List<XhXkVtPhieuXuatNhapKho> listByBcId = mapPxk.get(s.getId());
             listByBcId.forEach(item -> {
