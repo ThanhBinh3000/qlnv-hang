@@ -27,10 +27,10 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.XUAT_KHAC + PathContains.KTCL_VT_TRONG_BAO_HANH + PathContains.QD_GIAO_NV_NHAP_HANG)
+@RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.XUAT_KHAC + PathContains.KTCL_VT_TRONG_BAO_HANH + PathContains.QD_GIAO_NV_XUAT_HANG)
 @Slf4j
-@Api(tags = "Xuất hàng DTQG - Xuất khác - Ktcl Vt,Tb trong thời gian bảo hành - Quyết định giao nhiệm vụ xuất hàng.")
-public class XhXkVtBhQdGiaonvXhController {
+@Api(tags = "Xuất hàng DTQG - Xuất khác - Ktcl Vt,Tb trong thời gian bảo hành - Quyết định giao nhiệm vụ nhập hàng.")
+public class XhXkVtBhQdGiaonvNhController {
   @Autowired
   XhXkVtBhQdGiaonvXnService xhXkVtBhQdGiaonvXnService;
 

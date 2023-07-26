@@ -6,7 +6,7 @@ import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhPhieuXuatNhapKhoRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhQdGiaonvXhRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhQdGiaonvXnRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -15,7 +15,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuXuatNhapKho;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhQdGiaonvXhHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhQdGiaonvXnHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
@@ -41,7 +41,7 @@ public class XhXkVtBhPhieuXuatNhapKhoService extends BaseServiceImpl {
     private XhXkVtBhPhieuXuatNhapKhoRepository xhXkVtBhPhieuXuatNhapKhoRepository;
 
     @Autowired
-    private XhXkVtBhQdGiaonvXhRepository xhXkVtBhQdGiaonvXhRepository;
+    private XhXkVtBhQdGiaonvXnRepository xhXkVtBhQdGiaonvXnRepository;
 
     @Autowired
     private UserInfoRepository userInfoRepository;
@@ -79,7 +79,7 @@ public class XhXkVtBhPhieuXuatNhapKhoService extends BaseServiceImpl {
         XhXkVtBhPhieuXuatNhapKho created = xhXkVtBhPhieuXuatNhapKhoRepository.save(data);
         // cập nhật trạng thái đang thực hiện cho QD giao nv nhập hàng
         if (data.getLoaiPhieu().equals("XUAT")) {
-            Optional<XhXkVtBhQdGiaonvXhHdr> qdGiaoNvXh = xhXkVtBhQdGiaonvXhRepository.findById(created.getIdCanCu());
+            Optional<XhXkVtBhQdGiaonvXnHdr> qdGiaoNvXh = xhXkVtBhQdGiaonvXnRepository.findById(created.getIdCanCu());
             if (qdGiaoNvXh.isPresent()) {
                 qdGiaoNvXh.get().setTrangThaiXh(TrangThaiAllEnum.DANG_THUC_HIEN.getId());
             }
@@ -141,7 +141,7 @@ public class XhXkVtBhPhieuXuatNhapKhoService extends BaseServiceImpl {
         XhXkVtBhPhieuXuatNhapKho data = optional.get();
         //Update trạng thái chưa thực hiện xuất hàng cho qd giao nv xuất hàng
         if (data.getLoaiPhieu().equals("XUAT")) {
-            Optional<XhXkVtBhQdGiaonvXhHdr> qdGiaoNv = xhXkVtBhQdGiaonvXhRepository.findById(data.getIdCanCu());
+            Optional<XhXkVtBhQdGiaonvXnHdr> qdGiaoNv = xhXkVtBhQdGiaonvXnRepository.findById(data.getIdCanCu());
             if (qdGiaoNv.isPresent()) {
                 qdGiaoNv.get().setTrangThaiXh(TrangThaiAllEnum.CHUA_THUC_HIEN.getId());
             }
@@ -157,12 +157,12 @@ public class XhXkVtBhPhieuXuatNhapKhoService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         List<Long> idsQdGiaoNv = list.stream().map(XhXkVtBhPhieuXuatNhapKho::getIdCanCu).collect(Collectors.toList());
-        List<XhXkVtBhQdGiaonvXhHdr> listQdGiaoNv = xhXkVtBhQdGiaonvXhRepository.findByIdIn(idsQdGiaoNv);
+        List<XhXkVtBhQdGiaonvXnHdr> listQdGiaoNv = xhXkVtBhQdGiaonvXnRepository.findByIdIn(idsQdGiaoNv);
         if (!listQdGiaoNv.isEmpty()) {
             listQdGiaoNv.forEach(item -> {
                 item.setTrangThaiXh(TrangThaiAllEnum.CHUA_THUC_HIEN.getId());
             });
-            xhXkVtBhQdGiaonvXhRepository.saveAll(listQdGiaoNv);
+            xhXkVtBhQdGiaonvXnRepository.saveAll(listQdGiaoNv);
         }
         fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhXkVtBhPhieuXuatNhapKho.TABLE_NAME));
         xhXkVtBhPhieuXuatNhapKhoRepository.deleteAll(list);

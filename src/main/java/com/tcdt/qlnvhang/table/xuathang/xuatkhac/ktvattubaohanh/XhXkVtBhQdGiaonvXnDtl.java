@@ -13,14 +13,14 @@ import java.util.Map;
 @Getter
 @Setter
 @Entity
-@Table(name = XhXkVtBhQdGiaonvXhDtl.TABLE_NAME)
-public class XhXkVtBhQdGiaonvXhDtl {
+@Table(name = XhXkVtBhQdGiaonvXnDtl.TABLE_NAME)
+public class XhXkVtBhQdGiaonvXnDtl {
 
-  public static final String TABLE_NAME = "XH_XK_VT_BH_QD_GNV_XH_DTL";
+  public static final String TABLE_NAME = "XH_XK_VT_BH_QD_GNV_XN_DTL";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXkVtBhQdGiaonvXhDtl.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhXkVtBhQdGiaonvXhDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhXkVtBhQdGiaonvXhDtl.TABLE_NAME + "_SEQ")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXkVtBhQdGiaonvXnDtl.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = XhXkVtBhQdGiaonvXnDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhXkVtBhQdGiaonvXnDtl.TABLE_NAME + "_SEQ")
   Long id;
   String maDiaDiem;
   String loaiVthh;
@@ -36,7 +36,7 @@ public class XhXkVtBhQdGiaonvXhDtl {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "idHdr")
   @JsonIgnore
-  private XhXkVtBhQdGiaonvXhHdr qdGiaonvXhHdr;
+  private XhXkVtBhQdGiaonvXnHdr qdGiaonvXhHdr;
 
   @JsonIgnore
   @Transient

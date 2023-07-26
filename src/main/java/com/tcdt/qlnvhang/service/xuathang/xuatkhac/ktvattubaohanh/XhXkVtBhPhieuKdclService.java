@@ -6,7 +6,7 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhPhieuKdclRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhPhieuXuatNhapKhoRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhQdGiaonvXhRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhQdGiaonvXnRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -15,8 +15,8 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuKdclHdr;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhQdGiaonvXhDtl;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhQdGiaonvXhHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhQdGiaonvXnDtl;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhQdGiaonvXnHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -43,7 +43,7 @@ public class XhXkVtBhPhieuKdclService extends BaseServiceImpl {
   private XhXkVtBhPhieuKdclRepository xhXkVtBhPhieuKdclRepository;
 
   @Autowired
-  private XhXkVtBhQdGiaonvXhRepository xhXkVtBhQdGiaonvXhRepository;
+  private XhXkVtBhQdGiaonvXnRepository xhXkVtBhQdGiaonvXnRepository;
 
 
   @Autowired
@@ -229,11 +229,11 @@ public class XhXkVtBhPhieuKdclService extends BaseServiceImpl {
 
   public void updateQdGiaoNvXh(XhXkVtBhPhieuKdclHdr phieuKdcl, boolean xoa) {
     if (!DataUtils.isNullObject(phieuKdcl.getIdQdGiaoNvXh())) {
-      Optional<XhXkVtBhQdGiaonvXhHdr> qdGiaonvXhHdr = xhXkVtBhQdGiaonvXhRepository.findById(phieuKdcl.getIdQdGiaoNvXh());
+      Optional<XhXkVtBhQdGiaonvXnHdr> qdGiaonvXhHdr = xhXkVtBhQdGiaonvXnRepository.findById(phieuKdcl.getIdQdGiaoNvXh());
       if (qdGiaonvXhHdr.isPresent()) {
-        XhXkVtBhQdGiaonvXhHdr item = qdGiaonvXhHdr.get();
-        List<XhXkVtBhQdGiaonvXhDtl> qdGiaonvXhDtl = item.getQdGiaonvXhDtl();
-        for (XhXkVtBhQdGiaonvXhDtl f : qdGiaonvXhDtl) {
+        XhXkVtBhQdGiaonvXnHdr item = qdGiaonvXhHdr.get();
+        List<XhXkVtBhQdGiaonvXnDtl> qdGiaonvXhDtl = item.getQdGiaonvXhDtl();
+        for (XhXkVtBhQdGiaonvXnDtl f : qdGiaonvXhDtl) {
           if (f.getMaDiaDiem().equals(phieuKdcl.getMaDiaDiem())) {
             if (xoa) {
               f.setIdPhieuKdcl(null);
@@ -249,7 +249,7 @@ public class XhXkVtBhPhieuKdclService extends BaseServiceImpl {
 
           }
         }
-        xhXkVtBhQdGiaonvXhRepository.save(item);
+        xhXkVtBhQdGiaonvXnRepository.save(item);
       }
     }
   }

@@ -6,7 +6,7 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhBbLayMauRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhPhieuXuatNhapKhoRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhQdGiaonvXhRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhQdGiaonvXnRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -42,7 +42,7 @@ public class XhXkVtBhBbLayMauService extends BaseServiceImpl {
   private XhXkVtBhBbLayMauRepository xhXkVtBhBbLayMauRepository;
 
   @Autowired
-  private XhXkVtBhQdGiaonvXhRepository xhXkVtBhQdGiaonvXhRepository;
+  private XhXkVtBhQdGiaonvXnRepository xhXkVtBhQdGiaonvXnRepository;
 
 
   @Autowired

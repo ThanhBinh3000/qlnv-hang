@@ -14,14 +14,14 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = XhXkVtBhQdGiaonvXhHdr.TABLE_NAME)
-public class XhXkVtBhQdGiaonvXhHdr extends BaseEntity implements Serializable {
+@Table(name = XhXkVtBhQdGiaonvXnHdr.TABLE_NAME)
+public class XhXkVtBhQdGiaonvXnHdr extends BaseEntity implements Serializable {
 
-  public static final String TABLE_NAME = "XH_XK_VT_BH_QD_GNV_XH_HDR";
+  public static final String TABLE_NAME = "XH_XK_VT_BH_QD_GNV_XN_HDR";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXkVtBhQdGiaonvXhHdr.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhXkVtBhQdGiaonvXhHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhXkVtBhQdGiaonvXhHdr.TABLE_NAME + "_SEQ")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXkVtBhQdGiaonvXnHdr.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = XhXkVtBhQdGiaonvXnHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhXkVtBhQdGiaonvXnHdr.TABLE_NAME + "_SEQ")
   private Long id;
   private Integer nam;
   private String maDvi;
@@ -43,6 +43,11 @@ public class XhXkVtBhQdGiaonvXhHdr extends BaseEntity implements Serializable {
   private String loaiCanCu;
   private String soBaoCaoKdm;
   private Long idBaoCaoKdm;
+  private String loaiXn;
+  private String soPhieuNk;
+  private Long idPhieuNk;
+  private String soBbKtNk;
+  private Long idBbKtNk;
 
 
   @Transient
@@ -59,7 +64,7 @@ public class XhXkVtBhQdGiaonvXhHdr extends BaseEntity implements Serializable {
   @Transient
   private List<FileDinhKem> fileDinhKems;
   @OneToMany(mappedBy = "qdGiaonvXhHdr", cascade = CascadeType.ALL)
-  private List<XhXkVtBhQdGiaonvXhDtl> qdGiaonvXhDtl = new ArrayList<>();
+  private List<XhXkVtBhQdGiaonvXnDtl> qdGiaonvXhDtl = new ArrayList<>();
 
 
 }
