@@ -119,6 +119,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 	}
 
 	@Override
+	@Transactional
 	public HhQdPduyetKqlcntHdr update(HhQdPduyetKqlcntHdrReq objReq) throws Exception {
 		if (StringUtils.isEmpty(objReq.getId())){
 			throw new Exception("Sửa thất bại, không tìm thấy dữ liệu");
@@ -156,6 +157,13 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			fileDinhKemService.delete(dataDB.getId(), Lists.newArrayList(HhQdPduyetKqlcntHdr.TABLE_NAME));
 			if (!DataUtils.isNullObject(objReq.getFileDinhKems())) {
 				fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), dataDB.getId(), HhQdPduyetKqlcntHdr.TABLE_NAME);
+			}
+			hhQdPduyetKqlcntDtlRepository.deleteAllByIdQdPdHdr(dataDB.getId());
+			for (HhQdPduyetKqlcntDtlReq qdPdKq : objReq.getDetailList()){
+				HhQdPduyetKqlcntDtl qdPdKqDtl = ObjectMapperUtils.map(qdPdKq, HhQdPduyetKqlcntDtl.class);
+				qdPdKqDtl.setId(null);
+				qdPdKqDtl.setIdQdPdHdr(dataDB.getId());
+				hhQdPduyetKqlcntDtlRepository.save(qdPdKqDtl);
 			}
 		} else{
 			// Add danh sach file dinh kem o Master
