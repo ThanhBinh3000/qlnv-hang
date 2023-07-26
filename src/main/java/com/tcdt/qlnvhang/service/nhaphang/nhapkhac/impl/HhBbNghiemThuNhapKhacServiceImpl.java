@@ -63,7 +63,11 @@ public class HhBbNghiemThuNhapKhacServiceImpl extends BaseServiceImpl implements
         }
         Pageable pageable= PageRequest.of(req.getPaggingReq().getPage(),
                 req.getPaggingReq().getLimit(), Sort.by("id").descending());
-        req.setMaDvi(userInfo.getDvql());
+        if (userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            req.setMaDviChiCuc(userInfo.getDvql());
+        } else {
+            req.setMaDvi(userInfo.getDvql());
+        }
         req.setTuNgayKTStr(convertFullDateToString(req.getTuNgayKT()));
         req.setDenNgayKTStr(convertFullDateToString(req.getDenNgayKT()));
         req.setTuNgayLPStr(convertFullDateToString(req.getTuNgayLP()));
@@ -272,6 +276,19 @@ public class HhBbNghiemThuNhapKhacServiceImpl extends BaseServiceImpl implements
     @Override
     public List<HhBbNghiemThuNhapKhac> timKiemBbtheoMaNganLo(HhBbNghiemThuNhapKhacSearch objReq) throws Exception {
         return hhBbNghiemThuNhapKhacRepository.findByIdQdGiaoNvNhAndMaLoKhoAndMaNganKhoAndTrangThai(objReq.getIdQdGiaoNvnh(), objReq.getMaLoKho(), objReq.getMaNganKho(), Contains.DADUYET_LDCC);
+    }
+
+    @Override
+    public List<HhQdGiaoNvuNhapHangKhacHdr> dsQdNvuDuocLapBbNtBqLd(HhBbNghiemThuNhapKhacSearch objReq) throws Exception {
+        List<HhQdGiaoNvuNhapHangKhacHdr> data = hhQdGiaoNvNhapKhacHdrRepository.dsQdNvuDuocLapBbNtBqLd(objReq);
+        Map<String, String> mapVthh = getListDanhMucHangHoa();
+//        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        data.forEach(f -> {
+            f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+            f.setTenLoaiVthh(mapVthh.get(f.getLoaiVthh()));
+//            f.setTenDvi(mapDmucDvi.get(f.getMaDviDxuat()));
+        });
+        return data;
     }
 
     private void luuFile(HhBbNghiemThuNhapKhacReq objReq, HhBbNghiemThuNhapKhac created) {
