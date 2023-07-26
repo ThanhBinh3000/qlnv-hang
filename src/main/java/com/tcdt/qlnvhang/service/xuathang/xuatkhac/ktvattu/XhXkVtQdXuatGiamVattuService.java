@@ -132,7 +132,7 @@ public class XhXkVtQdXuatGiamVattuService extends BaseServiceImpl {
         if (!allByIdQdXuatGiamVt.isEmpty()) {
             allByIdQdXuatGiamVt.stream().forEach(item -> {
                 item.setMapVthh(mapVthh);
-                item.setMapVthh(mapDmucDvi);
+                item.setMapDmucDvi(mapDmucDvi);
             });
         }
         model.setXhXkVtPhieuXuatNhapKho(allByIdQdXuatGiamVt);
