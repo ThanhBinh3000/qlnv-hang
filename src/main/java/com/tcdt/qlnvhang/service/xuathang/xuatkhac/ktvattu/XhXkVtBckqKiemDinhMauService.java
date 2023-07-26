@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.xuathang.xuatkhac.ktvattu;
 
+import com.tcdt.qlnvhang.entities.bandaugia.tonghopdexuatkhbdg.BhTongHopDeXuatCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
@@ -33,6 +34,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @Service
 public class XhXkVtBckqKiemDinhMauService extends BaseServiceImpl {
@@ -58,10 +63,20 @@ public class XhXkVtBckqKiemDinhMauService extends BaseServiceImpl {
         req.setDvql(ObjectUtils.isEmpty(req.getDvql()) ? currentUser.getDvql() : req.getDvql());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhXkVtBckqKiemDinhMau> search = xhXkVtBckqKiemDinhMauRepository.search(req, pageable);
-//        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-//        Map<String, String> mapVthh = getListDanhMucHangHoa();
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        Map<String, String> mapVthh = getListDanhMucHangHoa();
+        List<Long> idsBcKqKdMaus = search.getContent().stream().map(XhXkVtBckqKiemDinhMau::getId).collect(Collectors.toList());
+        List<XhXkVtPhieuXuatNhapKho> allByIdBcKqkdMauIn = xhXkVtPhieuXuatNhapKhoRepository.findAllByIdBcKqkdMauIn(idsBcKqKdMaus);
+        Map<Long, List<XhXkVtPhieuXuatNhapKho>> mapPxk = allByIdBcKqkdMauIn.stream()
+                .collect(groupingBy(XhXkVtPhieuXuatNhapKho::getIdBcKqkdMau));
         search.getContent().forEach(s -> {
             s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
+            List<XhXkVtPhieuXuatNhapKho> listByBcId = mapPxk.get(s.getId());
+            listByBcId.forEach(item -> {
+                item.setMapDmucDvi(mapDmucDvi);
+                item.setMapVthh(mapVthh);
+            });
+            s.setXhXkVtPhieuXuatNhapKho(listByBcId);
         });
         return search;
     }
