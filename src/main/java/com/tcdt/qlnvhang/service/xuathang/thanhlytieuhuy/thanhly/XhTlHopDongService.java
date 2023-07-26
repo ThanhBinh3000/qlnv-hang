@@ -1,9 +1,10 @@
 package com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly;
 
 import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlHopDongRepository;
+import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhQdPdRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlHopDongHdrReq;
@@ -11,6 +12,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlHopDongHdr;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhPdKqHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import org.springframework.beans.BeanUtils;
@@ -35,6 +37,9 @@ public class XhTlHopDongService extends BaseServiceImpl {
     private XhTlHopDongRepository xhTlHopDongRepository;
 
     @Autowired
+    private XhTlQuyetDinhQdPdRepository xhTlQuyetDinhQdPdRepository;
+
+    @Autowired
     private FileDinhKemService fileDinhKemService;
 
     public Page<XhTlHopDongHdr> searchPage(CustomUserDetails currentUser, XhTlHopDongHdrReq req) throws Exception {
@@ -46,13 +51,10 @@ public class XhTlHopDongService extends BaseServiceImpl {
         }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhTlHopDongHdr> search = xhTlHopDongRepository.search(req, pageable);
-        Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         search.getContent().forEach(f -> {
-            if (mapDmucDvi.containsKey((f.getMaDvi()))) {
-                Map<String, Object> objDonVi = mapDmucDvi.get(f.getMaDvi());
-                f.setTenDvi(objDonVi.get("tenDvi").toString());
-            }
+            f.setMapDmucDvi(mapDmucDvi);
             f.setMapVthh(mapVthh);
             f.setTrangThai(f.getTrangThai());
         });
@@ -64,13 +66,23 @@ public class XhTlHopDongService extends BaseServiceImpl {
         if (currentUser == null) throw new Exception("Bad request.");
         if (!DataUtils.isNullObject(req.getSoHd())) {
             Optional<XhTlHopDongHdr> optional = xhTlHopDongRepository.findBySoHd(req.getSoHd());
-            if (optional.isPresent()) throw new Exception("Số hợp đồng đã tồn tại");
+            if (optional.isPresent()) throw new Exception("Hợp đồng số " + req.getSoHd() + " đã tồn tại");
+        }
+        if (!DataUtils.isNullObject(req.getSoQdKqTl())) {
+            Optional<XhTlQuyetDinhPdKqHdr> checkSoQdKq = xhTlQuyetDinhQdPdRepository.findFirstBySoQd(req.getSoQdKqTl());
+            if (!checkSoQdKq.isPresent()) {
+                throw new Exception("Số quyết định phê duyệt kết quả lựa chọn nhà thầu " + req.getSoQdKqTl() + " không tồn tại");
+            } else {
+                checkSoQdKq.get().setTrangThaiHd(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
+            }
         }
         XhTlHopDongHdr data = new XhTlHopDongHdr();
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(currentUser.getUser().getDepartment());
         data.setTrangThai(Contains.DU_THAO);
+        data.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
         data.getHopDongDtl().forEach(f -> {
+            f.setId(null);
             f.setHopDongHdr(data);
         });
         XhTlHopDongHdr created = xhTlHopDongRepository.save(data);
@@ -96,7 +108,7 @@ public class XhTlHopDongService extends BaseServiceImpl {
         }
 
         XhTlHopDongHdr data = optional.get();
-        BeanUtils.copyProperties(req, data, "id", "maDvi");
+        BeanUtils.copyProperties(req, data, "id", "maDvi", "trangThaiXh");
         data.getHopDongDtl().forEach(f -> {
             f.setHopDongHdr(data);
         });
@@ -123,20 +135,22 @@ public class XhTlHopDongService extends BaseServiceImpl {
 
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
-
+        Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
+        Map<String, String> mapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
         List<XhTlHopDongHdr> allById = xhTlHopDongRepository.findAllById(ids);
         allById.forEach(data -> {
-            if (mapDmucDvi.get((data.getMaDvi())) != null) {
-                data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
-            }
+            data.setMapDmucDvi(mapDmucDvi);
             data.setMapVthh(mapVthh);
             data.setTrangThai(data.getTrangThai());
-
+            data.setTenLoaiHinhNx(StringUtils.isEmpty(data.getLoaiHinhNx()) ? null : mapLoaiHinhNx.get(data.getLoaiHinhNx()));
+            data.setTenKieuNx(StringUtils.isEmpty(data.getKieuNx()) ? null : mapKieuNx.get(data.getKieuNx()));
             List<FileDinhKem> fileCanCu = fileDinhKemService.search(data.getId(), Arrays.asList(XhTlHopDongHdr.TABLE_NAME + "_CAN_CU"));
             data.setFileCanCu(fileCanCu);
             List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhTlHopDongHdr.TABLE_NAME));
             data.setFileDinhKem(fileDinhKem);
-
+            if (!DataUtils.isNullObject(data.getMaDviTsan())) {
+                data.setListMaDviTsan(Arrays.asList(data.getMaDviTsan().split(",")));
+            }
             data.getHopDongDtl().forEach(f -> {
                 f.setMapDmucDvi(mapDmucDvi);
             });
@@ -183,5 +197,4 @@ public class XhTlHopDongService extends BaseServiceImpl {
         XhTlHopDongHdr created = xhTlHopDongRepository.save(optional.get());
         return created;
     }
-
 }

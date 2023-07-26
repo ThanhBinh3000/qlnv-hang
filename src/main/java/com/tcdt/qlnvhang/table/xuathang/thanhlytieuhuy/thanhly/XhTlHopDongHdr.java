@@ -54,6 +54,7 @@ public class XhTlHopDongHdr extends BaseEntity implements Serializable {
     private String stkBenBan;
     private String moTaiBenBan;
     private String thongTinUyQuyen;
+    private String tenDviBenMua;
     private String diaChiBenMua;
     private String mstBenMua;
     private String daiDienBenMua;
@@ -70,6 +71,7 @@ public class XhTlHopDongHdr extends BaseEntity implements Serializable {
     private BigDecimal thanhTien;
     private String ghiChu;
     private String trangThai;
+    private String trangThaiXh;
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
     private LocalDate ngayGduyet;
@@ -83,6 +85,16 @@ public class XhTlHopDongHdr extends BaseEntity implements Serializable {
     private String tenLoaiVthh;
     @Transient
     private String tenCloaiVthh;
+    @Transient
+    private String tenLoaiHinhNx;
+    @Transient
+    private String tenKieuNx;
+    @Transient
+    private String tenTrangThai;
+    @Transient
+    private String tenTrangThaiXh;
+    @Transient
+    private List<String> listMaDviTsan = new ArrayList<>();
 
     public void setMapVthh(Map<String, String> mapVthh) {
         this.mapVthh = mapVthh;
@@ -94,12 +106,25 @@ public class XhTlHopDongHdr extends BaseEntity implements Serializable {
         }
     }
 
+    @JsonIgnore
     @Transient
-    private String tenTrangThai;
+    private Map<String, String> mapDmucDvi;
+
+    public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+        this.mapDmucDvi = mapDmucDvi;
+        if (!DataUtils.isNullObject(getMaDvi())) {
+            setTenDvi(mapDmucDvi.containsKey(getMaDvi()) ? mapDmucDvi.get(getMaDvi()) : null);
+        }
+    }
 
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
         this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+    }
+
+    public void setTrangThaiXh(String trangThaiXh) {
+        this.trangThaiXh = trangThaiXh;
+        this.tenTrangThaiXh = TrangThaiAllEnum.getLabelById(this.trangThaiXh);
     }
 
     @Transient
