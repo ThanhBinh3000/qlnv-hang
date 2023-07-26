@@ -46,6 +46,8 @@ public interface XhXkVtPhieuXuatNhapKhoRepository extends JpaRepository<XhXkVtPh
 
     List<XhXkVtPhieuXuatNhapKho> findAllByIdBcKqkdMau(Long idBcKqKdMau);
 
+    List<XhXkVtPhieuXuatNhapKho> findAllByIdBcKqkdMauIn(List<Long> idList);
+
     List<XhXkVtPhieuXuatNhapKho> findAllByIdQdXuatGiamVt(Long idQdXuatGiamVt);
 
 
