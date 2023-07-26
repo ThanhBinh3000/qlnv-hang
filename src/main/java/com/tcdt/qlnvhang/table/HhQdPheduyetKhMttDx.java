@@ -42,6 +42,9 @@ public class HhQdPheduyetKhMttDx implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayPduyet;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayTao;
+
     private String trichYeu;
 
     private String tenDuAn;

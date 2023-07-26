@@ -157,6 +157,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
             BeanUtils.copyProperties(dxReq, dx, "id");
             dx.setIdQdHdr(idQdHdr);
             dx.setTrangThai(Contains.CHUACAPNHAT);
+            dx.setNgayTao(new Date());
             hhQdPheduyetKhMttDxRepository.save(dx);
             hhQdPheduyetKhMttSLDDRepository.deleteByIdQdDtl(dxReq.getId());
             for (HhQdPheduyetKhMttSLDDReq slddReq : dxReq.getChildren()) {
@@ -518,7 +519,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         hdr.setTenLoaiVthh(hashMapVthh.get(hdr.getLoaiVthh()));
         hdr.setTenCloaiVthh(hashMapVthh.get(hdr.getCloaiVthh()));
         dtl.setHhQdPheduyetKhMttHdr(hdr);
-        if (hdr.getIsChange()) {
+        if (hdr.getIsChange() != null) {
             dtl.setChildren2(detailDc(hdr));
         }else{
             List<HhQdPheduyetKhMttSLDD> byIdSldd = hhQdPheduyetKhMttSLDDRepository.findAllByIdQdDtl(dtl.getId());
