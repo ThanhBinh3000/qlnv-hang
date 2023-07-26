@@ -31,4 +31,6 @@ public interface XhTlHopDongRepository extends JpaRepository<XhTlHopDongHdr, Lon
     List<XhTlHopDongHdr> findByIdIn(List<Long> ids);
 
     List<XhTlHopDongHdr> findAllByIdIn(List<Long> listId);
+
+    List<XhTlHopDongHdr> findAllByIdQdKqTl(Long idQdKqTl);
 }

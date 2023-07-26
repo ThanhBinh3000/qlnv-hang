@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlToChucRepository;
@@ -22,7 +21,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
 import java.util.Arrays;
@@ -54,7 +52,7 @@ public class XhTlToChucService extends BaseServiceImpl {
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         search.getContent().forEach(f -> {
-            f.getToChucDtl().forEach(s ->{
+            f.getToChucDtl().forEach(s -> {
                 s.setMapDmucDvi(mapDmucDvi);
                 s.setMapVthh(mapVthh);
             });
@@ -120,14 +118,14 @@ public class XhTlToChucService extends BaseServiceImpl {
         BeanUtils.copyProperties(req, data, "id", "maDvi");
         data.getToChucDtl().forEach(f -> {
             f.setToChucHdr(data);
-            if (req.getKetQua().equals(0)){
+            if (req.getKetQua().equals(0)) {
                 f.setGiaKhoiDiem(null);
                 f.setDonGiaCaoNhat(null);
                 f.setSoLanTraGia(null);
                 f.setToChucCaNhan(null);
             }
         });
-        if (req.getKetQua().equals(1)){
+        if (req.getKetQua().equals(1)) {
             data.getToChucNlq().forEach(f -> {
                 f.setToChucHdr(data);
             });

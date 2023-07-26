@@ -42,6 +42,7 @@ public class XhTlHopDongHdrReq extends BaseRequest {
     private String stkBenBan;
     private String moTaiBenBan;
     private String thongTinUyQuyen;
+    private String tenDviBenMua;
     private String diaChiBenMua;
     private String mstBenMua;
     private String daiDienBenMua;
@@ -58,6 +59,7 @@ public class XhTlHopDongHdrReq extends BaseRequest {
     private BigDecimal thanhTien;
     private String ghiChu;
     private String trangThai;
+    private String trangThaiXh;
     private List<FileDinhKemReq> fileCanCu = new ArrayList<>();
     private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();
     private List<XhTlHopDongDtl> hopDongDtl = new ArrayList<>();

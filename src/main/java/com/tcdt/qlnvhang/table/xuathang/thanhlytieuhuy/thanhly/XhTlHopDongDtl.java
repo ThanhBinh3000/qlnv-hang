@@ -21,11 +21,13 @@ public class XhTlHopDongDtl implements Serializable {
     @SequenceGenerator(sequenceName = XhTlHopDongDtl.TABLE_NAME
             + "_SEQ", allocationSize = 1, name = XhTlHopDongDtl.TABLE_NAME + "_SEQ")
     private Long id;
+    private String diaDiemXuat;
     private String maDiaDiem;
     private BigDecimal slDauGia;
     private String maDviTsan;
-    private BigDecimal donGiaKhongVat;
+    private BigDecimal giaTlKhongVat;
     private BigDecimal thanhTien;
+    private BigDecimal slDauGiaChiCuc;
     @JsonIgnore
     @Transient
     private Map<String, String> mapDmucDvi;
