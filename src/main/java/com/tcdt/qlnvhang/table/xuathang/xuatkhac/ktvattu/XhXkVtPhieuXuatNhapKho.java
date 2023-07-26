@@ -92,6 +92,14 @@ public class XhXkVtPhieuXuatNhapKho extends BaseEntity implements Serializable {
     @Transient
     private Map<String, String> mapDmucDvi;
     @Transient
+    private String maCuc;
+    @Transient
+    private String maChiCuc;
+    @Transient
+    private String maDiemKho;
+    @Transient
+    private String maNhaKho;
+    @Transient
     private String tenCuc;
     @Transient
     private String tenChiCuc;
@@ -139,6 +147,10 @@ public class XhXkVtPhieuXuatNhapKho extends BaseEntity implements Serializable {
             setTenNhaKho(tenNhaKho);
             setTenNganKho(tenNganKho);
             setTenLoKho(tenLoKho);
+            setMaCuc(maCuc);
+            setMaChiCuc(maChiCuc);
+            setMaDiemKho(maDiemKho);
+            setMaNhaKho(maNhaKho);
         }
     }
 
