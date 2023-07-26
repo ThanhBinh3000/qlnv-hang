@@ -179,4 +179,22 @@ public class HhBbNghiemThuNhapKhacController {
         }
         return ResponseEntity.ok(resp);
     }
+
+    @ApiOperation(value = "Tra cứu Ds Qd giao nhiệm vụ được lập BBNTBQLD", response = List.class)
+    @PostMapping(value = "/lap-bb-ntbq-ld", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> dsQdNvuDuocLapBbNtBqLd(@Valid HttpServletRequest request,
+                                                              @RequestBody HhBbNghiemThuNhapKhacSearch objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.dsQdNvuDuocLapBbNtBqLd(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu Ds Qd giao nhiệm vụ được lập BBNTBQLD trace: {?}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
 }
