@@ -69,6 +69,9 @@ public class XhXkVtPhieuXuatNhapKho extends BaseEntity implements Serializable {
     // Số id biên bản kết thúc nhập kho - cho loaiPhieu = NHAP
     private String soBbKtNhapKho;
     private Long idBbKtNhapKho;
+    // Số id qd xuat giam vat tu - loaiPhieu = XUAT
+    private String soQdXuatGiamVt;
+    private Long idQdXuatGiamVt;
 
     @Transient
     private List<FileDinhKem> fileDinhKems;
@@ -88,6 +91,14 @@ public class XhXkVtPhieuXuatNhapKho extends BaseEntity implements Serializable {
     @JsonIgnore
     @Transient
     private Map<String, String> mapDmucDvi;
+    @Transient
+    private String maCuc;
+    @Transient
+    private String maChiCuc;
+    @Transient
+    private String maDiemKho;
+    @Transient
+    private String maNhaKho;
     @Transient
     private String tenCuc;
     @Transient
@@ -136,6 +147,10 @@ public class XhXkVtPhieuXuatNhapKho extends BaseEntity implements Serializable {
             setTenNhaKho(tenNhaKho);
             setTenNganKho(tenNganKho);
             setTenLoKho(tenLoKho);
+            setMaCuc(maCuc);
+            setMaChiCuc(maChiCuc);
+            setMaDiemKho(maDiemKho);
+            setMaNhaKho(maNhaKho);
         }
     }
 

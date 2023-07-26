@@ -180,4 +180,22 @@ public class HhNkPhieuKtclController {
         }
         return ResponseEntity.ok(resp);
     }
+
+    @ApiOperation(value = "Tra cứu Ds Qd giao nhiệm vụ được lập phiếu KTCL", response = List.class)
+    @PostMapping(value = "/lap-phieu-ktcl", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> dsQdNvuDuocLapBbNtBqLd(@Valid HttpServletRequest request,
+                                                               @RequestBody HhNkPhieuKtclSearch objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.dsQdNvuDuocLapPhieuKtcl(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu Ds Qd giao nhiệm vụ được lập BBNTBQLD trace: {?}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
 }

@@ -46,6 +46,10 @@ public interface XhXkVtPhieuXuatNhapKhoRepository extends JpaRepository<XhXkVtPh
 
     List<XhXkVtPhieuXuatNhapKho> findAllByIdBcKqkdMau(Long idBcKqKdMau);
 
+    List<XhXkVtPhieuXuatNhapKho> findAllByIdBcKqkdMauIn(List<Long> idList);
+
+    List<XhXkVtPhieuXuatNhapKho> findAllByIdQdXuatGiamVt(Long idQdXuatGiamVt);
+
 
     @Query("SELECT c FROM XhXkVtPhieuXuatNhapKho c, XhXkVtBbKtNhapKho b WHERE 1=1 " +
             "AND (c.idBbKtNhapKho = b.id) " +
