@@ -155,9 +155,14 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
         if(Objects.isNull(hdr.getIdBangKeCanHang())){
             throw new Exception("Phiếu xuất kho đang chưa khởi tạo bảng kê xuất vật tư. Vui lòng tạo bảng kê xuất vật tư");
         } else {
-            ScBangKeNhapVtHdr bk = scBangKeNhapVtHdrRepository.findById(hdr.getIdBangKeCanHang()).get();
-            if(!bk.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())){
-                throw new Exception("Số bảng kê " +bk.getSoBangKe()+" chưa đc phê duyệt. Vui lòng phê duyệt bảng kê");
+            Optional<ScBangKeXuatVatTuHdr> bkOp = scBangKeXuatVatTuHdrRepository.findById(hdr.getIdBangKeCanHang());
+            if(bkOp.isPresent()){
+                ScBangKeXuatVatTuHdr bk = bkOp.get();
+                if(!bk.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())){
+                    throw new Exception("Số bảng kê " +bk.getSoBangKe()+" chưa đc phê duyệt. Vui lòng phê duyệt bảng kê");
+                }
+            }else{
+                throw new Exception("Phiếu xuất kho không tìm thấy bảng kê xuất vật tư. Vui lòng tạo bảng kê xuất vật tư");
             }
         }
 

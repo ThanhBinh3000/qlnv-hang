@@ -31,6 +31,7 @@ public class XhXkVtQdGiaonvXhDtl {
     String cloaiVthh;
     BigDecimal slLayMau;
     BigDecimal slTonKho;
+    BigDecimal slXuatGiam;
     String maDviTsan;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -109,5 +110,13 @@ public class XhXkVtQdGiaonvXhDtl {
 
     public void setSlTonKho(BigDecimal slTonKho) {
         this.slTonKho = !ObjectUtils.isEmpty(slTonKho) ? slTonKho : BigDecimal.ZERO;
+    }
+
+    public BigDecimal getSlXuatGiam() {
+        return !ObjectUtils.isEmpty(slXuatGiam) ? slXuatGiam : BigDecimal.ZERO;
+    }
+
+    public void setSlXuatGiam(BigDecimal slXuatGiam) {
+        this.slXuatGiam = !ObjectUtils.isEmpty(slXuatGiam) ? slXuatGiam : BigDecimal.ZERO;
     }
 }

@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.nhaphang.nhapkhac.impl;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhDxuatKhNhapKhacDtl;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhDxuatKhNhapKhacHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhThopKhNhapKhac;
@@ -9,6 +10,7 @@ import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhDxuatKhNhapKhacDtlReposi
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhDxuatKhNhapKhacHdrRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhThopKhNhapKhacRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhDxuatKhNhapKhacDTO;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhDxuatKhNhapKhacDtlReq;
@@ -20,6 +22,7 @@ import com.tcdt.qlnvhang.service.nhaphang.nhapkhac.HhDxuatKhNhapKhacService;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
@@ -243,8 +246,56 @@ public class HhDxuatKhNhapKhacServiceImpl extends BaseServiceImpl implements HhD
     }
 
     @Override
-    public void xuatFile(HhDxuatKhNhapKhacSearch req , HttpServletResponse response) {
-
+    public void xuatFile(HhDxuatKhNhapKhacSearch req , HttpServletResponse response) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        Page<HhDxuatKhNhapKhacHdr> page = timKiem(req);
+        List<HhDxuatKhNhapKhacHdr> data = page.getContent();
+        String filename = "danh-sach-ke-hoach-nhap_khac.xlsx";
+        String title = "Danh sách kế hoạch nhập khác";
+        String[] rowsName;
+        if (userInfo.getCapDvi().equals(Contains.CAP_TONG_CUC)){
+            rowsName = new String[]{"STT",  "Năm kế hoạch","Số công văn/tờ trình", "Đơn vị đề xuất", "Ngày đề xuất", "Ngày duyệt đề xuất", "Loại hàng DTQG",
+                    "Tổng SL đề xuất", "ĐVT", "Trích yếu", "Trạng thái đề xuất", "Trạng thái tổng hợp", "Mã tổng hợp"};
+        } else {
+            rowsName = new String[]{"STT",  "Năm kế hoạch","Số công văn/tờ trình", "Ngày đề xuất", "Ngày duyệt đề xuất", "Loại hàng DTQG",
+                    "Tổng SL đề xuất", "ĐVT", "Trích yếu", "Trạng thái đề xuất"};
+        }
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        for (int i = 0; i < data.size(); i++) {
+            HhDxuatKhNhapKhacHdr dx = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = dx.getNamKhoach();
+            objs[2] = dx.getSoDxuat();
+            if (userInfo.getCapDvi().equals(Contains.CAP_TONG_CUC)){
+                objs[3] = dx.getTenDvi();
+                objs[4] = convertDate(dx.getNgayDxuat());
+                objs[5] = convertDate(dx.getNgayPduyet());
+                objs[6] = dx.getTenLoaiVthh();
+                objs[7] = dx.getTongSlNhap();
+                objs[8] = dx.getDvt();
+                objs[9] = dx.getTrichYeu();
+                objs[10] = dx.getTenTrangThai();
+                objs[11] = dx.getTenTrangThaiTh();
+                objs[12] = dx.getMaTh();
+            } else {
+                objs[3] = convertDate(dx.getNgayDxuat());
+                objs[4] = convertDate(dx.getNgayPduyet());
+                objs[5] = dx.getTenLoaiVthh();
+                objs[6] = dx.getTongSlNhap();
+                objs[7] = dx.getDvt();
+                objs[7] = dx.getTrichYeu();
+                objs[7] = dx.getTenTrangThai();
+            }
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+        ex.export();
     }
 
     @Override

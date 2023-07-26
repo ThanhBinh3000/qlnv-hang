@@ -36,4 +36,8 @@ public class HhDcQdPduyetKhmttHdrReq {
     private List<FileDinhKemReq> canCuPhapLy = new ArrayList<>();
 
     private List<HhDcQdPduyetKhmttDxReq> hhDcQdPduyetKhmttDxList=new ArrayList<>();
+
+
+//    đánh dấu có thay đổi ở QD
+    private Boolean isChange;
 }

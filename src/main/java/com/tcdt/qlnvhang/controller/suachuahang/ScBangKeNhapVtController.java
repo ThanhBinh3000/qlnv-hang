@@ -31,6 +31,7 @@ import java.util.List;
 public class ScBangKeNhapVtController {
     @Autowired
     private ScBangKeNhapVtServiceImpl service;
+
     @ApiOperation(value = "Tra cứu ", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)

@@ -19,4 +19,5 @@ public interface HhBbNghiemThuNhapKhacService {
     Object getDataKho(String maDvi) throws Exception;
     void exportBbNtBq (HhBbNghiemThuNhapKhacSearch req, HttpServletResponse response) throws Exception;
     List<HhBbNghiemThuNhapKhac> timKiemBbtheoMaNganLo (HhBbNghiemThuNhapKhacSearch objReq) throws Exception;
+    List<HhQdGiaoNvuNhapHangKhacHdr> dsQdNvuDuocLapBbNtBqLd (HhBbNghiemThuNhapKhacSearch objReq) throws Exception;
 }

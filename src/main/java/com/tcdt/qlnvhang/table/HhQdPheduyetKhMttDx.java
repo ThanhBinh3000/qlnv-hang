@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhChiTietTTinChaoGia;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDcQdPduyetKhmttSldd;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -40,6 +41,9 @@ public class HhQdPheduyetKhMttDx implements Serializable {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayPduyet;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayTao;
 
     private String trichYeu;
 
@@ -82,6 +86,9 @@ public class HhQdPheduyetKhMttDx implements Serializable {
     @Transient
     private List<HhQdPheduyetKhMttSLDD> children = new ArrayList<>();
 
+    @Transient
+    private List<HhDcQdPduyetKhmttSldd> children2 = new ArrayList<>();
+
 
     // thông tin chào giá
     private String pthucMuaTrucTiep;
@@ -100,6 +107,12 @@ public class HhQdPheduyetKhMttDx implements Serializable {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayMua;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date tgianMkho;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date tgianKthuc;
 
     private String ghiChuChaoGia;
 

@@ -99,7 +99,7 @@ public class HhHopDongHdrReq {
 	String moTaiNhaThau;
 	String giayUyQuyenNhaThau;
 
-//	String donViTinh;
+	String donViTinh;
 //
 //
 //

@@ -175,11 +175,13 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
         ddSave.setTrangThai(TrangThaiAllEnum.CHUA_TAO_QD.getId());
         hhHopDongDdiemNhapKhoRepository.save(ddSave);
         hhHopDongDdiemNhapKhoVtRepository.deleteAllByIdHdongDdiemNkho(dd.getId());
-        for(HhDdiemNhapKhoVtReq vt : dd.getChildren()){
-          HhHopDongDdiemNhapKhoVt ddSaveVt = new HhHopDongDdiemNhapKhoVt();
-          BeanUtils.copyProperties(vt, ddSaveVt,"id");
-          ddSaveVt.setIdHdongDdiemNkho(ddSave.getId());
-          hhHopDongDdiemNhapKhoVtRepository.save(ddSaveVt);
+        if (dd.getChildren() != null) {
+          for(HhDdiemNhapKhoVtReq vt : dd.getChildren()){
+            HhHopDongDdiemNhapKhoVt ddSaveVt = new HhHopDongDdiemNhapKhoVt();
+            BeanUtils.copyProperties(vt, ddSaveVt,"id");
+            ddSaveVt.setIdHdongDdiemNkho(ddSave.getId());
+            hhHopDongDdiemNhapKhoVtRepository.save(ddSaveVt);
+          }
         }
       }
     }
