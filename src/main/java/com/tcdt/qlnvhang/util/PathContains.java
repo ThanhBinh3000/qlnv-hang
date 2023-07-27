@@ -321,6 +321,7 @@ public class PathContains {
     public static final String HO_SO = "/ho-so";
     public static final String TRINH_THAM_DINH = "/trinh-tham-dinh";
     public static final String QUYET_DINH_THANH_LY = "/quyet-dinh-thanh-ly";
+    public static final String QD_GIAO_NV_THANH_LY = "/qd-giao-nv-thanh-ly";
     public static final String QUYET_DINH_PDKQ = "/quyet-dinh-pdkq";
 
     public static final String THONG_BAO_KET_QUA = "/thong-bao-ket-qua";
