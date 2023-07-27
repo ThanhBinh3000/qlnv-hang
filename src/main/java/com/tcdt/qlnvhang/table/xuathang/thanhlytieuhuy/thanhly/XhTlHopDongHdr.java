@@ -2,10 +2,13 @@ package com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
-import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -129,12 +132,51 @@ public class XhTlHopDongHdr extends BaseEntity implements Serializable {
         this.tenTrangThaiXh = TrangThaiAllEnum.getLabelById(this.trangThaiXh);
     }
 
-    @Transient
-    private List<FileDinhKem> fileCanCu = new ArrayList<>();
-    @Transient
-    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(value = FetchMode.SUBSELECT)
+    @JoinColumn(name = "dataId")
+    @Where(clause = "data_type='" + XhTlHopDongHdr.TABLE_NAME + "_CAN_CU'")
+    private List<FileDKemJoinHoSoKyThuatDtl> fileCanCu = new ArrayList<>();
 
-    @OneToMany(mappedBy = "hopDongHdr", cascade = CascadeType.ALL)
+    public void setFileCanCu(List<FileDKemJoinHoSoKyThuatDtl> fileCanCu) {
+        this.fileCanCu.clear();
+        if (!DataUtils.isNullObject(fileCanCu)) {
+            fileCanCu.forEach(f -> {
+                f.setDataType(XhTlHopDongHdr.TABLE_NAME + "_CAN_CU");
+                f.setXhTlHopDongHdr(this);
+            });
+            this.fileCanCu.addAll(fileCanCu);
+        }
+    }
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(value = FetchMode.SUBSELECT)
+    @JoinColumn(name = "dataId")
+    @Where(clause = "data_type='" + XhTlHopDongHdr.TABLE_NAME + "_DINH_KEM'")
+    private List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem = new ArrayList<>();
+
+    public void setFileDinhKem(List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem) {
+        this.fileDinhKem.clear();
+        if (!DataUtils.isNullObject(fileDinhKem)) {
+            fileDinhKem.forEach(s -> {
+                s.setDataType(XhTlHopDongHdr.TABLE_NAME + "_DINH_KEM");
+                s.setXhTlHopDongHdr(this);
+            });
+            this.fileDinhKem.addAll(fileDinhKem);
+        }
+    }
+
+    @OneToMany(mappedBy = "hopDongHdr", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<XhTlHopDongDtl> hopDongDtl = new ArrayList<>();
 
+    public void setHopDongDtl(List<XhTlHopDongDtl> hopDongDtl) {
+        this.getHopDongDtl().clear();
+        if (!DataUtils.isNullOrEmpty(hopDongDtl)) {
+            hopDongDtl.forEach(f -> {
+                f.setId(null);
+                f.setHopDongHdr(this);
+            });
+            this.hopDongDtl.addAll(hopDongDtl);
+        }
+    }
 }

@@ -16,6 +16,7 @@ public class XhTlQdGiaoNvHdrReq extends BaseRequest {
     private Integer nam;
     private String maDvi;
     private String soBbQd;
+    private LocalDate ngayKy;
     private LocalDate ngayKyQd;
     private Long idHopDong;
     private String soHopDong;
@@ -30,6 +31,7 @@ public class XhTlQdGiaoNvHdrReq extends BaseRequest {
     private String loaiHinhNx;
     private String kieuNx;
     private String trichYeu;
+    private String trangThaiXh;
     private List<XhTlQdGiaoNvDtl> quyetDinhDtl = new ArrayList<>();
     private List<FileDKemJoinHoSoKyThuatDtl> fileCanCu = new ArrayList<>();
     private List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem = new ArrayList<>();

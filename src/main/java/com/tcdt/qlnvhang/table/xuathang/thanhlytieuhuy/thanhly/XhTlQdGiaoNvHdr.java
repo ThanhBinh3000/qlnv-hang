@@ -33,6 +33,7 @@ public class XhTlQdGiaoNvHdr extends BaseEntity implements Serializable {
     private Integer nam;
     private String maDvi;
     private String soBbQd;
+    private LocalDate ngayKy;
     private LocalDate ngayKyQd;
     private Long idHopDong;
     private String soHopDong;
@@ -149,6 +150,7 @@ public class XhTlQdGiaoNvHdr extends BaseEntity implements Serializable {
         this.getQuyetDinhDtl().clear();
         if (!DataUtils.isNullOrEmpty(quyetDinhDtl)) {
             quyetDinhDtl.forEach(f -> {
+                f.setId(null);
                 f.setQuyetDinhHdr(this);
             });
             this.quyetDinhDtl.addAll(quyetDinhDtl);
