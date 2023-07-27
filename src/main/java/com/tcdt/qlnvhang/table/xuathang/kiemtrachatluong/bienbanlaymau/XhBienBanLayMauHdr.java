@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhPdKqDtl;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -121,10 +120,16 @@ public class XhBienBanLayMauHdr extends BaseEntity implements Serializable {
   private String maQhns;
   private Long idQdGnv;
   private String soQdGnv;
+  private LocalDate ngayKyQdGnv;
   private Long idHopDong;
   private String soHopDong;
   private Long idBangKe;
   private String soBangKe;
+  private Long idBbTinhKho;
+  private String soBbTinhKho;
+  private LocalDate ngayXuatDocKho;
+  private Long idBbHaoDoi;
+  private String soBbHaoDoi;
   private LocalDate ngayKy;
   private String ktvBaoQuan;
   private String dviKiemNghiem;
@@ -186,7 +191,7 @@ public class XhBienBanLayMauHdr extends BaseEntity implements Serializable {
     }
   }
 
-  @OneToMany(mappedBy = "xhBienBanLayMauHdr", cascade = CascadeType.ALL,orphanRemoval = true)
+  @OneToMany(mappedBy = "xhBienBanLayMauHdr", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<XhBienBanLayMauDtl> xhBienBanLayMauDtl = new ArrayList<>();
 
   public void setXhBienBanLayMauDtl(List<XhBienBanLayMauDtl> xhBienBanLayMauDtl) {
