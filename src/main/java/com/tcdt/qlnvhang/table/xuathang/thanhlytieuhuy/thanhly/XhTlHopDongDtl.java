@@ -27,7 +27,8 @@ public class XhTlHopDongDtl implements Serializable {
     private String maDviTsan;
     private BigDecimal giaTlKhongVat;
     private BigDecimal thanhTien;
-    private BigDecimal slDauGiaChiCuc;
+    private String loaiVthh;
+    private String cloaiVthh;
     @JsonIgnore
     @Transient
     private Map<String, String> mapDmucDvi;
@@ -65,6 +66,24 @@ public class XhTlHopDongDtl implements Serializable {
             setTenNhaKho(tenNhaKho);
             setTenNganKho(tenNganKho);
             setTenLoKho(tenLoKho);
+        }
+    }
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapVthh;
+    @Transient
+    private String tenLoaiVthh;
+    @Transient
+    private String tenCloaiVthh;
+
+    public void setMapVthh(Map<String, String> mapVthh) {
+        this.mapVthh = mapVthh;
+        if (!DataUtils.isNullObject(getLoaiVthh())) {
+            setTenLoaiVthh(mapVthh.containsKey(getLoaiVthh()) ? mapVthh.get(getLoaiVthh()) : null);
+        }
+        if (!DataUtils.isNullObject(getCloaiVthh())) {
+            setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
         }
     }
 

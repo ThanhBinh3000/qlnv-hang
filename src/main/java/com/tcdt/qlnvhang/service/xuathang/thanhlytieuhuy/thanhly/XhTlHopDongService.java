@@ -104,6 +104,7 @@ public class XhTlHopDongService extends BaseServiceImpl {
         allById.forEach(data -> {
             data.getHopDongDtl().forEach(f -> {
                 f.setMapDmucDvi(mapDmucDvi);
+                f.setMapVthh(mapVthh);
             });
             if (!DataUtils.isNullObject(data.getMaDviTsan())) {
                 data.setListMaDviTsan(Arrays.asList(data.getMaDviTsan().split(",")));
@@ -111,6 +112,7 @@ public class XhTlHopDongService extends BaseServiceImpl {
             data.setMapDmucDvi(mapDmucDvi);
             data.setMapVthh(mapVthh);
             data.setTrangThai(data.getTrangThai());
+            data.setTrangThaiXh(data.getTrangThaiXh());
             data.setTenLoaiHinhNx(StringUtils.isEmpty(data.getLoaiHinhNx()) ? null : mapLoaiHinhNx.get(data.getLoaiHinhNx()));
             data.setTenKieuNx(StringUtils.isEmpty(data.getKieuNx()) ? null : mapKieuNx.get(data.getKieuNx()));
         });

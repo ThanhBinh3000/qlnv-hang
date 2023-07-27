@@ -54,6 +54,7 @@ public class XhTlQdGiaoNvService extends BaseServiceImpl {
             data.setMapVthh(mapDmucVthh);
             data.setMapDmucDvi(mapDmucDvi);
             data.setTrangThai(data.getTrangThai());
+            data.setTrangThaiXh(data.getTrangThaiXh());
             data.setTenLoaiHinhNx(StringUtils.isEmpty(data.getLoaiHinhNx()) ? null : mapLoaiHinhNx.get(data.getLoaiHinhNx()));
             data.setTenKieuNx(StringUtils.isEmpty(data.getKieuNx()) ? null : mapKieuNx.get(data.getKieuNx()));
         });
@@ -104,10 +105,12 @@ public class XhTlQdGiaoNvService extends BaseServiceImpl {
         allById.forEach(data -> {
             data.getQuyetDinhDtl().forEach(dtl -> {
                 dtl.setMapDmucDvi(mapDmucDvi);
+                dtl.setMapVthh(mapVthh);
             });
             data.setMapDmucDvi(mapDmucDvi);
             data.setMapVthh(mapVthh);
             data.setTrangThai(data.getTrangThai());
+            data.setTrangThaiXh(data.getTrangThaiXh());
             data.setTenLoaiHinhNx(StringUtils.isEmpty(data.getLoaiHinhNx()) ? null : mapLoaiHinhNx.get(data.getLoaiHinhNx()));
             data.setTenKieuNx(StringUtils.isEmpty(data.getKieuNx()) ? null : mapKieuNx.get(data.getKieuNx()));
         });
