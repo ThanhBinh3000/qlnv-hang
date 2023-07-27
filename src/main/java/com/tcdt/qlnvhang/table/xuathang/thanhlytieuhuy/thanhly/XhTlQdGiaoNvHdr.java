@@ -2,11 +2,14 @@ package com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
-import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -105,10 +108,39 @@ public class XhTlQdGiaoNvHdr extends BaseEntity implements Serializable {
         return trangThaiXh;
     }
 
-    @Transient
-    private List<FileDinhKem> fileCanCu = new ArrayList<>();
-    @Transient
-    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(value = FetchMode.SUBSELECT)
+    @JoinColumn(name = "dataId")
+    @Where(clause = "data_type='" + XhTlQdGiaoNvHdr.TABLE_NAME + "_CAN_CU'")
+    private List<FileDKemJoinHoSoKyThuatDtl> fileCanCu = new ArrayList<>();
+
+    public void setFileCanCu(List<FileDKemJoinHoSoKyThuatDtl> fileCanCu) {
+        this.fileCanCu.clear();
+        if (!DataUtils.isNullObject(fileCanCu)) {
+            fileCanCu.forEach(f -> {
+                f.setDataType(XhTlQdGiaoNvHdr.TABLE_NAME + "_CAN_CU");
+                f.setXhTlQdGiaoNvHdr(this);
+            });
+            this.fileCanCu.addAll(fileCanCu);
+        }
+    }
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(value = FetchMode.SUBSELECT)
+    @JoinColumn(name = "dataId")
+    @Where(clause = "data_type='" + XhTlQdGiaoNvHdr.TABLE_NAME + "_DINH_KEM'")
+    private List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem = new ArrayList<>();
+
+    public void setFileDinhKem(List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem) {
+        this.fileDinhKem.clear();
+        if (!DataUtils.isNullObject(fileDinhKem)) {
+            fileDinhKem.forEach(s -> {
+                s.setDataType(XhTlQdGiaoNvHdr.TABLE_NAME + "_DINH_KEM");
+                s.setXhTlQdGiaoNvHdr(this);
+            });
+            this.fileDinhKem.addAll(fileDinhKem);
+        }
+    }
 
     @OneToMany(mappedBy = "quyetDinhHdr", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<XhTlQdGiaoNvDtl> quyetDinhDtl = new ArrayList<>();
