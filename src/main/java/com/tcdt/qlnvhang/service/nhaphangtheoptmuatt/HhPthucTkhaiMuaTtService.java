@@ -12,6 +12,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhChiTietTTinChaoGia;
 
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdPdKhMttSlddDtl;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -43,6 +44,9 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
     private FileDinhKemService fileDinhKemService;
     @Autowired
     private HhQdPheduyetKhMttSLDDRepository hhQdPheduyetKhMttSLDDRepository;
+
+    @Autowired
+    private HhQdPdKhMttSlddDtlRepository hhQdPdKhMttSlddDtlRepository;
 
 
     public Page<HhQdPheduyetKhMttDx> selectPage(SearchHhPthucTkhaiReq req) throws Exception {
@@ -123,6 +127,14 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
         }
         List<HhChiTietTTinChaoGia> chaoGiaList = new ArrayList<>();
         for (HhQdPheduyetKhMttSLDDReq hhQdPheduyetKhMttSLDDReq : objReq.getDanhSachCtiet()) {
+            HhQdPheduyetKhMttSLDD sldd = new HhQdPheduyetKhMttSLDD();
+            BeanUtils.copyProperties(hhQdPheduyetKhMttSLDDReq, sldd);
+            hhQdPheduyetKhMttSLDDRepository.save(sldd);
+            for (HhQdPdKhMttSlddDtlReq child : hhQdPheduyetKhMttSLDDReq.getChildren()) {
+                HhQdPdKhMttSlddDtl hhQdPdKhMttSlddDtl = new HhQdPdKhMttSlddDtl();
+                BeanUtils.copyProperties(child, hhQdPdKhMttSlddDtl);
+                hhQdPdKhMttSlddDtlRepository.save(hhQdPdKhMttSlddDtl);
+            }
             hhCtietTtinCgiaRepository.deleteAllByIdQdPdSldd(hhQdPheduyetKhMttSLDDReq.getId());
             for (HhChiTietTTinChaoGiaReq child : hhQdPheduyetKhMttSLDDReq.getListChaoGia()) {
                 HhChiTietTTinChaoGia chaoGia = new HhChiTietTTinChaoGia();

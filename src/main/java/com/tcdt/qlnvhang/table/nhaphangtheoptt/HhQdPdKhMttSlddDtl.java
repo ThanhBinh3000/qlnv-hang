@@ -23,6 +23,8 @@ public class HhQdPdKhMttSlddDtl implements Serializable {
     private String maDiemKho;
     @Transient
     private String tenDiemKho;
+    @Transient
+    private Boolean edit = false;
 
     private String diaDiemNhap;
 
