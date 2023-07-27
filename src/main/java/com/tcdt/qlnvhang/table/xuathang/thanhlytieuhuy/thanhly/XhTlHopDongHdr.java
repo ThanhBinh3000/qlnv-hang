@@ -28,6 +28,8 @@ public class XhTlHopDongHdr extends BaseEntity implements Serializable {
     private Long id;
     private Integer nam;
     private String maDvi;
+    private Long idQdNv;
+    private String soQdNv;
     private Long idQdKqTl;
     private String soQdKqTl;
     private LocalDate ngayKyQdkqTl;
