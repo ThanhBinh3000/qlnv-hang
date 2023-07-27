@@ -24,11 +24,9 @@ public class XhBienBanLayMauReq {
   private String tenVthh;
   private String lyDo;
   private String trangThai;
-  private Map<String, String> mapVthh;
   private String tenLoaiVthh;
   private String tenCloaiVthh;
   private String tenTrangThai;
-  private Map<String, String> mapDmucDvi = new ArrayMap<>();
   private String tenDvi;
   private String tenCuc;
   private String tenChiCuc;
