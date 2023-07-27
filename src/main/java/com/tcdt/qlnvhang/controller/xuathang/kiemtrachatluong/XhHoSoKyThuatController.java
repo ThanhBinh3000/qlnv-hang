@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = PathContains.KIEM_TRA_CHAT_LUONG + PathContains.BIEN_BAN_LAY_MAU_BAN_GIAO_MAU)
+@RequestMapping(value = PathContains.KIEM_TRA_CHAT_LUONG + PathContains.BBAN_LAY_MAU)
 @Slf4j
 @Api(tags = "Xuất hàng - Biên bản lấy mẫu dùng chung")
 public class XhHoSoKyThuatController extends BaseController {
