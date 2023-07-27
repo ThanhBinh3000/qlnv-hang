@@ -514,10 +514,13 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
 
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
+        Map<String,String> hashMapNguonVon = getListDanhMucChung("NGUON_VON");
 
         HhQdPheduyetKhMttHdr hdr = hhQdPheduyetKhMttHdrRepository.findById(dtl.getIdQdHdr()).get();
         hdr.setTenLoaiVthh(hashMapVthh.get(hdr.getLoaiVthh()));
         hdr.setTenCloaiVthh(hashMapVthh.get(hdr.getCloaiVthh()));
+        List<FileDinhKem> fileDinhKemHdr = fileDinhKemService.search(hdr.getId(), Arrays.asList(HhQdPheduyetKhMttHdr.TABLE_NAME));
+        hdr.setFileDinhKems(fileDinhKemHdr);
         dtl.setHhQdPheduyetKhMttHdr(hdr);
         if (hdr.getIsChange() != null) {
             dtl.setChildren2(detailDc(hdr));
@@ -543,6 +546,8 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
             dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
             dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh())? null : hashMapVthh.get(dtl.getLoaiVthh()));
             dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh())? null : hashMapVthh.get(dtl.getCloaiVthh()));
+            dtl.setTenNguonVon(StringUtils.isEmpty(dtl.getNguonVon())? null : hashMapNguonVon.get(dtl.getNguonVon()));
+            dtl.setTenPthucMuaTrucTiep(Contains.getPthucMtt(dtl.getPthucMuaTrucTiep()));
             dtl.setChildren(byIdSldd);
 
 

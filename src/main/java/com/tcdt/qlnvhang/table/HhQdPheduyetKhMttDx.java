@@ -60,6 +60,8 @@ public class HhQdPheduyetKhMttDx implements Serializable {
     private String cloaiVthh;
     @Transient
     private String tenCloaiVthh;
+    @Transient
+    private String tenNguonVon;
 
     private String moTaHangHoa;
 
