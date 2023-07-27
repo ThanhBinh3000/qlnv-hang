@@ -182,7 +182,7 @@ public class XhXkVtBhPhieuKdclService extends BaseServiceImpl {
         optional.get().setNgayPduyet(LocalDate.now());
         optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
         break;
-      case Contains.BAN_HANH + Contains.CHODUYET_LDC:
+      case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
         break;
