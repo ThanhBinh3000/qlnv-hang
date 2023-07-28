@@ -195,6 +195,8 @@ public class HhQdKhlcntHdr implements Serializable {
 	@Transient
 	String soQdDc;
 	@Transient
+	Long soHdDaKy;
+	@Transient
 	private QdPdHsmt qdPdHsmt;
 	@Transient
 	private List<FileDinhKem> listCcPhapLy;
