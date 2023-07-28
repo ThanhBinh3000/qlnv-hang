@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.xuathang.kiemtrachatluong;
 
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
@@ -149,34 +150,26 @@ public class XhBienBanLayMauService extends BaseServiceImpl {
     Optional<XhBienBanLayMauHdr> optional = xhBienBanLayMauRepository.findById(Long.valueOf(statusReq.getId()));
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu");
-    }
-
-    String status = statusReq.getTrangThai() + optional.get().getTrangThai();
-    switch (status) {
-      case Contains.CHODUYET_TP + Contains.DUTHAO:
-      case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
-      case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
-      case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
-        optional.get().setNguoiGduyetId(currentUser.getUser().getId());
-        optional.get().setNgayGduyet(LocalDate.now());
-        break;
-      case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
-      case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
-        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
-        optional.get().setNgayPduyet(LocalDate.now());
-        optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
-        break;
-      case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
-      case Contains.BAN_HANH + Contains.DADUYET_LDC:
-        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
-        optional.get().setNgayPduyet(LocalDate.now());
-        break;
-      default:
+    } else {
+      XhBienBanLayMauHdr data = optional.get();
+      String status = data.getTrangThai() + statusReq.getTrangThai();
+      if (status.equals(TrangThaiAllEnum.DU_THAO.getId() + TrangThaiAllEnum.CHO_DUYET_LDCC.getId()) || status.equals(TrangThaiAllEnum.TU_CHOI_LDCC.getId() + TrangThaiAllEnum.CHO_DUYET_LDCC.getId())) {
+        data.setNguoiGduyetId(currentUser.getUser().getId());
+        data.setNgayGduyet(LocalDate.now());
+      } else if (status.equals(TrangThaiAllEnum.CHO_DUYET_LDCC.getId() + TrangThaiAllEnum.TU_CHOI_LDCC.getId())) {
+        data.setNguoiPduyetId(currentUser.getUser().getId());
+        data.setNgayPduyet(LocalDate.now());
+        data.setLyDoTuChoi(statusReq.getLyDoTuChoi());
+      } else if (status.equals(TrangThaiAllEnum.CHO_DUYET_LDCC.getId() + TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
+        data.setNguoiPduyetId(currentUser.getUser().getId());
+        data.setNgayPduyet(LocalDate.now());
+      } else {
         throw new Exception("Phê duyệt không thành công");
+      }
+      data.setTrangThai(statusReq.getTrangThai());
+      XhBienBanLayMauHdr created = xhBienBanLayMauRepository.save(data);
+      return created;
     }
-    optional.get().setTrangThai(statusReq.getTrangThai());
-    XhBienBanLayMauHdr created = xhBienBanLayMauRepository.save(optional.get());
-    return created;
   }
 
 
