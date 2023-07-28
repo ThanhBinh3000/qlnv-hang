@@ -289,8 +289,8 @@ public class HhDxuatKhNhapKhacServiceImpl extends BaseServiceImpl implements HhD
                 objs[5] = dx.getTenLoaiVthh();
                 objs[6] = dx.getTongSlNhap();
                 objs[7] = dx.getDvt();
-                objs[7] = dx.getTrichYeu();
-                objs[7] = dx.getTenTrangThai();
+                objs[8] = dx.getTrichYeu();
+                objs[9] = dx.getTenTrangThai();
             }
             dataList.add(objs);
         }
