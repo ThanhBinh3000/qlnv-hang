@@ -17,6 +17,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuXuatNhapKho;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhQdGiaonvXnHdr;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,8 +78,9 @@ public class XhXkVtBhPhieuXuatNhapKhoService extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data);
         data.setTrangThai(Contains.DUTHAO);
         XhXkVtBhPhieuXuatNhapKho created = xhXkVtBhPhieuXuatNhapKhoRepository.save(data);
+        this.updatePhieuNk(created, false);
         // cập nhật trạng thái đang thực hiện cho QD giao nv nhập hàng
-        if (data.getLoaiPhieu().equals("XUAT")) {
+        if (!DataUtils.isNullObject(data.getLoaiPhieu())) {
             Optional<XhXkVtBhQdGiaonvXnHdr> qdGiaoNvXh = xhXkVtBhQdGiaonvXnRepository.findById(created.getIdCanCu());
             if (qdGiaoNvXh.isPresent()) {
                 qdGiaoNvXh.get().setTrangThaiXh(TrangThaiAllEnum.DANG_THUC_HIEN.getId());
@@ -107,6 +109,7 @@ public class XhXkVtBhPhieuXuatNhapKhoService extends BaseServiceImpl {
         XhXkVtBhPhieuXuatNhapKho data = optional.get();
         BeanUtils.copyProperties(objReq, data);
         XhXkVtBhPhieuXuatNhapKho created = xhXkVtBhPhieuXuatNhapKhoRepository.save(data);
+        this.updatePhieuNk(created, false);
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhXkVtBhPhieuXuatNhapKho.TABLE_NAME));
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtBhPhieuXuatNhapKho.TABLE_NAME);
         created.setFileDinhKems(fileDinhKems);
@@ -139,8 +142,9 @@ public class XhXkVtBhPhieuXuatNhapKhoService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         XhXkVtBhPhieuXuatNhapKho data = optional.get();
+        this.updatePhieuNk(data, true);
         //Update trạng thái chưa thực hiện xuất hàng cho qd giao nv xuất hàng
-        if (data.getLoaiPhieu().equals("XUAT")) {
+        if (!DataUtils.isNullObject(data.getLoaiPhieu()) ) {
             Optional<XhXkVtBhQdGiaonvXnHdr> qdGiaoNv = xhXkVtBhQdGiaonvXnRepository.findById(data.getIdCanCu());
             if (qdGiaoNv.isPresent()) {
                 qdGiaoNv.get().setTrangThaiXh(TrangThaiAllEnum.CHUA_THUC_HIEN.getId());
@@ -233,5 +237,22 @@ public class XhXkVtBhPhieuXuatNhapKhoService extends BaseServiceImpl {
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
+    }
+
+    public void updatePhieuNk(XhXkVtBhPhieuXuatNhapKho phieuXuatNhapKho, boolean xoa) {
+        if (!DataUtils.isNullObject(phieuXuatNhapKho.getIdCanCu())) {
+            Optional<XhXkVtBhQdGiaonvXnHdr> phieuXuatKho = xhXkVtBhQdGiaonvXnRepository.findById(phieuXuatNhapKho.getIdCanCu());
+            if (phieuXuatKho.isPresent()) {
+                XhXkVtBhQdGiaonvXnHdr item = phieuXuatKho.get();
+                if (xoa) {
+                    item.setIdPhieuNk(null);
+                    item.setSoPhieuNk(null);
+                } else {
+                    item.setIdPhieuNk(phieuXuatNhapKho.getId());
+                    item.setSoPhieuNk(phieuXuatNhapKho.getSoPhieu());
+                }
+                xhXkVtBhQdGiaonvXnRepository.save(item);
+            }
+        }
     }
 }
