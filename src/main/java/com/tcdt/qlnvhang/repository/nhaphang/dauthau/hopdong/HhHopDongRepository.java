@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface HhHopDongRepository extends BaseRepository<HhHopDongHdr, Long> {
 
   Optional<HhHopDongHdr> findBySoHd(String soHd);
+  Optional<HhHopDongHdr> findBySoQdKqLcntAndIdGoiThau(String soQd, Long idGthau);
 
   List<HhHopDongHdr> findAllByIdQdKqLcnt(Long idQdKqLcnt);
 

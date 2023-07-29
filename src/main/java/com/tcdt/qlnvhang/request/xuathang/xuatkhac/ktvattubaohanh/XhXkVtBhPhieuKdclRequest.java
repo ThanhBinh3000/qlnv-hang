@@ -20,6 +20,7 @@ public class XhXkVtBhPhieuKdclRequest extends BaseRequest {
     private String soQdGiaoNvXh;
     private Long idBbLayMau;
     private Integer soLanLm;
+    private Integer soLuongMau;
     private String soBbLayMau;
     private LocalDate ngayLauMau;
     private String soPhieu;
@@ -28,6 +29,7 @@ public class XhXkVtBhPhieuKdclRequest extends BaseRequest {
     private String dviKiemDinh;
     private String loaiVthh;
     private String cloaiVthh;
+    private String donViTinh;
     private String maDiaDiem;
     private String ppLayMau;
     private String nhanXetKetLuan;
