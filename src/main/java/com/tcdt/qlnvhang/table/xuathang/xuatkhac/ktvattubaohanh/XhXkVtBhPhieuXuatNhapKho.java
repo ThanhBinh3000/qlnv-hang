@@ -64,7 +64,7 @@ public class XhXkVtBhPhieuXuatNhapKho extends BaseEntity implements Serializable
   private Long idBienBanLm;
   private String soBienBanLm;
 
-  private Long idBienBankt;
+  private Long idBienBanKt;
   private String soBienBanKt;
 
   private Boolean mauBiHuy;
