@@ -1,7 +1,9 @@
 package com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.phieuxuatkho;
+
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import lombok.Data;
+
 import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -39,6 +41,8 @@ public class XhPhieuXkhoBttReq extends BaseRequest {
 
     private LocalDate ngayKyHd;
 
+    private Long idDdiemXh;
+
     private String maDiemKho;
 
     private String maNhaKho;
@@ -75,7 +79,7 @@ public class XhPhieuXkhoBttReq extends BaseRequest {
 
     private LocalDate tgianGiaoNhan;
 
-    private String  maSo;
+    private String maSo;
 
     private String donViTinh;
 

@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.bangkecanhang;
+
 import com.tcdt.qlnvhang.request.BaseRequest;
 import lombok.Data;
+
 import javax.persistence.Transient;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -30,6 +32,8 @@ public class XhBkeCanHangBttHdrReq extends BaseRequest {
     private String soHd;
 
     private LocalDate ngayKyHd;
+
+    private Long idDdiemXh;
 
     private String maDiemKho;
 

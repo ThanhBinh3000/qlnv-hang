@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.phieuxuatkho;
+
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -49,6 +51,8 @@ public class XhPhieuXkhoBtt implements Serializable {
     private String soHd;
 
     private LocalDate ngayKyHd;
+
+    private Long idDdiemXh;
 
     private String maDiemKho;
     @Transient
@@ -106,7 +110,7 @@ public class XhPhieuXkhoBtt implements Serializable {
 
     private String soBangKe;
 
-    private String  maSo;
+    private String maSo;
 
     private String donViTinh;
 
