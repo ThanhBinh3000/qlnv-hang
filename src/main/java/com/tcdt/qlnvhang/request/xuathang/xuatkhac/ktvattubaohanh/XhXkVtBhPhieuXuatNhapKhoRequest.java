@@ -54,6 +54,9 @@ public class XhXkVtBhPhieuXuatNhapKhoRequest extends BaseRequest {
     private String soBcKqkdMau;
     private Long idBcKqkdMau;
 
+    private Long idBienBankt;
+    private String soBienBanKt;
+
     //search params
     private LocalDate ngayXuatNhapTu;
     private LocalDate ngayXuatNhapDen;
