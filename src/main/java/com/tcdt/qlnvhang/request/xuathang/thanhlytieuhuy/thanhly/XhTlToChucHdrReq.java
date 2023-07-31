@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly;
 
-import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlToChucDtl;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlToChucNlq;
 import lombok.Data;
@@ -81,9 +81,9 @@ public class XhTlToChucHdrReq {
     private String soHopDong;
     private Long idQdGnv;
     private String soQdGnv;
-    private List<FileDinhKemReq> fileCanCu = new ArrayList<>();
-    private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();
-    private List<FileDinhKemReq> fileDinhKemDaKy = new ArrayList<>();
+    private List<FileDKemJoinHoSoKyThuatDtl> fileCanCu = new ArrayList<>();
+    private List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem = new ArrayList<>();
+    private List<FileDKemJoinHoSoKyThuatDtl> fileDinhKemDaKy = new ArrayList<>();
     private List<XhTlToChucDtl> toChucDtl = new ArrayList<>();
     private List<XhTlToChucNlq> toChucNlq = new ArrayList<>();
 }
