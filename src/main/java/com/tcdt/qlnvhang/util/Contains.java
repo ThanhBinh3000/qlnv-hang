@@ -273,6 +273,8 @@ public class Contains {
     public static final String LT_6_THANG = "LT6";
     public static final String VT_12_THANG = "VT12";
     public static final String VT_6_THANG = "VT6";
+    public static final String NHAP_SAU_BH = "NHAP_SAU_BH";
+    public static final String NHAP_MAU = "NHAP_MAU";
 
 
     public static final Map<String, String> mappingLoaiDx;
