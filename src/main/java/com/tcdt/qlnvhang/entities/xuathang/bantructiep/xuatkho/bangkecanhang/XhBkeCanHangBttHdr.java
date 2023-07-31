@@ -1,5 +1,7 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bangkecanhang;
+
 import lombok.Data;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -41,6 +43,8 @@ public class XhBkeCanHangBttHdr implements Serializable {
     private String soHd;
 
     private LocalDate ngayKyHd;
+
+    private Long idDdiemXh;
 
     private String maDiemKho;
     @Transient
