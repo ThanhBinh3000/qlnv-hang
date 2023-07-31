@@ -1,15 +1,26 @@
 package com.tcdt.qlnvhang;
 
+import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.service.dieuchuyennoibo.impl.DcnbKeHoachDcHdrServiceImpl;
+import com.tcdt.qlnvhang.service.dieuchuyennoibo.impl.DcnbQuyetDinhDcCHdrServiceImpl;
 import com.tcdt.qlnvhang.service.feign.CategoryServiceProxy;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbQuyetDinhDcCHdr;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Optional;
+
 @SpringBootTest
 class QlnvHangApplicationTests {
     @Autowired
     private CategoryServiceProxy categoryServiceProxy;
+
+    @Autowired
+    private DcnbKeHoachDcHdrServiceImpl dcnbKeHoachDcHdrServiceImpl;
+    @Autowired
+    private DcnbQuyetDinhDcCHdrServiceImpl dcnbQuyetDinhDcCHdrServiceImpl;
 
     @Test
     void contextLoads() {
@@ -18,4 +29,14 @@ class QlnvHangApplicationTests {
 //        System.out.println(response);
     }
 
+//    @Test
+//    void testCloneQdLoaiDc() throws Exception {
+////        ID = 1541
+//        StatusReq statusReq = new StatusReq();
+//        statusReq.setId(1541l);
+//        statusReq.setTrangThai("29");
+//        DcnbQuyetDinhDcCHdr details = dcnbQuyetDinhDcCHdrServiceImpl.detail(statusReq.getId());
+//        // clone chi cục xuat
+//        dcnbQuyetDinhDcCHdrServiceImpl.cloneQuyetDinhDcCXuat(statusReq, Optional.of(details));
+//    }
 }

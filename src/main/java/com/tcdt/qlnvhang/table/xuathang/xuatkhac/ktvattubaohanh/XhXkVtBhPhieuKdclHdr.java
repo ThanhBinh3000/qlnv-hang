@@ -31,6 +31,8 @@ public class XhXkVtBhPhieuKdclHdr extends BaseEntity implements Serializable {
   private String maQhNs;
   private Long idQdGiaoNvXh;
   private String soQdGiaoNvXh;
+  private Long idQdGiaoNvNh;
+  private String soQdGiaoNvNh;
   private Integer soLanLm;
   private Long idBbLayMau;
   private String soBbLayMau;

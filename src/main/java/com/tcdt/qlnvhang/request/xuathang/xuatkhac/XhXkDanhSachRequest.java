@@ -38,6 +38,8 @@ public class XhXkDanhSachRequest extends BaseRequest {
   private BigDecimal slHetHan;
   private Integer thoiHanLk;
   private LocalDate ngayNhapKho;
+  private LocalDate ngayHetHanBh;
+  private String bienPhapXuLy;
   private LocalDate ngayDeXuat;
   private LocalDate ngayDeXuatTu;
   private LocalDate ngayDeXuatDen;

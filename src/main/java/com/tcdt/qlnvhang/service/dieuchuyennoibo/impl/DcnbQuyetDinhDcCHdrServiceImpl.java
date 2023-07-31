@@ -19,6 +19,7 @@ import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.apache.commons.lang3.SerializationUtils;
+import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +55,8 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
     private FileDinhKemService fileDinhKemService;
     @Autowired
     private DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
+    @Autowired
+    private DcnbPhuongAnDcRepository dcnbPhuongAnDcRepository;
     @Autowired
     private DcnbKeHoachDcHdrRepository dcnbKeHoachDcHdrRepository;
     @Autowired
@@ -343,7 +346,6 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
             data.setCanCu(canCu);
             List<FileDinhKem> quyetDinh = fileDinhKemService.search(data.getId(), Arrays.asList(DcnbQuyetDinhDcCHdr.TABLE_NAME + "_QUYET_DINH"));
             data.setQuyetDinh(quyetDinh);
-
             List<DcnbQuyetDinhDcCDtl> sachQuyetDinh = data.getDanhSachQuyetDinh();
             sachQuyetDinh.forEach(data1 -> {
                 if (data1.getKeHoachDcHdrId() != null) {
@@ -406,7 +408,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
         if (optional.get().getType() == null) {
             this.approve(currentUser, statusReq, optional); // Truyền giá trị của optional vào
         } else if (Contains.NHAN_DIEU_CHUYEN.equals(optional.get().getType())) {
-            this.approveNhanDieuChuyen(currentUser, statusReq, optional); // Truyền giá trị của optional vào
+            this.approveNhanDieuChuyen(currentUser, statusReq, optional); // Luồng nhận điều chuyển quyết định
         }
     }
 
@@ -562,7 +564,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         dcnbQuyetDinhDcTcHdr.get().setSoQdinhXuatCuc(soQdinh);
                     }
                 }
-                if (Contains.GIUA_2_CHI_CUC_TRONG_1_CUC.equals(optional.get().getLoaiDc())) { // khác điều chuyển "khác cục"
+                if (Contains.GIUA_2_CHI_CUC_TRONG_1_CUC.equals(optional.get().getLoaiDc())) {
                     // clone chi cục nhận
                     cloneQuyetDinhDcCNhan(statusReq, optional, true);
                     // clone chi cục xuat
@@ -580,7 +582,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
         return created;
     }
 
-    private void cloneQuyetDinhDcCXuat(StatusReq statusReq, Optional<DcnbQuyetDinhDcCHdr> optional) throws Exception {
+    public void cloneQuyetDinhDcCXuat(StatusReq statusReq, Optional<DcnbQuyetDinhDcCHdr> optional) throws Exception {
         // xử lý clone cho chi cục với TYPE là DC
         List<DcnbQuyetDinhDcCDtl> danhSachQuyetDinh = optional.get().getDanhSachQuyetDinh();
         Map<String, List<DcnbKeHoachDcDtl>> groupedByMaCc = new HashMap<>();
@@ -619,6 +621,8 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         throw new RuntimeException(e);
                     }
                     DcnbKeHoachDcHdr dcnbKeHoachDcHdrClone = SerializationUtils.clone(dcnbKeHoachDcHdrDetail.get());
+                    dcnbKeHoachDcHdrClone.setDanhSachHangHoa(dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(dcnbKeHoachDcHdrClone.getId()));
+                    dcnbKeHoachDcHdrClone.setPhuongAnDieuChuyen(dcnbPhuongAnDcRepository.findByKeHoachDcHdrId(dcnbKeHoachDcHdrClone.getId()));
                     dcnbKeHoachDcHdrClone.setParentId(dcnbKeHoachDcHdrClone.getId());
                     dcnbKeHoachDcHdrClone.setId(null);
                     dcnbKeHoachDcHdrClone.setMaDviPq(maChiCucThue);
@@ -699,7 +703,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
         }
     }
 
-    private void cloneQuyetDinhDcCNhan(StatusReq statusReq, Optional<DcnbQuyetDinhDcCHdr> optional, boolean isClone) throws Exception {
+    public void cloneQuyetDinhDcCNhan(StatusReq statusReq, Optional<DcnbQuyetDinhDcCHdr> optional, boolean isClone) throws Exception {
         // xử lý clone cho chi cục với TYPE là NDC
         List<DcnbQuyetDinhDcCDtl> danhSachQuyetDinh = optional.get().getDanhSachQuyetDinh();
         List<DcnbKeHoachDcDtl> danhSachKeHoachs = new ArrayList<>();
@@ -708,6 +712,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
         }
         Map<String, List<DcnbKeHoachDcDtl>> groupedByMaCc = danhSachKeHoachs.stream()
                 .collect(Collectors.groupingBy(DcnbKeHoachDcDtl::getMaChiCucNhan));
+
         AtomicBoolean loiData = new AtomicBoolean(false);
         groupedByMaCc.forEach((maChiCucThue, khList) -> {
             DcnbQuyetDinhDcCHdr dcnbQuyetDinhDcCHdrCloned = SerializationUtils.clone(optional.get());
@@ -733,6 +738,8 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         throw new RuntimeException(e);
                     }
                     DcnbKeHoachDcHdr dcnbKeHoachDcHdrClone = SerializationUtils.clone(keHoachDcHdrOpt.get());
+                    dcnbKeHoachDcHdrClone.setDanhSachHangHoa(dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(dcnbKeHoachDcHdrClone.getId()));
+                    dcnbKeHoachDcHdrClone.setPhuongAnDieuChuyen(dcnbPhuongAnDcRepository.findByKeHoachDcHdrId(dcnbKeHoachDcHdrClone.getId()));
                     dcnbKeHoachDcHdrClone.setParentId(dcnbKeHoachDcHdrClone.getId());
                     dcnbKeHoachDcHdrClone.setId(null);
                     dcnbKeHoachDcHdrClone.setMaDviPq(maChiCucThue);

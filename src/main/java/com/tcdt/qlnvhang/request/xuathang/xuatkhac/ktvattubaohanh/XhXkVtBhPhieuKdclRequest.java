@@ -18,6 +18,8 @@ public class XhXkVtBhPhieuKdclRequest extends BaseRequest {
     private String maQhNs;
     private Long idQdGiaoNvXh;
     private String soQdGiaoNvXh;
+    private Long idQdGiaoNvNh;
+    private String soQdGiaoNvNh;
     private Long idBbLayMau;
     private Integer soLanLm;
     private Integer soLuongMau;
