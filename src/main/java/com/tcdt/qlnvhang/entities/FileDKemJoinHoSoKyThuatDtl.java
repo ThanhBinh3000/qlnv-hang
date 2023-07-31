@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThu
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlHopDongHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlQdGiaoNvHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhPdKqHdr;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlToChucHdr;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -38,6 +39,11 @@ public class FileDKemJoinHoSoKyThuatDtl implements Serializable {
 //  @JsonBackReference
     @JsonIgnore
     private XhHoSoKyThuatDtl parent;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "dataId", insertable = false, updatable = false)
+    @JsonIgnore
+    private XhTlToChucHdr xhTlToChucHdr;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dataId", insertable = false, updatable = false)

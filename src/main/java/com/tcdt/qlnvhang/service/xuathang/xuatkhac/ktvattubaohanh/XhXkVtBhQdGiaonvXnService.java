@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.xuathang.xuatkhac.ktvattubaohanh;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktluongthuc.XhXkTongHopRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhPhieuKdclRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhQdGiaonvXnRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -13,6 +14,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkKhXuatHang;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuKdclHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhQdGiaonvXnHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -39,6 +41,9 @@ public class XhXkVtBhQdGiaonvXnService extends BaseServiceImpl {
   private FileDinhKemService fileDinhKemService;
   @Autowired
   private XhXkTongHopRepository xhXkTongHopRepository;
+  @Autowired
+  private XhXkVtBhPhieuKdclRepository xhXkVtBhPhieuKdclRepository;
+
 
   public Page<XhXkVtBhQdGiaonvXnHdr> searchPage(CustomUserDetails currentUser, XhXkVtBhQdGiaonvXnRequest req) throws Exception {
     String dvql = currentUser.getDvql();
@@ -85,6 +90,7 @@ public class XhXkVtBhQdGiaonvXnService extends BaseServiceImpl {
     XhXkVtBhQdGiaonvXnHdr created = xhXkVtBhQdGiaonvXnRepository.save(data);
     //update số lần lấy mẫu
     this.updateTongHop(created, false);
+    this.updateQdGiaonvNhap(created, false);
     //save file đính kèm
     fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtBhQdGiaonvXnHdr.TABLE_NAME);
     return detail(created.getId());
@@ -113,6 +119,7 @@ public class XhXkVtBhQdGiaonvXnService extends BaseServiceImpl {
     XhXkVtBhQdGiaonvXnHdr created = xhXkVtBhQdGiaonvXnRepository.save(dx);
     //update số lần lấy mẫu
     this.updateTongHop(created, false);
+    this.updateQdGiaonvNhap(created, false);
     fileDinhKemService.delete(dx.getId(), Collections.singleton(XhXkVtBhQdGiaonvXnHdr.TABLE_NAME));
     //save file đính kèm
     fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtBhQdGiaonvXnHdr.TABLE_NAME);
@@ -150,6 +157,7 @@ public class XhXkVtBhQdGiaonvXnService extends BaseServiceImpl {
     XhXkVtBhQdGiaonvXnHdr data = optional.get();
     //update số lần lấy mẫu
     this.updateTongHop(data, true);
+    this.updateQdGiaonvNhap(data, true);
     fileDinhKemService.deleteMultiple(Collections.singleton(data.getId()), Collections.singleton(XhXkVtBhQdGiaonvXnHdr.TABLE_NAME));
     xhXkVtBhQdGiaonvXnRepository.delete(data);
   }
@@ -246,6 +254,24 @@ public class XhXkVtBhQdGiaonvXnService extends BaseServiceImpl {
           item.setSoLanLm(qdGiaonvXh.getSoLanLm());
         }
         xhXkTongHopRepository.save(item);
+      }
+    }
+  }
+  public void updateQdGiaonvNhap(XhXkVtBhQdGiaonvXnHdr qdGiaonvNh, boolean xoa) {
+    if (!DataUtils.isNullObject(qdGiaonvNh.getIdCanCu())) {
+      if (qdGiaonvNh.getLoai().equals(Contains.NHAP_MAU)){
+        Optional<XhXkVtBhPhieuKdclHdr> phieuKdcl = xhXkVtBhPhieuKdclRepository.findById(qdGiaonvNh.getIdCanCu());
+        if (phieuKdcl.isPresent()) {
+          XhXkVtBhPhieuKdclHdr item = phieuKdcl.get();
+          if (xoa) {
+            item.setSoQdGiaoNvNh(null);
+            item.setIdQdGiaoNvNh(null);
+          } else {
+            item.setSoQdGiaoNvNh(qdGiaonvNh.getSoQuyetDinh());
+            item.setIdQdGiaoNvNh(qdGiaonvNh.getId());
+          }
+          xhXkVtBhPhieuKdclRepository.save(item);
+        }
       }
     }
   }
