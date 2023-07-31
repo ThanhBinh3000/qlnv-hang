@@ -306,4 +306,27 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
         }
         return optional;
     }
+
+    public List<DcnbBangKeCanHangHdrDTO> list(CustomUserDetails currentUser, SearchBangKeCanHang req) {
+        String dvql = currentUser.getDvql();
+        req.setMaDvi(dvql);
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+
+        List<DcnbBangKeCanHangHdrDTO> searchDto = null;
+        if (req.getIsVatTu() == null) {
+            req.setIsVatTu(false);
+        }
+        if (req.getIsVatTu()) {
+            req.setDsLoaiHang(Arrays.asList("VT"));
+        } else {
+            req.setDsLoaiHang(Arrays.asList("LT", "M"));
+        }
+        if ("00".equals(req.getType())) { // kiểu xuất
+            searchDto = dcnbBangKeCanHangHdrRepository.searchListXuat(req);
+        }
+        if ("01".equals(req.getType())) { // kiểu nhan
+            searchDto = dcnbBangKeCanHangHdrRepository.searchListNhan(req);
+        }
+        return searchDto;
+    }
 }
