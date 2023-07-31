@@ -21,6 +21,7 @@ public interface XhXkVtBhPhieuKdclRepository extends JpaRepository<XhXkVtBhPhieu
       "AND (:#{#param.loaiVthh} IS NULL OR c.loaiVthh = :#{#param.loaiVthh}) " +
       "AND (:#{#param.soPhieu} IS NULL OR LOWER(c.soPhieu) LIKE CONCAT('%',LOWER(:#{#param.soPhieu}),'%')) " +
       "AND (:#{#param.soQdGiaoNvXh} IS NULL OR LOWER(c.soQdGiaoNvXh) LIKE CONCAT('%',LOWER(:#{#param.soQdGiaoNvXh}),'%')) " +
+      "AND (:#{#param.soQdGiaoNvNh} IS NULL OR LOWER(c.soQdGiaoNvNh) LIKE CONCAT('%',LOWER(:#{#param.soQdGiaoNvNh}),'%')) " +
       "AND (:#{#param.dviKiemDinh} IS NULL OR LOWER(c.dviKiemDinh) LIKE CONCAT('%',LOWER(:#{#param.dviKiemDinh}),'%')) " +
       "AND ((:#{#param.ngayKiemDinhTu}  IS NULL OR c.ngayKiemDinh >= :#{#param.ngayKiemDinhTu})" +
       "AND (:#{#param.ngayKiemDinhDen}  IS NULL OR c.ngayKiemDinh <= :#{#param.ngayKiemDinhDen}) ) " +
