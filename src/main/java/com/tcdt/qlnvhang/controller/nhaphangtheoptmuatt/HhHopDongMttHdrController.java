@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdrReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
+import com.tcdt.qlnvhang.response.SearchHopDongMttHdrDTO;
 import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.hopdong.hopdongphuluc.HopDongMttHdrService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
@@ -41,6 +42,25 @@ public class HhHopDongMttHdrController extends BaseController {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hopDongMttHdrService.searchPage(req));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (
+                Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu thông tin : {}", e);
+        }
+
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Tra cứu thông tin hợp đồng", response = List.class)
+    @PostMapping(value = PathContains.URL_TRA_CUU + "/hop-dong", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> searchPageHopDongHdr(@Valid @RequestBody SearchHopDongMttHdrDTO req) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(hopDongMttHdrService.searchPageHopDongHdr(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (

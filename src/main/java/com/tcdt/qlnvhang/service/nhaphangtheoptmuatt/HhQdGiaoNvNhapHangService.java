@@ -91,7 +91,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         Pageable pageable= PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<HhQdGiaoNvNhapHang> data = null;
-        if(userInfo.getCapDvi().equalsIgnoreCase(Contains.CAP_CHI_CUC)){
+//        if(userInfo.getCapDvi().equalsIgnoreCase(Contains.CAP_CHI_CUC)){
             data =hhQdGiaoNvNhapHangRepository.searchPageChiCuc(
                     objReq.getNamNhap(),
                     objReq.getSoQd(),
@@ -104,20 +104,20 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                     userInfo.getDvql(),
                     objReq.getLoaiQd(),
                     pageable);
-        }else {
-            data =hhQdGiaoNvNhapHangRepository.searchPageCuc(
-                    objReq.getNamNhap(),
-                    objReq.getSoQd(),
-                    objReq.getLoaiVthh(),
-                    objReq.getCloaiVthh(),
-                    objReq.getTrichyeu(),
-                    Contains.convertDateToString(objReq.getNgayQdTu()),
-                    Contains.convertDateToString(objReq.getNgayQdDen()),
-                    objReq.getTrangThai(),
-                    objReq.getLoaiQd(),
-                    userInfo.getDvql(),
-                    pageable);
-        }
+//        }else {
+//            data =hhQdGiaoNvNhapHangRepository.searchPageCuc(
+//                    objReq.getNamNhap(),
+//                    objReq.getSoQd(),
+//                    objReq.getLoaiVthh(),
+//                    objReq.getCloaiVthh(),
+//                    objReq.getTrichyeu(),
+//                    Contains.convertDateToString(objReq.getNgayQdTu()),
+//                    Contains.convertDateToString(objReq.getNgayQdDen()),
+//                    objReq.getTrangThai(),
+//                    objReq.getLoaiQd(),
+//                    userInfo.getDvql(),
+//                    pageable);
+//        }
 
         Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
         Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
@@ -222,11 +222,12 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 }
                 bienBanDayKhoHdr.setHhBienBanDayKhoDtlList(hhBienBanDayKhoDtl);
             }
-
-            Optional<HhQdPheduyetKhMttHdr> hhQdPheduyetKhMttHdr = hhQdPheduyetKhMttHdrRepository.findById(f.getIdQdPdKh());
-            if(hhQdPheduyetKhMttHdr.isPresent()){
-                hhQdPheduyetKhMttHdr.get().setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(hhQdPheduyetKhMttHdr.get().getTrangThaiHd()));
-                f.setHhQdPheduyetKhMttHdr(hhQdPheduyetKhMttHdr.get());
+            if(f.getIdQdPdKh() != null){
+                Optional<HhQdPheduyetKhMttHdr> hhQdPheduyetKhMttHdr = hhQdPheduyetKhMttHdrRepository.findById(f.getIdQdPdKh());
+                if(hhQdPheduyetKhMttHdr.isPresent()){
+                    hhQdPheduyetKhMttHdr.get().setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(hhQdPheduyetKhMttHdr.get().getTrangThaiHd()));
+                    f.setHhQdPheduyetKhMttHdr(hhQdPheduyetKhMttHdr.get());
+                }
             }
             f.setHhPhieuNhapKhoHdrList(hhPhieuNhapKhoHdrList);
             f.setHhBcanKeHangHdrList(hhBcanKeHangHdrList);
@@ -416,7 +417,10 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         data.setHopDongMttHdrs(listHd);
 
         Optional<HhQdPheduyetKhMttHdr> hhQdPheduyetKhMttHdr = hhQdPheduyetKhMttHdrRepository.findById(data.getIdQdPdKh());
-        data.setHhQdPheduyetKhMttHdr(hhQdPheduyetKhMttHdr.get());
+        if(hhQdPheduyetKhMttHdr.isPresent()){
+            hhQdPheduyetKhMttHdr.get().setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(hhQdPheduyetKhMttHdr.get().getTrangThaiHd()));
+            data.setHhQdPheduyetKhMttHdr(hhQdPheduyetKhMttHdr.get());
+        }
         return data;
     }
 
