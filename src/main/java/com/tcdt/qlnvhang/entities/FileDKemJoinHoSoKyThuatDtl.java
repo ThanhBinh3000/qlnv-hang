@@ -66,4 +66,9 @@ public class FileDKemJoinHoSoKyThuatDtl implements Serializable {
     @JoinColumn(name = "dataId", insertable = false, updatable = false)
     @JsonIgnore
     private XhTlXuatKhoHdr xhTlXuatKhoHdr;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "dataId", insertable = false, updatable = false)
+    @JsonIgnore
+    private XhTlTinhKhoHdr xhTlTinhKhoHdr;
 }

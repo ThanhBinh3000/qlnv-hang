@@ -2,13 +2,9 @@ package com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
-import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Where;
 import org.olap4j.impl.ArrayMap;
 
 import javax.persistence.*;
@@ -20,23 +16,19 @@ import java.util.List;
 import java.util.Map;
 
 @Entity
-@Table(name = XhTlXuatKhoHdr.TABLE_NAME)
+@Table(name = XhTlBangKeHdr.TABLE_NAME)
 @Data
-public class XhTlXuatKhoHdr extends BaseEntity implements Serializable {
+public class XhTlBangKeHdr extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "XH_TL_XUAT_KHO_HDR";
+    public static final String TABLE_NAME = "XH_TL_BANG_KE_HDR";
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlXuatKhoHdr.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = XhTlXuatKhoHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlXuatKhoHdr.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlBangKeHdr.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = XhTlBangKeHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlBangKeHdr.TABLE_NAME + "_SEQ")
     private Long id;
     private Integer nam;
     private String maDvi;
     private String maQhNs;
-    private String soPhieuXuatKho;
-    private LocalDate ngayTaoPhieu;
-    private LocalDate ngayXuatKho;
-    private BigDecimal taiKhoanNo;
-    private BigDecimal taiKhoanCo;
+    private String soBangKe;
     private Long idBbQd;
     private String soBbQd;
     private LocalDate ngayKyBbQd;
@@ -44,31 +36,21 @@ public class XhTlXuatKhoHdr extends BaseEntity implements Serializable {
     private String soHopDong;
     private LocalDate ngayKyHopDong;
     private String maDiaDiem;
-    private Long idPhieuKnCl;
-    private String soPhieuKnCl;
-    private LocalDate ngayKnCl;
-    private String loaiVthh;
-    private String cloaiVthh;
-    private String tenVthh;
-    private Long idNguoiLapPhieu;
-    private String ktvBaoQuan;
-    private String keToanTruong;
+    private Long idPhieuXuatKho;
+    private String soPhieuXuatKho;
+    private LocalDate ngayXuatKho;
+    private String diaDiemKho;
+    private String thuKho;
     private String tenNguoiGiao;
     private String cmtNguoiGiao;
     private String congTyNguoiGiao;
     private String diaChiNguoiGiao;
     private LocalDate thoiGianGiaoNhan;
-    private String loaiHinhNx;
-    private String kieuNx;
-    private Long idBangCanKeHang;
-    private String soBangCanKeHang;
-    private String maSo;
+    private String loaiVthh;
+    private String cloaiVthh;
+    private String tenVthh;
     private String donViTinh;
-    private BigDecimal theoChungTu;
-    private BigDecimal thucXuat;
-    private BigDecimal donGia;
-    private BigDecimal thanhTien;
-    private String ghiChu;
+    private BigDecimal tongTrongLuongBaoBi;
     private String trangThai;
     private String lyDoTuChoi;
     private LocalDate ngayGduyet;
@@ -139,36 +121,8 @@ public class XhTlXuatKhoHdr extends BaseEntity implements Serializable {
         }
     }
 
-    @JsonIgnore
-    @Transient
-    private Map<String, String> mapLoaiHinhNx;
-    @Transient
-    private String tenLoaiHinhNx;
-
-    public void setMapLoaiHinhNx(Map<String, String> mapLoaiHinhNx) {
-        this.mapLoaiHinhNx = mapLoaiHinhNx;
-        if (!DataUtils.isNullObject(getLoaiHinhNx())) {
-            setTenLoaiHinhNx(mapLoaiHinhNx.containsKey(getLoaiHinhNx()) ? mapLoaiHinhNx.get(getLoaiHinhNx()) : null);
-        }
-    }
-
-    @JsonIgnore
-    @Transient
-    private Map<String, String> mapKieuNx;
-    @Transient
-    private String tenKieuNx;
-
-    public void setMapKieuNx(Map<String, String> mapKieuNx) {
-        this.mapKieuNx = mapKieuNx;
-        if (!DataUtils.isNullObject(getKieuNx())) {
-            setTenKieuNx(mapKieuNx.containsKey(getKieuNx()) ? mapKieuNx.get(getKieuNx()) : null);
-        }
-    }
-
     @Transient
     private String tenNguoiPduyet;
-    @Transient
-    private String tenNguoiLapPhieu;
 
     @Transient
     private String tenTrangThai;
@@ -178,20 +132,17 @@ public class XhTlXuatKhoHdr extends BaseEntity implements Serializable {
         return trangThai;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @Fetch(value = FetchMode.SUBSELECT)
-    @JoinColumn(name = "dataId")
-    @Where(clause = "data_type='" + XhTlXuatKhoHdr.TABLE_NAME + "_DINH_KEM'")
-    private List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem = new ArrayList<>();
+    @OneToMany(mappedBy = "bangKeHdr", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<XhTlBangKeDtl> bangKeDtl = new ArrayList<>();
 
-    public void setFileDinhKem(List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem) {
-        this.fileDinhKem.clear();
-        if (!DataUtils.isNullObject(fileDinhKem)) {
-            fileDinhKem.forEach(s -> {
-                s.setDataType(XhTlXuatKhoHdr.TABLE_NAME + "_DINH_KEM");
-                s.setXhTlXuatKhoHdr(this);
+    public void setBangKeDtl(List<XhTlBangKeDtl> bangKeDtl) {
+        this.getBangKeDtl().clear();
+        if (!DataUtils.isNullObject(bangKeDtl)) {
+            bangKeDtl.forEach(f -> {
+                f.setId(null);
+                f.setBangKeHdr(this);
             });
-            this.fileDinhKem.addAll(fileDinhKem);
+            this.bangKeDtl.addAll(bangKeDtl);
         }
     }
 }

@@ -20,23 +20,20 @@ import java.util.List;
 import java.util.Map;
 
 @Entity
-@Table(name = XhTlXuatKhoHdr.TABLE_NAME)
+@Table(name = XhTlTinhKhoHdr.TABLE_NAME)
 @Data
-public class XhTlXuatKhoHdr extends BaseEntity implements Serializable {
+public class XhTlTinhKhoHdr extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "XH_TL_XUAT_KHO_HDR";
+    public static final String TABLE_NAME = "XH_TL_TINH_KHO_HDR";
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlXuatKhoHdr.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = XhTlXuatKhoHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlXuatKhoHdr.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlTinhKhoHdr.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = XhTlTinhKhoHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlTinhKhoHdr.TABLE_NAME + "_SEQ")
     private Long id;
     private Integer nam;
     private String maDvi;
     private String maQhNs;
-    private String soPhieuXuatKho;
-    private LocalDate ngayTaoPhieu;
-    private LocalDate ngayXuatKho;
-    private BigDecimal taiKhoanNo;
-    private BigDecimal taiKhoanCo;
+    private String soBbTinhKho;
+    private LocalDate ngayLapBienBan;
     private Long idBbQd;
     private String soBbQd;
     private LocalDate ngayKyBbQd;
@@ -44,33 +41,25 @@ public class XhTlXuatKhoHdr extends BaseEntity implements Serializable {
     private String soHopDong;
     private LocalDate ngayKyHopDong;
     private String maDiaDiem;
-    private Long idPhieuKnCl;
-    private String soPhieuKnCl;
-    private LocalDate ngayKnCl;
-    private String loaiVthh;
-    private String cloaiVthh;
-    private String tenVthh;
-    private Long idNguoiLapPhieu;
-    private String ktvBaoQuan;
-    private String keToanTruong;
-    private String tenNguoiGiao;
-    private String cmtNguoiGiao;
-    private String congTyNguoiGiao;
-    private String diaChiNguoiGiao;
-    private LocalDate thoiGianGiaoNhan;
-    private String loaiHinhNx;
-    private String kieuNx;
-    private Long idBangCanKeHang;
-    private String soBangCanKeHang;
-    private String maSo;
-    private String donViTinh;
-    private BigDecimal theoChungTu;
-    private BigDecimal thucXuat;
-    private BigDecimal donGia;
-    private BigDecimal thanhTien;
+    private LocalDate ngayBatDauXuat;
+    private LocalDate ngayKetThucXuat;
+    private BigDecimal tongSlNhap;
+    private BigDecimal tongSlXuat;
+    private BigDecimal slConLai;
+    private BigDecimal slThucTe;
+    private BigDecimal slThua;
+    private BigDecimal slThieu;
+    private String nguyenNhan;
+    private String kienNghi;
     private String ghiChu;
+    private String donViTinh;
     private String trangThai;
     private String lyDoTuChoi;
+    private String thuKho;
+    private Long idKtvBaoQuan;
+    private LocalDate ngayPduyetKtvBq;
+    private Long idKeToan;
+    private LocalDate ngayPduyetKt;
     private LocalDate ngayGduyet;
     private Long nguoiGduyetId;
     private LocalDate ngayPduyet;
@@ -122,53 +111,11 @@ public class XhTlXuatKhoHdr extends BaseEntity implements Serializable {
     }
 
     @Transient
-    private String tenLoaiVthh;
+    private String tenKtvBaoQuan;
     @Transient
-    private String tenCloaiVthh;
-    @JsonIgnore
+    private String tenKeToan;
     @Transient
-    private Map<String, String> mapVthh;
-
-    public void setMapVthh(Map<String, String> mapVthh) {
-        this.mapVthh = mapVthh;
-        if (!DataUtils.isNullObject(getLoaiVthh())) {
-            setTenLoaiVthh(mapVthh.containsKey(getLoaiVthh()) ? mapVthh.get(getLoaiVthh()) : null);
-        }
-        if (!DataUtils.isNullObject(getCloaiVthh())) {
-            setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
-        }
-    }
-
-    @JsonIgnore
-    @Transient
-    private Map<String, String> mapLoaiHinhNx;
-    @Transient
-    private String tenLoaiHinhNx;
-
-    public void setMapLoaiHinhNx(Map<String, String> mapLoaiHinhNx) {
-        this.mapLoaiHinhNx = mapLoaiHinhNx;
-        if (!DataUtils.isNullObject(getLoaiHinhNx())) {
-            setTenLoaiHinhNx(mapLoaiHinhNx.containsKey(getLoaiHinhNx()) ? mapLoaiHinhNx.get(getLoaiHinhNx()) : null);
-        }
-    }
-
-    @JsonIgnore
-    @Transient
-    private Map<String, String> mapKieuNx;
-    @Transient
-    private String tenKieuNx;
-
-    public void setMapKieuNx(Map<String, String> mapKieuNx) {
-        this.mapKieuNx = mapKieuNx;
-        if (!DataUtils.isNullObject(getKieuNx())) {
-            setTenKieuNx(mapKieuNx.containsKey(getKieuNx()) ? mapKieuNx.get(getKieuNx()) : null);
-        }
-    }
-
-    @Transient
-    private String tenNguoiPduyet;
-    @Transient
-    private String tenNguoiLapPhieu;
+    private String tenLanhDaoChiCuc;
 
     @Transient
     private String tenTrangThai;
@@ -181,17 +128,31 @@ public class XhTlXuatKhoHdr extends BaseEntity implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "dataId")
-    @Where(clause = "data_type='" + XhTlXuatKhoHdr.TABLE_NAME + "_DINH_KEM'")
+    @Where(clause = "data_type='" + XhTlTinhKhoHdr.TABLE_NAME + "_DINH_KEM'")
     private List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem = new ArrayList<>();
 
     public void setFileDinhKem(List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem) {
         this.fileDinhKem.clear();
         if (!DataUtils.isNullObject(fileDinhKem)) {
             fileDinhKem.forEach(s -> {
-                s.setDataType(XhTlXuatKhoHdr.TABLE_NAME + "_DINH_KEM");
-                s.setXhTlXuatKhoHdr(this);
+                s.setDataType(XhTlTinhKhoHdr.TABLE_NAME + "_DINH_KEM");
+                s.setXhTlTinhKhoHdr(this);
             });
             this.fileDinhKem.addAll(fileDinhKem);
+        }
+    }
+
+    @OneToMany(mappedBy = "tinhKhoHdr", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<XhTlTinhKhoDtl> tinhKhoDtl = new ArrayList<>();
+
+    public void setTinhKhoDtl(List<XhTlTinhKhoDtl> tinhKhoDtl) {
+        this.getTinhKhoDtl().clear();
+        if (!DataUtils.isNullObject(tinhKhoDtl)) {
+            tinhKhoDtl.forEach(f -> {
+                f.setId(null);
+                f.setTinhKhoHdr(this);
+            });
+            this.tinhKhoDtl.addAll(tinhKhoDtl);
         }
     }
 }
