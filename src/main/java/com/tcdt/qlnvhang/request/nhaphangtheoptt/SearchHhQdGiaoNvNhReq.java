@@ -20,5 +20,6 @@ public class SearchHhQdGiaoNvNhReq extends BaseRequest {
     Date ngayQdDen;
     private String maDvi;
     private String trangThai;
+    private String loaiQd;
 
 }

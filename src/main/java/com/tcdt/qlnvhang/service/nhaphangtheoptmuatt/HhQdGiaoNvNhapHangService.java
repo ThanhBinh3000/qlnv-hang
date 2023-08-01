@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.hopdong.hopdongphuluc.HopDongMttHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -11,8 +12,10 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -40,6 +43,9 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
 
     @Autowired
     private HhQdGiaoNvNhangDtlRepository hhQdGiaoNvNhangDtlRepository;
+
+    @Autowired
+    private HopDongMttHdrRepository hopDongMttHdrRepository;
 
     @Autowired
     private HhQdGiaoNvNhDdiemRepository hhQdGiaoNvNhDdiemRepository;
@@ -77,6 +83,9 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
     @Autowired
     private HhBienBanDayKhoDtlRepository hhBienBanDayKhoDtlRepository;
 
+    @Autowired
+    private HhQdPheduyetKhMttHdrRepository hhQdPheduyetKhMttHdrRepository;
+
     public Page<HhQdGiaoNvNhapHang> searchPage(SearchHhQdGiaoNvNhReq objReq) throws Exception{
         UserInfo userInfo= SecurityContextService.getUser();
         Pageable pageable= PageRequest.of(objReq.getPaggingReq().getPage(),
@@ -93,6 +102,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                     Contains.convertDateToString(objReq.getNgayQdDen()),
                     objReq.getTrangThai(),
                     userInfo.getDvql(),
+                    objReq.getLoaiQd(),
                     pageable);
         }else {
             data =hhQdGiaoNvNhapHangRepository.searchPageCuc(
@@ -104,6 +114,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                     Contains.convertDateToString(objReq.getNgayQdTu()),
                     Contains.convertDateToString(objReq.getNgayQdDen()),
                     objReq.getTrangThai(),
+                    objReq.getLoaiQd(),
                     userInfo.getDvql(),
                     pageable);
         }
@@ -212,6 +223,11 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 bienBanDayKhoHdr.setHhBienBanDayKhoDtlList(hhBienBanDayKhoDtl);
             }
 
+            Optional<HhQdPheduyetKhMttHdr> hhQdPheduyetKhMttHdr = hhQdPheduyetKhMttHdrRepository.findById(f.getIdQdPdKh());
+            if(hhQdPheduyetKhMttHdr.isPresent()){
+                hhQdPheduyetKhMttHdr.get().setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(hhQdPheduyetKhMttHdr.get().getTrangThaiHd()));
+                f.setHhQdPheduyetKhMttHdr(hhQdPheduyetKhMttHdr.get());
+            }
             f.setHhPhieuNhapKhoHdrList(hhPhieuNhapKhoHdrList);
             f.setHhBcanKeHangHdrList(hhBcanKeHangHdrList);
             f.setHhBienBanDayKhoHdrList(hhBienBanDayKhoHdr);
@@ -314,6 +330,10 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         return created;
     }
     public void saveCtiet(HhQdGiaoNvNhapHang data,HhQdGiaoNvNhapHangReq objReq){
+        Optional<HhQdPheduyetKhMttHdr> hhQdPheduyetKhMttHdr = hhQdPheduyetKhMttHdrRepository.findById(data.getIdQdPdKh());
+        hhQdPheduyetKhMttHdr.get().setIdQdGnvu(data.getId());
+        hhQdPheduyetKhMttHdr.get().setSoQdGnvu(data.getSoQd());
+        hhQdPheduyetKhMttHdrRepository.save(hhQdPheduyetKhMttHdr.get());
         for(HhQdGiaoNvNhangDtlReq req : objReq.getHhQdGiaoNvNhangDtlList()){
             HhQdGiaoNvNhangDtl dtl= new ModelMapper().map(req,HhQdGiaoNvNhangDtl.class);
             dtl.setId(null);
@@ -392,6 +412,11 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         }
         data.setHhQdGiaoNvNhangDtlList(listDtl);
 
+        List<HopDongMttHdr> listHd = hopDongMttHdrRepository.findAllById(Collections.singleton(data.getIdHd()));
+        data.setHopDongMttHdrs(listHd);
+
+        Optional<HhQdPheduyetKhMttHdr> hhQdPheduyetKhMttHdr = hhQdPheduyetKhMttHdrRepository.findById(data.getIdQdPdKh());
+        data.setHhQdPheduyetKhMttHdr(hhQdPheduyetKhMttHdr.get());
         return data;
     }
 
