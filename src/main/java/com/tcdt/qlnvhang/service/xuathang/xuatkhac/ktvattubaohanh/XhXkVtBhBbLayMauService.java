@@ -232,11 +232,11 @@ public class XhXkVtBhBbLayMauService extends BaseServiceImpl {
       if (phieuXuatKho.isPresent()) {
         XhXkVtBhPhieuXuatNhapKho item = phieuXuatKho.get();
         if (xoa) {
-          item.setIdBienBanLm(null);
-          item.setSoBienBanLm(null);
+          item.setIdBbLayMau(null);
+          item.setSoBbLayMau(null);
         } else {
-          item.setIdBienBanLm(bbLayMau.getId());
-          item.setSoBienBanLm(bbLayMau.getSoBienBan());
+          item.setIdBbLayMau(bbLayMau.getId());
+          item.setSoBbLayMau(bbLayMau.getSoBienBan());
         }
         xhXkVtBhPhieuXuatNhapKhoRepository.save(item);
       }

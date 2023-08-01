@@ -39,6 +39,8 @@ public class XhXkVtBhQdGiaonvXnRequest extends BaseRequest {
   String loaiXn;
   String soPhieuNk;
   Long idPhieuNk;
+  String soBbKtNhapKho;
+  Long idBbKtNhapKho;
   //search params
   LocalDate ngayKyQdTu;
   LocalDate ngayKyQdDen;

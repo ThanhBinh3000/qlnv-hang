@@ -9,69 +9,50 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Getter
 @Setter
 @Entity
-@Table(name = XhXkVtBhPhieuXuatNhapKho.TABLE_NAME)
-public class XhXkVtBhPhieuXuatNhapKho extends BaseEntity implements Serializable {
+@Table(name = XhXkVtBhBbKtNhapKho.TABLE_NAME)
+public class XhXkVtBhBbKtNhapKho extends BaseEntity implements Serializable {
 
-  public static final String TABLE_NAME = "XH_XK_VT_BH_PHIEU_XN_KHO";
+  private static final long serialVersionUID = 1L;
+  public static final String TABLE_NAME = "XH_XK_VT_BH_BB_KT_NHAP_KHO";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXkVtBhPhieuXuatNhapKho.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhXkVtBhPhieuXuatNhapKho.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhXkVtBhPhieuXuatNhapKho.TABLE_NAME + "_SEQ")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXkVtBhBbKtNhapKho.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = XhXkVtBhBbKtNhapKho.TABLE_NAME
+      + "_SEQ", allocationSize = 1, name = XhXkVtBhBbKtNhapKho.TABLE_NAME + "_SEQ")
   private Long id;
   private Integer namKeHoach;
   private String maDvi;
-  private String soPhieu;
-  private String loai;
+  private String soBienBan;
   private String maQhns;
-  private LocalDate ngayXuatNhap;
-  private LocalDate thoiGianGiaoHang;
-  private BigDecimal duNo;
-  private BigDecimal duCo;
+  private LocalDate ngayLapBienBan;
   private String soCanCu;
   private Long idCanCu;
   private String maDiaDiem; // mã địa điểm (mã lô/ngăn kho)
-  private String soPhieuKdcl;
-  private Long idPhieuKdcl;
-  private LocalDate ngayKdcl;
   private String loaiVthh;
   private String cloaiVthh;
-  private String canBoLapPhieu;
+  private String canBoLapBb;
   private String ldChiCuc;
   private String ktvBaoQuan;
   private String keToanTruong;
-  private String hoTenNgh;
-  private String cccdNgh;
-  private String donViNgh;
-  private String diaChiNgh;
-  private BigDecimal slThucTe;
   private String ghiChu;
   private String trangThai;
   private String lyDoTuChoi;
-  private Long nguoiDuyetId;
-  private LocalDate ngayDuyet;
-  private String maSo;
-  private BigDecimal slTonKho;
-  private BigDecimal slLayMau;
-  private String donViTinh;
+  private LocalDate ngayGduyet;
+  private Long nguoiGduyetId;
+  private LocalDate ngayPduyet;
+  private Long nguoiPduyetId;
+  private LocalDate ngayBatDauNhap;
+  private LocalDate ngayKetThucNhap;
+  private LocalDate ngayHetHanLuuKho;
 
-  private Long idBbLayMau;
-  private String soBbLayMau;
-
-  private Long idBbKtNhapKho;
-  private String soBbKtNhapKho;
-
-  private Boolean mauBiHuy;
-  private String loaiPhieu; // XUAT,NHAP
-  private String soBcKqkdMau;
-  private Long idBcKqkdMau;
 
   @Transient
   private List<FileDinhKem> fileDinhKems;
@@ -103,6 +84,8 @@ public class XhXkVtBhPhieuXuatNhapKho extends BaseEntity implements Serializable
   private String tenNganKho;
   @Transient
   private String tenLoKho;
+  @Transient
+  private List<XhXkVtBhPhieuXuatNhapKho> listPhieuNhapKho = new ArrayList<>();
 
   public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
     this.mapDmucDvi = mapDmucDvi;
@@ -137,4 +120,5 @@ public class XhXkVtBhPhieuXuatNhapKho extends BaseEntity implements Serializable
       setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
     }
   }
+
 }
