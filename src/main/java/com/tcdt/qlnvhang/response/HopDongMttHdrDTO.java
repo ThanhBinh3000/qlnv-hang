@@ -1,27 +1,32 @@
-package com.tcdt.qlnvhang.table.nhaphangtheoptt;
+package com.tcdt.qlnvhang.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttDx;
 import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttHdr;
+import com.tcdt.qlnvhang.table.HhQdPheduyetKqMttSLDD;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBcanKeHangHdr;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBienBanDayKhoHdr;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoHdr;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdGiaoNvNhangDtl;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdr;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Entity
-@Table(name = "HH_QD_GIAO_NV_NHAP_HANG")
-@Data
-public class HhQdGiaoNvNhapHang implements Serializable {
-    private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "HH_QD_GIAO_NV_NHAP_HANG";
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HH_QD_GIAO_NV_NHAP_HANG_SEQ")
-    @SequenceGenerator(sequenceName = "HH_QD_GIAO_NV_NHAP_HANG_SEQ", allocationSize = 1, name = "HH_QD_GIAO_NV_NHAP_HANG_SEQ")
+@Data
+public class HopDongMttHdrDTO {
     private Long id;
     private Integer namNhap;
     private String soQd;
@@ -40,10 +45,8 @@ public class HhQdGiaoNvNhapHang implements Serializable {
     private Long idQdPdKq;
     private String soQdPdKq;
     private String loaiVthh;
-    @Transient
     private String tenLoaiVthh;
     private String cloaiVthh;
-    @Transient
     private String tenCloaiVthh;
     private String moTaHangHoa;
     private String donViTinh;
@@ -51,7 +54,6 @@ public class HhQdGiaoNvNhapHang implements Serializable {
     private Date tgianNkho;
     private String trichYeu;
     private String trangThai;
-    @Transient
     private String tenTrangThai;
     private BigDecimal soLuong;
     @Temporal(TemporalType.DATE)
@@ -67,29 +69,38 @@ public class HhQdGiaoNvNhapHang implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date ngayPduyet;
     private String nguoiPduyet;
-
-    @Transient
     private List<HopDongMttHdr> hopDongMttHdrs = new ArrayList<>();
-
-    @Transient
     private HhQdPheduyetKhMttHdr hhQdPheduyetKhMttHdr;
-
-    @Transient
     private List<HhQdGiaoNvNhangDtl> hhQdGiaoNvNhangDtlList= new ArrayList<>();
-
-    @Transient
     private List<HhPhieuNhapKhoHdr> hhPhieuNhapKhoHdrList = new ArrayList<>();
-
-    @Transient
     private List<HhBcanKeHangHdr> hhBcanKeHangHdrList = new ArrayList<>();
-
-    @Transient
     private List<HhBienBanDayKhoHdr> hhBienBanDayKhoHdrList = new ArrayList<>();
-
-    @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
-
-    @Transient
     private FileDinhKem fileDinhKem;
 
+
+
+
+
+
+    private Long idPdKhDtl;
+    private Long idPdKhHdr;
+    private Integer namKh;
+    private String soQdKq;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayKy;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayHluc;
+    private String diaDiemChaoGia;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayMkho;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayMua;
+    private String ghiChu;
+    private String trangThaiHd;
+    private String tenTrangThaiHd;
+    private String trangThaiNh;
+    private String tenTrangThaiNh;
+    private List<HopDongMttHdr> hopDongMttHdrList = new ArrayList<>();
+    private List<HhQdPheduyetKqMttSLDD> danhSachCtiet = new ArrayList<>();
 }

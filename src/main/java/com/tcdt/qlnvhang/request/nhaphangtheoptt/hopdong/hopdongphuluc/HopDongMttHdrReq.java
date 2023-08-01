@@ -117,6 +117,9 @@ public class HopDongMttHdrReq extends BaseRequest {
 
   private BigDecimal tongSoLuongQdKhChuakyHd;
 
+  private Long idQdGiaoNvNh;
+  private String soQdGiaoNvNh;
+
   @Transient
   private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 

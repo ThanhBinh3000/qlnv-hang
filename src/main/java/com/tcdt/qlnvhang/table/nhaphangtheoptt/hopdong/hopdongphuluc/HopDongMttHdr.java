@@ -3,7 +3,9 @@ package com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttHdr;
 import com.tcdt.qlnvhang.table.HhQdPheduyetKqMttSLDD;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdGiaoNvNhangDtl;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,6 +36,8 @@ public class HopDongMttHdr extends TrangThaiBaseEntity implements Serializable {
   private Long idQdPdSldd;
 
   private String soQdKq;
+  private Long idQdGiaoNvNh;
+  private String soQdGiaoNvNh;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
   @Column(columnDefinition = "Date")
@@ -194,5 +198,11 @@ public class HopDongMttHdr extends TrangThaiBaseEntity implements Serializable {
 
   @Transient
   private List<DiaDiemGiaoNhanMtt> phuLucDtl = new ArrayList<>();
+
+  @Transient
+  private List<HhQdGiaoNvNhangDtl> qdGiaoNvuDtlList = new ArrayList<>();
+
+  @Transient
+  private HhQdPheduyetKhMttHdr hhQdPheduyetKhMttHdr;
 
 }

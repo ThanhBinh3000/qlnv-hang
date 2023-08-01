@@ -68,7 +68,15 @@ public class HhQdPheduyetKhMttHdr extends TrangThaiBaseEntity implements Seriali
     private Long idSoQdCc;
     private String soQdCc;
 
+    private Long idQdGnvu;
+    private String soQdGnvu;
+
     private String ptMuaTrucTiep;
+
+    private String trangThaiHd;
+
+    @Transient
+    private String tenTrangThaiHd;
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
