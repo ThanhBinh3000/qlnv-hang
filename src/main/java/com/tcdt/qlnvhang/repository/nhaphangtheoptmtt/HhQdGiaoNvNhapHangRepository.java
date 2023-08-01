@@ -37,7 +37,8 @@ public interface HhQdGiaoNvNhapHangRepository extends JpaRepository<HhQdGiaoNvNh
             " AND (:ngayQdTu IS NULL OR QD.NGAY_QD >=  TO_DATE(:ngayQdTu,'yyyy-MM-dd')) " +
             " AND (:ngayQdDen IS NULL OR QD.NGAY_QD <= TO_DATE(:ngayQdDen,'yyyy-MM-dd'))" +
             " AND (:trangThai IS NULL OR QD.TRANG_THAI = :trangThai)" +
-            " AND (:maDvi IS NULL OR QD_DTL.MA_DVI = :maDvi)" ,
+            " AND (:maDvi IS NULL OR LOWER(QD_DTL.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))",
+//            " AND (:maDvi IS NULL OR QD_DTL.MA_DVI = :maDvi)" ,
             nativeQuery = true)
     Page<HhQdGiaoNvNhapHang> searchPageChiCuc(Integer namNhap, String soQd, String loaiVthh, String cloaiVthh, String trichYeu, String ngayQdTu, String ngayQdDen, String trangThai, String maDvi, String loaiQd, Pageable pageable);
 
