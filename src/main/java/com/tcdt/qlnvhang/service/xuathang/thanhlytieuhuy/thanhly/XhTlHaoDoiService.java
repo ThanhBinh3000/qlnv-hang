@@ -2,12 +2,12 @@ package com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly;
 
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlTinhKhoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlHaoDoiRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlTinhKhoHdrReq;
+import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlHaoDoiHdrReq;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlTinhKhoHdr;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlHaoDoiHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import org.springframework.beans.BeanUtils;
@@ -26,14 +26,14 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class XhTlTinhKhoService extends BaseServiceImpl {
+public class XhTlHaoDoiService extends BaseServiceImpl {
 
     @Autowired
-    private XhTlTinhKhoRepository xhTlTinhKhoRepository;
+    private XhTlHaoDoiRepository xhTlHaoDoiRepository;
     @Autowired
     private UserInfoRepository userInfoRepository;
 
-    public Page<XhTlTinhKhoHdr> searchPage(CustomUserDetails currentUser, XhTlTinhKhoHdrReq req) throws Exception {
+    public Page<XhTlHaoDoiHdr> searchPage(CustomUserDetails currentUser, XhTlHaoDoiHdrReq req) throws Exception {
         String dvql = currentUser.getDvql();
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             req.setDvql(dvql.substring(0, 6));
@@ -42,7 +42,7 @@ public class XhTlTinhKhoService extends BaseServiceImpl {
             req.setTrangThai(Contains.DADUYET_LDCC);
         }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<XhTlTinhKhoHdr> search = xhTlTinhKhoRepository.search(req, pageable);
+        Page<XhTlHaoDoiHdr> search = xhTlHaoDoiRepository.search(req, pageable);
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         search.getContent().forEach(data -> {
             data.setMapDmucDvi(mapDmucDvi);
@@ -52,33 +52,33 @@ public class XhTlTinhKhoService extends BaseServiceImpl {
     }
 
     @Transactional
-    public XhTlTinhKhoHdr create(CustomUserDetails currentUser, XhTlTinhKhoHdrReq req) throws Exception {
+    public XhTlHaoDoiHdr create(CustomUserDetails currentUser, XhTlHaoDoiHdrReq req) throws Exception {
         if (currentUser == null) throw new Exception("Bad request.");
-        XhTlTinhKhoHdr data = new XhTlTinhKhoHdr();
+        XhTlHaoDoiHdr data = new XhTlHaoDoiHdr();
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(currentUser.getUser().getDepartment());
         data.setTrangThai(Contains.DUTHAO);
-        XhTlTinhKhoHdr created = xhTlTinhKhoRepository.save(data);
+        XhTlHaoDoiHdr created = xhTlHaoDoiRepository.save(data);
         return created;
     }
 
     @Transactional
-    public XhTlTinhKhoHdr update(CustomUserDetails currentUser, XhTlTinhKhoHdrReq req) throws Exception {
+    public XhTlHaoDoiHdr update(CustomUserDetails currentUser, XhTlHaoDoiHdrReq req) throws Exception {
         if (currentUser == null) throw new Exception("Bad request.");
-        Optional<XhTlTinhKhoHdr> optional = xhTlTinhKhoRepository.findById(req.getId());
+        Optional<XhTlHaoDoiHdr> optional = xhTlHaoDoiRepository.findById(req.getId());
         if (!optional.isPresent()) throw new Exception("Không tìm thấy dữ liệu cần sửa");
-        XhTlTinhKhoHdr data = optional.get();
+        XhTlHaoDoiHdr data = optional.get();
         BeanUtils.copyProperties(req, data, "id", "maDvi");
-        XhTlTinhKhoHdr updated = xhTlTinhKhoRepository.save(data);
+        XhTlHaoDoiHdr updated = xhTlHaoDoiRepository.save(data);
         return updated;
     }
 
-    public List<XhTlTinhKhoHdr> detail(List<Long> ids) throws Exception {
+    public List<XhTlHaoDoiHdr> detail(List<Long> ids) throws Exception {
         if (DataUtils.isNullOrEmpty(ids)) throw new Exception("Tham số không hợp lệ.");
-        List<XhTlTinhKhoHdr> list = xhTlTinhKhoRepository.findByIdIn(ids);
+        List<XhTlHaoDoiHdr> list = xhTlHaoDoiRepository.findByIdIn(ids);
         if (DataUtils.isNullOrEmpty(list)) throw new Exception("Không tìm thấy dữ liệu");
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-        List<XhTlTinhKhoHdr> allById = xhTlTinhKhoRepository.findAllById(ids);
+        List<XhTlHaoDoiHdr> allById = xhTlHaoDoiRepository.findAllById(ids);
         allById.forEach(data -> {
             data.setMapDmucDvi(mapDmucDvi);
             data.setTrangThai(data.getTrangThai());
@@ -91,23 +91,23 @@ public class XhTlTinhKhoService extends BaseServiceImpl {
 
     @Transactional
     public void delete(IdSearchReq idSearchReq) throws Exception {
-        Optional<XhTlTinhKhoHdr> optional = xhTlTinhKhoRepository.findById(idSearchReq.getId());
+        Optional<XhTlHaoDoiHdr> optional = xhTlHaoDoiRepository.findById(idSearchReq.getId());
         if (!optional.isPresent()) throw new Exception("Banr ghi không tồn tại");
-        xhTlTinhKhoRepository.delete(optional.get());
+        xhTlHaoDoiRepository.delete(optional.get());
     }
 
     @Transactional
     public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
-        List<XhTlTinhKhoHdr> list = xhTlTinhKhoRepository.findAllByIdIn(idSearchReq.getIdList());
+        List<XhTlHaoDoiHdr> list = xhTlHaoDoiRepository.findAllByIdIn(idSearchReq.getIdList());
         if (list.isEmpty()) throw new Exception("Bản ghi không tồn tại");
-        xhTlTinhKhoRepository.deleteAll(list);
+        xhTlHaoDoiRepository.deleteAll(list);
     }
 
-    public XhTlTinhKhoHdr approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
+    public XhTlHaoDoiHdr approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
         if (StringUtils.isEmpty(statusReq.getId())) throw new Exception("Không tìm thấy dữ liệu");
-        Optional<XhTlTinhKhoHdr> optional = xhTlTinhKhoRepository.findById(Long.valueOf(statusReq.getId()));
+        Optional<XhTlHaoDoiHdr> optional = xhTlHaoDoiRepository.findById(Long.valueOf(statusReq.getId()));
         if (!optional.isPresent()) throw new Exception("Không tìm thấy dữ liệu");
-        XhTlTinhKhoHdr data = optional.get();
+        XhTlHaoDoiHdr data = optional.get();
         String status = statusReq.getTrangThai() + data.getTrangThai();
         switch (status) {
             case Contains.CHODUYET_KTVBQ + Contains.DUTHAO:
@@ -140,7 +140,7 @@ public class XhTlTinhKhoService extends BaseServiceImpl {
                 throw new Exception("Phê duyệt không thành công");
         }
         data.setTrangThai(statusReq.getTrangThai());
-        XhTlTinhKhoHdr created = xhTlTinhKhoRepository.save(data);
+        XhTlHaoDoiHdr created = xhTlHaoDoiRepository.save(data);
         return created;
     }
 }
