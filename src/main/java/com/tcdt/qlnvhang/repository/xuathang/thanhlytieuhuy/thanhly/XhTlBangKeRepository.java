@@ -23,7 +23,7 @@ public interface XhTlBangKeRepository extends JpaRepository<XhTlBangKeHdr, Long>
             "AND ((:#{#param.ngayXuatKhoTu}  IS NULL OR BK.ngayXuatKho >= :#{#param.ngayXuatKhoTu})" +
             "AND (:#{#param.ngayXuatKhoDen}  IS NULL OR BK.ngayXuatKho <= :#{#param.ngayXuatKhoDen}))" +
             "AND (:#{#param.loaiVthh} IS NULL OR LOWER(BK.loaiVthh) LIKE CONCAT('%',LOWER(:#{#param.loaiVthh}),'%')) " +
-            "AND (:#{#param.trangThai} IS NULL OR XK.trangThai = :#{#param.trangThai}) " +
+            "AND (:#{#param.trangThai} IS NULL OR BK.trangThai = :#{#param.trangThai}) " +
             "ORDER BY BK.ngaySua desc , BK.ngayTao desc, BK.id desc"
     )
     Page<XhTlBangKeHdr> search(@Param("param") XhTlBangKeHdrReq param, Pageable pageable);
