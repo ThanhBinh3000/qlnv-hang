@@ -38,8 +38,9 @@ public class XhXkVtBhPhieuXuatNhapKho extends BaseEntity implements Serializable
   private String soCanCu;
   private Long idCanCu;
   private String maDiaDiem; // mã địa điểm (mã lô/ngăn kho)
-  private String soPhieuKncl;
-  private Long idPhieuKncl;
+  private String soPhieuKdcl;
+  private Long idPhieuKdcl;
+  private LocalDate ngayKdcl;
   private String loaiVthh;
   private String cloaiVthh;
   private String canBoLapPhieu;
