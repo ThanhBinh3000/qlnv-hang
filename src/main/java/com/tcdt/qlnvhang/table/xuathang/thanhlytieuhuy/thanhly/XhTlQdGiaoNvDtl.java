@@ -21,6 +21,8 @@ public class XhTlQdGiaoNvDtl implements Serializable {
     private Long id;
     private String maDiaDiem;
     private BigDecimal slDauGia;
+    private BigDecimal giaTlKhongVat;
+    private BigDecimal thanhTien;
     private String loaiVthh;
     private String cloaiVthh;
     @JsonIgnore

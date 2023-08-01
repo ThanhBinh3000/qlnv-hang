@@ -37,9 +37,9 @@ public class XhTlXuatKhoService extends BaseServiceImpl {
         String dvql = currentUser.getDvql();
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             req.setDvql(dvql.substring(0, 6));
-            req.setTrangThai(Contains.BAN_HANH);
         } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
             req.setDvql(dvql);
+            req.setTrangThai(Contains.DADUYET_LDCC);
         }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhTlXuatKhoHdr> search = xhTlXuatKhoRepository.search(req, pageable);
@@ -88,8 +88,8 @@ public class XhTlXuatKhoService extends BaseServiceImpl {
         allById.forEach(data -> {
             data.setMapDmucDvi(mapDmucDvi);
             data.setMapVthh(mapVthh);
-            data.setMapNhapXuat(mapLoaiHinhNx);
-            data.setMapNhapXuat(mapKieuNx);
+            data.setMapLoaiHinhNx(mapLoaiHinhNx);
+            data.setMapKieuNx(mapKieuNx);
             data.setTrangThai(data.getTrangThai());
             data.setTenNguoiPduyet(ObjectUtils.isEmpty(data.getNguoiPduyetId()) ? null : userInfoRepository.findById(data.getNguoiPduyetId()).get().getFullName());
             data.setTenNguoiLapPhieu(ObjectUtils.isEmpty(data.getIdNguoiLapPhieu()) ? null : userInfoRepository.findById(data.getIdNguoiLapPhieu()).get().getFullName());
