@@ -231,7 +231,7 @@ public class XhXkVtBhPhieuXuatNhapKhoService extends BaseServiceImpl {
             objs[5] = dx.getTenLoKho();
             objs[6] = dx.getSoPhieu();
             objs[7] = dx.getNgayXuatNhap();
-            objs[8] = dx.getSoPhieuKncl();
+            objs[8] = dx.getSoPhieuKdcl();
             objs[9] = dx.getTenTrangThai();
             dataList.add(objs);
         }
