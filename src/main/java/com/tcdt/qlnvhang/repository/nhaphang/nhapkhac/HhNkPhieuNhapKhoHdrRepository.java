@@ -27,9 +27,9 @@ public interface HhNkPhieuNhapKhoHdrRepository extends JpaRepository<HhNkPhieuNh
             "AND (:#{#param.nam} IS NULL OR qdgnv.nam = :#{#param.nam}) " +
             "ORDER BY pnk.soPhieuNhapKho desc, pnk.nam desc")
     List<HhNkPhieuNhapKhoHdrListDTO> searchList(@Param("param")HhNkPhieuNhapKhoHdrReq objReq);
-
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.nhaphang.nhapkhac.HhNkPhieuNhapKhoHdrListDTO(" +
-            "pnk.id,pnk.soPhieuNhapKho,pnk.ngayLap) " +
+            "pnk.id,pnk.soPhieuNhapKho,pnk.ngayLap, pnk.tongSoLuong,pnk.idPhieuKtraCluong, pnk.soPhieuKtraCluong,pnk.bangKeCanHangId, " +
+            "pnk.soBangKeCanHang, pnk.bangKeNhapVtId, pnk.soBangKeNhapVt, pnk.bBCbKhoId, pnk.soBbCbKho) " +
             "FROM HhNkPhieuNhapKhoHdr pnk " +
             "LEFT JOIN HhQdGiaoNvuNhapHangKhacHdr qdgnv ON pnk.qdGiaoNvId = qdgnv.id "+
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = pnk.cloaiVthh " +
