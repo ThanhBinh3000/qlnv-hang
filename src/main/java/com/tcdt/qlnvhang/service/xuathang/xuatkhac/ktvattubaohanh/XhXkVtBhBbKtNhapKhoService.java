@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhBbKtNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhPhieuXuatNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhQdGiaonvXnRepository;
@@ -64,6 +65,7 @@ public class XhXkVtBhBbKtNhapKhoService extends BaseServiceImpl {
       s.setMapDmucDvi(mapDmucDvi);
       s.setMapVthh(mapVthh);
       s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
+      s.setListPhieuNhapKho(xhXkVtBhPhieuXuatNhapKhoRepository.findAllByIdBbKtNhapKho(s.getId()));
     });
     return search;
   }
@@ -86,13 +88,7 @@ public class XhXkVtBhBbKtNhapKhoService extends BaseServiceImpl {
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtBhBbKtNhapKho.TABLE_NAME);
     created.setFileDinhKems(fileDinhKems);
     //save lại số bb vào phiếu xuất kho
-    if (!objReq.getListPhieuNhapKho().isEmpty()) {
-      objReq.getListPhieuNhapKho().forEach(it -> {
-        it.setSoBbKtNhapKho(created.getSoBienBan());
-        it.setIdBbKtNhapKho(created.getId());
-      });
-      xhXkVtBhPhieuXuatNhapKhoRepository.saveAll(objReq.getListPhieuNhapKho());
-    }
+    this.updatePhieuXk( created, false);
     return created;
   }
 
@@ -118,7 +114,7 @@ public class XhXkVtBhBbKtNhapKhoService extends BaseServiceImpl {
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), updated.getId(), XhXkVtBhBbKtNhapKho.TABLE_NAME);
     updated.setFileDinhKems(fileDinhKems);
     //Update lại phiếu nhập kho khi sửa số BC kết quả kiểm định mẫu
-
+    this.updatePhieuXk( updated, false);
     return updated;
   }
 
@@ -149,7 +145,7 @@ public class XhXkVtBhBbKtNhapKhoService extends BaseServiceImpl {
     }
     XhXkVtBhBbKtNhapKho data = optional.get();
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhXkVtBhBbKtNhapKho.TABLE_NAME));
-
+    this.updatePhieuXk( data, true);
     xhXkVtBhBbKtNhapKhoRepository.delete(data);
   }
 
