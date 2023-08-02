@@ -1,7 +1,9 @@
 package com.tcdt.qlnvhang.service.impl;
 
+import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,17 +11,21 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhlcntThopHdr;
-import com.tcdt.qlnvhang.entities.FileDKemJoinQdKhlcntHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxKhlcntDsgthau;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxKhlcntDsgthauCtiet;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.*;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxKhlcntDsgthauCtietRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntDsgtDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdrRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.object.DsChiCucPreview;
+import com.tcdt.qlnvhang.request.object.HhDxuatKhLcntThopPreview;
 import com.tcdt.qlnvhang.table.*;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -55,6 +61,9 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 
 	@Autowired
 	private HhQdKhlcntHdrRepository hhQdKhlcntHdrRepository;
+
+	@Autowired
+	private HhDxKhlcntDsgthauCtietRepository hhDxKhlcntDsgthauCtietRepository;
 
 	@Override
 	public HhDxKhLcntThopHdr sumarryData(HhDxKhLcntTChiThopReq objReq) throws Exception {
@@ -469,5 +478,54 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 	@Override
 	public List<HhDxKhLcntThopHdr> timKiemAll(HttpServletRequest request,HhDxKhLcntThopSearchReq req) throws Exception {
 		return hhDxKhLcntThopHdrRepository.selectAll(req.getNamKhoach(),req.getLoaiVthh(),req.getCloaiVthh(),convertDateToString(req.getTuNgayThop()),convertDateToString(req.getDenNgayThop()), req.getTrangThai());
+	}
+
+	@Override
+	public ReportTemplateResponse preview(HhDxKhLcntThopSearchReq objReq) throws Exception {
+		Optional<HhDxKhLcntThopHdr> optional = hhDxKhLcntThopHdrRepository.findById(objReq.getId());
+		if (!optional.isPresent()) {
+			throw new Exception("Không tìm thấy dữ liệu");
+		}
+		ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+		byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+		HhDxuatKhLcntThopPreview object = new HhDxuatKhLcntThopPreview();
+		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+		List<HhDxKhLcntThopDtl> listTh = hhDxKhLcntThopDtlRepository.findByIdThopHdr(optional.get().getId());
+		Map<String, String> mapDmucDvi = getMapTenDvi();
+		AtomicReference<BigDecimal> tongSl = new AtomicReference<>(BigDecimal.ZERO);
+		AtomicReference<Long> tongSoGthau = new AtomicReference<>(0L);
+		listTh.forEach(f -> {
+			Optional<HhDxuatKhLcntHdr> qOptional = hhDxuatKhLcntHdrRepository.findById(f.getIdDxHdr());
+			if (qOptional.isPresent()) {
+				try {
+					f.setTgianDongThau(convertDate(qOptional.get().getTgianDthau()));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(f.getIdDxHdr());
+			List<DsChiCucPreview> dsChiCuc = new ArrayList<>();
+			for (HhDxKhlcntDsgthau dsG : dsGthauList) {
+				List<HhDxKhlcntDsgthauCtiet> listDdNhap = hhDxKhlcntDsgthauCtietRepository.findByIdGoiThau(dsG.getId());
+				listDdNhap.forEach(ctiet -> {
+					DsChiCucPreview chiCuc = new DsChiCucPreview();
+					chiCuc.setDonGia(docxToPdfConverter.convertBigDecimalToStr(dsG.getDonGiaTamTinh()));
+					chiCuc.setChiCuc(StringUtils.isEmpty(ctiet.getMaDvi()) ? null : mapDmucDvi.get(ctiet.getMaDvi()));
+					dsChiCuc.add(chiCuc);
+				});
+			}
+			f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
+			f.setDsChiCucPreviews(dsChiCuc.stream().distinct().collect(Collectors.toList()));
+			f.setSoLuongStr(docxToPdfConverter.convertBigDecimalToStr(f.getSoLuong()));
+			tongSl.updateAndGet(v -> v.add(f.getSoLuong()));
+			tongSoGthau.updateAndGet(v -> v + f.getSoGthau());
+		});
+		object.setDetails(listTh);
+		object.setNamKhoach(optional.get().getNamKhoach().toString());
+		object.setTongSl(docxToPdfConverter.convertBigDecimalToStr(tongSl.get()));
+		object.setTongSoGthau(tongSoGthau.toString());
+		object.setTenLoaiVthh(hashMapDmHh.get(optional.get().getLoaiVthh()).toUpperCase());
+		return docxToPdfConverter.convertDocxToPdf(inputStream, object);
 	}
 }
