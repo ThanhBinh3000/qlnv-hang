@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
-public class DcnbKeHoachDcDtl implements Serializable {
+public class DcnbKeHoachDcDtl implements Cloneable,Serializable {
 
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_KE_HOACH_DC_DTL";
@@ -119,4 +119,9 @@ public class DcnbKeHoachDcDtl implements Serializable {
     private DcnbBienBanLayMauHdr dcnbBienBanLayMauHdr;
     @Transient
     private DcnbDataLinkHdr dcnbDataLinkHdr;
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

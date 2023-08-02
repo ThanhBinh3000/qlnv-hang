@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DcnbPhuongAnDc implements Serializable {
+public class DcnbPhuongAnDc implements Cloneable,Serializable {
 
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_PHUONG_AN_DC";
@@ -41,4 +41,9 @@ public class DcnbPhuongAnDc implements Serializable {
     @JoinColumn(name = "KE_HOACH_DC_HDR_ID", insertable = false, updatable = false)
     @JsonIgnore
     private DcnbKeHoachDcHdr dcnbKeHoachDcHdr;
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }
