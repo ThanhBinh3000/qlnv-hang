@@ -50,4 +50,6 @@ public class HhDxKhlcntDsgthauCtiet {
 	private BigDecimal soLuongDaMua;
 	@Transient
 	private String goiThau;
+	@Transient
+	private String thanhTienStr;
 }
