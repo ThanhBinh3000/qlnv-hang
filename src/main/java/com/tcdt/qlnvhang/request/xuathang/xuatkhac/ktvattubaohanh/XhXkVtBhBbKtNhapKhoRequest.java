@@ -35,7 +35,9 @@ public class XhXkVtBhBbKtNhapKhoRequest extends BaseRequest {
     private LocalDate ngayBatDauNhap;
     private LocalDate ngayKetThucNhap;
     private LocalDate ngayHetHanLuuKho;
-
+    // Số báo cáo kết quả kd mẫu
+    private String soBbLayMau;
+    private Long idBbLayMau;
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
     private List<XhXkVtBhPhieuXuatNhapKho> listPhieuNhapKho = new ArrayList<>();
 

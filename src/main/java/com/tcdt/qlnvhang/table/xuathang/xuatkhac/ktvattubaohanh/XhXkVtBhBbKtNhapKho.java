@@ -52,7 +52,9 @@ public class XhXkVtBhBbKtNhapKho extends BaseEntity implements Serializable {
   private LocalDate ngayBatDauNhap;
   private LocalDate ngayKetThucNhap;
   private LocalDate ngayHetHanLuuKho;
-
+  // Số báo cáo kết quả kd mẫu
+  private String soBbLayMau;
+  private Long idBbLayMau;
 
   @Transient
   private List<FileDinhKem> fileDinhKems;
