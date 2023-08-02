@@ -7,10 +7,10 @@ import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.xuathang.kiemtrachatluong.SearchBienBanLayMauReq;
-import com.tcdt.qlnvhang.request.xuathang.kiemtrachatluong.XhBienBanLayMauReq;
+import com.tcdt.qlnvhang.request.xuathang.kiemtrachatluong.SearchPhieuKnclReq;
+import com.tcdt.qlnvhang.request.xuathang.kiemtrachatluong.XhPhieuKnclReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.xuathang.kiemtrachatluong.XhBienBanLayMauService;
+import com.tcdt.qlnvhang.service.xuathang.kiemtrachatluong.XhPhieuKnclService;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
@@ -30,20 +30,20 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = PathContains.KIEM_TRA_CHAT_LUONG + PathContains.BBAN_LAY_MAU)
+@RequestMapping(value = PathContains.KIEM_TRA_CHAT_LUONG + PathContains.PHIEU_KIEM_NGHIEM_CHAT_LUONG)
 @Slf4j
-@Api(tags = "Xuất hàng - Biên bản lấy mẫu dùng chung")
-public class XhBienBanLayMauController extends BaseController {
+@Api(tags = "Xuất hàng - Phiếu kiểm nghiệm chất lượng dùng chung")
+public class XhPhieuKnclController extends BaseController {
   @Autowired
-  XhBienBanLayMauService xhBienBanLayMauService;
+  XhPhieuKnclService xhPhieuKnclService;
 
   @ApiOperation(value = "Tra cứu", response = List.class)
   @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchBienBanLayMauReq objReq) {
+  public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchPhieuKnclReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhBienBanLayMauService.searchPage(currentUser, objReq));
+      resp.setData(xhPhieuKnclService.searchPage(currentUser, objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -58,10 +58,10 @@ public class XhBienBanLayMauController extends BaseController {
   @ApiOperation(value = "Tạo mới", response = List.class)
   @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhBienBanLayMauReq objReq) {
+  public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhPhieuKnclReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhBienBanLayMauService.create(currentUser, objReq));
+      resp.setData(xhPhieuKnclService.create(currentUser, objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -75,10 +75,10 @@ public class XhBienBanLayMauController extends BaseController {
 
   @ApiOperation(value = "Cập nhật", response = List.class)
   @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhBienBanLayMauReq objReq) {
+  public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhPhieuKnclReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhBienBanLayMauService.update(currentUser, objReq));
+      resp.setData(xhPhieuKnclService.update(currentUser, objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -95,7 +95,7 @@ public class XhBienBanLayMauController extends BaseController {
   public ResponseEntity<BaseResponse> detail(@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids") List<Long> ids) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhBienBanLayMauService.detail(ids).get(0));
+      resp.setData(xhPhieuKnclService.detail(ids).get(0));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -111,7 +111,7 @@ public class XhBienBanLayMauController extends BaseController {
   public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody StatusReq stReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      xhBienBanLayMauService.approve(currentUser, stReq);
+      xhPhieuKnclService.approve(currentUser, stReq);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -132,7 +132,7 @@ public class XhBienBanLayMauController extends BaseController {
       if (!DataUtils.isNullObject(idSearchReq.getId())) {
         idSearchReq.getIdList().add(idSearchReq.getId());
       }
-      xhBienBanLayMauService.deleteMulti(idSearchReq);
+      xhPhieuKnclService.deleteMulti(idSearchReq);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -150,7 +150,7 @@ public class XhBienBanLayMauController extends BaseController {
   public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      xhBienBanLayMauService.deleteMulti(idSearchReq);
+      xhPhieuKnclService.deleteMulti(idSearchReq);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -164,9 +164,9 @@ public class XhBienBanLayMauController extends BaseController {
   @ApiOperation(value = "Kết xuất danh sách", response = List.class)
   @PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public void exportList(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody SearchBienBanLayMauReq objReq, HttpServletResponse response) throws Exception {
+  public void exportList(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody SearchPhieuKnclReq objReq, HttpServletResponse response) throws Exception {
     try {
-      xhBienBanLayMauService.export(currentUser, objReq, response);
+      xhPhieuKnclService.export(currentUser, objReq, response);
 
     } catch (Exception e) {
       log.error("Kết xuất danh sách dánh sách : {}", e);
