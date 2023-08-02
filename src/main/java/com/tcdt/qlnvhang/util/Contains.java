@@ -268,6 +268,7 @@ public class Contains {
     public static final String NHAN_DIEU_CHUYEN = "NDC";
 
     public static final String NHAN_DIEU_CHUYEN_TS = "NDCTS";
+    public static final String DIEU_CHUYEN_TS = "DCTS";
 
     // Loai diều chuyển
 
