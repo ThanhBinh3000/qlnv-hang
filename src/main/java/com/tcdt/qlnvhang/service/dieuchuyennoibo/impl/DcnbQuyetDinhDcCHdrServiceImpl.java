@@ -645,19 +645,18 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                     dcnbKeHoachDcHdrClone.setParentId(dcnbKeHoachDcHdrClone.getId());
                     dcnbKeHoachDcHdrClone.setId(null);
                     dcnbKeHoachDcHdrClone.setMaDviPq(maChiCucThue);
-                    dcnbKeHoachDcHdrClone.setType(Contains.NHAN_DIEU_CHUYEN_TS);
+                    dcnbKeHoachDcHdrClone.setType(Contains.DIEU_CHUYEN_TS);
                     dcnbKeHoachDcHdrClone.setTrangThai(statusReq.getTrangThai());
                     DcnbKeHoachDcHdr finalDcnbKeHoachDcHdrClone = dcnbKeHoachDcHdrClone;
                     dcnbKeHoachDcHdrClone.setDanhSachHangHoa(dcnbKeHoachDcHdrClone.getDanhSachHangHoa().stream()
-                            .filter(item -> item.getMaChiCucNhan().equals(maChiCucThue)).map(itemMap1 -> {
+                            .filter(item -> item.getMaDiemKho().substring(0, 8).equals(maChiCucThue)).map(itemMap1 -> {
                                 itemMap1.setParentId(itemMap1.getId());
                                 itemMap1.setId(null);
                                 itemMap1.setHdrId(finalDcnbKeHoachDcHdrClone.getId());
                                 itemMap1.setDcnbKeHoachDcHdr(finalDcnbKeHoachDcHdrClone);
                                 return itemMap1;
                             }).collect(Collectors.toList()));
-                    dcnbKeHoachDcHdrClone.setPhuongAnDieuChuyen(dcnbKeHoachDcHdrClone.getPhuongAnDieuChuyen().stream()
-                            .filter(item -> item.getMaChiCucNhan().equals(maChiCucThue)).map(itemMap1 -> {
+                    dcnbKeHoachDcHdrClone.setPhuongAnDieuChuyen(dcnbKeHoachDcHdrClone.getPhuongAnDieuChuyen().stream().map(itemMap1 -> {
                                 itemMap1.setParentId(itemMap1.getId());
                                 itemMap1.setId(null);
                                 itemMap1.setKeHoachDcHdrId(finalDcnbKeHoachDcHdrClone.getId());
