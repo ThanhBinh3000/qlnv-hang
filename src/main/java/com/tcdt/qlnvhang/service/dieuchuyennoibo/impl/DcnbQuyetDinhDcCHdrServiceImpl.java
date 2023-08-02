@@ -836,7 +836,9 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                 }
             });
             dcnbQuyetDinhDcCHdrCloned.setDanhSachQuyetDinh(quyetDinhDcCDtlsClone);
-            dcnbQuyetDinhDcCHdrCloned.setTrangThai(Contains.YC_CHICUC_PHANBO_DC);
+            if(!isClone){
+                dcnbQuyetDinhDcCHdrCloned.setTrangThai(Contains.YC_CHICUC_PHANBO_DC);
+            }
             dcnbQuyetDinhDcCHdrCloned = dcnbQuyetDinhDcCHdrRepository.save(dcnbQuyetDinhDcCHdrCloned);
             if (isClone) {
                 for (DcnbQuyetDinhDcCDtl ds : dcnbQuyetDinhDcCHdrCloned.getDanhSachQuyetDinh()) {
