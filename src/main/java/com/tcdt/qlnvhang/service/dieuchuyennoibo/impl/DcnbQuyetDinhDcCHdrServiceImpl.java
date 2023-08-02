@@ -14,6 +14,7 @@ import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -602,7 +603,12 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
             dcnbQuyetDinhDcCHdrCloned.setParentId(dcnbQuyetDinhDcCHdrCloned.getId());
             dcnbQuyetDinhDcCHdrCloned.setId(null);
             dcnbQuyetDinhDcCHdrCloned.setMaDvi(maChiCucThue);
-            dcnbQuyetDinhDcCHdrCloned.setTenDvi(khList.get(0).getTenChiCucNhan());
+            QlnvDmDonvi byMaDvi = qlnvDmDonviRepository.findByMaDvi(maChiCucThue);
+            if(byMaDvi != null){
+                dcnbQuyetDinhDcCHdrCloned.setTenDvi(byMaDvi.getTenDvi());
+            }else {
+                dcnbQuyetDinhDcCHdrCloned.setTenDvi(khList.get(0).getDcnbKeHoachDcHdr().getTenDvi());
+            }
             dcnbQuyetDinhDcCHdrCloned.setType(Contains.DIEU_CHUYEN);
             dcnbQuyetDinhDcCHdrCloned.setTrangThai(statusReq.getTrangThai());
             Map<Long, List<DcnbKeHoachDcDtl>> groupedByKhh = khList.stream()
