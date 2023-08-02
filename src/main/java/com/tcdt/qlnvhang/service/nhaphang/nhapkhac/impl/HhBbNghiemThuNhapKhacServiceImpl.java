@@ -305,7 +305,7 @@ public class HhBbNghiemThuNhapKhacServiceImpl extends BaseServiceImpl implements
                 HhBbNghiemThuNhapKhacDtl dtl = ObjectMapperUtils.map(i, HhBbNghiemThuNhapKhacDtl.class);
                 dtl.setIdHdr(created.getId());
                 dtl.setType(Contains.CHU_DONG);
-                tongKinhPhiThucTe.updateAndGet(v -> v.add(i.getTongGtri()));
+                tongKinhPhiThucTe.updateAndGet(v -> v.add(i.getTongGiaTri()));
                 hhBbNghiemThuNhapKhacDtlRepository.save(dtl);
             });
             created.setTongKinhPhiThucTe(tongKinhPhiThucTe.get());
@@ -316,7 +316,7 @@ public class HhBbNghiemThuNhapKhacServiceImpl extends BaseServiceImpl implements
                 HhBbNghiemThuNhapKhacDtl dtl = ObjectMapperUtils.map(i, HhBbNghiemThuNhapKhacDtl.class);
                 dtl.setIdHdr(created.getId());
                 dtl.setType(Contains.PHE_DUYET_TRUOC);
-                tongKinhPhiThucTe.updateAndGet(v -> v.add(i.getTongGtri()));
+                tongKinhPhiThucTe.updateAndGet(v -> v.add(i.getTongGiaTri()));
                 hhBbNghiemThuNhapKhacDtlRepository.save(dtl);
             });
             created.setTongKinhPhiGiao(tongKinhPhiThucTe.get());
