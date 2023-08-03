@@ -65,9 +65,11 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         if ("00".equals(req.getType())) { // kiểu xuất
+            req.setTypeQd(Contains.DIEU_CHUYEN);
             searchDto = dcnbBangKeCanHangHdrRepository.searchPageXuat(req, pageable);
         }
         if ("01".equals(req.getType())) { // kiểu nhan
+            req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
             searchDto = dcnbBangKeCanHangHdrRepository.searchPageNhan(req, pageable);
         }
         return searchDto;
@@ -269,8 +271,7 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
-        Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
-        Page<DcnbBangKeCanHangHdrDTO> page = dcnbBangKeCanHangHdrRepository.searchPageXuat(objReq, pageable);
+        Page<DcnbBangKeCanHangHdrDTO> page = searchPage(currentUser, objReq);
         List<DcnbBangKeCanHangHdrDTO> data = page.getContent();
 
         String title = "Danh sách bảng kê cân hàng ";
@@ -322,9 +323,11 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         if ("00".equals(req.getType())) { // kiểu xuất
+            req.setTypeQd(Contains.DIEU_CHUYEN);
             searchDto = dcnbBangKeCanHangHdrRepository.searchListXuat(req);
         }
         if ("01".equals(req.getType())) { // kiểu nhan
+            req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
             searchDto = dcnbBangKeCanHangHdrRepository.searchListNhan(req);
         }
         return searchDto;

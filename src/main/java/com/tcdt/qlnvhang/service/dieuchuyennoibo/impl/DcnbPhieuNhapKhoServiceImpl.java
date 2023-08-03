@@ -66,6 +66,7 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         }else {
             req.setDsLoaiHang(Arrays.asList("LT","M"));
         }
+        req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         searchDto = hdrRepository.searchPage(req, pageable);
 
         return searchDto;
@@ -234,6 +235,7 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
     public List<DcnbPhieuNhapKhoHdrListDTO> searchList(DcnbPhieuNhapKhoHdrReq objReq) throws Exception {
         CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
         objReq.setMaDvi(currentUser.getDvql());
+        objReq.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         List<DcnbPhieuNhapKhoHdrListDTO> searchDto =  hdrRepository.searchList(objReq);;
         return searchDto;
     }
@@ -242,6 +244,7 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
     public List<DcnbPhieuNhapKhoHdrListDTO> searchListChung(DcnbPhieuNhapKhoHdrReq objReq) throws Exception {
         CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
         objReq.setMaDvi(currentUser.getDvql());
+        objReq.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         List<DcnbPhieuNhapKhoHdrListDTO> searchDto =  hdrRepository.searchListChung(objReq);;
         return searchDto;
     }

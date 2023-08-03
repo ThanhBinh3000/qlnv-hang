@@ -50,6 +50,7 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
         }else {
             req.setDsLoaiHang(Arrays.asList("LT","M"));
         }
+        req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         searchDto = hdrRepository.searchPage(req, pageable);
         return searchDto;
     }
@@ -58,6 +59,7 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
     public List<DcnbBBKetThucNKHdrListDTO> searchList(CustomUserDetails currentUser, DcnbBBKetThucNKReq req) {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
+        req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         return hdrRepository.searchList(req);
     }
 
