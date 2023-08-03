@@ -89,6 +89,7 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(c.trichYeu) LIKE CONCAT('%',LOWER(:#{#param.trichYeu}),'%')) " +
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.types.isEmpty() } = true OR c.type IN :#{#param.types}) " +
+            "AND (c.type IS NULL OR (:#{#param.type} IS NULL OR c.type = :#{#param.type}))" +
             "AND (:#{#param.loaiDc} IS NULL OR c.loaiDc = :#{#param.loaiDc}) " +
             "AND (:#{#param.loaiQdinh} IS NULL OR c.loaiQdinh = :#{#param.loaiQdinh}) " +
             "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
