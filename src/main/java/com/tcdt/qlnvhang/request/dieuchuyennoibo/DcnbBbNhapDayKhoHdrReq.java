@@ -19,6 +19,7 @@ import java.util.List;
 public class DcnbBbNhapDayKhoHdrReq extends BaseRequest {
     private Long id;
     private String loaiQdinh;
+    private String typeQd;
     private String loaiDc;
     private Integer nam;
     private String maDvi;

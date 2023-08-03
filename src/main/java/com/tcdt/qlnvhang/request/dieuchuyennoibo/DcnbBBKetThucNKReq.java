@@ -15,6 +15,7 @@ import java.util.List;
 public class DcnbBBKetThucNKReq extends BaseRequest {
     private Long id;
     private String loaiDc;
+    private String typeQd;
     private String loaiQdinh;
     private String loaiVthh;
     private String cloaiVthh;

@@ -17,6 +17,7 @@ public class DcnbBangKeXuatVTReq extends BaseRequest {
     private String maDvi;
     private String loaiDc;
     private String loaiQdinh;
+    private String typeQd;
     private Boolean isVatTu = false;
     private List<String> dsLoaiHang = new ArrayList<>();
 
