@@ -34,7 +34,7 @@ public interface DcnbBienBanTinhKhoHdrRepository extends JpaRepository<DcnbBienB
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.parentId is not null and qdc.trangThai = '29' " +
-            "AND qdc.loaiDc = :#{#param.loaiDc} " +
+            "AND ((:#{#param.loaiDc} IS NULL OR qdc.loaiDc = :#{#param.loaiDc}))" +
             "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
             "AND (bbtk.type IS NULL OR (:#{#param.type} IS NULL OR bbtk.type = :#{#param.type}))" +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
@@ -77,7 +77,7 @@ public interface DcnbBienBanTinhKhoHdrRepository extends JpaRepository<DcnbBienB
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.trangThai = '29' " +
-            "AND qdc.loaiDc = :#{#param.loaiDc} " +
+            "AND ((:#{#param.loaiDc} IS NULL OR qdc.loaiDc = :#{#param.loaiDc}))" +
             "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
             "AND (bbtk.type IS NULL OR (:#{#param.type} IS NULL OR bbtk.type = :#{#param.type}))" +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
