@@ -55,7 +55,8 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
     private String nhanXet;
     private String trangThai;
     private String lyDoTuChoi;
-
+    private Boolean thayDoiThuKho;
+    private String loaiQdinh;
     private List<DcnbBbChuanBiKhoDtl> children = new ArrayList<>();
     private LocalDate tuNgayLapBb;
     private LocalDate denNgayLapBb;

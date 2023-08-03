@@ -59,7 +59,7 @@ public class DcnbBangKeXuatVTReq extends BaseRequest {
     private String lyDoTuChoi;
     private Long nguoiGDuyet;
     private LocalDate ngayGDuyet;
-
+    private Boolean thayDoiThuKho;
     private Long nguoiPDuyet;
 
     private LocalDate ngayPDuyet;

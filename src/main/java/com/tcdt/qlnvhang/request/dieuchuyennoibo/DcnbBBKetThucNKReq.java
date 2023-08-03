@@ -17,6 +17,7 @@ public class DcnbBBKetThucNKReq extends BaseRequest {
     private String loaiDc;
     private String typeQd;
     private String loaiQdinh;
+    private Boolean thayDoiThuKho;
     private String loaiVthh;
     private String cloaiVthh;
     private Integer nam;
