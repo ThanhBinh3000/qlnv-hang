@@ -93,5 +93,6 @@ public class HhDxuatKhLcntHdrPreview implements Serializable {
 	private Long maTh;
 	private BigDecimal qdGiaoChiTieuId;
 	String ykienThamGia;
+	private List<HhDxKhlcntDsgthau> dsGtVt;
 
 }

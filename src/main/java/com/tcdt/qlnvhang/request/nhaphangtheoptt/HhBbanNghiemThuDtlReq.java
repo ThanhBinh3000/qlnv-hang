@@ -10,12 +10,18 @@ public class HhBbanNghiemThuDtlReq {
     private Long idHdr;
     private String type;
     private String noiDung;
-    private String dvt;
-    private BigDecimal soLuongTn;
-    private BigDecimal donGiaTn;
-    private BigDecimal donGiaQt;
-    private BigDecimal thanhTienTn;
-    private BigDecimal soLuongQt;
-    private BigDecimal thanhTienQt;
-    private BigDecimal tongGtri;
+    private String danhMuc;
+    private String nhomHang;
+    private String donViTinh;
+    private String matHang;
+    private String tenMatHang;
+    private String donViTinhMh;
+    private BigDecimal tongGiaTri;
+    private BigDecimal soLuongTrongNam;
+    private BigDecimal donGia;
+    private BigDecimal thanhTienTrongNam;
+    private BigDecimal soLuongNamTruoc;
+    private BigDecimal thanhTienNamTruoc;
+    private Boolean isParent;
+    private String idParent;
 }

@@ -5,10 +5,12 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
+import com.tcdt.qlnvhang.request.object.HhQdKhlcntHdrReq;
 import com.tcdt.qlnvhang.request.search.HhDthauSearchReq;
 import com.tcdt.qlnvhang.request.search.HhQdKhlcntSearchReq;
 import com.tcdt.qlnvhang.table.HhDthauNthauDuthau;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtl;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import org.springframework.data.domain.Page;
 
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -42,4 +44,5 @@ public interface HhDauThauService {
 //	void delete(IdSearchReq idSearchReq) throws Exception;
 //
 	void exportList(@Valid @RequestBody HhQdKhlcntSearchReq objReq, HttpServletResponse response) throws  Exception;
+	ReportTemplateResponse preview(HhQdKhlcntHdrReq objReq) throws Exception;
 }

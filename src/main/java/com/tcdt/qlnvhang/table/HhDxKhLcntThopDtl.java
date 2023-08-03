@@ -3,12 +3,14 @@ package com.tcdt.qlnvhang.table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.request.object.DsChiCucPreview;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -42,4 +44,10 @@ public class HhDxKhLcntThopDtl implements Serializable {
 	String diaChiDvi;
 	BigDecimal donGiaVat;
 
+	@Transient
+	private String tgianDongThau;
+	@Transient
+	private String soLuongStr;
+	@Transient
+	private List<DsChiCucPreview> dsChiCucPreviews;
 }

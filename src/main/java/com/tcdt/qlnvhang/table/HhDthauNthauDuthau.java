@@ -38,5 +38,6 @@ public class HhDthauNthauDuthau implements Serializable {
 	String lyDo;
 
 	private Long idDtGt;
+	private String type;
 
 }

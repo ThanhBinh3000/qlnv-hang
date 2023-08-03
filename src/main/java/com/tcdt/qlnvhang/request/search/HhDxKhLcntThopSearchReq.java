@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -34,4 +35,6 @@ public class HhDxKhLcntThopSearchReq extends BaseRequest {
 	String trangThai;
 
 	String soQd;
+	private Long id;
+	private ReportTemplateRequest reportTemplateRequest;
 }

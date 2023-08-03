@@ -89,4 +89,8 @@ public class HhDxKhlcntDsgthau implements Serializable {
 	@Transient
 	private List<HhDxKhlcntDsgthauCtiet> children = new ArrayList<>();
 
+	@Transient
+	private String donGiaVatStr;
+	@Transient
+	private String thanhTienStr;
 }
