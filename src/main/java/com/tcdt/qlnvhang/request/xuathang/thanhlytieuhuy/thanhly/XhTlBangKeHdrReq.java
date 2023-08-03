@@ -37,6 +37,7 @@ public class XhTlBangKeHdrReq extends BaseRequest {
     private String cloaiVthh;
     private String tenVthh;
     private String donViTinh;
+    private BigDecimal soLuong;
     private BigDecimal tongTrongLuongBaoBi;
     private String trangThai;
     private String lyDoTuChoi;

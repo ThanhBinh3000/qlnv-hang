@@ -50,6 +50,7 @@ public class XhTlBangKeHdr extends BaseEntity implements Serializable {
     private String cloaiVthh;
     private String tenVthh;
     private String donViTinh;
+    private BigDecimal soLuong;
     private BigDecimal tongTrongLuongBaoBi;
     private String trangThai;
     private String lyDoTuChoi;
