@@ -5,13 +5,20 @@ import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.hopdong.hopdongphuluc.DiaDiemGiaoNhanMttCtRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.hopdong.hopdongphuluc.DiaDiemGiaoNhanMttRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.hopdong.hopdongphuluc.HopDongMttHdrRepository;
+import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttHdrSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhQdGiaoNvNhReq;
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhQdPduyetKqcg;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.hopdong.hopdongphuluc.DiaDiemGiaoNhanMttCtReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.hopdong.hopdongphuluc.DiaDiemGiaoNhanMttReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdrReq;
 import com.tcdt.qlnvhang.response.HopDongMttHdrDTO;
+import com.tcdt.qlnvhang.response.SearchHopDongMttHdrDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.HhQdGiaoNvNhapHangService;
+import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.HhQdPduyetKqcgService;
+import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.HhQdPheduyetKhMttHdrService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttHdr;
 import com.tcdt.qlnvhang.table.HhQdPheduyetKqMttSLDD;
@@ -25,10 +32,7 @@ import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -68,6 +72,12 @@ public class HopDongMttHdrService extends BaseServiceImpl {
   @Autowired
   private HhQdPheduyetKhMttHdrRepository hhQdPheduyetKhMttHdrRepository;
 
+  @Autowired
+  private HhQdGiaoNvNhapHangService hhQdGiaoNvNhapHangService;
+
+  @Autowired
+  private HhQdPduyetKqcgService hhQdPduyetKqcgService;
+
 
   public Page<HopDongMttHdr> searchPage(HopDongMttHdrReq req) throws Exception {
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
@@ -96,9 +106,37 @@ public class HopDongMttHdrService extends BaseServiceImpl {
     return hopDongHdrRepository.findById(req.getIdHd()).get();
   }
 
-//  public Page<HopDongMttHdrDTO> searchPageHopDongHdr(){
-//
-//  }
+  public Page<HopDongMttHdrDTO> searchPageHopDongHdr(SearchHopDongMttHdrDTO req) throws Exception {
+    SearchHhQdPduyetKqcg objReq = new SearchHhQdPduyetKqcg();
+    SearchHhQdGiaoNvNhReq objGnvu = new SearchHhQdGiaoNvNhReq();
+    BeanUtils.copyProperties(req, objReq);
+    objReq.setTrangThai(req.getTrangThaiKq());
+    BeanUtils.copyProperties(req, objGnvu);
+    objGnvu.setTrangThai(req.getTrangThaiQd());
+    Page<HhQdPduyetKqcgHdr> dataQdPdKqcg = hhQdPduyetKqcgService.searchPage(objReq);
+    Page<HhQdGiaoNvNhapHang> dataGiaoNvu = hhQdGiaoNvNhapHangService.searchPage(objGnvu);
+    List<HopDongMttHdrDTO> result = mergeLists(dataQdPdKqcg.getContent(), dataGiaoNvu.getContent());
+    Page<HopDongMttHdrDTO> page = new PageImpl<>(result);
+    return page;
+  }
+
+  public static List<HopDongMttHdrDTO> mergeLists(List<HhQdPduyetKqcgHdr> list1, List<HhQdGiaoNvNhapHang> list2) {
+    Map<Long, HopDongMttHdrDTO> dtoMap = new HashMap<>();
+
+    for (HhQdPduyetKqcgHdr item : list1) {
+      HopDongMttHdrDTO dto = new HopDongMttHdrDTO();
+      BeanUtils.copyProperties(item, dto);
+      dtoMap.put(item.getId(), dto);
+    }
+
+    for (HhQdGiaoNvNhapHang item : list2) {
+      HopDongMttHdrDTO dto = new HopDongMttHdrDTO();
+      BeanUtils.copyProperties(item, dto);
+      dtoMap.put(item.getId(), dto);
+    }
+    List<HopDongMttHdrDTO> result = new ArrayList<>(dtoMap.values());
+    return result;
+  }
 
   @Transactional
   public HopDongMttHdr save(HopDongMttHdrReq req) throws Exception {
@@ -343,9 +381,10 @@ public class HopDongMttHdrService extends BaseServiceImpl {
       dtl.setChildren(qdGiaoNvNhDdiem);
     }
     data.setQdGiaoNvuDtlList(listDtl);
-
-    Optional<HhQdPheduyetKhMttHdr> hhQdPheduyetKhMttHdr = hhQdPheduyetKhMttHdrRepository.findByIdQdGnvu(data.getIdQdGiaoNvNh());
-    data.setHhQdPheduyetKhMttHdr(hhQdPheduyetKhMttHdr.get());
+    if(data.getIdQdGiaoNvNh() != null){
+      Optional<HhQdPheduyetKhMttHdr> hhQdPheduyetKhMttHdr = hhQdPheduyetKhMttHdrRepository.findByIdQdGnvu(data.getIdQdGiaoNvNh());
+      data.setHhQdPheduyetKhMttHdr(hhQdPheduyetKhMttHdr.get());
+    }
 //    for (DiaDiemGiaoNhanMtt diaDiem : allByIdHdr){
 //      List<DiaDiemGiaoNhanMttCt> diaDiemCt = diaDiemGiaoNhanMttCtRepository.findAllByIdDiaDiem(diaDiem.getId());
 //      diaDiemCt.forEach(f ->{

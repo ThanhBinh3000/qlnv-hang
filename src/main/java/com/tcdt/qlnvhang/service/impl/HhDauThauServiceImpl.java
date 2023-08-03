@@ -1,24 +1,22 @@
 package com.tcdt.qlnvhang.service.impl;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.*;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.*;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdrRepository;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthau;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtl;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthauRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.object.HhDthauNthauDuthauReq;
-import com.tcdt.qlnvhang.request.object.HhDthauReq;
+import com.tcdt.qlnvhang.request.object.*;
 import com.tcdt.qlnvhang.request.search.HhDthauSearchReq;
 import com.tcdt.qlnvhang.request.search.HhQdKhlcntSearchReq;
 import com.tcdt.qlnvhang.service.HhDauThauService;
 import com.tcdt.qlnvhang.service.HhQdKhlcntHdrService;
 import com.tcdt.qlnvhang.table.*;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +29,9 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,6 +63,14 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
     @Autowired
     private HhDchinhDxKhLcntHdrRepository hhDchinhDxKhLcntHdrRepository;
 
+    @Autowired
+    private HhDchinhDxKhLcntDsgthauRepository gThauRepository;
+
+    @Autowired
+    private HhQdPduyetKqlcntDtlRepository hhQdPduyetKqlcntDtlRepository;
+
+    @Autowired
+    private HhQdKhlcntDsgthauRepository hhQdKhlcntDsgthauRepository;
 
     @Override
     @Transactional
@@ -143,6 +148,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
             HhDthauNthauDuthau nthauDthau = new HhDthauNthauDuthau();
             BeanUtils.copyProperties(req, nthauDthau, "id");
             nthauDthau.setIdDtGt(objReq.getIdGoiThau());
+            nthauDthau.setType(objReq.getType());
             HhDthauNthauDuthau save = nhaThauDuthauRepository.save(nthauDthau);
             listDuThau.add(nthauDthau);
         }
@@ -260,13 +266,13 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
                 if(!byId.isPresent()){
                     throw new Exception("Gói thầu không tồn tại");
                 }
-                byIdDtGt = nhaThauDuthauRepository.findByIdDtGt(Long.parseLong(ids));
+                byIdDtGt = nhaThauDuthauRepository.findByIdDtGtAndType(Long.parseLong(ids), type);
             } else if (type.equals("GOC")) {
                 Optional<HhQdKhlcntDsgthau> byId = goiThauRepository.findById(Long.parseLong(ids));
                 if(!byId.isPresent()){
                     throw new Exception("Gói thầu không tồn tại");
                 }
-                byIdDtGt = nhaThauDuthauRepository.findByIdDtGt(Long.parseLong(ids));
+                byIdDtGt = nhaThauDuthauRepository.findByIdDtGtAndType(Long.parseLong(ids), type);
             }
             byIdDtGt.forEach(f -> {
                 f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
@@ -276,7 +282,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
             if(!byId.isPresent()){
                 throw new Exception("Gói thầu không tồn tại");
             }
-            byIdDtGt = nhaThauDuthauRepository.findByIdDtGt(Long.parseLong(ids));
+            byIdDtGt = nhaThauDuthauRepository.findByIdDtGtAndType(Long.parseLong(ids), null);
             byIdDtGt.forEach(f -> {
                 f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             });
@@ -331,6 +337,68 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 
         ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
         ex.export();
+    }
+
+    @Override
+    public ReportTemplateResponse preview(HhQdKhlcntHdrReq objReq) throws Exception {
+        Optional<HhQdKhlcntHdr> qOptional = hhQdKhlcntHdrRepository.findById(objReq.getId());
+        if (!qOptional.isPresent()) {
+            throw new UnsupportedOperationException("Không tồn tại bản ghi");
+        }
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        HhQdKhlcntPreview object = new HhQdKhlcntPreview();
+        if (qOptional.get().getIdTrHdr() != null) {
+            Optional<HhDxuatKhLcntHdr> dxuatKhLcntHdr = hhDxuatKhLcntHdrRepository.findById(qOptional.get().getIdTrHdr());
+            if (dxuatKhLcntHdr.isPresent()) {
+                Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+                object.setTenLoaiVthh(StringUtils.isEmpty(dxuatKhLcntHdr.get().getLoaiVthh()) ? null : hashMapDmHh.get(dxuatKhLcntHdr.get().getLoaiVthh()).toUpperCase());
+                object.setNamKhoach(dxuatKhLcntHdr.get().getNamKhoach().toString());
+            }
+        }
+        BigDecimal tongSl = BigDecimal.ZERO;
+        List<DsGthauPreview> dsGthau = new ArrayList<>();
+        if (qOptional.get().getDieuChinh().equals(Boolean.TRUE)) {
+            Optional<HhDchinhDxKhLcntHdr> dchinhDxKhLcntHdr = hhDchinhDxKhLcntHdrRepository.findByIdQdGocAndLastest(qOptional.get().getId(), Boolean.TRUE);
+            if (dchinhDxKhLcntHdr.isPresent()) {
+                List<HhDchinhDxKhLcntDsgthau> gThauList = gThauRepository.findAllByIdDcDxHdr(dchinhDxKhLcntHdr.get().getId());
+
+                for(HhDchinhDxKhLcntDsgthau gThau : gThauList){
+                    DsGthauPreview gthauPreview = new DsGthauPreview();
+                    gthauPreview.setGoiThau(gThau.getGoiThau());
+                    gthauPreview.setSoLuong(gThau.getSoLuong());
+                    tongSl = tongSl.add(gThau.getSoLuong());
+                    gthauPreview.setDvt(gThau.getDviTinh());
+                    HhQdPduyetKqlcntDtl kq = hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndType(gThau.getId(), "DC");
+                    if (kq != null) {
+                        gthauPreview.setNhaThauTrungThau(kq.getTenNhaThau());
+                    }
+                    List<HhDthauNthauDuthau> byIdDtGt = nhaThauDuthauRepository.findByIdDtGtAndType(gThau.getId(), "DC");
+                    gthauPreview.setDsNhaThau(byIdDtGt);
+                    dsGthau.add(gthauPreview);
+                }
+            }
+        } else {
+            List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdHdr(qOptional.get().getId());
+            for(HhQdKhlcntDsgthau gThau : hhQdKhlcntDsgthauData){
+                DsGthauPreview gthauPreview = new DsGthauPreview();
+                gthauPreview.setGoiThau(gThau.getGoiThau());
+                gthauPreview.setSoLuong(gThau.getSoLuong());
+                gthauPreview.setDvt(gThau.getDviTinh());
+                tongSl = tongSl.add(gThau.getSoLuong());
+                HhQdPduyetKqlcntDtl kq = hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndType(gThau.getId(), "GOC");
+                if (kq != null) {
+                    gthauPreview.setNhaThauTrungThau(kq.getTenNhaThau());
+                }
+                List<HhDthauNthauDuthau> byIdDtGt = nhaThauDuthauRepository.findByIdDtGtAndType(gThau.getId(), "GOC");
+                gthauPreview.setDsNhaThau(byIdDtGt);
+                dsGthau.add(gthauPreview);
+            }
+        }
+        object.setDsGthauKq(dsGthau);
+        object.setTongSl(tongSl.toString());
+        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
     }
 
     void approveLuongThuc(HhDthauReq stReq) throws Exception {

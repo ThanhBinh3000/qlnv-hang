@@ -1,31 +1,22 @@
 package com.tcdt.qlnvhang.service.nhaphang.nhapkhac.impl;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoKyThuat;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoKyThuatCt;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.hosokythuat.NhHoSoBienBanNk;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.hosokythuat.NhHoSoKyThuatCtNk;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.hosokythuat.NhHoSoKyThuatNk;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
-import com.tcdt.qlnvhang.repository.kiemtrachatluong.NhHoSoBienBanRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.NhHoSoBienBanNkRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.NhHoSoKyThuatCtNkRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.NhHoSoKyThuatNkRepository;
-import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
-import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatCtRepository;
-import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.vattu.hosokythuat.NhHoSoKyThuatCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.hosokythuat.NhHoSoKyThuatReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.hosokythuat.NhHoSoKyThuatService;
-import com.tcdt.qlnvhang.service.nhaphang.nhapkhac.HhQdGiaoNvuNhapHangKhacService;
 import com.tcdt.qlnvhang.service.nhaphang.nhapkhac.NhHoSoKyThuatNkService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttDx;
-import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -61,9 +52,6 @@ public class NhHoSoKyThuatNkServiceImpl extends BaseServiceImpl implements NhHoS
 
     @Autowired
     private final NhHoSoBienBanNkRepository nhHoSoBienBanRepository;
-
-    @Autowired
-    private final HhQdGiaoNvuNhapHangKhacService hhQdGiaoNvuNhapHangKhacService;
 
     @Autowired
     private final HhHopDongRepository hhHopDongRepository;

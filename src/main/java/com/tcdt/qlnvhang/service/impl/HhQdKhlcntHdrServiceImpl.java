@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.impl;
 
+import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -25,6 +26,7 @@ import com.tcdt.qlnvhang.request.object.*;
 import com.tcdt.qlnvhang.service.feign.KeHoachService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.*;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
@@ -1041,6 +1043,69 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		}
 		return listData;
 	}
+
+	@Override
+	public ReportTemplateResponse preview(HhQdKhlcntHdrReq objReq) throws Exception {
+		Optional<HhQdKhlcntHdr> qOptional = hhQdKhlcntHdrRepository.findById(objReq.getId());
+		if (!qOptional.isPresent()) {
+			throw new UnsupportedOperationException("Không tồn tại bản ghi");
+		}
+		ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+		byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+		HhQdKhlcntPreview object = new HhQdKhlcntPreview();
+		if (objReq.getLoaiVthh().startsWith("02")) {
+			Map<String,String> hashMapNguonVon = getListDanhMucChung("NGUON_VON");
+			Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
+			Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+			Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
+			object.setHthucLcnt(hashMapHtLcnt.get(qOptional.get().getHthucLcnt()));
+			object.setTgianThienHd(qOptional.get().getTgianThienHd() + " ngày (" + qOptional.get().getDienGiai() + ")");
+			if (qOptional.get().getIdTrHdr() != null) {
+				Optional<HhDxuatKhLcntHdr> dxuatKhLcntHdr = hhDxuatKhLcntHdrRepository.findById(qOptional.get().getIdTrHdr());
+				if (dxuatKhLcntHdr.isPresent()) {
+					object.setNguonVon(hashMapNguonVon.get(dxuatKhLcntHdr.get().getNguonVon()));
+					object.setTgianBdauTchuc("Quý " + dxuatKhLcntHdr.get().getQuy() + "/" + dxuatKhLcntHdr.get().getNamKhoach());
+				}
+			}
+			List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdHdr(qOptional.get().getId());
+			for(HhQdKhlcntDsgthau dsg : hhQdKhlcntDsgthauData){
+				List<HhQdKhlcntDsgthauCtiet> listGtCtiet = hhQdKhlcntDsgthauCtietRepository.findByIdGoiThau(dsg.getId());
+				listGtCtiet.forEach(f -> {
+					f.setTenDvi(mapDmucDvi.get(f.getMaDvi()));
+				});
+				dsg.setTenDvi(mapDmucDvi.get(dsg.getMaDvi()));
+				dsg.setTenCloaiVthh(hashMapDmHh.get(dsg.getCloaiVthh()));
+				dsg.setChildren(listGtCtiet);
+			}
+			object.setDsGthau(hhQdKhlcntDsgthauData);
+		} else {
+			Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
+			Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+			List<HhQdKhlcntDtl> hhQdKhlcntDtlList = new ArrayList<>();
+			List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauData = new ArrayList<>();
+			for(HhQdKhlcntDtl dtl : hhQdKhlcntDtlRepository.findAllByIdQdHdr(objReq.getId())){
+				dtl.setTenDvi(mapDmucDvi.get(dtl.getMaDvi()));
+				hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdDtl(dtl.getId());
+				for(HhQdKhlcntDsgthau dsg : hhQdKhlcntDsgthauData){
+					List<HhQdKhlcntDsgthauCtiet> listGtCtiet = hhQdKhlcntDsgthauCtietRepository.findByIdGoiThau(dsg.getId());
+					listGtCtiet.forEach(chiCuc -> chiCuc.setTenDvi(mapDmucDvi.get(chiCuc.getMaDvi())));
+					if (dsg.getDonGiaTamTinh() != null && dsg.getSoLuong() != null) {
+						dsg.setThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(dsg.getDonGiaTamTinh().multiply(dsg.getSoLuong())));
+					}
+					dsg.setChildren(listGtCtiet);
+				}
+				dtl.setChildren(hhQdKhlcntDsgthauData);
+				dtl.setTenDvi(mapDmucDvi.get(dtl.getMaDvi()));
+				hhQdKhlcntDtlList.add(dtl);
+			}
+			object.setQdKhlcntDtls(hhQdKhlcntDtlList);
+			object.setNamKhoach(qOptional.get().getNamKhoach().toString());
+			object.setTenCloaiVthh(hashMapDmHh.get(qOptional.get().getCloaiVthh()).toUpperCase());
+		}
+		return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+	}
+
 	@Override
 	public void exportList(HhQdKhlcntSearchReq searchReq, HttpServletResponse response) throws Exception {
 

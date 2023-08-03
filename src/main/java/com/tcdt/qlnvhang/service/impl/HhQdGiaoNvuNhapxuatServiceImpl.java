@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.impl;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -705,7 +706,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					req.getTrichYeu(),
 					convertFullDateToString(req.getTuNgayQd()),
 					convertFullDateToString(req.getDenNgayQd()),
-					req.getMaDvi(),
+					userInfo.getDvql(),
+					req.getTrangThai(),
 					pageable);
 		}
 		Map<String, String> mapDmucHh = getListDanhMucHangHoa();
@@ -739,7 +741,9 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 				dtl.setListBienBanNghiemThuBq(bbNghiemThuBq);
 
 				// Set biên bản lấy mẫu/ bàn giao mẫu
-				List<BienBanLayMau> bbLayMau = bienBanLayMauRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
+				req.setIdQdGiaoNvNh(f.getId());
+				req.setMaDviDtl(dtl.getMaDvi());
+				List<BienBanLayMau> bbLayMau = bienBanLayMauRepository.timKiemList(req);
 				bbLayMau.forEach( item -> {
 					item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
 					item.setTenDiemKho(mapDmucDvi.get(item.getMaDiemKho()));
