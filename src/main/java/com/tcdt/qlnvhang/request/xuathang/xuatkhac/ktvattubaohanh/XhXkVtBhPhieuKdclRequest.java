@@ -24,7 +24,7 @@ public class XhXkVtBhPhieuKdclRequest extends BaseRequest {
     private Integer soLanLm;
     private Integer soLuongMau;
     private String soBbLayMau;
-    private LocalDate ngayLauMau;
+    private LocalDate ngayLayMau;
     private String soPhieu;
     private LocalDate ngayLapPhieu;
     private LocalDate ngayKiemDinh;
