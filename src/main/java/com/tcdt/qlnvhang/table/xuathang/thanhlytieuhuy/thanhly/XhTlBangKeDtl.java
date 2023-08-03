@@ -17,9 +17,8 @@ public class XhTlBangKeDtl implements Serializable {
     @SequenceGenerator(sequenceName = XhTlBangKeDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlBangKeDtl.TABLE_NAME + "_SEQ")
     private Long id;
     private String maCan;
-    private String soBaoBi;
+    private Long soBaoBi;
     private Long trongLuongBaoBi;
-    private Long trongLuongCaBi;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idHdr")
