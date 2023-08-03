@@ -28,8 +28,9 @@ public class XhXkVtBhBaoCaoKdm extends BaseEntity implements Serializable {
     private String maDviNhan;
     private String soBaoCao;
     private String tenBaoCao;
-    private String idQdGiaoNvXh;
-    private String soQdGiaoNvXh;
+    private String idCanCu;
+    private String soCanCu;
+    private String loaiCanCu;
     private LocalDate ngayBaoCao;
     private String trangThai;
     private LocalDate ngayGduyet;
