@@ -38,6 +38,7 @@ public interface DcnbBBKetThucNKHdrRepository extends JpaRepository<DcnbBBKetThu
             "WHERE 1 =1 " +
             "AND qdc.parentId is not null and qdc.trangThai = '29'" +
             "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
+            "AND ((:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho})) " +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
