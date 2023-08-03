@@ -37,7 +37,8 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
             "and ((khdcd.maLoKho is not null and pkncl.maLoKho = khdcd.maLoKho and pkncl.maNganKho = khdcd.maNganKho and pkncl.trangThai = '05' ) or (khdcd.maLoKhoNhan is null and pkncl.maNganKho = khdcd.maNganKho and pkncl.trangThai = '05'))" +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
-            "AND qdc.parentId is not null and qdc.trangThai = '29' AND qdc.loaiDc = :#{#param.loaiDc} " +
+            "AND qdc.parentId is not null and qdc.trangThai = '29' " +
+            "AND ((:#{#param.loaiDc} IS NULL OR qdc.loaiDc = :#{#param.loaiDc}))" +
             "AND (:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho}) " +
             "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
