@@ -380,6 +380,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
                 f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
                 f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho()) ? null : mapDmucDvi.get(f.getMaDiemKho()));
                 if (dsG.getDonGiaVat() != null) {
+                    f.setThanhTien(dsG.getDonGiaVat().multiply(f.getSoLuong()));
                     f.setThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(dsG.getDonGiaVat().multiply(f.getSoLuong())));
                 }
                 List<HhDxKhlcntDsgthauCtietVt> byIdGoiThauCtiet = hhDxKhlcntDsgthauCtietVtRepository.findByIdGoiThauCtiet(f.getId());
@@ -557,6 +558,19 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         List<HhDxKhlcntDsgthau> dsgthau = getDsGthau(hhDxuatKhLcntHdrReq.getId(), mapVthh, mapDmucDvi);
+        BigDecimal tongThanhTien = BigDecimal.ZERO;
+        BigDecimal tongThucHien = BigDecimal.ZERO;
+        BigDecimal tongDx = BigDecimal.ZERO;
+        for (HhDxKhlcntDsgthau hhDxKhlcntDsgthau : dsgthau) {
+            for (HhDxKhlcntDsgthauCtiet child : hhDxKhlcntDsgthau.getChildren()) {
+                tongThanhTien = tongThanhTien.add(child.getThanhTien());
+                tongThucHien = tongThucHien.add(child.getSoLuongDaMua());
+                tongDx = tongDx.add(child.getSoLuong());
+            }
+        }
+        object.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStrNotDecimal(tongThanhTien));
+        object.setTongThucHien(docxToPdfConverter.convertBigDecimalToStrNotDecimal(tongThucHien));
+        object.setTongDeXuat(docxToPdfConverter.convertBigDecimalToStrNotDecimal(tongDx));
         object.setDsGtVt(dsgthau);
         return docxToPdfConverter.convertDocxToPdf(inputStream, object);
     }
