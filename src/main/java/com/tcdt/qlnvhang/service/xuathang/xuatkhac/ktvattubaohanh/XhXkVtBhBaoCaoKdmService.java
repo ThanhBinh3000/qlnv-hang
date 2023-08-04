@@ -93,6 +93,7 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
         item.setSoBcKqkdMau(created.getSoBaoCao());
         item.setIdBcKqkdMau(created.getId());
       });
+      xhXkVtBhPhieuXuatNhapKhoRepository.saveAll(allByIdCanCuIn);
     }
     List<XhXkVtBhQdGiaonvXnHdr> listQdGiaoNvXh = xhXkVtBhQdGiaonvXnRepository.findByIdIn(Arrays.asList(idsQdGiaoNvXh));
     if (!listQdGiaoNvXh.isEmpty()) {
@@ -136,6 +137,7 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
         item.setSoBcKqkdMau(created.getSoBaoCao());
         item.setIdBcKqkdMau(created.getId());
       });
+      xhXkVtBhPhieuXuatNhapKhoRepository.saveAll(allByIdCanCuIn);
     }
     List<XhXkVtBhQdGiaonvXnHdr> listQdGiaoNvXh = xhXkVtBhQdGiaonvXnRepository.findByIdIn(Arrays.asList(idsQdGiaoNvXh));
     if (!listQdGiaoNvXh.isEmpty()) {
@@ -158,10 +160,28 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
     }
     XhXkVtBhBaoCaoKdm model = optional.get();
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    Map<String, String> mapVthh = getListDanhMucHangHoa();
     List<FileDinhKem> fileDinhKem = fileDinhKemService.search(model.getId(), Arrays.asList(XhXkVtBhBaoCaoKdm.TABLE_NAME));
     model.setFileDinhKems(fileDinhKem);
     model.setTenDvi(mapDmucDvi.get(model.getMaDvi()));
     model.setTenTrangThai(TrangThaiAllEnum.getLabelById(model.getTrangThai()));
+    if (model.getLoaiCanCu().equals(Contains.QD_GNV)){
+      Long[] listIdQd = Arrays.stream(model.getIdCanCu().split(","))
+          .map(String::trim)
+          .map(Long::valueOf)
+          .toArray(Long[]::new);
+      List<XhXkVtBhQdGiaonvXnHdr> listQdGiaoNv= xhXkVtBhQdGiaonvXnRepository.findByIdIn(Arrays.asList(listIdQd));
+      listQdGiaoNv.forEach(s->{
+        s.setTenLoai(Contains.getLoaiHinhXuat(s.getLoai()));
+        s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
+        s.setTenTrangThaiXh(TrangThaiAllEnum.getLabelById(s.getTrangThaiXh()));
+        s.getQdGiaonvXhDtl().forEach(item -> {
+          item.setMapVthh(mapVthh);
+          item.setMapDmucDvi(mapDmucDvi);
+        });
+      });
+      model.setQdGiaonvXhDtl(listQdGiaoNv);
+    }
     return model;
   }
 
@@ -186,6 +206,7 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
           item.setSoBcKqkdMau(null);
           item.setIdBcKqkdMau(null);
         });
+        xhXkVtBhPhieuXuatNhapKhoRepository.saveAll(allByIdCanCuIn);
       }
       List<XhXkVtBhQdGiaonvXnHdr> listQdGiaoNvXh = xhXkVtBhQdGiaonvXnRepository.findByIdIn(Arrays.asList(idsQdGiaoNvXh));
       if (!listQdGiaoNvXh.isEmpty()) {
