@@ -17,7 +17,7 @@ import java.util.List;
 @Table(name = XhXkVtBhQdXuatGiamVt.TABLE_NAME)
 public class XhXkVtBhQdXuatGiamVt extends BaseEntity implements Serializable {
 
-    public static final String TABLE_NAME = "XH_XK_VT_BH_QD_XUAT_GIAM_VT";
+    public static final String TABLE_NAME = "XH_XK_VT_BH_QD_XG_VT";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXkVtBhQdXuatGiamVt.TABLE_NAME + "_SEQ")
