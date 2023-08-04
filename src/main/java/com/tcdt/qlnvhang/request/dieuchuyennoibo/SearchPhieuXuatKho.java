@@ -13,6 +13,7 @@ import java.util.List;
 public class SearchPhieuXuatKho extends BaseRequest {
     private Integer nam;
     private Long qdinhDccId;
+    private String typeQd;
     private String soQdinhDcc;
     private String soBbLayMau;
     private String soPhieuXuatKho;

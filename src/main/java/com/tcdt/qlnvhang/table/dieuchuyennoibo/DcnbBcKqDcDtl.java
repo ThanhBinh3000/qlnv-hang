@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 
 @Entity
@@ -84,4 +83,31 @@ public class DcnbBcKqDcDtl extends BaseEntity implements Serializable, Cloneable
     @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
     @JsonIgnore
     private DcnbBcKqDcHdr dcnbBcKqDcHdr;
+
+    public DcnbBcKqDcDtl(String loaiVthh, String cloaiVthh, String tenLoaiVthh, String tenCloaiVthh, String maDiemKho, String tenDiemKho, String maNhaKho, String tenNhaKho, String maNganKho, String tenNganKho, String maLoKho, String tenLoKho, String donViTinh, String tenDonViTinh, BigDecimal slTon, BigDecimal slDieuChuyenQd, BigDecimal slXuatTt, BigDecimal slNhapTt, BigDecimal kinhPhiTheoQd, BigDecimal kinhPhiXuatTt, BigDecimal kinhPhiNhapTt, Boolean ketQua, Boolean tinhTrang, String type) {
+        this.loaiVthh = loaiVthh;
+        this.cloaiVthh = cloaiVthh;
+        this.tenLoaiVthh = tenLoaiVthh;
+        this.tenCloaiVthh = tenCloaiVthh;
+        this.maDiemKho = maDiemKho;
+        this.tenDiemKho = tenDiemKho;
+        this.maNhaKho = maNhaKho;
+        this.tenNhaKho = tenNhaKho;
+        this.maNganKho = maNganKho;
+        this.tenNganKho = tenNganKho;
+        this.maLoKho = maLoKho;
+        this.tenLoKho = tenLoKho;
+        this.donViTinh = donViTinh;
+        this.tenDonViTinh = tenDonViTinh;
+        this.slTon = slTon;
+        this.slDieuChuyenQd = slDieuChuyenQd;
+        this.slXuatTt = slXuatTt;
+        this.slNhapTt = slNhapTt;
+        this.kinhPhiTheoQd = kinhPhiTheoQd;
+        this.kinhPhiXuatTt = kinhPhiXuatTt;
+        this.kinhPhiNhapTt = kinhPhiNhapTt;
+        this.ketQua = ketQua;
+        this.tinhTrang = tinhTrang;
+        this.type = type;
+    }
 }

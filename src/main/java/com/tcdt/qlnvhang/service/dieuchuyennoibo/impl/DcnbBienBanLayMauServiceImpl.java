@@ -69,9 +69,11 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         if ("00".equals(req.getType())) { // kiểu xuất
+            req.setTypeQd(Contains.DIEU_CHUYEN);
             searchDto = dcnbBienBanLayMauHdrRepository.searchPageXuat(req, pageable);
         }
         if ("01".equals(req.getType())) { // kiểu nhan
+            req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
             searchDto = dcnbBienBanLayMauHdrRepository.searchPageNhan(req, pageable);
         }
         return searchDto;

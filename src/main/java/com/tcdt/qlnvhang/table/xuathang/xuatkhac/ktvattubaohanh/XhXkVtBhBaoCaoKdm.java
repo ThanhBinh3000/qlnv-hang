@@ -28,8 +28,9 @@ public class XhXkVtBhBaoCaoKdm extends BaseEntity implements Serializable {
     private String maDviNhan;
     private String soBaoCao;
     private String tenBaoCao;
-    private String idQdGiaoNvXh;
-    private String soQdGiaoNvXh;
+    private String idCanCu;
+    private String soCanCu;
+    private String loaiCanCu;
     private LocalDate ngayBaoCao;
     private String trangThai;
     private LocalDate ngayGduyet;
@@ -37,6 +38,8 @@ public class XhXkVtBhBaoCaoKdm extends BaseEntity implements Serializable {
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
     private String lyDoTuChoi;
+    private Long idQdXuatGiamVt;
+    private String soQdXuatGiamVt;
     
     @Transient
     private String tenDvi;
@@ -44,6 +47,7 @@ public class XhXkVtBhBaoCaoKdm extends BaseEntity implements Serializable {
     private String tenTrangThai;
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
-
+    @Transient
+    private List<XhXkVtBhQdGiaonvXnHdr> qdGiaonvXhDtl = new ArrayList<>();
 
 }

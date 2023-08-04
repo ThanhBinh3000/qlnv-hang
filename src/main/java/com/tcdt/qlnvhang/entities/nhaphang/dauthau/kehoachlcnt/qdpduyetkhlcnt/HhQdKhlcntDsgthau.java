@@ -78,7 +78,8 @@ public class HhQdKhlcntDsgthau implements Serializable {
 
 	@Transient
 	private List<HhQdKhlcntDsgthauCtiet> children = new ArrayList<>();
-
+	@Transient
+	private List<HhDthauNthauDuthau> dsNhaThauDthau = new ArrayList<>();
 	String tenNhaThau;
 
 	BigDecimal donGiaNhaThau;

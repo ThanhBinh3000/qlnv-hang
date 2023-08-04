@@ -59,6 +59,8 @@ public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService {
         } else {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
+        req.setType("01");
+        req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         searchDto = hdrRepository.searchPage(req, pageable);
         return searchDto;
     }
