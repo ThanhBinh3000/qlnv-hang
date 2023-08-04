@@ -24,8 +24,10 @@ public class XhXkVtBhQdXuatGiamVtRequest extends BaseRequest {
     private Long idCanCu;
     private String trangThai;
     private String lyDoTuChoi;
-    private Long nguoiDuyetId;
-    private LocalDate ngayDuyet;
+    private LocalDate ngayGduyet;
+    private Long nguoiGduyetId;
+    private LocalDate ngayPduyet;
+    private Long nguoiPduyetId;
     private String listSoQdGiaoNvXh;
     private String listIdQdGiaoNvXh;
     private List<XhXkVtBhQdXuatGiamVtDtl> qdXuatGiamVtDtl = new ArrayList<>();
