@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.xuathang.kiemtrachatluong;
 
 import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThuatDtl;
+import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThuatHdr;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,8 +12,8 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class XhHoSoKyThuatReq {
-  private Long id;
+public class XhHoSoKyThuatReq extends XhHoSoKyThuatHdr {
+  /*private Long id;
   private String soHskt;
   private Long idHsktNh;
   private Long soHsktNh;
@@ -41,5 +42,5 @@ public class XhHoSoKyThuatReq {
   private String tenDiemKho;
   private String tenNhaKho;
   private String tenNganKho;
-  private String tenLoKho;
+  private String tenLoKho;*/
 }
