@@ -44,10 +44,12 @@ public class XhXkVtBhBaoCaoKdm extends BaseEntity implements Serializable {
     @Transient
     private String tenDvi;
     @Transient
+    private String tenDviNhan;
+    @Transient
     private String tenTrangThai;
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     @Transient
-    private List<XhXkVtBhQdGiaonvXnHdr> qdGiaonvXhDtl = new ArrayList<>();
+    private List<XhXkVtBhQdGiaonvXnHdr> baoCaoDtl = new ArrayList<>();
 
 }

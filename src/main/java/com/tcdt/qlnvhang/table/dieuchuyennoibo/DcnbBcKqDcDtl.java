@@ -52,6 +52,28 @@ public class DcnbBcKqDcDtl extends BaseEntity implements Serializable, Cloneable
     private String maLoKho;
     @Column(name = "TEN_LO_KHO")
     private String tenLoKho;
+
+    @Column(name = "MA_DVI_NHAN")
+    private String maDviNhan;
+    @Column(name = "TEN_DVI_NHAN")
+    private String tenDviNhan;
+    @Column(name = "MA_DIEM_KHO_NHAN")
+    private String maDiemKhoNhan;
+    @Column(name = "TEN_DIEM_KHO_NHAN")
+    private String tenDiemKhoNhan;
+    @Column(name = "MA_NHA_KHO_NHAN")
+    private String maNhaKhoNhan;
+    @Column(name = "TEN_NHA_KHO_NHAN")
+    private String tenNhaKhoNhan;
+    @Column(name = "MA_NGAN_KHO_NHAN")
+    private String maNganKhoNhan;
+    @Column(name = "TEN_NGAN_KHO_NHAN")
+    private String tenNganKhoNhan;
+    @Column(name = "MA_LO_KHO_NHAN")
+    private String maLoKhoNhan;
+    @Column(name = "TEN_LO_KHO_NHAN")
+    private String tenLoKhoNhan;
+
     @Column(name = "DON_VI_TINH")
     private String donViTinh;
     @Column(name = "TEN_DON_VI_TINH")
@@ -84,7 +106,9 @@ public class DcnbBcKqDcDtl extends BaseEntity implements Serializable, Cloneable
     @JsonIgnore
     private DcnbBcKqDcHdr dcnbBcKqDcHdr;
 
-    public DcnbBcKqDcDtl(String loaiVthh, String cloaiVthh, String tenLoaiVthh, String tenCloaiVthh, String maDiemKho, String tenDiemKho, String maNhaKho, String tenNhaKho, String maNganKho, String tenNganKho, String maLoKho, String tenLoKho, String donViTinh, String tenDonViTinh, BigDecimal slTon, BigDecimal slDieuChuyenQd, BigDecimal slXuatTt, BigDecimal slNhapTt, BigDecimal kinhPhiTheoQd, BigDecimal kinhPhiXuatTt, BigDecimal kinhPhiNhapTt, Boolean ketQua, Boolean tinhTrang, String type) {
+    public DcnbBcKqDcDtl(String loaiVthh, String cloaiVthh, String tenLoaiVthh, String tenCloaiVthh, String maDiemKho, String tenDiemKho, String maNhaKho, String tenNhaKho, String maNganKho, String tenNganKho, String maLoKho, String tenLoKho,
+                         String maDviNhan, String tenDviNhan, String maDiemKhoNhan, String tenDiemKhoNhan, String maNhaKhoNhan, String tenNhaKhoNhan, String maNganKhoNhan, String tenNganKhoNhan, String maLoKhoNhan, String tenLoKhoNhan,
+                         String donViTinh, String tenDonViTinh, BigDecimal slTon, BigDecimal slDieuChuyenQd, BigDecimal slXuatTt, BigDecimal slNhapTt, BigDecimal kinhPhiTheoQd, BigDecimal kinhPhiXuatTt, BigDecimal kinhPhiNhapTt, Boolean ketQua, Boolean tinhTrang, String type) {
         this.loaiVthh = loaiVthh;
         this.cloaiVthh = cloaiVthh;
         this.tenLoaiVthh = tenLoaiVthh;
@@ -97,6 +121,16 @@ public class DcnbBcKqDcDtl extends BaseEntity implements Serializable, Cloneable
         this.tenNganKho = tenNganKho;
         this.maLoKho = maLoKho;
         this.tenLoKho = tenLoKho;
+        this.maDviNhan = maDviNhan;
+        this.tenDviNhan = tenDviNhan;
+        this.maDiemKhoNhan = maDiemKhoNhan;
+        this.tenDiemKhoNhan = tenDiemKhoNhan;
+        this.maNhaKhoNhan = maNhaKhoNhan;
+        this.tenNhaKhoNhan = tenNhaKhoNhan;
+        this.maNganKhoNhan = maNganKhoNhan;
+        this.tenNganKhoNhan = tenNganKhoNhan;
+        this.maLoKhoNhan = maLoKhoNhan;
+        this.tenLoKhoNhan = tenLoKhoNhan;
         this.donViTinh = donViTinh;
         this.tenDonViTinh = tenDonViTinh;
         this.slTon = slTon;

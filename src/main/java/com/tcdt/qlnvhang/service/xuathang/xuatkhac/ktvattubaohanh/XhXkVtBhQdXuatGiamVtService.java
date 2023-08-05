@@ -171,26 +171,36 @@ public class XhXkVtBhQdXuatGiamVtService extends BaseServiceImpl {
   }
 
 
-  public XhXkVtBhQdXuatGiamVt pheDuyet(CustomUserDetails currentUser, StatusReq req) throws Exception {
-    Optional<XhXkVtBhQdXuatGiamVt> dx = xhXkVtBhQdXuatGiamVattuRepository.findById(req.getId());
-    if (!dx.isPresent()) {
+  public XhXkVtBhQdXuatGiamVt pheDuyet(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
+    Optional<XhXkVtBhQdXuatGiamVt> optional = xhXkVtBhQdXuatGiamVattuRepository.findById(statusReq.getId());
+    if (!optional.isPresent()) {
       throw new Exception("Không tồn tại bản ghi");
     }
-    XhXkVtBhQdXuatGiamVt XhXkVtBhQdXuatGiamVt = dx.get();
-    String status = XhXkVtBhQdXuatGiamVt.getTrangThai() + req.getTrangThai();
+    String status = statusReq.getTrangThai() + optional.get().getTrangThai();
     switch (status) {
-      case Contains.DU_THAO + Contains.BAN_HANH:
-        XhXkVtBhQdXuatGiamVt.setNguoiDuyetId(currentUser.getUser().getId());
-        XhXkVtBhQdXuatGiamVt.setNgayDuyet(LocalDate.now());
+      case Contains.CHODUYET_LDV + Contains.DUTHAO:
+      case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
+      case Contains.CHODUYET_LDV + Contains.TUCHOI_LDTC:
+        optional.get().setNguoiGduyetId(currentUser.getUser().getId());
+        optional.get().setNgayGduyet(LocalDate.now());
+        break;
+      case Contains.TUCHOI_LDTC + Contains.CHODUYET_LDV:
+      case Contains.TUCHOI_LDTC + Contains.CHODUYET_LDTC:
+        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+        optional.get().setNgayPduyet(LocalDate.now());
+        optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
+        break;
+      case Contains.BAN_HANH + Contains.CHODUYET_LDTC:
+        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+        optional.get().setNgayPduyet(LocalDate.now());
         break;
       default:
-        throw new Exception("Phê duyệt không thành công.");
+        throw new Exception("Phê duyệt không thành công");
     }
-    XhXkVtBhQdXuatGiamVt.setTrangThai(req.getTrangThai());
-    XhXkVtBhQdXuatGiamVt model = xhXkVtBhQdXuatGiamVattuRepository.save(XhXkVtBhQdXuatGiamVt);
-    return detail(model.getId());
+    optional.get().setTrangThai(statusReq.getTrangThai());
+    XhXkVtBhQdXuatGiamVt created = xhXkVtBhQdXuatGiamVattuRepository.save(optional.get());
+    return created;
   }
-
 
   public void export(CustomUserDetails currentUser, XhXkVtBhQdXuatGiamVtRequest objReq, HttpServletResponse response) throws Exception {
     PaggingReq paggingReq = new PaggingReq();

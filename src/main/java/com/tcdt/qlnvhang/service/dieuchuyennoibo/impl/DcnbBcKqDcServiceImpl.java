@@ -9,7 +9,6 @@ import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBcKqDcHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbKqDcSearch;
-import com.tcdt.qlnvhang.request.dieuchuyennoibo.ThKeHoachDieuChuyenNoiBoCucDtlReq;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbKqDcDTO;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBbKqDcService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -17,14 +16,9 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBcKqDcDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBcKqDcHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
-import org.apache.commons.lang3.SerializationUtils;
-import org.hibernate.Hibernate;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -237,12 +231,7 @@ public class DcnbBcKqDcServiceImpl implements DcnbBbKqDcService {
     public List<DcnbBcKqDcDtl> thongTinNhapXuatHangChiCuc(DcnbBbKqDcSearch objReq) throws Exception {
         CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
         objReq.setMaDvi(currentUser.getDvql());
-        List<DcnbBcKqDcDtl> result = new ArrayList<>();
-        List<DcnbBcKqDcDtl> dcnbBcKqDcDtlsXuat = dtlRepository.thongTinXuatHangChiCuc(objReq);
-        List<DcnbBcKqDcDtl> dcnbBcKqDcDtlsNhap = dtlRepository.thongTinNhapHangChiCuc(objReq);
-        result.addAll(dcnbBcKqDcDtlsXuat);
-        result.addAll(dcnbBcKqDcDtlsNhap);
-        return result;
+        return dtlRepository.thongTinXuatNhapHangChiCuc(objReq);
     }
 
     @Override
@@ -252,10 +241,8 @@ public class DcnbBcKqDcServiceImpl implements DcnbBbKqDcService {
         List<DcnbBcKqDcDtl> result = new ArrayList<>();
         for (QlnvDmDonvi cqt : donvis) {
             objReq.setMaDvi(cqt.getMaDvi());
-            List<DcnbBcKqDcDtl> dcnbBcKqDcDtlsXuat = dtlRepository.thongTinXuatHangCuc(objReq);
-            List<DcnbBcKqDcDtl> dcnbBcKqDcDtlsNhap = dtlRepository.thongTinNhapHangCuc(objReq);
+            List<DcnbBcKqDcDtl> dcnbBcKqDcDtlsXuat = dtlRepository.thongTinXuatNhapHangCuc(objReq);
             result.addAll(dcnbBcKqDcDtlsXuat);
-            result.addAll(dcnbBcKqDcDtlsNhap);
         }
         return result;
     }
