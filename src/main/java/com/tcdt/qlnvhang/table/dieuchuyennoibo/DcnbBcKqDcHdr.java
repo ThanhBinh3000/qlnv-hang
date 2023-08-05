@@ -31,6 +31,7 @@ public class DcnbBcKqDcHdr extends BaseEntity implements Serializable, Cloneable
     private String maDvi;
     private String tenDvi;
     private String maDviNhan;
+    private String tenDviNhan;
     private String soBc;
     private LocalDate ngayBc;
     private String tenBc;
