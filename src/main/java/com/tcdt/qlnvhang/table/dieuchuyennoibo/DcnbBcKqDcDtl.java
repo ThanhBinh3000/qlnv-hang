@@ -52,6 +52,26 @@ public class DcnbBcKqDcDtl extends BaseEntity implements Serializable, Cloneable
     private String maLoKho;
     @Column(name = "TEN_LO_KHO")
     private String tenLoKho;
+
+    @Column(name = "MA_DVI_NHAN")
+    private String maDviNhan;
+    @Column(name = "MA_DIEM_KHO_NHAN")
+    private String maDiemKhoNhan;
+    @Column(name = "TEN_DIEM_KHO_NHAN")
+    private String tenDiemKhoNhan;
+    @Column(name = "MA_NHA_KHO_NHAN")
+    private String maNhaKhoNhan;
+    @Column(name = "TEN_NHA_KHO_NHAN")
+    private String tenNhaKhoNhan;
+    @Column(name = "MA_NGAN_KHO_NHAN")
+    private String maNganKhoNhan;
+    @Column(name = "TEN_NGAN_KHO_NHAN")
+    private String tenNganKhoNhan;
+    @Column(name = "MA_LO_KHO_NHAN")
+    private String maLoKhoNhan;
+    @Column(name = "TEN_LO_KHO_NHAN")
+    private String tenLoKhoNhan;
+
     @Column(name = "DON_VI_TINH")
     private String donViTinh;
     @Column(name = "TEN_DON_VI_TINH")
