@@ -16,6 +16,7 @@ public class DcnbBbKqDcDTO {
     private String maDvi;
     private String tenDvi;
     private String maDviNhan;
+    private String tenDviNhan;
     private String soBc;
     private LocalDate ngayBc;
     private String tenBc;
