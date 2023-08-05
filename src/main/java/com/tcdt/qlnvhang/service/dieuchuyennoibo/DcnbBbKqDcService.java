@@ -33,4 +33,6 @@ public interface DcnbBbKqDcService {
     List<DcnbBcKqDcDtl> thongTinNhapXuatHangChiCuc(DcnbBbKqDcSearch objReq) throws Exception;
 
     List<DcnbBcKqDcDtl> thongTinNhapXuatHangCuc(DcnbBbKqDcSearch objReq) throws Exception;
+
+    void finish(StatusReq objReq) throws Exception;
 }

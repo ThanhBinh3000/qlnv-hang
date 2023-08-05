@@ -246,4 +246,19 @@ public class DcnbBcKqDcServiceImpl implements DcnbBbKqDcService {
         }
         return result;
     }
+
+    @Override
+    public void finish(StatusReq statusReq) throws Exception {
+        CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
+        if (StringUtils.isEmpty(statusReq.getId())) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        DcnbBcKqDcHdr details = detail(Long.valueOf(statusReq.getId()));
+        Optional<DcnbBcKqDcHdr> optional = Optional.of(details);
+        if (!optional.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        optional.get().setTrangThai(Contains.DA_HOAN_THANH);
+        hdrRepository.save(optional.get());
+    }
 }
