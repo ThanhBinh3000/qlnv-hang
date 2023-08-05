@@ -80,4 +80,8 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
     List<XhDxKhBanDauGia> findAllByIdIn(List<Long> listId);
 
     List<XhDxKhBanDauGia> findByIdIn(List<Long> idDxList);
+
+    List<XhDxKhBanDauGia> findAllByIdThop(Long idThop);
+
+    List<XhDxKhBanDauGia> findByIdThopIn(List<Long> listId);
 }
