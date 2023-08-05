@@ -24,7 +24,7 @@ public interface DcnbBienBanHaoDoiHdrRepository extends JpaRepository<DcnbBienBa
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
             "LEFT JOIN DcnbBienBanHaoDoiHdr bbhd ON bbhd.qDinhDccId = qdc.id " +
-            "and ((khdcd.maLoKho is not null and bbhd.maLoKho = khdcd.maLoKho and bbhd.maNganKho = khdcd.maNganKho ) or (khdcd.maLoKhoNhan is null and bbhd.maNganKho = khdcd.maNganKho ))" +
+            "and ((khdcd.maLoKho is not null and bbhd.maLoKho = khdcd.maLoKho and bbhd.maNganKho = khdcd.maNganKho ) or (khdcd.maLoKho is null and bbhd.maNganKho = khdcd.maNganKho ))" +
             "LEFT JOIN DcnbBienBanTinhKhoHdr bbtk ON bbtk.qDinhDccId = qdc.id " +
             "and ((khdcd.maLoKho is not null and bbtk.maLoKho = khdcd.maLoKho and bbtk.maNganKho = khdcd.maNganKho and bbtk.trangThai = '17' ) or (khdcd.maLoKhoNhan is null and bbtk.maNganKho = khdcd.maNganKho and bbtk.trangThai = '17' ))" +
             "LEFT JOIN DcnbBienBanTinhKhoDtl bbtkd ON bbtkd.hdrId = bbtk.id " +
