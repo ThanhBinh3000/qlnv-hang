@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public interface XhXkVtBhQdXuatGiamVtRepository extends JpaRepository<XhXkVtBhQdXuatGiamVt, Long> {
     @Query("SELECT distinct c FROM XhXkVtBhQdXuatGiamVt c WHERE 1=1 " +
-            "AND (:#{#param.dvql} IS NULL OR c.maDviNhan LIKE CONCAT(:#{#param.dvql},'%')) " +
+            "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
             "AND (:#{#param.namKeHoach} IS NULL OR c.namKeHoach = :#{#param.namKeHoach}) " +
             "AND (:#{#param.loai} IS NULL OR c.loai = :#{#param.loai}) " +
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
