@@ -19,6 +19,7 @@ public interface DcnbBBNTBQHdrRepository extends JpaRepository<DcnbBBNTBQHdr, Lo
             " LEFT JOIN QlnvDmDonvi dvi ON dvi.maDvi = c.maDvi " +
             " WHERE 1=1 " +
             " AND (:#{#param.soBangKe} IS NULL OR LOWER(c.soPhieuXuatKho) LIKE CONCAT('%',LOWER(:#{#param.soBangKe}),'%')) " +
+            "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
             " ORDER BY c.soPhieuXuatKho desc , c.nam desc, c.id desc")
     Page<DcnbBBNTBQHdr> search(@Param("param") DcnbBBNTBQHdrReq req, Pageable pageable);
 
@@ -44,6 +45,7 @@ public interface DcnbBBNTBQHdrRepository extends JpaRepository<DcnbBBNTBQHdr, Lo
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
             "AND (qdc.loaiDc= 'DCNB' OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.trangThai} IS NULL OR bblm.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.soQdDcCuc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdDcCuc}),'%')) " +
             "AND (:#{#param.soBban} IS NULL OR LOWER(bblm.soBban) LIKE CONCAT('%',LOWER(:#{#param.soBban}),'%')) " +
             "AND ((:#{#param.tuNgayLap}  IS NULL OR bblm.ngayLap >= :#{#param.tuNgayLap})" +

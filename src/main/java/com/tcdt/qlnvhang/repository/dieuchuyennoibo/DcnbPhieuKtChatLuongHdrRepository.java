@@ -68,6 +68,7 @@ public interface DcnbPhieuKtChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "AND pktcl.trangThai = '05' " +
             "AND ((:#{#param.maDvi} IS NULL OR pktcl.maDvi = :#{#param.maDvi}))" +
             "AND (:#{#param.nam} IS NULL OR pktcl.nam = :#{#param.nam}) " +
+            "AND (:#{#param.trangThai} IS NULL OR pktcl.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.maNganKho} IS NULL OR pktcl.maNganKho = :#{#param.maNganKho}) " +
             "AND (:#{#param.maNganKhoXuat} IS NULL OR pktcl.maNganKhoXuat = :#{#param.maNganKhoXuat}) " +
             "AND (:#{#param.maLoKho} IS NULL OR pktcl.maLoKho = :#{#param.maLoKho}) " +
@@ -106,6 +107,7 @@ public interface DcnbPhieuKtChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "AND ((:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho})) " +
             "AND (qdc.loaiDc= 'DCNB' OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.trangThai} IS NULL OR pktcl.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.soPhieu} IS NULL OR LOWER(pktcl.soPhieu) LIKE CONCAT('%',LOWER(:#{#param.soPhieu}),'%')) " +
             "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(pktcl.soQdinhDc) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR pktcl.ngayKiem >= :#{#param.tuNgay})" +
