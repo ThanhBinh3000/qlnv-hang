@@ -60,6 +60,7 @@ public interface DcnbBienBanLayMauHdrRepository extends JpaRepository<DcnbBienBa
             "AND (:#{#param.maNganKho} IS NULL OR LOWER(hdr.maNganKho) LIKE CONCAT('%',LOWER(:#{#param.maNganKho}),'%')) " +
             "AND (:#{#param.DViKiemNghiem} IS NULL OR hdr.dViKiemNghiem LIKE CONCAT(:#{#param.DViKiemNghiem},'%')) " +
             "AND (:#{#param.nam} IS NULL OR hdr.nam = :#{#param.nam}) " +
+            "AND (:#{#param.trangThai} IS NULL OR hdr.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.soBbLayMau} IS NULL OR LOWER(hdr.soBbLayMau) LIKE CONCAT('%',LOWER(:#{#param.soBbLayMau}),'%')) " +
             "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(hdr.soQdinhDcc) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR hdr.ngayLayMau >= :#{#param.tuNgay})" +
