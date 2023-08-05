@@ -148,17 +148,8 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                     item.setTenLoKho(StringUtils.isEmpty(item.getMaLoKho())?null:hashMapDmdv.get(item.getMaLoKho()));
                 });
                 dDiem.setListBienBanNghiemThuBq(bbNghiemThuBq);
-                 }
-            for (HhQdGiaoNvNhangDtl dtl : hhQdGiaoNvNhangDtl ){
-                dtl.setChildren(ddiemList);
-                // Set biên bản nghiệm thu bảo quản
-//                List<HhBienBanNghiemThu> bbNghiemThuBq = hhBienBanNghiemThuRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
-//                bbNghiemThuBq.forEach( item ->  {
-//                   item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
-//                });
-                // Set biên bản lấy mẫu/ bàn giao mẫu
-//                dtl.setListBienBanNghiemThuBq(bbNghiemThuBq);
-                List<HhBienBanLayMau> bbLayMau = hhBienBanLayMauRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
+
+                List<HhBienBanLayMau> bbLayMau = hhBienBanLayMauRepository.findByIdQdGiaoNvNhAndMaLoKho(f.getId(), dDiem.getMaLoKho());
                 bbLayMau.forEach(item ->{
                     item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
                     item.setTenDiemKho(StringUtils.isEmpty(item.getMaDiemKho())?null:hashMapDmdv.get(item.getMaDiemKho()));
@@ -169,7 +160,29 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                             .stream().filter(x -> Objects.equals(x.getId(), item.getIdBbNhapDayKho())).findAny().orElse(null);
                     item.setBbNhapDayKho(bienBanDayKho);
                 });
-                dtl.setListBienBanLayMau(bbLayMau);
+                dDiem.setListBienBanLayMau(bbLayMau);
+                 }
+            for (HhQdGiaoNvNhangDtl dtl : hhQdGiaoNvNhangDtl ){
+                dtl.setChildren(ddiemList);
+                // Set biên bản nghiệm thu bảo quản
+//                List<HhBienBanNghiemThu> bbNghiemThuBq = hhBienBanNghiemThuRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
+//                bbNghiemThuBq.forEach( item ->  {
+//                   item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+//                });
+                // Set biên bản lấy mẫu/ bàn giao mẫu
+//                dtl.setListBienBanNghiemThuBq(bbNghiemThuBq);
+//                List<HhBienBanLayMau> bbLayMau = hhBienBanLayMauRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
+//                bbLayMau.forEach(item ->{
+//                    item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+//                    item.setTenDiemKho(StringUtils.isEmpty(item.getMaDiemKho())?null:hashMapDmdv.get(item.getMaDiemKho()));
+//                    item.setTenNhaKho(StringUtils.isEmpty(item.getMaNhaKho())?null:hashMapDmdv.get(item.getMaNhaKho()));
+//                    item.setTenNganKho(StringUtils.isEmpty(item.getMaNganKho())?null:hashMapDmdv.get(item.getMaNganKho()));
+//                    item.setTenLoKho(StringUtils.isEmpty(item.getMaLoKho())?null:hashMapDmdv.get(item.getMaLoKho()));
+//                    HhBienBanDayKhoHdr bienBanDayKho = hhBienBanDayKhoHdrRepository.findAllByIdQdGiaoNvNh(f.getId())
+//                            .stream().filter(x -> Objects.equals(x.getId(), item.getIdBbNhapDayKho())).findAny().orElse(null);
+//                    item.setBbNhapDayKho(bienBanDayKho);
+//                });
+//                dtl.setListBienBanLayMau(bbLayMau);
                 // Set phiếu kiểm nghiệm chất lượng
                 List<HhPhieuKngiemCluong> phieuKnghiemCl = hhPhieuKngiemCluongRepository.findBySoQdGiaoNvNhAndMaDvi(f.getSoQd(), dtl.getMaDvi());
                 phieuKnghiemCl.forEach( item -> {
@@ -254,6 +267,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
             dDiem.setListPhieuKtraCl(phieuKiemTraChatLuongList);
             dDiem.setBienBanNhapDayKho(hhBienBanDayKhoHdrRepository.findAllByIdQdGiaoNvNh(dDiem.getId()));
             dDiem.setBienBanNhapDayKho(hhBienBanDayKhoHdrRepository.findAllByIdDdiemGiaoNvNh(dDiem.getId()));
+            dDiem.setListBienBanNghiemThuBq(hhBienBanNghiemThuRepository.findByIdDdiemGiaoNvNh(dDiem.getId()));
         }
     }
 

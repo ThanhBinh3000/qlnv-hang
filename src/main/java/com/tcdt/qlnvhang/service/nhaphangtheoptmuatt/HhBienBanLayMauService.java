@@ -1,7 +1,9 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaDtl;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan.QuyChuanQuocGiaDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhBbanLayMauDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhBienBanDayKhoHdrRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhBienBanLayMauRepository;
@@ -49,6 +51,9 @@ public class HhBienBanLayMauService extends BaseServiceImpl {
 
     @Autowired
     private HhBienBanDayKhoHdrRepository hhBienBanDayKhoHdrRepository;
+
+    @Autowired
+    private QuyChuanQuocGiaDtlRepository quyChuanQuocGiaDtlRepository;
 
 
     public Page<HhBienBanLayMau> searchPage(SearchHhBbanLayMau objReq)throws Exception{
@@ -327,6 +332,10 @@ public class HhBienBanLayMauService extends BaseServiceImpl {
         optional.get().setTrangThai(statusReq.getTrangThai());
         HhBienBanLayMau created = hhBienBanLayMauRepository.save(optional.get());
         return created;
+    }
+
+    public List<QuyChuanQuocGiaDtl> getAllQuyChuanByCloaiVthh(String loaiVthh) throws Exception {
+        return quyChuanQuocGiaDtlRepository.getAllQuyChuanByCloaiVthh(loaiVthh).isEmpty() ? new ArrayList<>() : quyChuanQuocGiaDtlRepository.getAllQuyChuanByCloaiVthh(loaiVthh);
     }
     
 }
