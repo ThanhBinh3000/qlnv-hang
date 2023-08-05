@@ -40,6 +40,7 @@ public interface DcnbBangKeXuatVTHdrRepository extends JpaRepository<DcnbBangKeX
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND (qdc.loaiDc= 'DCNB' OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.trangThai} IS NULL OR bkxvt.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.soBangKe} IS NULL OR LOWER(bkxvt.soBangKe) LIKE CONCAT('%',LOWER(:#{#param.soBangKe}),'%')) " +
             "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
             "AND ((:#{#param.tuNgayThoiHan}  IS NULL OR bkxvt.thoiHanGiaoNhan >= :#{#param.tuNgayThoiHan})" +

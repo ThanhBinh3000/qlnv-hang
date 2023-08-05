@@ -23,6 +23,7 @@ public interface DcnbBbChuanBiKhoHdrRepository extends JpaRepository<DcnbBbChuan
             "AND ((:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi}) " +
             "OR (:#{#param.maDvi} IS NULL OR dvi.parent.maDvi = :#{#param.maDvi}))" +
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
+            "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR c.ngayXuatKho >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR c.ngayXuatKho <= :#{#param.denNgay}) ) " +
             "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(c.soQdinhDcc) LIKE CONCAT('%',LOWER(:#{#param.soBbLayMau}),'%')) " +
@@ -64,6 +65,7 @@ public interface DcnbBbChuanBiKhoHdrRepository extends JpaRepository<DcnbBbChuan
             "AND (:#{#param.soQdDcCuc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdDcCuc}),'%')) " +
             "AND (:#{#param.soBban} IS NULL OR LOWER(bbcb.soBban) LIKE CONCAT('%',LOWER(:#{#param.soBban}),'%')) " +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.trangThai} IS NULL OR bbcb.trangThai = :#{#param.trangThai}) " +
             "AND ((:#{#param.tuNgayLapBb}  IS NULL OR bbcb.ngayLap >= :#{#param.tuNgayLapBb})" +
             "AND (:#{#param.denNgayLapBb}  IS NULL OR bbcb.ngayLap <= :#{#param.denNgayLapBb}) ) " +
             "AND ((:#{#param.tuNgayKtnk}  IS NULL OR pnk.ngayLap >= :#{#param.tuNgayKtnk})" +

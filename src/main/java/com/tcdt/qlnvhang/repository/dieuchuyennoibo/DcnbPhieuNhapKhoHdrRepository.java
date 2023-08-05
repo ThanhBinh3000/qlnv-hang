@@ -21,6 +21,7 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
     @Query(value = "SELECT distinct c FROM DcnbBangKeCanHangHdr c LEFT JOIN QlnvDmDonvi dvi ON dvi.maDvi = c.maDvi WHERE 1=1 " +
             "AND (:#{#param.soBangKe} IS NULL OR LOWER(c.soBangKe) LIKE CONCAT('%',LOWER(:#{#param.soBangKe}),'%')) " +
             "AND ((:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi}) " +
+            "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
             "OR (:#{#param.maDvi} IS NULL OR dvi.parent.maDvi = :#{#param.maDvi}))" +
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR c.ngayXuatKho >= :#{#param.tuNgay})" +
@@ -62,6 +63,7 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND (qdc.loaiDc= 'DCNB' OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.trangThai} IS NULL OR pnk.trangThai = :#{#param.trangThai}) " +
             "GROUP BY pnk.id,qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan, khdcd.maDiemKhoNhan,khdcd.tenDiemKhoNhan,khdcd.maLoKhoNhan," +
             "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, khdcd.thayDoiThuKho,pnk.soPhieuNhapKho, pnk.ngayLap,  pnk.bangKeVtId, pnk.soBangKeVt," +
             "khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh, khdcd.tenCloaiVthh,khdcd.donViTinh, khdcd.tenDonViTinh,khdcd.soLuongDc,khdcd.duToanKphi," +
@@ -74,6 +76,7 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
             "pnk.id,pnk.soPhieuNhapKho,pnk.ngayLap) " +
             "FROM DcnbPhieuNhapKhoHdr pnk " +
             "WHERE 1 =1 " +
+            "AND (:#{#param.trangThai} IS NULL OR pnk.trangThai = :#{#param.trangThai}) " +
             "AND ((:#{#param.qdDcCucId} IS NULL OR pnk.qdDcCucId = :#{#param.qdDcCucId}))"+
             "AND ((:#{#param.maLoKho} IS NULL OR pnk.maLoKho = :#{#param.maLoKho}))" +
             "AND ((:#{#param.maNganKho} IS NULL OR pnk.maNganKho = :#{#param.maNganKho}))" +
@@ -88,6 +91,7 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
             "LEFT JOIN DcnbBangKeNhapVTHdr bknvt On bknvt.phieuNhapKhoId = pnk.id " +
             "LEFT JOIN DcnbBbChuanBiKhoHdr bbcbkh On bbcbkh.idPhieuNhapKho = pnk.id " +
             "WHERE 1 =1 " +
+            "AND (:#{#param.trangThai} IS NULL OR pnk.trangThai = :#{#param.trangThai}) " +
             "AND ((:#{#param.qdDcCucId} IS NULL OR pnk.qdDcCucId = :#{#param.qdDcCucId}))" +
             "AND ((:#{#param.maLoKho} IS NULL OR pnk.maLoKho = :#{#param.maLoKho}))" +
             "AND ((:#{#param.maNganKho} IS NULL OR pnk.maNganKho = :#{#param.maNganKho}))" +
