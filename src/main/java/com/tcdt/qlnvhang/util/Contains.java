@@ -284,6 +284,8 @@ public class Contains {
     public static final String NHAP_SAU_BH = "NHAP_SAU_BH";
     public static final String NHAP_MAU = "NHAP_MAU";
 
+    public static final String QD_GNV = "QD_GNV";
+
 
     public static final Map<String, String> mappingLoaiDx;
 

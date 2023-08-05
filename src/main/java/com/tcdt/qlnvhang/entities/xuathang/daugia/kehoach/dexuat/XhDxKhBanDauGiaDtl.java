@@ -19,30 +19,17 @@ public class XhDxKhBanDauGiaDtl implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_DX_KH_BAN_DAU_GIA_DTL_SEQ")
     @SequenceGenerator(sequenceName = "XH_DX_KH_BAN_DAU_GIA_DTL_SEQ", allocationSize = 1, name = "XH_DX_KH_BAN_DAU_GIA_DTL_SEQ")
     private Long id;
-
     private Long idHdr;
-
     private String maDvi;
-    @Transient
-    private String tenDvi;
-
     private BigDecimal slChiTieu;
-
     private BigDecimal slKeHoachDd;
-
     private BigDecimal soLuongChiCuc;
-
+    private BigDecimal tienDatTruocDx;
     private String donViTinh;
-
     private String diaChi;
 
     @Transient
-    private BigDecimal soTienDtruocDxChiCuc;
-
-    @Transient
-    private BigDecimal soTienDtruocDdChiCuc;
-
+    private String tenDvi;
     @Transient
     private List<XhDxKhBanDauGiaPhanLo> children = new ArrayList<>();
-
 }

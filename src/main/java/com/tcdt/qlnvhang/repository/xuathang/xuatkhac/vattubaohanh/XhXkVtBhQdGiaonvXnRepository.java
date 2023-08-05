@@ -29,6 +29,7 @@ public interface XhXkVtBhQdGiaonvXnRepository extends JpaRepository<XhXkVtBhQdGi
   void deleteAllByIdIn(List<Long> listId);
 
   List<XhXkVtBhQdGiaonvXnHdr> findByIdIn(List<Long> ids);
+  List<XhXkVtBhQdGiaonvXnHdr> findByIdBbKtNhapKho(Long id);
 
   List<XhXkVtBhQdGiaonvXnHdr> findByIdCanCuIn(List<Long> ids);
 
