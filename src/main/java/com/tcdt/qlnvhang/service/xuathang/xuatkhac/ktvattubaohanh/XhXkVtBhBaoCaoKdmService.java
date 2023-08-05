@@ -180,7 +180,7 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
           item.setMapDmucDvi(mapDmucDvi);
         });
       });
-      model.setQdGiaonvXhDtl(listQdGiaoNv);
+      model.setBaoCaoDtl(listQdGiaoNv);
     }
     return model;
   }
