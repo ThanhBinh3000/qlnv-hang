@@ -1,24 +1,26 @@
 package com.tcdt.qlnvhang.request.xuathang.daugia;
+
 import com.tcdt.qlnvhang.request.BaseRequest;
 import lombok.Data;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class SearchXhThopDxKhBdg extends BaseRequest {
-
-   private Integer namKh;
-
-   private String loaiVthh;
-
-   private String cloaiVthh;
-
-   private String noiDungThop;
-
-   private LocalDate ngayThopTu;
-
-   private LocalDate ngayThopDen;
-
-   private String TrangThai;
-
-   private String typeLoaiVthh;
+    private Long id;
+    private LocalDate ngayThop;
+    private String loaiVthh;
+    private String cloaiVthh;
+    private LocalDate ngayDuyetTu;
+    private LocalDate ngayDuyetDen;
+    private String noiDungThop;
+    private Integer namKh;
+    private String maDvi;
+    private String loaiHinhNx;
+    private String kieuNx;
+    private String trangThai;
+    private LocalDateTime ngayThopTu;
+    private LocalDateTime ngayThopDen;
+    private String dvql;
 }
