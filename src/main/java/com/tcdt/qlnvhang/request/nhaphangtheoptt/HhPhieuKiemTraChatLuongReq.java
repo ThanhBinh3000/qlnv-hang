@@ -36,6 +36,8 @@ public class HhPhieuKiemTraChatLuongReq {
     private String bienSoXe;
     private Double soLuongDeNghiKt;
     private Double soLuongNhapKho;
+    private Double slTtKtra;
+    private Double slKhKb;
     private String soChungThuGiamDinh;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayGdinh;

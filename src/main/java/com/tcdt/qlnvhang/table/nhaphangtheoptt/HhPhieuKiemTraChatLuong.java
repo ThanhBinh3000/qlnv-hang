@@ -58,6 +58,8 @@ public class HhPhieuKiemTraChatLuong implements Serializable {
     private String bienSoXe;
     private Double soLuongDeNghiKt;
     private Double soLuongNhapKho;
+    private Double slTtKtra;
+    private Double slKhKb;
     private String soChungThuGiamDinh;
     @Temporal(TemporalType.DATE)
     private Date ngayGdinh;
