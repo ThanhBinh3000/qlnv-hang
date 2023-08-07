@@ -47,9 +47,9 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
     public Page<XhDxKhBanDauGia> searchPage(CustomUserDetails currentUser, XhDxKhBanDauGiaReq req) throws Exception {
         String dvql = currentUser.getDvql();
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
-            req.setDvql(dvql.substring(0, 4));
-        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
             req.setDvql(dvql);
+        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
+            req.setDvql(dvql.substring(0, 4));
         }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhDxKhBanDauGia> search = xhDxKhBanDauGiaRepository.searchPage(req, pageable);
@@ -110,7 +110,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
         Optional<XhDxKhBanDauGia> soDxuat = xhDxKhBanDauGiaRepository.findBySoDxuat(req.getSoDxuat());
         if (soDxuat.isPresent()) {
             if (!soDxuat.get().getId().equals(req.getId())) {
-                throw new Exception("số quyết định đã tồn tại");
+                throw new Exception("số đề xuất đã tồn tại");
             }
         }
         XhDxKhBanDauGia data = optional.get();
@@ -134,6 +134,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
         Map<String, String> mapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
+        Map<String, String> mapPhuongThucTt = getListDanhMucChung("PHUONG_THUC_TT");
         List<XhDxKhBanDauGia> allById = xhDxKhBanDauGiaRepository.findAllById(ids);
         allById.forEach(data -> {
             List<XhDxKhBanDauGiaDtl> dauGiaDtl = xhDxKhBanDauGiaDtlRepository.findAllByIdHdr(data.getId());
@@ -146,6 +147,15 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
                     dataPhanLo.setTenLoKho(StringUtils.isEmpty(dataPhanLo.getMaLoKho()) ? null : mapDmucDvi.get(dataPhanLo.getMaLoKho()));
                     dataPhanLo.setTenLoaiVthh(StringUtils.isEmpty(dataPhanLo.getLoaiVthh()) ? null : mapVthh.get(dataPhanLo.getLoaiVthh()));
                     dataPhanLo.setTenCloaiVthh(StringUtils.isEmpty(dataPhanLo.getCloaiVthh()) ? null : mapVthh.get(dataPhanLo.getCloaiVthh()));
+                    if (dataPhanLo.getCloaiVthh().startsWith("02")) {
+                        BigDecimal donGiaDuocDuyet;
+                        donGiaDuocDuyet = xhDxKhBanDauGiaRepository.getDonGiaDuocDuyetVt(dataPhanLo.getCloaiVthh(), data.getNamKh());
+                        dataPhanLo.setDonGiaDuocDuyet(donGiaDuocDuyet);
+                    } else {
+                        BigDecimal donGiaDuocDuyet;
+                        donGiaDuocDuyet = xhDxKhBanDauGiaRepository.getDonGiaDuocDuyetLt(dataPhanLo.getCloaiVthh(), dataDtl.getMaDvi(), data.getNamKh());
+                        dataPhanLo.setDonGiaDuocDuyet(donGiaDuocDuyet);
+                    }
                 });
                 dataDtl.setTenDvi(StringUtils.isEmpty(dataDtl.getMaDvi()) ? null : mapDmucDvi.get(dataDtl.getMaDvi()));
                 dataDtl.setChildren(dauGiaPhanLo);
@@ -154,6 +164,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
             data.setMapVthh(mapVthh);
             data.setMapLoaiHinhNx(mapLoaiHinhNx);
             data.setMapKieuNx(mapKieuNx);
+            data.setMapPhuongThucTt(mapPhuongThucTt);
             data.setTrangThai(data.getTrangThai());
             data.setChildren(dauGiaDtl);
         });
@@ -231,7 +242,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
             case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
             case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
             case Contains.DA_DUYET_CBV + Contains.DADUYET_LDC:
-                data.setNguoiPduyetId(userInfo.getId());
+                data.setNguoiPduyetId(currentUser.getUser().getId());
                 data.setNgayPduyet(LocalDate.now());
                 break;
             default:
@@ -288,6 +299,14 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
             return xhDxKhBanDauGiaRepository.getGiaBanToiThieuVt(cloaiVthh, namKh);
         } else {
             return xhDxKhBanDauGiaRepository.getGiaBanToiThieuLt(cloaiVthh, maDvi, namKh);
+        }
+    }
+
+    public BigDecimal getDonGiaDuocDuyet(String cloaiVthh, String maDvi, Integer nam) {
+        if (cloaiVthh.startsWith("02")) {
+            return xhDxKhBanDauGiaRepository.getDonGiaDuocDuyetVt(cloaiVthh, nam);
+        } else {
+            return xhDxKhBanDauGiaRepository.getDonGiaDuocDuyetLt(cloaiVthh, maDvi, nam);
         }
     }
 

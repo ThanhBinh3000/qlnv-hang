@@ -17,44 +17,31 @@ public class XhQdPdKhBdgPlDtl implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_QD_PD_KH_BDG_PL_DTL_SEQ")
     @SequenceGenerator(sequenceName = "XH_QD_PD_KH_BDG_PL_DTL_SEQ", allocationSize = 1, name = "XH_QD_PD_KH_BDG_PL_DTL_SEQ")
     private Long id;
-
     private Long idPhanLo;
-
     private String maDiemKho;
+    private String maNhaKho;
+    private String maNganKho;
+    private String maLoKho;
+    private String maDviTsan;
+    private BigDecimal tonKho;
+    private BigDecimal soLuongDeXuat;
+    private String donViTinh;
+    private BigDecimal donGiaDeXuat;
+    private BigDecimal giaKhoiDiemDx;
+    private BigDecimal soTienDtruocDx;
+    private String loaiVthh;
+    private String cloaiVthh;
+    private BigDecimal donGiaDuocDuyet;
     @Transient
     private String tenDiemKho;
-
-    private String maNhaKho;
     @Transient
     private String tenNhaKho;
-
-    private String maNganKho;
     @Transient
     private String tenNganKho;
-
-    private String maLoKho;
     @Transient
     private String tenLoKho;
-
-    private String maDviTsan;
-
-    private BigDecimal tonKho;
-
-    private BigDecimal soLuongDeXuat;
-
-    private BigDecimal donGiaDeXuat;
-
-    @Transient
-    private BigDecimal donGiaDuocDuyet;
-
-    private String donViTinh;
-
-    private String loaiVthh;
     @Transient
     private String tenLoaiVthh;
-
-    private String cloaiVthh;
     @Transient
     private String tenCloaiVthh;
-
 }

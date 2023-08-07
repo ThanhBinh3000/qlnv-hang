@@ -7,22 +7,14 @@ import java.util.List;
 
 @Data
 public class XhQdPdKhBdgPlReq {
-    @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
-
-    private Long idHdr;
-
+    private Long idQdDtl;
     private String maDvi;
-
     private BigDecimal slChiTieu;
-
     private BigDecimal slKeHoachDd;
-
     private BigDecimal soLuongChiCuc;
-
+    private BigDecimal tienDatTruocDx;
     private String donViTinh;
-
     private String diaChi;
-
     List<XhQdPdKhBdgPlDtlReq> children =new ArrayList<>();
 }
