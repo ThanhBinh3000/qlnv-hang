@@ -69,7 +69,6 @@ public class ScTongHopServiceImpl extends BaseServiceImpl implements ScTongHopSe
     //set label
     search.getContent().forEach(s -> {
       s.setChildren(dataChilren.get(s.getId()));
-      s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
     });
     return search;
   }

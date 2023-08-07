@@ -220,6 +220,7 @@ public class ScTrinhThamDinhServiceImpl extends BaseServiceImpl implements ScTri
             case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
             case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
             case Contains.CHODUYET_LDTC + Contains.TUCHOI_LDTC:
+                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
