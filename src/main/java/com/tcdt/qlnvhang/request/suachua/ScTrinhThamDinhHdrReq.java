@@ -24,8 +24,6 @@ public class ScTrinhThamDinhHdrReq extends BaseRequest {
     private LocalDate thoiHanNhap;
     private LocalDate thoiHanXuatDk;
     private LocalDate thoiHanXuat;
-    private String soQdSc;
-    private Long idQdSc;
     private String trichYeu;
     private String lyDoTuChoi;
     private String trangThai;
@@ -35,7 +33,10 @@ public class ScTrinhThamDinhHdrReq extends BaseRequest {
     private List<ScTrinhThamDinhDtlReq> children;
 
     // Region Sr
-
-
+    private LocalDate ngayTuCuc;
+    private LocalDate ngayTuTc;
+    private LocalDate ngayDenCuc;
+    private LocalDate ngayDenTc;
+    private String soQdScSr;
 
 }
