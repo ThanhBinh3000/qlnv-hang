@@ -54,4 +54,6 @@ public interface DcnbBcKqDcDtlRepository extends JpaRepository<DcnbBcKqDcDtl, Lo
             "AND (:#{#param.denNgay}  IS NULL OR khdcd.thoiGianDkDc <= :#{#param.denNgay}) ) " +
             "ORDER BY qdc.soQdinh desc")
     List<DcnbBcKqDcDtl> thongTinXuatNhapHangCuc(@Param("param") DcnbBbKqDcSearch objReq);
+
+    List<DcnbBcKqDcDtl> findByHdrIdIn(List<Long> ids);
 }
