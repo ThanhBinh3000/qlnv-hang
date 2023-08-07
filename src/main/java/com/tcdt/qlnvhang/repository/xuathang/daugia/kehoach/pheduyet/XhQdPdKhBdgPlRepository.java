@@ -9,9 +9,7 @@ import java.util.List;
 @Repository
 public interface XhQdPdKhBdgPlRepository extends JpaRepository<XhQdPdKhBdgPl,Long> {
 
+    void deleteAllByIdQdDtl(Long idQdDtl);
 
-    List<XhQdPdKhBdgPl> findAllByIdQdDtlIn (List<Long> ids);
-     List<XhQdPdKhBdgPl> findByIdQdDtl(Long idQdDtl);
-
-    void deleteByIdQdDtl(Long idQdDtl);
+    List<XhQdPdKhBdgPl> findAllByIdQdDtl(Long idQdDtl);
 }

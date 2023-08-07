@@ -87,8 +87,6 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
             thopDtl.setTrangThai(dxuat.getTrangThai());
             thopDtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(thopDtl.getTrangThai()));
             thopDtls.add(thopDtl);
-            thopHdr.setLoaiHinhNx(dxuat.getLoaiHinhNx());
-            thopHdr.setKieuNx(dxuat.getKieuNx());
         }
         thopHdr.setChildren(thopDtls);
         return thopHdr;

@@ -33,8 +33,6 @@ public class XhThopDxKhBdg extends BaseEntity implements Serializable {
     private String maDvi;
     private Long idQdPd;
     private String soQdPd;
-    private String loaiHinhNx;
-    private String kieuNx;
     private String trangThai;
     private LocalDate ngayGuiDuyet;
     private Long nguoiGuiDuyetId;
@@ -48,6 +46,7 @@ public class XhThopDxKhBdg extends BaseEntity implements Serializable {
     private String tenCloaiVthh;
     @Transient
     private String tenTrangThai;
+
     @JsonIgnore
     @Transient
     private Map<String, String> mapVthh;

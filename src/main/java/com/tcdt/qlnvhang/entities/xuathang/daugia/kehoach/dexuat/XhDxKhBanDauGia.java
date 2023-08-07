@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @Entity
-@Table(name = "XH_DX_KH_BAN_DAU_GIA")
+@Table(name = XhDxKhBanDauGia.TABLE_NAME)
 @Data
 public class XhDxKhBanDauGia extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -76,6 +76,8 @@ public class XhDxKhBanDauGia extends BaseEntity implements Serializable {
     @Transient
     private String tenKieuNx;
     @Transient
+    private String tenPthucTtoan;
+    @Transient
     private String tenLoaiVthh;
     @Transient
     private String tenCloaiVthh;
@@ -114,6 +116,17 @@ public class XhDxKhBanDauGia extends BaseEntity implements Serializable {
         this.mapKieuNx = mapKieuNx;
         if (!DataUtils.isNullObject(getKieuNx())) {
             setTenKieuNx(mapKieuNx.containsKey(getKieuNx()) ? mapKieuNx.get(getKieuNx()) : null);
+        }
+    }
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapPhuongThucTt;
+
+    public void setMapPhuongThucTt(Map<String, String> mapPhuongThucTt) {
+        this.mapPhuongThucTt = mapPhuongThucTt;
+        if (!DataUtils.isNullObject(getKieuNx())) {
+            setTenPthucTtoan(mapPhuongThucTt.containsKey(getPthucTtoan()) ? mapPhuongThucTt.get(getPthucTtoan()) : null);
         }
     }
 

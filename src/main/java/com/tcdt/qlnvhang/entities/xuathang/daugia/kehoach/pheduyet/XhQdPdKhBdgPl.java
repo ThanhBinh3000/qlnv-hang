@@ -17,23 +17,16 @@ public class XhQdPdKhBdgPl implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_QD_PD_KH_BDG_PL_SEQ ")
     @SequenceGenerator(sequenceName = "XH_QD_PD_KH_BDG_PL_SEQ ", allocationSize = 1, name = "XH_QD_PD_KH_BDG_PL_SEQ ")
     private Long id;
-
     private Long idQdDtl;
-
     private String maDvi;
+    private BigDecimal slChiTieu;
+    private BigDecimal slKeHoachDd;
+    private BigDecimal soLuongChiCuc;
+    private BigDecimal tienDatTruocDx;
+    private String donViTinh;
+    private String diaChi;
     @Transient
     private String tenDvi;
-
-    private BigDecimal slChiTieu;
-
-    private BigDecimal slKeHoachDd;
-
-    private BigDecimal soLuongChiCuc;
-
-    private String donViTinh;
-
-    private String diaChi;
-
     @Transient
     List<XhQdPdKhBdgPlDtl> children =new ArrayList<>();
 }
