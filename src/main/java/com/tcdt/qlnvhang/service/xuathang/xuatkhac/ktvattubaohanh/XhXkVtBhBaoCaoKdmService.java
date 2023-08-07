@@ -83,16 +83,17 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
     created.setFileDinhKems(fileDinhKems);
 
     //lưu lại số báo cáo vào qd giao nv xh
-    Long[] idsQdGiaoNvXh = Arrays.stream(objReq.getIdQdGiaoNvXh().split(","))
+    Long[] idsQdGiaoNvXh = Arrays.stream(objReq.getIdCanCu().split(","))
         .map(String::trim)
         .map(Long::valueOf)
         .toArray(Long[]::new);
     List<XhXkVtBhPhieuXuatNhapKho> allByIdCanCuIn = xhXkVtBhPhieuXuatNhapKhoRepository.findAllByIdCanCuIn(Arrays.asList(idsQdGiaoNvXh));
     if (!allByIdCanCuIn.isEmpty()) {
       allByIdCanCuIn.forEach(item -> {
-        item.setSoBcKqkdMau(null);
-        item.setIdBcKqkdMau(null);
+        item.setSoBcKqkdMau(created.getSoBaoCao());
+        item.setIdBcKqkdMau(created.getId());
       });
+      xhXkVtBhPhieuXuatNhapKhoRepository.saveAll(allByIdCanCuIn);
     }
     List<XhXkVtBhQdGiaonvXnHdr> listQdGiaoNvXh = xhXkVtBhQdGiaonvXnRepository.findByIdIn(Arrays.asList(idsQdGiaoNvXh));
     if (!listQdGiaoNvXh.isEmpty()) {
@@ -126,7 +127,7 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
     //save file đính kèm
     fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtBhBaoCaoKdm.TABLE_NAME);
     //lưu lại số báo cáo vào qd giao nv xh
-    Long[] idsQdGiaoNvXh = Arrays.stream(objReq.getIdQdGiaoNvXh().split(","))
+    Long[] idsQdGiaoNvXh = Arrays.stream(objReq.getIdCanCu().split(","))
         .map(String::trim)
         .map(Long::valueOf)
         .toArray(Long[]::new);
@@ -136,6 +137,7 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
         item.setSoBcKqkdMau(created.getSoBaoCao());
         item.setIdBcKqkdMau(created.getId());
       });
+      xhXkVtBhPhieuXuatNhapKhoRepository.saveAll(allByIdCanCuIn);
     }
     List<XhXkVtBhQdGiaonvXnHdr> listQdGiaoNvXh = xhXkVtBhQdGiaonvXnRepository.findByIdIn(Arrays.asList(idsQdGiaoNvXh));
     if (!listQdGiaoNvXh.isEmpty()) {
@@ -158,10 +160,28 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
     }
     XhXkVtBhBaoCaoKdm model = optional.get();
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    Map<String, String> mapVthh = getListDanhMucHangHoa();
     List<FileDinhKem> fileDinhKem = fileDinhKemService.search(model.getId(), Arrays.asList(XhXkVtBhBaoCaoKdm.TABLE_NAME));
     model.setFileDinhKems(fileDinhKem);
     model.setTenDvi(mapDmucDvi.get(model.getMaDvi()));
     model.setTenTrangThai(TrangThaiAllEnum.getLabelById(model.getTrangThai()));
+    if (model.getLoaiCanCu().equals(Contains.QD_GNV)){
+      Long[] listIdQd = Arrays.stream(model.getIdCanCu().split(","))
+          .map(String::trim)
+          .map(Long::valueOf)
+          .toArray(Long[]::new);
+      List<XhXkVtBhQdGiaonvXnHdr> listQdGiaoNv= xhXkVtBhQdGiaonvXnRepository.findByIdIn(Arrays.asList(listIdQd));
+      listQdGiaoNv.forEach(s->{
+        s.setTenLoai(Contains.getLoaiHinhXuat(s.getLoai()));
+        s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
+        s.setTenTrangThaiXh(TrangThaiAllEnum.getLabelById(s.getTrangThaiXh()));
+        s.getQdGiaonvXhDtl().forEach(item -> {
+          item.setMapVthh(mapVthh);
+          item.setMapDmucDvi(mapDmucDvi);
+        });
+      });
+      model.setBaoCaoDtl(listQdGiaoNv);
+    }
     return model;
   }
 
@@ -176,7 +196,7 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
       fileDinhKemService.deleteMultiple(Collections.singleton(data.getId()), Collections.singleton(XhXkVtBhBaoCaoKdm.TABLE_NAME));
       //update mẫu bị hủy cho phiếu xuất kho
       //lưu lại số báo cáo vào qd giao nv xh
-      Long[] idsQdGiaoNvXh = Arrays.stream(data.getIdQdGiaoNvXh().split(","))
+      Long[] idsQdGiaoNvXh = Arrays.stream(data.getIdCanCu().split(","))
           .map(String::trim)
           .map(Long::valueOf)
           .toArray(Long[]::new);
@@ -186,6 +206,7 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
           item.setSoBcKqkdMau(null);
           item.setIdBcKqkdMau(null);
         });
+        xhXkVtBhPhieuXuatNhapKhoRepository.saveAll(allByIdCanCuIn);
       }
       List<XhXkVtBhQdGiaonvXnHdr> listQdGiaoNvXh = xhXkVtBhQdGiaonvXnRepository.findByIdIn(Arrays.asList(idsQdGiaoNvXh));
       if (!listQdGiaoNvXh.isEmpty()) {
@@ -258,7 +279,7 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
       objs[3] = dx.getSoBaoCao();
       objs[4] = dx.getTenBaoCao();
       objs[5] = dx.getNgayBaoCao();
-      objs[6] = dx.getSoQdGiaoNvXh();
+      objs[6] = dx.getSoCanCu();
       objs[7] = null;
       objs[8] = null;
       objs[9] = dx.getTenTrangThai();

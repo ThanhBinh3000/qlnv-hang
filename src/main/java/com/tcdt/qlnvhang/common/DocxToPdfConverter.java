@@ -1,5 +1,7 @@
 package com.tcdt.qlnvhang.common;
 
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.pdf.PdfWriter;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdrPreview;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -33,6 +35,8 @@ import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -120,5 +124,26 @@ public class DocxToPdfConverter {
         return base64String;
     }
 
+    public String convertBigDecimalToStr(BigDecimal num){
+        if (num != null) {
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+            symbols.setDecimalSeparator(',');
+            symbols.setGroupingSeparator('.');
+            DecimalFormat df = new DecimalFormat("#,##0.00", symbols);
+            return df.format(num);
+        }
+        return "";
+    }
+
+    public String convertBigDecimalToStrNotDecimal(BigDecimal num){
+        if (num != null) {
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+            symbols.setDecimalSeparator(',');
+            symbols.setGroupingSeparator('.');
+            DecimalFormat df = new DecimalFormat("#,##0", symbols);
+            return df.format(num);
+        }
+        return "";
+    }
 }
 

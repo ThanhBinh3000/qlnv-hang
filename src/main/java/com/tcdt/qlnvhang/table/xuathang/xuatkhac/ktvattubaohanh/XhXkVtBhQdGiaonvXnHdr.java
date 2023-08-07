@@ -46,8 +46,8 @@ public class XhXkVtBhQdGiaonvXnHdr extends BaseEntity implements Serializable {
   private String loaiXn;
   private String soPhieuNk;
   private Long idPhieuNk;
-  private String soBbKtNk;
-  private Long idBbKtNk;
+  private String soBbKtNhapKho;
+  private Long idBbKtNhapKho;
 
 
   @Transient

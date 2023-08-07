@@ -94,18 +94,14 @@ public class BangKeMuaLeService extends BaseServiceImpl {
     }
 
 
-    public List<BangKeMuaLe> detail( List<Long> ids) throws Exception {
-        if (DataUtils.isNullOrEmpty(ids))
-            throw new Exception("Tham số không hợp lệ.");
+    public BangKeMuaLe detail( Long ids) throws Exception {
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
-        List<BangKeMuaLe> allById = bangkethumualeRepository.findAllById(ids);
-        allById.forEach(data -> {
-            data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
-            data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
-            data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
-        });
-        return allById;
+        Optional<BangKeMuaLe> allById = bangkethumualeRepository.findById(ids);
+            allById.get().setTenDvi(mapDmucDvi.get(allById.get().getMaDvi()));
+            allById.get().setTenLoaiVthh(mapVthh.get(allById.get().getLoaiVthh()));
+        allById.get().setTenCloaiVthh(mapVthh.get(allById.get().getCloaiVthh()));
+        return allById.get();
     }
 
 

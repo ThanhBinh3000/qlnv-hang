@@ -16,11 +16,13 @@ public class DcnbBbKqDcDTO {
     private String maDvi;
     private String tenDvi;
     private String maDviNhan;
+    private String tenDviNhan;
     private String soBc;
     private LocalDate ngayBc;
     private String tenBc;
     private Long qdDcCucId;
     private String soQdDcCuc;
+    private LocalDate ngayKyQd;
     private Long qdDcTcId;
     private String soQdDcTc;
     private LocalDate ngayKyQdTc;

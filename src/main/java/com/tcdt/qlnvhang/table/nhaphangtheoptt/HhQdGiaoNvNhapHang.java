@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.table.nhaphangtheoptt;
 
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttHdr;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdr;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -65,6 +67,12 @@ public class HhQdGiaoNvNhapHang implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date ngayPduyet;
     private String nguoiPduyet;
+
+    @Transient
+    private List<HopDongMttHdr> hopDongMttHdrs = new ArrayList<>();
+
+    @Transient
+    private HhQdPheduyetKhMttHdr hhQdPheduyetKhMttHdr;
 
     @Transient
     private List<HhQdGiaoNvNhangDtl> hhQdGiaoNvNhangDtlList= new ArrayList<>();

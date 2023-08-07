@@ -14,6 +14,7 @@ import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -146,6 +147,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         }
                         e.getDanhSachKeHoach().forEach(e1 -> {
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr.get());
+                            e1.setThayDoiThuKho(true);
                         });
                         dcnbKeHoachDcHdr.get().setDanhSachHangHoa(e.getDanhSachKeHoach());
                         DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr.get());
@@ -189,6 +191,11 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                 } else {
                     req.setDsLoaiHang(Arrays.asList("LT", "M"));
                 }
+            }
+            if("00".equals(req.getType())){
+                req.setType(Contains.DIEU_CHUYEN);
+            }else if("01".equals(req.getType())){
+                req.setType(Contains.NHAN_DIEU_CHUYEN);
             }
             List<DcnbQuyetDinhDcCHdrDTO> danhSachSoQdDieuChuyen = dcnbQuyetDinhDcCHdrRepository.searchListChiCuc(req);
             return danhSachSoQdDieuChuyen;
@@ -602,7 +609,12 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
             dcnbQuyetDinhDcCHdrCloned.setParentId(dcnbQuyetDinhDcCHdrCloned.getId());
             dcnbQuyetDinhDcCHdrCloned.setId(null);
             dcnbQuyetDinhDcCHdrCloned.setMaDvi(maChiCucThue);
-            dcnbQuyetDinhDcCHdrCloned.setTenDvi(khList.get(0).getTenChiCucNhan());
+            QlnvDmDonvi byMaDvi = qlnvDmDonviRepository.findByMaDvi(maChiCucThue);
+            if(byMaDvi != null){
+                dcnbQuyetDinhDcCHdrCloned.setTenDvi(byMaDvi.getTenDvi());
+            }else {
+                dcnbQuyetDinhDcCHdrCloned.setTenDvi(khList.get(0).getDcnbKeHoachDcHdr().getTenDvi());
+            }
             dcnbQuyetDinhDcCHdrCloned.setType(Contains.DIEU_CHUYEN);
             dcnbQuyetDinhDcCHdrCloned.setTrangThai(statusReq.getTrangThai());
             Map<Long, List<DcnbKeHoachDcDtl>> groupedByKhh = khList.stream()
@@ -621,23 +633,46 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         throw new RuntimeException(e);
                     }
                     DcnbKeHoachDcHdr dcnbKeHoachDcHdrClone = SerializationUtils.clone(dcnbKeHoachDcHdrDetail.get());
-                    dcnbKeHoachDcHdrClone.setDanhSachHangHoa(dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(dcnbKeHoachDcHdrClone.getId()));
-                    dcnbKeHoachDcHdrClone.setPhuongAnDieuChuyen(dcnbPhuongAnDcRepository.findByKeHoachDcHdrId(dcnbKeHoachDcHdrClone.getId()));
+                    List<DcnbKeHoachDcDtl> keHoachDcDtls = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(dcnbKeHoachDcHdrClone.getId());
+                    List<DcnbPhuongAnDc> phuongAnDcs = dcnbPhuongAnDcRepository.findByKeHoachDcHdrId(dcnbKeHoachDcHdrClone.getId());
+                    List<DcnbKeHoachDcDtl> keHoachDcDtlsClone = new ArrayList<>();
+                    List<DcnbPhuongAnDc> phuongAnDcsClone = new ArrayList<>();
+                    for (DcnbKeHoachDcDtl keHoachDcDtl : keHoachDcDtls) {
+                        try {
+                            keHoachDcDtlsClone.add((DcnbKeHoachDcDtl) keHoachDcDtl.clone());
+                        } catch (CloneNotSupportedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    for (DcnbPhuongAnDc phuongAnDc : phuongAnDcs) {
+                        try {
+                            phuongAnDcsClone.add((DcnbPhuongAnDc) phuongAnDc.clone());
+                        } catch (CloneNotSupportedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    dcnbKeHoachDcHdrClone.setDanhSachHangHoa(keHoachDcDtlsClone);
+                    dcnbKeHoachDcHdrClone.setPhuongAnDieuChuyen(phuongAnDcsClone);
                     dcnbKeHoachDcHdrClone.setParentId(dcnbKeHoachDcHdrClone.getId());
                     dcnbKeHoachDcHdrClone.setId(null);
                     dcnbKeHoachDcHdrClone.setMaDviPq(maChiCucThue);
-                    dcnbKeHoachDcHdrClone.setType(Contains.NHAN_DIEU_CHUYEN_TS);
+                    dcnbKeHoachDcHdrClone.setType(Contains.DIEU_CHUYEN_TS);
                     dcnbKeHoachDcHdrClone.setTrangThai(statusReq.getTrangThai());
+                    DcnbKeHoachDcHdr finalDcnbKeHoachDcHdrClone = dcnbKeHoachDcHdrClone;
                     dcnbKeHoachDcHdrClone.setDanhSachHangHoa(dcnbKeHoachDcHdrClone.getDanhSachHangHoa().stream()
-                            .filter(item -> item.getMaChiCucNhan().equals(maChiCucThue)).map(itemMap1 -> {
+                            .filter(item -> item.getMaDiemKho().substring(0, 8).equals(maChiCucThue)).map(itemMap1 -> {
                                 itemMap1.setParentId(itemMap1.getId());
                                 itemMap1.setId(null);
+                                itemMap1.setHdrId(finalDcnbKeHoachDcHdrClone.getId());
+                                itemMap1.setDcnbKeHoachDcHdr(finalDcnbKeHoachDcHdrClone);
                                 return itemMap1;
                             }).collect(Collectors.toList()));
-                    dcnbKeHoachDcHdrClone.setPhuongAnDieuChuyen(dcnbKeHoachDcHdrClone.getPhuongAnDieuChuyen().stream()
-                            .filter(item -> item.getMaChiCucNhan().equals(maChiCucThue)).map(itemMap1 -> {
+                    dcnbKeHoachDcHdrClone.setPhuongAnDieuChuyen(dcnbKeHoachDcHdrClone.getPhuongAnDieuChuyen().stream().map(itemMap1 -> {
                                 itemMap1.setParentId(itemMap1.getId());
                                 itemMap1.setId(null);
+                                itemMap1.setKeHoachDcHdrId(finalDcnbKeHoachDcHdrClone.getId());
+                                itemMap1.setDcnbKeHoachDcHdr(finalDcnbKeHoachDcHdrClone);
                                 return itemMap1;
                             }).collect(Collectors.toList()));
                     dcnbKeHoachDcHdrClone.setCanCu(dcnbKeHoachDcHdrClone.getCanCu().stream().map(itemMap1 -> {
@@ -738,23 +773,47 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         throw new RuntimeException(e);
                     }
                     DcnbKeHoachDcHdr dcnbKeHoachDcHdrClone = SerializationUtils.clone(keHoachDcHdrOpt.get());
-                    dcnbKeHoachDcHdrClone.setDanhSachHangHoa(dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(dcnbKeHoachDcHdrClone.getId()));
-                    dcnbKeHoachDcHdrClone.setPhuongAnDieuChuyen(dcnbPhuongAnDcRepository.findByKeHoachDcHdrId(dcnbKeHoachDcHdrClone.getId()));
+                    List<DcnbKeHoachDcDtl> keHoachDcDtls = dcnbKeHoachDcDtlRepository.findByDcnbKeHoachDcHdrId(dcnbKeHoachDcHdrClone.getId());
+                    List<DcnbPhuongAnDc> phuongAnDcs = dcnbPhuongAnDcRepository.findByKeHoachDcHdrId(dcnbKeHoachDcHdrClone.getId());
+                    List<DcnbKeHoachDcDtl> keHoachDcDtlsClone = new ArrayList<>();
+                    List<DcnbPhuongAnDc> phuongAnDcsClone = new ArrayList<>();
+                    for (DcnbKeHoachDcDtl keHoachDcDtl : keHoachDcDtls) {
+                        try {
+                            keHoachDcDtlsClone.add((DcnbKeHoachDcDtl) keHoachDcDtl.clone());
+                        } catch (CloneNotSupportedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    for (DcnbPhuongAnDc phuongAnDc : phuongAnDcs) {
+                        try {
+                            phuongAnDcsClone.add((DcnbPhuongAnDc) phuongAnDc.clone());
+                        } catch (CloneNotSupportedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    dcnbKeHoachDcHdrClone.setDanhSachHangHoa(keHoachDcDtlsClone);
+                    dcnbKeHoachDcHdrClone.setPhuongAnDieuChuyen(phuongAnDcsClone);
                     dcnbKeHoachDcHdrClone.setParentId(dcnbKeHoachDcHdrClone.getId());
                     dcnbKeHoachDcHdrClone.setId(null);
                     dcnbKeHoachDcHdrClone.setMaDviPq(maChiCucThue);
                     dcnbKeHoachDcHdrClone.setType(Contains.NHAN_DIEU_CHUYEN_TS);
                     dcnbKeHoachDcHdrClone.setTrangThai(statusReq.getTrangThai());
+                    DcnbKeHoachDcHdr finalDcnbKeHoachDcHdrClone = dcnbKeHoachDcHdrClone;
                     dcnbKeHoachDcHdrClone.setDanhSachHangHoa(dcnbKeHoachDcHdrClone.getDanhSachHangHoa().stream()
                             .filter(item -> item.getMaChiCucNhan().equals(maChiCucThue)).map(itemMap1 -> {
                                 itemMap1.setParentId(itemMap1.getId());
                                 itemMap1.setId(null);
+                                itemMap1.setHdrId(finalDcnbKeHoachDcHdrClone.getId());
+                                itemMap1.setDcnbKeHoachDcHdr(finalDcnbKeHoachDcHdrClone);
                                 return itemMap1;
                             }).collect(Collectors.toList()));
                     dcnbKeHoachDcHdrClone.setPhuongAnDieuChuyen(dcnbKeHoachDcHdrClone.getPhuongAnDieuChuyen().stream()
                             .filter(item -> item.getMaChiCucNhan().equals(maChiCucThue)).map(itemMap1 -> {
                                 itemMap1.setParentId(itemMap1.getId());
                                 itemMap1.setId(null);
+                                itemMap1.setKeHoachDcHdrId(finalDcnbKeHoachDcHdrClone.getId());
+                                itemMap1.setDcnbKeHoachDcHdr(finalDcnbKeHoachDcHdrClone);
                                 return itemMap1;
                             }).collect(Collectors.toList()));
                     dcnbKeHoachDcHdrClone.setCanCu(dcnbKeHoachDcHdrClone.getCanCu().stream().map(itemMap1 -> {
@@ -789,7 +848,9 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                 }
             });
             dcnbQuyetDinhDcCHdrCloned.setDanhSachQuyetDinh(quyetDinhDcCDtlsClone);
-            dcnbQuyetDinhDcCHdrCloned.setTrangThai(Contains.YC_CHICUC_PHANBO_DC);
+            if(!isClone){
+                dcnbQuyetDinhDcCHdrCloned.setTrangThai(Contains.YC_CHICUC_PHANBO_DC);
+            }
             dcnbQuyetDinhDcCHdrCloned = dcnbQuyetDinhDcCHdrRepository.save(dcnbQuyetDinhDcCHdrCloned);
             if (isClone) {
                 for (DcnbQuyetDinhDcCDtl ds : dcnbQuyetDinhDcCHdrCloned.getDanhSachQuyetDinh()) {

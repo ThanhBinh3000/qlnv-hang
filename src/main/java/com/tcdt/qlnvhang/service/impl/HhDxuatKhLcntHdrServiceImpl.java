@@ -359,12 +359,19 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         qOptional.get().setTenDviLapDx(mapDmucDvi.get(qOptional.get().getMaDviLapDx()) + " - " + mapDmucDvi.get(qOptional.get().getMaDvi()));
         qOptional.get().setCcXdgDtlList(hhDxuatKhLcntCcxdgDtlRepository.findByIdDxKhlcnt(qOptional.get().getId()));
         qOptional.get().setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(qOptional.get().getTrangThai()));
+        qOptional.get().setDsGtDtlList(getDsGthau(qOptional.get().getId(), mapVthh, mapDmucDvi));
+        return qOptional.get();
+    }
 
-        List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(qOptional.get().getId());
+    private List<HhDxKhlcntDsgthau> getDsGthau (Long dxId, Map<String, String> mapVthh, Map<String, String> mapDmucDvi) {
+        List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(dxId);
         for (HhDxKhlcntDsgthau dsG : dsGthauList) {
             dsG.setTenDvi(mapDmucDvi.get(dsG.getMaDvi()));
             dsG.setTenCloaiVthh(mapVthh.get(dsG.getCloaiVthh()));
-
+            if (dsG.getDonGiaVat() != null && dsG.getSoLuong() !=null) {
+                dsG.setDonGiaVatStr(docxToPdfConverter.convertBigDecimalToStr(dsG.getDonGiaVat()));
+                dsG.setThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(dsG.getDonGiaVat().multiply(dsG.getSoLuong())));
+            }
             List<HhDxKhlcntDsgthauCtiet> listDdNhap = hhDxKhlcntDsgthauCtietRepository.findByIdGoiThau(dsG.getId());
             listDdNhap.forEach(f -> {
                 f.setDonGiaTamTinh(dsG.getDonGiaTamTinh());
@@ -372,6 +379,10 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
                 f.setGoiThau(dsG.getGoiThau());
                 f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
                 f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho()) ? null : mapDmucDvi.get(f.getMaDiemKho()));
+                if (dsG.getDonGiaVat() != null) {
+                    f.setThanhTien(dsG.getDonGiaVat().multiply(f.getSoLuong()));
+                    f.setThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(dsG.getDonGiaVat().multiply(f.getSoLuong())));
+                }
                 List<HhDxKhlcntDsgthauCtietVt> byIdGoiThauCtiet = hhDxKhlcntDsgthauCtietVtRepository.findByIdGoiThauCtiet(f.getId());
                 byIdGoiThauCtiet.forEach(x -> {
                     x.setTenDvi(StringUtils.isEmpty(x.getMaDvi()) ? null : mapDmucDvi.get(x.getMaDvi()));
@@ -385,8 +396,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             });
             dsG.setChildren(listDdNhap);
         }
-        qOptional.get().setDsGtDtlList(dsGthauList);
-        return qOptional.get();
+        return dsGthauList;
     }
 
     @Override
@@ -536,6 +546,32 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             }
         }
 
+        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+    }
+
+    @Override
+    public ReportTemplateResponse previewVt(HhDxuatKhLcntHdrReq hhDxuatKhLcntHdrReq) throws Exception {
+        ReportTemplate model = findByTenFile(hhDxuatKhLcntHdrReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        HhDxuatKhLcntHdrPreview object = new ModelMapper().map(hhDxuatKhLcntHdrReq, HhDxuatKhLcntHdrPreview.class);
+        Map<String, String> mapVthh = getListDanhMucHangHoa();
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        List<HhDxKhlcntDsgthau> dsgthau = getDsGthau(hhDxuatKhLcntHdrReq.getId(), mapVthh, mapDmucDvi);
+        BigDecimal tongThanhTien = BigDecimal.ZERO;
+        BigDecimal tongThucHien = BigDecimal.ZERO;
+        BigDecimal tongDx = BigDecimal.ZERO;
+        for (HhDxKhlcntDsgthau hhDxKhlcntDsgthau : dsgthau) {
+            for (HhDxKhlcntDsgthauCtiet child : hhDxKhlcntDsgthau.getChildren()) {
+                tongThanhTien = tongThanhTien.add(child.getThanhTien());
+                tongThucHien = tongThucHien.add(child.getSoLuongDaMua());
+                tongDx = tongDx.add(child.getSoLuong());
+            }
+        }
+        object.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStrNotDecimal(tongThanhTien));
+        object.setTongThucHien(docxToPdfConverter.convertBigDecimalToStrNotDecimal(tongThucHien));
+        object.setTongDeXuat(docxToPdfConverter.convertBigDecimalToStrNotDecimal(tongDx));
+        object.setDsGtVt(dsgthau);
         return docxToPdfConverter.convertDocxToPdf(inputStream, object);
     }
 

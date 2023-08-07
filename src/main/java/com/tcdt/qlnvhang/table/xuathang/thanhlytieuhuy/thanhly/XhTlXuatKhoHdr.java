@@ -141,19 +141,27 @@ public class XhTlXuatKhoHdr extends BaseEntity implements Serializable {
 
     @JsonIgnore
     @Transient
-    private Map<String, String> mapNhapXuat;
+    private Map<String, String> mapLoaiHinhNx;
     @Transient
     private String tenLoaiHinhNx;
+
+    public void setMapLoaiHinhNx(Map<String, String> mapLoaiHinhNx) {
+        this.mapLoaiHinhNx = mapLoaiHinhNx;
+        if (!DataUtils.isNullObject(getLoaiHinhNx())) {
+            setTenLoaiHinhNx(mapLoaiHinhNx.containsKey(getLoaiHinhNx()) ? mapLoaiHinhNx.get(getLoaiHinhNx()) : null);
+        }
+    }
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapKieuNx;
     @Transient
     private String tenKieuNx;
 
-    public void setMapNhapXuat(Map<String, String> mapNhapXuat) {
-        this.mapNhapXuat = mapNhapXuat;
-        if (!DataUtils.isNullObject(getLoaiHinhNx())) {
-            setTenLoaiHinhNx(mapNhapXuat.containsKey(getLoaiHinhNx()) ? mapNhapXuat.get(getLoaiHinhNx()) : null);
-        }
+    public void setMapKieuNx(Map<String, String> mapKieuNx) {
+        this.mapKieuNx = mapKieuNx;
         if (!DataUtils.isNullObject(getKieuNx())) {
-            setTenKieuNx(mapNhapXuat.containsKey(getKieuNx()) ? mapNhapXuat.get(getKieuNx()) : null);
+            setTenKieuNx(mapKieuNx.containsKey(getKieuNx()) ? mapKieuNx.get(getKieuNx()) : null);
         }
     }
 

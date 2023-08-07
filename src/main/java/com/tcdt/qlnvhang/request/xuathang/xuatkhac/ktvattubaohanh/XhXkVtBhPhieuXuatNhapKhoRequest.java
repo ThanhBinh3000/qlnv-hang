@@ -24,8 +24,9 @@ public class XhXkVtBhPhieuXuatNhapKhoRequest extends BaseRequest {
     private String soCanCu;
     private Long idCanCu;
     private String maDiaDiem; // mã địa điểm (mã lô/ngăn kho)
-    private String soPhieuKncl;
-    private Long idPhieuKncl;
+    private String soPhieuKdcl;
+    private Long idPhieuKdcl;
+    private LocalDate ngayKdcl;
     private String loaiVthh;
     private String cloaiVthh;
     private String canBoLapPhieu;
@@ -49,8 +50,8 @@ public class XhXkVtBhPhieuXuatNhapKhoRequest extends BaseRequest {
     private Boolean mauBiHuy;
     private String loaiPhieu;
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
-    private Long idBienBanLm;
-    private String soBienBanLm;
+    private Long idBbLayMau;
+    private String soBbLayMau;
     private String soBcKqkdMau;
     private Long idBcKqkdMau;
 

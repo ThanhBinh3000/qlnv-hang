@@ -15,6 +15,7 @@ public interface HhQdGiaoNvNhapHangRepository extends JpaRepository<HhQdGiaoNvNh
 
     @Query(value = "select * from HH_QD_GIAO_NV_NHAP_HANG QD where (:namNhap IS NULL OR QD.NAM_NHAP = TO_NUMBER(:namNhap))" +
             " AND (:soQd IS NULL OR LOWER(QD.SO_QD) LIKE LOWER(CONCAT(CONCAT('%',:soQd),'%')))" +
+            " AND (:loaiQd IS NULL OR QD.LOAI_QD = :loaiQd)" +
             " AND (:loaiVthh IS NULL OR QD.LOAI_VTHH = :loaiVthh)" +
             " AND (:cloaiVthh IS NULL OR QD.CLOAI_VTHH = :cloaiVthh)" +
             " AND (:trichYeu IS NULL OR LOWER(QD.TRICH_YEU) LIKE(CONCAT(CONCAT('%',:trichYeu),'%')) )" +
@@ -23,21 +24,23 @@ public interface HhQdGiaoNvNhapHangRepository extends JpaRepository<HhQdGiaoNvNh
             " AND (:trangThai IS NULL OR QD.TRANG_THAI = :trangThai)" +
             " AND (:maDvi IS NULL OR LOWER(QD.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))",
     nativeQuery = true)
-    Page<HhQdGiaoNvNhapHang> searchPageCuc(Integer namNhap, String soQd, String loaiVthh, String cloaiVthh, String trichYeu, String ngayQdTu, String ngayQdDen, String trangThai, String maDvi, Pageable pageable);
+    Page<HhQdGiaoNvNhapHang> searchPageCuc(Integer namNhap, String soQd, String loaiVthh, String cloaiVthh, String trichYeu, String ngayQdTu, String ngayQdDen, String trangThai, String maDvi, String loaiQd, Pageable pageable);
 
-    @Query(value = "select * from HH_QD_GIAO_NV_NHAP_HANG QD " +
-            " LEFT JOIN HH_QD_GIAO_NV_NHAP_HANG_DTL QD_DTL ON QD.ID = QD_DTL.ID_QD_HDR " +
-            " where (:namNhap IS NULL OR QD.NAM_NHAP = TO_NUMBER(:namNhap))" +
+    @Query(value = "select DISTINCT QD.* from HH_QD_GIAO_NV_NHAP_HANG QD, HH_QD_GIAO_NV_NHAP_HANG_DTL QD_DTL " +
+            " where QD.ID = QD_DTL.ID_QD_HDR" +
+            " AND (:namNhap IS NULL OR QD.NAM_NHAP = TO_NUMBER(:namNhap))" +
             " AND (:soQd IS NULL OR LOWER(QD.SO_QD) LIKE LOWER(CONCAT(CONCAT('%',:soQd),'%')))" +
             " AND (:loaiVthh IS NULL OR QD.LOAI_VTHH = :loaiVthh)" +
+            " AND (:loaiQd IS NULL OR QD.LOAI_QD = :loaiQd)" +
             " AND (:cloaiVthh IS NULL OR QD.CLOAI_VTHH = :cloaiVthh)" +
             " AND (:trichYeu IS NULL OR LOWER(QD.TRICH_YEU) LIKE(CONCAT(CONCAT('%',:trichYeu),'%')) )" +
             " AND (:ngayQdTu IS NULL OR QD.NGAY_QD >=  TO_DATE(:ngayQdTu,'yyyy-MM-dd')) " +
             " AND (:ngayQdDen IS NULL OR QD.NGAY_QD <= TO_DATE(:ngayQdDen,'yyyy-MM-dd'))" +
             " AND (:trangThai IS NULL OR QD.TRANG_THAI = :trangThai)" +
             " AND (:maDvi IS NULL OR LOWER(QD_DTL.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))",
+//            " AND (:maDvi IS NULL OR QD_DTL.MA_DVI = :maDvi)" ,
             nativeQuery = true)
-    Page<HhQdGiaoNvNhapHang> searchPageChiCuc(Integer namNhap, String soQd, String loaiVthh, String cloaiVthh, String trichYeu, String ngayQdTu, String ngayQdDen, String trangThai, String maDvi, Pageable pageable);
+    Page<HhQdGiaoNvNhapHang> searchPageChiCuc(Integer namNhap, String soQd, String loaiVthh, String cloaiVthh, String trichYeu, String ngayQdTu, String ngayQdDen, String trangThai, String maDvi, String loaiQd, Pageable pageable);
 
     Optional<HhQdGiaoNvNhapHang> findAllBySoQd(String soQd);
 

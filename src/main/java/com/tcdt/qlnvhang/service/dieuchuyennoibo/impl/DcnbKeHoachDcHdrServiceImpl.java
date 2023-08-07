@@ -426,6 +426,9 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
                         parentDtl.get().setTichLuongKd(hh.getTichLuongKd());
                         parentDtl.get().setSoLuongPhanBo(hh.getSoLuongPhanBo());
                         parentDtl.get().setSlDcConLai(hh.getSlDcConLai());
+                        parentDtl.get().setThuKhoNhan(hh.getThuKhoNhan());
+                        parentDtl.get().setThuKhoNhanId(hh.getThuKhoNhanId());
+                        parentDtl.get().setThayDoiThuKho(hh.getThayDoiThuKho());
                         parentDtl.get().setDaXdinhDiemNhap(true);
                         dcnbKeHoachDcDtlRepository.save(parentDtl.get());
                     }

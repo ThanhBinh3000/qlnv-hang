@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.table.HhDthauNthauDuthau;
 import com.tcdt.qlnvhang.table.HhQdPduyetKqlcntDtl;
 import lombok.Data;
 
@@ -77,7 +78,8 @@ public class HhQdKhlcntDsgthau implements Serializable {
 
 	@Transient
 	private List<HhQdKhlcntDsgthauCtiet> children = new ArrayList<>();
-
+	@Transient
+	private List<HhDthauNthauDuthau> dsNhaThauDthau = new ArrayList<>();
 	String tenNhaThau;
 
 	BigDecimal donGiaNhaThau;
@@ -92,4 +94,7 @@ public class HhQdKhlcntDsgthau implements Serializable {
 	public String getTenTrangThai() {
 		return NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(this.getTrangThai());
 	}
+
+	@Transient
+	private String thanhTienStr;
 }

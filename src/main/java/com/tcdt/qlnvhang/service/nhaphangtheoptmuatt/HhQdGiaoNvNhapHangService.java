@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.hopdong.hopdongphuluc.HopDongMttHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -11,8 +12,10 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -40,6 +43,9 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
 
     @Autowired
     private HhQdGiaoNvNhangDtlRepository hhQdGiaoNvNhangDtlRepository;
+
+    @Autowired
+    private HopDongMttHdrRepository hopDongMttHdrRepository;
 
     @Autowired
     private HhQdGiaoNvNhDdiemRepository hhQdGiaoNvNhDdiemRepository;
@@ -77,12 +83,15 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
     @Autowired
     private HhBienBanDayKhoDtlRepository hhBienBanDayKhoDtlRepository;
 
+    @Autowired
+    private HhQdPheduyetKhMttHdrRepository hhQdPheduyetKhMttHdrRepository;
+
     public Page<HhQdGiaoNvNhapHang> searchPage(SearchHhQdGiaoNvNhReq objReq) throws Exception{
         UserInfo userInfo= SecurityContextService.getUser();
         Pageable pageable= PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<HhQdGiaoNvNhapHang> data = null;
-        if(userInfo.getCapDvi().equalsIgnoreCase(Contains.CAP_CHI_CUC)){
+//        if(userInfo.getCapDvi().equalsIgnoreCase(Contains.CAP_CHI_CUC)){
             data =hhQdGiaoNvNhapHangRepository.searchPageChiCuc(
                     objReq.getNamNhap(),
                     objReq.getSoQd(),
@@ -93,20 +102,22 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                     Contains.convertDateToString(objReq.getNgayQdDen()),
                     objReq.getTrangThai(),
                     userInfo.getDvql(),
+                    objReq.getLoaiQd(),
                     pageable);
-        }else {
-            data =hhQdGiaoNvNhapHangRepository.searchPageCuc(
-                    objReq.getNamNhap(),
-                    objReq.getSoQd(),
-                    objReq.getLoaiVthh(),
-                    objReq.getCloaiVthh(),
-                    objReq.getTrichyeu(),
-                    Contains.convertDateToString(objReq.getNgayQdTu()),
-                    Contains.convertDateToString(objReq.getNgayQdDen()),
-                    objReq.getTrangThai(),
-                    userInfo.getDvql(),
-                    pageable);
-        }
+//        }else {
+//            data =hhQdGiaoNvNhapHangRepository.searchPageCuc(
+//                    objReq.getNamNhap(),
+//                    objReq.getSoQd(),
+//                    objReq.getLoaiVthh(),
+//                    objReq.getCloaiVthh(),
+//                    objReq.getTrichyeu(),
+//                    Contains.convertDateToString(objReq.getNgayQdTu()),
+//                    Contains.convertDateToString(objReq.getNgayQdDen()),
+//                    objReq.getTrangThai(),
+//                    objReq.getLoaiQd(),
+//                    userInfo.getDvql(),
+//                    pageable);
+//        }
 
         Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
         Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
@@ -137,17 +148,8 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                     item.setTenLoKho(StringUtils.isEmpty(item.getMaLoKho())?null:hashMapDmdv.get(item.getMaLoKho()));
                 });
                 dDiem.setListBienBanNghiemThuBq(bbNghiemThuBq);
-                 }
-            for (HhQdGiaoNvNhangDtl dtl : hhQdGiaoNvNhangDtl ){
-                dtl.setChildren(ddiemList);
-                // Set biên bản nghiệm thu bảo quản
-//                List<HhBienBanNghiemThu> bbNghiemThuBq = hhBienBanNghiemThuRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
-//                bbNghiemThuBq.forEach( item ->  {
-//                   item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
-//                });
-                // Set biên bản lấy mẫu/ bàn giao mẫu
-//                dtl.setListBienBanNghiemThuBq(bbNghiemThuBq);
-                List<HhBienBanLayMau> bbLayMau = hhBienBanLayMauRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
+
+                List<HhBienBanLayMau> bbLayMau = hhBienBanLayMauRepository.findByIdQdGiaoNvNhAndMaLoKho(f.getId(), dDiem.getMaLoKho());
                 bbLayMau.forEach(item ->{
                     item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
                     item.setTenDiemKho(StringUtils.isEmpty(item.getMaDiemKho())?null:hashMapDmdv.get(item.getMaDiemKho()));
@@ -158,7 +160,29 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                             .stream().filter(x -> Objects.equals(x.getId(), item.getIdBbNhapDayKho())).findAny().orElse(null);
                     item.setBbNhapDayKho(bienBanDayKho);
                 });
-                dtl.setListBienBanLayMau(bbLayMau);
+                dDiem.setListBienBanLayMau(bbLayMau);
+                 }
+            for (HhQdGiaoNvNhangDtl dtl : hhQdGiaoNvNhangDtl ){
+                dtl.setChildren(ddiemList);
+                // Set biên bản nghiệm thu bảo quản
+//                List<HhBienBanNghiemThu> bbNghiemThuBq = hhBienBanNghiemThuRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
+//                bbNghiemThuBq.forEach( item ->  {
+//                   item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+//                });
+                // Set biên bản lấy mẫu/ bàn giao mẫu
+//                dtl.setListBienBanNghiemThuBq(bbNghiemThuBq);
+//                List<HhBienBanLayMau> bbLayMau = hhBienBanLayMauRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
+//                bbLayMau.forEach(item ->{
+//                    item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+//                    item.setTenDiemKho(StringUtils.isEmpty(item.getMaDiemKho())?null:hashMapDmdv.get(item.getMaDiemKho()));
+//                    item.setTenNhaKho(StringUtils.isEmpty(item.getMaNhaKho())?null:hashMapDmdv.get(item.getMaNhaKho()));
+//                    item.setTenNganKho(StringUtils.isEmpty(item.getMaNganKho())?null:hashMapDmdv.get(item.getMaNganKho()));
+//                    item.setTenLoKho(StringUtils.isEmpty(item.getMaLoKho())?null:hashMapDmdv.get(item.getMaLoKho()));
+//                    HhBienBanDayKhoHdr bienBanDayKho = hhBienBanDayKhoHdrRepository.findAllByIdQdGiaoNvNh(f.getId())
+//                            .stream().filter(x -> Objects.equals(x.getId(), item.getIdBbNhapDayKho())).findAny().orElse(null);
+//                    item.setBbNhapDayKho(bienBanDayKho);
+//                });
+//                dtl.setListBienBanLayMau(bbLayMau);
                 // Set phiếu kiểm nghiệm chất lượng
                 List<HhPhieuKngiemCluong> phieuKnghiemCl = hhPhieuKngiemCluongRepository.findBySoQdGiaoNvNhAndMaDvi(f.getSoQd(), dtl.getMaDvi());
                 phieuKnghiemCl.forEach( item -> {
@@ -211,7 +235,13 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 }
                 bienBanDayKhoHdr.setHhBienBanDayKhoDtlList(hhBienBanDayKhoDtl);
             }
-
+            if(f.getIdQdPdKh() != null){
+                Optional<HhQdPheduyetKhMttHdr> hhQdPheduyetKhMttHdr = hhQdPheduyetKhMttHdrRepository.findById(f.getIdQdPdKh());
+                if(hhQdPheduyetKhMttHdr.isPresent()){
+                    hhQdPheduyetKhMttHdr.get().setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(hhQdPheduyetKhMttHdr.get().getTrangThaiHd()));
+                    f.setHhQdPheduyetKhMttHdr(hhQdPheduyetKhMttHdr.get());
+                }
+            }
             f.setHhPhieuNhapKhoHdrList(hhPhieuNhapKhoHdrList);
             f.setHhBcanKeHangHdrList(hhBcanKeHangHdrList);
             f.setHhBienBanDayKhoHdrList(hhBienBanDayKhoHdr);
@@ -237,6 +267,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
             dDiem.setListPhieuKtraCl(phieuKiemTraChatLuongList);
             dDiem.setBienBanNhapDayKho(hhBienBanDayKhoHdrRepository.findAllByIdQdGiaoNvNh(dDiem.getId()));
             dDiem.setBienBanNhapDayKho(hhBienBanDayKhoHdrRepository.findAllByIdDdiemGiaoNvNh(dDiem.getId()));
+            dDiem.setListBienBanNghiemThuBq(hhBienBanNghiemThuRepository.findByIdDdiemGiaoNvNh(dDiem.getId()));
         }
     }
 
@@ -314,6 +345,10 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         return created;
     }
     public void saveCtiet(HhQdGiaoNvNhapHang data,HhQdGiaoNvNhapHangReq objReq){
+        Optional<HhQdPheduyetKhMttHdr> hhQdPheduyetKhMttHdr = hhQdPheduyetKhMttHdrRepository.findById(data.getIdQdPdKh());
+        hhQdPheduyetKhMttHdr.get().setIdQdGnvu(data.getId());
+        hhQdPheduyetKhMttHdr.get().setSoQdGnvu(data.getSoQd());
+        hhQdPheduyetKhMttHdrRepository.save(hhQdPheduyetKhMttHdr.get());
         for(HhQdGiaoNvNhangDtlReq req : objReq.getHhQdGiaoNvNhangDtlList()){
             HhQdGiaoNvNhangDtl dtl= new ModelMapper().map(req,HhQdGiaoNvNhangDtl.class);
             dtl.setId(null);
@@ -392,6 +427,14 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         }
         data.setHhQdGiaoNvNhangDtlList(listDtl);
 
+        List<HopDongMttHdr> listHd = hopDongMttHdrRepository.findAllById(Collections.singleton(data.getIdHd()));
+        data.setHopDongMttHdrs(listHd);
+
+        Optional<HhQdPheduyetKhMttHdr> hhQdPheduyetKhMttHdr = hhQdPheduyetKhMttHdrRepository.findById(data.getIdQdPdKh());
+        if(hhQdPheduyetKhMttHdr.isPresent()){
+            hhQdPheduyetKhMttHdr.get().setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(hhQdPheduyetKhMttHdr.get().getTrangThaiHd()));
+            data.setHhQdPheduyetKhMttHdr(hhQdPheduyetKhMttHdr.get());
+        }
         return data;
     }
 

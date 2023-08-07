@@ -164,6 +164,23 @@ public class HhDxuatKhLcntHdrController {
 		return ResponseEntity.ok(resp);
 	}
 
+	@ApiOperation(value = "Xem truoc", response = List.class)
+	@PostMapping(value = PathContains.URL_XEM_TRUOC + "/vt", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> previewVt(@RequestBody HhDxuatKhLcntHdrReq objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.previewVt(objReq));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Lấy chi tiết trace: {}", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
+
 	@ApiOperation(value = "Xoá", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
 	@PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)

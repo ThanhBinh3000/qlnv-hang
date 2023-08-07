@@ -65,6 +65,7 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         }
         Page<DcnbPhieuKtChatLuongHdrDTO> search = null;
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            req.setTypeQd(Contains.DIEU_CHUYEN);
             search = dcnbPhieuKtChatLuongHdrRepository.searchChiCuc(req, pageable);
         }else {
             search = dcnbPhieuKtChatLuongHdrRepository.search(req, pageable);

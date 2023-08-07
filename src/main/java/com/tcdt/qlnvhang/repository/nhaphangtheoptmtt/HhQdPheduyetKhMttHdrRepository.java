@@ -56,5 +56,6 @@ public interface HhQdPheduyetKhMttHdrRepository extends JpaRepository<HhQdPheduy
 
     Optional<HhQdPheduyetKhMttHdr> findByIdThHdrAndLastest(Long idThHdr, Boolean lastest);
     Optional<HhQdPheduyetKhMttHdr> findBySoQdAndLastest(String soQd, Boolean lastest);
+    Optional<HhQdPheduyetKhMttHdr> findByIdQdGnvu(Long idQdGnvu);
 
 }

@@ -39,4 +39,6 @@ public interface XhXkVtBhPhieuXuatNhapKhoRepository extends JpaRepository<XhXkVt
   List<XhXkVtBhPhieuXuatNhapKho> findAllByIdIn(List<Long> idList);
 
   List<XhXkVtBhPhieuXuatNhapKho> findAllByIdCanCuIn(List<Long> idList);
+
+  List<XhXkVtBhPhieuXuatNhapKho> findAllByIdBbKtNhapKho(Long idBbKtNhapKho);
 }

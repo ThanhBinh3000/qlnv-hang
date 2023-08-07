@@ -1,9 +1,16 @@
 package com.tcdt.qlnvhang.util;
 
+import com.tcdt.qlnvhang.response.HopDongMttHdrDTO;
+import org.apache.poi.ss.formula.functions.T;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -261,6 +268,7 @@ public class Contains {
     public static final String NHAN_DIEU_CHUYEN = "NDC";
 
     public static final String NHAN_DIEU_CHUYEN_TS = "NDCTS";
+    public static final String DIEU_CHUYEN_TS = "DCTS";
 
     // Loai diều chuyển
 
@@ -275,6 +283,8 @@ public class Contains {
     public static final String VT_6_THANG = "VT6";
     public static final String NHAP_SAU_BH = "NHAP_SAU_BH";
     public static final String NHAP_MAU = "NHAP_MAU";
+
+    public static final String QD_GNV = "QD_GNV";
 
 
     public static final Map<String, String> mappingLoaiDx;
@@ -360,6 +370,13 @@ public class Contains {
         }
         DateFormat df = new SimpleDateFormat(Contains.FORMAT_DATE_STR);
         return df.format(date);
+    }
+
+    public static Page<T> convertListToPage(List<T> list, Pageable pageable){
+        final int start = (int)pageable.getOffset();
+        final int end = Math.min((start + pageable.getPageSize()), list.size());
+        final Page<T> page = new PageImpl<>(list.subList(start, end), pageable, list.size());
+        return page;
     }
 
     public static class NguoiLienQuan {

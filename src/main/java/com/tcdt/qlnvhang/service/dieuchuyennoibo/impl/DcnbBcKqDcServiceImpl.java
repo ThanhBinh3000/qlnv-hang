@@ -230,13 +230,35 @@ public class DcnbBcKqDcServiceImpl implements DcnbBbKqDcService {
     @Override
     public List<DcnbBcKqDcDtl> thongTinNhapXuatHangChiCuc(DcnbBbKqDcSearch objReq) throws Exception {
         CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
-//        return dtlRepository.thongTinNhapXuatHang(objReq);
-        return null;
+        objReq.setMaDvi(currentUser.getDvql());
+        return dtlRepository.thongTinXuatNhapHangChiCuc(objReq);
     }
 
     @Override
     public List<DcnbBcKqDcDtl> thongTinNhapXuatHangCuc(DcnbBbKqDcSearch objReq) throws Exception {
         CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
-        return null;
+        List<QlnvDmDonvi> donvis = qlnvDmDonviRepository.findByMaDviChaAndTrangThai(currentUser.getDvql(), "01");
+        List<DcnbBcKqDcDtl> result = new ArrayList<>();
+        for (QlnvDmDonvi cqt : donvis) {
+            objReq.setMaDvi(cqt.getMaDvi());
+            List<DcnbBcKqDcDtl> dcnbBcKqDcDtlsXuat = dtlRepository.thongTinXuatNhapHangCuc(objReq);
+            result.addAll(dcnbBcKqDcDtlsXuat);
+        }
+        return result;
+    }
+
+    @Override
+    public void finish(StatusReq statusReq) throws Exception {
+        CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
+        if (StringUtils.isEmpty(statusReq.getId())) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        DcnbBcKqDcHdr details = detail(Long.valueOf(statusReq.getId()));
+        Optional<DcnbBcKqDcHdr> optional = Optional.of(details);
+        if (!optional.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        optional.get().setTrangThai(Contains.DA_HOAN_THANH);
+        hdrRepository.save(optional.get());
     }
 }

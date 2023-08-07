@@ -13,6 +13,7 @@ import java.util.List;
 public class SearchDcnbBienBanLayMau extends BaseRequest {
     private Integer nam;
     private Long qdDcCucId;
+    private String typeQd;
     private String soQdinhDcc;
     private String soBbLayMau;
     private String dViKiemNghiem;

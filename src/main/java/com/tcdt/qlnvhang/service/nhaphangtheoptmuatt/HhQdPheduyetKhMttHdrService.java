@@ -392,11 +392,15 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
                 dataDB.setNgayPduyet(getDateTimeNow());
                 dataDB.setNguoiPduyetId(getUser().getId());
                 break;
+            case Contains.DA_HOAN_THANH + Contains.BAN_HANH:
+
+                break;
             default:
                 throw new Exception("Phê duyệt không thành công");
         }
-        dataDB.setTrangThai(req.getTrangThai());
+        HhQdPheduyetKhMttHdr createCheck = null;
         if (req.getTrangThai().equals(Contains.BAN_HANH)) {
+            dataDB.setTrangThai(req.getTrangThai());
             if (dataDB.getPhanLoai().equals("TH")) {
                 Optional<HhDxKhMttThopHdr> qOptional = hhDxuatKhMttThopRepository.findById(dataDB.getIdThHdr());
                 if (qOptional.isPresent()) {
@@ -421,8 +425,13 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
                 }
             }
 //            this.cloneProject(dataDB.getId());
+            createCheck = hhQdPheduyetKhMttHdrRepository.save(dataDB);
         }
-        HhQdPheduyetKhMttHdr createCheck = hhQdPheduyetKhMttHdrRepository.save(dataDB);
+        if(req.getTrangThai().equals(Contains.DA_HOAN_THANH)){
+            dataDB.setTrangThaiHd(req.getTrangThai());
+            createCheck = hhQdPheduyetKhMttHdrRepository.save(dataDB);
+        }
+
         return createCheck;
     }
 

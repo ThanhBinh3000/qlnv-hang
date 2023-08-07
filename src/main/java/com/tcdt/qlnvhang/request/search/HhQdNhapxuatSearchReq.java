@@ -39,6 +39,11 @@ public class HhQdNhapxuatSearchReq extends BaseRequest {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
 	Date denNgayKT;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
+	Date ngayLayMauTu;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
+	Date ngayLayMauDen;
+
 	String maDvi;
 
 	String maVthh;
@@ -53,6 +58,10 @@ public class HhQdNhapxuatSearchReq extends BaseRequest {
 	String cloaiVthh;
 
 	String trichYeu;
+	String soBienBan;
+	String dviKiemNghiem;
+	Long idQdGiaoNvNh;
+	String maDviDtl;
 
 	List<String> bienBan = new ArrayList<>();
 }

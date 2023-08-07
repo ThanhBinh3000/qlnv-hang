@@ -249,26 +249,7 @@ public class HhQdGiaoNvNhapKhacServiceImpl extends BaseServiceImpl implements Hh
         }
         String status = stReq.getTrangThai() + qOptional.get().getTrangThai();
         switch (status) {
-            case Contains.CHODUYET_TP + Contains.DUTHAO:
-            case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
-            case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
-                qOptional.get().setNguoiGuiDuyet(getUser().getUsername());
-                qOptional.get().setNgayGuiDuyet(getDateTimeNow());
-                break;
-            case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
-            case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
-            case Contains.TU_CHOI_CBV + Contains.DA_DUYET_LDC:
-                qOptional.get().setNguoiPduyet(getUser().getUsername());
-                qOptional.get().setNgayPduyet(getDateTimeNow());
-                qOptional.get().setLdoTuchoi(stReq.getLyDo());
-                break;
-            case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
-            case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
-            case Contains.DA_DUYET_CBV + Contains.DA_DUYET_LDC:
-                qOptional.get().setNguoiPduyet(getUser().getUsername());
-                qOptional.get().setNgayPduyet(getDateTimeNow());
-                break;
-            case Contains.BAN_HANH + Contains.CHODUYET_LDC:
+            case Contains.BAN_HANH + Contains.DUTHAO:
                 qOptional.get().setNguoiPduyet(getUser().getUsername());
                 qOptional.get().setNgayPduyet(getDateTimeNow());
                 break;

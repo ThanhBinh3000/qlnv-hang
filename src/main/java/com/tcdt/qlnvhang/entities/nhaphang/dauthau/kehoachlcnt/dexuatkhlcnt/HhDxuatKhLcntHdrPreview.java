@@ -83,6 +83,9 @@ public class HhDxuatKhLcntHdrPreview implements Serializable {
 	Integer tongSl;
 	Integer tongSlChiTieu = 0;
 	BigDecimal tongThanhTien;
+	String tongThanhTienStr;
+	String tongThucHien;
+	String tongDeXuat;
 
 	private ReportTemplateRequest reportTemplateRequest;
 	private List<ListDsGthauDTO> listDsGthau;
@@ -93,5 +96,6 @@ public class HhDxuatKhLcntHdrPreview implements Serializable {
 	private Long maTh;
 	private BigDecimal qdGiaoChiTieuId;
 	String ykienThamGia;
+	private List<HhDxKhlcntDsgthau> dsGtVt;
 
 }

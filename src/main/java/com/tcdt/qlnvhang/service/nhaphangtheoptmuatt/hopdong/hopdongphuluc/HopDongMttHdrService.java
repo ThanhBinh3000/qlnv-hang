@@ -1,24 +1,29 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.hopdong.hopdongphuluc;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhQdPdKqMttSlddDtlRepository;
-import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhQdPduyetKqcgRepository;
-import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhQdPheduyetKqMttSLDDRepository;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.hopdong.hopdongphuluc.DiaDiemGiaoNhanMttCtRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.hopdong.hopdongphuluc.DiaDiemGiaoNhanMttRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.hopdong.hopdongphuluc.HopDongMttHdrRepository;
+import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttHdrSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhQdGiaoNvNhReq;
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhQdPduyetKqcg;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.hopdong.hopdongphuluc.DiaDiemGiaoNhanMttCtReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.hopdong.hopdongphuluc.DiaDiemGiaoNhanMttReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdrReq;
+import com.tcdt.qlnvhang.response.HopDongMttHdrDTO;
+import com.tcdt.qlnvhang.response.SearchHopDongMttHdrDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.HhQdGiaoNvNhapHangService;
+import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.HhQdPduyetKqcgService;
+import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.HhQdPheduyetKhMttHdrService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttHdr;
 import com.tcdt.qlnvhang.table.HhQdPheduyetKqMttSLDD;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhChiTietKqTTinChaoGia;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdPdKQMttSlddDtl;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdPduyetKqcgHdr;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.DiaDiemGiaoNhanMtt;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.DiaDiemGiaoNhanMttCt;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdr;
@@ -27,10 +32,7 @@ import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -38,6 +40,7 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class HopDongMttHdrService extends BaseServiceImpl {
@@ -54,11 +57,26 @@ public class HopDongMttHdrService extends BaseServiceImpl {
   private HhQdPduyetKqcgRepository hhQdPduyetKqcgRepository;
 
   @Autowired
+  private HhQdGiaoNvNhapHangRepository hhQdGiaoNvNhapHangRepository;
+
+  @Autowired
   private FileDinhKemService fileDinhKemService;
   @Autowired
   private HhQdPdKqMttSlddDtlRepository hhQdPdKqMttSlddDtlRepository;
   @Autowired
   private HhQdPheduyetKqMttSLDDRepository hhQdPheduyetKqMttSLDDRepository;
+  @Autowired
+  private HhQdGiaoNvNhangDtlRepository hhQdGiaoNvNhangDtlRepository;
+  @Autowired
+  private HhQdGiaoNvNhDdiemRepository hhQdGiaoNvNhDdiemRepository;
+  @Autowired
+  private HhQdPheduyetKhMttHdrRepository hhQdPheduyetKhMttHdrRepository;
+
+  @Autowired
+  private HhQdGiaoNvNhapHangService hhQdGiaoNvNhapHangService;
+
+  @Autowired
+  private HhQdPduyetKqcgService hhQdPduyetKqcgService;
 
 
   public Page<HopDongMttHdr> searchPage(HopDongMttHdrReq req) throws Exception {
@@ -88,7 +106,37 @@ public class HopDongMttHdrService extends BaseServiceImpl {
     return hopDongHdrRepository.findById(req.getIdHd()).get();
   }
 
+  public Page<HopDongMttHdrDTO> searchPageHopDongHdr(SearchHopDongMttHdrDTO req) throws Exception {
+    SearchHhQdPduyetKqcg objReq = new SearchHhQdPduyetKqcg();
+    SearchHhQdGiaoNvNhReq objGnvu = new SearchHhQdGiaoNvNhReq();
+    BeanUtils.copyProperties(req, objReq);
+    objReq.setTrangThai(req.getTrangThaiKq());
+    BeanUtils.copyProperties(req, objGnvu);
+    objGnvu.setTrangThai(req.getTrangThaiQd());
+    Page<HhQdPduyetKqcgHdr> dataQdPdKqcg = hhQdPduyetKqcgService.searchPage(objReq);
+    Page<HhQdGiaoNvNhapHang> dataGiaoNvu = hhQdGiaoNvNhapHangService.searchPage(objGnvu);
+    List<HopDongMttHdrDTO> result = mergeLists(dataQdPdKqcg.getContent(), dataGiaoNvu.getContent());
+    Page<HopDongMttHdrDTO> page = new PageImpl<>(result);
+    return page;
+  }
 
+  public static List<HopDongMttHdrDTO> mergeLists(List<HhQdPduyetKqcgHdr> list1, List<HhQdGiaoNvNhapHang> list2) {
+    Map<Long, HopDongMttHdrDTO> dtoMap = new HashMap<>();
+
+    for (HhQdPduyetKqcgHdr item : list1) {
+      HopDongMttHdrDTO dto = new HopDongMttHdrDTO();
+      BeanUtils.copyProperties(item, dto);
+      dtoMap.put(item.getId(), dto);
+    }
+
+    for (HhQdGiaoNvNhapHang item : list2) {
+      HopDongMttHdrDTO dto = new HopDongMttHdrDTO();
+      BeanUtils.copyProperties(item, dto);
+      dtoMap.put(item.getId(), dto);
+    }
+    List<HopDongMttHdrDTO> result = new ArrayList<>(dtoMap.values());
+    return result;
+  }
 
   @Transactional
   public HopDongMttHdr save(HopDongMttHdrReq req) throws Exception {
@@ -99,19 +147,27 @@ public class HopDongMttHdrService extends BaseServiceImpl {
 
     Optional<HopDongMttHdr> qOpHdong = hopDongHdrRepository.findBySoHd(req.getSoHd());
     HopDongMttHdr dataMap = new HopDongMttHdr();
-
+    Optional<HhQdGiaoNvNhapHang> checkSoQdGiaoNvNh = null;
     if (DataUtils.isNullObject(req.getIdHd())) {
       if (qOpHdong.isPresent()) {
         throw new Exception("Hợp đồng số" + req.getSoHd() + "đã tồn tại");
       }
-
-      Optional<HhQdPduyetKqcgHdr> checkSoQdKq = hhQdPduyetKqcgRepository.findBySoQdKq(req.getSoQdKq());
-      if (!checkSoQdKq.isPresent()){
-        throw new Exception("Số quyết định phê duyệt kết quả chào giá " + req.getSoQdKq() + " không tồn tại");
-      }else {
-        checkSoQdKq.get().setTrangThaiHd(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
-        hhQdPduyetKqcgRepository.save(checkSoQdKq.get());
+      if(!StringUtils.isEmpty(req.getSoQdKq())){
+        Optional<HhQdPduyetKqcgHdr> checkSoQdKq = hhQdPduyetKqcgRepository.findBySoQdKq(req.getSoQdKq());
+        if (!checkSoQdKq.isPresent()){
+          throw new Exception("Số quyết định phê duyệt kết quả chào giá " + req.getSoQdKq() + " không tồn tại");
+        }else {
+          checkSoQdKq.get().setTrangThaiHd(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
+          hhQdPduyetKqcgRepository.save(checkSoQdKq.get());
+        }
       }
+      if(!StringUtils.isEmpty(req.getSoQdGiaoNvNh())){
+        checkSoQdGiaoNvNh = hhQdGiaoNvNhapHangRepository.findAllBySoQd(req.getSoQdGiaoNvNh());
+        if (!checkSoQdGiaoNvNh.isPresent()){
+          throw new Exception("Số quyết định giao nhiệm vụ nhập hàng " + req.getSoQdGiaoNvNh() + " không tồn tại");
+        }
+      }
+
     }
 
     BeanUtils.copyProperties(req, dataMap, "id");
@@ -122,6 +178,9 @@ public class HopDongMttHdrService extends BaseServiceImpl {
     dataMap.setMaDvi(userInfo.getDvql());
 
     HopDongMttHdr created = hopDongHdrRepository.save(dataMap);
+    checkSoQdGiaoNvNh.get().setIdHd(created.getId());
+    checkSoQdGiaoNvNh.get().setSoHd(created.getSoHd());
+    checkSoQdGiaoNvNh.get().setTenHd(created.getTenHd());
     if (!DataUtils.isNullObject(req.getFileDinhKem())) {
       List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(req.getFileDinhKem()), created.getId(), HopDongMttHdr.TABLE_NAME);
       created.setFileDinhKem(fileDinhKem.get(0));
@@ -201,11 +260,15 @@ public class HopDongMttHdrService extends BaseServiceImpl {
         if (qOpHdong.isPresent())
           throw new Exception("Hợp đồng số " + req.getSoHd() + " đã tồn tại");
       }
-
-      if (qOptional.get().getSoHd() != null && !qOptional.get().getSoQdKq().equals(req.getSoQdKq())) {
+      if (qOptional.get().getSoQdKq() != null && qOptional.get().getSoHd() != null && !qOptional.get().getSoQdKq().equals(req.getSoQdKq())) {
         Optional<HhQdPduyetKqcgHdr> checkSoQdKq = hhQdPduyetKqcgRepository.findBySoQdKq(req.getSoQdKq());
         if (!checkSoQdKq.isPresent())
           throw new Exception("Số quyết định phê duyệt kết quả chào giá " + req.getSoQdKq() + " không tồn tại");
+      }
+      if (qOptional.get().getSoQdGiaoNvNh() != null && qOptional.get().getSoHd() != null && !qOptional.get().getSoQdGiaoNvNh().equals(req.getSoQdGiaoNvNh())) {
+        Optional<HhQdGiaoNvNhapHang> checkQdGnvu = hhQdGiaoNvNhapHangRepository.findById(req.getIdQdGiaoNvNh());
+        if (!checkQdGnvu.isPresent())
+          throw new Exception("Số quyết định phê duyệt kết quả chào giá " + req.getSoQdGiaoNvNh() + " không tồn tại");
       }
     }
     HopDongMttHdr dataDB = qOptional.get();
@@ -244,6 +307,8 @@ public class HopDongMttHdrService extends BaseServiceImpl {
     }
 
     Optional<HopDongMttHdr> qOptional = hopDongHdrRepository.findById(id);
+    Map<String,String> hashMapDmhh = getListDanhMucHangHoa();
+    Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
 
     if (!qOptional.isPresent()) {
       throw new UnsupportedOperationException("Không tồn tại bản ghi");
@@ -293,6 +358,33 @@ public class HopDongMttHdrService extends BaseServiceImpl {
     data.setPhuLucDtl(allByIdHdr);
     data.setChildren(listGthau);
 
+    List<HhQdGiaoNvNhangDtl> listDtl = hhQdGiaoNvNhangDtlRepository.findAllByIdQdHdr(data.getIdQdGiaoNvNh());
+    List<Long> listId=listDtl.stream().map(HhQdGiaoNvNhangDtl::getId).collect(Collectors.toList());
+    List<HhQdGiaoNvNhDdiem> listDd = hhQdGiaoNvNhDdiemRepository.findAllByIdDtlIn(listId);
+    for (HhQdGiaoNvNhangDtl dtl : listDtl){
+      List<HhQdGiaoNvNhDdiem> qdGiaoNvNhDdiem = new ArrayList<>();
+      dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi())?null:hashMapDmdv.get(dtl.getMaDvi()));
+      dtl.setTenDiemKho(StringUtils.isEmpty(dtl.getMaDiemKho())?null:hashMapDmdv.get(dtl.getMaDiemKho()));
+      dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
+      for (HhQdGiaoNvNhDdiem dDiem : listDd){
+        dDiem.setTenCuc(StringUtils.isEmpty(dDiem.getMaCuc())?null:hashMapDmdv.get(dDiem.getMaCuc()));
+        dDiem.setTenChiCuc(StringUtils.isEmpty(dDiem.getMaChiCuc())?null:hashMapDmdv.get(dDiem.getMaChiCuc()));
+        dDiem.setTenDiemKho(StringUtils.isEmpty(dDiem.getMaDiemKho())?null:hashMapDmdv.get(dDiem.getMaDiemKho()));
+        dDiem.setTenNhaKho(StringUtils.isEmpty(dDiem.getMaNhaKho())?null:hashMapDmdv.get(dDiem.getMaNhaKho()));
+        dDiem.setTenNganKho(StringUtils.isEmpty(dDiem.getMaNganKho())?null:hashMapDmdv.get(dDiem.getMaNganKho()));
+        dDiem.setTenLoKho(StringUtils.isEmpty(dDiem.getMaLoKho())?null:hashMapDmdv.get(dDiem.getMaLoKho()));
+//        this.setDataPhieu(null,dDiem);
+        if(dDiem.getIdDtl().equals(dtl.getId())){
+          qdGiaoNvNhDdiem.add(dDiem);
+        }
+      }
+      dtl.setChildren(qdGiaoNvNhDdiem);
+    }
+    data.setQdGiaoNvuDtlList(listDtl);
+    if(data.getIdQdGiaoNvNh() != null){
+      Optional<HhQdPheduyetKhMttHdr> hhQdPheduyetKhMttHdr = hhQdPheduyetKhMttHdrRepository.findByIdQdGnvu(data.getIdQdGiaoNvNh());
+      data.setHhQdPheduyetKhMttHdr(hhQdPheduyetKhMttHdr.get());
+    }
 //    for (DiaDiemGiaoNhanMtt diaDiem : allByIdHdr){
 //      List<DiaDiemGiaoNhanMttCt> diaDiemCt = diaDiemGiaoNhanMttCtRepository.findAllByIdDiaDiem(diaDiem.getId());
 //      diaDiemCt.forEach(f ->{
