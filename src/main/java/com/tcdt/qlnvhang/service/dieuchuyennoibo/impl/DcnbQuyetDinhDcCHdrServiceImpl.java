@@ -148,6 +148,10 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         e.getDanhSachKeHoach().forEach(e1 -> {
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr.get());
                             e1.setThayDoiThuKho(true);
+                            Optional<DcnbKeHoachDcDtl> dcnbKeHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(e1.getHdrId());
+                            if (dcnbKeHoachDcDtl.isPresent()) {
+                                e1.setParentId(dcnbKeHoachDcDtl.get().getParentId());
+                            }
                         });
                         dcnbKeHoachDcHdr.get().setDanhSachHangHoa(e.getDanhSachKeHoach());
                         DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr.get());
