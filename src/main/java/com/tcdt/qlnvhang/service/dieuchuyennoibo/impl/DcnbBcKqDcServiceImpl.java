@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DcnbBcKqDcServiceImpl implements DcnbBbKqDcService {
@@ -236,14 +237,34 @@ public class DcnbBcKqDcServiceImpl implements DcnbBbKqDcService {
 
     @Override
     public List<DcnbBcKqDcDtl> thongTinNhapXuatHangCuc(DcnbBbKqDcSearch objReq) throws Exception {
-        CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
-        List<QlnvDmDonvi> donvis = qlnvDmDonviRepository.findByMaDviChaAndTrangThai(currentUser.getDvql(), "01");
-        List<DcnbBcKqDcDtl> result = new ArrayList<>();
-        for (QlnvDmDonvi cqt : donvis) {
-            objReq.setMaDvi(cqt.getMaDvi());
-            List<DcnbBcKqDcDtl> dcnbBcKqDcDtlsXuat = dtlRepository.thongTinXuatNhapHangCuc(objReq);
-            result.addAll(dcnbBcKqDcDtlsXuat);
+        if (objReq.getIds() != null) {
+            List<Long> ids = Arrays.stream(objReq.getHdrIds().split(",")).map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+            return dtlRepository.findByHdrIdIn(ids);
         }
-        return result;
+        return new ArrayList<>();
+//        CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
+//        List<QlnvDmDonvi> donvis = qlnvDmDonviRepository.findByMaDviChaAndTrangThai(currentUser.getDvql(), "01");
+//        List<DcnbBcKqDcDtl> result = new ArrayList<>();
+//        for (QlnvDmDonvi cqt : donvis) {
+//            objReq.setMaDvi(cqt.getMaDvi());
+//            List<DcnbBcKqDcDtl> dcnbBcKqDcDtlsXuat = dtlRepository.thongTinXuatNhapHangCuc(objReq);
+//            result.addAll(dcnbBcKqDcDtlsXuat);
+//        }
+//        return result;
+    }
+
+    @Override
+    public void finish(StatusReq statusReq) throws Exception {
+        CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
+        if (StringUtils.isEmpty(statusReq.getId())) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        DcnbBcKqDcHdr details = detail(Long.valueOf(statusReq.getId()));
+        Optional<DcnbBcKqDcHdr> optional = Optional.of(details);
+        if (!optional.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        optional.get().setTrangThai(Contains.DA_HOAN_THANH);
+        hdrRepository.save(optional.get());
     }
 }

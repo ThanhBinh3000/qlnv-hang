@@ -39,6 +39,7 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND (qdc.loaiDc= 'DCNB' OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.trangThai} IS NULL OR pkncl.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho}) " +
             "AND (:#{#param.soPhieu} IS NULL OR LOWER(pkncl.soPhieu) LIKE CONCAT('%',LOWER(:#{#param.soPhieu}),'%')) " +
             "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
@@ -77,6 +78,7 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "AND ((:#{#param.maDvi} IS NULL OR bblm.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND (qdc.loaiDc= 'DCNB' OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.trangThai} IS NULL OR pkncl.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.thayDoiThuKho} IS NULL OR bblm.thayDoiThuKho = :#{#param.thayDoiThuKho}) " +
             "AND (:#{#param.soPhieu} IS NULL OR LOWER(pkncl.soPhieu) LIKE CONCAT('%',LOWER(:#{#param.soPhieu}),'%')) " +
             "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
@@ -118,6 +120,7 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND (qdc.loaiDc= 'DCNB' OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.trangThai} IS NULL OR pkncl.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho}) " +
             "AND (:#{#param.soPhieu} IS NULL OR LOWER(pkncl.soPhieu) LIKE CONCAT('%',LOWER(:#{#param.soPhieu}),'%')) " +
             "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +

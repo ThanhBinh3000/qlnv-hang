@@ -43,10 +43,13 @@ public class XhXkVtBhQdXuatGiamVtService extends BaseServiceImpl {
   private FileDinhKemService fileDinhKemService;
 
   public Page<XhXkVtBhQdXuatGiamVt> searchPage(CustomUserDetails currentUser, XhXkVtBhQdXuatGiamVtRequest req) throws Exception {
-    Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-    if (ObjectUtils.isEmpty(req.getDvql())) {
-      req.setDvql(currentUser.getDvql());
+    String dvql = currentUser.getDvql();
+    if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
+      req.setDvql(dvql.substring(0, 4));
+    } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
+      req.setDvql(dvql);
     }
+    Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<XhXkVtBhQdXuatGiamVt> search = xhXkVtBhQdXuatGiamVattuRepository.searchPage(req, pageable);
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     search.getContent().forEach(s -> {

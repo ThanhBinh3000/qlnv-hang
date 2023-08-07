@@ -69,7 +69,6 @@ public class ScTongHopServiceImpl extends BaseServiceImpl implements ScTongHopSe
     //set label
     search.getContent().forEach(s -> {
       s.setChildren(dataChilren.get(s.getId()));
-      s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
     });
     return search;
   }
@@ -133,9 +132,10 @@ public class ScTongHopServiceImpl extends BaseServiceImpl implements ScTongHopSe
     if(!optional.isPresent()){
       throw new Exception("Bản ghi không tồn tại");
     }
+    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     HashMap<Long, List<ScTongHopDtl>> dataChilren = getDataChilren(Collections.singletonList(optional.get().getId()));
     optional.get().setChildren(dataChilren.get(optional.get().getId()));
-
+    optional.get().setTenDvi(mapDmucDvi.get(optional.get().getMaDvi()));
     return optional.get();
   }
 

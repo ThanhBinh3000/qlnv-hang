@@ -45,6 +45,7 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND (qdc.loaiDc= 'DCNB' OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.trangThai} IS NULL OR pxk.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
             "AND (:#{#param.soPhieuXuatKho} IS NULL OR LOWER(pxk.soPhieuXuatKho) LIKE CONCAT('%',LOWER(:#{#param.soPhieuXuatKho}),'%')) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR pxk.ngayXuatKho >= :#{#param.tuNgay})" +
@@ -62,6 +63,7 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
             "pxk.id,pxk.soPhieuXuatKho,pxk.ngayTaoPhieu) " +
             "FROM DcnbPhieuXuatKhoHdr pxk " +
             "WHERE 1 =1 " +
+            "AND (:#{#param.trangThai} IS NULL OR pxk.trangThai = :#{#param.trangThai}) " +
             "AND ((:#{#param.qdinhDccId} IS NULL OR pxk.qddcId = :#{#param.qdinhDccId}))" +
             "AND ((:#{#param.maLoKho} IS NULL OR pxk.maLoKho = :#{#param.maLoKho}))" +
             "AND ((:#{#param.maNganKho} IS NULL OR pxk.maNganKho = :#{#param.maNganKho}))" +
@@ -74,6 +76,7 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
             "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On pkncl.id = pxk.phieuKnChatLuongHdrId " +
             "LEFT JOIN DcnbBangKeXuatVTHdr bkxvth On bkxvth.phieuXuatKhoId = pxk.id " +
             "WHERE 1 =1 " +
+            "AND (:#{#param.trangThai} IS NULL OR pxk.trangThai = :#{#param.trangThai}) " +
             "AND ((:#{#param.qdinhDccId} IS NULL OR pxk.qddcId = :#{#param.qdinhDccId}))" +
             "AND ((:#{#param.maLoKho} IS NULL OR pxk.maLoKho = :#{#param.maLoKho}))" +
             "AND ((:#{#param.maNganKho} IS NULL OR pxk.maNganKho = :#{#param.maNganKho}))" +

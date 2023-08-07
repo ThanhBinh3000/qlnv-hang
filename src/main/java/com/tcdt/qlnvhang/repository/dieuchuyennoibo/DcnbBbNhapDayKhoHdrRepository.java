@@ -67,6 +67,7 @@ public interface DcnbBbNhapDayKhoHdrRepository extends JpaRepository<DcnbBbNhapD
             "AND (qdc.loaiDc= 'DCNB' OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
             "AND (:#{#param.soBb} IS NULL OR LOWER(bbndk.soBb) LIKE CONCAT('%',LOWER(:#{#param.soBb}),'%')) " +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.trangThai} IS NULL OR bbndk.trangThai = :#{#param.trangThai}) " +
             "AND ((:#{#param.tuNgayBdNhap}  IS NULL OR bbndk.ngayBdNhap >= :#{#param.tuNgayBdNhap})" +
             "AND (:#{#param.denNgayBdNhap}  IS NULL OR bbndk.ngayBdNhap <= :#{#param.denNgayBdNhap}) ) " +
             "AND ((:#{#param.tuNgayKtNhap}  IS NULL OR bbndk.ngayKtNhap >= :#{#param.tuNgayKtNhap})" +

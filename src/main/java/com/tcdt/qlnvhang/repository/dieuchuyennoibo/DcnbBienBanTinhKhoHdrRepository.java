@@ -42,6 +42,7 @@ public interface DcnbBienBanTinhKhoHdrRepository extends JpaRepository<DcnbBienB
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND (qdc.loaiDc= 'DCNB' OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.trangThai} IS NULL OR bbtk.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.soBbTinhKho} IS NULL OR LOWER(bbtk.soBbTinhKho) LIKE CONCAT('%',LOWER(:#{#param.soBbTinhKho}),'%')) " +
             "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(bbtk.soQdinhDcc) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
             "AND ((:#{#param.tuNgayBdXuat}  IS NULL OR bbtk.ngayBatDauXuat >= :#{#param.tuNgayBdXuat})" +
@@ -85,6 +86,7 @@ public interface DcnbBienBanTinhKhoHdrRepository extends JpaRepository<DcnbBienB
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND (qdc.loaiDc= 'DCNB' OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.trangThai} IS NULL OR bbtk.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.soBbTinhKho} IS NULL OR LOWER(bbtk.soBbTinhKho) LIKE CONCAT('%',LOWER(:#{#param.soBbTinhKho}),'%')) " +
             "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(bbtk.soQdinhDcc) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
             "AND (:#{#param.qdinhDccId} IS NULL OR bbtk.qDinhDccId = :#{#param.qdinhDccId}) " +
