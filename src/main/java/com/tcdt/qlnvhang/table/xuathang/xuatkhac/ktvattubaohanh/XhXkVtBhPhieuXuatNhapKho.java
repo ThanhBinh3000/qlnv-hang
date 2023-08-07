@@ -37,6 +37,7 @@ public class XhXkVtBhPhieuXuatNhapKho extends BaseEntity implements Serializable
   private BigDecimal duCo;
   private String soCanCu;
   private Long idCanCu;
+  private Integer soLanLm;
   private String maDiaDiem; // mã địa điểm (mã lô/ngăn kho)
   private String soPhieuKdcl;
   private Long idPhieuKdcl;
@@ -51,7 +52,7 @@ public class XhXkVtBhPhieuXuatNhapKho extends BaseEntity implements Serializable
   private String cccdNgh;
   private String donViNgh;
   private String diaChiNgh;
-  private BigDecimal slThucTe;
+  private BigDecimal slThucXuat;
   private String ghiChu;
   private String trangThai;
   private String lyDoTuChoi;

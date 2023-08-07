@@ -51,7 +51,10 @@ public class DcnbBcKqDcHdr extends BaseEntity implements Serializable, Cloneable
     private Long nguoiDuyetTp;
     private LocalDate ngayPDuyet;
     private Long nguoiPDuyet;
-
+    @Column(name = "TYPE")
+    private String type; // CHI_CUC, CUC
+    @Column(name = "IDS_CHI_CUC")
+    private String idsChiCuc;
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
