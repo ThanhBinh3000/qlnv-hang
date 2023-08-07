@@ -192,4 +192,22 @@ public class HhBienBanLayMauController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
+    @ApiOperation(value = "Lấy all quy chuẩn theo chủng loại hàng hóa", response = List.class)
+    @GetMapping(value = PathContains.BB_LM + "/quy-chuan-theo-loai-hang" + "/{cloaiVthh}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> allQuyChuanByCloaiVthh(
+            @ApiParam(value = "cloaiVthh ", example = "010101", required = true) @PathVariable("cloaiVthh") String cloaiVthh) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(hhBienBanLayMauService.getAllQuyChuanByCloaiVthh(cloaiVthh));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Chi tiết: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
 }

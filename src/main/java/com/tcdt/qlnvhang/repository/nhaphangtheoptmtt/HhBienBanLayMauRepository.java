@@ -29,4 +29,5 @@ public interface HhBienBanLayMauRepository extends JpaRepository<HhBienBanLayMau
     List<HhBienBanLayMau> findAllByIdIn(List<Long> listId);
 
     List<HhBienBanLayMau> findByIdQdGiaoNvNhAndMaDvi(Long idQdGiaoNvNh, String maDvi);
+    List<HhBienBanLayMau> findByIdQdGiaoNvNhAndMaLoKho(Long idQdGiaoNvNh, String maLoKho);
 }
