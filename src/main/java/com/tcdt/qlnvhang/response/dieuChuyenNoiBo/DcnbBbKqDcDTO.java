@@ -33,6 +33,7 @@ public class DcnbBbKqDcDTO {
     private List<DcnbBcKqDcDtl> danhSachKetQua = new ArrayList<>();
     private String tenTrangThai;
     private String type;
+    private String idsChiCuc;
 
     public DcnbBbKqDcDTO(Long id, Integer nam, String maDvi, String tenDvi, String maDviNhan, String soBc, LocalDate ngayBc, String tenBc, Long qdDcCucId, String soQdDcCuc, Long qdDcTcId, String soQdDcTc, LocalDate ngayKyQdTc, String noiDung, String trangThai, String lyDoTuChoi, List<FileDinhKemReq> fileDinhKems, List<DcnbBcKqDcDtl> danhSachKetQua, String tenTrangThai,String type) {
         this.id = id;
