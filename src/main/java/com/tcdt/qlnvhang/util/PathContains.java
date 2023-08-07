@@ -307,6 +307,7 @@ public class PathContains {
     public static final String KTCL_VT_TRUOC_HET_HAN = "/ktcl-vt-truoc-het-han";
     public static final String XUAT_VT_TRONG_TH_BKK = "/xuat-vt-trong-th-bat-kha-khang";
 
+    public static final String XUAT_HANG_KHOI_DM = "/xuat-hang-khoi-dm";
     public static final String KH_XUAT_HANG = "/kh-xuat-hang";
 
     public static final String QD_GIAO_NV_XUAT_HANG = "/qd-giao-nv-xuat-hang";
