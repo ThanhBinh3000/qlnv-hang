@@ -19,6 +19,7 @@ public class XhXkDsHangDtqgRequest extends BaseRequest {
     private String lyDoTuChoi;
     private Long nguoiDuyetId;
     private LocalDate ngayDuyet;
+    private Boolean loai;
     private List<XhXkDsHangDtqgDtl> xhXkDsHangDtqgDtl = new ArrayList<>();
     private List<FileDinhKem> fileDinhKems;
     //search params
