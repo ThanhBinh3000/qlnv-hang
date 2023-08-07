@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.xuathang.suachuahang;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -39,4 +40,7 @@ public class ScTongHopHdr extends BaseEntity implements Serializable {
   private String tenDvi;
   @Transient
   private List<ScTongHopDtl> children = new ArrayList<>();
+  public String getTenTrangThai(){
+    return TrangThaiAllEnum.getLabelById(getTrangThai());
+  }
 }
