@@ -29,6 +29,7 @@ public interface ScQuyetDinhXuatHangRepository extends JpaRepository<ScQuyetDinh
             "AND (:#{#param.maDviSr} IS NULL OR a.maDvi = :#{#param.maDviSr} )" +
             "AND (:#{#param.trangThai} IS NULL OR a.trangThai = :#{#param.trangThai} )" +
             "AND (:#{#param.soQd} IS NULL OR a.soQd LIKE CONCAT(:#{#param.soQd},'%'))" +
+            "AND ((:#{#param.ngayTu}  IS NULL OR a.thoiHanXuat >= :#{#param.ngayTu}) AND (:#{#param.ngayDen}  IS NULL OR a.thoiHanXuat <= :#{#param.ngayDen})) " +
             " ORDER BY a.ngaySua desc , a.ngayTao desc, a.id desc "
     )
     Page<ScQuyetDinhXuatHang> searchPageViewFromPhieuXuatKho(@Param("param") ScQuyetDinhXuatHangReq req, Pageable pageable);

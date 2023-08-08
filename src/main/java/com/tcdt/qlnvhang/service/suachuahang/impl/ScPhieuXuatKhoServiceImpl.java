@@ -122,7 +122,7 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
             throw new Exception("Không tìm thấy dữ liệu");
         }
         ScPhieuXuatKhoHdr data = optional.get();
-        data.setFileDinhKems(fileDinhKemService.search(id, Collections.singleton(ScPhieuXuatKhoHdr.TABLE_NAME)));
+        data.setFileDinhKem(fileDinhKemService.search(id, Collections.singleton(ScPhieuXuatKhoHdr.TABLE_NAME)));
         data.setChildren(dtlRepository.findByIdHdr(id));
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
