@@ -24,4 +24,9 @@ public class ScQuyetDinhScReq extends BaseRequest {
     private List<FileDinhKemReq> fileDinhKemReq =new ArrayList<>();
     private List<FileDinhKemReq> fileCanCuReq = new ArrayList<>();
 
+    //Param search
+
+    private LocalDate ngayTu;
+    private LocalDate ngayDen;
+
 }

@@ -15,7 +15,10 @@ public interface ScQuyetDinhXuatHangRepository extends JpaRepository<ScQuyetDinh
     @Query(value = "SELECT a FROM ScQuyetDinhXuatHang a WHERE 1=1 " +
             "AND (:#{#param.nam} IS NULL OR a.nam = :#{#param.nam} )" +
             "AND (:#{#param.soQd} IS NULL OR a.soQd LIKE CONCAT(:#{#param.soQd},'%'))" +
-            "AND (:#{#param.trichYeu} IS NULL OR a.trichYeu LIKE CONCAT(:#{#param.trichYeu},'%')) ")
+            "AND (:#{#param.trichYeu} IS NULL OR a.trichYeu LIKE CONCAT(:#{#param.trichYeu},'%')) " +
+            "AND ((:#{#param.ngayTu}  IS NULL OR a.ngayKy >= :#{#param.ngayTu}) AND (:#{#param.ngayDen}  IS NULL OR a.ngayKy <= :#{#param.ngayDen})) " +
+            " ORDER BY a.ngaySua desc , a.ngayTao desc, a.id desc "
+    )
     Page<ScQuyetDinhXuatHang> searchPage(@Param("param") ScQuyetDinhXuatHangReq req, Pageable pageable);
 
     @Query(value = "SELECT a FROM ScQuyetDinhXuatHang a WHERE 1=1 " +

@@ -16,7 +16,9 @@ public interface ScQuyetDinhScRepository extends JpaRepository<ScQuyetDinhSc, Lo
 
     @Query(value = "SELECT q FROM ScQuyetDinhSc q WHERE 1 = 1" +
             "AND (:#{#param.soQd} IS NULL OR q.soQd LIKE CONCAT(:#{#param.soQd},'%')) " +
+            "AND (:#{#param.soTtr} IS NULL OR q.soTtr LIKE CONCAT(:#{#param.soTtr},'%')) " +
             "AND (:#{#param.trangThai} IS NULL OR q.trangThai = :#{#param.trangThai})" +
+            "AND ((:#{#param.ngayTu}  IS NULL OR q.ngayKy >= :#{#param.ngayTu}) AND (:#{#param.ngayDen}  IS NULL OR q.ngayKy <= :#{#param.ngayDen})) " +
             " ORDER BY q.ngaySua desc , q.ngayTao desc, q.id desc "
     )
     Page<ScQuyetDinhSc> searchPage(@Param("param") ScQuyetDinhScReq req, Pageable pageable);
