@@ -9,13 +9,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ScQuyetDinhXuatHangRepository extends JpaRepository<ScQuyetDinhXuatHang,Long> {
 
     @Query(value = "SELECT a FROM ScQuyetDinhXuatHang a WHERE 1=1 " +
             "AND (:#{#param.nam} IS NULL OR a.nam = :#{#param.nam} )" +
             "AND (:#{#param.soQd} IS NULL OR a.soQd LIKE CONCAT(:#{#param.soQd},'%'))" +
-            "AND (:#{#param.trichYeu} IS NULL OR a.trichYeu LIKE CONCAT(:#{#param.trichYeu},'%')) " +
+            "AND (:#{#param.trichYeu} IS NULL OR LOWER(a.trichYeu) LIKE LOWER(CONCAT('%',CONCAT(:#{#param.trichYeu},'%')))) " +
             "AND ((:#{#param.ngayTu}  IS NULL OR a.ngayKy >= :#{#param.ngayTu}) AND (:#{#param.ngayDen}  IS NULL OR a.ngayKy <= :#{#param.ngayDen})) " +
             " ORDER BY a.ngaySua desc , a.ngayTao desc, a.id desc "
     )
@@ -48,4 +49,7 @@ public interface ScQuyetDinhXuatHangRepository extends JpaRepository<ScQuyetDinh
             " ORDER BY xh.ngaySua desc , xh.ngayTao desc, xh.id desc "
     )
     List<ScQuyetDinhXuatHang> listTaoBaoCao(@Param("param") ScQuyetDinhXuatHangReq param);
+
+    Optional<ScQuyetDinhXuatHang> findBySoQd(String soQd);
+
 }

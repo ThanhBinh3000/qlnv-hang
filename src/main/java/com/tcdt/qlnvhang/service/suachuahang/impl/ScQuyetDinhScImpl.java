@@ -8,6 +8,7 @@ import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhScRepository
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScTongHopHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScTrinhThamDinhRepository;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhScReq;
+import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhXuatHangReq;
 import com.tcdt.qlnvhang.request.suachua.ScTongHopReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -16,6 +17,7 @@ import com.tcdt.qlnvhang.service.suachuahang.ScQuyetDinhScService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhSc;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhXuatHang;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTongHopHdr;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTrinhThamDinhHdr;
 import com.tcdt.qlnvhang.util.Contains;
@@ -25,6 +27,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
@@ -57,6 +60,7 @@ public class ScQuyetDinhScImpl extends BaseServiceImpl implements ScQuyetDinhScS
     @Override
     public ScQuyetDinhSc create(ScQuyetDinhScReq req) throws Exception {
         ScQuyetDinhSc hdr = new ScQuyetDinhSc();
+        validateData(req);
         BeanUtils.copyProperties(req, hdr);
         hdr.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         ScQuyetDinhSc created = scQuyetDinhScRepository.save(hdr);
@@ -85,12 +89,26 @@ public class ScQuyetDinhScImpl extends BaseServiceImpl implements ScQuyetDinhScS
         }
     }
 
+    void validateData(ScQuyetDinhScReq req) throws Exception {
+        Optional<ScQuyetDinhSc> bySoQd = scQuyetDinhScRepository.findBySoQd(req.getSoQd());
+        if(bySoQd.isPresent()){
+            if(ObjectUtils.isEmpty(req.getId())){
+                throw new Exception("Số quyết định " + bySoQd.get().getSoQd() +" đã tồn tại");
+            }else{
+                if(!req.getId().equals(bySoQd.get().getId())){
+                    throw new Exception("Số quyết định " + bySoQd.get().getSoQd() +" đã tồn tại");
+                }
+            }
+        }
+    }
+
     @Override
     public ScQuyetDinhSc update(ScQuyetDinhScReq req) throws Exception {
         Optional<ScQuyetDinhSc> optional = scQuyetDinhScRepository.findById(req.getId());
         if (!optional.isPresent()){
             throw new Exception("Bản ghi không tồn tại");
         }
+        validateData(req);
         ScQuyetDinhSc hdr = optional.get();
         BeanUtils.copyProperties(req, hdr);
         ScQuyetDinhSc created = scQuyetDinhScRepository.save(hdr);

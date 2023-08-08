@@ -28,6 +28,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
@@ -39,6 +40,7 @@ import java.util.Optional;
 
 @Service
 public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements ScQuyetDinhXuatHangService {
+
     @Autowired
     private ScQuyetDinhXuatHangRepository scQuyetDinhXuatHangRepository;
 
@@ -78,6 +80,7 @@ public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements S
         if (!currentUser.getCapDvi().equals(Contains.CAP_CUC)) {
             throw new Exception("Quyết định xuất hàng chỉ được thực hiện ở cấp cục");
         }
+        validateData(req);
         ScQuyetDinhXuatHang hdr = new ScQuyetDinhXuatHang();
         BeanUtils.copyProperties(req, hdr);
         hdr.setMaDvi(currentUser.getDvql());
@@ -90,6 +93,19 @@ public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements S
         return created;
     }
 
+    void validateData(ScQuyetDinhXuatHangReq req) throws Exception {
+        Optional<ScQuyetDinhXuatHang> bySoQd = scQuyetDinhXuatHangRepository.findBySoQd(req.getSoQd());
+        if(bySoQd.isPresent()){
+            if(ObjectUtils.isEmpty(req.getId())){
+                throw new Exception("Số quyết định " + bySoQd.get().getSoQd() +" đã tồn tại");
+            }else{
+                if(!req.getId().equals(bySoQd.get().getId())){
+                    throw new Exception("Số quyết định " + bySoQd.get().getSoQd() +" đã tồn tại");
+                }
+            }
+        }
+    }
+
     @Override
     public ScQuyetDinhXuatHang update(ScQuyetDinhXuatHangReq req) throws Exception {
         UserInfo currentUser = SecurityContextService.getUser();
@@ -100,6 +116,7 @@ public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements S
         if (!optional.isPresent()){
             throw new Exception("Bản ghi không tồn tại");
         }
+        validateData(req);
         ScQuyetDinhXuatHang hdr = optional.get();
         BeanUtils.copyProperties(req, hdr);
         ScQuyetDinhXuatHang created = scQuyetDinhXuatHangRepository.save(hdr);

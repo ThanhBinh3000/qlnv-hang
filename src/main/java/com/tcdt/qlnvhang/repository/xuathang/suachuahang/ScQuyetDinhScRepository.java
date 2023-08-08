@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ScQuyetDinhScRepository extends JpaRepository<ScQuyetDinhSc, Long> {
 
@@ -32,4 +33,5 @@ public interface ScQuyetDinhScRepository extends JpaRepository<ScQuyetDinhSc, Lo
     )
     List<ScQuyetDinhSc> listQuyetDinhXuatHang(@Param("param") ScQuyetDinhScReq param);
 
+    Optional<ScQuyetDinhSc> findBySoQd(String soQd);
 }

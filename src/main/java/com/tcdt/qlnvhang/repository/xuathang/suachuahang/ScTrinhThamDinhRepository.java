@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.repository.xuathang.suachuahang;
 
 import com.tcdt.qlnvhang.request.suachua.ScTongHopReq;
 import com.tcdt.qlnvhang.request.suachua.ScTrinhThamDinhHdrReq;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhSc;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTongHopHdr;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTrinhThamDinhHdr;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ScTrinhThamDinhRepository extends JpaRepository<ScTrinhThamDinhHdr, Long> {
     @Query(value = "SELECT t FROM ScTrinhThamDinhHdr t WHERE 1 = 1 " +
@@ -32,5 +34,6 @@ public interface ScTrinhThamDinhRepository extends JpaRepository<ScTrinhThamDinh
     )
     List<ScTrinhThamDinhHdr> listQuyetDinhSuaChua(@Param("param") ScTrinhThamDinhHdrReq req);
 
+    Optional<ScTrinhThamDinhHdr> findBySoTtr(String soTtr);
 
 }
