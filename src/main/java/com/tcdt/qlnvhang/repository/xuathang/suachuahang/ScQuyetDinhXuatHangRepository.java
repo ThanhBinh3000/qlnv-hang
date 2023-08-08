@@ -18,6 +18,7 @@ public interface ScQuyetDinhXuatHangRepository extends JpaRepository<ScQuyetDinh
             "AND (:#{#param.soQd} IS NULL OR a.soQd LIKE CONCAT(:#{#param.soQd},'%'))" +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(a.trichYeu) LIKE LOWER(CONCAT('%',CONCAT(:#{#param.trichYeu},'%')))) " +
             "AND ((:#{#param.ngayTu}  IS NULL OR a.ngayKy >= :#{#param.ngayTu}) AND (:#{#param.ngayDen}  IS NULL OR a.ngayKy <= :#{#param.ngayDen})) " +
+            "AND (:#{#param.trangThai} IS NULL OR a.trangThai = :#{#param.trangThai} )" +
             " ORDER BY a.ngaySua desc , a.ngayTao desc, a.id desc "
     )
     Page<ScQuyetDinhXuatHang> searchPage(@Param("param") ScQuyetDinhXuatHangReq req, Pageable pageable);
@@ -25,7 +26,11 @@ public interface ScQuyetDinhXuatHangRepository extends JpaRepository<ScQuyetDinh
     @Query(value = "SELECT a FROM ScQuyetDinhXuatHang a WHERE 1=1 " +
             " AND (:#{#param.trangThai} IS NULL OR a.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.nam} IS NULL OR a.nam = :#{#param.nam} )" +
-            "AND (:#{#param.soQd} IS NULL OR a.soQd LIKE CONCAT(:#{#param.soQd},'%'))")
+            "AND (:#{#param.maDviSr} IS NULL OR a.maDvi = :#{#param.maDviSr} )" +
+            "AND (:#{#param.trangThai} IS NULL OR a.trangThai = :#{#param.trangThai} )" +
+            "AND (:#{#param.soQd} IS NULL OR a.soQd LIKE CONCAT(:#{#param.soQd},'%'))" +
+            " ORDER BY a.ngaySua desc , a.ngayTao desc, a.id desc "
+    )
     Page<ScQuyetDinhXuatHang> searchPageViewFromPhieuXuatKho(@Param("param") ScQuyetDinhXuatHangReq req, Pageable pageable);
 
     @Query(value = "SELECT c FROM ScQuyetDinhXuatHang c " +

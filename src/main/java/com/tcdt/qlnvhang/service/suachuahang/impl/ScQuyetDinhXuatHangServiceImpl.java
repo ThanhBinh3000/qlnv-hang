@@ -186,6 +186,7 @@ public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements S
             // Arena từ chối
             case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
             case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
+                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");

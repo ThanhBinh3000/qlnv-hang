@@ -41,6 +41,7 @@ public class ScQuyetDinhXuatHang extends BaseEntity implements Serializable {
     private String kieuNhapXuat;
     private String trichYeu;
     private String trangThai;
+    private String lyDoTuChoi;
     @Transient
     private String tenTrangThai;
     @Transient

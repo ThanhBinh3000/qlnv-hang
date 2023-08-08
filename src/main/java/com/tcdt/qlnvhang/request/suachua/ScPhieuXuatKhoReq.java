@@ -39,4 +39,10 @@ public class ScPhieuXuatKhoReq extends BaseRequest {
     List<FileDinhKemReq> fileDinhKemReq = new ArrayList<>();
     private List<ScPhieuXuatKhoDtl> children = new ArrayList<>();
 
+    //Region search
+    private LocalDate ngayTu;
+    private LocalDate ngayDen;
+    private String maDviSr;
+
+
 }
