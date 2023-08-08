@@ -68,13 +68,13 @@ public class XhXkDsHangDtqgService extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data);
         data.setTrangThai(Contains.DUTHAO);
         XhXkDsHangDtqgHdr created = xhXkDsHangDtqgRepository.save(data);
-        created.setMaDanhSach(created.getMaDanhSach() +'-'+ created.getId());
+        created.setMaDanhSach(created.getMaDanhSach() + '-' + created.getId());
         created = xhXkDsHangDtqgRepository.save(created);
         //Save detail
-        this.saveDetailDs(created.getId(), created.getLoai());
+        created.setXhXkDsHangDtqgDtl(this.saveDetailDs(created.getId(), created.getLoai()));
         //save file đính kèm
         fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkDsHangDtqgHdr.TABLE_NAME);
-        return detail(created.getId());
+        return created;
     }
 
     @Transactional()
@@ -151,7 +151,8 @@ public class XhXkDsHangDtqgService extends BaseServiceImpl {
                 list.add(model);
             });
         }
-        return xhXkDsHangDtqgDtlRepository.saveAll(list);
+        List<XhXkDsHangDtqgDtl> xhXkDsHangDtqgDtls = xhXkDsHangDtqgDtlRepository.saveAll(list);
+        return xhXkDsHangDtqgDtls;
     }
 
 
