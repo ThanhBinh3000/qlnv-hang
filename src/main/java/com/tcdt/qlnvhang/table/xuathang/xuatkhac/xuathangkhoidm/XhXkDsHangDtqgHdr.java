@@ -30,10 +30,10 @@ public class XhXkDsHangDtqgHdr extends BaseEntity implements Serializable {
     private String lyDoTuChoi;
     private Long nguoiDuyetId;
     private LocalDate ngayDuyet;
-    private Boolean loai;
-    @OneToMany(mappedBy = "xhXkDsHangDtqgHdr", cascade = CascadeType.ALL)
+    private Integer loai;
+    private String soQd;
+    @Transient
     private List<XhXkDsHangDtqgDtl> xhXkDsHangDtqgDtl = new ArrayList<>();
-
     @Transient
     private List<FileDinhKem> fileDinhKems;
     @Transient
