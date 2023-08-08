@@ -25,6 +25,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
@@ -72,6 +73,7 @@ public class ScTrinhThamDinhServiceImpl extends BaseServiceImpl implements ScTri
         if(!userInfo.getCapDvi().equals(Contains.CAP_CUC)){
             throw new Exception("Đơn vị lưu phải là cấp cục");
         }
+        validateData(req);
         ScTrinhThamDinhHdr hdr = new ScTrinhThamDinhHdr();
         BeanUtils.copyProperties(req, hdr);
         hdr.setNam(LocalDate.now().getYear());
@@ -85,6 +87,19 @@ public class ScTrinhThamDinhServiceImpl extends BaseServiceImpl implements ScTri
         List<ScTrinhThamDinhDtl> scTrinhThamDinhDtls = this.saveDtl(req, created.getId());
         created.setChildren(scTrinhThamDinhDtls);
         return created;
+    }
+
+    void validateData(ScTrinhThamDinhHdrReq req) throws Exception {
+        Optional<ScTrinhThamDinhHdr> bySoQd = hdrRepository.findBySoTtr(req.getSoTtr());
+        if(bySoQd.isPresent()){
+            if(ObjectUtils.isEmpty(req.getId())){
+                throw new Exception("Số tờ trình " + bySoQd.get().getSoTtr() +" đã tồn tại");
+            }else{
+                if(!req.getId().equals(bySoQd.get().getId())){
+                    throw new Exception("Số tờ trình " + bySoQd.get().getSoTtr() +" đã tồn tại");
+                }
+            }
+        }
     }
 
     private List<ScTrinhThamDinhDtl> saveDtl(ScTrinhThamDinhHdrReq req,Long idHdr) throws Exception {
@@ -120,6 +135,7 @@ public class ScTrinhThamDinhServiceImpl extends BaseServiceImpl implements ScTri
         if (!optional.isPresent()){
             throw new Exception("Bản ghi không tồn tại");
         }
+        validateData(req);
         ScTrinhThamDinhHdr hdr = optional.get();
         BeanUtils.copyProperties(req, hdr);
 

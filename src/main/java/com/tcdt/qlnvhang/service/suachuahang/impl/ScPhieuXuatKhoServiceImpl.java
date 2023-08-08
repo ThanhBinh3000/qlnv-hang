@@ -223,11 +223,19 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
     }
 
     @Override
-    public Page<ScQuyetDinhXuatHang> searchPhieuXuatKho(ScPhieuXuatKhoReq req) {
+    public Page<ScQuyetDinhXuatHang> searchPhieuXuatKho(ScPhieuXuatKhoReq req) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         ScQuyetDinhXuatHangReq reqQd = new ScQuyetDinhXuatHangReq();
         reqQd.setNam(req.getNam());
         reqQd.setSoQd(req.getSoQdXh());
+        reqQd.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
+        if(userInfo.getCapDvi().equals(Contains.CAP_CUC)){
+            reqQd.setMaDviSr(userInfo.getDvql());
+        }
+        if(userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+            reqQd.setMaDviSr(userInfo.getDvql().substring(0, 6));
+        }
         Page<ScQuyetDinhXuatHang> search = scQuyetDinhXuatHangRepository.searchPageViewFromPhieuXuatKho(reqQd, pageable);
         search.getContent().forEach(item -> {
             try {
@@ -237,7 +245,12 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
                 scQuyetDinhSc.getScTrinhThamDinhHdr().getChildren().forEach(( dsHdr)->{
                     ScDanhSachHdr scDanhSachHdr = dsHdr.getScDanhSachHdr();
                     req.setIdScDanhSachHdr(scDanhSachHdr.getId());
-                    scDanhSachHdr.setScPhieuXuatKhoList(hdrRepository.searchList(req));
+                    if(userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+                        req.setMaDviSr(userInfo.getDvql());
+                    }
+                    // Lấy phiếu xuất kho theo từng danh sách sửa chữa ( địa điểm )
+                    List<ScPhieuXuatKhoHdr> scPhieuXuatKhoHdrs = hdrRepository.searchList(req);
+                    scDanhSachHdr.setScPhieuXuatKhoList(scPhieuXuatKhoHdrs);
                     scDanhSachHdrList.add(scDanhSachHdr);
                 });
                 item.setScQuyetDinhSc(scQuyetDinhScService.detail(item.getIdQdSc()));

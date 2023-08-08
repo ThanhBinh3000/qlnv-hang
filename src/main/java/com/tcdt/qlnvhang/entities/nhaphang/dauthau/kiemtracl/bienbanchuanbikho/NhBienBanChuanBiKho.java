@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bienbanchuanbikho;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -126,4 +127,7 @@ public class NhBienBanChuanBiKho extends TrangThaiBaseEntity implements Serializ
 
     @Transient
     private List<NhBienBanChuanBiKhoCt> children = new ArrayList<>();
+
+    @Transient
+    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 }

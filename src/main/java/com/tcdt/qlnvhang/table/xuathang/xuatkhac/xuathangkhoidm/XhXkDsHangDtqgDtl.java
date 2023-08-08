@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,10 +33,7 @@ public class XhXkDsHangDtqgDtl {
     private String loaiHang;
     private String dviQly;
     private Boolean isNgoaiDanhMuc;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idHdr")
-    @JsonIgnore
-    private XhXkDsHangDtqgHdr xhXkDsHangDtqgHdr;
-
+    private Long idHdr;
+    @Transient
+    private List<XhXkDsHangDtqgDtl> children = new ArrayList<>();
 }

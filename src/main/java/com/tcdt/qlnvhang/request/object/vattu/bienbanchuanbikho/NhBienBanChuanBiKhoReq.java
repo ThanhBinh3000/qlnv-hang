@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.object.vattu.bienbanchuanbikho;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.AllArgsConstructor;
@@ -67,6 +68,8 @@ public class NhBienBanChuanBiKhoReq extends BaseRequest {
     private BigDecimal soLuongDdiemGiaoNvNh;
 
     private Long idDdiemGiaoNvNh;
+
+    private List<FileDinhKemReq> listFileDinhKem;
 
     private List<NhBienBanChuanBiKhoCtReq> children = new ArrayList<>();
 }
