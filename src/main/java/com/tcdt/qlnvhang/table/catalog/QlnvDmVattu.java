@@ -37,5 +37,5 @@ public class QlnvDmVattu {
 	private String trangThai;
 	private Boolean isLoaiKhoiDm;
 	private String nhomHhBaoHiem;
-	private Integer cap;
+	private String cap;
 }
