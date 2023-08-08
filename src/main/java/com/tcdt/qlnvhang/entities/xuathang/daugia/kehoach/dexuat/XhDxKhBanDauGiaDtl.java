@@ -22,9 +22,9 @@ public class XhDxKhBanDauGiaDtl implements Serializable {
     private Long idHdr;
     private String maDvi;
     private BigDecimal slChiTieu;
-    private BigDecimal slKeHoachDd;
-    private BigDecimal soLuongChiCuc;
-    private BigDecimal tienDatTruocDx;
+    private BigDecimal tongSlKeHoachDd;
+    private BigDecimal tongSlXuatBanDx;
+    private BigDecimal tongTienDatTruocDx;
     private String donViTinh;
     private String diaChi;
 

@@ -1,8 +1,10 @@
 package com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.dexuat;
 
+import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttHdrSearchReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.XhThopChiTieuReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.dexuat.XhDxKhBanDauGiaReq;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia;
+import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +37,7 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
             "AND (:#{#param.trangThaiTh} IS NULL OR DX.trangThaiTh = :#{#param.trangThaiTh}) " +
             "AND (:#{#param.trangThaiList == null || #param.trangThaiList.isEmpty() } = true OR DX.trangThai IN :#{#param.trangThaiList}) " +
             "ORDER BY DX.ngaySua desc , DX.ngayTao desc, DX.id desc")
-    Page<XhDxKhBanDauGia> searchPage(@feign.Param("param") XhDxKhBanDauGiaReq param, Pageable pageable);
+    Page<XhDxKhBanDauGia> searchPage(@Param("param") XhDxKhBanDauGiaReq param, Pageable pageable);
 
     @Query("SELECT TH from XhDxKhBanDauGia TH WHERE 1 = 1 " +
             "AND (:#{#param.namKh} IS NULL OR TH.namKh = :#{#param.namKh}) " +
@@ -79,14 +81,14 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
 
     @Query(value = " SELECT dtl.GIA_QD_TCDT FROM KH_PAG_TT_CHUNG dtl " +
             "JOIN KH_PAG_GCT_QD_TCDTNN hdr ON dtl.QD_TCDTNN_ID = hdr.ID " +
-            " WHERE hdr.TRANG_THAI = '29' AND LOAI_GIA = 'LG03'  AND dtl.CLOAI_VTHH = :cloaiVthh AND hdr.NAM_KE_HOACH = :namKhoach AND hdr.NGAY_HIEU_LUC <= SYSDATE " +
+            " WHERE hdr.TRANG_THAI = '29' AND LOAI_GIA = 'LG04'  AND dtl.CLOAI_VTHH = :cloaiVthh AND hdr.NAM_KE_HOACH = :namKhoach AND hdr.NGAY_HIEU_LUC <= SYSDATE " +
             " FETCH FIRST 1 ROWS ONLY ",
             nativeQuery = true)
     BigDecimal getDonGiaDuocDuyetVt(String cloaiVthh, Integer namKhoach);
 
     @Query(value = " SELECT dtl.GIA_QD_TCDTNN FROM KH_PAG_TONG_HOP_CTIET dtl " +
             "JOIN KH_PAG_GCT_QD_TCDTNN hdr ON dtl.QD_TCDTNN_ID = hdr.ID " +
-            " WHERE hdr.TRANG_THAI = '29' AND hdr.LOAI_GIA = 'LG03'  AND hdr.CLOAI_VTHH = :cloaiVthh AND dtl.MA_CHI_CUC = :maDvi AND hdr.NAM_KE_HOACH = :namKhoach AND hdr.NGAY_HIEU_LUC <= SYSDATE " +
+            " WHERE hdr.TRANG_THAI = '29' AND hdr.LOAI_GIA = 'LG04'  AND hdr.CLOAI_VTHH = :cloaiVthh AND dtl.MA_CHI_CUC = :maDvi AND hdr.NAM_KE_HOACH = :namKhoach AND hdr.NGAY_HIEU_LUC <= SYSDATE " +
             " FETCH FIRST 1 ROWS ONLY ",
             nativeQuery = true)
     BigDecimal getDonGiaDuocDuyetLt(String cloaiVthh, String maDvi, Integer namKhoach);

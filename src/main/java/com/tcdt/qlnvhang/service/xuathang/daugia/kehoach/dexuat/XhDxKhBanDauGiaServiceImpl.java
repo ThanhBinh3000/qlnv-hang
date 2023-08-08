@@ -149,11 +149,11 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
                     dataPhanLo.setTenCloaiVthh(StringUtils.isEmpty(dataPhanLo.getCloaiVthh()) ? null : mapVthh.get(dataPhanLo.getCloaiVthh()));
                     if (dataPhanLo.getCloaiVthh().startsWith("02")) {
                         BigDecimal donGiaDuocDuyet;
-                        donGiaDuocDuyet = xhDxKhBanDauGiaRepository.getDonGiaDuocDuyetVt(dataPhanLo.getCloaiVthh(), data.getNamKh());
+                        donGiaDuocDuyet = xhDxKhBanDauGiaRepository.getDonGiaDuocDuyetVt(data.getCloaiVthh(), data.getNamKh());
                         dataPhanLo.setDonGiaDuocDuyet(donGiaDuocDuyet);
                     } else {
                         BigDecimal donGiaDuocDuyet;
-                        donGiaDuocDuyet = xhDxKhBanDauGiaRepository.getDonGiaDuocDuyetLt(dataPhanLo.getCloaiVthh(), dataDtl.getMaDvi(), data.getNamKh());
+                        donGiaDuocDuyet = xhDxKhBanDauGiaRepository.getDonGiaDuocDuyetLt(data.getCloaiVthh(), dataDtl.getMaDvi(), data.getNamKh());
                         dataPhanLo.setDonGiaDuocDuyet(donGiaDuocDuyet);
                     }
                 });
