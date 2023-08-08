@@ -52,10 +52,11 @@ public class XhXkVtBhBbBaoHanhService extends BaseServiceImpl {
     req.setDvql(currentUser.getDvql());
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<XhXkVtBhBbBaoHanh> search = xhXkVtBhBbBaoHanhRepository.search(req, pageable);
-//        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
 //        Map<String, String> mapVthh = getListDanhMucHangHoa();
     search.getContent().forEach(s -> {
       s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
+      s.setMapDmucDvi(mapDmucDvi);
     });
     return search;
   }
@@ -121,6 +122,8 @@ public class XhXkVtBhBbBaoHanhService extends BaseServiceImpl {
     List<FileDinhKem> fileDinhKem = fileDinhKemService.search(model.getId(), Arrays.asList(XhXkVtBhBbBaoHanh.TABLE_NAME));
     model.setFileDinhKems(fileDinhKem);
     model.setTenDvi(mapDmucDvi.get(model.getMaDvi()));
+    model.setMapDmucDvi(mapDmucDvi);
+    model.setMapVthh(mapVthh);
     model.setTenTrangThai(TrangThaiAllEnum.getLabelById(model.getTrangThai()));
     
     return model;
@@ -155,17 +158,7 @@ public class XhXkVtBhBbBaoHanhService extends BaseServiceImpl {
     }
     String status = statusReq.getTrangThai() + optional.get().getTrangThai();
     switch (status) {
-      case Contains.CHODUYET_LDC + Contains.DUTHAO:
-      case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
-        optional.get().setNguoiGduyetId(currentUser.getUser().getId());
-        optional.get().setNgayGduyet(LocalDate.now());
-        break;
-      case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
-        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
-        optional.get().setNgayPduyet(LocalDate.now());
-        optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
-        break;
-      case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
+      case Contains.DA_HOAN_THANH + Contains.DUTHAO:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
         break;
