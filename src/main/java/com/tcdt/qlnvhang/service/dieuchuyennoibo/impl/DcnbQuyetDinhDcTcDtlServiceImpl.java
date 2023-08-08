@@ -176,18 +176,18 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
                     danhSachQuyetDinhChiTiet.add(dcnbQuyetDinhDcTcTTDtl);
                 }
             }
-            if (qd.getThKeHoachDieuChuyenCucHdr() != null && !qd.getThKeHoachDieuChuyenCucHdr().getThKeHoachDieuChuyenNoiBoCucDtls().isEmpty()) {
-                List<THKeHoachDieuChuyenNoiBoCucDtl> thKeHoachDieuChuyenNoiBoCucDtls = qd.getThKeHoachDieuChuyenCucHdr().getThKeHoachDieuChuyenNoiBoCucDtls();
-                Set<Long> ids = new HashSet<>();
-                for (THKeHoachDieuChuyenNoiBoCucDtl dc : thKeHoachDieuChuyenNoiBoCucDtls) {
-                    ids.add(dc.getDcKeHoachDcHdrId());
-                }
-                for (Long id : ids) {
-                    DcnbQuyetDinhDcTcTTDtl dcnbQuyetDinhDcTcTTDtl = new DcnbQuyetDinhDcTcTTDtl();
-                    dcnbQuyetDinhDcTcTTDtl.setKeHoachDcHdrId(id);
-                    danhSachQuyetDinhChiTiet.add(dcnbQuyetDinhDcTcTTDtl);
-                }
-            }
+//            if (qd.getThKeHoachDieuChuyenCucHdr() != null && !qd.getThKeHoachDieuChuyenCucHdr().getThKeHoachDieuChuyenNoiBoCucDtls().isEmpty()) {
+//                List<THKeHoachDieuChuyenNoiBoCucDtl> thKeHoachDieuChuyenNoiBoCucDtls = qd.getThKeHoachDieuChuyenCucHdr().getThKeHoachDieuChuyenNoiBoCucDtls();
+//                Set<Long> ids = new HashSet<>();
+//                for (THKeHoachDieuChuyenNoiBoCucDtl dc : thKeHoachDieuChuyenNoiBoCucDtls) {
+//                    ids.add(dc.getDcKeHoachDcHdrId());
+//                }
+//                for (Long id : ids) {
+//                    DcnbQuyetDinhDcTcTTDtl dcnbQuyetDinhDcTcTTDtl = new DcnbQuyetDinhDcTcTTDtl();
+//                    dcnbQuyetDinhDcTcTTDtl.setKeHoachDcHdrId(id);
+//                    danhSachQuyetDinhChiTiet.add(dcnbQuyetDinhDcTcTTDtl);
+//                }
+//            }
 
             qdtc.setDanhSachQuyetDinhChiTiet(danhSachQuyetDinhChiTiet);
             result.add(qdtc);
