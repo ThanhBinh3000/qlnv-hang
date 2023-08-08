@@ -15,6 +15,7 @@ import java.util.Optional;
 
 public interface XhXkDsHangDtqgRepository extends JpaRepository<XhXkDsHangDtqgHdr, Long> {
     @Query("SELECT distinct c FROM XhXkDsHangDtqgHdr c WHERE 1=1 " +
+            "AND (:#{#param.loai} IS NULL OR c.loai  = :#{#param.loai}) " +
             "AND (:#{#param.maDs} IS NULL OR c.maDs LIKE CONCAT(:#{#param.maDs},'%')) " +
             "AND (:#{#param.tenDs} IS NULL OR c.tenDs LIKE CONCAT(:#{#param.tenDs},'%')) " +
             "AND ((:#{#param.ngayCapNhatTu}  IS NULL OR c.ngayTao >= :#{#param.ngayCapNhatTu})" +
