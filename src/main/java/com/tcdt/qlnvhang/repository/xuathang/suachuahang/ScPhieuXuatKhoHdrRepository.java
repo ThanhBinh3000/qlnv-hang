@@ -21,8 +21,12 @@ public interface ScPhieuXuatKhoHdrRepository extends JpaRepository<ScPhieuXuatKh
 
     @Query(value = "SELECT qd FROM ScPhieuXuatKhoHdr qd WHERE 1 = 1 " +
             "AND (:#{#param.nam} IS NULL OR qd.nam = :#{#param.nam}) " +
+            "AND (:#{#param.maDviSr} IS NULL OR qd.maDvi = :#{#param.maDviSr}) " +
             "AND (:#{#param.idScDanhSachHdr} IS NULL OR qd.idScDanhSachHdr = :#{#param.idScDanhSachHdr}) " +
-            "AND (:#{#param.soPhieuXuatKho} IS NULL OR qd.soPhieuXuatKho LIKE CONCAT(:#{#param.soPhieuXuatKho},'%'))")
+            "AND (:#{#param.soPhieuXuatKho} IS NULL OR qd.soPhieuXuatKho LIKE CONCAT(:#{#param.soPhieuXuatKho},'%'))" +
+            "AND ((:#{#param.ngayTu}  IS NULL OR qd.ngayXuatKho >= :#{#param.ngayTu}) AND (:#{#param.ngayDen}  IS NULL OR qd.ngayXuatKho <= :#{#param.ngayDen})) " +
+            " ORDER BY qd.ngaySua desc , qd.ngayTao desc, qd.id desc "
+    )
     List<ScPhieuXuatKhoHdr> searchList(@Param("param") ScPhieuXuatKhoReq req);
 
     @Query(value = "SELECT qd FROM ScPhieuXuatKhoHdr qd " +

@@ -40,10 +40,28 @@ public interface BienBanLayMauRepository extends BaseRepository<BienBanLayMau, L
                     " AND (:#{#req.ngayLayMauDen} IS NULL OR BB.ngayLayMau <= TO_DATE(:#{#req.ngayLayMauDen}, 'YYYY-MM-DD HH24:MI:SS')) " +
                     " AND (:#{#req.idQdGiaoNvNh} IS NULL OR BB.idQdGiaoNvNh = :#{#req.idQdGiaoNvNh}) " +
                     " AND (:#{#req.maDviDtl} IS NULL OR BB.maDvi = :#{#req.maDviDtl}) " +
-                    " AND (:#{#req.soBienBan} IS NULL OR LOWER(BB.soBienBan) LIKE LOWER(CONCAT(CONCAT('%', :soBienBan),'%'))) " +
-                    " AND (:#{#req.dviKiemNghiem} IS NULL OR LOWER(BB.dviKiemNghiem) LIKE LOWER(CONCAT(CONCAT('%', :dviKiemNghiem),'%'))) "
+                    " AND (:#{#req.soBienBan} IS NULL OR LOWER(BB.soBienBan) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.soBienBan}),'%'))) " +
+                    " AND (:#{#req.dviKiemNghiem} IS NULL OR LOWER(BB.dviKiemNghiem) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.dviKiemNghiem}),'%'))) "
     )
     List<BienBanLayMau> timKiemList(HhQdNhapxuatSearchReq req);
+
+    @Query(
+            value = " SELECT BB FROM BienBanLayMau BB " +
+                    " WHERE 1 = 1 " +
+                    " AND (:#{#req.ngayLayMauTuStr} IS NULL OR BB.ngayLayMau >= TO_DATE(:#{#req.ngayLayMauTuStr}, 'YYYY-MM-DD HH24:MI:SS')) " +
+                    " AND (:#{#req.ngayLayMauDenStr} IS NULL OR BB.ngayLayMau <= TO_DATE(:#{#req.ngayLayMauDenStr}, 'YYYY-MM-DD HH24:MI:SS')) " +
+                    " AND (:#{#req.idDdiemGiaoNvNh} IS NULL OR BB.idDdiemGiaoNvNh = :#{#req.idDdiemGiaoNvNh}) " +
+                    " AND (:#{#req.soBienBan} IS NULL OR LOWER(BB.soBienBan) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.soBienBan}),'%'))) " +
+                    " AND (:#{#req.dviKiemNghiem} IS NULL OR LOWER(BB.dviKiemNghiem) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.dviKiemNghiem}),'%'))) ",
+            countQuery = " SELECT COUNT * FROM ( SELECT BB FROM BienBanLayMau BB " +
+                    " WHERE 1 = 1 " +
+                    " AND (:#{#req.ngayLayMauTuStr} IS NULL OR BB.ngayLayMau >= TO_DATE(:#{#req.ngayLayMauTuStr}, 'YYYY-MM-DD HH24:MI:SS')) " +
+                    " AND (:#{#req.ngayLayMauDenStr} IS NULL OR BB.ngayLayMau <= TO_DATE(:#{#req.ngayLayMauDenStr}, 'YYYY-MM-DD HH24:MI:SS')) " +
+                    " AND (:#{#req.idDdiemGiaoNvNh} IS NULL OR BB.idDdiemGiaoNvNh = :#{#req.idDdiemGiaoNvNh}) " +
+                    " AND (:#{#req.soBienBan} IS NULL OR LOWER(BB.soBienBan) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.soBienBan}),'%'))) " +
+                    " AND (:#{#req.dviKiemNghiem} IS NULL OR LOWER(BB.dviKiemNghiem) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.dviKiemNghiem}),'%')))) "
+    )
+    BienBanLayMau timKiemByDiaDiemNh (HhQdNhapxuatSearchReq req);
 
     @Query(
             value = "SELECT * FROM NH_BB_LAY_MAU  BB ",

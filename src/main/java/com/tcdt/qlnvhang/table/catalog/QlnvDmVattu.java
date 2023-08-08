@@ -35,4 +35,7 @@ public class QlnvDmVattu {
 	private String maDviTinh;
 	private String loaiHang;
 	private String trangThai;
+	private Boolean isLoaiKhoiDm;
+	private String nhomHhBaoHiem;
+	private String cap;
 }

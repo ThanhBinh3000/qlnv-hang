@@ -30,6 +30,7 @@ public interface HhPhieuKngiemCluongRepository extends JpaRepository<HhPhieuKngi
     List<HhPhieuKngiemCluong> findAllByIdIn(List<Long> ids);
 
     List<HhPhieuKngiemCluong> findBySoQdGiaoNvNhAndMaDvi(String idQdGiaoNvNh, String maDvi);
+    List<HhPhieuKngiemCluong> findBySoQdGiaoNvNhAndMaLoKho(String idQdGiaoNvNh, String maLoKho);
 
 
 }

@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ScPhieuXuatKhoService extends BaseService<ScPhieuXuatKhoHdr, ScPhieuXuatKhoReq, Long> {
 
-    Page<ScQuyetDinhXuatHang> searchPhieuXuatKho(ScPhieuXuatKhoReq req);
+    Page<ScQuyetDinhXuatHang> searchPhieuXuatKho(ScPhieuXuatKhoReq req) throws Exception;
 
     List<ScPhieuXuatKhoHdr> searchDanhSachTaoBangKe(ScPhieuXuatKhoReq req);
 

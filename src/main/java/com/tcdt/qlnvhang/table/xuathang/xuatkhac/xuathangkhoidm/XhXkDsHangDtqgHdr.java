@@ -24,16 +24,16 @@ public class XhXkDsHangDtqgHdr extends BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_XK_DS_HANG_DTQG_HDR_SEQ")
     @SequenceGenerator(sequenceName = "XH_XK_DS_HANG_DTQG_HDR_SEQ", allocationSize = 1, name = "XH_XK_DS_HANG_DTQG_HDR_SEQ")
     private Long id;
-    private String maDs;
-    private String tenDs;
+    private String maDanhSach;
+    private String tenDanhSach;
     private String trangThai;
     private String lyDoTuChoi;
     private Long nguoiDuyetId;
     private LocalDate ngayDuyet;
-    private Boolean loai;
-    @OneToMany(mappedBy = "xhXkDsHangDtqgHdr", cascade = CascadeType.ALL)
+    private Integer loai;
+    private String soQd;
+    @Transient
     private List<XhXkDsHangDtqgDtl> xhXkDsHangDtqgDtl = new ArrayList<>();
-
     @Transient
     private List<FileDinhKem> fileDinhKems;
     @Transient

@@ -24,4 +24,12 @@ public class ScBangKeXuatVatTuReq extends BaseRequest {
     private Long idScDanhSachHdr;
     List<ScBangKeXuatVatTuDtl> children = new ArrayList<>();
 
+    //Region search
+    private LocalDate ngayTuXh;
+    private LocalDate ngayDenXh;
+    private LocalDate ngayTu;
+    private LocalDate ngayDen;
+    private String maDviSr;
+
+
 }

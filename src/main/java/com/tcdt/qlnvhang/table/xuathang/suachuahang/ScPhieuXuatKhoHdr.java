@@ -62,7 +62,7 @@ public class ScPhieuXuatKhoHdr extends BaseEntity implements Serializable {
     @Transient
     private String tenDvi;
     @Transient
-    List<FileDinhKem> fileDinhKems = new ArrayList<>();
+    List<FileDinhKem> fileDinhKem = new ArrayList<>();
     @Transient
     private List<ScPhieuXuatKhoDtl> children = new ArrayList<>();
     @JsonIgnore
