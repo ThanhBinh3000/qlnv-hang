@@ -4,73 +4,86 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Getter
+@Setter
 @Entity
-@Table(name = XhXkVtBhPhieuKdclHdr.TABLE_NAME)
-@Data
-public class XhXkVtBhPhieuKdclHdr extends BaseEntity implements Serializable {
+@Table(name = XhXkVtBhBbBaoHanh.TABLE_NAME)
+public class XhXkVtBhBbBaoHanh extends BaseEntity implements Serializable {
 
-  private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_XK_VT_BH_PHIEU_KDCL_HDR";
+  public static final String TABLE_NAME = "XH_XK_VT_BH_BB_BAO_HANH";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXkVtBhPhieuKdclHdr.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhXkVtBhPhieuKdclHdr.TABLE_NAME
-      + "_SEQ", allocationSize = 1, name = XhXkVtBhPhieuKdclHdr.TABLE_NAME + "_SEQ")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXkVtBhBbBaoHanh.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = XhXkVtBhBbBaoHanh.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhXkVtBhBbBaoHanh.TABLE_NAME + "_SEQ")
   private Long id;
   private Integer nam;
   private String maDvi;
-  private String maQhNs;
-  private Long idQdGiaoNvXh;
-  private String soQdGiaoNvXh;
-  private Long idQdGiaoNvNh;
-  private String soQdGiaoNvNh;
+  private String soBienBan;
+  private LocalDate ngayLapBb;
+  private String soCanCu;
+  private Long idCanCu;
   private Integer soLanLm;
-  private Long idBbLayMau;
-  private String soBbLayMau;
-  private LocalDate ngayLayMau;
-  private Integer soLuongMau;
-  private String soPhieu;
-  private LocalDate ngayLapPhieu;
-  private LocalDate ngayKiemDinh;
-  private String dviKiemDinh;
+  private String soPhieuKdcl;
+  private Long idPhieuKdcl;
+  private LocalDate ngayKdcl;
+  private String maDiaDiem; // mã địa điểm (mã lô/ngăn kho)
   private String loaiVthh;
   private String cloaiVthh;
-  private String donViTinh;
-  private String maDiaDiem;
-  private String ppLayMau;
-  private String nhanXetKetLuan;
-  private Boolean isDat;
-  private Boolean mauBiHuy;
+  private BigDecimal slTonKho;
+  private BigDecimal slBaoHanh;
+  private LocalDate thoiGianBh;
+  private String canBoLapBb;
+  private String noiDung;
+  private String lyDo;
   private String trangThai;
+  private String lyDoTuChoi;
   private LocalDate ngayGduyet;
   private Long nguoiGduyetId;
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
-  private String lyDoTuChoi;
 
-  private Long idBbBaoHanh;
-  private String soBbBaoHanh;
-
-  @OneToMany(mappedBy = "phieuKdclHdr", cascade = CascadeType.ALL)
-  private List<XhXkVtBhPhieuKdclDtl> phieuKdclDtl = new ArrayList<>();
+  private Long idQdGnvNh;
+  private String soQdGnvNh;
+  private Long idPhieuKtcl;
+  private String soPhieuKtcl;
 
   @Transient
+  private LocalDate ngayLayMauL1;
+  @Transient
+  private String soBbLayMauL1;
+  @Transient
+  private LocalDate ngayLayMauLL2;
+  @Transient
+  private String soBbLayMauL2;
+
+  @Transient
+  private List<FileDinhKem> fileDinhKems;
+  @Transient
+  private String tenTrangThai;
+  @Transient
   private String tenDvi;
+  @Transient
+  private String tenLoai;
   @Transient
   private String tenLoaiVthh;
   @Transient
   private String tenCloaiVthh;
+  @JsonIgnore
   @Transient
-  private String tenTrangThai;
+  private Map<String, String> mapVthh;
+  @JsonIgnore
+  @Transient
+  private Map<String, String> mapDmucDvi;
   @Transient
   private String tenCuc;
   @Transient
@@ -83,17 +96,6 @@ public class XhXkVtBhPhieuKdclHdr extends BaseEntity implements Serializable {
   private String tenNganKho;
   @Transient
   private String tenLoKho;
-  @Transient
-  private String tenThuKho;
-  @Transient
-  private List<FileDinhKem> fileDinhKems = new ArrayList<>();
-
-  @JsonIgnore
-  @Transient
-  private Map<String, String> mapDmucDvi;
-  @JsonIgnore
-  @Transient
-  private Map<String, String> mapVthh;
 
   public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
     this.mapDmucDvi = mapDmucDvi;
