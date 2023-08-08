@@ -148,6 +148,7 @@ public class XhXkDsHangDtqgService extends BaseServiceImpl {
                 XhXkDsHangDtqgDtl model = new XhXkDsHangDtqgDtl();
                 BeanUtils.copyProperties(item, model);
                 model.setIdHdr(idHdr);
+                model.setIsNgoaiDanhMuc(item.getIsLoaiKhoiDm());
                 list.add(model);
             });
         }
