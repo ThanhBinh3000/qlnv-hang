@@ -9,13 +9,20 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class NhBienBanChuanBiKhoCtReq {
     private Long id;
-    private Long bbChuanBiKhoId;
-    private String noiDung;
+    private Long hdrId;
+    private String danhMuc;
+    private String nhomHang;
     private String donViTinh;
-    private BigDecimal soLuongTrongNam;
-    private BigDecimal donGiaTrongNam;
-    private BigDecimal thanhTienTrongNam;
-    private BigDecimal soLuongQt;
-    private BigDecimal thanhTienQt;
-    private BigDecimal tongGiaTri;
+    private String matHang;
+    private String tenMatHang;
+    private String donViTinhMh;
+    private Double tongGiaTri;
+    private Double soLuongTrongNam;
+    private Double donGia;
+    private Double thanhTienTrongNam;
+    private Double soLuongNamTruoc;
+    private Double thanhTienNamTruoc;
+    private String type;
+    private Boolean isParent;
+    private String idParent;
 }

@@ -161,6 +161,18 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                     item.setBbNhapDayKho(bienBanDayKho);
                 });
                 dDiem.setListBienBanLayMau(bbLayMau);
+
+                List<HhPhieuKngiemCluong> phieuKnghiemCl = hhPhieuKngiemCluongRepository.findBySoQdGiaoNvNhAndMaLoKho(f.getSoQd(), dDiem.getMaLoKho());
+                phieuKnghiemCl.forEach( item -> {
+                    item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+                    item.setTenDiemKho(StringUtils.isEmpty(item.getMaDiemKho())?null:hashMapDmdv.get(item.getMaDiemKho()));
+                    item.setTenNhaKho(StringUtils.isEmpty(item.getMaNhaKho())?null:hashMapDmdv.get(item.getMaNhaKho()));
+                    item.setTenNganKho(StringUtils.isEmpty(item.getMaNganKho())?null:hashMapDmdv.get(item.getMaNganKho()));
+                    item.setTenLoKho(StringUtils.isEmpty(item.getMaLoKho())?null:hashMapDmdv.get(item.getMaLoKho()));
+                });
+                dDiem.setListPhieuKiemNghiemCl(phieuKnghiemCl);
+
+
                  }
             for (HhQdGiaoNvNhangDtl dtl : hhQdGiaoNvNhangDtl ){
                 dtl.setChildren(ddiemList);
@@ -184,15 +196,15 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
 //                });
 //                dtl.setListBienBanLayMau(bbLayMau);
                 // Set phiếu kiểm nghiệm chất lượng
-                List<HhPhieuKngiemCluong> phieuKnghiemCl = hhPhieuKngiemCluongRepository.findBySoQdGiaoNvNhAndMaDvi(f.getSoQd(), dtl.getMaDvi());
-                phieuKnghiemCl.forEach( item -> {
-                    item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
-                    item.setTenDiemKho(StringUtils.isEmpty(item.getMaDiemKho())?null:hashMapDmdv.get(item.getMaDiemKho()));
-                    item.setTenNhaKho(StringUtils.isEmpty(item.getMaNhaKho())?null:hashMapDmdv.get(item.getMaNhaKho()));
-                    item.setTenNganKho(StringUtils.isEmpty(item.getMaNganKho())?null:hashMapDmdv.get(item.getMaNganKho()));
-                    item.setTenLoKho(StringUtils.isEmpty(item.getMaLoKho())?null:hashMapDmdv.get(item.getMaLoKho()));
-                });
-                dtl.setListPhieuKiemNghiemCl(phieuKnghiemCl);
+//                List<HhPhieuKngiemCluong> phieuKnghiemCl = hhPhieuKngiemCluongRepository.findBySoQdGiaoNvNhAndMaDvi(f.getSoQd(), dtl.getMaDvi());
+//                phieuKnghiemCl.forEach( item -> {
+//                    item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+//                    item.setTenDiemKho(StringUtils.isEmpty(item.getMaDiemKho())?null:hashMapDmdv.get(item.getMaDiemKho()));
+//                    item.setTenNhaKho(StringUtils.isEmpty(item.getMaNhaKho())?null:hashMapDmdv.get(item.getMaNhaKho()));
+//                    item.setTenNganKho(StringUtils.isEmpty(item.getMaNganKho())?null:hashMapDmdv.get(item.getMaNganKho()));
+//                    item.setTenLoKho(StringUtils.isEmpty(item.getMaLoKho())?null:hashMapDmdv.get(item.getMaLoKho()));
+//                });
+//                dtl.setListPhieuKiemNghiemCl(phieuKnghiemCl);
             }
             List<HhPhieuNhapKhoHdr> hhPhieuNhapKhoHdrList = hhPhieuNhapKhoHdrRepository.findAllByIdQdGiaoNvNh(f.getId());
             for (HhPhieuNhapKhoHdr phieuNhapKho : hhPhieuNhapKhoHdrList){
@@ -422,6 +434,18 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 if(dDiem.getIdDtl().equals(dtl.getId())){
                     qdGiaoNvNhDdiem.add(dDiem);
                 }
+                List<HhBienBanLayMau> bbLayMau = hhBienBanLayMauRepository.findByIdQdGiaoNvNhAndMaLoKho(data.getId(), dDiem.getMaLoKho());
+                bbLayMau.forEach(item ->{
+                    item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+                    item.setTenDiemKho(StringUtils.isEmpty(item.getMaDiemKho())?null:hashMapDmdv.get(item.getMaDiemKho()));
+                    item.setTenNhaKho(StringUtils.isEmpty(item.getMaNhaKho())?null:hashMapDmdv.get(item.getMaNhaKho()));
+                    item.setTenNganKho(StringUtils.isEmpty(item.getMaNganKho())?null:hashMapDmdv.get(item.getMaNganKho()));
+                    item.setTenLoKho(StringUtils.isEmpty(item.getMaLoKho())?null:hashMapDmdv.get(item.getMaLoKho()));
+                    HhBienBanDayKhoHdr bienBanDayKho = hhBienBanDayKhoHdrRepository.findAllByIdQdGiaoNvNh(data.getId())
+                            .stream().filter(x -> Objects.equals(x.getId(), item.getIdBbNhapDayKho())).findAny().orElse(null);
+                    item.setBbNhapDayKho(bienBanDayKho);
+                });
+                dDiem.setListBienBanLayMau(bbLayMau);
             }
             dtl.setChildren(qdGiaoNvNhDdiem);
         }
