@@ -68,6 +68,8 @@ public class XhXkDsHangDtqgService extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data);
         data.setTrangThai(Contains.DUTHAO);
         XhXkDsHangDtqgHdr created = xhXkDsHangDtqgRepository.save(data);
+        created.setMaDanhSach(created.getMaDanhSach() +'-'+ created.getId());
+        created = xhXkDsHangDtqgRepository.save(created);
         //Save detail
         this.saveDetailDs(created.getId(), created.getLoai());
         //save file đính kèm

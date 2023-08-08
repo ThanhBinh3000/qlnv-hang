@@ -14,8 +14,8 @@ import java.util.List;
 @Data
 public class XhXkDsHangDtqgRequest extends BaseRequest {
     private Long id;
-    private String maDs;
-    private String tenDs;
+    private String maDanhSach;
+    private String tenDanhSach;
     private String trangThai;
     private String lyDoTuChoi;
     private Long nguoiDuyetId;
