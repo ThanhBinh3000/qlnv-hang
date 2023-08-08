@@ -21,26 +21,20 @@ public class NhBienBanChuanBiKhoCt implements Serializable {
     @SequenceGenerator(sequenceName = "BB_CHUAN_BI_KHO_CT_SEQ", allocationSize = 1, name = "BB_CHUAN_BI_KHO_CT_SEQ")
     @Column(name = "ID")
     private Long id;
-
-    @Column(name = "ID_BB_CHUAN_BI_KHO")
-    private Long idBbChuanBiKho;
-
-    @Column(name = "NOI_DUNG")
-    private String noiDung;
-
-    @Column(name = "DON_VI_TINH")
+    private Long hdrId;
+    private String danhMuc;
+    private String nhomHang;
     private String donViTinh;
-
-    @Column(name = "SO_LUONG_TRONG_NAM")
-    private BigDecimal soLuongTrongNam;
-
-    @Column(name = "DON_GIA_TRONG_NAM")
-    private BigDecimal donGiaTrongNam;
-
-    @Column(name = "SO_LUONG_QT")
-    private BigDecimal soLuongQt;
-
-    @Column(name = "DON_GIA_QT")
-    private BigDecimal thanhTienQt;
-
+    private String matHang;
+    private String tenMatHang;
+    private String donViTinhMh;
+    private Double tongGiaTri;
+    private Double soLuongTrongNam;
+    private Double donGia;
+    private Double thanhTienTrongNam;
+    private Double soLuongNamTruoc;
+    private Double thanhTienNamTruoc;
+    private String type;
+    private Boolean isParent;
+    private String idParent;
 }
