@@ -92,6 +92,23 @@ public class XhXkDsHangDtqgController {
         return ResponseEntity.ok(resp);
     }
 
+    @ApiOperation(value = "Phê duyệt", response = List.class)
+    @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody StatusReq stReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(xhXkDsHangDtqgService.pheDuyet(currentUser, stReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Phê duyệt thông tin : {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
     @ApiOperation(value = "Xoá thông tin", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)

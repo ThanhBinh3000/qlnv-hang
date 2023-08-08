@@ -112,23 +112,12 @@ public class XhXkDsHangDtqgService extends BaseServiceImpl {
         XhXkDsHangDtqgHdr xhXkDsHangDtqgHdr = dx.get();
         String status = xhXkDsHangDtqgHdr.getTrangThai() + req.getTrangThai();
         switch (status) {
-            case Contains.DU_THAO + Contains.CHO_DUYET_TP:
-            case Contains.TU_CHOI_TP + Contains.CHO_DUYET_TP:
-            case Contains.TU_CHOI_LDC + Contains.CHO_DUYET_TP:
+            case Contains.DU_THAO + Contains.CHODUYET_LDV:
                 break;
-            case Contains.CHO_DUYET_TP + Contains.TU_CHOI_TP:
-            case Contains.CHO_DUYET_LDC + Contains.CHO_DUYET_TP:
             case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
-            case Contains.CHO_DUYET_BTC + Contains.TU_CHOI_BTC:
-            case Contains.CHODUYET_LDTC + Contains.TUCHOI_LDTC:
                 xhXkDsHangDtqgHdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
-            case Contains.CHO_DUYET_LDC + Contains.DA_DUYET_LDC:
-            case Contains.CHO_DUYET_TP + Contains.CHO_DUYET_LDC:
-            case Contains.CHODUYET_LDV + Contains.CHODUYET_LDTC:
-            case Contains.CHODUYET_LDTC + Contains.CHO_DUYET_BTC:
-            case Contains.CHO_DUYET_BTC + Contains.DA_DUYET_BTC:
-            case Contains.DU_THAO + Contains.CHODUYET_LDV:
+            case Contains.CHODUYET_LDV + Contains.DADUYET_LDV:
                 xhXkDsHangDtqgHdr.setNguoiDuyetId(currentUser.getUser().getId());
                 xhXkDsHangDtqgHdr.setNgayDuyet(LocalDate.now());
                 break;
