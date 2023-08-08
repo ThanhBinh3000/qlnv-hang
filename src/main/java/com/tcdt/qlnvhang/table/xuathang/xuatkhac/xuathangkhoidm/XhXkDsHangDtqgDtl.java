@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,5 +34,6 @@ public class XhXkDsHangDtqgDtl {
     private String dviQly;
     private Boolean isNgoaiDanhMuc;
     private Long idHdr;
-
+    @Transient
+    private List<XhXkDsHangDtqgDtl> children = new ArrayList<>();
 }

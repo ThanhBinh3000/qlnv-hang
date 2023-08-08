@@ -55,6 +55,7 @@ public class XhXkDsHangDtqgService extends BaseServiceImpl {
         Page<XhXkDsHangDtqgHdr> search = xhXkDsHangDtqgRepository.searchPage(req, pageable);
         search.getContent().forEach(s -> {
             s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
+            s.setXhXkDsHangDtqgDtl(this.buildTreeVattu(xhXkDsHangDtqgDtlRepository.findAllByIdHdr(s.getId())));
         });
         return search;
     }
@@ -88,6 +89,7 @@ public class XhXkDsHangDtqgService extends BaseServiceImpl {
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(model.getId(), Arrays.asList(XhXkDsHangDtqgHdr.TABLE_NAME));
         model.setFileDinhKems(fileDinhKem);
         model.setTenTrangThai(TrangThaiAllEnum.getLabelById(model.getTrangThai()));
+        model.setXhXkDsHangDtqgDtl(this.buildTreeVattu(xhXkDsHangDtqgDtlRepository.findAllByIdHdr(id)));
         return model;
     }
 
@@ -154,6 +156,24 @@ public class XhXkDsHangDtqgService extends BaseServiceImpl {
         }
         List<XhXkDsHangDtqgDtl> xhXkDsHangDtqgDtls = xhXkDsHangDtqgDtlRepository.saveAll(list);
         return xhXkDsHangDtqgDtls;
+    }
+
+
+    public List<XhXkDsHangDtqgDtl> buildTreeVattu(List<XhXkDsHangDtqgDtl> flatNodes) {
+        Map<String, XhXkDsHangDtqgDtl> nodeMap = new HashMap<>();
+        for (XhXkDsHangDtqgDtl node : flatNodes) {
+            nodeMap.put(node.getMa(), node);
+        }
+        List<XhXkDsHangDtqgDtl> treeNodes = new ArrayList<>();
+        for (XhXkDsHangDtqgDtl node : flatNodes) {
+            XhXkDsHangDtqgDtl parent = nodeMap.get(node.getMaCha());
+            if (parent == null) {
+                treeNodes.add(node);
+            } else {
+                parent.getChildren().add(node);
+            }
+        }
+        return treeNodes;
     }
 
 
