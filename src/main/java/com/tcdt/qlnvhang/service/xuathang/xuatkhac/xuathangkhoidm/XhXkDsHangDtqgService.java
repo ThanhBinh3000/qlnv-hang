@@ -2,7 +2,9 @@ package com.tcdt.qlnvhang.service.xuathang.xuatkhac.xuathangkhoidm;
 
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkKhXuatHangRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.xuathangkhoidm.XhXkDsHangDtqgDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.xuathangkhoidm.XhXkDsHangDtqgRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -14,8 +16,10 @@ import com.tcdt.qlnvhang.response.xuathang.xuatkhac.ktvattu.XhXkTongHopKhXuatHan
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkKhXuatHang;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkKhXuatHangDtl;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.xuathangkhoidm.XhXkDsHangDtqgDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.xuathangkhoidm.XhXkDsHangDtqgHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -41,6 +45,10 @@ public class XhXkDsHangDtqgService extends BaseServiceImpl {
     private XhXkDsHangDtqgRepository xhXkDsHangDtqgRepository;
     @Autowired
     private FileDinhKemService fileDinhKemService;
+    @Autowired
+    private QlnvDmVattuRepository qlnvDmVattuRepository;
+    @Autowired
+    private XhXkDsHangDtqgDtlRepository xhXkDsHangDtqgDtlRepository;
 
     public Page<XhXkDsHangDtqgHdr> searchPage(CustomUserDetails currentUser, XhXkDsHangDtqgRequest req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
@@ -59,8 +67,9 @@ public class XhXkDsHangDtqgService extends BaseServiceImpl {
         XhXkDsHangDtqgHdr data = new XhXkDsHangDtqgHdr();
         BeanUtils.copyProperties(objReq, data);
         data.setTrangThai(Contains.DUTHAO);
-        data.getXhXkDsHangDtqgDtl().forEach(s -> s.setXhXkDsHangDtqgHdr(data));
         XhXkDsHangDtqgHdr created = xhXkDsHangDtqgRepository.save(data);
+        //Save detail
+        this.saveDetailDs(created.getId(), created.getLoai());
         //save file đính kèm
         fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkDsHangDtqgHdr.TABLE_NAME);
         return detail(created.getId());
@@ -126,5 +135,22 @@ public class XhXkDsHangDtqgService extends BaseServiceImpl {
         XhXkDsHangDtqgHdr model = xhXkDsHangDtqgRepository.save(xhXkDsHangDtqgHdr);
         return detail(model.getId());
     }
+
+    public List<XhXkDsHangDtqgDtl> saveDetailDs(Long idHdr, Integer loaiDs) throws Exception {
+        //Xóa và save lại
+        xhXkDsHangDtqgDtlRepository.deleteAllByIdHdr(idHdr);
+        List<XhXkDsHangDtqgDtl> list = new ArrayList<>();
+        List<QlnvDmVattu> qlnvDmVattus = qlnvDmVattuRepository.listHangDtqg(loaiDs);
+        if (!qlnvDmVattus.isEmpty()) {
+            qlnvDmVattus.forEach(item -> {
+                XhXkDsHangDtqgDtl model = new XhXkDsHangDtqgDtl();
+                BeanUtils.copyProperties(item, model);
+                model.setIdHdr(idHdr);
+                list.add(model);
+            });
+        }
+        return xhXkDsHangDtqgDtlRepository.saveAll(list);
+    }
+
 
 }

@@ -32,10 +32,6 @@ public class XhXkDsHangDtqgDtl {
     private String loaiHang;
     private String dviQly;
     private Boolean isNgoaiDanhMuc;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idHdr")
-    @JsonIgnore
-    private XhXkDsHangDtqgHdr xhXkDsHangDtqgHdr;
+    private Long idHdr;
 
 }
