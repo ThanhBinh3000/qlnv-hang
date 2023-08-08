@@ -1,8 +1,10 @@
 package com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.dexuat;
 
+import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttHdrSearchReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.XhThopChiTieuReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.dexuat.XhDxKhBanDauGiaReq;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia;
+import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +37,7 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
             "AND (:#{#param.trangThaiTh} IS NULL OR DX.trangThaiTh = :#{#param.trangThaiTh}) " +
             "AND (:#{#param.trangThaiList == null || #param.trangThaiList.isEmpty() } = true OR DX.trangThai IN :#{#param.trangThaiList}) " +
             "ORDER BY DX.ngaySua desc , DX.ngayTao desc, DX.id desc")
-    Page<XhDxKhBanDauGia> searchPage(@feign.Param("param") XhDxKhBanDauGiaReq param, Pageable pageable);
+    Page<XhDxKhBanDauGia> searchPage(@Param("param") XhDxKhBanDauGiaReq param, Pageable pageable);
 
     @Query("SELECT TH from XhDxKhBanDauGia TH WHERE 1 = 1 " +
             "AND (:#{#param.namKh} IS NULL OR TH.namKh = :#{#param.namKh}) " +
