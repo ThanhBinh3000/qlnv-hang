@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "XH_THOP_DX_KH_BDG_DTL  ")
+@Table(name = XhThopDxKhBdgDtl.TABLE_NAME)
 @Data
 public class XhThopDxKhBdgDtl implements Serializable {
 
@@ -17,8 +17,8 @@ public class XhThopDxKhBdgDtl implements Serializable {
     public static final String TABLE_NAME = "XH_THOP_DX_KH_BDG_DTL";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_THOP_DX_KH_BDG_DTL_SEQ  ")
-    @SequenceGenerator(sequenceName = "XH_THOP_DX_KH_BDG_DTL_SEQ  ", allocationSize = 1, name = "XH_THOP_DX_KH_BDG_DTL_SEQ  ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhThopDxKhBdgDtl.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = XhThopDxKhBdgDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhThopDxKhBdgDtl.TABLE_NAME + "_SEQ")
 
     private Long id;
     private Long idDxHdr;

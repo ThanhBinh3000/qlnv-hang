@@ -7,15 +7,15 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "XH_QD_PD_KH_BDG_PL_DTL")
+@Table(name = XhQdPdKhBdgPlDtl.TABLE_NAME)
 @Data
 public class XhQdPdKhBdgPlDtl implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_QD_PD_KH_BDG_PL_DTL";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_QD_PD_KH_BDG_PL_DTL_SEQ")
-    @SequenceGenerator(sequenceName = "XH_QD_PD_KH_BDG_PL_DTL_SEQ", allocationSize = 1, name = "XH_QD_PD_KH_BDG_PL_DTL_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhQdPdKhBdgPlDtl.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = XhQdPdKhBdgPlDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhQdPdKhBdgPlDtl.TABLE_NAME + "_SEQ")
     private Long id;
     private Long idPhanLo;
     private String maDiemKho;

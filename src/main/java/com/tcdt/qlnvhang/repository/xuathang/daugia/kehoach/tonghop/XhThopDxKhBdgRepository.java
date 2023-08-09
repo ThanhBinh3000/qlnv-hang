@@ -5,10 +5,8 @@ import com.tcdt.qlnvhang.request.xuathang.daugia.SearchXhThopDxKhBdg;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,11 +25,6 @@ public interface XhThopDxKhBdgRepository extends JpaRepository<XhThopDxKhBdg, Lo
             "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
     )
     Page<XhThopDxKhBdg> searchPage(@feign.Param("param") SearchXhThopDxKhBdg param, Pageable pageable);
-
-    @Transactional()
-    @Modifying
-    @Query(value = "UPDATE XH_THOP_DX_KH_BAN_DAU_GIA SET TRANG_THAI =:trangThai WHERE ID = :idThHdr", nativeQuery = true)
-    void updateTrangThai(Long idThHdr, String trangThai);
 
     List<XhThopDxKhBdg> findAllByIdIn(List<Long> ids);
 
