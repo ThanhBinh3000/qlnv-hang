@@ -27,7 +27,7 @@ public class HhDxKhMttThopHdrReq extends HhDxKhMttTChiThopReq {
     private String soQdPd;
 
     private String soQdCc;
-
+    private Long idSoQdCc;
     private String tchuanCluong;
     private List<FileDinhKemReq> fileDinhKems;
 }
