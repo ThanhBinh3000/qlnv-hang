@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Entity
-@Table(name = "XH_THOP_DX_KH_BAN_DAU_GIA")
+@Table(name = XhThopDxKhBdg.TABLE_NAME)
 @Data
 public class XhThopDxKhBdg extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;

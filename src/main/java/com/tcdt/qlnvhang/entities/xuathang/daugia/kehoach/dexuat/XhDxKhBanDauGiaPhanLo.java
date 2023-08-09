@@ -5,10 +5,9 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Map;
 
 @Entity
-@Table(name = "XH_DX_KH_BAN_DAU_GIA_PHAN_LO ")
+@Table(name = XhDxKhBanDauGiaPhanLo.TABLE_NAME)
 @Data
 public class XhDxKhBanDauGiaPhanLo implements Serializable {
     private static final long serialVersionUID = 1L;
