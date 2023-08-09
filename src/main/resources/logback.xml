@@ -1,15 +1,11 @@
 <configuration>
-    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+<!--    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>-->
     <springProperty scope="context" name="applicationName" source="spring.application.name"/>
     <springProperty scope="context" name="loggingPath" source="logging.file.path"/>
-
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
-<!--            <Pattern>-->
-<!--                %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n-->
-<!--            </Pattern>-->
             <Pattern>
-                %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+                %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
             </Pattern>
         </layout>
     </appender>
@@ -27,9 +23,21 @@
         </rollingPolicy>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
     </appender>
-
+    <appender name="FILE-AUDIT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${loggingPath}/${applicationName}-trace.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+            </Pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${loggingPath}/${applicationName}.%d{yyyy-MM-dd}-trace.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+    </appender>
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="STASH"/>
+        <appender-ref ref="FILE-AUDIT"/>
     </root>
 </configuration>
