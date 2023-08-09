@@ -506,7 +506,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		data.setTenPthucLcnt(hashMapPthucDthau.get(data.getPthucLcnt()));
 		data.setTenLoaiHdong(hashMapLoaiHdong.get(data.getLoaiHdong()));
 		data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
-		List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdHdr(data.getId());
+		List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdHdrOrderByGoiThauAsc(data.getId());
 		for(HhQdKhlcntDsgthau dsg : hhQdKhlcntDsgthauData){
 			List<HhQdKhlcntDsgthauCtiet> listGtCtiet = hhQdKhlcntDsgthauCtietRepository.findByIdGoiThau(dsg.getId());
 			listGtCtiet.forEach(f -> {
