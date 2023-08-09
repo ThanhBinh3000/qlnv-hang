@@ -117,7 +117,7 @@ public class ScKiemTraChatLuongImpl extends BaseServiceImpl implements ScKiemTra
         }
         ScKiemTraChatLuongHdr data = optional.get();
         data.setFileDinhKems(fileDinhKemService.search(id, Collections.singleton(ScPhieuXuatKhoHdr.TABLE_NAME)));
-        data.setChildren(dtlRepository.findAllByIdHdrOrderByThuTu(id));
+        data.setChildren(dtlRepository.findAllByIdHdrOrderByThuTuHt(id));
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
         if(!Objects.isNull(data.getNguoiTaoId())){
