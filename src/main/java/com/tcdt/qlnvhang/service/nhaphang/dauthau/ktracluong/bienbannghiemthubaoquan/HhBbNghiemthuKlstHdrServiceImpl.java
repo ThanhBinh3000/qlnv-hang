@@ -226,7 +226,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
         hhBbNghiemthuKlstHdr.setTenDvi(listDanhMucDvi.get(hhBbNghiemthuKlstHdr.getMaDvi()));
         hhBbNghiemthuKlstHdr.setTenNguoiTao(ObjectUtils.isEmpty(hhBbNghiemthuKlstHdr.getNguoiTaoId()) ? null : userInfoRepository.findById(hhBbNghiemthuKlstHdr.getNguoiTaoId()).get().getFullName());
         hhBbNghiemthuKlstHdr.setTenKeToan(ObjectUtils.isEmpty(hhBbNghiemthuKlstHdr.getIdKeToan()) ? null : userInfoRepository.findById(hhBbNghiemthuKlstHdr.getIdKeToan()).get().getFullName());
-        hhBbNghiemthuKlstHdr.setTenKyThuatVien(ObjectUtils.isEmpty(hhBbNghiemthuKlstHdr.getIdKyThuatVien()) ? null : userInfoRepository.findById(hhBbNghiemthuKlstHdr.getIdKyThuatVien()).get().getFullName());
+        hhBbNghiemthuKlstHdr.setTenThuKho(ObjectUtils.isEmpty(hhBbNghiemthuKlstHdr.getIdThuKho()) ? null : userInfoRepository.findById(hhBbNghiemthuKlstHdr.getIdThuKho()).get().getFullName());
         hhBbNghiemthuKlstHdr.setTenNguoiPduyet(ObjectUtils.isEmpty(hhBbNghiemthuKlstHdr.getNguoiPduyetId()) ? null : userInfoRepository.findById(hhBbNghiemthuKlstHdr.getNguoiPduyetId()).get().getFullName());
 //        if(!StringUtils.isEmpty(hhBbNghiemthuKlstHdr.getMaLoKho())){
 //            KtNganLo nganLo = ktNganLoRepository.findFirstByMaNganlo(hhBbNghiemthuKlstHdr.getMaLoKho());
@@ -301,15 +301,13 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
             (NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_TK.getId()).equals(status) ||
             (NhapXuatHangTrangThaiEnum.TUCHOI_TK.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_TK.getId()).equals(status)
         ) {
-            phieu.setNgayPduyet(new Date());
-            phieu.setNguoiPduyetId(userInfo.getId());
+            phieu.setIdThuKho(userInfo.getId());
             phieu.setLyDoTuChoi(req.getLyDoTuChoi());
         } else if (
             (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId()).equals(status) ||
             (NhapXuatHangTrangThaiEnum.TUCHOI_KT.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId()).equals(status)
         ) {
-            phieu.setNgayPduyet(new Date());
-            phieu.setNguoiPduyetId(userInfo.getId());
+            phieu.setIdKeToan(userInfo.getId());
             phieu.setLyDoTuChoi(req.getLyDoTuChoi());
         } else if (
             (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId()).equals(status) ||

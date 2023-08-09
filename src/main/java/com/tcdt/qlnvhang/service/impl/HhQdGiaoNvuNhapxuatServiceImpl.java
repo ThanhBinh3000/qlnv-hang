@@ -734,7 +734,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 				dtl.setListBienBanNhapDayKho(bbNhapDayKho);
 
 				// Set biên bản nghiệm thu bảo quản
-				List<HhBbNghiemthuKlstHdr> bbNghiemThuBq = hhBbNghiemthuKlstRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
+				List<HhBbNghiemthuKlstHdr> bbNghiemThuBq = hhBbNghiemthuKlstRepository.findByIdQdGiaoNvNhAndMaDviStartsWith(f.getId(), dtl.getMaDvi());
 				bbNghiemThuBq.forEach( item ->  {
 					item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
 				});
