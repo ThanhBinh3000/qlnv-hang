@@ -34,6 +34,9 @@ public class XhXkDsHangDtqgDtl {
     private String dviQly;
     private Boolean isNgoaiDanhMuc;
     private Long idHdr;
+    private String loaiHinhXuat;
     @Transient
     private List<XhXkDsHangDtqgDtl> children = new ArrayList<>();
+    @Transient
+    private String tenLoaiHinhXuat;
 }
