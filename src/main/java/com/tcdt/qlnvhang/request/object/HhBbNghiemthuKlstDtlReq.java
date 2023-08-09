@@ -10,19 +10,21 @@ public class HhBbNghiemthuKlstDtlReq {
 	@ApiModelProperty(notes = "Bắt buộc set đối với update")
 	private Long id;
 
-	@Size(max = 500, message = "Nội dung không được vượt quá 500 ký tự")
-	String noiDung;
-
-	@Size(max = 20, message = "Đơn vị tính không được vượt quá 20 ký tự")
-	String dvt;
-
-	Double soLuongTn;
-	Double donGiaTn;
-	Double thanhTienTn;
-	Double soLuongQt;
-	Double thanhTienQt;
-	Double tongGtri;
-
-	Long idHdr;
+	private Long hdrId;
+	private String danhMuc;
+	private String nhomHang;
+	private String donViTinh;
+	private String matHang;
+	private String tenMatHang;
+	private String donViTinhMh;
+	private Double tongGiaTri;
+	private Double soLuongTrongNam;
+	private Double donGia;
+	private Double thanhTienTrongNam;
+	private Double soLuongNamTruoc;
+	private Double thanhTienNamTruoc;
+	private String type;
+	private Boolean isParent;
+	private String idParent;
 
 }
