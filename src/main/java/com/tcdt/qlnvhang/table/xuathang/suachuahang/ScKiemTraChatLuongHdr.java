@@ -42,6 +42,7 @@ public class ScKiemTraChatLuongHdr extends BaseEntity implements Serializable {
     private Integer dat;
     private String nhanXet;
     private String trangThai;
+    private String lyDoTuChoi;
     @Transient
     private String tenDvi;
     @Transient
@@ -51,7 +52,7 @@ public class ScKiemTraChatLuongHdr extends BaseEntity implements Serializable {
     @Transient
     private String tenNguoiTao;
     @Transient
-    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
     @Transient
     private ScPhieuXuatKhoHdr scPhieuXuatKhoHdr;
     @Transient
