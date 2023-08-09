@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.xuathang.daugia.kehoach.pheduyet;
 
+import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaRepository;
@@ -8,6 +9,7 @@ import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdg
 import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgPlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.tonghop.XhThopDxKhBdgRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -62,6 +64,8 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
     private XhThopDxKhBdgRepository xhThopDxKhBdgRepository;
     @Autowired
     private XhDxKhBanDauGiaRepository xhDxKhBanDauGiaRepository;
+    @Autowired
+    private XhTcTtinBdgHdrRepository xhTcTtinBdgHdrRepository;
     @Autowired
     FileDinhKemService fileDinhKemService;
 
@@ -526,6 +530,8 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
             dataDtl.setTenCloaiVthh(StringUtils.isEmpty(dataDtl.getCloaiVthh()) ? null : mapVthh.get(dataDtl.getCloaiVthh()));
             dataDtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dataDtl.getTrangThai()));
             dataDtl.setChildren(phanLo);
+            List<XhTcTtinBdgHdr> xhTcTtinBdgHdrs = xhTcTtinBdgHdrRepository.findByIdQdPdDtlOrderByLanDauGia(dataDtl.getId());
+            dataDtl.setListTtinDg(xhTcTtinBdgHdrs);
         });
         return allByIdDtl;
     }
