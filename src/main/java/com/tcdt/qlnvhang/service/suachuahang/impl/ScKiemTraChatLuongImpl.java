@@ -198,11 +198,19 @@ public class ScKiemTraChatLuongImpl extends BaseServiceImpl implements ScKiemTra
     }
 
     @Override
-    public Page<ScQuyetDinhXuatHang> searchKiemTraChatLuong(ScKiemTraChatLuongReq req) {
+    public Page<ScQuyetDinhXuatHang> searchKiemTraChatLuong(ScKiemTraChatLuongReq req) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         ScQuyetDinhXuatHangReq reqQd = new ScQuyetDinhXuatHangReq();
         reqQd.setNam(req.getNam());
         reqQd.setSoQd(req.getSoQdXh());
+        reqQd.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
+        if(userInfo.getCapDvi().equals(Contains.CAP_CUC)){
+            reqQd.setMaDviSr(userInfo.getDvql());
+        }
+        if(userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+            reqQd.setMaDviSr(userInfo.getDvql().substring(0, 6));
+        }
         Page<ScQuyetDinhXuatHang> search = scQuyetDinhXuatHangRepository.searchPageViewFromPhieuXuatKho(reqQd, pageable);
         search.getContent().forEach(item -> {
             try {
@@ -215,6 +223,9 @@ public class ScKiemTraChatLuongImpl extends BaseServiceImpl implements ScKiemTra
                     ScPhieuXuatKhoReq scPhieuXuatKhoReq = new ScPhieuXuatKhoReq();
                     scPhieuXuatKhoReq.setNam(req.getNam());
                     scPhieuXuatKhoReq.setIdScDanhSachHdr(scDanhSachHdr.getId());
+                    if(userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+                        scPhieuXuatKhoReq.setMaDviSr(userInfo.getDvql());
+                    }
                     List<ScPhieuXuatKhoHdr> scPhieuXuatKhoHdrs = scPhieuXuatKhoHdrRepository.searchList(scPhieuXuatKhoReq);
                     scDanhSachHdr.setScPhieuXuatKhoList(scPhieuXuatKhoHdrs);
 
