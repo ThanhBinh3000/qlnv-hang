@@ -232,7 +232,8 @@ public class ScKiemTraChatLuongImpl extends BaseServiceImpl implements ScKiemTra
                     // Từ phiếu xuất kho -> lấy ra phiếu kiểm nghiệm chất lượng sau sc
                     // get idlist phiếu xuất kho
                     List<Long> listIdPxk = scPhieuXuatKhoHdrs.stream().map(ScPhieuXuatKhoHdr::getId).collect(Collectors.toList());
-                    List<ScKiemTraChatLuongHdr> allByIdPhieuXuatKhoIn = hdrRepository.findAllByIdPhieuXuatKhoIn(listIdPxk);
+                    req.setIds(listIdPxk);
+                    List<ScKiemTraChatLuongHdr> allByIdPhieuXuatKhoIn = hdrRepository.findAllByIdPhieuXuatKho(req);
                     scDanhSachHdr.setScKiemTraChatLuongList(allByIdPhieuXuatKhoIn);
                     scDanhSachHdrList.add(scDanhSachHdr);
                 });

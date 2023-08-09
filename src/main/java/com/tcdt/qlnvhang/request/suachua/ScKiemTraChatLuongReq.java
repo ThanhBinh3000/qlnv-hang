@@ -35,5 +35,8 @@ public class ScKiemTraChatLuongReq extends BaseRequest {
 
     private Long idScDanhSachHdr;
 
+    // Region sr
     private String maDviSr;
+    private LocalDate ngayTu;
+    private LocalDate ngayDen;
 }
