@@ -142,6 +142,8 @@ public class XhXkDsHangDtqgService extends BaseServiceImpl {
                 model.setIsNgoaiDanhMuc(item.getIsLoaiKhoiDm());
                 list.add(model);
             });
+        }else{
+            throw new Exception("Không có hàng hóa nào thuộc danh sách này.");
         }
         List<XhXkDsHangDtqgDtl> xhXkDsHangDtqgDtls = xhXkDsHangDtqgDtlRepository.saveAll(list);
         return xhXkDsHangDtqgDtls;

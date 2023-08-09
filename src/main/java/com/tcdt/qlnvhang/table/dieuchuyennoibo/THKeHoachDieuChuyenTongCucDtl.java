@@ -10,6 +10,7 @@ import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -54,7 +55,7 @@ public class THKeHoachDieuChuyenTongCucDtl implements Serializable {
     private String trichYeu;
 
     @Column(name = "DU_TOAN_KP")
-    private Long tongDuToanKp;
+    private BigDecimal tongDuToanKp;
 
 
     @ManyToOne(fetch = FetchType.EAGER)

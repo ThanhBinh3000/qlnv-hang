@@ -43,6 +43,7 @@ public class HhDxKhMttThopHdr extends TrangThaiBaseEntity implements Serializabl
     private String soQdPduyet;
 
     private String soQdCc;
+    private Long idSoQdCc;
 
     private String tchuanCluong;
     private Long idQdPduyet;
