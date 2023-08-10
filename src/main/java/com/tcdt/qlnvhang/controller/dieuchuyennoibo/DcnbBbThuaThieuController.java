@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
+import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbThuaThieuHdrReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.impl.DcnbBbThuaThieuServiceImpl;
@@ -113,6 +114,23 @@ public class DcnbBbThuaThieuController {
         BaseResponse resp = new BaseResponse();
         try {
             service.approve(objReq);
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Phê duyệt thông tin : {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Hoàn thành", response = List.class)
+    @PostMapping(value = "hoan-thanh", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> finish(@Valid @RequestBody StatusReq objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            service.finish(objReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

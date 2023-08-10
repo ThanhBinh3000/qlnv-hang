@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
+import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +18,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DcnbBbThuaThieuHdr {
+public class DcnbBbThuaThieuHdr extends BaseEntity implements Serializable, Cloneable{
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_BB_THUA_THIEU_HDR";
 
