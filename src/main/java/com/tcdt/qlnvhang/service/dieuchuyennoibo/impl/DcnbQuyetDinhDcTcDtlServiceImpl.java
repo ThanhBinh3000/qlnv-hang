@@ -164,9 +164,9 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
             qdtc.setMaCucNhan(qd.getMaCucNhan());
             qdtc.setTenCucNhan(qd.getTenCucNhan());
             qdtc.setSoDxuat(qd.getSoDxuat());
-            qdtc.setNgayTrinhTc(qd.getThKeHoachDieuChuyenCucHdr().getNgayTrinhDuyetTc());
+            qdtc.setNgayTrinhTc(qd.getThKeHoachDieuChuyenCucHdr() == null ? null : qd.getThKeHoachDieuChuyenCucHdr().getNgayTrinhDuyetTc());
             qdtc.setTongDuToanKp(qd.getTongDuToanKp());
-            qdtc.setTrichYeu(qd.getThKeHoachDieuChuyenCucHdr().getTrichYeu());
+            qdtc.setTrichYeu(qd.getThKeHoachDieuChuyenCucHdr() == null ? null : qd.getThKeHoachDieuChuyenCucHdr().getTrichYeu());
             List<DcnbQuyetDinhDcTcTTDtl> danhSachQuyetDinhChiTiet = new ArrayList<>();
             if (qd.getThKeHoachDieuChuyenCucKhacCucDtl() != null && !qd.getThKeHoachDieuChuyenCucKhacCucDtl().getDcnbKeHoachDcHdr().isEmpty()) {
                 List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = qd.getThKeHoachDieuChuyenCucKhacCucDtl().getDcnbKeHoachDcHdr();
@@ -175,7 +175,7 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
                     dcnbQuyetDinhDcTcTTDtl.setKeHoachDcHdrId(dc.getId());
                     danhSachQuyetDinhChiTiet.add(dcnbQuyetDinhDcTcTTDtl);
                 }
-            }else if (qd.getThKeHoachDieuChuyenCucHdr() != null && !qd.getThKeHoachDieuChuyenCucHdr().getThKeHoachDieuChuyenNoiBoCucDtls().isEmpty()) {
+            } else if (qd.getThKeHoachDieuChuyenCucHdr() != null && !qd.getThKeHoachDieuChuyenCucHdr().getThKeHoachDieuChuyenNoiBoCucDtls().isEmpty()) {
                 List<THKeHoachDieuChuyenNoiBoCucDtl> thKeHoachDieuChuyenNoiBoCucDtls = qd.getThKeHoachDieuChuyenCucHdr().getThKeHoachDieuChuyenNoiBoCucDtls();
                 Set<Long> ids = new HashSet<>();
                 for (THKeHoachDieuChuyenNoiBoCucDtl dc : thKeHoachDieuChuyenNoiBoCucDtls) {
