@@ -117,6 +117,7 @@ public class XhXkQdXuatHangKhoiDmService extends BaseServiceImpl {
         XhXkQdXuatHangKhoiDm model = optional.get();
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(model.getId(), Arrays.asList(XhXkQdXuatHangKhoiDm.TABLE_NAME));
         model.setFileDinhKems(fileDinhKem);
+        model.setListDtl(this.buildTreeVattu(xhXkDsHangDtqgDtlRepository.findAllByIdHdr(model.getIdCanCu())));
         model.setTenTrangThai(TrangThaiAllEnum.getLabelById(model.getTrangThai()));
         return model;
     }
@@ -198,6 +199,23 @@ public class XhXkQdXuatHangKhoiDmService extends BaseServiceImpl {
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
+    }
+
+    public List<XhXkDsHangDtqgDtl> buildTreeVattu(List<XhXkDsHangDtqgDtl> flatNodes) {
+        Map<String, XhXkDsHangDtqgDtl> nodeMap = new HashMap<>();
+        for (XhXkDsHangDtqgDtl node : flatNodes) {
+            nodeMap.put(node.getMa(), node);
+        }
+        List<XhXkDsHangDtqgDtl> treeNodes = new ArrayList<>();
+        for (XhXkDsHangDtqgDtl node : flatNodes) {
+            XhXkDsHangDtqgDtl parent = nodeMap.get(node.getMaCha());
+            if (parent == null) {
+                treeNodes.add(node);
+            } else {
+                parent.getChildren().add(node);
+            }
+        }
+        return treeNodes;
     }
 }
 
