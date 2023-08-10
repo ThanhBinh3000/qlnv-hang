@@ -40,6 +40,7 @@ public class XhXkVtBhBbBaoHanh extends BaseEntity implements Serializable {
   private String loaiVthh;
   private String cloaiVthh;
   private BigDecimal slTonKho;
+  private Integer capLaiCaLo;
   private BigDecimal slBaoHanh;
   private LocalDate thoiGianBh;
   private String canBoLapBb;
@@ -51,19 +52,18 @@ public class XhXkVtBhBbBaoHanh extends BaseEntity implements Serializable {
   private Long nguoiGduyetId;
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
+  private String trangThaiBh;
 
   private Long idQdGnvNh;
   private String soQdGnvNh;
   private Long idPhieuKtcl;
   private String soPhieuKtcl;
 
-  @Transient
+  private Long idBbLayMauL1;
   private LocalDate ngayLayMauL1;
-  @Transient
   private String soBbLayMauL1;
-  @Transient
-  private LocalDate ngayLayMauLL2;
-  @Transient
+  private Long idBbLayMauL2;
+  private LocalDate ngayLayMauL2;
   private String soBbLayMauL2;
 
   @Transient

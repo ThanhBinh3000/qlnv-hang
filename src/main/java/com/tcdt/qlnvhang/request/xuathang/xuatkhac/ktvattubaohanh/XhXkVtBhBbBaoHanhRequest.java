@@ -38,6 +38,7 @@ public class XhXkVtBhBbBaoHanhRequest extends BaseRequest {
   private Long nguoiGduyetId;
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
+  private String trangThaiBh;
 
   private Long idQdGnvNh;
   private String soQdGnvNh;
@@ -45,6 +46,12 @@ public class XhXkVtBhBbBaoHanhRequest extends BaseRequest {
   private String soPhieuKtcl;
   private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
 
+  private Long idBbLayMauL1;
+  private LocalDate ngayLayMauL1;
+  private String soBbLayMauL1;
+  private Long idBbLayMauL2;
+  private LocalDate ngayLayMauL2;
+  private String soBbLayMauL2;
   //search params
   private LocalDate ngayKdclTu;
   private LocalDate ngayKdclDen;
