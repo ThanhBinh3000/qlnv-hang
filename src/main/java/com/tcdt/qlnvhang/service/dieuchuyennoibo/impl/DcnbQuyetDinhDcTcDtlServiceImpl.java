@@ -159,14 +159,14 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
         List<THKeHoachDieuChuyenTongCucDtl> quyetDinhPdDtl = objReq.getQuyetDinhPdDtl();
         for (THKeHoachDieuChuyenTongCucDtl qd : quyetDinhPdDtl) {
             DcnbQuyetDinhDcTcDtl qdtc = new DcnbQuyetDinhDcTcDtl();
-            qdtc.setMaCucXuat(qd.getMaCucDxuat());
-            qdtc.setTenCucXuat(qd.getTenCucDxuat());
+            qdtc.setMaCucXuat(qd.getMaCucDxuat() == null ? qd.getMaCucXuat() : qd.getMaCucDxuat());
+            qdtc.setTenCucXuat(qd.getTenCucDxuat() == null ? qd.getTenCucXuat() : qd.getTenCucDxuat());
             qdtc.setMaCucNhan(qd.getMaCucNhan());
             qdtc.setTenCucNhan(qd.getTenCucNhan());
             qdtc.setSoDxuat(qd.getSoDxuat());
-            qdtc.setNgayTrinhTc(qd.getThKeHoachDieuChuyenCucHdr() == null ? null : qd.getThKeHoachDieuChuyenCucHdr().getNgayTrinhDuyetTc());
+            qdtc.setNgayTrinhTc(qd.getThKeHoachDieuChuyenCucHdr() == null ? qd.getNgayTrinhTc() : qd.getThKeHoachDieuChuyenCucHdr().getNgayTrinhDuyetTc());
             qdtc.setTongDuToanKp(qd.getTongDuToanKp());
-            qdtc.setTrichYeu(qd.getThKeHoachDieuChuyenCucHdr() == null ? null : qd.getThKeHoachDieuChuyenCucHdr().getTrichYeu());
+            qdtc.setTrichYeu(qd.getThKeHoachDieuChuyenCucHdr() == null ? qd.getTrichYeu() : qd.getThKeHoachDieuChuyenCucHdr().getTrichYeu());
             List<DcnbQuyetDinhDcTcTTDtl> danhSachQuyetDinhChiTiet = new ArrayList<>();
             if (qd.getThKeHoachDieuChuyenCucKhacCucDtl() != null && !qd.getThKeHoachDieuChuyenCucKhacCucDtl().getDcnbKeHoachDcHdr().isEmpty()) {
                 List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = qd.getThKeHoachDieuChuyenCucKhacCucDtl().getDcnbKeHoachDcHdr();
