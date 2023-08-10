@@ -350,6 +350,7 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
                     thKeHoachDCTCHdrRepository.save(thKeHoachDieu.get());
                 }
                 break;
+            case Contains.CHODUYET_LDTC + Contains.BAN_HANH:
             case Contains.DADUYET_LDTC + Contains.BAN_HANH:
                 optional.get().setNgayBanHanhTc(LocalDate.now());
                 optional.get().setNguoiBanHanhTcId(currentUser.getUser().getId());
