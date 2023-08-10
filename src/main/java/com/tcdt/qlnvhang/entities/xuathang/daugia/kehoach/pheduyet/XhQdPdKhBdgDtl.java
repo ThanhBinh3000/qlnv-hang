@@ -9,15 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "XH_QD_PD_KH_BDG_DTL")
+@Table(name = XhQdPdKhBdgDtl.TABLE_NAME)
 @Data
 public class XhQdPdKhBdgDtl implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_QD_PD_KH_BDG_DTL";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_QD_PD_KH_BDG_DTL_SEQ")
-    @SequenceGenerator(sequenceName = "XH_QD_PD_KH_BDG_DTL_SEQ", allocationSize = 1, name = "XH_QD_PD_KH_BDG_DTL_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhQdPdKhBdgDtl.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = XhQdPdKhBdgDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhQdPdKhBdgDtl.TABLE_NAME + "_SEQ")
     private Long id;
     private Long idQdHdr;
     private Long idDxHdr;

@@ -145,23 +145,8 @@ public class HhBbNghiemthuKlstHdr extends TrangThaiBaseEntity implements Seriali
 	String soPhieuNhapKho;
 
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "id_hdr")
-	@JsonManagedReference
+	@Transient
 	private List<HhBbNghiemthuKlstDtl> children = new ArrayList<>();
-
-	public void setChildren(List<HhBbNghiemthuKlstDtl> children) {
-		this.children.clear();
-		for (HhBbNghiemthuKlstDtl child : children) {
-			child.setParent(this);
-		}
-		this.children.addAll(children);
-	}
-
-	public void addChild(HhBbNghiemthuKlstDtl child) {
-		child.setParent(this);
-		this.children.add(child);
-	}
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Fetch(value = FetchMode.SUBSELECT)

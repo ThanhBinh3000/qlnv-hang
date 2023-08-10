@@ -25,8 +25,8 @@ public class XhDxKhBanDauGia extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_DX_KH_BAN_DAU_GIA";
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_DX_KH_BAN_DAU_GIA_SEQ")
-    @SequenceGenerator(sequenceName = "XH_DX_KH_BAN_DAU_GIA_SEQ", allocationSize = 1, name = "XH_DX_KH_BAN_DAU_GIA_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhDxKhBanDauGia.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = XhDxKhBanDauGia.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhDxKhBanDauGia.TABLE_NAME + "_SEQ")
     private Long id;
     private String maDvi;
     private String loaiHinhNx;

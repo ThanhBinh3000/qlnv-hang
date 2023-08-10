@@ -7,22 +7,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "XH_QD_PD_KH_BDG_PL")
+@Table(name = XhQdPdKhBdgPl.TABLE_NAME)
 @Data
 public class XhQdPdKhBdgPl implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_QD_PD_KH_BDG_PL";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_QD_PD_KH_BDG_PL_SEQ ")
-    @SequenceGenerator(sequenceName = "XH_QD_PD_KH_BDG_PL_SEQ ", allocationSize = 1, name = "XH_QD_PD_KH_BDG_PL_SEQ ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhQdPdKhBdgPl.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = XhQdPdKhBdgPl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhQdPdKhBdgPl.TABLE_NAME + "_SEQ")
     private Long id;
     private Long idQdDtl;
     private String maDvi;
     private BigDecimal slChiTieu;
-    private BigDecimal slKeHoachDd;
-    private BigDecimal soLuongChiCuc;
-    private BigDecimal tienDatTruocDx;
+    private BigDecimal tongSlKeHoachDd;
+    private BigDecimal tongSlXuatBanDx;
+    private BigDecimal tongTienDatTruocDx;
     private String donViTinh;
     private String diaChi;
     @Transient

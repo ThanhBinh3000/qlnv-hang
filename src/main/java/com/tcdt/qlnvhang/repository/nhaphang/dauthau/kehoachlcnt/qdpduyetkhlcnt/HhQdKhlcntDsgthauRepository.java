@@ -13,6 +13,7 @@ public interface HhQdKhlcntDsgthauRepository extends BaseRepository<HhQdKhlcntDs
 
     List<HhQdKhlcntDsgthau> findByIdQdDtl(Long IdQdDtl);
     List<HhQdKhlcntDsgthau> findByIdQdHdr(Long IdQdHdr);
+    List<HhQdKhlcntDsgthau> findByIdQdHdrOrderByGoiThauAsc(Long IdQdHdr);
 
     @Transactional()
     @Modifying

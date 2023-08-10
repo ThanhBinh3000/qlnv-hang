@@ -84,6 +84,7 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
         List<HhDxKhMttThopDtl> thopDtls = new ArrayList<HhDxKhMttThopDtl>();
         String tChuanCluong = "";
         String soQdcc = "";
+        Long idSoQdcc = 0L;
         for (HhDxuatKhMttHdr dXuat : dxuatList) {
             HhDxKhMttThopDtl thopDtl = new HhDxKhMttThopDtl();
             BeanUtils.copyProperties(dXuat,thopDtl,"id");
@@ -91,10 +92,12 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
             thopDtl.setTenDvi(mapDmucDvi.get(dXuat.getMaDvi()));
             tChuanCluong = tChuanCluong.concat(dXuat.getTchuanCluong() + "");
             soQdcc = soQdcc.concat(dXuat.getSoQdCc() + "");
+            idSoQdcc = dXuat.getIdSoQdCc();
             thopDtls.add(thopDtl);
         }
         thopHdr.setTchuanCluong(tChuanCluong);
         thopHdr.setSoQdCc(soQdcc);
+        thopHdr.setIdSoQdCc(idSoQdcc);
         thopHdr.setChildren(thopDtls);
         return thopHdr;
     }

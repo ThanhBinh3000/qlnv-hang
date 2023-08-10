@@ -218,11 +218,21 @@ public class ScBangKeXuatVatTuServiceImpl extends BaseServiceImpl implements ScB
     }
 
     @Override
-    public Page<ScQuyetDinhXuatHang> searchBangKeCanHang(ScBangKeXuatVatTuReq req) {
+    public Page<ScQuyetDinhXuatHang> searchBangKeCanHang(ScBangKeXuatVatTuReq req) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         ScQuyetDinhXuatHangReq reqQd = new ScQuyetDinhXuatHangReq();
         reqQd.setNam(req.getNam());
         reqQd.setSoQd(req.getSoQdXh());
+        reqQd.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
+        reqQd.setNgayTu(req.getNgayTuXh());
+        reqQd.setNgayDen(req.getNgayDenXh());
+        if(userInfo.getCapDvi().equals(Contains.CAP_CUC)){
+            reqQd.setMaDviSr(userInfo.getDvql());
+        }
+        if(userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+            reqQd.setMaDviSr(userInfo.getDvql().substring(0, 6));
+        }
         Page<ScQuyetDinhXuatHang> search = scQuyetDinhXuatHangRepository.searchPageViewFromPhieuXuatKho(reqQd, pageable);
         search.getContent().forEach(item -> {
             try {
@@ -232,7 +242,12 @@ public class ScBangKeXuatVatTuServiceImpl extends BaseServiceImpl implements ScB
                 scQuyetDinhSc.getScTrinhThamDinhHdr().getChildren().forEach(( dsHdr)->{
                     ScDanhSachHdr scDanhSachHdr = dsHdr.getScDanhSachHdr();
                     req.setIdScDanhSachHdr(scDanhSachHdr.getId());
-                    scDanhSachHdr.setScBangKeXuatVatTuList(hdrRepository.searchList(req));
+                    if(userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+                        req.setMaDviSr(userInfo.getDvql());
+                    }
+                    // Lấy bảng kê theo từng danh sách sửa chữa ( địa điểm )
+                    List<ScBangKeXuatVatTuHdr> scBangKeXuatVatTuHdrs = hdrRepository.searchList(req);
+                    scDanhSachHdr.setScBangKeXuatVatTuList(scBangKeXuatVatTuHdrs);
                     scDanhSachHdrList.add(scDanhSachHdr);
                 });
                 item.setScQuyetDinhSc(scQuyetDinhScService.detail(item.getIdQdSc()));

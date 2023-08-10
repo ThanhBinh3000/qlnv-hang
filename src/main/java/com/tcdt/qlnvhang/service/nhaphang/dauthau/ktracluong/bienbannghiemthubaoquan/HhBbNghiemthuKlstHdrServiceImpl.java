@@ -7,6 +7,7 @@ import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 import com.tcdt.qlnvhang.entities.FileDKemJoinKeLot;
 import com.tcdt.qlnvhang.entities.FileDKemJoinKquaLcntHdr;
@@ -18,9 +19,11 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.khotang.KtNganKhoRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstDtlRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.object.HhBbNghiemthuKlstDtlReq;
 import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
 import com.tcdt.qlnvhang.service.HhQdGiaoNvuNhapxuatService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -48,6 +51,8 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
     @Autowired
     private HhBbNghiemthuKlstRepository hhBbNghiemthuKlstRepository;
+    @Autowired
+    private HhBbNghiemthuKlstDtlRepository hhBbNghiemthuKlstDtlRepository;
 
     @Autowired
     private HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
@@ -95,11 +100,6 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
         dataMap.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         dataMap.setNguoiTaoId(getUser().getId());
         dataMap.setChildren1(fileDinhKemList);
-
-        // Add thong tin chung
-		List<HhBbNghiemthuKlstDtl> dtls1 = ObjectMapperUtils.mapAll(req.getDetail(), HhBbNghiemthuKlstDtl.class);
-		dataMap.setChildren(dtls1);
-
         dataMap.setNam(qdNxOptional.get().getNamNhap());
         dataMap.setMaDvi(userInfo.getDvql());
         dataMap.setCapDvi(userInfo.getCapDvi());
@@ -126,7 +126,20 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
 
         hhBbNghiemthuKlstRepository.save(dataMap);
+        saveDetail(req, dataMap.getId());
         return dataMap;
+    }
+
+    @Transactional
+    void saveDetail(HhBbNghiemthuKlstHdrReq req, Long id){
+        hhBbNghiemthuKlstDtlRepository.deleteAllByHdrId(id);
+        for (HhBbNghiemthuKlstDtlReq hhBbNghiemthuKlstDtlReq : req.getDetail()) {
+            HhBbNghiemthuKlstDtl ct = new HhBbNghiemthuKlstDtl();
+            BeanUtils.copyProperties(hhBbNghiemthuKlstDtlReq, ct,"id");
+            ct.setId(null);
+            ct.setHdrId(id);
+            hhBbNghiemthuKlstDtlRepository.save(ct);
+        }
     }
 
     @Override
@@ -179,16 +192,11 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
         dataDTB.setNgaySua(getDateTimeNow());
         dataDTB.setNguoiSuaId(getUser().getId());;
         dataDTB.setChildren1(fileDinhKemList);
-
-        // Add thong tin chung
-        List<HhBbNghiemthuKlstDtl> dtls1 = ObjectMapperUtils.mapAll(objReq.getDetail(), HhBbNghiemthuKlstDtl.class);
-        dataDTB.setChildren(dtls1);
-
         dataDTB.setNam(qdNxOptional.get().getNamNhap());
         dataDTB.setMaDvi(userInfo.getDvql());
         dataDTB.setCapDvi(userInfo.getCapDvi());
         hhBbNghiemthuKlstRepository.save(dataDTB);
-
+        saveDetail(objReq, dataDTB.getId());
 		return dataDTB;
     }
 
@@ -218,7 +226,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
         hhBbNghiemthuKlstHdr.setTenDvi(listDanhMucDvi.get(hhBbNghiemthuKlstHdr.getMaDvi()));
         hhBbNghiemthuKlstHdr.setTenNguoiTao(ObjectUtils.isEmpty(hhBbNghiemthuKlstHdr.getNguoiTaoId()) ? null : userInfoRepository.findById(hhBbNghiemthuKlstHdr.getNguoiTaoId()).get().getFullName());
         hhBbNghiemthuKlstHdr.setTenKeToan(ObjectUtils.isEmpty(hhBbNghiemthuKlstHdr.getIdKeToan()) ? null : userInfoRepository.findById(hhBbNghiemthuKlstHdr.getIdKeToan()).get().getFullName());
-        hhBbNghiemthuKlstHdr.setTenKyThuatVien(ObjectUtils.isEmpty(hhBbNghiemthuKlstHdr.getIdKyThuatVien()) ? null : userInfoRepository.findById(hhBbNghiemthuKlstHdr.getIdKyThuatVien()).get().getFullName());
+        hhBbNghiemthuKlstHdr.setTenThuKho(ObjectUtils.isEmpty(hhBbNghiemthuKlstHdr.getIdThuKho()) ? null : userInfoRepository.findById(hhBbNghiemthuKlstHdr.getIdThuKho()).get().getFullName());
         hhBbNghiemthuKlstHdr.setTenNguoiPduyet(ObjectUtils.isEmpty(hhBbNghiemthuKlstHdr.getNguoiPduyetId()) ? null : userInfoRepository.findById(hhBbNghiemthuKlstHdr.getNguoiPduyetId()).get().getFullName());
 //        if(!StringUtils.isEmpty(hhBbNghiemthuKlstHdr.getMaLoKho())){
 //            KtNganLo nganLo = ktNganLoRepository.findFirstByMaNganlo(hhBbNghiemthuKlstHdr.getMaLoKho());
@@ -236,6 +244,7 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 //            hhBbNghiemthuKlstHdr.setLhKho(lishLoaiKho.get(ktNganKho.getLoaikhoId()));
 //            hhBbNghiemthuKlstHdr.setTichLuong(tichLuong.doubleValue());
 //        }
+        hhBbNghiemthuKlstHdr.setChildren(hhBbNghiemthuKlstDtlRepository.findAllByHdrId(hhBbNghiemthuKlstHdr.getId()));
         return hhBbNghiemthuKlstHdr;
     }
 
@@ -292,15 +301,13 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
             (NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_TK.getId()).equals(status) ||
             (NhapXuatHangTrangThaiEnum.TUCHOI_TK.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_TK.getId()).equals(status)
         ) {
-            phieu.setNgayPduyet(new Date());
-            phieu.setNguoiPduyetId(userInfo.getId());
+            phieu.setIdThuKho(userInfo.getId());
             phieu.setLyDoTuChoi(req.getLyDoTuChoi());
         } else if (
             (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId()).equals(status) ||
             (NhapXuatHangTrangThaiEnum.TUCHOI_KT.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_KT.getId()).equals(status)
         ) {
-            phieu.setNgayPduyet(new Date());
-            phieu.setNguoiPduyetId(userInfo.getId());
+            phieu.setIdKeToan(userInfo.getId());
             phieu.setLyDoTuChoi(req.getLyDoTuChoi());
         } else if (
             (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId()).equals(status) ||

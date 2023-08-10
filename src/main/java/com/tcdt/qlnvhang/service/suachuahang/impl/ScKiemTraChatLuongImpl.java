@@ -116,8 +116,8 @@ public class ScKiemTraChatLuongImpl extends BaseServiceImpl implements ScKiemTra
             throw new Exception("Không tìm thấy dữ liệu");
         }
         ScKiemTraChatLuongHdr data = optional.get();
-        data.setFileDinhKems(fileDinhKemService.search(id, Collections.singleton(ScPhieuXuatKhoHdr.TABLE_NAME)));
-        data.setChildren(dtlRepository.findAllByIdHdrOrderByThuTu(id));
+        data.setFileDinhKem(fileDinhKemService.search(id, Collections.singleton(ScPhieuXuatKhoHdr.TABLE_NAME)));
+        data.setChildren(dtlRepository.findAllByIdHdrOrderByThuTuHt(id));
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
         if(!Objects.isNull(data.getNguoiTaoId())){
@@ -140,8 +140,8 @@ public class ScKiemTraChatLuongImpl extends BaseServiceImpl implements ScKiemTra
         String status = hdr.getTrangThai() + req.getTrangThai();
         switch (status) {
             // Re approve : gửi lại duyệt
-            case Contains.TUCHOI_TP + Contains.DUTHAO:
-            case Contains.TUCHOI_LDC + Contains.DUTHAO:
+            case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+            case Contains.TUCHOI_LDC + Contains.CHODUYET_TP:
                 break;
             // Arena các cấp duuyệt
             case Contains.DUTHAO + Contains.CHODUYET_TP:
@@ -163,6 +163,7 @@ public class ScKiemTraChatLuongImpl extends BaseServiceImpl implements ScKiemTra
             // Arena từ chối
             case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
             case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
+                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -198,11 +199,19 @@ public class ScKiemTraChatLuongImpl extends BaseServiceImpl implements ScKiemTra
     }
 
     @Override
-    public Page<ScQuyetDinhXuatHang> searchKiemTraChatLuong(ScKiemTraChatLuongReq req) {
+    public Page<ScQuyetDinhXuatHang> searchKiemTraChatLuong(ScKiemTraChatLuongReq req) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         ScQuyetDinhXuatHangReq reqQd = new ScQuyetDinhXuatHangReq();
         reqQd.setNam(req.getNam());
         reqQd.setSoQd(req.getSoQdXh());
+        reqQd.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
+        if(userInfo.getCapDvi().equals(Contains.CAP_CUC)){
+            reqQd.setMaDviSr(userInfo.getDvql());
+        }
+        if(userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+            reqQd.setMaDviSr(userInfo.getDvql().substring(0, 6));
+        }
         Page<ScQuyetDinhXuatHang> search = scQuyetDinhXuatHangRepository.searchPageViewFromPhieuXuatKho(reqQd, pageable);
         search.getContent().forEach(item -> {
             try {
@@ -215,13 +224,17 @@ public class ScKiemTraChatLuongImpl extends BaseServiceImpl implements ScKiemTra
                     ScPhieuXuatKhoReq scPhieuXuatKhoReq = new ScPhieuXuatKhoReq();
                     scPhieuXuatKhoReq.setNam(req.getNam());
                     scPhieuXuatKhoReq.setIdScDanhSachHdr(scDanhSachHdr.getId());
+                    if(userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+                        scPhieuXuatKhoReq.setMaDviSr(userInfo.getDvql());
+                    }
                     List<ScPhieuXuatKhoHdr> scPhieuXuatKhoHdrs = scPhieuXuatKhoHdrRepository.searchList(scPhieuXuatKhoReq);
                     scDanhSachHdr.setScPhieuXuatKhoList(scPhieuXuatKhoHdrs);
 
                     // Từ phiếu xuất kho -> lấy ra phiếu kiểm nghiệm chất lượng sau sc
                     // get idlist phiếu xuất kho
                     List<Long> listIdPxk = scPhieuXuatKhoHdrs.stream().map(ScPhieuXuatKhoHdr::getId).collect(Collectors.toList());
-                    List<ScKiemTraChatLuongHdr> allByIdPhieuXuatKhoIn = hdrRepository.findAllByIdPhieuXuatKhoIn(listIdPxk);
+                    req.setIds(listIdPxk);
+                    List<ScKiemTraChatLuongHdr> allByIdPhieuXuatKhoIn = hdrRepository.findAllByIdPhieuXuatKho(req);
                     scDanhSachHdr.setScKiemTraChatLuongList(allByIdPhieuXuatKhoIn);
                     scDanhSachHdrList.add(scDanhSachHdr);
                 });
