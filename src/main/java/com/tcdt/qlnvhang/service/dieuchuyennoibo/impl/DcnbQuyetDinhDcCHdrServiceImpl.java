@@ -455,9 +455,12 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                     List<DcnbKeHoachDcDtl> danhSachKeHoach = hh.getDanhSachKeHoach();
                     hh.getDcnbKeHoachDcHdr().setDaXdinhDiemNhap(true);
                     dcnbKeHoachDcHdrRepository.save(hh.getDcnbKeHoachDcHdr());
+                    Set<Long> parentIds = new HashSet<>();
                     for (DcnbKeHoachDcDtl kh : danhSachKeHoach) {
                         Optional<DcnbKeHoachDcDtl> parentDtl = dcnbKeHoachDcDtlRepository.findById(kh.getParentId());
-                        if (parentDtl.isPresent()) {
+                        boolean contains = parentIds.contains(hh.getParentId());
+                        if (parentDtl.isPresent() && !contains) {
+                            parentIds.add(hh.getParentId());
                             parentDtl.get().setMaDiemKhoNhan(kh.getMaDiemKhoNhan());
                             parentDtl.get().setTenDiemKhoNhan(kh.getTenDiemKhoNhan());
                             parentDtl.get().setMaNhaKhoNhan(kh.getMaNhaKhoNhan());
@@ -470,6 +473,9 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                             parentDtl.get().setTichLuongKd(kh.getTichLuongKd());
                             parentDtl.get().setSoLuongPhanBo(kh.getSoLuongPhanBo());
                             parentDtl.get().setSlDcConLai(kh.getSlDcConLai());
+                            parentDtl.get().setThuKhoNhan(kh.getThuKhoNhan());
+                            parentDtl.get().setThuKhoNhanId(kh.getThuKhoNhanId());
+                            parentDtl.get().setThayDoiThuKho(kh.getThayDoiThuKho());
                             parentDtl.get().setDaXdinhDiemNhap(true);
                             dcnbKeHoachDcDtlRepository.save(parentDtl.get());
 
@@ -478,6 +484,37 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                             dataLink.setKeHoachDcHdrId(kh.getHdrId());
                             dataLink.setKeHoachDcDtlParentId(parentDtl.get().getId());
                             dataLink.setKeHoachDcHdrParentId(parentDtl.get().getHdrId());
+                            dataLink.setQdCcId(optional.get().getId());
+                            dataLink.setQdCcParentId(optional.get().getParentId());
+                            dataLink.setQdCtcId(optional.get().getCanCuQdTc());
+                            dataLink.setType(Contains.NHAN_DIEU_CHUYEN);
+                            dcnbDataLinkHdrRepository.save(dataLink);
+                        }else  if (parentDtl.isPresent()){
+                            DcnbKeHoachDcDtl clone = SerializationUtils.clone(parentDtl.get());
+                            clone.setId(null);
+                            clone.setMaDiemKhoNhan(kh.getMaDiemKhoNhan());
+                            clone.setTenDiemKhoNhan(kh.getTenDiemKhoNhan());
+                            clone.setMaNhaKhoNhan(kh.getMaNhaKhoNhan());
+                            clone.setTenNhaKhoNhan(kh.getTenNhaKhoNhan());
+                            clone.setMaNganKhoNhan(kh.getMaNganKhoNhan());
+                            clone.setTenNganKhoNhan(kh.getTenNganKhoNhan());
+                            clone.setCoLoKhoNhan(kh.getCoLoKhoNhan());
+                            clone.setMaLoKhoNhan(kh.getMaLoKhoNhan());
+                            clone.setTenLoKhoNhan(kh.getTenLoKhoNhan());
+                            clone.setTichLuongKd(kh.getTichLuongKd());
+                            clone.setSoLuongPhanBo(kh.getSoLuongPhanBo());
+                            clone.setSlDcConLai(kh.getSlDcConLai());
+                            clone.setThuKhoNhan(kh.getThuKhoNhan());
+                            clone.setThuKhoNhanId(kh.getThuKhoNhanId());
+                            clone.setThayDoiThuKho(kh.getThayDoiThuKho());
+                            clone.setDaXdinhDiemNhap(true);
+                            clone = dcnbKeHoachDcDtlRepository.save(clone);
+
+                            DcnbDataLinkHdr dataLink = new DcnbDataLinkHdr();
+                            dataLink.setKeHoachDcDtlId(kh.getId());
+                            dataLink.setKeHoachDcHdrId(kh.getHdrId());
+                            dataLink.setKeHoachDcDtlParentId(clone.getId());
+                            dataLink.setKeHoachDcHdrParentId(clone.getHdrId());
                             dataLink.setQdCcId(optional.get().getId());
                             dataLink.setQdCcParentId(optional.get().getParentId());
                             dataLink.setQdCtcId(optional.get().getCanCuQdTc());
