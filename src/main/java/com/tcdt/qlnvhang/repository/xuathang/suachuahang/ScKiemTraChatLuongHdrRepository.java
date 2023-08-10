@@ -30,7 +30,15 @@ public interface ScKiemTraChatLuongHdrRepository extends JpaRepository<ScKiemTra
 
 //    Optional<ScKiemTraChatLuongHdr> findBySoPhieuKdcl(String soPhieuKdcl);
 
-    List<ScKiemTraChatLuongHdr> findAllByIdPhieuXuatKhoIn(List<Long> idPhieuXuatKho);
+    @Query(value = "SELECT qd FROM ScKiemTraChatLuongHdr qd " +
+            " WHERE 1 = 1 " +
+            " AND (qd.idPhieuXuatKho IN :#{#param.ids}) " +
+            " AND (:#{#param.soPhieuKtcl} IS NULL OR qd.soPhieuKtcl LIKE CONCAT(:#{#param.soPhieuKtcl},'%')) " +
+            " AND (:#{#param.trangThai} IS NULL OR qd.trangThai = :#{#param.trangThai}) " +
+            " AND (:#{#param.maDviSr} IS NULL OR qd.maDvi = :#{#param.maDviSr}) " +
+            " AND ((:#{#param.ngayTu} IS NULL OR qd.ngayKiemDinh >= :#{#param.ngayTu}) AND (:#{#param.ngayDen}  IS NULL OR qd.ngayKiemDinh <= :#{#param.ngayDen})) "
+    )
+    List<ScKiemTraChatLuongHdr> findAllByIdPhieuXuatKho(@Param("param") ScKiemTraChatLuongReq req);
 
     List<ScKiemTraChatLuongHdr> findAllByIdQdXh(Long idQdXh);
 
