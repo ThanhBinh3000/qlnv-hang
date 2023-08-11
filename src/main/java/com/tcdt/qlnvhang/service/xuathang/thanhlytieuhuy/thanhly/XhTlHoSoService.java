@@ -23,7 +23,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -111,7 +110,7 @@ public class XhTlHoSoService extends BaseServiceImpl {
     objReq.getHoSoDtl().forEach(s -> {
       s.setHoSoHdr(null);
     });
-    BeanUtils.copyProperties(objReq, data, "id","maDvi");
+    BeanUtils.copyProperties(objReq, data, "id", "maDvi");
     data.getHoSoDtl().forEach(s -> {
       s.setHoSoHdr(data);
     });
@@ -225,13 +224,14 @@ public class XhTlHoSoService extends BaseServiceImpl {
       case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
       case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
       case Contains.TUCHOI_LDTC + Contains.CHODUYET_LDTC:
+      case Contains.TU_CHOI_BTC + Contains.CHO_DUYET_BTC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
         optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
         break;
-      case Contains.DA_DUYET_BTC + Contains.DADUYET_LDTC:
-        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
-        optional.get().setNgayPduyet(LocalDate.now());
+      case Contains.CHO_DUYET_BTC + Contains.DADUYET_LDTC:
+        break;
+      case Contains.DA_DUYET_BTC + Contains.CHO_DUYET_BTC:
         break;
       default:
         throw new Exception("Phê duyệt không thành công");
