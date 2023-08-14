@@ -205,16 +205,26 @@ public class ScBienBanKtServiceImpl extends BaseServiceImpl implements ScBienBan
   }
 
   @Override
-  public Page<ScQuyetDinhNhapHang> searchBienBanKt(ScBienBanKtReq req) {
+  public Page<ScQuyetDinhNhapHang> searchBienBanKt(ScBienBanKtReq req) throws Exception {
+    UserInfo userInfo = UserUtils.getUserInfo();
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     ScQuyetDinhNhapHangReq reqQd = new ScQuyetDinhNhapHangReq();
     reqQd.setNam(req.getNam());
     reqQd.setSoQd(req.getSoQdNh());
     reqQd.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
+    reqQd.setThoiHanNhapTu(req.getNgayNhapTu());
+    reqQd.setThoiHanNhapDen(req.getNgayNhapDen());
+    if(userInfo.getCapDvi().equals(Contains.CAP_CUC)){
+      reqQd.setMaDviSr(userInfo.getDvql());
+    }
+    if(userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+      reqQd.setMaDviSr(userInfo.getDvql().substring(0, 6));
+    }
     Page<ScQuyetDinhNhapHang> search = scQuyetDinhNhapHangRepository.searchPageViewFromAnother(reqQd, pageable);
     search.getContent().forEach(item -> {
       try {
-        List<ScBienBanKtHdr> bbKtList = hdrRepository.findAllByIdQdNh(item.getId());
+        req.setIdQdNh(item.getId());
+        List<ScBienBanKtHdr> bbKtList = hdrRepository.searchList(req);
         List<ScBienBanKtHdr> bkList = new ArrayList<>();
         bbKtList.forEach(dtl -> {
           try {

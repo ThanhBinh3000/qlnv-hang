@@ -142,8 +142,8 @@ public class ScBaoCaoServiceImpl extends BaseServiceImpl implements ScBaoCaoServ
     String status = hdr.getTrangThai() + req.getTrangThai();
     switch (status) {
       // Re approve : gửi lại duyệt
-      case Contains.TUCHOI_TP + Contains.DUTHAO:
-      case Contains.TUCHOI_LDC + Contains.DUTHAO:
+      case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+      case Contains.TUCHOI_LDC + Contains.CHODUYET_TP:
         break;
       // Arena các cấp duuyệt
       case Contains.DUTHAO + Contains.CHODUYET_TP:
@@ -156,6 +156,7 @@ public class ScBaoCaoServiceImpl extends BaseServiceImpl implements ScBaoCaoServ
       // Arena từ chối
       case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
       case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
+        hdr.setLyDoTuChoi(req.getLyDoTuChoi());
         break;
       default:
         throw new Exception("Phê duyệt không thành công");

@@ -169,7 +169,7 @@ public class ScPhieuNhapKhoServiceImpl extends BaseServiceImpl implements ScPhie
         String status = hdr.getTrangThai() + req.getTrangThai();
         switch (status) {
             // Re approve : gửi lại duyệt
-            case Contains.TUCHOI_LDCC + Contains.DUTHAO:
+            case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
                 break;
             // Arena các cấp duuyệt
             case Contains.DUTHAO + Contains.CHODUYET_LDCC:
@@ -185,6 +185,7 @@ public class ScPhieuNhapKhoServiceImpl extends BaseServiceImpl implements ScPhie
                 break;
             // Arena từ chối
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
+                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -223,12 +224,19 @@ public class ScPhieuNhapKhoServiceImpl extends BaseServiceImpl implements ScPhie
     }
 
     @Override
-    public Page<ScQuyetDinhNhapHang> searchPhieuNhapKho(ScPhieuNhapKhoReq req) {
+    public Page<ScQuyetDinhNhapHang> searchPhieuNhapKho(ScPhieuNhapKhoReq req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+        UserInfo userInfo = UserUtils.getUserInfo();
         ScQuyetDinhNhapHangReq reqQd = new ScQuyetDinhNhapHangReq();
         reqQd.setNam(req.getNam());
         reqQd.setSoQd(req.getSoQdNh());
         reqQd.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
+        if(userInfo.getCapDvi().equals(Contains.CAP_CUC)){
+            reqQd.setMaDviSr(userInfo.getDvql());
+        }
+        if(userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+            reqQd.setMaDviSr(userInfo.getDvql().substring(0, 6));
+        }
         Page<ScQuyetDinhNhapHang> search = scQuyetDinhNhapHangRepository.searchPageViewFromAnother(reqQd, pageable);
         search.getContent().forEach(item -> {
             try {
@@ -238,7 +246,10 @@ public class ScPhieuNhapKhoServiceImpl extends BaseServiceImpl implements ScPhie
                         ScDanhSachHdr newDtl = new ScDanhSachHdr();
                         ScDanhSachHdr detail = scDanhSachServiceImpl.detail(dtl.getIdDsHdr());
                         BeanUtils.copyProperties(detail,newDtl);
-                        List<ScPhieuNhapKhoHdr> allByIdScDanhSachHdr = hdrRepository.findAllByIdScDanhSachHdrAndIdQdNh(detail.getId(),dtl.getIdHdr());
+//                        List<ScPhieuNhapKhoHdr> allByIdScDanhSachHdr = hdrRepository.findAllByIdScDanhSachHdrAndIdQdNh(detail.getId(),dtl.getIdHdr());
+                        req.setIdScDanhSachHdr(detail.getId());
+                        req.setIdQdNh(dtl.getIdHdr());
+                        List<ScPhieuNhapKhoHdr> allByIdScDanhSachHdr = hdrRepository.searchList(req);
                         newDtl.setScPhieuNhapKhoList(allByIdScDanhSachHdr);
                         dtl.setScDanhSachHdr(newDtl);
                     } catch (Exception e) {

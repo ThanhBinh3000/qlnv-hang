@@ -51,9 +51,9 @@ public class ScQuyetDinhNhapHangImpl extends BaseServiceImpl implements ScQuyetD
     @Override
     public Page<ScQuyetDinhNhapHang> searchPage(ScQuyetDinhNhapHangReq req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        UserInfo currentUser = SecurityContextService.getUser();
-        if (currentUser.getCapDvi().equals(Contains.CAP_CUC)) {
-            req.setMaDviSr(currentUser.getDvql());
+        UserInfo userInfo = UserUtils.getUserInfo();
+        if (userInfo.getCapDvi().equals(Contains.CAP_CUC)) {
+            req.setMaDviSr(userInfo.getDvql());
         }
         Page<ScQuyetDinhNhapHang> searchPage = hdrRepository.searchPage(req, pageable);
         return searchPage;

@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface ScPhieuNhapKhoService extends BaseService<ScPhieuNhapKhoHdr, ScPhieuNhapKhoReq, Long> {
 
-    Page<ScQuyetDinhNhapHang> searchPhieuNhapKho(ScPhieuNhapKhoReq req);
+    Page<ScQuyetDinhNhapHang> searchPhieuNhapKho(ScPhieuNhapKhoReq req) throws Exception;
 
     List<ScPhieuNhapKhoHdr> searchDanhSachTaoBangKe(ScPhieuNhapKhoReq req);
 
