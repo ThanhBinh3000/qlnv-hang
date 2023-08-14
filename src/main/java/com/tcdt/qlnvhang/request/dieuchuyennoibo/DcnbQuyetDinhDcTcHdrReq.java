@@ -43,4 +43,5 @@ public class DcnbQuyetDinhDcTcHdrReq implements Serializable {
     private List<FileDinhKemReq> quyetDinh = new ArrayList<>();
     private List<DcnbQuyetDinhDcTcTTDtl> danhSachQuyetDinhChiTiet = new ArrayList<>();
     private List<THKeHoachDieuChuyenTongCucDtl> quyetDinhPdDtl = new ArrayList<>();
+    private List<DcnbQuyetDinhDcTcDtl> danhSachQuyetDinh = new ArrayList<>();
 }

@@ -211,12 +211,21 @@ public class ScBangKeNhapVtServiceImpl extends BaseServiceImpl implements ScBang
     }
 
     @Override
-    public Page<ScQuyetDinhNhapHang> searchBangKeNhapVt(ScBangKeNhapVtReq req) {
+    public Page<ScQuyetDinhNhapHang> searchBangKeNhapVt(ScBangKeNhapVtReq req) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         ScQuyetDinhNhapHangReq reqQd = new ScQuyetDinhNhapHangReq();
         reqQd.setNam(req.getNam());
         reqQd.setSoQd(req.getSoQdNh());
         reqQd.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
+        reqQd.setThoiHanNhapTu(req.getNgayTuNh());
+        reqQd.setThoiHanNhapDen(req.getNgayDenNh());
+        if(userInfo.getCapDvi().equals(Contains.CAP_CUC)){
+            reqQd.setMaDviSr(userInfo.getDvql());
+        }
+        if(userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+            reqQd.setMaDviSr(userInfo.getDvql().substring(0, 6));
+        }
         Page<ScQuyetDinhNhapHang> search = scQuyetDinhNhapHangRepository.searchPageViewFromAnother(reqQd, pageable);
         search.getContent().forEach(item -> {
             try {
@@ -229,7 +238,8 @@ public class ScBangKeNhapVtServiceImpl extends BaseServiceImpl implements ScBang
                         List<ScPhieuNhapKhoHdr> allByIdScDanhSachHdr = scPhieuNhapKhoHdrRepository.findAllByIdScDanhSachHdrAndIdQdNh(detail.getId(),dtl.getIdHdr());
                         if(allByIdScDanhSachHdr != null && !allByIdScDanhSachHdr.isEmpty()){
                             List<Long> ids = allByIdScDanhSachHdr.stream().map(ScPhieuNhapKhoHdr::getId).collect(Collectors.toList());
-                            List<ScBangKeNhapVtHdr> listBk = hdrRepository.findAllByIdPhieuNhapKhoIn(ids);
+                            req.setIdPhieuNhapKhoList(ids);
+                            List<ScBangKeNhapVtHdr> listBk = hdrRepository.searchList(req);
                             newDtl.setScBangKeNhapVtList(listBk);
                         }
                         dtl.setScDanhSachHdr(newDtl);

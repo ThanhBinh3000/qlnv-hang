@@ -39,6 +39,7 @@ public class ScBaoCaoHdr extends BaseEntity implements Serializable {
   private LocalDate ngayQdTc;
   private String noiDung;
   private String trangThai;
+  private String lyDoTuChoi;
   @Transient
   private String tenTrangThai;
   @Transient

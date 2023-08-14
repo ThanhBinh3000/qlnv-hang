@@ -9,6 +9,6 @@ import org.springframework.data.domain.Page;
 
 public interface ScBienBanKtService extends BaseService<ScBienBanKtHdr, ScBienBanKtReq, Long> {
 
-    Page<ScQuyetDinhNhapHang> searchBienBanKt(ScBienBanKtReq req);
+    Page<ScQuyetDinhNhapHang> searchBienBanKt(ScBienBanKtReq req) throws Exception;
 
 }

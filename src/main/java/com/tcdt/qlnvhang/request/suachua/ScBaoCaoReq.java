@@ -31,4 +31,9 @@ public class ScBaoCaoReq extends BaseRequest {
 
     private List<ScBaoCaoDtl> children = new ArrayList<>();
 
+    //Param
+    private String maDviSr;
+    private LocalDate ngayTu;
+    private LocalDate ngayDen;
+
 }

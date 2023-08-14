@@ -185,6 +185,7 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
                 break;
             // Arena từ chối
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
+                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");

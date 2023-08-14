@@ -46,6 +46,13 @@ public class ScBaoCaoServiceImpl extends BaseServiceImpl implements ScBaoCaoServ
 
   @Override
   public Page<ScBaoCaoHdr> searchPage(ScBaoCaoReq req) throws Exception {
+    UserInfo userInfo = UserUtils.getUserInfo();
+    if (userInfo.getCapDvi().equals(Contains.CAP_CUC)) {
+      req.setMaDviSr(userInfo.getDvql());
+    }
+    if(userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+      req.setMaDviSr(userInfo.getDvql().substring(0, 6));
+    }
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<ScBaoCaoHdr> search = hdrRepository.searchPage(req, pageable);
     return search;
@@ -135,8 +142,8 @@ public class ScBaoCaoServiceImpl extends BaseServiceImpl implements ScBaoCaoServ
     String status = hdr.getTrangThai() + req.getTrangThai();
     switch (status) {
       // Re approve : gửi lại duyệt
-      case Contains.TUCHOI_TP + Contains.DUTHAO:
-      case Contains.TUCHOI_LDC + Contains.DUTHAO:
+      case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+      case Contains.TUCHOI_LDC + Contains.CHODUYET_TP:
         break;
       // Arena các cấp duuyệt
       case Contains.DUTHAO + Contains.CHODUYET_TP:
@@ -149,6 +156,7 @@ public class ScBaoCaoServiceImpl extends BaseServiceImpl implements ScBaoCaoServ
       // Arena từ chối
       case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
       case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
+        hdr.setLyDoTuChoi(req.getLyDoTuChoi());
         break;
       default:
         throw new Exception("Phê duyệt không thành công");

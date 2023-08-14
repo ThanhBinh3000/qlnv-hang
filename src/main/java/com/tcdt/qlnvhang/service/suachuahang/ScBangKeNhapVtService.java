@@ -10,6 +10,6 @@ import org.springframework.data.domain.Page;
 
 public interface ScBangKeNhapVtService extends BaseService<ScBangKeNhapVtHdr, ScBangKeNhapVtReq, Long> {
 
-    Page<ScQuyetDinhNhapHang> searchBangKeNhapVt(ScBangKeNhapVtReq req);
+    Page<ScQuyetDinhNhapHang> searchBangKeNhapVt(ScBangKeNhapVtReq req) throws Exception;
 
 }

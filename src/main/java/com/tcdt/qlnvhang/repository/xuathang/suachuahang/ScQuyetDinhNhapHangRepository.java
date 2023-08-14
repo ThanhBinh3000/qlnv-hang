@@ -16,13 +16,14 @@ public interface ScQuyetDinhNhapHangRepository extends JpaRepository<ScQuyetDinh
 
     @Query(value = "SELECT c FROM ScQuyetDinhNhapHang c WHERE 1=1 " +
             " AND (:#{#param.maDviSr} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDviSr},'%')) " +
-            "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
+            " AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
             " AND (:#{#param.trichYeu} IS NULL OR c.trichYeu LIKE CONCAT(:#{#param.trichYeu},'%')) ")
     Page<ScQuyetDinhNhapHang> searchPage(@Param("param") ScQuyetDinhNhapHangReq req, Pageable pageable);
 
     @Query(value = "SELECT a FROM ScQuyetDinhNhapHang a WHERE 1=1 " +
             " AND (:#{#param.trangThai} IS NULL OR a.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.nam} IS NULL OR a.nam = :#{#param.nam} )" +
+            "AND ((:#{#param.thoiHanNhapTu} IS NULL OR a.thoiHanNhap >= :#{#param.thoiHanNhapTu}) AND (:#{#param.thoiHanNhapDen}  IS NULL OR a.thoiHanNhap <= :#{#param.thoiHanNhapDen})) " +
             "AND (:#{#param.soQd} IS NULL OR a.soQd LIKE CONCAT(:#{#param.soQd},'%'))")
     Page<ScQuyetDinhNhapHang> searchPageViewFromAnother(@Param("param") ScQuyetDinhNhapHangReq req, Pageable pageable);
 
