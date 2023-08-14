@@ -134,6 +134,8 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data);
         data.setDanhSachQuyetDinh(getDanhSachQuyetDinh(objReq));
         deleteDetail(optional.get());
+        dcnbQuyetDinhDcTcDtlRepository.flush();
+        dcnbQuyetDinhDcTcTTDtlRepository.flush();
         DcnbQuyetDinhDcTcHdr created = dcnbQuyetDinhDcTcHdrRepository.save(data);
 
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_CAN_CU"));
@@ -249,13 +251,6 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
         }
         DcnbQuyetDinhDcTcHdr data = optional.get();
         deleteDetail(data);
-        fileDinhKemService.delete(data.getId(), Lists.newArrayList(DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_CAN_CU"));
-        fileDinhKemService.delete(data.getId(), Lists.newArrayList(DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_QUYET_DINH"));
-    }
-
-    private void deleteDetail(DcnbQuyetDinhDcTcHdr data) {
-        List<DcnbQuyetDinhDcTcDtl> list = dcnbQuyetDinhDcTcDtlRepository.findByHdrId(data.getId());
-        dcnbQuyetDinhDcTcDtlRepository.deleteAll(list);
         dcnbQuyetDinhDcTcHdrRepository.delete(data);
         if (data.getIdThop() != null) {
             Optional<THKeHoachDieuChuyenTongCucHdr> thKeHoach = thKeHoachDCTCHdrRepository.findById(data.getIdThop());
@@ -266,6 +261,16 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
                 thKeHoachDCTCHdrRepository.save(thKeHoach.get());
             }
         }
+        fileDinhKemService.delete(data.getId(), Lists.newArrayList(DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_CAN_CU"));
+        fileDinhKemService.delete(data.getId(), Lists.newArrayList(DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_QUYET_DINH"));
+    }
+
+    private void deleteDetail(DcnbQuyetDinhDcTcHdr data) {
+        List<DcnbQuyetDinhDcTcDtl> list = dcnbQuyetDinhDcTcDtlRepository.findByHdrId(data.getId());
+        List<Long> listIds = list.stream().map(DcnbQuyetDinhDcTcDtl::getId).collect(Collectors.toList());
+        List<DcnbQuyetDinhDcTcTTDtl> lists = dcnbQuyetDinhDcTcTTDtlRepository.findByHdrIdIn(listIds);
+        dcnbQuyetDinhDcTcDtlRepository.deleteAll(list);
+        dcnbQuyetDinhDcTcTTDtlRepository.deleteAll(lists);
     }
 
     @Transient
