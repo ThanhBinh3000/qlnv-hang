@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,6 +23,7 @@ public class XhCtvtDeXuatPa implements Serializable {
   private Long id;
   private String noiDung;
   private BigDecimal soLuongXuat;
+  private String maDvi;
   private String maDviCuc;
   private BigDecimal tonKhoCuc;
   private BigDecimal soLuongXuatCuc;
@@ -41,6 +41,8 @@ public class XhCtvtDeXuatPa implements Serializable {
   private String tenLoaiVthh;
   @Transient
   private String tenCloaiVthh;
+  @Transient
+  private String tenDvi;
   @Transient
   private String tenCuc;
   @Transient
