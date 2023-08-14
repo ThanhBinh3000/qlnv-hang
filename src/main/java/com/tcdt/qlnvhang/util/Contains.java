@@ -398,11 +398,14 @@ public class Contains {
     // Loai hình xuất
     public static final String XUAT_MAU = "XUAT_MAU";
     public static final String XUAT_HUY = "XUAT_HUY";
+    public static final String XUAT_BH = "XUAT_BH";
     public static final Map<String, String> mapLoaiHinhXuat;
 
     static {
         mapLoaiHinhXuat = Maps.<String, String>buildMap().put(Contains.XUAT_MAU, "Xuất hàng để lấy mẫu")
-                .put(Contains.XUAT_HUY, "Xuất hàng bị hủy khỏi kho").get();
+            .put(Contains.XUAT_HUY, "Xuất hàng bị hủy khỏi kho")
+            .put(Contains.XUAT_BH, "Xuất để bảo hành")
+            .get();
     }
 
     public static String getLoaiHinhXuat(String key) {
