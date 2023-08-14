@@ -133,6 +133,7 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
         objReq.setMaDvi(data.getMaDvi());
         BeanUtils.copyProperties(objReq, data);
         data.setDanhSachQuyetDinh(getDanhSachQuyetDinh(objReq));
+        deleteDetail(optional.get());
         DcnbQuyetDinhDcTcHdr created = dcnbQuyetDinhDcTcHdrRepository.save(data);
 
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_CAN_CU"));
@@ -247,13 +248,17 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         DcnbQuyetDinhDcTcHdr data = optional.get();
-        List<DcnbQuyetDinhDcTcDtl> list = dcnbQuyetDinhDcTcDtlRepository.findByHdrId(data.getId());
-        dcnbQuyetDinhDcTcDtlRepository.deleteAll(list);
+        deleteDetail(data);
         fileDinhKemService.delete(data.getId(), Lists.newArrayList(DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_CAN_CU"));
         fileDinhKemService.delete(data.getId(), Lists.newArrayList(DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_QUYET_DINH"));
+    }
+
+    private void deleteDetail(DcnbQuyetDinhDcTcHdr data) {
+        List<DcnbQuyetDinhDcTcDtl> list = dcnbQuyetDinhDcTcDtlRepository.findByHdrId(data.getId());
+        dcnbQuyetDinhDcTcDtlRepository.deleteAll(list);
         dcnbQuyetDinhDcTcHdrRepository.delete(data);
-        if (optional.get().getIdThop() != null) {
-            Optional<THKeHoachDieuChuyenTongCucHdr> thKeHoach = thKeHoachDCTCHdrRepository.findById(optional.get().getIdThop());
+        if (data.getIdThop() != null) {
+            Optional<THKeHoachDieuChuyenTongCucHdr> thKeHoach = thKeHoachDCTCHdrRepository.findById(data.getIdThop());
             if (thKeHoach.isPresent()) {
                 thKeHoach.get().setTrangThai(Contains.CHUATAO_QD);
                 thKeHoach.get().setQdDcId(null);
