@@ -84,4 +84,6 @@ public class THKeHoachDieuChuyenTongCucDtl implements Serializable {
     private String tenCucXuat;
     @Transient
     private List<DcnbQuyetDinhDcTcTTDtl> danhSachQuyetDinhChiTiet;
+    @Transient
+    private List<DcnbKeHoachDcDtl> danhSachHangHoa;
 }
