@@ -105,7 +105,7 @@ public class DcnbPhieuKtChatLuongHdrReq {
 
     private String lyDoTuChoi;
 
-    private Long thayDoiThuKho;
+    private Boolean thayDoiThuKho;
 
     private LocalDate ngayDuyetTp;
 
