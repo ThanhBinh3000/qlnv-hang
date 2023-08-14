@@ -11,7 +11,6 @@ import java.util.List;
 public class XhQdDchinhKhBdgDtlReq {
     private Long id;
     private Long idHdr;
-    private Long idQdGoc;
     private String maDvi;
     private String diaChi;
     private String soDxuat;
@@ -28,7 +27,7 @@ public class XhQdDchinhKhBdgDtlReq {
     private Integer tgianGnhan;
     private String tgianGnhanGhiChu;
     private String pthucGnhan;
-    private String thongBaoKh;
+    private String thongBao;
     private BigDecimal khoanTienDatTruoc;
     private String loaiVthh;
     private String cloaiVthh;

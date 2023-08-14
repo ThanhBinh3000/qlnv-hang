@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
@@ -119,4 +120,9 @@ public class XhTlQuyetDinhDtl extends BaseEntity implements Serializable {
     private String tenTrangThaiThucHien;
     private LocalDate thoiGianGiaoNhan;
     private String ketQuaDauGia;
+
+    public String getTrangThaiThucHien() {
+        setTenTrangThaiThucHien(TrangThaiAllEnum.getLabelById(trangThaiThucHien));
+        return trangThaiThucHien;
+    }
 }
