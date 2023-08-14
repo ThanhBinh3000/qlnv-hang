@@ -22,17 +22,18 @@ public class XhCtvtDeXuatPa implements Serializable {
   @SequenceGenerator(sequenceName = XhCtvtDeXuatPa.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhCtvtDeXuatPa.TABLE_NAME + "_SEQ")
   private Long id;
   private String noiDung;
-  private BigDecimal soLuongXuat;
-  private String maDvi;
-  private String maDviCuc;
-  private BigDecimal tonKhoCuc;
-  private BigDecimal soLuongXuatCuc;
-  private String maDviChiCuc;
-  private BigDecimal tonKhoChiCuc;
-  private BigDecimal tonKhoCloaiVthh;
   private String loaiVthh;
   private String cloaiVthh;
+  private String maDvi;
+  private String maDviCuc;
+  private String maDviChiCuc;
+  private BigDecimal soLuongXuat;
+  private BigDecimal soLuongXuatCuc;
   private BigDecimal soLuongXuatChiCuc;
+  private BigDecimal tonKhoDvi;
+  private BigDecimal tonKhoChiCuc;
+  private BigDecimal tonKhoLoaiVthh;
+  private BigDecimal tonKhoCloaiVthh;
   private String donViTinh;
   private BigDecimal donGiaKhongVat;
   private BigDecimal thanhTien;
