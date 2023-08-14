@@ -60,7 +60,7 @@ public class XhTlQuyetDinhController {
     public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhTlQuyetDinhHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhTlQuyetDinhService.save(currentUser, objReq));
+            resp.setData(xhTlQuyetDinhService.create(currentUser, objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -70,7 +70,6 @@ public class XhTlQuyetDinhController {
         }
         return ResponseEntity.ok(resp);
     }
-
 
     @ApiOperation(value = "Cập nhật", response = List.class)
     @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)

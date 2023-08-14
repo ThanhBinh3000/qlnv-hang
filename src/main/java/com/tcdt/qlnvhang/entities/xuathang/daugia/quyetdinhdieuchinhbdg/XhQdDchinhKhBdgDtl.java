@@ -20,7 +20,6 @@ public class XhQdDchinhKhBdgDtl implements Serializable {
     @SequenceGenerator(sequenceName = TABLE_NAME + "_SEQ", allocationSize = 1, name = TABLE_NAME + "_SEQ")
     private Long id;
     private Long idHdr;
-    private Long idQdGoc;
     private String maDvi;
     private String diaChi;
     private String soDxuat;
@@ -37,7 +36,7 @@ public class XhQdDchinhKhBdgDtl implements Serializable {
     private Integer tgianGnhan;
     private String tgianGnhanGhiChu;
     private String pthucGnhan;
-    private String thongBaoKh;
+    private String thongBao;
     private BigDecimal khoanTienDatTruoc;
     private String loaiVthh;
     private String cloaiVthh;
