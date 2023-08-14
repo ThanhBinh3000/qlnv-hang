@@ -134,8 +134,8 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data);
         data.setDanhSachQuyetDinh(getDanhSachQuyetDinh(objReq));
         deleteDetail(optional.get());
-        dcnbQuyetDinhDcTcDtlRepository.flush();
         dcnbQuyetDinhDcTcTTDtlRepository.flush();
+        dcnbQuyetDinhDcTcDtlRepository.flush();
         DcnbQuyetDinhDcTcHdr created = dcnbQuyetDinhDcTcHdrRepository.save(data);
 
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_CAN_CU"));
@@ -269,8 +269,8 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
         List<DcnbQuyetDinhDcTcDtl> list = dcnbQuyetDinhDcTcDtlRepository.findByHdrId(data.getId());
         List<Long> listIds = list.stream().map(DcnbQuyetDinhDcTcDtl::getId).collect(Collectors.toList());
         List<DcnbQuyetDinhDcTcTTDtl> lists = dcnbQuyetDinhDcTcTTDtlRepository.findByHdrIdIn(listIds);
-        dcnbQuyetDinhDcTcDtlRepository.deleteAll(list);
         dcnbQuyetDinhDcTcTTDtlRepository.deleteAll(lists);
+        dcnbQuyetDinhDcTcDtlRepository.deleteAll(list);
     }
 
     @Transient
