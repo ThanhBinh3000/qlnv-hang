@@ -9,6 +9,7 @@ public interface XhQdDchinhKhBdgDtlRepository extends JpaRepository<XhQdDchinhKh
 
     void deleteAllByIdHdr(Long idHdr);
 
-    List<XhQdDchinhKhBdgDtl> findAllByIdHdr (Long idHdr);
+    List<XhQdDchinhKhBdgDtl> findAllByIdHdr(Long idHdr);
 
+    List<XhQdDchinhKhBdgDtl> findByIdHdrIn(List<Long> listId);
 }

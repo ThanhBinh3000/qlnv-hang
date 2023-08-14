@@ -46,6 +46,13 @@ public class ScBaoCaoServiceImpl extends BaseServiceImpl implements ScBaoCaoServ
 
   @Override
   public Page<ScBaoCaoHdr> searchPage(ScBaoCaoReq req) throws Exception {
+    UserInfo userInfo = UserUtils.getUserInfo();
+    if (userInfo.getCapDvi().equals(Contains.CAP_CUC)) {
+      req.setMaDviSr(userInfo.getDvql());
+    }
+    if(userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+      req.setMaDviSr(userInfo.getDvql().substring(0, 6));
+    }
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<ScBaoCaoHdr> search = hdrRepository.searchPage(req, pageable);
     return search;
