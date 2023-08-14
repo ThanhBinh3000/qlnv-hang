@@ -381,7 +381,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		}
 		Page<HhQdPduyetKqlcntHdr> hhQdPduyetKqlcntHdrs = hhQdPduyetKqlcntHdrRepository.selectPage(req, pageable);
 		Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
-		hhQdPduyetKqlcntHdrs.forEach( item -> {
+		hhQdPduyetKqlcntHdrs.getContent().forEach( item -> {
 			try {
 				item.setListHopDong(hhHopDongRepository.findAllByIdQdKqLcnt(item.getId()));
 				if(req.getLoaiVthh().startsWith("02")){

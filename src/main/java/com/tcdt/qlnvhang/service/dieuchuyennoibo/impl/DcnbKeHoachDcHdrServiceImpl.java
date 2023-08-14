@@ -48,10 +48,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -409,11 +406,14 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
                 optional.get().setXdLaiDiemNhap(false);
                 // update lại các kho nhận điều chuyển trong danh sách hàng hóa cha.
                 List<DcnbKeHoachDcDtl> danhSachHangHoa = optional.get().getDanhSachHangHoa();
+                Set<Long> parentIds = new HashSet<>();
                 for (DcnbKeHoachDcDtl hh : danhSachHangHoa) {
                     hh.setDaXdinhDiemNhap(true);
                     dcnbKeHoachDcDtlRepository.save(hh);
                     Optional<DcnbKeHoachDcDtl> parentDtl = dcnbKeHoachDcDtlRepository.findById(hh.getParentId());
-                    if (parentDtl.isPresent()) {
+                    boolean contains = parentIds.contains(hh.getParentId());
+                    if (parentDtl.isPresent() && !contains) {
+                        parentIds.add(hh.getParentId());
                         parentDtl.get().setMaDiemKhoNhan(hh.getMaDiemKhoNhan());
                         parentDtl.get().setTenDiemKhoNhan(hh.getTenDiemKhoNhan());
                         parentDtl.get().setMaNhaKhoNhan(hh.getMaNhaKhoNhan());
@@ -431,6 +431,26 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
                         parentDtl.get().setThayDoiThuKho(hh.getThayDoiThuKho());
                         parentDtl.get().setDaXdinhDiemNhap(true);
                         dcnbKeHoachDcDtlRepository.save(parentDtl.get());
+                    }else  if (parentDtl.isPresent()){
+                        DcnbKeHoachDcDtl clone = SerializationUtils.clone(parentDtl.get());
+                        clone.setId(null);
+                        clone.setMaDiemKhoNhan(hh.getMaDiemKhoNhan());
+                        clone.setTenDiemKhoNhan(hh.getTenDiemKhoNhan());
+                        clone.setMaNhaKhoNhan(hh.getMaNhaKhoNhan());
+                        clone.setTenNhaKhoNhan(hh.getTenNhaKhoNhan());
+                        clone.setMaNganKhoNhan(hh.getMaNganKhoNhan());
+                        clone.setTenNganKhoNhan(hh.getTenNganKhoNhan());
+                        clone.setCoLoKhoNhan(hh.getCoLoKhoNhan());
+                        clone.setMaLoKhoNhan(hh.getMaLoKhoNhan());
+                        clone.setTenLoKhoNhan(hh.getTenLoKhoNhan());
+                        clone.setTichLuongKd(hh.getTichLuongKd());
+                        clone.setSoLuongPhanBo(hh.getSoLuongPhanBo());
+                        clone.setSlDcConLai(hh.getSlDcConLai());
+                        clone.setThuKhoNhan(hh.getThuKhoNhan());
+                        clone.setThuKhoNhanId(hh.getThuKhoNhanId());
+                        clone.setThayDoiThuKho(hh.getThayDoiThuKho());
+                        clone.setDaXdinhDiemNhap(true);
+                        dcnbKeHoachDcDtlRepository.save(clone);
                     }
                 }
 

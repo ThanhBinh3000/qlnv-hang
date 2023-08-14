@@ -11,6 +11,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class SearchDcnbBienBanLayMau extends BaseRequest {
+    private Long id;
     private Integer nam;
     private Long qdDcCucId;
     private String typeQd;

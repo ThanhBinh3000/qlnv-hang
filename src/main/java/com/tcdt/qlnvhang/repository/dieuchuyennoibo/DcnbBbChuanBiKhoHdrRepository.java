@@ -40,8 +40,8 @@ public interface DcnbBbChuanBiKhoHdrRepository extends JpaRepository<DcnbBbChuan
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbChuanBiKhoHdrDTO(" +
             "bbcb.id, qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,qdc.nam,khdcd.thoiGianDkDc, bbcb.soBban, bbcb.ngayLap, pnk.id, pnk.soPhieuNhapKho, bbktnk.id," +
-            "bbktnk.soBb,bbktnk.ngayKetThucNhap,bbgn.id,bbgn.soBb,khdcd.maNhaKho, khdcd.tenNhaKho, khdcd.maDiemKho, khdcd.tenDiemKho, khdcd.maLoKho, " +
-            "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.soLuongDc,bbcb.trangThai) FROM DcnbQuyetDinhDcCHdr qdc " +
+            "bbktnk.soBb,bbktnk.ngayKetThucNhap,bbgn.id,bbgn.soBb,khdcd.maNhaKhoNhan, khdcd.tenNhaKhoNhan, khdcd.maDiemKhoNhan, khdcd.tenDiemKhoNhan, khdcd.maLoKhoNhan, " +
+            "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.soLuongDc,bbcb.trangThai) FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
@@ -71,8 +71,8 @@ public interface DcnbBbChuanBiKhoHdrRepository extends JpaRepository<DcnbBbChuan
             "AND ((:#{#param.tuNgayKtnk}  IS NULL OR pnk.ngayLap >= :#{#param.tuNgayKtnk})" +
             "AND (:#{#param.denNgayKtnk}  IS NULL OR pnk.ngayLap <= :#{#param.denNgayKtnk})) " +
             "GROUP BY bbcb.id, qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,qdc.nam,khdcd.thoiGianDkDc, bbcb.soBban, bbcb.ngayLap, pnk.id, pnk.soPhieuNhapKho, bbktnk.id," +
-            "bbktnk.soBb,bbktnk.ngayKetThucNhap,bbgn.id,bbgn.soBb,khdcd.maNhaKho, khdcd.tenNhaKho, khdcd.maDiemKho, khdcd.tenDiemKho, khdcd.maLoKho, " +
-            "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.soLuongDc,bbcb.trangThai "+
+            "bbktnk.soBb,bbktnk.ngayKetThucNhap,bbgn.id,bbgn.soBb,khdcd.maNhaKhoNhan, khdcd.tenNhaKhoNhan, khdcd.maDiemKhoNhan, khdcd.tenDiemKhoNhan, khdcd.maLoKhoNhan, " +
+            "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.soLuongDc,bbcb.trangThai "+
             "ORDER BY qdc.soQdinh DESC")
     Page<DcnbBbChuanBiKhoHdrDTO> searchPage(@Param("param") DcnbBbChuanBiKhoHdrReq req, Pageable pageable);
 }

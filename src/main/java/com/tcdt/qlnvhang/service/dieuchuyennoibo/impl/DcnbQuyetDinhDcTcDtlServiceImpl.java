@@ -159,14 +159,14 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
         List<THKeHoachDieuChuyenTongCucDtl> quyetDinhPdDtl = objReq.getQuyetDinhPdDtl();
         for (THKeHoachDieuChuyenTongCucDtl qd : quyetDinhPdDtl) {
             DcnbQuyetDinhDcTcDtl qdtc = new DcnbQuyetDinhDcTcDtl();
-            qdtc.setMaCucXuat(qd.getMaCucDxuat());
-            qdtc.setTenCucXuat(qd.getTenCucDxuat());
+            qdtc.setMaCucXuat(qd.getMaCucDxuat() == null ? qd.getMaCucXuat() : qd.getMaCucDxuat());
+            qdtc.setTenCucXuat(qd.getTenCucDxuat() == null ? qd.getTenCucXuat() : qd.getTenCucDxuat());
             qdtc.setMaCucNhan(qd.getMaCucNhan());
             qdtc.setTenCucNhan(qd.getTenCucNhan());
             qdtc.setSoDxuat(qd.getSoDxuat());
-            qdtc.setNgayTrinhTc(qd.getThKeHoachDieuChuyenCucHdr().getNgayTrinhDuyetTc());
+            qdtc.setNgayTrinhTc(qd.getThKeHoachDieuChuyenCucHdr() == null ? qd.getNgayTrinhTc() : qd.getThKeHoachDieuChuyenCucHdr().getNgayTrinhDuyetTc());
             qdtc.setTongDuToanKp(qd.getTongDuToanKp());
-            qdtc.setTrichYeu(qd.getThKeHoachDieuChuyenCucHdr().getTrichYeu());
+            qdtc.setTrichYeu(qd.getThKeHoachDieuChuyenCucHdr() == null ? qd.getTrichYeu() : qd.getThKeHoachDieuChuyenCucHdr().getTrichYeu());
             List<DcnbQuyetDinhDcTcTTDtl> danhSachQuyetDinhChiTiet = new ArrayList<>();
             if (qd.getThKeHoachDieuChuyenCucKhacCucDtl() != null && !qd.getThKeHoachDieuChuyenCucKhacCucDtl().getDcnbKeHoachDcHdr().isEmpty()) {
                 List<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = qd.getThKeHoachDieuChuyenCucKhacCucDtl().getDcnbKeHoachDcHdr();
@@ -175,7 +175,7 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
                     dcnbQuyetDinhDcTcTTDtl.setKeHoachDcHdrId(dc.getId());
                     danhSachQuyetDinhChiTiet.add(dcnbQuyetDinhDcTcTTDtl);
                 }
-            }else if (qd.getThKeHoachDieuChuyenCucHdr() != null && !qd.getThKeHoachDieuChuyenCucHdr().getThKeHoachDieuChuyenNoiBoCucDtls().isEmpty()) {
+            } else if (qd.getThKeHoachDieuChuyenCucHdr() != null && !qd.getThKeHoachDieuChuyenCucHdr().getThKeHoachDieuChuyenNoiBoCucDtls().isEmpty()) {
                 List<THKeHoachDieuChuyenNoiBoCucDtl> thKeHoachDieuChuyenNoiBoCucDtls = qd.getThKeHoachDieuChuyenCucHdr().getThKeHoachDieuChuyenNoiBoCucDtls();
                 Set<Long> ids = new HashSet<>();
                 for (THKeHoachDieuChuyenNoiBoCucDtl dc : thKeHoachDieuChuyenNoiBoCucDtls) {
@@ -184,6 +184,12 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
                 for (Long id : ids) {
                     DcnbQuyetDinhDcTcTTDtl dcnbQuyetDinhDcTcTTDtl = new DcnbQuyetDinhDcTcTTDtl();
                     dcnbQuyetDinhDcTcTTDtl.setKeHoachDcHdrId(id);
+                    danhSachQuyetDinhChiTiet.add(dcnbQuyetDinhDcTcTTDtl);
+                }
+            }else if(qd.getDanhSachQuyetDinhChiTiet() != null && !qd.getDanhSachQuyetDinhChiTiet().isEmpty()){
+                for (DcnbQuyetDinhDcTcTTDtl dc : qd.getDanhSachQuyetDinhChiTiet()) {
+                    DcnbQuyetDinhDcTcTTDtl dcnbQuyetDinhDcTcTTDtl = new DcnbQuyetDinhDcTcTTDtl();
+                    dcnbQuyetDinhDcTcTTDtl.setKeHoachDcHdrId(dc.getKeHoachDcHdrId());
                     danhSachQuyetDinhChiTiet.add(dcnbQuyetDinhDcTcTTDtl);
                 }
             }
@@ -344,6 +350,7 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
                     thKeHoachDCTCHdrRepository.save(thKeHoachDieu.get());
                 }
                 break;
+            case Contains.CHODUYET_LDTC + Contains.BAN_HANH:
             case Contains.DADUYET_LDTC + Contains.BAN_HANH:
                 optional.get().setNgayBanHanhTc(LocalDate.now());
                 optional.get().setNguoiBanHanhTcId(currentUser.getUser().getId());

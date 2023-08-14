@@ -51,7 +51,7 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
             "AND TH.trangThaiTh ='" + Contains.CHUATONGHOP + "'")
     List<XhDxKhBanDauGia> listTongHop(@Param("param") XhThopChiTieuReq param);
 
-    @Query(value = " SELECT NVL(SUM(DSG.SO_LUONG_CHI_CUC),0) FROM XH_QD_PD_KH_BDG HDR " +
+    @Query(value = " SELECT NVL(SUM(DSG.TONG_SL_XUAT_BAN_DX),0) FROM XH_QD_PD_KH_BDG HDR " +
             " INNER JOIN XH_QD_PD_KH_BDG_DTL DTL on HDR.ID = DTL.ID_QD_HDR " +
             " LEFT JOIN XH_QD_PD_KH_BDG_PL DSG ON DSG.ID_QD_DTL = DTL.ID " +
             "WHERE HDR.NAM = :namKh AND HDR.LOAI_VTHH = :loaiVthh AND DSG.MA_DVI = :maDvi AND HDR.LASTEST = :lastest",
