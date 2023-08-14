@@ -18,42 +18,38 @@ import java.util.Map;
 @Table(name = XhQdPdKhBdg.TABLE_NAME)
 @Data
 public class XhQdPdKhBdg extends BaseEntity implements Serializable {
-
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_QD_PD_KH_BDG";
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhQdPdKhBdg.TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = XhQdPdKhBdg.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhQdPdKhBdg.TABLE_NAME + "_SEQ")
-
     private Long id;
     private Integer nam;
     private String maDvi;
+    private Long idGoc;
     private String soQdPd;
     private LocalDate ngayKyQd;
     private LocalDate ngayHluc;
     private Long idThHdr;
-    private String soTrHdr;
     private Long idTrHdr;
+    private String soTrHdr;
     private String trichYeu;
+    private String soQdCc;
     private String loaiVthh;
     private String cloaiVthh;
     private String moTaHangHoa;
-    private String tchuanCluong;
-    private Boolean lastest;
-    private String phanLoai;
-    private Long idGoc;
-    private String soQdCc;
-    private Integer slDviTsan;
     private String loaiHinhNx;
     private String kieuNx;
+    private String tchuanCluong;
+    private Boolean lastest;
+    private Integer slDviTsan;
+    private String phanLoai;
     private String trangThai;
+    private String lyDoTuChoi;
     private LocalDate ngayGuiDuyet;
     private Long nguoiGuiDuyetId;
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
-    private String lyDoTuChoi;
-
     @Transient
     private String tenDvi;
     @Transient
