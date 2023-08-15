@@ -1,7 +1,5 @@
 package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
-
-import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtTongHopDtlRepository;
@@ -35,7 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,22 +53,6 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
     objReq.setDvql(currentUser.getDvql());
     Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
     Page<XhCtvtTongHopHdr> data = xhCtvtTongHopHdrRepository.search(objReq, pageable);
-    Map<String, String> hashMapDmhh = getListDanhMucHangHoa();
-    Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
-    data.getContent().forEach(f -> {
-      f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmhh.get(f.getLoaiVthh()));
-      f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmhh.get(f.getCloaiVthh()));
-      f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
-
-      List<XhCtvtTongHopDtl> listTh = xhCtvtTongHopDtlRepository.findAllByXhCtvtTongHopHdrId(f.getId());
-      listTh.forEach(s -> {
-        if (mapDmucDvi.containsKey((s.getMaDviDx()))) {
-          Map<String, Object> objDonVi = mapDmucDvi.get(s.getMaDviDx());
-          s.setTenDviDx(objDonVi.get("tenDvi").toString());
-        }
-      });
-      f.setDeXuatCuuTro(listTh);
-    });
     return data;
   }
 
@@ -82,27 +63,31 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
     }
     XhCtvtTongHopHdr thopHdr = new XhCtvtTongHopHdr();
     List<XhCtvtTongHopDtl> thopDtls = new ArrayList<>();
-    Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
-    for (XhCtvtDeXuatHdr dxuat : dxuatList) {
-      XhCtvtTongHopDtl thopDtl = new XhCtvtTongHopDtl();
-      BeanUtils.copyProperties(dxuat, thopDtl, "id");
-//      thopDtl.setIdHdr(objReq.getId());
-      thopDtl.setMaDviDx(dxuat.getMaDvi());
-      if (mapDmucDvi.containsKey((thopDtl.getMaDviDx()))) {
-        Map<String, Object> objDonVi = mapDmucDvi.get(thopDtl.getMaDviDx());
-        thopDtl.setTenDviDx(objDonVi.get("tenDvi").toString());
-      }
+    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    Map<String, String> mapVthh = getListDanhMucHangHoa();
 
-      thopDtl.setIdDx(dxuat.getId());
-      thopDtl.setNgayPduyetDx(dxuat.getNgayPduyet());
-      thopDtl.setTrichYeuDx(dxuat.getTrichYeu());
-      thopDtl.setTongSoLuongDx(dxuat.getTongSoLuong());
-      thopDtl.setSoLuongXuatCap(dxuat.getSoLuongXuatCap());
-      thopDtl.setSoLuongDeXuat(dxuat.getTongSoLuongDeXuat());
-      thopDtl.setThanhTienDx(dxuat.getThanhTien());
-      thopDtl.setNgayKetThucDx(dxuat.getNgayKetThuc());
-      thopDtls.add(thopDtl);
-    }
+    dxuatList.forEach(s -> {
+      s.getDeXuatPhuongAn().forEach(s1 -> {
+        XhCtvtTongHopDtl thopDtl = new XhCtvtTongHopDtl();
+        thopDtl.setMapDmucDvi(mapDmucDvi);
+        thopDtl.setMapVthh(mapVthh);
+        thopDtl.setIdDx(s.getId());
+        thopDtl.setSoDx(s.getSoDx());
+        thopDtl.setNgayKyDx(s.getNgayPduyet());
+        thopDtl.setTrichYeuDx(s.getTrichYeu());
+        thopDtl.setSoLuongDx(s1.getSoLuongXuat());
+        thopDtl.setNoiDung(s1.getNoiDung());
+        thopDtl.setLoaiVthh(s1.getLoaiVthh());
+        thopDtl.setCloaiVthh(s1.getCloaiVthh());
+        thopDtl.setMaDvi(s1.getMaDvi());
+        thopDtl.setSoLuong(s1.getSoLuongXuat());
+        thopDtl.setTonKhoDvi(s1.getTonKhoDvi());
+        thopDtl.setTonKhoLoaiVthh(s1.getTonKhoLoaiVthh());
+        thopDtl.setTonKhoCloaiVthh(s1.getTonKhoCloaiVthh());
+        thopDtl.setDonViTinh(s1.getDonViTinh());
+        thopDtls.add(thopDtl);
+      });
+    });
     thopHdr.setDeXuatCuuTro(thopDtls);
     return thopHdr;
   }
@@ -170,23 +155,16 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
     List<XhCtvtTongHopHdr> optional = xhCtvtTongHopHdrRepository.findByIdIn(ids);
     if (DataUtils.isNullOrEmpty(optional))
       throw new Exception("Không tìm thấy dữ liệu");
+    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    Map<String, String> mapVthh = getListDanhMucHangHoa();
 
-    Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
     List<XhCtvtTongHopHdr> allById = xhCtvtTongHopHdrRepository.findAllById(ids);
     allById.forEach(data -> {
-      data.setTenLoaiVthh(hashMapDmHh.get(data.getLoaiVthh()));
-      data.setTenCloaiVthh(hashMapDmHh.get(data.getCloaiVthh()));
-      data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
-
       List<XhCtvtTongHopDtl> listTh = xhCtvtTongHopDtlRepository.findAllByXhCtvtTongHopHdrId(data.getId());
-      Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
       listTh.forEach(s -> {
-        if (mapDmucDvi.containsKey((s.getMaDviDx()))) {
-          Map<String, Object> objDonVi = mapDmucDvi.get(s.getMaDviDx());
-          s.setTenDviDx(objDonVi.get("tenDvi").toString());
-        }
+        s.setMapDmucDvi(mapDmucDvi);
+        s.setMapVthh(mapVthh);
       });
-      data.setDeXuatCuuTro(listTh);
     });
     return allById;
   }
@@ -268,10 +246,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
       objs[4] = dx.getSoQdPd();
       objs[5] = dx.getNgayKyQd();
       objs[6] = dx.getTenLoaiVthh();
-      for (XhCtvtTongHopDtl dtl : dx.getDeXuatCuuTro()) {
-        objs[7] = dtl.getTongSoLuongDx();
-        objs[8] = dtl.getSoLuongXuatCap();
-      }
+
       objs[9] = dx.getNoiDungThop();
       objs[10] = dx.getTenTrangThai();
       dataList.add(objs);
