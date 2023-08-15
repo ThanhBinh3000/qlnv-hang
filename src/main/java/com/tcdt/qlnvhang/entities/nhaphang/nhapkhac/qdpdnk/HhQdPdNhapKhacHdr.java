@@ -53,6 +53,8 @@ public class HhQdPdNhapKhacHdr {
     private String tenDvi;
     @Transient
     private String tenTrangThai;
+    @Transient
+    private String phanLoai;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyQd;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
