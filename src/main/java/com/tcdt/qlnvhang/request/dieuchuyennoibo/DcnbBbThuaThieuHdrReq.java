@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +22,11 @@ public class DcnbBbThuaThieuHdrReq extends BaseRequest {
     private Long id;
     private Integer nam;
     private String maDvi;
+    private String tenDvi;
     private String maDviNhan;
+    private String tenCanBo;
     private String canBoId;
-    private String soBc;
+    private String soBb;
     private LocalDate ngayLap;
     private Long qdDcCucId;
     private String soQdDcCuc;
@@ -30,7 +34,11 @@ public class DcnbBbThuaThieuHdrReq extends BaseRequest {
     private String soBcKetQuaDc;
     private String bcKetQuaDcId;
     private LocalDate ngayLapBcKetQuaDc;
+    private String nguyenNhan;
+    private String kienNghi;
+    private String ghiChu;
     private String trangThai;
+    private List<FileDinhKemReq> fileBienBanHaoDois = new ArrayList<>();
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
     private List<DcnbBbThuaThieuDtl> chiTiet = new ArrayList<>();
     private List<DcnbBbThuaThieuKiemKeDtl> banKiemKe = new ArrayList<>();

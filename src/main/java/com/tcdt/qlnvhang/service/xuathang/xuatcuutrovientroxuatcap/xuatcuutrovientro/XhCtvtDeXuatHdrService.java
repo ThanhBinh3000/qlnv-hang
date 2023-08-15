@@ -208,6 +208,10 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
         if (mapDmucDvi.containsKey(deXuatPhuongAn.getMaDviChiCuc())) {
           deXuatPhuongAn.setTenChiCuc(mapDmucDvi.get(deXuatPhuongAn.getMaDviChiCuc()).get("tenDvi").toString());
         }
+        if (mapDmucDvi.containsKey(deXuatPhuongAn.getMaDvi())) {
+          deXuatPhuongAn.setTenDvi(mapDmucDvi.get(deXuatPhuongAn.getMaDvi()).get("tenDvi").toString());
+        }
+        deXuatPhuongAn.setTenLoaiVthh(mapVthh.get(deXuatPhuongAn.getLoaiVthh()));
         deXuatPhuongAn.setTenCloaiVthh(mapVthh.get(deXuatPhuongAn.getCloaiVthh()));
       }
       data.setDeXuatPhuongAn(list);

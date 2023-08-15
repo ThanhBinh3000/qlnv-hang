@@ -166,7 +166,7 @@ public class DcnbPhieuKtChatLuongHdr extends BaseEntity implements Serializable,
     private String lyDoTuChoi;
 
     @Column(name = "THAY_DOI_THU_KHO")
-    private Long thayDoiThuKho;
+    private Boolean thayDoiThuKho;
 
     @Column(name = "NGAY_DUYET_TP")
     private LocalDate ngayDuyetTp;

@@ -21,6 +21,7 @@ public interface XhXkVtBhBbBaoHanhRepository extends JpaRepository<XhXkVtBhBbBao
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
             "AND (:#{#param.soBienBan} IS NULL OR LOWER(c.soBienBan) LIKE CONCAT('%',LOWER(:#{#param.soBienBan}),'%')) " +
             "AND (:#{#param.soCanCu} IS NULL OR LOWER(c.soCanCu) LIKE CONCAT('%',LOWER(:#{#param.soCanCu}),'%')) " +
+            "AND (:#{#param.soQdGiaoNvXh} IS NULL OR c.soQdGiaoNvXh = :#{#param.soQdGiaoNvXh}) " +
             "AND ((:#{#param.ngayKdclTu}  IS NULL OR c.ngayKdcl >= :#{#param.ngayKdclTu})" +
             "AND (:#{#param.ngayKdclDen}  IS NULL OR c.ngayKdcl <= :#{#param.ngayKdclDen}) ) " +
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +

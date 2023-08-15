@@ -53,10 +53,12 @@ public class XhXkVtBhBbBaoHanhService extends BaseServiceImpl {
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<XhXkVtBhBbBaoHanh> search = xhXkVtBhBbBaoHanhRepository.search(req, pageable);
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-//        Map<String, String> mapVthh = getListDanhMucHangHoa();
+        Map<String, String> mapVthh = getListDanhMucHangHoa();
     search.getContent().forEach(s -> {
       s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
       s.setMapDmucDvi(mapDmucDvi);
+      s.setMapVthh(mapVthh);
+      s.setTenDvi(mapDmucDvi.get(s.getMaDvi()));
     });
     return search;
   }

@@ -3,8 +3,6 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKtChatLuongDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKtChatLuongHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -64,12 +62,8 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
             req.setDsLoaiHang(Arrays.asList("LT","M"));
         }
         Page<DcnbPhieuKtChatLuongHdrDTO> search = null;
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            req.setTypeQd(Contains.DIEU_CHUYEN);
-            search = dcnbPhieuKtChatLuongHdrRepository.searchChiCuc(req, pageable);
-        }else {
-            search = dcnbPhieuKtChatLuongHdrRepository.search(req, pageable);
-        }
+        req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
+        search = dcnbPhieuKtChatLuongHdrRepository.searchPage(req, pageable);
 
         return search;
     }
@@ -79,8 +73,8 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
-        if(!currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)){
-            throw new Exception("Chức năng thêm mới chỉ dành cho cấp cục");
+        if(!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)){
+            throw new Exception("Chức năng thêm mới chỉ dành cho cấp chi cục");
         }
 //        Optional<DcnbPhieuKtChatLuongHdr> optional = dcnbPhieuKtChatLuongHdrRepository.findFirstBySoPhieu(objReq.getSoPhieu());
 //        if (optional.isPresent() && objReq.getSoPhieu().split("/").length == 1) {
@@ -109,7 +103,7 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
-        if(!currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)){
+        if(!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)){
             throw new Exception("Chức năng cập nhật chỉ dành cho cấp cục");
         }
         Optional<DcnbPhieuKtChatLuongHdr> optional = dcnbPhieuKtChatLuongHdrRepository.findById(objReq.getId());

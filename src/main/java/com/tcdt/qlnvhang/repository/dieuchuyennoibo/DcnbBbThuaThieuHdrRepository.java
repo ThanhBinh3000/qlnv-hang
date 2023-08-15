@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DcnbBbThuaThieuHdrRepository extends JpaRepository<DcnbBbThuaThieuHdr, Long> {
     @Query(value = "SELECT distinct c FROM DcnbBbThuaThieuHdr c LEFT JOIN QlnvDmDonvi dvi ON dvi.maDvi = c.maDvi WHERE 1=1 " +
-            "AND (:#{#param.soBc} IS NULL OR LOWER(c.soBc) LIKE CONCAT('%',LOWER(:#{#param.soBc}),'%')) " +
+            "AND (:#{#param.soBb} IS NULL OR LOWER(c.soBb) LIKE CONCAT('%',LOWER(:#{#param.soBb}),'%')) " +
             "AND ((:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi})) " +
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
             "AND ((:#{#param.tuNgayLap}  IS NULL OR c.ngayLap >= :#{#param.tuNgayLap})" +
