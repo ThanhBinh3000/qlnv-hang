@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -47,6 +48,8 @@ public class DcnbBbThuaThieuHdr extends BaseEntity implements Serializable, Clon
     @Access(value = AccessType.PROPERTY)
     private String trangThai;
 
+    @Transient
+    private List<FileDinhKem> fileBienBanHaoDois = new ArrayList<>();
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)
