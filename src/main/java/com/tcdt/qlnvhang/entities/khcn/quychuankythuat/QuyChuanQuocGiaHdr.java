@@ -52,6 +52,7 @@ public class QuyChuanQuocGiaHdr extends BaseEntity implements Serializable {
     private String trangThai;
     private String trangThaiHl;
     private String listTenLoaiVthh;
+    private Boolean isMat;
 
 
     @Transient
