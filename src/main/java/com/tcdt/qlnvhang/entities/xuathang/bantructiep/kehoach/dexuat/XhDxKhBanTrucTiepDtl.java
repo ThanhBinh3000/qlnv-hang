@@ -9,34 +9,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "XH_DX_KH_BAN_TRUC_TIEP_DTL")
+@Table(name = XhDxKhBanTrucTiepDtl.TABLE_NAME)
 @Data
 public class XhDxKhBanTrucTiepDtl implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "XH_DX_KH_BAN_TRUC_TIEP_DTL ";
-
+    public static final String TABLE_NAME = "XH_DX_KH_BAN_TRUC_TIEP_DTL";
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_DX_KH_BAN_TRUC_TIEP_DTL_SEQ")
-    @SequenceGenerator(sequenceName = "XH_DX_KH_BAN_TRUC_TIEP_DTL_SEQ", allocationSize = 1, name = "XH_DX_KH_BAN_TRUC_TIEP_DTL_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhDxKhBanTrucTiepDtl.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = XhDxKhBanTrucTiepDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhDxKhBanTrucTiepDtl.TABLE_NAME + "_SEQ")
     private Long id;
-
     private Long idHdr;
-
     private BigDecimal soLuongChiCuc;
-
     private String maDvi;
+    private String diaChi;
+    private BigDecimal soLuongChiTieu;
+    private BigDecimal soLuongKhDaDuyet;
+    private String donViTinh;
     @Transient
     private String tenDvi;
-
-    private String diaChi;
-
-    private BigDecimal soLuongChiTieu;
-
-    private BigDecimal soLuongKhDaDuyet;
-
-    private String donViTinh;
-
     @Transient
     private List<XhDxKhBanTrucTiepDdiem> children = new ArrayList<>();
-
 }
