@@ -45,7 +45,7 @@ public class XhCtvtTongHopHdrController extends BaseController {
             @Valid @RequestBody SearchXhCtvtDeXuatHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhCtvtTongHopHdrService.sumarryData(currentUser,objReq));
+            resp.setData(xhCtvtTongHopHdrService.summaryData(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

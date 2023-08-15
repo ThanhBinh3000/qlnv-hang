@@ -75,13 +75,12 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
     return data;
   }
 
-  public XhCtvtTongHopHdr sumarryData(CustomUserDetails currentUser, SearchXhCtvtDeXuatHdrReq objReq) throws Exception {
+  public XhCtvtTongHopHdr summaryData(CustomUserDetails currentUser, SearchXhCtvtDeXuatHdrReq objReq) throws Exception {
     List<XhCtvtDeXuatHdr> dxuatList = xhCtvtDeXuatHdrRepository.listTongHop(objReq);
     if (dxuatList.isEmpty()) {
       throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
     }
     XhCtvtTongHopHdr thopHdr = new XhCtvtTongHopHdr();
-    thopHdr.setId(getNextSequence("XH_CTVT_TONG_HOP_HDR_SEQ"));
     List<XhCtvtTongHopDtl> thopDtls = new ArrayList<>();
     Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
     for (XhCtvtDeXuatHdr dxuat : dxuatList) {
@@ -110,19 +109,10 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
 
   @Transactional()
   public XhCtvtTongHopHdr save(CustomUserDetails currentUser, XhCtvtTongHopHdrReq objReq) throws Exception {
-    XhCtvtTongHopHdr thopHdr = new XhCtvtTongHopHdr(DataUtils.safeToLong(objReq.getMaTongHop()));
+    XhCtvtTongHopHdr thopHdr = new XhCtvtTongHopHdr();
     DataUtils.copyProperties(objReq, thopHdr, "id");
     thopHdr.setTrangThai(Contains.DUTHAO);
     thopHdr.setMaDvi(currentUser.getUser().getDepartment());
-    AtomicInteger tongDeXuat = new AtomicInteger();
-    AtomicInteger tongXuatCap = new AtomicInteger();
-    thopHdr.getDeXuatCuuTro().forEach(s -> {
-      s.setXhCtvtTongHopHdr(thopHdr);
-      tongDeXuat.addAndGet(DataUtils.safeToInt(s.getTongSoLuongDx()));
-      tongXuatCap.addAndGet(DataUtils.safeToInt(s.getSoLuongXuatCap()));
-    });
-    thopHdr.setTongSlCtVt(DataUtils.safeToBigDecimal(tongDeXuat.get()));
-    thopHdr.setTongSlXuatCap(DataUtils.safeToBigDecimal(tongXuatCap.get()));
 
     XhCtvtTongHopHdr created = xhCtvtTongHopHdrRepository.save(thopHdr);
 
@@ -150,16 +140,6 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
 
     XhCtvtTongHopHdr data = qOptional.get();
     BeanUtils.copyProperties(objReq, data);
-    AtomicInteger tongDeXuat = new AtomicInteger();
-    AtomicInteger tongXuatCap = new AtomicInteger();
-    data.getDeXuatCuuTro().forEach(s -> {
-      s.setXhCtvtTongHopHdr(data);
-      tongDeXuat.addAndGet(DataUtils.safeToInt(s.getTongSoLuongDx()));
-      tongXuatCap.addAndGet(DataUtils.safeToInt(s.getSoLuongXuatCap()));
-    });
-    data.setTongSlCtVt(DataUtils.safeToBigDecimal(tongDeXuat.get()));
-    data.setTongSlXuatCap(DataUtils.safeToBigDecimal(tongXuatCap.get()));
-
     XhCtvtTongHopHdr created = xhCtvtTongHopHdrRepository.save(data);
 
     //update dx
