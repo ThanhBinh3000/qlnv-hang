@@ -86,8 +86,10 @@ public class DcnbBbThuaThieuServiceImpl implements DcnbBbThuaThieuService {
         String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BBTT-" + currentUser.getUser().getDvqlTenVietTat();
         created.setSoBc(so);
         hdrRepository.save(created);
-        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), DcnbBbThuaThieuHdr.TABLE_NAME);
+        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), DcnbBbThuaThieuHdr.TABLE_NAME + "_DINH_KEM");
         created.setFileDinhKems(canCu);
+        List<FileDinhKem> bbHaoDoi = fileDinhKemService.saveListFileDinhKem(objReq.getFileBienBanHaoDois(), created.getId(), DcnbBbThuaThieuHdr.TABLE_NAME + "_HAO_DOI");
+        created.setFileBienBanHaoDois(bbHaoDoi);
         return created;
     }
 
@@ -121,9 +123,12 @@ public class DcnbBbThuaThieuServiceImpl implements DcnbBbThuaThieuService {
         String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BBTT-" + currentUser.getUser().getDvqlTenVietTat();
         created.setSoBc(so);
         hdrRepository.save(created);
-        fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbBbThuaThieuHdr.TABLE_NAME));
-        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), DcnbBbThuaThieuHdr.TABLE_NAME);
-        created.setFileDinhKems(fileDinhKem);
+        fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbBbThuaThieuHdr.TABLE_NAME + "_DINH_KEM"));
+        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), DcnbBbThuaThieuHdr.TABLE_NAME + "_DINH_KEM");
+        created.setFileDinhKems(canCu);
+        fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbBbThuaThieuHdr.TABLE_NAME + "_HAO_DOI"));
+        List<FileDinhKem> bbHaoDoi = fileDinhKemService.saveListFileDinhKem(objReq.getFileBienBanHaoDois(), created.getId(), DcnbBbThuaThieuHdr.TABLE_NAME + "_HAO_DOI");
+        created.setFileBienBanHaoDois(bbHaoDoi);
         return created;
     }
 
@@ -133,8 +138,10 @@ public class DcnbBbThuaThieuServiceImpl implements DcnbBbThuaThieuService {
         if (!optional.isPresent()) {
             throw new Exception("Dữ liệu không tồn tại");
         }
-        List<FileDinhKem> canCu = fileDinhKemRepository.findByDataIdAndDataTypeIn(id, Collections.singleton(DcnbBbThuaThieuHdr.TABLE_NAME));
+        List<FileDinhKem> canCu = fileDinhKemRepository.findByDataIdAndDataTypeIn(id, Collections.singleton(DcnbBbThuaThieuHdr.TABLE_NAME + "_DINH_KEM"));
         optional.get().setFileDinhKems(canCu);
+        List<FileDinhKem> bbHaoDoi = fileDinhKemRepository.findByDataIdAndDataTypeIn(id, Collections.singleton(DcnbBbThuaThieuHdr.TABLE_NAME + "_HAO_DOI"));
+        optional.get().setFileBienBanHaoDois(bbHaoDoi);
         return optional.get();
     }
 

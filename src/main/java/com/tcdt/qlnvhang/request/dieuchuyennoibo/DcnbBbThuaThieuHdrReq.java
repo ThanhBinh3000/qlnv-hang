@@ -31,6 +31,7 @@ public class DcnbBbThuaThieuHdrReq extends BaseRequest {
     private String bcKetQuaDcId;
     private LocalDate ngayLapBcKetQuaDc;
     private String trangThai;
+    private List<FileDinhKemReq> fileBienBanHaoDois = new ArrayList<>();
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
     private List<DcnbBbThuaThieuDtl> chiTiet = new ArrayList<>();
     private List<DcnbBbThuaThieuKiemKeDtl> banKiemKe = new ArrayList<>();
