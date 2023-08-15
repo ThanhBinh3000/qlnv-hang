@@ -247,7 +247,7 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
                         dcnbPhieuXuatKhoHdrRepository.save(dcnbPhieuXuatKhoHdr.get());
                     }
                 } else if ("01".equals(optional.get().getType())) {
-                    Optional<DcnbPhieuNhapKhoHdr> dcnbPhieuNhapKhoHdr = dcnbPhieuNhapKhoHdrRepository.findById(optional.get().getPhieuXuatKhoId());
+                    Optional<DcnbPhieuNhapKhoHdr> dcnbPhieuNhapKhoHdr = dcnbPhieuNhapKhoHdrRepository.findById(optional.get().getPhieuNhapKhoId());
                     if(dcnbPhieuNhapKhoHdr.isPresent()){
                         dcnbPhieuNhapKhoHdr.get().setBangKeChId(optional.get().getId());
                         dcnbPhieuNhapKhoHdr.get().setSoBangKeCh(optional.get().getSoBangKe());
