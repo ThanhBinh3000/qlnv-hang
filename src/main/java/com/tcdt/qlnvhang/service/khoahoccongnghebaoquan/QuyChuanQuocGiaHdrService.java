@@ -151,7 +151,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         data.setFileDinhKems(fileDinhKems);
         List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
         if (!dtlList.isEmpty()) {
-            if (data.isApDungCloaiVthh() == false) {
+            if (data.getApDungCloaiVthh () == false) {
                 for (QuyChuanQuocGiaDtl dtl : dtlList) {
                     dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh()) ? null : hashMapDmHh.get(dtl.getLoaiVthh()));
                     dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh()) ? null : hashMapDmHh.get(dtl.getCloaiVthh()));
