@@ -47,8 +47,8 @@ public class QuyChuanQuocGiaHdr extends BaseEntity implements Serializable {
     private String trichYeu;
     private String type;
     private int thoiGianLuuKhoToiDa;
-    private boolean lastest;
-    private boolean apDungCloaiVthh;
+    private Boolean lastest;
+    private Boolean apDungCloaiVthh;
     private String trangThai;
     private String trangThaiHl;
     private String listTenLoaiVthh;
