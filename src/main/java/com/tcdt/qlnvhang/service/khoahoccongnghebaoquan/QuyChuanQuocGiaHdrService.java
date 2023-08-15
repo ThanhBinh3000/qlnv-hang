@@ -58,9 +58,8 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
-            f.setTenTrangThaiHl(f.getTrangThaiHl().equals(Contains.CON_HIEU_LUC) ? "Còn hiệu lực" : "Hết hiệu lực");
+            f.setTenTrangThaiHl(f.getTrangThaiHl().equals(Contains.CON_HIEU_LUC) ? "Còn hiệu lực" : (f.getTrangThaiHl().equals(Contains.HET_HIEU_LUC) ? "Hết hiệu lực" : "Chưa có hiệu lực"));
         });
-
         return data;
     }
 
@@ -280,6 +279,17 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
 
 
     public List<QuyChuanQuocGiaDtl> getAllQuyChuanByCloaiVthh(String loaiVthh) throws Exception {
-        return quyChuanQuocGiaDtlRepository.getAllQuyChuanByCloaiVthh(loaiVthh).isEmpty() ? new ArrayList<>() : quyChuanQuocGiaDtlRepository.getAllQuyChuanByCloaiVthh(loaiVthh);
+        List<QuyChuanQuocGiaDtl> allQuyChuanByCloaiVthh = quyChuanQuocGiaDtlRepository.getAllQuyChuanByCloaiVthh(loaiVthh);
+        List<QuyChuanQuocGiaDtl> listQuyChuanApDung = new ArrayList<>();
+        if (!allQuyChuanByCloaiVthh.isEmpty()) {
+            List<Long> idsHdr = allQuyChuanByCloaiVthh.stream().map(QuyChuanQuocGiaDtl::getIdHdr).collect(Collectors.toList());
+            List<QuyChuanQuocGiaHdr> allHdrCoHieuLuc = quyChuanQuocGiaHdrRepository.findAllByIdIn(idsHdr).stream().filter(item -> item.getTrangThaiHl().equals("01")).collect(Collectors.toList());
+            if (!allHdrCoHieuLuc.isEmpty()) {
+                List<Long> idsHdrCoHieuLuc = allHdrCoHieuLuc.stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList());
+                listQuyChuanApDung = quyChuanQuocGiaDtlRepository.getAllQuyChuanByCloaiVthhApDung(loaiVthh, idsHdrCoHieuLuc);
+            }
+        }
+        return listQuyChuanApDung;
     }
+
 }
