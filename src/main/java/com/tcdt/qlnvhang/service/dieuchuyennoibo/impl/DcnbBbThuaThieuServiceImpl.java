@@ -84,7 +84,7 @@ public class DcnbBbThuaThieuServiceImpl implements DcnbBbThuaThieuService {
         });
         DcnbBbThuaThieuHdr created = hdrRepository.save(data);
         String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BBTT-" + currentUser.getUser().getDvqlTenVietTat();
-        created.setSoBc(so);
+        created.setSoBb(so);
         hdrRepository.save(created);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), DcnbBbThuaThieuHdr.TABLE_NAME + "_DINH_KEM");
         created.setFileDinhKems(canCu);
@@ -121,7 +121,7 @@ public class DcnbBbThuaThieuServiceImpl implements DcnbBbThuaThieuService {
         });
         DcnbBbThuaThieuHdr created = hdrRepository.save(data);
         String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BBTT-" + currentUser.getUser().getDvqlTenVietTat();
-        created.setSoBc(so);
+        created.setSoBb(so);
         hdrRepository.save(created);
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbBbThuaThieuHdr.TABLE_NAME + "_DINH_KEM"));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), DcnbBbThuaThieuHdr.TABLE_NAME + "_DINH_KEM");
