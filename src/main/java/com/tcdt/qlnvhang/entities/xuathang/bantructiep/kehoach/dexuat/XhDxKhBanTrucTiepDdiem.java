@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "XH_DX_KH_BAN_TRUC_TIEP_DDIEM ")
+@Table(name = XhDxKhBanTrucTiepDdiem.TABLE_NAME)
 @Data
 public class XhDxKhBanTrucTiepDdiem implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -16,44 +16,31 @@ public class XhDxKhBanTrucTiepDdiem implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_DX_KH_BAN_TRUC_TIEP_DD_SEQ")
     @SequenceGenerator(sequenceName = "XH_DX_KH_BAN_TRUC_TIEP_DD_SEQ", allocationSize = 1, name = "XH_DX_KH_BAN_TRUC_TIEP_DD_SEQ")
     private Long id;
-
     private Long idDtl;
-
     private String maDiemKho;
-    @Transient
-    private String tenDiemKho;
-
     private String maNhaKho;
-    @Transient
-    private String tenNhaKho;
-
     private String maNganKho;
-    @Transient
-    private String tenNganKho;
-
     private String maLoKho;
-    @Transient
-    private String tenLoKho;
-
     private String maDviTsan;
-
     private BigDecimal tonKho;
-
     private BigDecimal soLuongDeXuat;
-
     private String donViTinh;
-
     private BigDecimal donGiaDeXuat;
-
-    @Transient
-    private BigDecimal donGiaDuocDuyet;
-
+    private BigDecimal thanhTienDeXuat;
     private String loaiVthh;
-    @Transient
-    private String tenLoaiVthh;
-
     private String cloaiVthh;
     @Transient
+    private String tenDiemKho;
+    @Transient
+    private String tenNhaKho;
+    @Transient
+    private String tenNganKho;
+    @Transient
+    private String tenLoKho;
+    @Transient
+    private String tenLoaiVthh;
+    @Transient
     private String tenCloaiVthh;
-
+    @Transient
+    private BigDecimal donGiaDuocDuyet;
 }

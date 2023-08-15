@@ -3,12 +3,13 @@ package com.tcdt.qlnvhang.controller.xuathang.bantructiep.kehoach;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
+import com.tcdt.qlnvhang.jwt.CurrentUser;
+import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.CountKhMttSlReq;
+import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdrReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepService;
 import com.tcdt.qlnvhang.service.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepServicelmpl;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
@@ -29,161 +30,156 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.BAN_TRUC_TIEP + PathContains.DX_KH_BTT )
+@RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.BAN_TRUC_TIEP + PathContains.DX_KH_BTT)
 @Slf4j
 @Api(tags = "Xuất hàng - Bán trực tiếp - Kế hoạch bán trực tiếp - Đề xuất kế hoạch bán trực tiếp")
 public class XhDxKhBanTrucTiepControler extends BaseController {
 
     @Autowired
-    private XhDxKhBanTrucTiepService xhDxKhBanTrucTiepService;
+    private XhDxKhBanTrucTiepServicelmpl xhDxKhBanTrucTiepService;
 
-    @ApiOperation(value = "Tra cứu đề xuất kế hoạch bán trực tiếp", response = List.class)
-    @PostMapping(value=  PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
-    public final ResponseEntity<BaseResponse> searchPage(@Valid @RequestBody XhDxKhBanTrucTiepHdrReq objReq) {
-        BaseResponse resp = new BaseResponse();
-        try {
-            resp.setData(xhDxKhBanTrucTiepService.searchPage(objReq));
-            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (Exception e) {
-            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-            resp.setMsg(e.getMessage());
-            log.error("Tra cứu: {}", e);
-        }
-        return ResponseEntity.ok(resp);
-    }
-
-    @ApiOperation(value = "Tạo mới đề xuất kế hoạch bán trực tiếp ", response = List.class)
-    @PostMapping(value=  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> save(@Valid @RequestBody XhDxKhBanTrucTiepHdrReq objReq) {
-        BaseResponse resp = new BaseResponse();
-        try {
-            resp.setData(xhDxKhBanTrucTiepService.create(objReq));
-            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (Exception e) {
-            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-            resp.setMsg(e.getMessage());
-            log.error("Tạo mới: {}", e);
-        }
-        return ResponseEntity.ok(resp);
-    }
-
-    @ApiOperation(value = "Sửa đề xuất kế hoạch bán trực tiếp ", response = List.class)
-    @PostMapping(value=  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> update(@Valid @RequestBody XhDxKhBanTrucTiepHdrReq objReq) {
-        BaseResponse resp = new BaseResponse();
-        try {
-            resp.setData(xhDxKhBanTrucTiepService.update(objReq));
-            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (Exception e) {
-            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-            resp.setMsg(e.getMessage());
-            log.error("Cập nhật: {}", e);
-        }
-        return ResponseEntity.ok(resp);
-    }
-
-    @ApiOperation(value = "Lấy chi tiết kế hoạch bán trực tiếp", response = List.class)
-    @GetMapping(value =PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Tra cứu", response = List.class)
+    @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> detail(
-            @ApiParam(value = "ID", example = "1", required = true) @PathVariable("id") Long id) {
+    public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody XhDxKhBanTrucTiepHdrReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhDxKhBanTrucTiepService.detail(id));
+            resp.setData(xhDxKhBanTrucTiepService.searchPage(currentUser, req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Lấy chi tiết trace: {}", e);
+            log.error("Tra cứu thông tin : {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Phê duyêt kế hoạch bán trực tiếp", response = List.class)
-    @PostMapping(value=PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> updateStatus( @RequestBody XhDxKhBanTrucTiepHdrReq stReq) {
+    @ApiOperation(value = "Tạo mới", response = List.class)
+    @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhDxKhBanTrucTiepHdrReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhDxKhBanTrucTiepService.approve(stReq));
+            resp.setData(xhDxKhBanTrucTiepService.create(currentUser, req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
-            // TODO: handle exception
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Phê duyệt trace: {}", e);
+            log.error("Tạo mới thông tin  : {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xóa kế hoạch bán trực tiếp  ", response = List.class)
-    @PostMapping(value=  PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Cập nhật", response = List.class)
+    @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhDxKhBanTrucTiepHdrReq req) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(xhDxKhBanTrucTiepService.update(currentUser, req));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Cập nhật thông tin : {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Lấy chi tiết", response = List.class)
+    @GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> detail(@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids") List<Long> ids) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(xhDxKhBanTrucTiepService.detail(ids).get(0));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Lấy chi tiết thông tin : {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Xoá thông tin", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            xhDxKhBanTrucTiepService.delete(idSearchReq.getId());
+            xhDxKhBanTrucTiepService.delete(idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("xóa: {}", e);
+            log.error("Xoá thông tin : {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xóa dánh sách kế hoạch bán trực tiếp ", response = List.class)
-    @PostMapping(value=  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Xoá danh sách thông tin", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            xhDxKhBanTrucTiepService.deleteMulti(idSearchReq.getIdList());
+            xhDxKhBanTrucTiepService.deleteMulti(idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Xóa danh sách: {}", e);
+            log.error("Xoá thông tin : {}", e);
         }
         return ResponseEntity.ok(resp);
     }
 
-
-    @ApiOperation(value = "Kết xuất danh sách kế hoạch bán trực tiếp ", response = List.class)
-    @PostMapping(value= PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public void exportListQdBtcBnToExcel(@Valid @RequestBody XhDxKhBanTrucTiepHdrReq objReq, HttpServletResponse response) throws Exception{
-
+    @ApiOperation(value = "Trình duyệt", response = List.class)
+    @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody StatusReq stReq) {
+        BaseResponse resp = new BaseResponse();
         try {
-            xhDxKhBanTrucTiepService.export(objReq,response);
+            xhDxKhBanTrucTiepService.approve(currentUser, stReq);
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Phê duyệt thông tin : {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
 
-            log.error("Kết xuất danh sách : {}", e);
+    @ApiOperation(value = "Kết xuất danh sách", response = List.class)
+    @PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public void exportList(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhDxKhBanTrucTiepHdrReq req, HttpServletResponse response) throws Exception {
+        try {
+            xhDxKhBanTrucTiepService.export(currentUser, req, response);
+        } catch (Exception e) {
+            log.error("Kết xuất danh sách dánh sách : {}", e);
             final Map<String, Object> body = new HashMap<>();
             body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             body.put("msg", e.getMessage());
-
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setCharacterEncoding("UTF-8");
-
             final ObjectMapper mapper = new ObjectMapper();
             mapper.writeValue(response.getOutputStream(), body);
         }
-
     }
 
     @ApiOperation(value = "Lấy tổng số lượng đã lên kế hoạch trong năm theo đơn vị, loại vật tư  hàng hóa", response = List.class)
-    @PostMapping(value="/count-sl-kh", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.COUNT_SL_KH, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> getCountSl(HttpServletRequest request,
-                                                   @Valid @RequestBody CountKhlcntSlReq objReq) {
+    public ResponseEntity<BaseResponse> getCountSl(HttpServletRequest request, @Valid @RequestBody CountKhlcntSlReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhDxKhBanTrucTiepService.countSoLuongKeHoachNam(objReq));
+            resp.setData(xhDxKhBanTrucTiepService.countSoLuongKeHoachNam(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -204,6 +200,26 @@ public class XhDxKhBanTrucTiepControler extends BaseController {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(xhDxKhBanTrucTiepService.getGiaBanToiThieu(cloaiVthh, maDvi, namKhoach));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Lấy giá bán tối đa trace: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Lấy đơn giá được duyệt", response = List.class)
+    @GetMapping(value = PathContains.DON_GIA_DUOC_DUYET + "/{cloaiVthh}/{maDvi}/{nam}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> getDonGiaDuocDuyet(
+            @ApiParam(value = "cloaiVthh", example = "010101", required = true) @PathVariable("cloaiVthh") String cloaiVthh,
+            @ApiParam(value = "maDvi", example = "010101", required = true) @PathVariable("maDvi") String maDvi,
+            @ApiParam(value = "nam", example = "2023", required = true) @PathVariable("nam") Integer nam) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(xhDxKhBanTrucTiepService.getDonGiaDuocDuyet(cloaiVthh, maDvi, nam));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
