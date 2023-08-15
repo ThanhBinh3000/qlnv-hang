@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.bienbanlaymau.XhBienBanLayMauDtl;
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -61,8 +63,17 @@ public class XhCtvtTongHopHdr extends BaseEntity implements Serializable {
     @Transient
     private String tenDvi;
 
-    @OneToMany(mappedBy = "xhCtvtTongHopHdr",cascade = CascadeType.ALL)
-//    @Transient
+    @OneToMany(mappedBy = "xhCtvtTongHopHdr",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<XhCtvtTongHopDtl> deXuatCuuTro = new ArrayList<>();
+
+    public void setXhCtvtTongHopDtl(List<XhCtvtTongHopDtl> xhCtvtTongHopDtl) {
+        deXuatCuuTro.clear();
+        if (!DataUtils.isNullOrEmpty(deXuatCuuTro)) {
+            deXuatCuuTro.forEach(s -> {
+                s.setXhCtvtTongHopHdr(this);
+            });
+            deXuatCuuTro.addAll(xhCtvtTongHopDtl);
+        }
+    }
 
 }
