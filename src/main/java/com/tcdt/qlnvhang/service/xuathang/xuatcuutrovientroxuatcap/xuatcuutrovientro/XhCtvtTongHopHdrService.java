@@ -69,8 +69,6 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
     dxuatList.forEach(s -> {
       s.getDeXuatPhuongAn().forEach(s1 -> {
         XhCtvtTongHopDtl thopDtl = new XhCtvtTongHopDtl();
-        thopDtl.setMapDmucDvi(mapDmucDvi);
-        thopDtl.setMapVthh(mapVthh);
         thopDtl.setIdDx(s.getId());
         thopDtl.setSoDx(s.getSoDx());
         thopDtl.setNgayKyDx(s.getNgayPduyet());
@@ -85,6 +83,8 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
         thopDtl.setTonKhoLoaiVthh(s1.getTonKhoLoaiVthh());
         thopDtl.setTonKhoCloaiVthh(s1.getTonKhoCloaiVthh());
         thopDtl.setDonViTinh(s1.getDonViTinh());
+        thopDtl.setMapDmucDvi(mapDmucDvi);
+        thopDtl.setMapVthh(mapVthh);
         thopDtls.add(thopDtl);
       });
     });
