@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtTongHopDtlRepository;
@@ -29,6 +30,7 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +64,8 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
       throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
     }
     XhCtvtTongHopHdr thopHdr = new XhCtvtTongHopHdr();
+    thopHdr.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
+    thopHdr.setNgayTao(LocalDateTime.now());
     List<XhCtvtTongHopDtl> thopDtls = new ArrayList<>();
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
@@ -69,8 +73,6 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
     dxuatList.forEach(s -> {
       s.getDeXuatPhuongAn().forEach(s1 -> {
         XhCtvtTongHopDtl thopDtl = new XhCtvtTongHopDtl();
-        thopDtl.setMapDmucDvi(mapDmucDvi);
-        thopDtl.setMapVthh(mapVthh);
         thopDtl.setIdDx(s.getId());
         thopDtl.setSoDx(s.getSoDx());
         thopDtl.setNgayKyDx(s.getNgayPduyet());
@@ -85,6 +87,8 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
         thopDtl.setTonKhoLoaiVthh(s1.getTonKhoLoaiVthh());
         thopDtl.setTonKhoCloaiVthh(s1.getTonKhoCloaiVthh());
         thopDtl.setDonViTinh(s1.getDonViTinh());
+        thopDtl.setMapDmucDvi(mapDmucDvi);
+        thopDtl.setMapVthh(mapVthh);
         thopDtls.add(thopDtl);
       });
     });

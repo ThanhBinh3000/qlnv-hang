@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThuatDtl;
+import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.phieukncl.XhPhieuKnclHdr;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -88,8 +89,18 @@ public class XhCtvtDeXuatHdr extends BaseEntity implements Serializable {
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   @Fetch(value = FetchMode.SUBSELECT)
   @JoinColumn(name = "dataId")
-  @Where(clause = "data_type='" + XhHoSoKyThuatDtl.TABLE_NAME + "_CAN_CU'")
+  @Where(clause = "data_type='" + XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU'")
   private List<FileDKemJoinHoSoKyThuatDtl> canCu = new ArrayList<>();
+  public void setCanCu(List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem) {
+    this.canCu.clear();
+    if (!DataUtils.isNullObject(fileDinhKem)) {
+      fileDinhKem.forEach(s -> {
+        s.setDataType(XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU");
+        s.setXhCtvtDeXuatHdr(this);
+      });
+      this.canCu.addAll(fileDinhKem);
+    }
+  }
 
   @OneToMany(mappedBy = "xhCtvtDeXuatHdr", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<XhCtvtDeXuatPa> deXuatPhuongAn = new ArrayList<>();
