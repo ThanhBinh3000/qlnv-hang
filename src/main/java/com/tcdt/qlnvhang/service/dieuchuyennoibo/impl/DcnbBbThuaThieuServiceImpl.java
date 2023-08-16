@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbThuaThieuDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbThuaThieuHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbThuaThieuKiemKeDtlRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBcKqDcHdrRepository;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbKqDcSearch;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbThuaThieuHdrReq;
@@ -46,7 +47,8 @@ public class DcnbBbThuaThieuServiceImpl implements DcnbBbThuaThieuService {
     private FileDinhKemService fileDinhKemService;
     @Autowired
     private FileDinhKemRepository fileDinhKemRepository;
-
+    @Autowired
+    private DcnbBcKqDcHdrRepository hdrBcRepository;
     @Override
     public Page<DcnbBbThuaThieuHdr> searchPage(DcnbBbThuaThieuHdrReq req) throws Exception {
         CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
@@ -90,6 +92,14 @@ public class DcnbBbThuaThieuServiceImpl implements DcnbBbThuaThieuService {
         created.setFileDinhKems(canCu);
         List<FileDinhKem> bbHaoDoi = fileDinhKemService.saveListFileDinhKem(objReq.getFileBienBanHaoDois(), created.getId(), DcnbBbThuaThieuHdr.TABLE_NAME + "_HAO_DOI");
         created.setFileBienBanHaoDois(bbHaoDoi);
+        if(objReq.getBcKetQuaDcId()!=null){
+            Optional<DcnbBcKqDcHdr> dcnbBcKqDcHdr = hdrBcRepository.findById(objReq.getBcKetQuaDcId());
+            if(dcnbBcKqDcHdr.isPresent()){
+                dcnbBcKqDcHdr.get().setBbThuaThieuId(created.getId());
+                dcnbBcKqDcHdr.get().setSoBbThuaThieu(created.getSoBb());
+            }
+            hdrBcRepository.save(dcnbBcKqDcHdr.get());
+        }
         return created;
     }
 
@@ -129,6 +139,14 @@ public class DcnbBbThuaThieuServiceImpl implements DcnbBbThuaThieuService {
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbBbThuaThieuHdr.TABLE_NAME + "_HAO_DOI"));
         List<FileDinhKem> bbHaoDoi = fileDinhKemService.saveListFileDinhKem(objReq.getFileBienBanHaoDois(), created.getId(), DcnbBbThuaThieuHdr.TABLE_NAME + "_HAO_DOI");
         created.setFileBienBanHaoDois(bbHaoDoi);
+        if(objReq.getBcKetQuaDcId()!=null){
+            Optional<DcnbBcKqDcHdr> dcnbBcKqDcHdr = hdrBcRepository.findById(objReq.getBcKetQuaDcId());
+            if(dcnbBcKqDcHdr.isPresent()){
+                dcnbBcKqDcHdr.get().setBbThuaThieuId(created.getId());
+                dcnbBcKqDcHdr.get().setSoBbThuaThieu(created.getSoBb());
+            }
+            hdrBcRepository.save(dcnbBcKqDcHdr.get());
+        }
         return created;
     }
 

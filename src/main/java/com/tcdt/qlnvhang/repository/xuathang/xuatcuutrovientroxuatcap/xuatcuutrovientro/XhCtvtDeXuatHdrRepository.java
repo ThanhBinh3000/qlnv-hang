@@ -20,7 +20,7 @@ public interface XhCtvtDeXuatHdrRepository extends JpaRepository<XhCtvtDeXuatHdr
   @Query("SELECT distinct c FROM XhCtvtDeXuatHdr c left join c.deXuatPhuongAn h WHERE 1=1 " +
       "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
       "AND (:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDvi},'%')) " +
-      "AND (:#{#param.maDviCuc} IS NULL OR h.maDviCuc LIKE CONCAT(:#{#param.maDviCuc},'%')) " +
+      "AND (:#{#param.maDviDx} IS NULL OR h.maDvi LIKE CONCAT(:#{#param.maDviDx},'%')) " +
       "AND (:#{#param.type} IS NULL OR c.type = :#{#param.type}) " +
       "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
       "AND (:#{#param.soDx} IS NULL OR LOWER(c.soDx) LIKE CONCAT('%',LOWER(:#{#param.soDx}),'%')) " +
@@ -48,7 +48,7 @@ public interface XhCtvtDeXuatHdrRepository extends JpaRepository<XhCtvtDeXuatHdr
       "(:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) AND " +
       "(:#{#param.type} IS NULL OR c.type = :#{#param.type}) AND " +
       "(:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) AND " +
-      "c.maTongHop IS NULL AND " +
+      "c.idThop IS NULL AND " +
       "c.idQdPd IS NULL AND " +
       "(:#{#param.loaiVthh} IS NULL OR c.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) AND " +
       "(:#{#param.loaiNhapXuat} IS NULL OR c.loaiNhapXuat LIKE CONCAT(:#{#param.loaiNhapXuat},'%')) AND " +

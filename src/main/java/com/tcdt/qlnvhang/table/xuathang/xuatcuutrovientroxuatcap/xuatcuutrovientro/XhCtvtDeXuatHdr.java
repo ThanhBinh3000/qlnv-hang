@@ -1,10 +1,18 @@
 package com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
-import com.tcdt.qlnvhang.table.FileDinhKem;
-import lombok.Data;
+import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThuatDtl;
+import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.phieukncl.XhPhieuKnclHdr;
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Where;
+import org.olap4j.impl.ArrayMap;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,6 +20,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = XhCtvtDeXuatHdr.TABLE_NAME)
@@ -37,7 +46,6 @@ public class XhCtvtDeXuatHdr extends BaseEntity implements Serializable {
   private String loaiVthh;
   private String cloaiVthh;
   private String tenVthh;
-  private BigDecimal tonKho;
   private LocalDate ngayDx;
   private LocalDate ngayKetThuc;
   private String noiDungDx;
@@ -56,13 +64,11 @@ public class XhCtvtDeXuatHdr extends BaseEntity implements Serializable {
   private Long nguoiPduyetId;
   private String lyDoTuChoi;
   private String type;
-  private BigDecimal thanhTien;
+  @JsonIgnore
+  @Transient
+  private Map<String, String> mapDmucDvi = new ArrayMap<>();
   @Transient
   private String tenDvi;
-  @Transient
-  private String tenDviDx;
-  @Transient
-  private String diaChiDvi;
   @Transient
   private String tenLoaiVthh;
   @Transient
@@ -70,16 +76,47 @@ public class XhCtvtDeXuatHdr extends BaseEntity implements Serializable {
   @Transient
   private String tenTrangThai;
   @Transient
-  private String tenLoaiHinhNhapXuat;
-  @Transient
   private String tenTrangThaiTh;
   @Transient
   private String tenTrangThaiQd;
-  @Transient
-  private List<FileDinhKem> canCu = new ArrayList<>();
 
-  //    @Transient
-  @OneToMany(mappedBy = "xhCtvtDeXuatHdr",cascade = CascadeType.ALL)
+  public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+    this.mapDmucDvi = mapDmucDvi;
+    String tenDvi = mapDmucDvi.containsKey(maDvi) ? mapDmucDvi.get(maDvi) : null;
+    setTenDvi(tenDvi);
+  }
+
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @Fetch(value = FetchMode.SUBSELECT)
+  @JoinColumn(name = "dataId")
+  @Where(clause = "data_type='" + XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU'")
+  private List<FileDKemJoinHoSoKyThuatDtl> canCu = new ArrayList<>();
+  public void setCanCu(List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem) {
+    this.canCu.clear();
+    if (!DataUtils.isNullObject(fileDinhKem)) {
+      fileDinhKem.forEach(s -> {
+        s.setDataType(XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU");
+        s.setXhCtvtDeXuatHdr(this);
+      });
+      this.canCu.addAll(fileDinhKem);
+    }
+  }
+
+  @OneToMany(mappedBy = "xhCtvtDeXuatHdr", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<XhCtvtDeXuatPa> deXuatPhuongAn = new ArrayList<>();
 
+  public void setDeXuatPhuongAn(List<XhCtvtDeXuatPa> data) {
+    deXuatPhuongAn.clear();
+    if (!DataUtils.isNullOrEmpty(data)) {
+      data.forEach(s -> {
+        s.setXhCtvtDeXuatHdr(this);
+      });
+      deXuatPhuongAn.addAll(data);
+    }
+  }
+
+  public String getTrangThai() {
+    setTenTrangThai(TrangThaiAllEnum.getLabelById(trangThai));
+    return trangThai;
+  }
 }

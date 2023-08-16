@@ -16,17 +16,16 @@ public interface XhCtvtTongHopHdrRepository extends JpaRepository<XhCtvtTongHopH
   @Query("SELECT DISTINCT  c FROM XhCtvtTongHopHdr c  join c.deXuatCuuTro e" +
       " WHERE 1=1 " +
       "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
-      "AND (:#{#param.maDviDx} IS NULL OR e.maDviDx LIKE CONCAT(:#{#param.maDviDx},'%')) " +
-      "AND (:#{#param.type} IS NULL OR e.type = :#{#param.type}) " +
+      "AND (:#{#param.maDviDx} IS NULL OR e.maDvi LIKE CONCAT(:#{#param.maDviDx},'%')) " +
       "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
       "AND (:#{#param.soDx} IS NULL OR LOWER(e.soDx) LIKE CONCAT('%',LOWER(:#{#param.soDx}),'%')) " +
-      "AND ((:#{#param.ngayDxTu}  IS NULL OR e.ngayDx >= :#{#param.ngayDxTu})" +
-      "AND (:#{#param.ngayDxDen}  IS NULL OR e.ngayDx <= :#{#param.ngayDxDen}) ) " +
-      "AND ((:#{#param.ngayKetThucDxTu}  IS NULL OR e.ngayKetThucDx >= :#{#param.ngayKetThucDxTu})" +
+      "AND ((:#{#param.ngayTaoTu}  IS NULL OR c.ngayTao >= :#{#param.ngayTaoTu})" +
+      "AND (:#{#param.ngayTaoDen}  IS NULL OR c.ngayTao <= :#{#param.ngayTaoDen}) ) " +
+    /*  "AND ((:#{#param.ngayKetThucDxTu}  IS NULL OR e.ngayKetThucDx >= :#{#param.ngayKetThucDxTu})" +
       "AND (:#{#param.ngayKetThucDxDen}  IS NULL OR e.ngayKetThucDx <= :#{#param.ngayKetThucDxDen}) ) " +
       "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
       "AND (:#{#param.idQdPdList.isEmpty() } = true OR c.idQdPd IN :#{#param.idQdPdList}) " +
-      "AND (:#{#param.idQdPdNull } = false OR (:#{#param.idQdPdNull } = true AND c.idQdPd IS NULL)) " +
+      "AND (:#{#param.idQdPdNull } = false OR (:#{#param.idQdPdNull } = true AND c.idQdPd IS NULL)) " +*/
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
   Page<XhCtvtTongHopHdr> search(@Param("param") SearchXhCtvtTongHopHdr param, Pageable pageable);

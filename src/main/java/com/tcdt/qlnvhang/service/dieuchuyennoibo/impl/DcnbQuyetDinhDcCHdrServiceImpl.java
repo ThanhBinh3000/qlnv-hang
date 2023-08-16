@@ -199,7 +199,11 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
             if("00".equals(req.getType())){
                 req.setType(Contains.DIEU_CHUYEN);
             }else if("01".equals(req.getType())){
-                req.setType(Contains.NHAN_DIEU_CHUYEN);
+                if(Contains.DCNB.equals(req.getLoaiDc())){
+                    req.setType(Contains.DIEU_CHUYEN);
+                }else {
+                    req.setType(Contains.NHAN_DIEU_CHUYEN);
+                }
             }
             List<DcnbQuyetDinhDcCHdrDTO> danhSachSoQdDieuChuyen = dcnbQuyetDinhDcCHdrRepository.searchListChiCuc(req);
             return danhSachSoQdDieuChuyen;

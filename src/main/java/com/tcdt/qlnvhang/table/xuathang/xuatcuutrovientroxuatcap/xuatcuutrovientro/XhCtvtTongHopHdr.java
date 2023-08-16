@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -71,4 +72,8 @@ public class XhCtvtTongHopHdr extends BaseEntity implements Serializable {
     }
   }
 
+  public String getTrangThai() {
+    setTenTrangThai(TrangThaiAllEnum.getLabelById(trangThai));
+    return trangThai;
+  }
 }

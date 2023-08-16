@@ -72,6 +72,8 @@ public class HhQdPheduyetKhMttHdr extends TrangThaiBaseEntity implements Seriali
     private String soQdGnvu;
 
     private String ptMuaTrucTiep;
+    @Transient
+    private String tenPtMuaTrucTiep;
 
     private String trangThaiHd;
 

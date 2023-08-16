@@ -86,6 +86,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
                 pageable);
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
         data.getContent().forEach(f->{
+            f.setTenPtMuaTrucTiep(Contains.getPthucMtt(f.getPtMuaTrucTiep()));
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
