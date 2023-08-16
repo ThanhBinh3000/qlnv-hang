@@ -23,19 +23,15 @@ public class  HhDxKhLcntTChiThopReq {
 	@ApiModelProperty(example = Contains.LOAI_VTHH_GAO)
 	String cloaiVthh;
 
-	@NotNull(message = "Không được để trống")
 	@ApiModelProperty(example = Contains.LOAI_VTHH_GAO)
 	String hthucLcnt;
 
-	@NotNull(message = "Không được để trống")
 	@ApiModelProperty(example = Contains.LOAI_VTHH_GAO)
 	String pthucLcnt;
 
-	@NotNull(message = "Không được để trống")
 	@ApiModelProperty(example = Contains.LOAI_VTHH_GAO)
 	String loaiHdong;
 
-	@NotNull(message = "Không được để trống")
 	@ApiModelProperty(example = Contains.LOAI_VTHH_GAO)
 	String nguonVon;
 }

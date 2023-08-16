@@ -100,43 +100,43 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		String tChuanCluong = "";
 		for (HhDxuatKhLcntHdr dxuat : dxuatList) {
 			HhDxKhLcntThopDtl thopDtl = new HhDxKhLcntThopDtl();
-			// Set ngay min va ngay max o detail
-			// Set min max ngày bắt đầu tổ chức
-			if (StringUtils.isEmpty(thopHdr.getTgianBdauTchucTu())
-					|| thopHdr.getTgianBdauTchucTu().compareTo(dxuat.getTgianBdauTchuc()) > 0){
-				thopHdr.setTgianBdauTchucTu(dxuat.getTgianBdauTchuc());
-			}
-			if (StringUtils.isEmpty(thopHdr.getTgianBdauTchucDen())
-					|| thopHdr.getTgianBdauTchucDen().compareTo(dxuat.getTgianBdauTchuc()) < 0){
-				thopHdr.setTgianBdauTchucDen(dxuat.getTgianBdauTchuc());
-			}
-			// Set ngày min max ngày mở thầu
-			if (StringUtils.isEmpty(thopHdr.getTgianMthauTu())
-					|| thopHdr.getTgianMthauTu().compareTo(dxuat.getTgianMthau()) > 0){
-				thopHdr.setTgianMthauTu(dxuat.getTgianMthau());
-			}
-			if (StringUtils.isEmpty(thopHdr.getTgianMthauDen())
-					|| thopHdr.getTgianMthauDen().compareTo(dxuat.getTgianMthau()) < 0){
-				thopHdr.setTgianMthauDen(dxuat.getTgianMthau());
-			}
-			// Set ngày min max ngày đóng thầu
-			if (StringUtils.isEmpty(thopHdr.getTgianDthauTu())
-					|| thopHdr.getTgianDthauTu().compareTo(dxuat.getTgianDthau()) > 0){
-				thopHdr.setTgianDthauTu(dxuat.getTgianDthau());
-			}
-			if (StringUtils.isEmpty(thopHdr.getTgianDthauDen())
-					|| thopHdr.getTgianDthauDen().compareTo(dxuat.getTgianDthau()) < 0){
-				thopHdr.setTgianDthauDen(dxuat.getTgianDthau());
-			}
-			// Set ngày mim max nhập hàng
-			if (StringUtils.isEmpty(thopHdr.getTgianNhangTu())
-					|| thopHdr.getTgianNhangTu().compareTo(dxuat.getTgianNhang()) > 0){
-				thopHdr.setTgianNhangTu(dxuat.getTgianNhang());
-			}
-			if (StringUtils.isEmpty(thopHdr.getTgianNhangDen())
-					|| thopHdr.getTgianNhangDen().compareTo(dxuat.getTgianNhang()) < 0){
-				thopHdr.setTgianNhangDen(dxuat.getTgianNhang());
-			}
+//			// Set ngay min va ngay max o detail
+//			// Set min max ngày bắt đầu tổ chức
+//			if (StringUtils.isEmpty(thopHdr.getTgianBdauTchucTu())
+//					|| thopHdr.getTgianBdauTchucTu().compareTo(dxuat.getTgianBdauTchuc()) > 0){
+//				thopHdr.setTgianBdauTchucTu(dxuat.getTgianBdauTchuc());
+//			}
+//			if (StringUtils.isEmpty(thopHdr.getTgianBdauTchucDen())
+//					|| thopHdr.getTgianBdauTchucDen().compareTo(dxuat.getTgianBdauTchuc()) < 0){
+//				thopHdr.setTgianBdauTchucDen(dxuat.getTgianBdauTchuc());
+//			}
+//			// Set ngày min max ngày mở thầu
+//			if (StringUtils.isEmpty(thopHdr.getTgianMthauTu())
+//					|| thopHdr.getTgianMthauTu().compareTo(dxuat.getTgianMthau()) > 0){
+//				thopHdr.setTgianMthauTu(dxuat.getTgianMthau());
+//			}
+//			if (StringUtils.isEmpty(thopHdr.getTgianMthauDen())
+//					|| thopHdr.getTgianMthauDen().compareTo(dxuat.getTgianMthau()) < 0){
+//				thopHdr.setTgianMthauDen(dxuat.getTgianMthau());
+//			}
+//			// Set ngày min max ngày đóng thầu
+//			if (StringUtils.isEmpty(thopHdr.getTgianDthauTu())
+//					|| thopHdr.getTgianDthauTu().compareTo(dxuat.getTgianDthau()) > 0){
+//				thopHdr.setTgianDthauTu(dxuat.getTgianDthau());
+//			}
+//			if (StringUtils.isEmpty(thopHdr.getTgianDthauDen())
+//					|| thopHdr.getTgianDthauDen().compareTo(dxuat.getTgianDthau()) < 0){
+//				thopHdr.setTgianDthauDen(dxuat.getTgianDthau());
+//			}
+//			// Set ngày mim max nhập hàng
+//			if (StringUtils.isEmpty(thopHdr.getTgianNhangTu())
+//					|| thopHdr.getTgianNhangTu().compareTo(dxuat.getTgianNhang()) > 0){
+//				thopHdr.setTgianNhangTu(dxuat.getTgianNhang());
+//			}
+//			if (StringUtils.isEmpty(thopHdr.getTgianNhangDen())
+//					|| thopHdr.getTgianNhangDen().compareTo(dxuat.getTgianNhang()) < 0){
+//				thopHdr.setTgianNhangDen(dxuat.getTgianNhang());
+//			}
 
 			// Set thong tin chung lay tu de xuat
 			thopDtl.setIdDxHdr(dxuat.getId());
@@ -149,8 +149,9 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 			thopDtl.setTenDuAn(dxuat.getTenDuAn());
 			thopDtl.setTrichYeu(dxuat.getTrichYeu());
 			thopDtl.setDonGiaVat(dxuat.getDonGiaVat());
+			thopDtl.setTongTien(dxuat.getTongMucDtDx());
 			// Add danh sach goi thau
-			List<HhDxKhlcntDsgthau> dtlsGThau = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(dxuat.getId());
+			List<HhDxKhlcntDsgthau> dtlsGThau = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcntOrderByGoiThau(dxuat.getId());
 			BigDecimal soLuong = BigDecimal.ZERO;
 			BigDecimal tongTien = BigDecimal.ZERO;
 			int soGthau = dtlsGThau.size();
@@ -504,7 +505,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 					e.printStackTrace();
 				}
 			}
-			List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(f.getIdDxHdr());
+			List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcntOrderByGoiThau(f.getIdDxHdr());
 			List<DsChiCucPreview> dsChiCuc = new ArrayList<>();
 			for (HhDxKhlcntDsgthau dsG : dsGthauList) {
 				List<HhDxKhlcntDsgthauCtiet> listDdNhap = hhDxKhlcntDsgthauCtietRepository.findByIdGoiThau(dsG.getId());

@@ -3,11 +3,13 @@ package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.HhDthauNthauDuthau;
 import com.tcdt.qlnvhang.table.HhQdPduyetKqlcntDtl;
 import lombok.Data;
@@ -90,7 +92,13 @@ public class HhQdKhlcntDsgthau implements Serializable {
 	BigDecimal soLuongDaMua;
 
 	Long idNhaThau;
-
+	private String ghiChuTtdt;
+	@Temporal(TemporalType.DATE)
+	private Date tgianTrinhKqTcg;
+	@Temporal(TemporalType.DATE)
+	private Date tgianTrinhTtd;
+	@Transient
+	private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 	public String getTenTrangThai() {
 		return NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(this.getTrangThai());
 	}
