@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
 import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQdPdHdrRepository;
@@ -12,11 +11,9 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtDeXuatHdrReq;
-
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdrReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatPa;
@@ -35,9 +32,11 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.tcdt.qlnvhang.util.Contains.CAP_CUC;
@@ -65,33 +64,19 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     }
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<XhCtvtDeXuatHdr> search = xhCtvtDeXuatHdrRepository.search(req, pageable);
-    Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
+    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
 
-    Map<String, String> mapVthh = getListDanhMucHangHoa();
     //lay thong tin tong hop va quyet dinh
     List<Long> listIdTh = search.getContent().stream().map(s -> s.getIdThop()).collect(Collectors.toList());
     List<XhCtvtTongHopHdr> dataIdTh = xhCtvtTongHopHdrRepository.findByIdIn(listIdTh);
     Map<Long, String> trangThaiTh = dataIdTh.stream().collect(Collectors.toMap(XhCtvtTongHopHdr::getId, XhCtvtTongHopHdr::getTrangThai));
 
     List<Long> listIdQd = search.getContent().stream().map(s -> s.getIdQdPd()).collect(Collectors.toList());
-    List<XhCtVtQuyetDinhPdHdr> dataIdQd = xhCtVtQdPdHdrRepository.findByIdIn(listIdTh);
+    List<XhCtVtQuyetDinhPdHdr> dataIdQd = xhCtVtQdPdHdrRepository.findByIdIn(listIdQd);
     Map<Long, String> trangThaiQd = dataIdQd.stream().collect(Collectors.toMap(XhCtVtQuyetDinhPdHdr::getId, XhCtVtQuyetDinhPdHdr::getTrangThai));
 
     search.getContent().forEach(s -> {
-      if (mapDmucDvi.containsKey((s.getMaDvi()))) {
-        Map<String, Object> objDonVi = mapDmucDvi.get(s.getMaDvi());
-        Map<String, Object> objDonViDx = mapDmucDvi.get(s.getMaDvi().substring(0, 6));
-        s.setTenDvi(objDonVi.get("tenDvi").toString());
-        s.setTenDviDx(objDonViDx.get("tenDvi").toString());
-      }
-      if (mapVthh.get((s.getLoaiVthh())) != null) {
-        s.setTenLoaiVthh(mapVthh.get(s.getLoaiVthh()));
-      }
-      if (mapVthh.get((s.getCloaiVthh())) != null) {
-        s.setTenCloaiVthh(mapVthh.get(s.getCloaiVthh()));
-      }
-      s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
-
+      s.setMapDmucDvi(mapDmucDvi);
       if (DataUtils.isNullObject(s.getIdThop())) {
         s.setTenTrangThaiTh("Chưa tổng hợp");
       } else {
@@ -100,7 +85,6 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
       if (!DataUtils.isNullObject(s.getIdQdPd())) {
         s.setTenTrangThaiQd(TrangThaiAllEnum.getLabelById(trangThaiQd.get(s.getIdQdPd())));
       }
-
     });
     return search;
   }
@@ -118,28 +102,9 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     BeanUtils.copyProperties(objReq, data);
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
-    data.getDeXuatPhuongAn().forEach(e -> e.setXhCtvtDeXuatHdr(data));
     XhCtvtDeXuatHdr created = xhCtvtDeXuatHdrRepository.save(data);
-
-    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU");
-    created.setCanCu(canCu);
-//    this.saveCtiet(created.getId(), objReq);
-//    created.getDeXuatPhuongAn().forEach(s -> {
-//      s.setIdHdr(created.getId());
-//    });
     xhCtvtDeXuatHdrRepository.save(created);
     return created;
-  }
-
-  @Transactional()
-  public void saveCtiet(Long idHdr, XhCtvtDeXuatHdrReq objReq) {
-    for (XhCtvtDeXuatPa deXuatPhuongAnReq : objReq.getDeXuatPhuongAn()) {
-      XhCtvtDeXuatPa deXuatPhuongAn = new XhCtvtDeXuatPa();
-      BeanUtils.copyProperties(deXuatPhuongAnReq, deXuatPhuongAn);
-      deXuatPhuongAn.setId(null);
-//      deXuatPhuongAn.setIdHdr(idHdr);
-      xhCtvtDeXuatPaRepository.save(deXuatPhuongAn);
-    }
   }
 
   @Transactional
@@ -158,63 +123,27 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
       }
     }
     XhCtvtDeXuatHdr data = optional.get();
-    data.getDeXuatPhuongAn().forEach(e -> e.setXhCtvtDeXuatHdr(null));
-    BeanUtils.copyProperties(objReq, data,"maDvi");
-    data.getDeXuatPhuongAn().forEach(e -> e.setXhCtvtDeXuatHdr(data));
+    BeanUtils.copyProperties(objReq, data, "maDvi");
     XhCtvtDeXuatHdr created = xhCtvtDeXuatHdrRepository.save(data);
-
-    fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU"));
-    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU");
-    created.setCanCu(canCu);
-
-//    created.getDeXuatPhuongAn().forEach(s -> {
-//      s.setIdHdr(created.getId());
-//    });
-/*
-    List<XhCtvtDeXuatPa> listDeXuatPhuongAn = xhCtvtDeXuatPaRepository.findByIdHdr(objReq.getId());
-    xhCtvtDeXuatPaRepository.deleteAll(listDeXuatPhuongAn);
-    this.saveCtiet(created.getId(), objReq);*/
     return created;
   }
 
 
   public List<XhCtvtDeXuatHdr> detail(List<Long> ids) throws Exception {
-    if (DataUtils.isNullOrEmpty(ids))
-      throw new Exception("Tham số không hợp lệ.");
+    if (DataUtils.isNullOrEmpty(ids)) throw new Exception("Tham số không hợp lệ.");
     List<XhCtvtDeXuatHdr> optional = xhCtvtDeXuatHdrRepository.findByIdIn(ids);
     if (DataUtils.isNullOrEmpty(optional)) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
-    Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
+    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     List<XhCtvtDeXuatHdr> allById = xhCtvtDeXuatHdrRepository.findAllById(ids);
     allById.forEach(data -> {
-      if (mapDmucDvi.containsKey(data.getMaDvi())) {
-        data.setTenDvi(mapDmucDvi.get(data.getMaDvi()).get("tenDvi").toString());
-        data.setDiaChiDvi(mapDmucDvi.get(data.getMaDvi()).get("diaChi").toString());
-      }
-      data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
-      data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
-      data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
-
-      List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU"));
-      data.setCanCu(canCu);
-
-      List<XhCtvtDeXuatPa> list = xhCtvtDeXuatPaRepository.findByXhCtvtDeXuatHdrId(data.getId());
-      for (XhCtvtDeXuatPa deXuatPhuongAn : list) {
-        if (mapDmucDvi.containsKey(deXuatPhuongAn.getMaDviCuc())) {
-          deXuatPhuongAn.setTenCuc(mapDmucDvi.get(deXuatPhuongAn.getMaDviCuc()).get("tenDvi").toString());
-        }
-        if (mapDmucDvi.containsKey(deXuatPhuongAn.getMaDviChiCuc())) {
-          deXuatPhuongAn.setTenChiCuc(mapDmucDvi.get(deXuatPhuongAn.getMaDviChiCuc()).get("tenDvi").toString());
-        }
-        if (mapDmucDvi.containsKey(deXuatPhuongAn.getMaDvi())) {
-          deXuatPhuongAn.setTenDvi(mapDmucDvi.get(deXuatPhuongAn.getMaDvi()).get("tenDvi").toString());
-        }
-        deXuatPhuongAn.setTenLoaiVthh(mapVthh.get(deXuatPhuongAn.getLoaiVthh()));
-        deXuatPhuongAn.setTenCloaiVthh(mapVthh.get(deXuatPhuongAn.getCloaiVthh()));
-      }
-      data.setDeXuatPhuongAn(list);
+      data.setMapDmucDvi(mapDmucDvi);
+      data.getDeXuatPhuongAn().forEach(s -> {
+        s.setMapDmucDvi(mapDmucDvi);
+        s.setMapVthh(mapVthh);
+      });
     });
 
     return allById;
@@ -338,8 +267,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     List<XhCtvtDeXuatHdr> data = page.getContent();
 
     String title = "Danh sách phương án xuất cứu trợ, viện trợ ";
-    String[] rowsName = new String[]{"STT", "Năm kH", "Loại hình nhập xuất", "Số công văn/đề xuất", "Đơn vị đề xuất", "Ngày đề xuất", "Ngày duyệt đề xuất",
-        "Loại hàng hóa", "Tổng SL xuất CT,VT (kg)", "Trích yếu", "Trang thái đề xuât", "Trạng thái/Mã tổng hợp",};
+    String[] rowsName = new String[]{"STT", "Năm kH", "Loại hình nhập xuất", "Số công văn/đề xuất", "Đơn vị đề xuất", "Ngày đề xuất", "Ngày duyệt đề xuất", "Loại hàng hóa", "Tổng SL xuất CT,VT (kg)", "Trích yếu", "Trang thái đề xuât", "Trạng thái/Mã tổng hợp",};
     String fileName = "danh-sach-phuong-an-xuat-cuu-tro-vien-tro.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs = null;
