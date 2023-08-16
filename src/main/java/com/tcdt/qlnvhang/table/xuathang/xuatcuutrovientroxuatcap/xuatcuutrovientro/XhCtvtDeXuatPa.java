@@ -1,12 +1,15 @@
 package com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.olap4j.impl.ArrayMap;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Map;
 
 @Entity
 @Table(name = XhCtvtDeXuatPa.TABLE_NAME)
@@ -25,29 +28,40 @@ public class XhCtvtDeXuatPa implements Serializable {
   private String loaiVthh;
   private String cloaiVthh;
   private String maDvi;
-  private String maDviCuc;
-  private String maDviChiCuc;
-  private BigDecimal soLuongXuat;
-  private BigDecimal soLuongXuatCuc;
-  private BigDecimal soLuongXuatChiCuc;
   private BigDecimal tonKhoDvi;
-  private BigDecimal tonKhoChiCuc;
   private BigDecimal tonKhoLoaiVthh;
   private BigDecimal tonKhoCloaiVthh;
   private String donViTinh;
-  private BigDecimal donGiaKhongVat;
-  private BigDecimal thanhTien;
-  private BigDecimal soLuongXuatCap;
+  private BigDecimal soLuong;
+
+  @JsonIgnore
+  @Transient
+  private Map<String, String> mapVthh;
   @Transient
   private String tenLoaiVthh;
   @Transient
   private String tenCloaiVthh;
+  @JsonIgnore
+  @Transient
+  private Map<String, String> mapDmucDvi = new ArrayMap<>();
   @Transient
   private String tenDvi;
-  @Transient
-  private String tenCuc;
-  @Transient
-  private String tenChiCuc;
+
+  public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+    this.mapDmucDvi = mapDmucDvi;
+    String tenDvi = mapDmucDvi.containsKey(maDvi) ? mapDmucDvi.get(maDvi) : null;
+    setTenDvi(tenDvi);
+  }
+
+  public void setMapVthh(Map<String, String> mapVthh) {
+    this.mapVthh = mapVthh;
+    if (!DataUtils.isNullObject(getLoaiVthh())) {
+      setTenLoaiVthh(mapVthh.containsKey(getLoaiVthh()) ? mapVthh.get(getLoaiVthh()) : null);
+    }
+    if (!DataUtils.isNullObject(getCloaiVthh())) {
+      setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
+    }
+  }
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "idHdr")
   @JsonIgnore
