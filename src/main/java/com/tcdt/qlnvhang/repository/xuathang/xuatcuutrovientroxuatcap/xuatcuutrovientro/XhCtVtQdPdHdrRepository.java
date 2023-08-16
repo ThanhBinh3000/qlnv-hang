@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
+import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtQuyetDinhPdHdr;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtTongHopHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdHdr;
 import org.springframework.data.domain.Page;
@@ -33,7 +34,7 @@ public interface XhCtVtQdPdHdrRepository extends JpaRepository<XhCtVtQuyetDinhPd
           "AND (:#{#param.ngayKyDen}  IS NULL OR c.ngayKy <= :#{#param.ngayKyDen}) ) " +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
-  Page<XhCtVtQuyetDinhPdHdr> search(@Param("param") SearchXhCtvtTongHopHdr param, Pageable pageable);
+  Page<XhCtVtQuyetDinhPdHdr> search(@Param("param") SearchXhCtvtQuyetDinhPdHdr param, Pageable pageable);
 
 
   void deleteAllByIdIn(List<Long> listId);
@@ -54,5 +55,5 @@ public interface XhCtVtQdPdHdrRepository extends JpaRepository<XhCtVtQuyetDinhPd
           "AND c.id NOT IN (SELECT d.qdPaXuatCapId FROM XhCtvtQdXuatCapHdr d WHERE d.qdPaXuatCapId IS NOT NULL) " +
           "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
-  List<XhCtVtQuyetDinhPdHdr> searchQdPaXuatCap(@Param("param") SearchXhCtvtTongHopHdr param);
+  List<XhCtVtQuyetDinhPdHdr> searchQdPaXuatCap(@Param("param") SearchXhCtvtQuyetDinhPdHdr param);
 }
