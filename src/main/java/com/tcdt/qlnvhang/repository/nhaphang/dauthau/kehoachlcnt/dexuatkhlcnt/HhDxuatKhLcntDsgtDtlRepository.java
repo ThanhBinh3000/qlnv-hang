@@ -13,6 +13,7 @@ public interface HhDxuatKhLcntDsgtDtlRepository extends BaseRepository<HhDxKhlcn
 //	List<HhDxuatKhLcntDsgtDtl> findByIdHdr(Long id);
 
 	List<HhDxKhlcntDsgthau> findByIdDxKhlcnt(Long idDxKhlcnt);
+	List<HhDxKhlcntDsgthau> findByIdDxKhlcntOrderByGoiThau(Long idDxKhlcnt);
 
 	void deleteAllByIdDxKhlcnt(Long idDxKhlcnt);
 
