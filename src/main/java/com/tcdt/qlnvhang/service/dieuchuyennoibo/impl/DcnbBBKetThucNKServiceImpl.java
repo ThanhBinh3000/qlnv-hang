@@ -178,7 +178,7 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 hdr.setNguoiPDuyet(userInfo.getId());
                 hdr.setNgayPDuyet(LocalDate.now());
-                List<DcnbBBKetThucNKDtl> bbKetThucNKDtl = hdr.getDcnbBBKetThucNKDtl();
+                List<DcnbBBKetThucNKDtl> bbKetThucNKDtl = dtlRepository.findByHdrId(hdr.getId());
                 for (DcnbBBKetThucNKDtl kt : bbKetThucNKDtl) {
                     Optional<DcnbPhieuNhapKhoHdr> dcnbPhieuNhapKhoHdr = dcnbPhieuNhapKhoHdrRepository.findById(kt.getPhieuNhapKhoId());
                     if (dcnbPhieuNhapKhoHdr.isPresent()) {
