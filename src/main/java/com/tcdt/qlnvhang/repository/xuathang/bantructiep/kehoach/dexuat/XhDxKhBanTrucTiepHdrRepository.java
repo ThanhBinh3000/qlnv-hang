@@ -72,7 +72,7 @@ public interface XhDxKhBanTrucTiepHdrRepository extends JpaRepository<XhDxKhBanT
     @Query(value = " SELECT dtl.GIA_QD_TCDTNN FROM KH_PAG_TONG_HOP_CTIET dtl " +
             "JOIN KH_PAG_GCT_QD_TCDTNN hdr ON dtl.QD_TCDTNN_ID = hdr.ID " +
             " WHERE hdr.TRANG_THAI = '29' AND hdr.LOAI_GIA = 'LG04'  AND hdr.CLOAI_VTHH = :cloaiVthh AND dtl.MA_CHI_CUC = :maDvi AND hdr.NAM_KE_HOACH = :namKhoach AND hdr.NGAY_HIEU_LUC <= SYSDATE " +
-            " F ETCH FIRST 1 ROWS ONLY ",
+            " FETCH FIRST 1 ROWS ONLY ",
             nativeQuery = true)
     BigDecimal getDonGiaDuocDuyetLt(String cloaiVthh, String maDvi, Integer namKhoach);
 
@@ -95,4 +95,8 @@ public interface XhDxKhBanTrucTiepHdrRepository extends JpaRepository<XhDxKhBanT
     List<XhDxKhBanTrucTiepHdr> findByIdIn(List<Long> idDxList);
 
     List<XhDxKhBanTrucTiepHdr> findAllByIdIn(List<Long> listId);
+
+    List<XhDxKhBanTrucTiepHdr> findAllByIdThop(Long idThop);
+
+    List<XhDxKhBanTrucTiepHdr> findByIdThopIn(List<Long> listId);
 }

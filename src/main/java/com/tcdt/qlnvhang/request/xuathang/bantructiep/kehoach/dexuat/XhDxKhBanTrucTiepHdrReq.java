@@ -47,6 +47,8 @@ public class XhDxKhBanTrucTiepHdrReq extends BaseRequest {
     private String trangThai;
     private LocalDate ngayTao;
     private LocalDate ngayPduyet;
+    private BigDecimal donGia;
+    private BigDecimal thanhTien;
     private List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem = new ArrayList<>();
     private List<XhDxKhBanTrucTiepDtl> children = new ArrayList<>();
     private String dvql;
