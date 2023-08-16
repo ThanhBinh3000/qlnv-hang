@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -57,4 +58,8 @@ public interface DcnbBBNTBQHdrRepository extends JpaRepository<DcnbBBNTBQHdr, Lo
             "bblm.ngayLap,bblm.ngayKetThucNt , bblm.tongKinhPhiDaTh,bblm.tongKinhPhiDaTh ,bblm.trangThai, bblm.trangThai,khdcd.tenLoaiVthh,khdcd.tenCloaiVthh, khdcd.tichLuongKd, khdcd.tenDonViTinh, khdcd.loaiVthh, khdcd.cloaiVthh "+
             "ORDER BY qdc.soQdinh DESC")
     Page<DcnbBBNTBQHdrDTO> searchPage(@Param("param") DcnbBBNTBQHdrReq req, Pageable pageable);
+
+    List<DcnbBBNTBQHdr> findByQdDcCucIdAndMaNganKho(Long qdDcCucId, String maNganKho);
+
+    List<DcnbBBNTBQHdr> findByQdDcCucIdAndMaNganKhoAndMaLoKho(Long qdDcCucId, String maNganKho, String maLoKho);
 }

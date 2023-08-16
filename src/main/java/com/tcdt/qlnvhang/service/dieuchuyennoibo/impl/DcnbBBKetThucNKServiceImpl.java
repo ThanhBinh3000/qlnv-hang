@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBKetThucNKDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBKetThucNKHdrRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuNhapKhoHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBBKetThucNKReq;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBKetThucNKHdrDTO;
@@ -10,7 +11,9 @@ import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBKetThucNKHdrListDTO;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBBKetThucNKService;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBKetThucNKDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBKetThucNKHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -31,6 +34,8 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
     private DcnbBBKetThucNKHdrRepository hdrRepository;
     @Autowired
     private DcnbBBKetThucNKDtlRepository dtlRepository;
+    @Autowired
+    private DcnbPhieuNhapKhoHdrRepository dcnbPhieuNhapKhoHdrRepository;
 
     @Override
     public Page<DcnbBBKetThucNKHdr> searchPage(DcnbBBKetThucNKReq req) throws Exception {
@@ -42,13 +47,13 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbBBKetThucNKHdrDTO> searchDto = null;
-        if(req.getIsVatTu() == null){
+        if (req.getIsVatTu() == null) {
             req.setIsVatTu(false);
         }
-        if(req.getIsVatTu()){
+        if (req.getIsVatTu()) {
             req.setDsLoaiHang(Arrays.asList("VT"));
-        }else {
-            req.setDsLoaiHang(Arrays.asList("LT","M"));
+        } else {
+            req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         searchDto = hdrRepository.searchPage(req, pageable);
@@ -85,7 +90,7 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
             e.setDcnbBBKetThucNKHdr(data);
         });
         DcnbBBKetThucNKHdr created = hdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBKT-"+ userInfo.getDvqlTenVietTat();
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BBKT-" + userInfo.getDvqlTenVietTat();
         created.setSoBb(so);
         hdrRepository.save(created);
         return created;
@@ -108,7 +113,7 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
         BeanUtils.copyProperties(req, data);
         data.setDcnbBBKetThucNKDtl(req.getDcnbBBKetThucNKDtl());
         DcnbBBKetThucNKHdr update = hdrRepository.save(data);
-        String so = update.getId() + "/" + (new Date().getYear() + 1900) +"/BBKT-"+ userInfo.getDvqlTenVietTat();
+        String so = update.getId() + "/" + (new Date().getYear() + 1900) + "/BBKT-" + userInfo.getDvqlTenVietTat();
         update.setSoBb(so);
         hdrRepository.save(update);
         return update;
@@ -161,18 +166,27 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
                 hdr.setNgayPDuyetKt(LocalDate.now());
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
-            case Contains.CHODUYET_KT + Contains.CHODUYET_LDC:
+            case Contains.CHODUYET_KT + Contains.CHODUYET_LDCC:
                 hdr.setNguoiPDuyetKt(userInfo.getId());
                 hdr.setNgayPDuyetKt(LocalDate.now());
                 break;
-            case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
+            case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
                 hdr.setNguoiPDuyet(userInfo.getId());
                 hdr.setNgayPDuyet(LocalDate.now());
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
-            case Contains.CHODUYET_LDC + Contains.DADUYET_LDCC:
+            case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 hdr.setNguoiPDuyet(userInfo.getId());
                 hdr.setNgayPDuyet(LocalDate.now());
+                List<DcnbBBKetThucNKDtl> bbKetThucNKDtl = dtlRepository.findByHdrId(hdr.getId());
+                for (DcnbBBKetThucNKDtl kt : bbKetThucNKDtl) {
+                    Optional<DcnbPhieuNhapKhoHdr> dcnbPhieuNhapKhoHdr = dcnbPhieuNhapKhoHdrRepository.findById(kt.getPhieuNhapKhoId());
+                    if (dcnbPhieuNhapKhoHdr.isPresent()) {
+                        dcnbPhieuNhapKhoHdr.get().setSoBbKetThucNk(hdr.getSoBb());
+                        dcnbPhieuNhapKhoHdr.get().setBbKetThucNkId(hdr.getId());
+                        dcnbPhieuNhapKhoHdrRepository.save(dcnbPhieuNhapKhoHdr.get());
+                    }
+                }
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");

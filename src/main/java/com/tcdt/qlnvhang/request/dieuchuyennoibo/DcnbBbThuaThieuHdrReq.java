@@ -2,15 +2,12 @@ package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbThuaThieuDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbThuaThieuKiemKeDtl;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +22,7 @@ public class DcnbBbThuaThieuHdrReq extends BaseRequest {
     private String tenDvi;
     private String maDviNhan;
     private String tenCanBo;
+    private String tenBaoCao;
     private String canBoId;
     private String soBb;
     private LocalDate ngayLap;
@@ -32,7 +30,7 @@ public class DcnbBbThuaThieuHdrReq extends BaseRequest {
     private String soQdDcCuc;
     private LocalDate ngayKyQdCuc;
     private String soBcKetQuaDc;
-    private String bcKetQuaDcId;
+    private Long bcKetQuaDcId;
     private LocalDate ngayLapBcKetQuaDc;
     private String nguyenNhan;
     private String kienNghi;

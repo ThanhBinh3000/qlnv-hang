@@ -364,7 +364,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
     }
 
     private List<HhDxKhlcntDsgthau> getDsGthau (Long dxId, Map<String, String> mapVthh, Map<String, String> mapDmucDvi) {
-        List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(dxId);
+        List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcntOrderByGoiThau(dxId);
         for (HhDxKhlcntDsgthau dsG : dsGthauList) {
             dsG.setTenDvi(mapDmucDvi.get(dsG.getMaDvi()));
             dsG.setTenCloaiVthh(mapVthh.get(dsG.getCloaiVthh()));
@@ -527,7 +527,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         object.setSoGoiThau(hhDxuatKhLcntDsgtDtlRepository.countByIdDxKhlcnt(hhDxuatKhLcntHdrReq.getId()));
         String diaDiem = "";
         if (object.getId() != null) {
-            List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(object.getId());
+            List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcntOrderByGoiThau(object.getId());
             for (HhDxKhlcntDsgthau dsG : dsGthauList) {
                 diaDiem = "";
                 HhDxKhlcntDsgthauReport data = new ModelMapper().map(dsG, HhDxKhlcntDsgthauReport.class);
@@ -1104,7 +1104,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 //		UnitScaler.formatList(dtls2, Contains.DVT_TAN);
 
 
-        List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(qOptional.get().getId());
+        List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcntOrderByGoiThau(qOptional.get().getId());
         for (HhDxKhlcntDsgthau dsG : dsGthauList) {
             dsG.setTenDvi(mapDmucDvi.get(dsG.getMaDvi()));
             dsG.setTenHthucLcnt(StringUtils.isEmpty(dsG.getHthucLcnt()) ? null : hashMapHtLcnt.get(dsG.getHthucLcnt()));

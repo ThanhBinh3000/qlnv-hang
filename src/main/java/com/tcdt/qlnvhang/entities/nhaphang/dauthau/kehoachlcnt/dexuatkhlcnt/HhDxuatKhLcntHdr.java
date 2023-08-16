@@ -105,6 +105,12 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String kieuNx;
 	@Transient
 	String tenKieuNx;
+	@Transient
+	String tenLoaiHdong;
+	@Transient
+	String tenPthucLcnt;
+	@Transient
+	String tenHthucLcnt;
 	String diaChiDvi;
 	BigDecimal donGiaVat;
 	String dienGiaiTongMucDt;
