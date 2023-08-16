@@ -11,6 +11,7 @@ import java.time.LocalDate;
 public class DcnbPhieuNhapKhoHdrListDTO {
     private Long id;
     private String soPhieuNhapKho;
+    private Long phieuNhapKhoId;
     private LocalDate ngayNhapKho;
     private BigDecimal soLuong;
 
