@@ -41,6 +41,7 @@ public class XhXkVtBhPhieuKtclHdr extends BaseEntity implements Serializable {
   private String soPhieu;
   private LocalDate ngayLapPhieu;
   private LocalDate ngayKiemTra;
+  private String dviKiemTra;
   private String loaiVthh;
   private String cloaiVthh;
   private String donViTinh;
@@ -65,6 +66,11 @@ public class XhXkVtBhPhieuKtclHdr extends BaseEntity implements Serializable {
 
   @Transient
   private String tenDvi;
+  @Transient
+  private String nguoiTao;
+  @Transient
+  private String tpKtbq;
+
   @Transient
   private String tenLoaiVthh;
   @Transient

@@ -27,7 +27,7 @@ public interface QuyChuanQuocGiaDtlRepository extends JpaRepository<QuyChuanQuoc
     List<QuyChuanQuocGiaDtl> getAllQuyChuanByCloaiVthh(String cloaiVthh);
 
 
-    @Query(value = "select dtl from QuyChuanQuocGiaDtl dtl,QuyChuanQuocGiaHdr hdr where hdr.id = dtl.idHdr and hdr.id in (?2) " +
-            " and dtl.cloaiVthh = ?1 or dtl.loaiVthh = ?1  order by dtl.thuTuHt asc ")
+    @Query(value = "select distinct dtl from QuyChuanQuocGiaDtl dtl,QuyChuanQuocGiaHdr hdr where hdr.id = dtl.idHdr and hdr.id in (?2) " +
+            " and (dtl.cloaiVthh = ?1 or dtl.loaiVthh = ?1 ) order by dtl.thuTuHt asc ")
     List<QuyChuanQuocGiaDtl> getAllQuyChuanByCloaiVthhApDung(String cloaiVthh, List<Long> idsHdr);
 }

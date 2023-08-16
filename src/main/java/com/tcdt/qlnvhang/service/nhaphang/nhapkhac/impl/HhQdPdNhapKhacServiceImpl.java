@@ -128,7 +128,7 @@ public class HhQdPdNhapKhacServiceImpl extends BaseServiceImpl implements HhQdPd
         dataMap.setNguoiTao(getUser().getUsername());
         dataMap.setFileDinhKems(fileDinhKemList);
         dataMap.setLastest(req.getLastest());
-        dataMap.setMaDvi(getUser().getDvql());
+//        dataMap.setMaDvi(getUser().getDvql());
         hhQdPdNhapKhacHdrRepository.save(dataMap);
 
         // Update trạng thái tổng hợp dxkhclnt
@@ -251,6 +251,7 @@ public class HhQdPdNhapKhacServiceImpl extends BaseServiceImpl implements HhQdPd
         List<HhQdPdNhapKhacDtl> dtls = new ArrayList<>();
         List<HhDxuatKhNhapKhacDtl> dxDtls = new ArrayList<>();
         if(qOptional.get().getIdTh() != null){
+            qOptional.get().setPhanLoai("TH");
             qOptional.get().setChildren(hhDxuatKhNhapKhacHdrRepository.findAllByThopId(qOptional.get().getIdTh()));
             for (HhDxuatKhNhapKhacHdr child : qOptional.get().getChildren()) {
                 dxDtls = new ArrayList<>();
@@ -265,6 +266,7 @@ public class HhQdPdNhapKhacServiceImpl extends BaseServiceImpl implements HhQdPd
 //                child.getDetails().addAll(dxDtls);
             }
         }else{
+            qOptional.get().setPhanLoai("TTr");
             dtls = hhQdPdNhapKhacDtlRepository.findAllByIdHdr(qOptional.get().getId());
         }
         Integer sumSlNhap = 0;

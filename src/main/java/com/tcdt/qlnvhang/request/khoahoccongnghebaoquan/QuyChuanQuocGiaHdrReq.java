@@ -27,11 +27,12 @@ public class QuyChuanQuocGiaHdrReq {
     private String trichYeu;
     private String type;
     private int thoiGianLuuKhoToiDa;
-    private boolean lastest;
+    private Boolean lastest;
     private String trangThai;
     private String trangThaiHl;
     private String ldoTuChoi;
-    private boolean apDungCloaiVthh;
+    private Boolean apDungCloaiVthh;
+    private Boolean isMat;
     private String listTenLoaiVthh;
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
     private List<QuyChuanQuocGiaDtlReq> tieuChuanKyThuat = new ArrayList<>();

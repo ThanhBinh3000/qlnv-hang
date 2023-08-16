@@ -296,6 +296,8 @@ public class PathContains {
 
     public static final String GIA_BAN_TOI_THIEU = "/gia-ban-toi-thieu";
 
+    public static final String COUNT_SL_KH = "/count-sl-kh";
+
     public static final String DON_GIA_DUOC_DUYET= "/don-gia-duoc-duyet";
 
     public static final String XUAT_THANH_LY = "/xuat-thanh-ly";

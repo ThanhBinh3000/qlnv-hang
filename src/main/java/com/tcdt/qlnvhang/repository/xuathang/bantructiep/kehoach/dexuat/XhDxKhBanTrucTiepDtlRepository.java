@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.dexuat;
 
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepDtl;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaDtl;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +13,5 @@ public interface XhDxKhBanTrucTiepDtlRepository extends JpaRepository<XhDxKhBanT
 
     List<XhDxKhBanTrucTiepDtl> findAllByIdHdr(Long idHdr);
 
+    List<XhDxKhBanTrucTiepDtl> findByIdHdrIn(List<Long> listId);
 }
