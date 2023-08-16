@@ -17,6 +17,7 @@ public interface DcnbBcKqDcHdrRepository extends JpaRepository<DcnbBcKqDcHdr, Lo
     @Query(value = "SELECT distinct c FROM DcnbBcKqDcHdr c LEFT JOIN QlnvDmDonvi dvi ON dvi.maDvi = c.maDvi WHERE 1=1 " +
             "AND (:#{#param.soBc} IS NULL OR LOWER(c.soBc) LIKE CONCAT('%',LOWER(:#{#param.soBc}),'%')) " +
             "AND ((:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi})) " +
+            "AND ((:#{#param.type} IS NULL OR c.type = :#{#param.type})) " +
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR c.ngayBc >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR c.ngayBc <= :#{#param.denNgay}) ) " +
@@ -29,6 +30,7 @@ public interface DcnbBcKqDcHdrRepository extends JpaRepository<DcnbBcKqDcHdr, Lo
     @Query(value = "SELECT distinct c FROM DcnbBcKqDcHdr c LEFT JOIN QlnvDmDonvi dvi ON dvi.maDvi = c.maDvi WHERE 1=1 " +
             "AND (:#{#param.soBc} IS NULL OR LOWER(c.soBc) LIKE CONCAT('%',LOWER(:#{#param.soBc}),'%')) " +
             "AND ((:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%'))) " +
+            "AND ((:#{#param.type} IS NULL OR c.type = :#{#param.type})) " +
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR c.ngayBc >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR c.ngayBc <= :#{#param.denNgay}) ) " +
