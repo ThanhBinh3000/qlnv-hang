@@ -161,16 +161,16 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
                 hdr.setNgayPDuyetKt(LocalDate.now());
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
-            case Contains.CHODUYET_KT + Contains.CHODUYET_LDC:
+            case Contains.CHODUYET_KT + Contains.CHODUYET_LDCC:
                 hdr.setNguoiPDuyetKt(userInfo.getId());
                 hdr.setNgayPDuyetKt(LocalDate.now());
                 break;
-            case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
+            case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
                 hdr.setNguoiPDuyet(userInfo.getId());
                 hdr.setNgayPDuyet(LocalDate.now());
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
-            case Contains.CHODUYET_LDC + Contains.DADUYET_LDCC:
+            case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 hdr.setNguoiPDuyet(userInfo.getId());
                 hdr.setNgayPDuyet(LocalDate.now());
                 break;
