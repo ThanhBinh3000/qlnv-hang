@@ -67,8 +67,7 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
         if ("00".equals(req.getType())) { // kiểu xuất
             req.setTypeQd(Contains.DIEU_CHUYEN);
             searchDto = dcnbBangKeCanHangHdrRepository.searchPageXuat(req, pageable);
-        }
-        if ("01".equals(req.getType())) { // kiểu nhan
+        } else if ("01".equals(req.getType())) { // kiểu nhan
             req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
             searchDto = dcnbBangKeCanHangHdrRepository.searchPageNhan(req, pageable);
         }
@@ -241,14 +240,14 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
 //                }
                 if ("00".equals(optional.get().getType())) { // xuất
                     Optional<DcnbPhieuXuatKhoHdr> dcnbPhieuXuatKhoHdr = dcnbPhieuXuatKhoHdrRepository.findById(optional.get().getPhieuXuatKhoId());
-                    if(dcnbPhieuXuatKhoHdr.isPresent()){
+                    if (dcnbPhieuXuatKhoHdr.isPresent()) {
                         dcnbPhieuXuatKhoHdr.get().setBangKeChId(optional.get().getId());
                         dcnbPhieuXuatKhoHdr.get().setSoBangKeCh(optional.get().getSoBangKe());
                         dcnbPhieuXuatKhoHdrRepository.save(dcnbPhieuXuatKhoHdr.get());
                     }
                 } else if ("01".equals(optional.get().getType())) {
                     Optional<DcnbPhieuNhapKhoHdr> dcnbPhieuNhapKhoHdr = dcnbPhieuNhapKhoHdrRepository.findById(optional.get().getPhieuNhapKhoId());
-                    if(dcnbPhieuNhapKhoHdr.isPresent()){
+                    if (dcnbPhieuNhapKhoHdr.isPresent()) {
                         dcnbPhieuNhapKhoHdr.get().setBangKeChId(optional.get().getId());
                         dcnbPhieuNhapKhoHdr.get().setSoBangKeCh(optional.get().getSoBangKe());
                         dcnbPhieuNhapKhoHdrRepository.save(dcnbPhieuNhapKhoHdr.get());
