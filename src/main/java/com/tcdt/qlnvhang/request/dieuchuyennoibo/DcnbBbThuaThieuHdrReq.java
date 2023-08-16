@@ -22,6 +22,7 @@ public class DcnbBbThuaThieuHdrReq extends BaseRequest {
     private String tenDvi;
     private String maDviNhan;
     private String tenCanBo;
+    private String tenBaoCao;
     private String canBoId;
     private String soBb;
     private LocalDate ngayLap;
@@ -29,7 +30,7 @@ public class DcnbBbThuaThieuHdrReq extends BaseRequest {
     private String soQdDcCuc;
     private LocalDate ngayKyQdCuc;
     private String soBcKetQuaDc;
-    private String bcKetQuaDcId;
+    private Long bcKetQuaDcId;
     private LocalDate ngayLapBcKetQuaDc;
     private String nguyenNhan;
     private String kienNghi;
