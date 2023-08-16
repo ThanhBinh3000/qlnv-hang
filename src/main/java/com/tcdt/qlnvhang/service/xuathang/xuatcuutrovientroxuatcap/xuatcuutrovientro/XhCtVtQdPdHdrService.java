@@ -7,7 +7,7 @@ import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutro
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtTongHopHdr;
+import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtQuyetDinhPdHdr;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdHdrReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -58,7 +58,7 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
   private FileDinhKemService fileDinhKemService;
 
 
-  public Page<XhCtVtQuyetDinhPdHdr> searchPage(CustomUserDetails currentUser, SearchXhCtvtTongHopHdr req) throws Exception {
+  public Page<XhCtVtQuyetDinhPdHdr> searchPage(CustomUserDetails currentUser, SearchXhCtvtQuyetDinhPdHdr req) throws Exception {
     req.setDvql(currentUser.getDvql());
     //cuc xem cac quyet dinh tu tong cuc
     if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
@@ -394,7 +394,7 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
   }
 
 
-  public void export(CustomUserDetails currentUser, SearchXhCtvtTongHopHdr objReq, HttpServletResponse response) throws Exception {
+  public void export(CustomUserDetails currentUser, SearchXhCtvtQuyetDinhPdHdr objReq, HttpServletResponse response) throws Exception {
     PaggingReq paggingReq = new PaggingReq();
     paggingReq.setPage(0);
     paggingReq.setLimit(Integer.MAX_VALUE);
@@ -429,7 +429,7 @@ public class XhCtVtQdPdHdrService extends BaseServiceImpl {
     ex.export();
   }
 
-  public List<XhCtVtQuyetDinhPdHdr> searchQdPaXc(CustomUserDetails currentUser, SearchXhCtvtTongHopHdr req) throws Exception {
+  public List<XhCtVtQuyetDinhPdHdr> searchQdPaXc(CustomUserDetails currentUser, SearchXhCtvtQuyetDinhPdHdr req) throws Exception {
 //        req.setDvql(currentUser.getDvql());
 //        //cuc xem cac quyet dinh tu tong cuc
 //        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
