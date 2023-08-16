@@ -77,11 +77,11 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
     Page<DcnbQuyetDinhDcCHdr> searchChiCuc(@Param("param") SearchDcnbQuyetDinhDcC param, Pageable pageable);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO(c.id,c.soQdinh, c.ngayKyQdinh) FROM DcnbQuyetDinhDcCHdr c " +
-            " LEFT JOIN DcnbQuyetDinhDcCDtl dtl on c.id = dtl.hdrId " +
+            "LEFT JOIN DcnbQuyetDinhDcCDtl dtl on c.id = dtl.hdrId " +
             "LEFT JOIN DcnbKeHoachDcHdr kh on dtl.keHoachDcHdrId = kh.id " +
-            " WHERE 1=1 " +
+            "WHERE 1=1 " +
             "AND (:#{#param.soQdinh} IS NULL OR LOWER(c.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinh}),'%')) " +
-            "AND ((:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDvi},'')) OR (:#{#param.maDvi} IS NULL OR kh.maDvi LIKE CONCAT(:#{#param.maDvi},''))) " +
+            "AND ((:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDvi},'')))" +
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
             "AND (exists (SELECT distinct hdrv.id FROM DcnbKeHoachDcDtl dtlv JOIN DcnbKeHoachDcHdr hdrv ON hdrv.id = dtlv.hdrId JOIN QlnvDmVattu dmvt On dmvt.ma = dtlv.cloaiVthh  where hdrv.id = dtl.keHoachDcHdrId and (:#{#param.dsLoaiHang.isEmpty() } = true OR dmvt.loaiHang in :#{#param.dsLoaiHang})  ) ) " +
             "AND ((:#{#param.ngayDuyetTcTu}  IS NULL OR c.ngayDuyetTc >= :#{#param.ngayDuyetTcTu})" +
