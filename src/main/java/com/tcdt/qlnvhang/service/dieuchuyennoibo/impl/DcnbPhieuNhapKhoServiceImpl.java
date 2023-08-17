@@ -257,6 +257,14 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
         objReq.setMaDvi(currentUser.getDvql());
         objReq.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
+        if(objReq.getIsVatTu() == null){
+            objReq.setIsVatTu(false);
+        }
+        if(objReq.getIsVatTu()){
+            objReq.setDsLoaiHang(Arrays.asList("VT"));
+        }else {
+            objReq.setDsLoaiHang(Arrays.asList("LT","M"));
+        }
         List<DcnbPhieuNhapKhoHdrListDTO> searchDto =  hdrRepository.searchList(objReq);;
         return searchDto;
     }
@@ -266,6 +274,14 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
         objReq.setMaDvi(currentUser.getDvql());
         objReq.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
+        if(objReq.getIsVatTu() == null){
+            objReq.setIsVatTu(false);
+        }
+        if(objReq.getIsVatTu()){
+            objReq.setDsLoaiHang(Arrays.asList("VT"));
+        }else {
+            objReq.setDsLoaiHang(Arrays.asList("LT","M"));
+        }
         List<DcnbPhieuNhapKhoHdrListDTO> searchDto =  hdrRepository.searchListChung(objReq);;
         return searchDto;
     }
