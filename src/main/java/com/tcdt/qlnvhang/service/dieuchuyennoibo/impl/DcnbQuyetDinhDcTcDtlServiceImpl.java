@@ -82,7 +82,7 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
         data.setMaDvi(currentUser.getDvql());
         data.setType(Contains.DIEU_CHUYEN);
         data.setTrangThai(Contains.DUTHAO);
-        data.setDanhSachQuyetDinh(getDanhSachQuyetDinh(objReq));
+        data.setDanhSachQuyetDinh(getDanhSachQuyetDinh(objReq, false));
         DcnbQuyetDinhDcTcHdr created = dcnbQuyetDinhDcTcHdrRepository.save(data);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getCanCu(), created.getId(), DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_CAN_CU");
         List<FileDinhKem> quyetDinh = fileDinhKemService.saveListFileDinhKem(objReq.getQuyetDinh(), created.getId(), DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_QUYET_DINH");
@@ -135,7 +135,7 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
 //        deleteDetail(optional.get());
 //        dcnbQuyetDinhDcTcTTDtlRepository.flush();
 //        dcnbQuyetDinhDcTcDtlRepository.flush();
-        data.setDanhSachQuyetDinh(getDanhSachQuyetDinh(objReq));
+        data.setDanhSachQuyetDinh(getDanhSachQuyetDinh(objReq, true));
         DcnbQuyetDinhDcTcHdr created = dcnbQuyetDinhDcTcHdrRepository.save(data);
 
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_CAN_CU"));
@@ -157,11 +157,13 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
         return created;
     }
 
-    private List<DcnbQuyetDinhDcTcDtl> getDanhSachQuyetDinh(DcnbQuyetDinhDcTcHdrReq objReq) {
+    private List<DcnbQuyetDinhDcTcDtl> getDanhSachQuyetDinh(DcnbQuyetDinhDcTcHdrReq objReq, boolean isUpdate) {
         List<DcnbQuyetDinhDcTcDtl> result = new ArrayList<>();
         List<THKeHoachDieuChuyenTongCucDtl> quyetDinhPdDtl = objReq.getQuyetDinhPdDtl();
         for (THKeHoachDieuChuyenTongCucDtl qd : quyetDinhPdDtl) {
             DcnbQuyetDinhDcTcDtl qdtc = new DcnbQuyetDinhDcTcDtl();
+            qdtc.setId(isUpdate ? qd.getId() :null);
+            qdtc.setHdrId(isUpdate ? qd.getHdrId() :null);
             qdtc.setMaCucXuat(qd.getMaCucDxuat() == null ? qd.getMaCucXuat() : qd.getMaCucDxuat());
             qdtc.setTenCucXuat(qd.getTenCucDxuat() == null ? qd.getTenCucXuat() : qd.getTenCucDxuat());
             qdtc.setMaCucNhan(qd.getMaCucNhan());
