@@ -1,91 +1,61 @@
 package com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tcdt.qlnvhang.entities.BaseEntity;
-import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 
 @Getter
 @Setter
 @Entity
-@Table(name = XhXkVtBhBbBaoHanh.TABLE_NAME)
-public class XhXkVtBhBbBaoHanh extends BaseEntity implements Serializable {
+@Table(name = XhXkVtBhBaoCaoKqDtl.TABLE_NAME)
+public class XhXkVtBhBaoCaoKqDtl {
 
-  public static final String TABLE_NAME = "XH_XK_VT_BH_BB_BAO_HANH";
+  public static final String TABLE_NAME = "XH_XK_VT_BH_BAO_CAO_KQ_DTL";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXkVtBhBbBaoHanh.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhXkVtBhBbBaoHanh.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhXkVtBhBbBaoHanh.TABLE_NAME + "_SEQ")
-  private Long id;
-  private Integer nam;
-  private String maDvi;
-  private String soBienBan;
-  private LocalDate ngayLapBb;
-  private String soCanCu;
-  private Long idCanCu;
-  private Integer soLanLm;
-  private String soPhieuKdcl;
-  private Long idPhieuKdcl;
-  private LocalDate ngayKdcl;
-  private String maDiaDiem; // mã địa điểm (mã lô/ngăn kho)
-  private String loaiVthh;
-  private String cloaiVthh;
-  private BigDecimal slTonKho;
-  private Integer capLaiCaLo;
-  private BigDecimal slBaoHanh;
-  private LocalDate thoiGianBh;
-  private String canBoLapBb;
-  private String noiDung;
-  private String lyDo;
-  private String trangThai;
-  private String lyDoTuChoi;
-  private LocalDate ngayGduyet;
-  private Long nguoiGduyetId;
-  private LocalDate ngayPduyet;
-  private Long nguoiPduyetId;
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXkVtBhBaoCaoKqDtl.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = XhXkVtBhBaoCaoKqDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhXkVtBhBaoCaoKqDtl.TABLE_NAME + "_SEQ")
+  Long id;
+  String maDiaDiem;
+  String loaiVthh;
+  String donViTinh;
+  String cloaiVthh;
+  BigDecimal slLayMau;
+  BigDecimal slTonKho;
+  String maDviTsan;
+  Long idBbLayMauL1;
+  LocalDate ngayLayMauL1;
+  String soBbLayMauL1;
+  Long idBbLayMauL2;
+  LocalDate ngayLayMauL2;
+  String soBbLayMauL2;
+
   private String trangThaiBh;
+  private String trangThaiNh;
 
-  private Long idQdGnvNh;
-  private String soQdGnvNh;
-  private String soQdGiaoNvXh;
-  private Long idQdGiaoNvXh;
-  private Long idPhieuKtcl;
-  private String soPhieuKtcl;
-  private Long idBaoCaoKq;
-  private String soBaoCaoKq;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "idHdr")
+  @JsonIgnore
+  private XhXkVtBhBaoCaoKqHdr bhBaoCaoKqHdr;
 
-  private Long idBbLayMauL1;
-  private LocalDate ngayLayMauL1;
-  private String soBbLayMauL1;
-  private Long idBbLayMauL2;
-  private LocalDate ngayLayMauL2;
-  private String soBbLayMauL2;
-  private Integer ketQuaKdclL2;
-
+  @JsonIgnore
   @Transient
-  private List<FileDinhKem> fileDinhKems;
-  @Transient
-  private String tenTrangThai;
-  @Transient
-  private String tenDvi;
-  @Transient
-  private String tenLoai;
+  private Map<String, String> mapVthh;
   @Transient
   private String tenLoaiVthh;
   @Transient
   private String tenCloaiVthh;
-  @JsonIgnore
   @Transient
-  private Map<String, String> mapVthh;
+  private String tenTrangThaiBh;
+  @Transient
+  private String tenTrangThaiNh;
   @JsonIgnore
   @Transient
   private Map<String, String> mapDmucDvi;
@@ -134,5 +104,21 @@ public class XhXkVtBhBbBaoHanh extends BaseEntity implements Serializable {
     if (!DataUtils.isNullObject(getCloaiVthh())) {
       setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
     }
+  }
+
+  public BigDecimal getSlLayMau() {
+    return !ObjectUtils.isEmpty(slLayMau) ? slLayMau : BigDecimal.ZERO;
+  }
+
+  public void setSlLayMau(BigDecimal slLayMau) {
+    this.slLayMau = !ObjectUtils.isEmpty(slLayMau) ? slLayMau : BigDecimal.ZERO;
+  }
+
+  public BigDecimal getSlTonKho() {
+    return !ObjectUtils.isEmpty(slTonKho) ? slTonKho : BigDecimal.ZERO;
+  }
+
+  public void setSlTonKho(BigDecimal slTonKho) {
+    this.slTonKho = !ObjectUtils.isEmpty(slTonKho) ? slTonKho : BigDecimal.ZERO;
   }
 }
