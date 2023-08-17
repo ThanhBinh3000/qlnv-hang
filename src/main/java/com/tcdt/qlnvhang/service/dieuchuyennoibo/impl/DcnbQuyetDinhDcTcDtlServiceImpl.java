@@ -132,10 +132,10 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
         objReq.setType(data.getType());
         objReq.setMaDvi(data.getMaDvi());
         BeanUtils.copyProperties(objReq, data);
+//        deleteDetail(optional.get());
+//        dcnbQuyetDinhDcTcTTDtlRepository.flush();
+//        dcnbQuyetDinhDcTcDtlRepository.flush();
         data.setDanhSachQuyetDinh(getDanhSachQuyetDinh(objReq));
-        deleteDetail(optional.get());
-        dcnbQuyetDinhDcTcTTDtlRepository.flush();
-        dcnbQuyetDinhDcTcDtlRepository.flush();
         DcnbQuyetDinhDcTcHdr created = dcnbQuyetDinhDcTcHdrRepository.save(data);
 
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbQuyetDinhDcTcHdr.TABLE_NAME + "_CAN_CU"));
@@ -191,9 +191,7 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
                 }
             }else if(qd.getDanhSachQuyetDinhChiTiet() != null && !qd.getDanhSachQuyetDinhChiTiet().isEmpty()){
                 for (DcnbQuyetDinhDcTcTTDtl dc : qd.getDanhSachQuyetDinhChiTiet()) {
-                    DcnbQuyetDinhDcTcTTDtl dcnbQuyetDinhDcTcTTDtl = new DcnbQuyetDinhDcTcTTDtl();
-                    dcnbQuyetDinhDcTcTTDtl.setKeHoachDcHdrId(dc.getKeHoachDcHdrId());
-                    danhSachQuyetDinhChiTiet.add(dcnbQuyetDinhDcTcTTDtl);
+                    danhSachQuyetDinhChiTiet.add(dc);
                 }
             }else if(qd.getDanhSachHangHoa() != null && !qd.getDanhSachHangHoa().isEmpty()){
                 for (DcnbKeHoachDcDtl khct : qd.getDanhSachHangHoa()) {
@@ -266,11 +264,11 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
     }
 
     private void deleteDetail(DcnbQuyetDinhDcTcHdr data) {
-        List<DcnbQuyetDinhDcTcDtl> list = dcnbQuyetDinhDcTcDtlRepository.findByHdrId(data.getId());
-        List<Long> listIds = list.stream().map(DcnbQuyetDinhDcTcDtl::getId).collect(Collectors.toList());
-        List<DcnbQuyetDinhDcTcTTDtl> lists = dcnbQuyetDinhDcTcTTDtlRepository.findByHdrIdIn(listIds);
-        dcnbQuyetDinhDcTcTTDtlRepository.deleteAll(lists);
-        dcnbQuyetDinhDcTcDtlRepository.deleteAll(list);
+        List<DcnbQuyetDinhDcTcDtl> listDtls = dcnbQuyetDinhDcTcDtlRepository.findByHdrId(data.getId());
+        List<Long> listDtlIds = listDtls.stream().map(DcnbQuyetDinhDcTcDtl::getId).collect(Collectors.toList());
+        List<DcnbQuyetDinhDcTcTTDtl> listTTDtls = dcnbQuyetDinhDcTcTTDtlRepository.findByHdrIdIn(listDtlIds);
+        dcnbQuyetDinhDcTcTTDtlRepository.deleteAll(listTTDtls);
+        dcnbQuyetDinhDcTcDtlRepository.deleteAll(listDtls);
     }
 
     @Transient
