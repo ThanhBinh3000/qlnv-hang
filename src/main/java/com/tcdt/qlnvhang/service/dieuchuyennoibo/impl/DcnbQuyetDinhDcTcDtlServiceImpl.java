@@ -196,9 +196,13 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
                     danhSachQuyetDinhChiTiet.add(dc);
                 }
             }else if(qd.getDanhSachHangHoa() != null && !qd.getDanhSachHangHoa().isEmpty()){
+                Set<Long> ids = new HashSet<>();
                 for (DcnbKeHoachDcDtl khct : qd.getDanhSachHangHoa()) {
+                    ids.add(khct.getHdrId());
+                }
+                for (Long id : ids) {
                     DcnbQuyetDinhDcTcTTDtl dcnbQuyetDinhDcTcTTDtl = new DcnbQuyetDinhDcTcTTDtl();
-                    dcnbQuyetDinhDcTcTTDtl.setKeHoachDcHdrId(khct.getHdrId());
+                    dcnbQuyetDinhDcTcTTDtl.setKeHoachDcHdrId(id);
                     danhSachQuyetDinhChiTiet.add(dcnbQuyetDinhDcTcTTDtl);
                 }
             }
