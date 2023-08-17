@@ -174,6 +174,9 @@ public class XhXkVtBhBbKtNhapKhoService extends BaseServiceImpl {
       case Contains.CHODUYET_KTVBQ + Contains.DUTHAO:
       case Contains.CHODUYET_KT + Contains.CHODUYET_KTVBQ:
       case Contains.CHODUYET_LDCC + Contains.CHODUYET_KT:
+      case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_KTVBQ:
+      case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_KT:
+      case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_LDCC:
         optional.get().setNguoiGduyetId(currentUser.getUser().getId());
         optional.get().setNgayGduyet(LocalDate.now());
         break;
