@@ -100,6 +100,8 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                     objReq.getTrichyeu(),
                     Contains.convertDateToString(objReq.getNgayQdTu()),
                     Contains.convertDateToString(objReq.getNgayQdDen()),
+                    Contains.convertDateToString(objReq.getTuNgayKy()),
+                    Contains.convertDateToString(objReq.getDenNgayKy()),
                     objReq.getTrangThai(),
                     userInfo.getDvql(),
                     objReq.getLoaiQd(),

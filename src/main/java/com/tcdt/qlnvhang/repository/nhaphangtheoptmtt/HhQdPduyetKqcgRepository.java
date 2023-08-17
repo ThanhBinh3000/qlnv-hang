@@ -18,10 +18,13 @@ public interface HhQdPduyetKqcgRepository extends JpaRepository<HhQdPduyetKqcgHd
 
     @Query("SELECT DISTINCT QD FROM HhQdPduyetKqcgHdr QD " +
             " LEFT JOIN HhQdPheduyetKhMttDx DTL on DTL.id = QD.idPdKhDtl " +
+            " LEFT JOIN HopDongMttHdr HD on HD.idQdKq = QD.id " +
             " WHERE 1 = 1 " +
             "AND (:#{#param.namKh} IS NULL OR QD.namKh = :#{#param.namKh}) " +
-            "AND (:#{#param.ngayCgiaTu} IS NULL OR DTL.ngayNhanCgia >= :#{#param.ngayCgiaTu}) " +
-            "AND (:#{#param.ngayCgiaDen} IS NULL OR DTL.ngayNhanCgia <= :#{#param.ngayCgiaDen}) " +
+            "AND (:#{#param.ngayCgiaTu} IS NULL OR DTL.ngayNhanCgia >= TO_DATE(:#{#param.ngayCgiaTu},'yyyy-MM-dd')) " +
+            "AND (:#{#param.ngayCgiaDen} IS NULL OR DTL.ngayNhanCgia <= TO_DATE(:#{#param.ngayCgiaDen},'yyyy-MM-dd')) " +
+            "AND (:#{#param.tuNgayKy} IS NULL OR HD.ngayPduyet >= TO_DATE(:#{#param.tuNgayKy},'YYYY-MM-DD HH24:MI:SS')) " +
+            "AND (:#{#param.denNgayKy} IS NULL OR HD.ngayPduyet <= TO_DATE(:#{#param.denNgayKy},'YYYY-MM-DD HH24:MI:SS')) " +
             "AND (:#{#param.loaiVthh } IS NULL OR LOWER(QD.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
             "AND (:#{#param.trangThai } IS NULL OR LOWER(QD.trangThai) = :#{#param.trangThai}) " +
             "AND (:#{#param.maDvi} IS NULL OR QD.maDvi = :#{#param.maDvi}) "

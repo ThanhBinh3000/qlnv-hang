@@ -65,6 +65,8 @@ public class XhDxKhBanTrucTiepHdr extends BaseEntity implements Serializable {
     private Long nguoiGuiDuyetId;
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
+    private BigDecimal donGia;
+    private BigDecimal thanhTien;
 
     @Transient
     private String tenDvi;

@@ -194,6 +194,7 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
                 BeanUtils.copyProperties(child, chaoGia, "id");
                 chaoGia.setId(null);
                 chaoGia.setIdQdPdKqSldd(data.getId());
+                chaoGia.setSigned(false);
                 HhChiTietKqTTinChaoGia save = hhCtietKqTtinCgiaRepository.save(chaoGia);
                 if (!DataUtils.isNullObject(child.getFileDinhKems())) {
                     FileDinhKemReq file = new FileDinhKemReq();

@@ -43,6 +43,7 @@ public class HhDxKhLcntThopDtl implements Serializable {
 	String trichYeu;
 	String diaChiDvi;
 	BigDecimal donGiaVat;
+	BigDecimal tongTien;
 
 	@Transient
 	private String tgianDongThau;

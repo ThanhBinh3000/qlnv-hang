@@ -77,6 +77,8 @@ public class HopDongMttHdrService extends BaseServiceImpl {
 
   @Autowired
   private HhQdPduyetKqcgService hhQdPduyetKqcgService;
+  @Autowired
+  private HhCtietKqTtinCgiaRepository hhCtietKqTtinCgiaRepository;
 
 
   public Page<HopDongMttHdr> searchPage(HopDongMttHdrReq req) throws Exception {
@@ -485,7 +487,8 @@ public class HopDongMttHdrService extends BaseServiceImpl {
       }
       optional.get().setTrangThaiPhuLuc(req.getTrangThaiPhuLuc());
     }
-
+    Optional<HhChiTietKqTTinChaoGia> hhChiTietKqTTinChaoGia = hhCtietKqTtinCgiaRepository.findById(optional.get().getIdKqCgia());
+    hhChiTietKqTTinChaoGia.get().setSigned(true);
     return hopDongHdrRepository.save(optional.get());
   }
 

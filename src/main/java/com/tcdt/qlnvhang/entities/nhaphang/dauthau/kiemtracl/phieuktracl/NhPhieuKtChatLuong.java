@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl;
 
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -138,4 +139,8 @@ public class NhPhieuKtChatLuong extends TrangThaiBaseEntity implements Serializa
 
 	@Transient
 	private NhPhieuNhapKho phieuNhapKho;
+	@Transient
+	private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+	@Transient
+	private List<FileDinhKem> fileDinhKemsKtcl = new ArrayList<>();
 }

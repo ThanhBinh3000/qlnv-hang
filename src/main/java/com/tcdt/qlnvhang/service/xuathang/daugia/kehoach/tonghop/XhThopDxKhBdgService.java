@@ -47,11 +47,8 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhThopDxKhBdg> search = xhThopDxKhBdgRepository.searchPage(req, pageable);
-
-        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         search.getContent().forEach(data -> {
-            data.setMapVthh(mapDmucDvi);
             data.setMapVthh(mapVthh);
             data.setTrangThai(data.getTrangThai());
         });
@@ -74,7 +71,6 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
                 Map<String, Object> objDonVi = mapDmucDvi.get(thopDtl.getMaDvi());
                 thopDtl.setTenDvi(objDonVi.get("tenDvi").toString());
             }
-            thopDtl.setIdDxHdr(dxuat.getId());
             thopDtl.setIdDxHdr(dxuat.getId());
             thopDtl.setSoDxuat(dxuat.getSoDxuat());
             thopDtl.setNgayPduyet(dxuat.getNgayPduyet());
@@ -148,7 +144,7 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
     @Transactional
     public void delete(IdSearchReq idSearchReq) throws Exception {
         Optional<XhThopDxKhBdg> optional = xhThopDxKhBdgRepository.findById(idSearchReq.getId());
-        if (!optional.isPresent()) throw new Exception("Banr ghi không tồn tại");
+        if (!optional.isPresent()) throw new Exception("Bản ghi không tồn tại");
         XhThopDxKhBdg data = optional.get();
         if (!data.getTrangThai().equals(Contains.CHUATAO_QD)) {
             throw new Exception("Chỉ thực hiện xóa tổng hợp ở trạng thái chưa tạo quyết định");

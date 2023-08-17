@@ -299,16 +299,16 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl implements XhQdPdKhB
                         throw new Exception("Tổng hợp kế hoạch này đã được quyết định");
                     }
                     xhThopDxKhBttRepository.updateTrangThai(data.getIdThHdr(), Contains.DABANHANH_QD);
-                    List<XhThopDxKhBttDtl> dtlList = xhThopDxKhBttDtlRepository.findByIdThopHdr(data.getIdThHdr());
-                    for (XhThopDxKhBttDtl dtl : dtlList){
-                        Optional<XhDxKhBanTrucTiepHdr> optionalDx = xhDxKhBanTrucTiepHdrRepository.findById(dtl.getIdDxHdr());
-                        if (optionalDx.isPresent()){
-                            optionalDx.get().setSoQdPd(data.getSoQdPd());
-                            optionalDx.get().setIdSoQdPd(data.getId());
-                            optionalDx.get().setNgayKyQd(data.getNgayPduyet());
-                            xhDxKhBanTrucTiepHdrRepository.save(optionalDx.get());
-                        }
-                    }
+//                    List<XhThopDxKhBttDtl> dtlList = xhThopDxKhBttDtlRepository.findByIdThopHdr(data.getIdThHdr());
+//                    for (XhThopDxKhBttDtl dtl : dtlList){
+//                        Optional<XhDxKhBanTrucTiepHdr> optionalDx = xhDxKhBanTrucTiepHdrRepository.findById(dtl.getIdDxHdr());
+//                        if (optionalDx.isPresent()){
+//                            optionalDx.get().setSoQdPd(data.getSoQdPd());
+//                            optionalDx.get().setIdSoQdPd(data.getId());
+//                            optionalDx.get().setNgayKyQd(data.getNgayPduyet());
+//                            xhDxKhBanTrucTiepHdrRepository.save(optionalDx.get());
+//                        }
+//                    }
                 } else {
                     throw new Exception("Tổng hợp kế hoạch không được tìm thấy");
                 }
