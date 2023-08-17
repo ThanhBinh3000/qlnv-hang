@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktluongthuc.XhXkTongHopRep
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtQdXuatGiamVattuRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhBbBaoHanhRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhPhieuKdclRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhPhieuKtclRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhQdGiaonvXnRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -19,6 +20,7 @@ import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkKhXuatHang;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtQdXuatGiamVattu;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhBbBaoHanh;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuKdclHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuKtclHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhQdGiaonvXnHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -51,6 +53,8 @@ public class XhXkVtBhQdGiaonvXnService extends BaseServiceImpl {
   private XhXkVtBhBbBaoHanhRepository xhXkVtBhBbBaoHanhRepository;
   @Autowired
   private XhXkVtBhPhieuKdclRepository xhXkVtBhPhieuKdclRepository;
+  @Autowired
+  private XhXkVtBhPhieuKtclRepository xhXkVtBhPhieuKtclRepository;
 
 
   public Page<XhXkVtBhQdGiaonvXnHdr> searchPage(CustomUserDetails currentUser, XhXkVtBhQdGiaonvXnRequest req) throws Exception {
@@ -334,6 +338,19 @@ public class XhXkVtBhQdGiaonvXnService extends BaseServiceImpl {
             item.setIdQdGiaoNvNh(qdGiaonvNh.getId());
           }
           xhXkVtBhPhieuKdclRepository.save(item);
+        }
+      }else {
+        Optional<XhXkVtBhPhieuKtclHdr> phieuKtcl = xhXkVtBhPhieuKtclRepository.findById(Long.valueOf(qdGiaonvNh.getIdCanCu()));
+        if (phieuKtcl.isPresent()) {
+          XhXkVtBhPhieuKtclHdr item = phieuKtcl.get();
+          if (xoa) {
+            item.setSoQdGiaoNvNh(null);
+            item.setIdQdGiaoNvNh(null);
+          } else {
+            item.setSoQdGiaoNvNh(qdGiaonvNh.getSoQuyetDinh());
+            item.setIdQdGiaoNvNh(qdGiaonvNh.getId());
+          }
+          xhXkVtBhPhieuKtclRepository.save(item);
         }
       }
     }
