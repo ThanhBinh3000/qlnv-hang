@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh;
 
 import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuXuatNhapKhoRequest;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatNhapKho;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuXuatNhapKho;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
