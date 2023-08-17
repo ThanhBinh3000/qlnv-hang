@@ -11,7 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
-
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 @SpringBootTest
 class QlnvHangApplicationTests {
     @Autowired
@@ -21,7 +22,8 @@ class QlnvHangApplicationTests {
     private DcnbKeHoachDcHdrServiceImpl dcnbKeHoachDcHdrServiceImpl;
     @Autowired
     private DcnbQuyetDinhDcCHdrServiceImpl dcnbQuyetDinhDcCHdrServiceImpl;
-
+    @Autowired
+    private EntityManager entityManager;
     @Test
     void contextLoads() {
         System.out.println("HELLO");
@@ -38,5 +40,12 @@ class QlnvHangApplicationTests {
 //        DcnbQuyetDinhDcCHdr details = dcnbQuyetDinhDcCHdrServiceImpl.detail(statusReq.getId());
 //        // clone chi cục xuat
 //        dcnbQuyetDinhDcCHdrServiceImpl.cloneQuyetDinhDcCXuat(statusReq, Optional.of(details));
+//    }
+//    @Test
+//    void testCloneQdLoaiDc() throws Exception {
+//        String sql = "SELECT * FROM DCNB_QUYET_DINH_DC_C_HDR WHERE ID = :value";
+//        Query query = entityManager.createNativeQuery(sql, DcnbQuyetDinhDcCHdr.class);
+//        query.setParameter("value", 2441);
+//        System.out.println(query.getResultList());
 //    }
 }
