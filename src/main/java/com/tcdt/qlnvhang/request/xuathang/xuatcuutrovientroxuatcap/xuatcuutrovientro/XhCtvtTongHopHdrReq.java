@@ -19,6 +19,7 @@ public class XhCtvtTongHopHdrReq{
     private String noiDungThop;
     private String loaiVthh;
     private String cloaiVthh;
+    private String tenVthh;
     private String trangThai;
     private Long idQdPd;
     private String soQdPd;
