@@ -368,6 +368,8 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         if(objReq.getIdHd() != null){
             Optional<HopDongMttHdr> hopDongMttHdr = hopDongMttHdrRepository.findById(objReq.getIdHd());
             hopDongMttHdr.get().setIdQdGiaoNvNh(data.getId());
+            hopDongMttHdr.get().setSoQdGiaoNvNh(data.getSoQd());
+            hopDongMttHdr.get().setTrangThaiNh(Contains.DANG_THUC_HIEN);
             hopDongMttHdrRepository.save(hopDongMttHdr.get());
         }
         for(HhQdGiaoNvNhangDtlReq req : objReq.getHhQdGiaoNvNhangDtlList()){
@@ -399,6 +401,11 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 hhQdGiaoNvNhDdiemRepository.save(ddiem);
             }
             hhQdGiaoNvNhangDtlRepository.updateTrangThai(dtlReq.getId(),dtlReq.getTrangThai());
+            if(dtlReq.getTrangThai().equals(Contains.HOANTHANHCAPNHAT)){
+                Optional<HopDongMttHdr> hopDongMttHdr = hopDongMttHdrRepository.findById(objReq.getIdHd());
+                hopDongMttHdr.get().setTrangThaiNh(Contains.DA_HOAN_THANH);
+                hopDongMttHdrRepository.save(hopDongMttHdr.get());
+            }
         }
     }
 
