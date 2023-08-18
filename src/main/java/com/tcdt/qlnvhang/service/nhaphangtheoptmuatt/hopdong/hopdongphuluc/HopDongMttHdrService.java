@@ -414,7 +414,7 @@ public class HopDongMttHdrService extends BaseServiceImpl {
       dtl.setChildren(qdGiaoNvNhDdiem);
     }
     data.setQdGiaoNvuDtlList(listDtl);
-    if(data.getIdQdGiaoNvNh() != null){
+    if(data.getIdQdGiaoNvNh() != null && data.getIdQdKq() == null){
       Optional<HhQdPheduyetKhMttHdr> hhQdPheduyetKhMttHdr = hhQdPheduyetKhMttHdrRepository.findByIdQdGnvu(data.getIdQdGiaoNvNh());
       data.setHhQdPheduyetKhMttHdr(hhQdPheduyetKhMttHdr.get());
     }
