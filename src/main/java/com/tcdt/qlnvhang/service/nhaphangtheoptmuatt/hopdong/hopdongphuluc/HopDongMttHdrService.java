@@ -198,6 +198,7 @@ public class HopDongMttHdrService extends BaseServiceImpl {
     dataMap.setNgayTao(new Date());
     dataMap.setTrangThai(Contains.DU_THAO);
     dataMap.setTrangThaiPhuLuc(Contains.DUTHAO);
+    dataMap.setTrangThaiNh(Contains.CHUA_THUC_HIEN);
     dataMap.setMaDvi(userInfo.getDvql());
 
     HopDongMttHdr created = hopDongHdrRepository.save(dataMap);
