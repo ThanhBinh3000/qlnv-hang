@@ -26,9 +26,10 @@ public interface HhQdGiaoNvNhapHangRepository extends JpaRepository<HhQdGiaoNvNh
     nativeQuery = true)
     Page<HhQdGiaoNvNhapHang> searchPageCuc(Integer namNhap, String soQd, String loaiVthh, String cloaiVthh, String trichYeu, String ngayQdTu, String ngayQdDen, String trangThai, String maDvi, String loaiQd, Pageable pageable);
 
-    @Query(value = "select DISTINCT QD.* from HH_QD_GIAO_NV_NHAP_HANG QD, HH_QD_GIAO_NV_NHAP_HANG_DTL QD_DTL, HH_HD_MTT_HDR HD " +
-            " where QD.ID = QD_DTL.ID_QD_HDR" +
-            " AND HD.ID_QD_GIAO_NV_NH = QD.ID" +
+    @Query(value = "select DISTINCT QD.* from HH_QD_GIAO_NV_NHAP_HANG QD " +
+            " LEFT JOIN HH_QD_GIAO_NV_NHAP_HANG_DTL QD_DTL ON QD.ID = QD_DTL.ID_QD_HDR" +
+            " LEFT JOIN HH_HD_MTT_HDR HD ON HD.ID_QD_GIAO_NV_NH = QD.ID" +
+            " where 1=1" +
             " AND (:namNhap IS NULL OR QD.NAM_NHAP = TO_NUMBER(:namNhap))" +
             " AND (:soQd IS NULL OR LOWER(QD.SO_QD) LIKE LOWER(CONCAT(CONCAT('%',:soQd),'%')))" +
             " AND (:loaiVthh IS NULL OR QD.LOAI_VTHH = :loaiVthh)" +

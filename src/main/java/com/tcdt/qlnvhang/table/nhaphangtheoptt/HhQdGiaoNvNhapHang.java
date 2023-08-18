@@ -51,8 +51,11 @@ public class HhQdGiaoNvNhapHang implements Serializable {
     private Date tgianNkho;
     private String trichYeu;
     private String trangThai;
+    private String trangThaiHd;
     @Transient
     private String tenTrangThai;
+    @Transient
+    private String tenTrangThaiHd;
     private BigDecimal soLuong;
     @Temporal(TemporalType.DATE)
     private Date ngayTao;

@@ -55,6 +55,25 @@ public class HhHopDongMttHdrController extends BaseController {
     }
 
     @ApiOperation(value = "Tra cứu thông tin hợp đồng", response = List.class)
+    @PostMapping(value = PathContains.URL_TRA_CUU + "/ds-tao-qd", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> dsTaoQd(@Valid @RequestBody HopDongMttHdrReq req) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(hopDongMttHdrService.dsDuocTaoQdGvuNhang(req));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (
+                Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu thông tin : {}", e);
+        }
+
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Tra cứu thông tin hợp đồng", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU + "/hop-dong", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> searchPageHopDongHdr(@Valid @RequestBody SearchHopDongMttHdrDTO req) {
