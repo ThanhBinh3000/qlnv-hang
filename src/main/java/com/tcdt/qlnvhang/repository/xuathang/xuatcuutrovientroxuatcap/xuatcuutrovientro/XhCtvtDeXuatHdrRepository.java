@@ -51,6 +51,7 @@ public interface XhCtvtDeXuatHdrRepository extends JpaRepository<XhCtvtDeXuatHdr
       "c.idThop IS NULL AND " +
       "c.idQdPd IS NULL AND " +
       "(:#{#param.loaiVthh} IS NULL OR c.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) AND " +
+      "(:#{#param.tenVthh} IS NULL OR c.tenVthh LIKE CONCAT(:#{#param.tenVthh},'%')) AND " +
       "(:#{#param.loaiNhapXuat} IS NULL OR c.loaiNhapXuat LIKE CONCAT(:#{#param.loaiNhapXuat},'%')) AND " +
       "(:#{#param.trangThaiList == null || #param.trangThaiList.isEmpty()} = true OR c.trangThai IN :#{#param.trangThaiList}) " +
       "ORDER BY c.ngaySua DESC, c.ngayTao DESC, c.id DESC"
