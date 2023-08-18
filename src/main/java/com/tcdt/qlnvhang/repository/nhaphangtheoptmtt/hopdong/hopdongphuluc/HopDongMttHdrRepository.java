@@ -24,6 +24,17 @@ public interface HopDongMttHdrRepository extends JpaRepository<HopDongMttHdr, Lo
           "AND (:#{#param.maDvi} IS NULL OR DX.maDvi = :#{#param.maDvi})")
   Page<HopDongMttHdr> searchPage(@Param("param") HopDongMttHdrReq param, Pageable pageable);
 
+  @Query("SELECT DX from HopDongMttHdr DX WHERE 1 = 1 " +
+          "AND (:#{#param.namHd} IS NULL OR DX.namHd = :#{#param.namHd}) " +
+          "AND (:#{#param.soHd} IS NULL OR LOWER(DX.soHd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soHd}),'%' ) ) )" +
+          "AND (:#{#param.tenHd} IS NULL OR LOWER(DX.tenHd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.tenHd}),'%'))) " +
+          "AND (:#{#param.tenDviBan} IS NULL OR LOWER(DX.tenDviBan) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.tenDviBan}),'%'))) " +
+          "AND (:#{#param.loaiVthh} IS NULL OR DX.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+          "AND (:#{#param.trangThai} IS NULL OR DX.trangThai = :#{#param.trangThai}) " +
+          "AND DX.idQdGiaoNvNh is null " +
+          "AND (:#{#param.maDvi} IS NULL OR DX.maDvi = :#{#param.maDvi})")
+  Page<HopDongMttHdr> dsTaoQd(@Param("param") HopDongMttHdrReq param, Pageable pageable);
+
   Optional<HopDongMttHdr> findBySoHd(String soHd);
 
   @Transactional

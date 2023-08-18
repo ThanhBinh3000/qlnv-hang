@@ -102,6 +102,27 @@ public class HopDongMttHdrService extends BaseServiceImpl {
     return page;
   }
 
+  public Page<HopDongMttHdr> dsDuocTaoQdGvuNhang(HopDongMttHdrReq req) throws Exception {
+    Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
+    Page<HopDongMttHdr> page = hopDongHdrRepository.dsTaoQd(
+            req,
+            pageable
+    );
+    Map<String, String> hashMapVthh = getListDanhMucHangHoa();
+    Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
+    Map<String, String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
+    page.getContent().forEach(f -> {
+      f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+      f.setTenTrangThaiPhuLuc(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiPhuLuc()));
+      f.setTenTrangThaiNh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiNh()));
+      f.setTenDvi(hashMapDvi.get(f.getMaDvi()));
+      f.setTenLoaiVthh(hashMapVthh.get(f.getLoaiVthh()));
+      f.setTenCloaiVthh(hashMapVthh.get(f.getCloaiVthh()));
+      f.setTenLoaiHdong(hashMapLoaiHdong.get(f.getLoaiHdong()));
+    });
+    return page;
+  }
+
   @Transactional
   public HopDongMttHdr savePl(HopDongMttHdrReq req) throws Exception {
     saveDetail(req, req.getIdHd());
@@ -296,6 +317,16 @@ public class HopDongMttHdrService extends BaseServiceImpl {
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), HopDongMttHdr.TABLE_NAME);
         dataDB.setFileDinhKems(fileDinhKems);
       }
+    }
+    if(created.getIdQdKq() != null){
+      Optional<HhQdPduyetKqcgHdr> hhQdPduyetKqcgHdr = hhQdPduyetKqcgRepository.findById(created.getIdQdKq());
+      hhQdPduyetKqcgHdr.get().setTrangThaiHd(Contains.DANG_THUC_HIEN);
+      hhQdPduyetKqcgRepository.save(hhQdPduyetKqcgHdr.get());
+    }
+    if(created.getIdQdGiaoNvNh() != null){
+      Optional<HhQdGiaoNvNhapHang> hhQdGiaoNvNhapHang = hhQdGiaoNvNhapHangRepository.findById(created.getIdQdGiaoNvNh());
+      hhQdGiaoNvNhapHang.get().setTrangThaiHd(Contains.DANG_THUC_HIEN);
+      hhQdGiaoNvNhapHangRepository.save(hhQdGiaoNvNhapHang.get());
     }
 
     saveDetail(req, dataDB.getId());
