@@ -65,7 +65,6 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
     }
     XhCtvtTongHopHdr thopHdr = new XhCtvtTongHopHdr();
     thopHdr.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
-    thopHdr.setNgayTao(LocalDateTime.now());
     List<XhCtvtTongHopDtl> thopDtls = new ArrayList<>();
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();

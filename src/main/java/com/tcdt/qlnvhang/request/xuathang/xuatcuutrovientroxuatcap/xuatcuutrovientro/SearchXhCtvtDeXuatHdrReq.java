@@ -23,6 +23,7 @@ public class SearchXhCtvtDeXuatHdrReq extends BaseRequest {
   private String trangThai;
   private String type;
 
+  private String tenVthh;
   private String loaiVthh;
   private String loaiNhapXuat;
   private List<String> trangThaiList = new ArrayList<>();
