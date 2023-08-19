@@ -49,7 +49,7 @@ public class XhDxKhBanTrucTiepHdr extends BaseEntity implements Serializable {
     private Integer tgianGnhan;
     private String tgianGnhanGhiChu;
     private String pthucGnhan;
-    private String thongBaoKh;
+    private String thongBao;
     private BigDecimal tongSoLuong;
     private String ghiChu;
     private Long idSoQdPd;

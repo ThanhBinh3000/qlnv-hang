@@ -5,11 +5,9 @@ import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.tonghop.SearchXhTh
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,9 +29,4 @@ public interface XhThopDxKhBttRepository extends JpaRepository<XhThopDxKhBttHdr,
     List<XhThopDxKhBttHdr> findByIdIn(List<Long> ids);
 
     List<XhThopDxKhBttHdr> findAllByIdIn(List<Long> ids);
-
-    @Transactional()
-    @Modifying
-    @Query(value = "UPDATE XH_THOP_DX_KH_BTT_HDR SET TRANG_THAI =:trangThai WHERE ID = :idThHdr", nativeQuery = true)
-    void updateTrangThai(Long idThHdr, String trangThai);
 }
