@@ -77,11 +77,34 @@ public class HopDongMttHdrService extends BaseServiceImpl {
 
   @Autowired
   private HhQdPduyetKqcgService hhQdPduyetKqcgService;
+  @Autowired
+  private HhCtietKqTtinCgiaRepository hhCtietKqTtinCgiaRepository;
 
 
   public Page<HopDongMttHdr> searchPage(HopDongMttHdrReq req) throws Exception {
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
     Page<HopDongMttHdr> page = hopDongHdrRepository.searchPage(
+            req,
+            pageable
+    );
+    Map<String, String> hashMapVthh = getListDanhMucHangHoa();
+    Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
+    Map<String, String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
+    page.getContent().forEach(f -> {
+      f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+      f.setTenTrangThaiPhuLuc(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiPhuLuc()));
+      f.setTenTrangThaiNh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiNh()));
+      f.setTenDvi(hashMapDvi.get(f.getMaDvi()));
+      f.setTenLoaiVthh(hashMapVthh.get(f.getLoaiVthh()));
+      f.setTenCloaiVthh(hashMapVthh.get(f.getCloaiVthh()));
+      f.setTenLoaiHdong(hashMapLoaiHdong.get(f.getLoaiHdong()));
+    });
+    return page;
+  }
+
+  public Page<HopDongMttHdr> dsDuocTaoQdGvuNhang(HopDongMttHdrReq req) throws Exception {
+    Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
+    Page<HopDongMttHdr> page = hopDongHdrRepository.dsTaoQd(
             req,
             pageable
     );
@@ -175,6 +198,7 @@ public class HopDongMttHdrService extends BaseServiceImpl {
     dataMap.setNgayTao(new Date());
     dataMap.setTrangThai(Contains.DU_THAO);
     dataMap.setTrangThaiPhuLuc(Contains.DUTHAO);
+    dataMap.setTrangThaiNh(Contains.CHUA_THUC_HIEN);
     dataMap.setMaDvi(userInfo.getDvql());
 
     HopDongMttHdr created = hopDongHdrRepository.save(dataMap);
@@ -295,6 +319,16 @@ public class HopDongMttHdrService extends BaseServiceImpl {
         dataDB.setFileDinhKems(fileDinhKems);
       }
     }
+    if(created.getIdQdKq() != null){
+      Optional<HhQdPduyetKqcgHdr> hhQdPduyetKqcgHdr = hhQdPduyetKqcgRepository.findById(created.getIdQdKq());
+      hhQdPduyetKqcgHdr.get().setTrangThaiHd(Contains.DANG_THUC_HIEN);
+      hhQdPduyetKqcgRepository.save(hhQdPduyetKqcgHdr.get());
+    }
+    if(created.getIdQdGiaoNvNh() != null){
+      Optional<HhQdGiaoNvNhapHang> hhQdGiaoNvNhapHang = hhQdGiaoNvNhapHangRepository.findById(created.getIdQdGiaoNvNh());
+      hhQdGiaoNvNhapHang.get().setTrangThaiHd(Contains.DANG_THUC_HIEN);
+      hhQdGiaoNvNhapHangRepository.save(hhQdGiaoNvNhapHang.get());
+    }
 
     saveDetail(req, dataDB.getId());
     return dataDB;
@@ -381,7 +415,7 @@ public class HopDongMttHdrService extends BaseServiceImpl {
       dtl.setChildren(qdGiaoNvNhDdiem);
     }
     data.setQdGiaoNvuDtlList(listDtl);
-    if(data.getIdQdGiaoNvNh() != null){
+    if(data.getIdQdGiaoNvNh() != null && data.getIdQdKq() == null){
       Optional<HhQdPheduyetKhMttHdr> hhQdPheduyetKhMttHdr = hhQdPheduyetKhMttHdrRepository.findByIdQdGnvu(data.getIdQdGiaoNvNh());
       data.setHhQdPheduyetKhMttHdr(hhQdPheduyetKhMttHdr.get());
     }
@@ -485,7 +519,8 @@ public class HopDongMttHdrService extends BaseServiceImpl {
       }
       optional.get().setTrangThaiPhuLuc(req.getTrangThaiPhuLuc());
     }
-
+    Optional<HhChiTietKqTTinChaoGia> hhChiTietKqTTinChaoGia = hhCtietKqTtinCgiaRepository.findById(optional.get().getIdKqCgia());
+    hhChiTietKqTTinChaoGia.get().setSigned(true);
     return hopDongHdrRepository.save(optional.get());
   }
 

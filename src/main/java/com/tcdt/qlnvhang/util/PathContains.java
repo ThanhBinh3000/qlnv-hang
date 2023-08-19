@@ -280,6 +280,8 @@ public class PathContains {
     public static final String BCKQ_KIEM_DINH_MAU = "/bckq-kiem-dinh-mau";
     public static final String BIEN_BAN_BAO_HANH = "/bien-ban-bao-hanh";
 
+    public static final String BAO_CAO_BAO_HANH = "/bao-cao-bao-hanh";
+
     public static final String KIEM_NGHIEM_CHAT_LUONG = "/kn-cl";
     public static final String PHIEU_XUAT_KHO = "/phieu-xuat-kho";
     public static final String BANG_KE = "/bang-ke";

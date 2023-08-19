@@ -42,7 +42,7 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
             "AND (:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho}) " +
             "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
-            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
+            "AND ((:#{#param.maDvi} IS NULL OR LOWER(qdc.maDvi) LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND (qdc.loaiDc= 'DCNB' OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
             "AND (:#{#param.trangThai} IS NULL OR pxk.trangThai = :#{#param.trangThai}) " +
@@ -62,7 +62,9 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuXuatKhoHdrListDTO(" +
             "pxk.id,pxk.soPhieuXuatKho,pxk.ngayTaoPhieu) " +
             "FROM DcnbPhieuXuatKhoHdr pxk " +
+            "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = pxk.cloaiVthh " +
             "WHERE 1 =1 " +
+            "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
             "AND (:#{#param.trangThai} IS NULL OR pxk.trangThai = :#{#param.trangThai}) " +
             "AND ((:#{#param.qdinhDccId} IS NULL OR pxk.qddcId = :#{#param.qdinhDccId}))" +
             "AND ((:#{#param.maLoKho} IS NULL OR pxk.maLoKho = :#{#param.maLoKho}))" +
@@ -75,11 +77,14 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
             "FROM DcnbPhieuXuatKhoHdr pxk " +
             "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On pkncl.id = pxk.phieuKnChatLuongHdrId " +
             "LEFT JOIN DcnbBangKeXuatVTHdr bkxvth On bkxvth.phieuXuatKhoId = pxk.id " +
+            "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = pxk.cloaiVthh " +
             "WHERE 1 =1 " +
+            "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
             "AND (:#{#param.trangThai} IS NULL OR pxk.trangThai = :#{#param.trangThai}) " +
             "AND ((:#{#param.qdinhDccId} IS NULL OR pxk.qddcId = :#{#param.qdinhDccId}))" +
             "AND ((:#{#param.maLoKho} IS NULL OR pxk.maLoKho = :#{#param.maLoKho}))" +
             "AND ((:#{#param.maNganKho} IS NULL OR pxk.maNganKho = :#{#param.maNganKho}))" +
-            "ORDER BY pxk.soPhieuXuatKho desc, pxk.nam desc")
+            "GROUP BY pxk.id,pxk.soPhieuXuatKho,pxk.ngayTaoPhieu, pxk.tongSoLuong, pkncl.id, pkncl.soPhieu,pxk.bangKeChId, pxk.soBangKeCh,bkxvth.id, bkxvth.soBangKe "+
+            "ORDER BY pxk.soPhieuXuatKho desc")
     List<DcnbPhieuXuatKhoHdrListDTO> searchListChung(@Param("param") SearchPhieuXuatKho req);
 }

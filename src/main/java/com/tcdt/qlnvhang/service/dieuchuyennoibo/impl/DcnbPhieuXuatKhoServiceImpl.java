@@ -240,6 +240,14 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
         req.setMaDvi(dvql);
         List<DcnbPhieuXuatKhoHdrListDTO> searchDto = null;
         req.setTypeQd(Contains.DIEU_CHUYEN);
+        if(req.getIsVatTu() == null){
+            req.setIsVatTu(false);
+        }
+        if(req.getIsVatTu()){
+            req.setDsLoaiHang(Arrays.asList("VT"));
+        }else {
+            req.setDsLoaiHang(Arrays.asList("LT","M"));
+        }
         searchDto = hdrRepository.searchList(req);
         return searchDto;
     }
@@ -249,6 +257,14 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
         req.setMaDvi(dvql);
         List<DcnbPhieuXuatKhoHdrListDTO> searchDto = null;
         req.setTypeQd(Contains.DIEU_CHUYEN);
+        if(req.getIsVatTu() == null){
+            req.setIsVatTu(false);
+        }
+        if(req.getIsVatTu()){
+            req.setDsLoaiHang(Arrays.asList("VT"));
+        }else {
+            req.setDsLoaiHang(Arrays.asList("LT","M"));
+        }
         searchDto = hdrRepository.searchListChung(req);
         return searchDto;
     }

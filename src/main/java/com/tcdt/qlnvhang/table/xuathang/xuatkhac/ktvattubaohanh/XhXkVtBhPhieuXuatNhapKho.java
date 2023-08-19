@@ -52,7 +52,7 @@ public class XhXkVtBhPhieuXuatNhapKho extends BaseEntity implements Serializable
   private String cccdNgh;
   private String donViNgh;
   private String diaChiNgh;
-  private BigDecimal slThucXuat;
+  private BigDecimal slThucTe;
   private String ghiChu;
   private String trangThai;
   private String lyDoTuChoi;

@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.phieukiemtracl;
 
+import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuongCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
@@ -8,6 +9,7 @@ import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhi
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNxDdiemRepository;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongRequestDto;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNxDdiem;
 import com.tcdt.qlnvhang.table.UserInfo;
@@ -47,7 +49,8 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 
 	@Autowired
 	private final HhQdGiaoNvuNxDdiemRepository hhQdGiaoNvuNxDdiemRepository;
-	
+	@Autowired
+	private FileDinhKemService fileDinhKemService;
 
 	@Override
 	public Page<NhPhieuKtChatLuong> searchPage(QlpktclhPhieuKtChatLuongRequestDto objReq) {
@@ -75,7 +78,7 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 		phieu.setId(Long.valueOf(phieu.getSoPhieu().split("/")[0]));
 		this.validateData(phieu);
 		qlpktclhPhieuKtChatLuongRepo.save(phieu);
-
+		updateFile(req, phieu);
 		//Kết quả kiểm tra
 		Long phieuKiemTraChatLuongId = phieu.getId();
 
@@ -87,6 +90,17 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 		});
 		qlpktclhKetQuaKiemTraRepo.saveAll(ketQuaKiemTras);
 		return phieu;
+	}
+
+	private void updateFile(QlpktclhPhieuKtChatLuongRequestDto req, NhPhieuKtChatLuong phieu) {
+		fileDinhKemService.delete(phieu.getId(), Lists.newArrayList("NH_PHIEU_KT_CHAT_LUONG_KTCL"));
+		fileDinhKemService.delete(phieu.getId(), Lists.newArrayList("NH_PHIEU_KT_CHAT_LUONG"));
+		if (!DataUtils.isNullOrEmpty(req.getFileDinhKemsKtcl())) {
+			fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemsKtcl(), phieu.getId(), "NH_PHIEU_KT_CHAT_LUONG_KTCL");
+		}
+		if (!DataUtils.isNullObject(req.getFileDinhKems())) {
+			fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), phieu.getId(), "NH_PHIEU_KT_CHAT_LUONG");
+		}
 	}
 
 	@Override
@@ -115,7 +129,7 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 		nhPhieuKtChatLuong.setMaDvi(userInfo.getDvql());
 		this.validateData(nhPhieuKtChatLuong);
 		nhPhieuKtChatLuong = qlpktclhPhieuKtChatLuongRepo.save(nhPhieuKtChatLuong);
-
+		updateFile(req, nhPhieuKtChatLuong);
 		//Update kết quả kiểm tra
 		Long phieuKiemTraChatLuongId = nhPhieuKtChatLuong.getId();
 		qlpktclhKetQuaKiemTraRepo.deleteByPhieuKtChatLuongId(phieuKiemTraChatLuongId);
@@ -171,6 +185,8 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 		data.setTenNhaKho(listDanhMucDvi.get(data.getMaNhaKho()));
 		data.setTenNganKho(listDanhMucDvi.get(data.getMaNganKho()));
 		data.setTenLoKho(listDanhMucDvi.get(data.getMaLoKho()));
+		data.setFileDinhKems(fileDinhKemService.search(data.getId(), Collections.singletonList("NH_PHIEU_KT_CHAT_LUONG")));
+		data.setFileDinhKemsKtcl(fileDinhKemService.search(data.getId(), Collections.singletonList("NH_PHIEU_KT_CHAT_LUONG_KTCL")));
 		return data;
 	}
 

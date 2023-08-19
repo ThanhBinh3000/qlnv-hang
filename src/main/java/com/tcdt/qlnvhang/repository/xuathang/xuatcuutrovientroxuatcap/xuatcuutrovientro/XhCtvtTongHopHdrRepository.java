@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 public interface XhCtvtTongHopHdrRepository extends JpaRepository<XhCtvtTongHopHdr, Long> {
-  @Query("SELECT DISTINCT  c FROM XhCtvtTongHopHdr c  join c.deXuatCuuTro e" +
+  @Query("SELECT DISTINCT  c FROM XhCtvtTongHopHdr c left join c.deXuatCuuTro e" +
       " WHERE 1=1 " +
       "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
       "AND (:#{#param.maDviDx} IS NULL OR e.maDvi LIKE CONCAT(:#{#param.maDviDx},'%')) " +

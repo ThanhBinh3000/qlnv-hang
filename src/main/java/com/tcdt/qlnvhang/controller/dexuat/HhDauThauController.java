@@ -239,4 +239,21 @@ public class HhDauThauController {
 		return ResponseEntity.ok(resp);
 	}
 
+	@ApiOperation(value = "Update thông tin đấu thầu cho từng gói thầu", response = List.class)
+	@PostMapping(value = "update-goi-thau", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<BaseResponse> updateGoiThau(HttpServletRequest request, @Valid @RequestBody HhDthauReq objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			service.updateGoiThau(objReq);
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Update thông tin đấu thầu cho từng gói thầu trace: {}", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
+
 }

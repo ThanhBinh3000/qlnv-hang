@@ -28,7 +28,10 @@ public class XhCtvtTongHopDtl implements Serializable {
   private LocalDate ngayKyDx;
   private String trichYeuDx;
   private BigDecimal soLuongDx;
-  private String noiDung;
+  private String loaiHinhNhapXuat;
+  private String kieuNhapXuat;
+  private String mucDichXuat;
+  private String noiDungDx;
   private String loaiVthh;
   private String cloaiVthh;
   private String maDvi;

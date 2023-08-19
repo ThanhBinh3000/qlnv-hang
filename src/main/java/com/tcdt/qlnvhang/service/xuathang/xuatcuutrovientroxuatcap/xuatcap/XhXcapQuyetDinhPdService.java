@@ -1,11 +1,10 @@
 package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcap;
 
 import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdgCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXcapQuyetDinhPdHdrRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQdPdHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQdPdHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -15,7 +14,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXcapQuyetDinhPdHdr;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -27,7 +26,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -41,7 +39,7 @@ public class XhXcapQuyetDinhPdService extends BaseServiceImpl {
   @Autowired
   private XhXcapQuyetDinhPdHdrRepository xhXcapQuyetDinhPdHdrRepository;
   @Autowired
-  private XhCtVtQdPdHdrRepository xhCtVtQdPdHdrRepository;
+  private XhCtvtQdPdHdrRepository xhCtVtQdPdHdrRepository;
 
   @Autowired
   private FileDinhKemService fileDinhKemService;
@@ -96,7 +94,7 @@ public class XhXcapQuyetDinhPdService extends BaseServiceImpl {
 
     //update so xuat cap vao bang qd cuu tro
     if (!DataUtils.isNullObject(data.getIdQdPd())) {
-      Optional<XhCtVtQuyetDinhPdHdr> qdCuuTro = xhCtVtQdPdHdrRepository.findById(data.getIdQdPd());
+      Optional<XhCtvtQuyetDinhPdHdr> qdCuuTro = xhCtVtQdPdHdrRepository.findById(data.getIdQdPd());
       if (qdCuuTro.isPresent()) {
         qdCuuTro.get().setIdXc(created.getId());
         qdCuuTro.get().setSoXc(created.getSoQd());
@@ -144,7 +142,7 @@ public class XhXcapQuyetDinhPdService extends BaseServiceImpl {
 
     //update so xuat cap vao bang qd cuu tro
     if (!DataUtils.isNullObject(data.getIdQdPd())) {
-      Optional<XhCtVtQuyetDinhPdHdr> qdCuuTro = xhCtVtQdPdHdrRepository.findById(data.getIdQdPd());
+      Optional<XhCtvtQuyetDinhPdHdr> qdCuuTro = xhCtVtQdPdHdrRepository.findById(data.getIdQdPd());
       if (qdCuuTro.isPresent()) {
         qdCuuTro.get().setIdXc(created.getId());
         qdCuuTro.get().setSoXc(created.getSoQd());
@@ -217,7 +215,7 @@ public class XhXcapQuyetDinhPdService extends BaseServiceImpl {
     XhXcapQuyetDinhPdHdr data = optional.get();
 
     //update so xuat cap vao bang qd cuu tro
-    Optional<XhCtVtQuyetDinhPdHdr> qdCuuTro = xhCtVtQdPdHdrRepository.findById(data.getIdQdPd());
+    Optional<XhCtvtQuyetDinhPdHdr> qdCuuTro = xhCtVtQdPdHdrRepository.findById(data.getIdQdPd());
     if (qdCuuTro.isPresent()) {
       qdCuuTro.get().setIdXc(null);
       qdCuuTro.get().setSoXc(null);
@@ -240,7 +238,7 @@ public class XhXcapQuyetDinhPdService extends BaseServiceImpl {
 
     //update so xuat cap vao bang qd cuu tro
     List<Long> listIdQdPd = list.stream().map(XhXcapQuyetDinhPdHdr::getIdQdPd).collect(Collectors.toList());
-    List<XhCtVtQuyetDinhPdHdr> listObjQdPd = xhCtVtQdPdHdrRepository.findByIdIn(listIdQdPd);
+    List<XhCtvtQuyetDinhPdHdr> listObjQdPd = xhCtVtQdPdHdrRepository.findByIdIn(listIdQdPd);
     listObjQdPd.forEach(s -> {
       s.setIdXc(null);
       s.setSoXc(null);

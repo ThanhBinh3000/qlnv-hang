@@ -24,6 +24,7 @@ public interface HhDauThauService {
 	@Transactional(rollbackOn = Exception.class)
     List<HhDthauNthauDuthau> create(HhDthauReq objReq) throws Exception;
     void updateKqLcnt(HhDthauReq objReq) throws Exception;
+    void updateGoiThau(HhDthauReq objReq) throws Exception;
 
 	Page<HhQdKhlcntDtl> selectPage(HhQdKhlcntSearchReq objReq) throws Exception;
 	Page<HhQdKhlcntHdr> selectPageVt(HhQdKhlcntSearchReq objReq) throws Exception;

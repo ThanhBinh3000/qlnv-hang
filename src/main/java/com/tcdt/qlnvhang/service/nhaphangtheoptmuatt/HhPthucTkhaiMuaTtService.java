@@ -12,6 +12,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhChiTietTTinChaoGia;
 
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDcQdPdKhmttSlddDtl;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdPdKhMttSlddDtl;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -47,6 +48,9 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
 
     @Autowired
     private HhQdPdKhMttSlddDtlRepository hhQdPdKhMttSlddDtlRepository;
+
+    @Autowired
+    private HhDcQdPdKhmttSlddDtlRepository hhDcQdPdKhmttSlddDtlRepository;
 
 
     public Page<HhQdPheduyetKhMttDx> selectPage(SearchHhPthucTkhaiReq req) throws Exception {
@@ -130,10 +134,20 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
             HhQdPheduyetKhMttSLDD sldd = new HhQdPheduyetKhMttSLDD();
             BeanUtils.copyProperties(hhQdPheduyetKhMttSLDDReq, sldd);
             hhQdPheduyetKhMttSLDDRepository.save(sldd);
-            for (HhQdPdKhMttSlddDtlReq child : hhQdPheduyetKhMttSLDDReq.getChildren()) {
-                HhQdPdKhMttSlddDtl hhQdPdKhMttSlddDtl = new HhQdPdKhMttSlddDtl();
-                BeanUtils.copyProperties(child, hhQdPdKhMttSlddDtl);
-                hhQdPdKhMttSlddDtlRepository.save(hhQdPdKhMttSlddDtl);
+            if(hdr.get().getIsChange() != null){
+                hhDcQdPdKhmttSlddDtlRepository.deleteAllByIdDiaDiem(sldd.getId());
+                for (HhQdPdKhMttSlddDtlReq child : hhQdPheduyetKhMttSLDDReq.getChildren()) {
+                    HhDcQdPdKhmttSlddDtl hhDcQdPdKhmttSlddDtl = new HhDcQdPdKhmttSlddDtl();
+                    BeanUtils.copyProperties(child, hhDcQdPdKhmttSlddDtl);
+                    hhDcQdPdKhmttSlddDtlRepository.save(hhDcQdPdKhmttSlddDtl);
+                }
+            }else{
+                hhQdPdKhMttSlddDtlRepository.deleteAllByIdDiaDiem(sldd.getId());
+                for (HhQdPdKhMttSlddDtlReq child : hhQdPheduyetKhMttSLDDReq.getChildren()) {
+                    HhQdPdKhMttSlddDtl hhQdPdKhMttSlddDtl = new HhQdPdKhMttSlddDtl();
+                    BeanUtils.copyProperties(child, hhQdPdKhMttSlddDtl);
+                    hhQdPdKhMttSlddDtlRepository.save(hhQdPdKhMttSlddDtl);
+                }
             }
             hhCtietTtinCgiaRepository.deleteAllByIdQdPdSldd(hhQdPheduyetKhMttSLDDReq.getId());
             for (HhChiTietTTinChaoGiaReq child : hhQdPheduyetKhMttSLDDReq.getListChaoGia()) {
@@ -183,7 +197,7 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
             throw new Exception("Bản nghi không tồn tại");
         }
          String status = stReq.getTrangThai() + optional.get().getTrangThai();
-        if ((NhapXuatHangTrangThaiEnum.HOANTHANHCAPNHAT.getId() + NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId()).equals(status)) {
+        if ((NhapXuatHangTrangThaiEnum.HOANTHANHCAPNHAT.getId() + NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId()).equals(status) || (NhapXuatHangTrangThaiEnum.HOANTHANHCAPNHAT.getId() + NhapXuatHangTrangThaiEnum.CHUACAPNHAT.getId()).equals(status)) {
             optional.get().setTrangThai(stReq.getTrangThai());
         }else{
             throw new Exception("Cập nhật không thành công");

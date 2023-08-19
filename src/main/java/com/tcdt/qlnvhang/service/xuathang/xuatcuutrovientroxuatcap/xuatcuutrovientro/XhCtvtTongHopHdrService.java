@@ -30,7 +30,6 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +64,6 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
     }
     XhCtvtTongHopHdr thopHdr = new XhCtvtTongHopHdr();
     thopHdr.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
-    thopHdr.setNgayTao(LocalDateTime.now());
     List<XhCtvtTongHopDtl> thopDtls = new ArrayList<>();
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
@@ -78,7 +76,10 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
         thopDtl.setNgayKyDx(s.getNgayPduyet());
         thopDtl.setTrichYeuDx(s.getTrichYeu());
         thopDtl.setSoLuongDx(s1.getSoLuong());
-        thopDtl.setNoiDung(s1.getNoiDung());
+        thopDtl.setNoiDungDx(s1.getNoiDung());
+        thopDtl.setLoaiHinhNhapXuat(s.getLoaiNhapXuat());
+        thopDtl.setKieuNhapXuat(s.getKieuNhapXuat());
+        thopDtl.setMucDichXuat(s.getMucDichXuat());
         thopDtl.setLoaiVthh(s1.getLoaiVthh());
         thopDtl.setCloaiVthh(s1.getCloaiVthh());
         thopDtl.setMaDvi(s1.getMaDvi());
