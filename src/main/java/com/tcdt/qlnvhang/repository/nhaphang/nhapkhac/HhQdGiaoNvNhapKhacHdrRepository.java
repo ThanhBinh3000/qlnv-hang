@@ -51,7 +51,7 @@ public interface HhQdGiaoNvNhapKhacHdrRepository extends JpaRepository<HhQdGiaoN
     Optional<HhQdGiaoNvuNhapHangKhacHdr> findById(Long id);
     List<HhQdGiaoNvuNhapHangKhacHdr> findBySoQd(String soQd);
     @Query(
-            value = " SELECT qdnk " +
+            value = " SELECT DISTINCT qdnk " +
                     " FROM HhQdGiaoNvuNhapHangKhacHdr qdnk " +
                     " LEFT JOIN HhQdPdNhapKhacDtl pdtdl ON pdtdl.idDxHdr = qdnk.idQdPdNk " +
                     " LEFT JOIN HhBbNghiemThuNhapKhac bbnt ON qdnk.id = bbnt.idQdGiaoNvNh" +
@@ -66,6 +66,7 @@ public interface HhQdGiaoNvNhapKhacHdrRepository extends JpaRepository<HhQdGiaoN
                     "  AND (:#{#req.denNgayKTStr} IS NULL OR bbnt.ngayNghiemThu <= TO_DATE(:#{#req.denNgayKTStr}, 'YYYY-MM-DD HH24:MI:SS'))" +
                     "  AND (:#{#req.soBbNtBq} IS NULL OR LOWER(bbnt.soBbNtBq) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.soBbNtBq}),'%'))) " +
                     "  AND (:#{#req.trangThai} IS NULL OR bbnt.trangThai = :#{#req.trangThai}) "+
+                    "  AND (:#{#req.trangThaiQdnk} IS NULL OR qdnk.trangThai = :#{#req.trangThaiQdnk}) "+
                     "  ORDER BY qdnk.ngaySua desc , qdnk.ngayTao desc, qdnk.id desc"
     )
     Page<HhQdGiaoNvuNhapHangKhacHdr> searchBbNtBq(HhBbNghiemThuNhapKhacSearch req, Pageable pageable);

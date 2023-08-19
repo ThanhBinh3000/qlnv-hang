@@ -86,6 +86,8 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 	@Transient
 	Integer soGthau;
 	@Transient
+	Long soGthauTrung;
+	@Transient
 	String tenDviTrungThau;
 	@Transient
 	String tenTrangThaiNh;

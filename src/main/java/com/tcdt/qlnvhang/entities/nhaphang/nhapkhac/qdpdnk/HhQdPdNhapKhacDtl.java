@@ -52,14 +52,15 @@ public class HhQdPdNhapKhacDtl {
     @Transient
     private String tenLoaiVthh;
     @Transient
-    private String dvt;
-    @Transient
     String tenLoaiHangHoa;
     private String cloaiVthh;
     private BigDecimal slTonKho;
     private BigDecimal slHaoDoiDinhMuc;
     private BigDecimal slDoiThua;
     private BigDecimal donGia;
+    private BigDecimal slTonKhoThucTe;
+    private BigDecimal slNhap;
+    private String dvt;
     @Transient
     List<HhBbNghiemThuNhapKhac> bbNghiemThuNhapKhacList;
     @Transient

@@ -246,14 +246,21 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
                 item.setHhQdKhlcntHdr(hhQdKhlcntHdr);
                 item.setNamKhoach(hhQdKhlcntHdr.getNamKhoach().toString());
                 List<HhQdKhlcntDsgthau> byIdQdDtl = goiThauRepository.findByIdQdDtl(item.getId());
-                long countThanhCong = byIdQdDtl.stream().filter(x -> x.getTrangThai().equals(NhapXuatHangTrangThaiEnum.THANH_CONG.getId())).count();
-                long countThatBai = byIdQdDtl.stream().filter(x -> x.getTrangThai().equals(NhapXuatHangTrangThaiEnum.THAT_BAI.getId())).count();
+                long countThanhCong = byIdQdDtl.stream().filter(x -> (
+                        x.getTrangThaiDt() != null &&
+                        x.getTrangThaiDt().equals(NhapXuatHangTrangThaiEnum.THANH_CONG.getId())
+                )).count();
+                long countThatBai = byIdQdDtl.stream().filter(x -> (
+                        x.getTrangThaiDt() != null && !x.getTrangThaiDt().equals(NhapXuatHangTrangThaiEnum.THANH_CONG.getId()))).count();
                 item.setSoGthauTrung(countThanhCong);
                 item.setSoGthauTruot(countThatBai);
                 item.setSoGthau(Long.valueOf(byIdQdDtl.size()));
                 if(!StringUtils.isEmpty(item.getSoDxuat())){
                     Optional<HhDxuatKhLcntHdr> bySoDxuat = hhDxuatKhLcntHdrRepository.findBySoDxuat(item.getSoDxuat());
-                    bySoDxuat.ifPresent(item::setDxuatKhLcntHdr);
+                    if (bySoDxuat.isPresent()) {
+                        bySoDxuat.get().setTenPthucLcnt(hashMapPthucDthau.get(bySoDxuat.get().getPthucLcnt()));
+                        item.setDxuatKhLcntHdr(bySoDxuat.get());
+                    }
                 }
                 if(!StringUtils.isEmpty(item.getSoQdPdKqLcnt())){
                     Optional<HhQdPduyetKqlcntHdr> bySoQd = hhQdPduyetKqlcntHdrRepository.findBySoQd(item.getSoQdPdKqLcnt());
@@ -458,12 +465,12 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
         if(!optional.isPresent()){
             throw new Exception("Thông tin đấu thầu không tồn tại");
         }
-        List<HhQdKhlcntDsgthau> byIdQdDtl = goiThauRepository.findByIdQdDtl(stReq.getId());
-
-        List<HhQdKhlcntDsgthau> collect = byIdQdDtl.stream().filter(item -> item.getTrangThai().equals(NhapXuatHangTrangThaiEnum.CHUACAPNHAT.getId())).collect(Collectors.toList());
-        if(!collect.isEmpty()){
-            throw new Exception("Vui lòng cập nhật thông tin các gói thầu");
-        }
+//        List<HhQdKhlcntDsgthau> byIdQdDtl = goiThauRepository.findByIdQdDtl(stReq.getId());
+//
+//        List<HhQdKhlcntDsgthau> collect = byIdQdDtl.stream().filter(item -> item.getTrangThai().equals(NhapXuatHangTrangThaiEnum.CHUACAPNHAT.getId())).collect(Collectors.toList());
+//        if(!collect.isEmpty()){
+//            throw new Exception("Vui lòng cập nhật thông tin các gói thầu");
+//        }
 
         String status = stReq.getTrangThai() + optional.get().getTrangThai();
         if ((NhapXuatHangTrangThaiEnum.HOANTHANHCAPNHAT.getId() + NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId()).equals(status)) {

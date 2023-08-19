@@ -39,4 +39,7 @@ public class HhDxuatKhNhapKhacDtl {
     private BigDecimal slHaoDoiDinhMuc;
     private BigDecimal slDoiThua;
     private BigDecimal donGia;
+    private BigDecimal slTonKhoThucTe;
+    private BigDecimal slNhap;
+    private String dvt;
 }
