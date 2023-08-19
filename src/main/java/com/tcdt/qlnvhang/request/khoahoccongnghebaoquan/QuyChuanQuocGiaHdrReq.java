@@ -34,6 +34,7 @@ public class QuyChuanQuocGiaHdrReq {
     private Boolean apDungCloaiVthh;
     private Boolean isMat;
     private String listTenLoaiVthh;
+    private String maBn;
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
     private List<QuyChuanQuocGiaDtlReq> tieuChuanKyThuat = new ArrayList<>();
 }

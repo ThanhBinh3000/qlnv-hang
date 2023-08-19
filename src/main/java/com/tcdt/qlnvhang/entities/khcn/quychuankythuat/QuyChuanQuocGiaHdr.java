@@ -53,6 +53,7 @@ public class QuyChuanQuocGiaHdr extends BaseEntity implements Serializable {
     private String trangThaiHl;
     private String listTenLoaiVthh;
     private Boolean isMat;
+    private String maBn;
 
 
     @Transient
@@ -78,6 +79,8 @@ public class QuyChuanQuocGiaHdr extends BaseEntity implements Serializable {
     private List<QuyChuanQuocGiaDtl> tieuChuanKyThuat = new ArrayList<>();
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+    @Transient
+    private String tenBn;
 
     @Transient
     String tenTrangThaiHl;
