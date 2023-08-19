@@ -72,6 +72,7 @@ public class HhBbNghiemThuNhapKhacServiceImpl extends BaseServiceImpl implements
         req.setDenNgayKTStr(convertFullDateToString(req.getDenNgayKT()));
         req.setTuNgayLPStr(convertFullDateToString(req.getTuNgayLP()));
         req.setDenNgayLPStr(convertFullDateToString(req.getDenNgayLP()));
+        req.setTrangThaiQdnk(Contains.BAN_HANH);
         Page<HhQdGiaoNvuNhapHangKhacHdr> data = hhQdGiaoNvNhapKhacHdrRepository.searchBbNtBq(req, pageable);
         Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
         data.forEach( f -> {
