@@ -31,7 +31,7 @@ public class XhCtvtTongHopHdrReq{
     private String lyDoTuChoi;
     private String type;
     private String loaiNhapXuat;
-    private BigDecimal tongSlCtVt;
+    private BigDecimal tongSlCtvt;
     private BigDecimal tongSlXuatCap;
     private BigDecimal tongSlDeXuat;
     private List<XhCtvtTongHopDtl> deXuatCuuTro = new ArrayList<>();

@@ -2,7 +2,8 @@ package com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovien
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.util.DataUtils;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.olap4j.impl.ArrayMap;
 
 import javax.persistence.*;
@@ -12,16 +13,17 @@ import java.time.LocalDate;
 import java.util.Map;
 
 @Entity
-@Table(name = XhCtvtTongHopDtl.TABLE_NAME)
-@Data
-public class XhCtvtTongHopDtl implements Serializable {
+@Table(name = XhCtvtQuyetDinhPdDtl.TABLE_NAME)
+@Getter
+@Setter
+public class XhCtvtQuyetDinhPdDtl implements Serializable {
+
   private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_CTVT_TONG_HOP_DTL";
+  public static final String TABLE_NAME = "XH_CTVT_QUYET_DINH_PD_DTL";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhCtvtTongHopDtl.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhCtvtTongHopDtl.TABLE_NAME
-      + "_SEQ", allocationSize = 1, name = XhCtvtTongHopDtl.TABLE_NAME + "_SEQ")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhCtvtQuyetDinhPdDtl.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = XhCtvtQuyetDinhPdDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhCtvtQuyetDinhPdDtl.TABLE_NAME + "_SEQ")
   private Long id;
   private Long idDx;
   private String soDx;
@@ -56,8 +58,8 @@ public class XhCtvtTongHopDtl implements Serializable {
 
   public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
     this.mapDmucDvi = mapDmucDvi;
-      String tenDvi = mapDmucDvi.containsKey(maDvi) ? mapDmucDvi.get(maDvi) : null;
-      setTenDvi(tenDvi);
+    String tenDvi = mapDmucDvi.containsKey(maDvi) ? mapDmucDvi.get(maDvi) : null;
+    setTenDvi(tenDvi);
   }
 
   public void setMapVthh(Map<String, String> mapVthh) {
@@ -73,6 +75,5 @@ public class XhCtvtTongHopDtl implements Serializable {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "idHdr")
   @JsonIgnore
-  private XhCtvtTongHopHdr xhCtvtTongHopHdr;
-
+  private XhCtvtQuyetDinhPdHdr xhCtvtQuyetDinhPdHdr;
 }

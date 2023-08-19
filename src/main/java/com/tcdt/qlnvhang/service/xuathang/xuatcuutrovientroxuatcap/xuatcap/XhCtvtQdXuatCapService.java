@@ -5,8 +5,8 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhCtvtQdXuatCapDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhCtvtQdXuatCapHdrRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQdPdDtlRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQdPdHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQdPdDtlRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQdPdHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcap.SearchXhCtvtQdXuatCap;
@@ -18,8 +18,8 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhCtvtQdXuatCapDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhCtvtQdXuatCapHdr;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdDtl;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdDtl;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import org.springframework.beans.BeanUtils;
@@ -45,9 +45,9 @@ public class XhCtvtQdXuatCapService extends BaseServiceImpl {
   @Autowired
   private XhCtvtQdXuatCapDtlRepository xhCtvtQdXuatCapDtlRepository;
   @Autowired
-  private XhCtVtQdPdDtlRepository xhCtVtQdPdDtlRepository;
+  private XhCtvtQdPdDtlRepository xhCtvtQdPdDtlRepository;
   @Autowired
-  private XhCtVtQdPdHdrRepository xhCtVtQdPdHdrRepository;
+  private XhCtvtQdPdHdrRepository xhCtVtQdPdHdrRepository;
 
   public Page<XhCtvtQdXuatCapHdr> search(SearchXhCtvtQdXuatCap req, CustomUserDetails currentUser) {
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
@@ -82,7 +82,7 @@ public class XhCtvtQdXuatCapService extends BaseServiceImpl {
 
       //update so xuat cap vao bang qd cuu tro
       if (!DataUtils.isNullObject(data.getQdPaXuatCapId())) {
-        Optional<XhCtVtQuyetDinhPdHdr> qdCuuTro = xhCtVtQdPdHdrRepository.findById(data.getQdPaXuatCapId());
+        Optional<XhCtvtQuyetDinhPdHdr> qdCuuTro = xhCtVtQdPdHdrRepository.findById(data.getQdPaXuatCapId());
         if (qdCuuTro.isPresent()) {
           qdCuuTro.get().setIdXc(created.getId());
           qdCuuTro.get().setSoXc(created.getSoQd());
@@ -141,16 +141,16 @@ public class XhCtvtQdXuatCapService extends BaseServiceImpl {
     BeanUtils.copyProperties(xhCtvtQdXuatCapHdr.get(), data);
     if (xhCtvtQdXuatCapHdr.get().getQdPaXuatCapId() != null) {
       data.setQdPaXuatCapId(xhCtvtQdXuatCapHdr.get().getQdPaXuatCapId());
-      List<XhCtVtQuyetDinhPdDtl> listDtl = xhCtVtQdPdDtlRepository.findByXhCtVtQuyetDinhPdHdrId(xhCtvtQdXuatCapHdr.get().getQdPaXuatCapId());
+      List<XhCtvtQuyetDinhPdDtl> listDtl = xhCtvtQdPdDtlRepository.findByXhCtvtQuyetDinhPdHdrId(xhCtvtQdXuatCapHdr.get().getQdPaXuatCapId());
       data.setQuyetDinhPdDtl(listDtl);
       data.setIsChonPhuongAn(true);
     }
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
     data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
-    List<FileDinhKem> fileDinhKem = fileDinhKemService.search(id, Collections.singletonList(XhCtVtQuyetDinhPdHdr.TABLE_NAME));
+    List<FileDinhKem> fileDinhKem = fileDinhKemService.search(id, Collections.singletonList(XhCtvtQuyetDinhPdHdr.TABLE_NAME));
     data.setFileDinhKem(fileDinhKem);
-    List<FileDinhKem> canCu = fileDinhKemService.search(id, Collections.singletonList(XhCtVtQuyetDinhPdHdr.TABLE_NAME + "_CAN_CU"));
+    List<FileDinhKem> canCu = fileDinhKemService.search(id, Collections.singletonList(XhCtvtQuyetDinhPdHdr.TABLE_NAME + "_CAN_CU"));
     data.setCanCu(canCu);
     Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
     List<XhCtvtQdXuatCapDtl> dtlList = xhCtvtQdXuatCapDtlRepository.findByHdrId(id);
@@ -193,7 +193,7 @@ public class XhCtvtQdXuatCapService extends BaseServiceImpl {
     fileDinhKemService.delete(xhCtvtQdXuatCapHdr.get().getId(), Lists.newArrayList(XhCtvtQdXuatCapHdr.TABLE_NAME));
 
     //update so xuat cap vao bang qd cuu tro
-    Optional<XhCtVtQuyetDinhPdHdr> qdCuuTro = xhCtVtQdPdHdrRepository.findById(xhCtvtQdXuatCapHdr.get().getQdPaXuatCapId());
+    Optional<XhCtvtQuyetDinhPdHdr> qdCuuTro = xhCtVtQdPdHdrRepository.findById(xhCtvtQdXuatCapHdr.get().getQdPaXuatCapId());
     if (qdCuuTro.isPresent()) {
       qdCuuTro.get().setIdXc(null);
       qdCuuTro.get().setSoXc(null);

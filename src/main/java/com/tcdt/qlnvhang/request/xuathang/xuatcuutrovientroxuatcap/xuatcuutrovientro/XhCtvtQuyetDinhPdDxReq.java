@@ -5,7 +5,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class XhCtVtQuyetDinhPdDxReq {
+public class XhCtvtQuyetDinhPdDxReq {
     private Long id;
     private Long idHdr;
     private String noiDung;
