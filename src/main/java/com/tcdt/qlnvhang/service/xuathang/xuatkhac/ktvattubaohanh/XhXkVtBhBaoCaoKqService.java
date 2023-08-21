@@ -73,6 +73,10 @@ public class XhXkVtBhBaoCaoKqService extends BaseServiceImpl {
     XhXkVtBhBaoCaoKqHdr data = new XhXkVtBhBaoCaoKqHdr();
     BeanUtils.copyProperties(objReq, data);
     data.setTrangThai(Contains.DUTHAO);
+    data.getBhBaoCaoKqDtl().forEach(s -> {
+      s.setBhBaoCaoKqHdr(data);
+      s.setId(null);
+    });
     XhXkVtBhBaoCaoKqHdr created = xhXkVtBhBaoCaoKqRepository.save(data);
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtBhBaoCaoKqHdr.TABLE_NAME);
     created.setFileDinhKems(fileDinhKems);
@@ -99,6 +103,8 @@ public class XhXkVtBhBaoCaoKqService extends BaseServiceImpl {
     }
     XhXkVtBhBaoCaoKqHdr data = optional.get();
     BeanUtils.copyProperties(objReq, data);
+    data.getBhBaoCaoKqDtl().forEach(e -> e.setBhBaoCaoKqHdr(data));
+    data.setBhBaoCaoKqDtl(objReq.getBhBaoCaoKqDtl());
     XhXkVtBhBaoCaoKqHdr created = xhXkVtBhBaoCaoKqRepository.save(data);
     fileDinhKemService.delete(data.getId(), Collections.singleton(XhXkVtBhBaoCaoKqHdr.TABLE_NAME));
     //save file đính kèm
