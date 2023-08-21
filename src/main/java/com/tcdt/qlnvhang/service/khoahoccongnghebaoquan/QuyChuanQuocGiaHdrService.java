@@ -115,7 +115,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         if (created.getTrangThaiHl().equals("01") && !listIdThayThe.isEmpty() && listIdThayThe.size() > 0) {
             List<QuyChuanQuocGiaHdr> allByIdIn = quyChuanQuocGiaHdrRepository.findAllByIdIn(listIdThayThe);
             allByIdIn.forEach(item -> {
-                item.setNgayHetHieuLuc(LocalDate.now());
+                item.setNgayHetHieuLuc(LocalDate.now().minusDays(1));
                 item.setTrangThaiHl(Contains.HET_HIEU_LUC);
             });
             quyChuanQuocGiaHdrRepository.saveAll(allByIdIn);
@@ -169,7 +169,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         if (created.getTrangThaiHl().equals("01") && listIdThayThe.size() > 0) {
             List<QuyChuanQuocGiaHdr> allByIdIn = quyChuanQuocGiaHdrRepository.findAllByIdIn(listIdThayThe);
             allByIdIn.forEach(item -> {
-                item.setNgayHetHieuLuc(LocalDate.now());
+                item.setNgayHetHieuLuc(LocalDate.now().minusDays(1));
                 item.setTrangThaiHl(Contains.HET_HIEU_LUC);
             });
             quyChuanQuocGiaHdrRepository.saveAll(allByIdIn);
@@ -326,7 +326,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             if (idsVanBanThayThes.length > 0) {
                 List<QuyChuanQuocGiaHdr> allByIdIn = quyChuanQuocGiaHdrRepository.findAllByIdIn(Arrays.asList(idsVanBanThayThes));
                 allByIdIn.forEach(item -> {
-                    item.setNgayHetHieuLuc(LocalDate.now());
+                    item.setNgayHetHieuLuc(LocalDate.now().minusDays(1));
                     item.setTrangThaiHl(Contains.HET_HIEU_LUC);
                 });
                 quyChuanQuocGiaHdrRepository.saveAll(allByIdIn);

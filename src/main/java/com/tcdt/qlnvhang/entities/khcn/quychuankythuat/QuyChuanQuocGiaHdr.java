@@ -92,14 +92,14 @@ public class QuyChuanQuocGiaHdr extends BaseEntity implements Serializable {
     public String getTrangThaiHl() {
         LocalDate dateNow = LocalDate.now();
         if (getTrangThai().equals(TrangThaiAllEnum.BAN_HANH.getId())) {
-            if (ObjectUtils.isEmpty(getNgayHieuLuc()) || (!ObjectUtils.isEmpty(getNgayHetHieuLuc()) && getNgayHetHieuLuc().isBefore(dateNow))) {
+            if (ObjectUtils.isEmpty(ngayHieuLuc) || (!ObjectUtils.isEmpty(ngayHetHieuLuc) && (ngayHetHieuLuc.isBefore(dateNow)))) {
                 return "00";
-            } else if ((!ObjectUtils.isEmpty(getNgayHieuLuc()) && getNgayHieuLuc().isAfter(dateNow))) {
+            } else if ((!ObjectUtils.isEmpty(ngayHieuLuc) && ngayHieuLuc.isAfter(dateNow))) {
                 return "02";
             }
             return "01";
         } else {
-            if ((!ObjectUtils.isEmpty(getNgayHetHieuLuc()) && getNgayHetHieuLuc().isBefore(dateNow))) {
+            if ((!ObjectUtils.isEmpty(ngayHetHieuLuc) && ngayHetHieuLuc.isBefore(dateNow))) {
                 return "00";
             } else {
                 return "02";
