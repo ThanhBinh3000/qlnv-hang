@@ -82,7 +82,9 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         if (objReq.getTieuChuanKyThuat().isEmpty()) {
             throw new Exception("Không tìm thấy thông tin tiêu chuẩn kỹ thuật");
         }
-        List<String> listCloai = quyChuanQuocGiaDtlRepository.findAllCloaiHoatDong(Contains.HOAT_DONG, null);
+//        List<String> listCloai = quyChuanQuocGiaDtlRepository.findAllCloaiHoatDong(Contains.HOAT_DONG, null);
+        List<QuyChuanQuocGiaHdr> allHdrCoHieuLuc = quyChuanQuocGiaHdrRepository.findAll().stream().filter(item -> item.getTrangThaiHl().equals("01")).collect(Collectors.toList());
+        List<String> listCloai = quyChuanQuocGiaDtlRepository.findAllByIdHdrIn(allHdrCoHieuLuc.stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList())).stream().map(QuyChuanQuocGiaDtl::getCloaiVthh).collect(Collectors.toList());
         List<String> listCloaiReq = objReq.getTieuChuanKyThuat().stream().map(QuyChuanQuocGiaDtlReq::getCloaiVthh).distinct().collect(Collectors.toList());
         listCloai.retainAll(listCloaiReq);
         if (!listCloai.isEmpty()) {
