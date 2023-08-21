@@ -94,12 +94,27 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         data.setMaDvi(userInfo.getDvql());
         data.setTrangThai(Contains.DUTHAO);
         if (DataUtils.isNullObject(objReq.getIdVanBanThayThe())) {
-            data.setIdVanBanThayThe(data.getId());
+            data.setIdVanBanThayThe(data.getId().toString());
         }
         QuyChuanQuocGiaHdr created = quyChuanQuocGiaHdrRepository.save(data);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), data.getId(), "KHCN_QUY_CHUAN_QG_HDR");
         created.setFileDinhKems(fileDinhKems);
         this.saveCtiet(data, objReq);
+        //Check bản ghi vừa thêm có hiệu lực và có văn bản thay thế ko , nếu có vb thay thế thì hết hiệu lực vb thay thế luôn
+        if (created.getTrangThaiHl().equals("01") && !DataUtils.isNullObject(objReq.getIdVanBanThayThe())) {
+            Long[] idsVanBanThayThes = Arrays.stream(created.getIdVanBanThayThe().split(","))
+                    .map(String::trim)
+                    .map(Long::valueOf)
+                    .toArray(Long[]::new);
+            if (idsVanBanThayThes.length > 0) {
+                List<QuyChuanQuocGiaHdr> allByIdIn = quyChuanQuocGiaHdrRepository.findAllByIdIn(Arrays.asList(idsVanBanThayThes));
+                allByIdIn.forEach(item -> {
+                    item.setNgayHetHieuLuc(LocalDate.now());
+                    item.setTrangThaiHl(Contains.HET_HIEU_LUC);
+                });
+                quyChuanQuocGiaHdrRepository.saveAll(allByIdIn);
+            }
+        }
         return created;
     }
 
@@ -132,6 +147,21 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
         quyChuanQuocGiaDtlRepository.deleteAll(dtlList);
         this.saveCtiet(data, objReq);
+        //Check bản ghi vừa thêm có hiệu lực và có văn bản thay thế ko , nếu có vb thay thế thì hết hiệu lực vb thay thế luôn
+        if (created.getTrangThaiHl().equals("01") && !DataUtils.isNullObject(objReq.getIdVanBanThayThe())) {
+            Long[] idsVanBanThayThes = Arrays.stream(created.getIdVanBanThayThe().split(","))
+                    .map(String::trim)
+                    .map(Long::valueOf)
+                    .toArray(Long[]::new);
+            if (idsVanBanThayThes.length > 0) {
+                List<QuyChuanQuocGiaHdr> allByIdIn = quyChuanQuocGiaHdrRepository.findAllByIdIn(Arrays.asList(idsVanBanThayThes));
+                allByIdIn.forEach(item -> {
+                    item.setNgayHetHieuLuc(LocalDate.now());
+                    item.setTrangThaiHl(Contains.HET_HIEU_LUC);
+                });
+                quyChuanQuocGiaHdrRepository.saveAll(allByIdIn);
+            }
+        }
         return created;
     }
 
@@ -276,14 +306,20 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         }
         optional.get().setTrangThai(statusReq.getTrangThai());
         QuyChuanQuocGiaHdr created = quyChuanQuocGiaHdrRepository.save(optional.get());
-        if (created.getIdVanBanThayThe() != null && created.getTrangThai().equals(Contains.BAN_HANH)) {
-            quyChuanQuocGiaHdrRepository.findById(created.getIdVanBanThayThe())
-                    .ifPresent(vanBanThayThe -> {
-                        vanBanThayThe.setNgayHetHieuLuc(LocalDate.now());
-                        vanBanThayThe.setTrangThaiHl(Contains.HET_HIEU_LUC);
-                        quyChuanQuocGiaHdrRepository.save(vanBanThayThe);
-                    });
-        }
+//        if (created.getIdVanBanThayThe() != null && created.getTrangThai().equals(Contains.BAN_HANH)) {
+//            Long[] idsVanBanThayThes = Arrays.stream(created.getIdVanBanThayThe().split(","))
+//                    .map(String::trim)
+//                    .map(Long::valueOf)
+//                    .toArray(Long[]::new);
+//            if (idsVanBanThayThes.length > 0) {
+//                List<QuyChuanQuocGiaHdr> allByIdIn = quyChuanQuocGiaHdrRepository.findAllByIdIn(Arrays.asList(idsVanBanThayThes));
+//                allByIdIn.forEach(item -> {
+//                    item.setNgayHetHieuLuc(LocalDate.now());
+//                    item.setTrangThaiHl(Contains.HET_HIEU_LUC);
+//                });
+//                quyChuanQuocGiaHdrRepository.saveAll(allByIdIn);
+//            }
+//        }
         return created;
     }
 

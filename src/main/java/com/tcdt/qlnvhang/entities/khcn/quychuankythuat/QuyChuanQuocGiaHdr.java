@@ -32,7 +32,7 @@ public class QuyChuanQuocGiaHdr extends BaseEntity implements Serializable {
             + "_SEQ", allocationSize = 1, name = QuyChuanQuocGiaHdr.TABLE_NAME + "_SEQ")
     private Long id;
     private String soVanBan;
-    private Long idVanBanThayThe;
+    private String idVanBanThayThe;
     private String soVanBanThayThe;
     private String maDvi;
     private String loaiVthh;
