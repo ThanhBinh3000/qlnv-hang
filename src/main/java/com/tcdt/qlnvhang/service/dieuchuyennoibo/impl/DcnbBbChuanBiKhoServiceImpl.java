@@ -71,6 +71,23 @@ public class DcnbBbChuanBiKhoServiceImpl implements DcnbBbChuanBiKhoService {
         return searchDto;
     }
 
+    public List<DcnbBbChuanBiKhoHdrDTO> list(DcnbBbChuanBiKhoHdrReq req) throws Exception {
+        CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
+        req.setMaDvi(currentUser.getDvql());
+        List<DcnbBbChuanBiKhoHdrDTO> searchDto = null;
+        if (req.getIsVatTu() == null) {
+            req.setIsVatTu(false);
+        }
+        if (req.getIsVatTu()) {
+            req.setDsLoaiHang(Arrays.asList("VT"));
+        } else {
+            req.setDsLoaiHang(Arrays.asList("LT", "M"));
+        }
+        req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
+        searchDto = hdrRepository.searchList(req);
+        return searchDto;
+    }
+
     @Override
     public DcnbBbChuanBiKhoHdr create(DcnbBbChuanBiKhoHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
