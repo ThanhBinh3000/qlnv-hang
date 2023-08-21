@@ -12,7 +12,7 @@ public class QuyChuanQuocGiaHdrReq {
 
     private Long id;
     private String soVanBan;
-    private Long idVanBanThayThe;
+    private String idVanBanThayThe;
     private String soVanBanThayThe;
     private String maDvi;
     private String loaiVthh;

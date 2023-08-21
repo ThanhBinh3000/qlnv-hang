@@ -14,6 +14,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -54,11 +55,16 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                 objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<QuyChuanQuocGiaHdr> data = quyChuanQuocGiaHdrRepository.search(objReq, pageable);
         Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
+        List<Long> idsHdr = data.getContent().stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList());
+        List<QuyChuanQuocGiaDtl> allByIdHdrIn = quyChuanQuocGiaDtlRepository.findAllByIdHdrIn(idsHdr);
+        Map<Long, List<QuyChuanQuocGiaDtl>> mapDtl = allByIdHdrIn.stream()
+                .collect(Collectors.groupingBy(QuyChuanQuocGiaDtl::getIdHdr));
         data.getContent().forEach(f -> {
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenTrangThaiHl(f.getTrangThaiHl().equals(Contains.CON_HIEU_LUC) ? "Còn hiệu lực" : (f.getTrangThaiHl().equals(Contains.HET_HIEU_LUC) ? "Hết hiệu lực" : "Chưa có hiệu lực"));
+            f.setTieuChuanKyThuat(mapDtl.get(f.getId()));
         });
         return data;
     }
@@ -151,7 +157,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         data.setFileDinhKems(fileDinhKems);
         List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
         if (!dtlList.isEmpty()) {
-            if (data.getApDungCloaiVthh () == false) {
+            if (data.getApDungCloaiVthh() == false) {
                 for (QuyChuanQuocGiaDtl dtl : dtlList) {
                     dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh()) ? null : hashMapDmHh.get(dtl.getLoaiVthh()));
                     dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh()) ? null : hashMapDmHh.get(dtl.getCloaiVthh()));
@@ -235,6 +241,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         ex.export();
     }
 
+    @Transactional
     public QuyChuanQuocGiaHdr approve(StatusReq statusReq) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (StringUtils.isEmpty(statusReq.getId())) {
