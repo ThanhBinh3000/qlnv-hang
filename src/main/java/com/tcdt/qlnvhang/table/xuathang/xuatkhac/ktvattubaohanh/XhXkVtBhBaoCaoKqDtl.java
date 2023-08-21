@@ -30,12 +30,8 @@ public class XhXkVtBhBaoCaoKqDtl {
   BigDecimal slLayMau;
   BigDecimal slTonKho;
   String maDviTsan;
-  Long idBbLayMauL1;
-  LocalDate ngayLayMauL1;
-  String soBbLayMauL1;
-  Long idBbLayMauL2;
-  LocalDate ngayLayMauL2;
-  String soBbLayMauL2;
+  BigDecimal slLayMauL1;
+  BigDecimal slLayMauL2;
 
   private String trangThaiBh;
   private String trangThaiNh;
