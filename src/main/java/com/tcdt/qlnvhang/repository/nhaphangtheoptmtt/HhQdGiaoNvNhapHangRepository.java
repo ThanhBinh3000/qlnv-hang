@@ -30,6 +30,7 @@ public interface HhQdGiaoNvNhapHangRepository extends JpaRepository<HhQdGiaoNvNh
             " LEFT JOIN HH_QD_GIAO_NV_NHAP_HANG_DTL QD_DTL ON QD.ID = QD_DTL.ID_QD_HDR" +
             " LEFT JOIN HH_HD_MTT_HDR HD ON HD.ID_QD_GIAO_NV_NH = QD.ID" +
             " LEFT JOIN HH_BIEN_BAN_NGHIEM_THU BBNT ON BBNT.ID_QD_GIAO_NV_NH = QD.ID" +
+            " LEFT JOIN HH_PHIEU_KT_CHAT_LUONG PKTCL ON PKTCL.ID_QD_GIAO_NV_NH = QD.ID" +
             " where 1=1" +
             " AND (:namNhap IS NULL OR QD.NAM_NHAP = TO_NUMBER(:namNhap))" +
             " AND (:soQd IS NULL OR LOWER(QD.SO_QD) LIKE LOWER(CONCAT(CONCAT('%',:soQd),'%')))" +
@@ -45,11 +46,16 @@ public interface HhQdGiaoNvNhapHangRepository extends JpaRepository<HhQdGiaoNvNh
             " AND (:denNgayTao IS NULL OR QD.NGAY_TAO <= TO_DATE(:denNgayTao,'YYYY-MM-DD HH24:MI:SS'))" +
             " AND (:tuNgayKetThuc IS NULL OR BBNT.NGAY_NGHIEM_THU >=  TO_DATE(:tuNgayKetThuc,'YYYY-MM-DD HH24:MI:SS')) " +
             " AND (:denNgayKetThuc IS NULL OR BBNT.NGAY_NGHIEM_THU <= TO_DATE(:denNgayKetThuc,'YYYY-MM-DD HH24:MI:SS'))" +
+
+            " AND (:tuLapPhieu IS NULL OR PKTCL.NGAY_TAO >=  TO_DATE(:tuLapPhieu,'YYYY-MM-DD HH24:MI:SS')) " +
+            " AND (:denLapPhieu IS NULL OR PKTCL.NGAY_TAO <= TO_DATE(:denLapPhieu,'YYYY-MM-DD HH24:MI:SS'))" +
+            " AND (:tuNgayGiamDinh IS NULL OR PKTCL.NGAY_GDINH >=  TO_DATE(:tuNgayGiamDinh,'YYYY-MM-DD HH24:MI:SS')) " +
+            " AND (:denNgayGiamDinh IS NULL OR PKTCL.NGAY_GDINH <= TO_DATE(:denNgayGiamDinh,'YYYY-MM-DD HH24:MI:SS'))" +
             " AND (:trangThai IS NULL OR QD.TRANG_THAI = :trangThai)" +
             " AND (:maDvi IS NULL OR LOWER(QD_DTL.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))",
 //            " AND (:maDvi IS NULL OR QD_DTL.MA_DVI = :maDvi)" ,
             nativeQuery = true)
-    Page<HhQdGiaoNvNhapHang> searchPageChiCuc(Integer namNhap, String soQd, String loaiVthh, String cloaiVthh, String trichYeu, String ngayQdTu, String ngayQdDen, String tuNgayKy, String denNgayKy, String tuNgayTao, String denNgayTao, String tuNgayKetThuc, String denNgayKetThuc, String trangThai, String maDvi, String loaiQd, Pageable pageable);
+    Page<HhQdGiaoNvNhapHang> searchPageChiCuc(Integer namNhap, String soQd, String loaiVthh, String cloaiVthh, String trichYeu, String ngayQdTu, String ngayQdDen, String tuNgayKy, String denNgayKy, String tuNgayTao, String denNgayTao, String tuNgayKetThuc, String denNgayKetThuc, String tuLapPhieu, String denLapPhieu, String tuNgayGiamDinh, String denNgayGiamDinh, String trangThai, String maDvi, String loaiQd, Pageable pageable);
 
     Optional<HhQdGiaoNvNhapHang> findAllBySoQd(String soQd);
 

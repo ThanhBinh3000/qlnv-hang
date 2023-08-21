@@ -32,7 +32,7 @@ public class QuyChuanQuocGiaHdr extends BaseEntity implements Serializable {
             + "_SEQ", allocationSize = 1, name = QuyChuanQuocGiaHdr.TABLE_NAME + "_SEQ")
     private Long id;
     private String soVanBan;
-    private Long idVanBanThayThe;
+    private String idVanBanThayThe;
     private String soVanBanThayThe;
     private String maDvi;
     private String loaiVthh;
@@ -92,19 +92,18 @@ public class QuyChuanQuocGiaHdr extends BaseEntity implements Serializable {
     public String getTrangThaiHl() {
         LocalDate dateNow = LocalDate.now();
         if (getTrangThai().equals(TrangThaiAllEnum.BAN_HANH.getId())) {
-            if (ObjectUtils.isEmpty(getNgayHieuLuc()) || (!ObjectUtils.isEmpty(getNgayHetHieuLuc()) && getNgayHetHieuLuc().isBefore(dateNow))) {
+            if (ObjectUtils.isEmpty(ngayHieuLuc) || (!ObjectUtils.isEmpty(ngayHetHieuLuc) && (ngayHetHieuLuc.isBefore(dateNow)))) {
                 return "00";
-            } else if ((!ObjectUtils.isEmpty(getNgayHieuLuc()) && getNgayHieuLuc().isAfter(dateNow))) {
+            } else if ((!ObjectUtils.isEmpty(ngayHieuLuc) && ngayHieuLuc.isAfter(dateNow))) {
                 return "02";
             }
             return "01";
         } else {
-            if (ObjectUtils.isEmpty(getNgayHieuLuc()) || (!ObjectUtils.isEmpty(getNgayHetHieuLuc()) && getNgayHetHieuLuc().isBefore(dateNow))) {
+            if ((!ObjectUtils.isEmpty(ngayHetHieuLuc) && ngayHetHieuLuc.isBefore(dateNow))) {
                 return "00";
-            } else if ((!ObjectUtils.isEmpty(getNgayHieuLuc()) && getNgayHieuLuc().isAfter(dateNow))) {
+            } else {
                 return "02";
             }
-            return "00";
         }
     }
 }

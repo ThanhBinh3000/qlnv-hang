@@ -14,6 +14,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -25,6 +26,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Transient;
@@ -54,11 +56,16 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                 objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<QuyChuanQuocGiaHdr> data = quyChuanQuocGiaHdrRepository.search(objReq, pageable);
         Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
+        List<Long> idsHdr = data.getContent().stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList());
+        List<QuyChuanQuocGiaDtl> allByIdHdrIn = quyChuanQuocGiaDtlRepository.findAllByIdHdrIn(idsHdr);
+        Map<Long, List<QuyChuanQuocGiaDtl>> mapDtl = allByIdHdrIn.stream()
+                .collect(Collectors.groupingBy(QuyChuanQuocGiaDtl::getIdHdr));
         data.getContent().forEach(f -> {
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenTrangThaiHl(f.getTrangThaiHl().equals(Contains.CON_HIEU_LUC) ? "Còn hiệu lực" : (f.getTrangThaiHl().equals(Contains.HET_HIEU_LUC) ? "Hết hiệu lực" : "Chưa có hiệu lực"));
+            f.setTieuChuanKyThuat(mapDtl.get(f.getId()));
         });
         return data;
     }
@@ -76,7 +83,22 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         if (objReq.getTieuChuanKyThuat().isEmpty()) {
             throw new Exception("Không tìm thấy thông tin tiêu chuẩn kỹ thuật");
         }
-        List<String> listCloai = quyChuanQuocGiaDtlRepository.findAllCloaiHoatDong(Contains.HOAT_DONG, null);
+//        List<String> listCloai = quyChuanQuocGiaDtlRepository.findAllCloaiHoatDong(Contains.HOAT_DONG, null);
+        List<QuyChuanQuocGiaHdr> allHdrCoHieuLuc = quyChuanQuocGiaHdrRepository.findAll().stream().filter(item -> item.getTrangThaiHl().equals("01")).collect(Collectors.toList());
+        //loai bỏ những id được thay thế
+        List<Long> listIdThayThe = new ArrayList<>();
+        if (!ObjectUtils.isEmpty(objReq.getIdVanBanThayThe())) {
+            listIdThayThe = Arrays.asList(Arrays.stream(objReq.getIdVanBanThayThe().split(","))
+                    .map(String::trim)
+                    .map(Long::valueOf)
+                    .toArray(Long[]::new));
+        }
+        List<Long> finalListIdThayThe = listIdThayThe;
+        List<Long> listHdrCoHieuLuc = allHdrCoHieuLuc.stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList()).stream()
+                .filter(item -> !finalListIdThayThe.contains(item))
+                .collect(Collectors.toList());
+
+        List<String> listCloai = quyChuanQuocGiaDtlRepository.findAllByIdHdrIn(listHdrCoHieuLuc).stream().map(QuyChuanQuocGiaDtl::getCloaiVthh).collect(Collectors.toList());
         List<String> listCloaiReq = objReq.getTieuChuanKyThuat().stream().map(QuyChuanQuocGiaDtlReq::getCloaiVthh).distinct().collect(Collectors.toList());
         listCloai.retainAll(listCloaiReq);
         if (!listCloai.isEmpty()) {
@@ -85,13 +107,19 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         QuyChuanQuocGiaHdr data = new ModelMapper().map(objReq, QuyChuanQuocGiaHdr.class);
         data.setMaDvi(userInfo.getDvql());
         data.setTrangThai(Contains.DUTHAO);
-        if (DataUtils.isNullObject(objReq.getIdVanBanThayThe())) {
-            data.setIdVanBanThayThe(data.getId());
-        }
         QuyChuanQuocGiaHdr created = quyChuanQuocGiaHdrRepository.save(data);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), data.getId(), "KHCN_QUY_CHUAN_QG_HDR");
         created.setFileDinhKems(fileDinhKems);
         this.saveCtiet(data, objReq);
+        //Check bản ghi vừa thêm có hiệu lực và có văn bản thay thế ko , nếu có vb thay thế thì hết hiệu lực vb thay thế luôn
+        if (created.getTrangThaiHl().equals("01") && !listIdThayThe.isEmpty() && listIdThayThe.size() > 0) {
+            List<QuyChuanQuocGiaHdr> allByIdIn = quyChuanQuocGiaHdrRepository.findAllByIdIn(listIdThayThe);
+            allByIdIn.forEach(item -> {
+                item.setNgayHetHieuLuc(LocalDate.now().minusDays(1));
+                item.setTrangThaiHl(Contains.HET_HIEU_LUC);
+            });
+            quyChuanQuocGiaHdrRepository.saveAll(allByIdIn);
+        }
         return created;
     }
 
@@ -111,7 +139,21 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         if (objReq.getTieuChuanKyThuat().isEmpty()) {
             throw new Exception("Không tìm thấy thông tin tiêu chuẩn kỹ thuật");
         }
-        List<String> listCloai = quyChuanQuocGiaDtlRepository.findAllCloaiHoatDong(Contains.HOAT_DONG, objReq.getId());
+        List<QuyChuanQuocGiaHdr> allHdrCoHieuLuc = quyChuanQuocGiaHdrRepository.findAll().stream().filter(item -> item.getTrangThaiHl().equals("01")).collect(Collectors.toList());
+        //loai bỏ những id được thay thế
+        List<Long> listIdThayThe = new ArrayList<>();
+        if (!ObjectUtils.isEmpty(objReq.getIdVanBanThayThe())) {
+            listIdThayThe = Arrays.asList(Arrays.stream(objReq.getIdVanBanThayThe().split(","))
+                    .map(String::trim)
+                    .map(Long::valueOf)
+                    .toArray(Long[]::new));
+        }
+        List<Long> finalListIdThayThe = listIdThayThe;
+        List<Long> listHdrCoHieuLuc = allHdrCoHieuLuc.stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList()).stream()
+                .filter(item -> !finalListIdThayThe.contains(item))
+                .collect(Collectors.toList());
+
+        List<String> listCloai = quyChuanQuocGiaDtlRepository.findAllByIdHdrIn(listHdrCoHieuLuc).stream().map(QuyChuanQuocGiaDtl::getCloaiVthh).collect(Collectors.toList());
         List<String> listCloaiReq = objReq.getTieuChuanKyThuat().stream().map(QuyChuanQuocGiaDtlReq::getCloaiVthh).distinct().collect(Collectors.toList());
         listCloai.retainAll(listCloaiReq);
         if (!listCloai.isEmpty()) {
@@ -123,6 +165,15 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
         quyChuanQuocGiaDtlRepository.deleteAll(dtlList);
         this.saveCtiet(data, objReq);
+        //Check bản ghi vừa thêm có hiệu lực và có văn bản thay thế ko , nếu có vb thay thế thì hết hiệu lực vb thay thế luôn
+        if (created.getTrangThaiHl().equals("01") && listIdThayThe.size() > 0) {
+            List<QuyChuanQuocGiaHdr> allByIdIn = quyChuanQuocGiaHdrRepository.findAllByIdIn(listIdThayThe);
+            allByIdIn.forEach(item -> {
+                item.setNgayHetHieuLuc(LocalDate.now().minusDays(1));
+                item.setTrangThaiHl(Contains.HET_HIEU_LUC);
+            });
+            quyChuanQuocGiaHdrRepository.saveAll(allByIdIn);
+        }
         return created;
     }
 
@@ -151,7 +202,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         data.setFileDinhKems(fileDinhKems);
         List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
         if (!dtlList.isEmpty()) {
-            if (data.getApDungCloaiVthh () == false) {
+            if (data.getApDungCloaiVthh() == false) {
                 for (QuyChuanQuocGiaDtl dtl : dtlList) {
                     dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh()) ? null : hashMapDmHh.get(dtl.getLoaiVthh()));
                     dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh()) ? null : hashMapDmHh.get(dtl.getCloaiVthh()));
@@ -235,6 +286,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         ex.export();
     }
 
+    @Transactional
     public QuyChuanQuocGiaHdr approve(StatusReq statusReq) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (StringUtils.isEmpty(statusReq.getId())) {
@@ -266,13 +318,19 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         }
         optional.get().setTrangThai(statusReq.getTrangThai());
         QuyChuanQuocGiaHdr created = quyChuanQuocGiaHdrRepository.save(optional.get());
-        if (created.getIdVanBanThayThe() != null && created.getTrangThai().equals(Contains.BAN_HANH)) {
-            quyChuanQuocGiaHdrRepository.findById(created.getIdVanBanThayThe())
-                    .ifPresent(vanBanThayThe -> {
-                        vanBanThayThe.setNgayHetHieuLuc(LocalDate.now());
-                        vanBanThayThe.setTrangThaiHl(Contains.HET_HIEU_LUC);
-                        quyChuanQuocGiaHdrRepository.save(vanBanThayThe);
-                    });
+        if (!ObjectUtils.isEmpty(created.getIdVanBanThayThe()) && created.getTrangThaiHl().equals("01")) {
+            Long[] idsVanBanThayThes = Arrays.stream(created.getIdVanBanThayThe().split(","))
+                    .map(String::trim)
+                    .map(Long::valueOf)
+                    .toArray(Long[]::new);
+            if (idsVanBanThayThes.length > 0) {
+                List<QuyChuanQuocGiaHdr> allByIdIn = quyChuanQuocGiaHdrRepository.findAllByIdIn(Arrays.asList(idsVanBanThayThes));
+                allByIdIn.forEach(item -> {
+                    item.setNgayHetHieuLuc(LocalDate.now().minusDays(1));
+                    item.setTrangThaiHl(Contains.HET_HIEU_LUC);
+                });
+                quyChuanQuocGiaHdrRepository.saveAll(allByIdIn);
+            }
         }
         return created;
     }
