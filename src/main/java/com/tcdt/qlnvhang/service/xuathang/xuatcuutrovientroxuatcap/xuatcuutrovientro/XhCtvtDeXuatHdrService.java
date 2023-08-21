@@ -3,7 +3,7 @@ package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovi
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQdPdHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQdPdHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatPaRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtTongHopHdrRepository;
@@ -14,7 +14,7 @@ import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovie
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdrReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtVtQuyetDinhPdHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatPa;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtTongHopHdr;
@@ -50,7 +50,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
   @Autowired
   private XhCtvtTongHopHdrRepository xhCtvtTongHopHdrRepository;
   @Autowired
-  private XhCtVtQdPdHdrRepository xhCtVtQdPdHdrRepository;
+  private XhCtvtQdPdHdrRepository xhCtvtQdPdHdrRepository;
   @Autowired
   private XhCtvtDeXuatPaRepository xhCtvtDeXuatPaRepository;
   @Autowired
@@ -72,8 +72,8 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     Map<Long, String> trangThaiTh = dataIdTh.stream().collect(Collectors.toMap(XhCtvtTongHopHdr::getId, XhCtvtTongHopHdr::getTrangThai));
 
     List<Long> listIdQd = search.getContent().stream().map(s -> s.getIdQdPd()).collect(Collectors.toList());
-    List<XhCtVtQuyetDinhPdHdr> dataIdQd = xhCtVtQdPdHdrRepository.findByIdIn(listIdQd);
-    Map<Long, String> trangThaiQd = dataIdQd.stream().collect(Collectors.toMap(XhCtVtQuyetDinhPdHdr::getId, XhCtVtQuyetDinhPdHdr::getTrangThai));
+    List<XhCtvtQuyetDinhPdHdr> dataIdQd = xhCtvtQdPdHdrRepository.findByIdIn(listIdQd);
+    Map<Long, String> trangThaiQd = dataIdQd.stream().collect(Collectors.toMap(XhCtvtQuyetDinhPdHdr::getId, XhCtvtQuyetDinhPdHdr::getTrangThai));
 
     search.getContent().forEach(s -> {
       s.setMapDmucDvi(mapDmucDvi);

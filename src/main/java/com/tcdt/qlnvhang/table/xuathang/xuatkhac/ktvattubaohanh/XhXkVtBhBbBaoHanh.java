@@ -70,6 +70,8 @@ public class XhXkVtBhBbBaoHanh extends BaseEntity implements Serializable {
   private LocalDate ngayLayMauL2;
   private String soBbLayMauL2;
   private Integer ketQuaKdclL2;
+  private BigDecimal slLayMauL1;
+  private BigDecimal slLayMauL2;
 
   @Transient
   private List<FileDinhKem> fileDinhKems;

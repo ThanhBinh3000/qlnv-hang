@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class XhCtVtQuyetDinhPdDtlReq {
+public class XhCtvtQuyetDinhPdDtlReq {
     private Long id;
     private Long idHdr;
     private Long idDx;
@@ -22,5 +22,5 @@ public class XhCtVtQuyetDinhPdDtlReq {
     private LocalDate ngayDx;
     private LocalDate ngayKetThucDx;
     private String type;
-    private List<XhCtVtQuyetDinhPdDxReq> quyetDinhPdDx = new ArrayList<>();
+    private List<XhCtvtQuyetDinhPdDxReq> quyetDinhPdDx = new ArrayList<>();
 }

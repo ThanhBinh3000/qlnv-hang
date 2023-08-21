@@ -160,7 +160,7 @@ public class QuyChuanQuocGiaHdrController extends BaseController {
 
     @ApiOperation(value = "Phê duyêt  ", response = List.class)
     @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> updateStatusUbtvqh(@Valid @RequestBody StatusReq statusReq, HttpServletRequest req) {
+    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq statusReq, HttpServletRequest req) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(quyChuanQuocGiaHdrService.approve(statusReq));

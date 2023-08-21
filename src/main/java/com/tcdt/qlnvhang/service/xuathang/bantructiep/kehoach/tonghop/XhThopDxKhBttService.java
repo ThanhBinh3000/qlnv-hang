@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
 @Service
 public class XhThopDxKhBttService extends BaseServiceImpl {
 
-
     @Autowired
     private XhThopDxKhBttRepository xhThopDxKhBttRepository;
     @Autowired

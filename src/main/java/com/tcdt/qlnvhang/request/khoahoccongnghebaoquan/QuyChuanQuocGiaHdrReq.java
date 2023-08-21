@@ -12,7 +12,7 @@ public class QuyChuanQuocGiaHdrReq {
 
     private Long id;
     private String soVanBan;
-    private Long idVanBanThayThe;
+    private String idVanBanThayThe;
     private String soVanBanThayThe;
     private String maDvi;
     private String loaiVthh;
@@ -34,6 +34,7 @@ public class QuyChuanQuocGiaHdrReq {
     private Boolean apDungCloaiVthh;
     private Boolean isMat;
     private String listTenLoaiVthh;
+    private String maBn;
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
     private List<QuyChuanQuocGiaDtlReq> tieuChuanKyThuat = new ArrayList<>();
 }

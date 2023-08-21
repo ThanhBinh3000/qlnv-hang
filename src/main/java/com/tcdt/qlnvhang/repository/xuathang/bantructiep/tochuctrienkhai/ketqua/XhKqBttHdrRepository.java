@@ -16,7 +16,7 @@ public interface XhKqBttHdrRepository  extends JpaRepository<XhKqBttHdr, Long> {
 
     @Query("SELECT DISTINCT KQ FROM XhKqBttHdr KQ " +
             " LEFT JOIN XhKqBttDtl DTL on KQ.id = DTL.idHdr " +
-            " LEFT JOIN XhQdPdKhBttDtl QDDTL on KQ.id = QDDTL.idSoQdKq " +
+            " LEFT JOIN XhQdPdKhBttDtl QDDTL on KQ.id = QDDTL.idQdKq " +
             " LEFT JOIN XhHopDongBttHdr HD on KQ.id = HD.idQdKq" + " WHERE 1 = 1 " +
             "AND (:#{#param.maDvi} IS NULL OR KQ.maDvi = :#{#param.maDvi}) " +
             "AND (:#{#param.namKh} IS NULL OR KQ.namKh = :#{#param.namKh}) " +

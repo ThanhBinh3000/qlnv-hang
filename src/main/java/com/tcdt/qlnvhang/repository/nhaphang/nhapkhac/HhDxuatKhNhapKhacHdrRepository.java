@@ -31,7 +31,7 @@ public interface HhDxuatKhNhapKhacHdrRepository  extends JpaRepository<HhDxuatKh
                     "  AND (:#{#req.tuNgayDuyetStr} IS NULL OR khnk.ngayPduyet >= TO_DATE(:#{#req.tuNgayDuyetStr}, 'YYYY-MM-DD HH24:MI:SS'))" +
                     "  AND (:#{#req.denNgayDuyetStr} IS NULL OR khnk.ngayPduyet <= TO_DATE(:#{#req.denNgayDuyetStr}, 'YYYY-MM-DD HH24:MI:SS'))" +
                     "  AND (:#{#req.trangThai} IS NULL OR khnk.trangThai = :#{#req.trangThai}) "+
-                    "  ORDER BY khnk.ngaySua desc , khnk.ngayTao desc, khnk.id desc"
+                    "  ORDER BY khnk.trangThai asc, khnk.ngaySua desc , khnk.ngayTao desc"
             )
     Page<HhDxuatKhNhapKhacHdr> search(HhDxuatKhNhapKhacSearch req, Pageable pageable);
 

@@ -340,9 +340,17 @@ public class HhDxuatKhNhapKhacServiceImpl extends BaseServiceImpl implements HhD
             for (HhDxuatKhNhapKhacDtlReq dtl : req.getDetails()) {
                 HhDxuatKhNhapKhacDtl dataChild = new ModelMapper().map(dtl, HhDxuatKhNhapKhacDtl.class);
                 dataChild.setHdrId(created.getId());
-                if (dataChild.getDonGia() != null && dataChild.getSlDoiThua() != null) {
-                    tongSlNhap = tongSlNhap.add(dataChild.getSlDoiThua());
-                    tongThanhTien = tongThanhTien.add(dataChild.getSlDoiThua().multiply(dataChild.getDonGia()));
+                if (dataChild.getDonGia() != null) {
+                    if (dataChild.getSlDoiThua() != null) {
+                        tongSlNhap = tongSlNhap.add(dataChild.getSlDoiThua());
+                        tongThanhTien = tongThanhTien.add(dataChild.getSlDoiThua().multiply(dataChild.getDonGia()));
+                    } else if(dataChild.getSlTonKhoThucTe() != null) {
+                        tongSlNhap = tongSlNhap.add(dataChild.getSlTonKhoThucTe().subtract(dataChild.getSlTonKho()) );
+                        tongThanhTien = tongThanhTien.add((dataChild.getSlTonKhoThucTe().subtract(dataChild.getSlTonKho())).multiply(dataChild.getDonGia()));
+                    } else if (dataChild.getSlNhap() != null) {
+                        tongSlNhap = tongSlNhap.add(dataChild.getSlNhap());
+                        tongThanhTien = tongThanhTien.add(dataChild.getSlNhap().multiply(dataChild.getDonGia()));
+                    }
                 }
                 hhDxuatKhNhapKhacDtlRepository.save(dataChild);
             }

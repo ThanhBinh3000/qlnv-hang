@@ -35,6 +35,7 @@ public class XhCtvtTongHopHdr extends BaseEntity implements Serializable {
   private String loaiNhapXuat;
   private String loaiVthh;
   private String cloaiVthh;
+  private String tenVthh;
   private String trangThai;
   private Long idQdPd;
   private String soQdPd;

@@ -1,7 +1,9 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet;
+
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -10,120 +12,84 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "XH_QD_PD_KH_BTT_DTL")
+@Table(name = XhQdPdKhBttDtl.TABLE_NAME)
 @Data
 public class XhQdPdKhBttDtl implements Serializable {
-
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_QD_PD_KH_BTT_DTL";
-
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_QD_PD_KH_BTT_DTL_SEQ")
-    @SequenceGenerator(sequenceName = "XH_QD_PD_KH_BTT_DTL_SEQ", allocationSize = 1, name = "XH_QD_PD_KH_BTT_DTL_SEQ")
-
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhQdPdKhBttDtl.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = XhQdPdKhBttDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhQdPdKhBttDtl.TABLE_NAME + "_SEQ")
     private Long id;
-
-    private Long idQdHdr;
-
-    private Long idDxHdr;
-
+    private Long idHdr;
     private String maDvi;
+    private String diaChi;
+    private Long idDxHdr;
+    private String soDxuat;
+    private LocalDate ngayTao;
+    private LocalDate ngayPduyet;
+    private String trichYeu;
+    private Integer slDviTsan;
+    private BigDecimal tongSoLuong;
+    private String donViTinh;
+    private LocalDate tgianDkienTu;
+    private LocalDate tgianDkienDen;
+    private Integer tgianTtoan;
+    private String tgianTtoanGhiChu;
+    private String pthucTtoan;
+    private Integer tgianGnhan;
+    private String tgianGnhanGhiChu;
+    private String pthucGnhan;
+    private String thongBao;
     @Transient
     private String tenDvi;
-
-    private String soDxuat;
-
-    private LocalDate ngayTao;
-
-    private LocalDate ngayPduyet;
-
-    private LocalDate tgianDkienTu;
-
-    private LocalDate tgianDkienDen;
-
-    private String trichYeu;
-
-    private BigDecimal tongSoLuong;
-
-    private Integer slDviTsan;
-
-    private String moTaHangHoa;
-
-    private String diaChi;
-
-    private Integer tgianTtoan;
-
-    private String tgianTtoanGhiChu;
-
-    private String pthucTtoan;
-
-    private Integer tgianGnhan;
-
-    private String tgianGnhanGhiChu;
-
-    private String pthucGnhan;
-
-    private String thongBaoKh;
-
     @Transient
-    private List<XhQdPdKhBttDvi> children= new ArrayList<>();
+    private List<XhQdPdKhBttDvi> children = new ArrayList<>();
 
-// thông tin chào giá
-    private String pthucBanTrucTiep;
-
-    private String diaDiemChaoGia;
-
-    private LocalDate ngayNhanCgia;
-
-    private LocalDate ngayMkho;
-
-    private LocalDate ngayKthuc;
-
-    private String ghiChu;
-
-    private String soQdKq;
-
-    private Long idSoQdKq;
-
+    // thông tin chào giá
     private String soQdPd;
-
-    private String trangThai;
-    @Transient
-    private String tenTrangThai;
-
+    private String pthucBanTrucTiep;
+    private LocalDate ngayNhanCgia;
+    private Long idQdKq;
+    private String soQdKq;
+    private String diaDiemChaoGia;
+    private String loaiHinhNx;
+    private String kieuNx;
+    private LocalDate ngayMkho;
+    private LocalDate ngayKthuc;
+    private String loaiVthh;
+    private String cloaiVthh;
+    private String moTaHangHoa;
+    private String ghiChu;
     private LocalDate thoiHanBan;
-
-    private String trangThaiHd;
-    @Transient
-    private String tenTrangThaiHd;
-
-    private String trangThaiXh;
-    @Transient
-    private String tenTrangThaiXh;
-
-    private Integer slHdDaKy;
-
-    private Integer slHdChuaKy;
-
+    private String trangThai;
     private Long idQdNv;
-
     private String soQdNv;
-
+    private String trangThaiHd;
+    private String trangThaiXh;
+    private Integer slHdDaKy;
+    private Integer slHdChuaKy;
+    private Integer namKh;
     @Transient
-    private List<FileDinhKem> fileDinhKemUyQuyen = new ArrayList<>();
-
+    private String tenLoaiHinhNx;
     @Transient
-    private List<FileDinhKem> fileDinhKemMuaLe = new ArrayList<>();
-
-    @Transient
-    private XhQdPdKhBttHdr xhQdPdKhBttHdr;
-
+    private String tenKieuNx;
     @Transient
     private String tenLoaiVthh;
-
     @Transient
     private String tenCloaiVthh;
-
+    @Transient
+    private String tenTrangThai;
+    @Transient
+    private String tenTrangThaiXh;
+    @Transient
+    private String tenTrangThaiHd;
+    @Transient
+    private XhQdPdKhBttHdr xhQdPdKhBttHdr;
+    @Transient
+    private List<FileDinhKem> fileUyQuyen = new ArrayList<>();
+    @Transient
+    private List<FileDinhKem> fileBanLe = new ArrayList<>();
     @Transient
     private List<XhHopDongBttHdr> listHopDongBtt;
 }

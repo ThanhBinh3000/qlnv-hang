@@ -66,6 +66,6 @@ public interface HhQdPduyetKqlcntHdrRepository extends BaseRepository<HhQdPduyet
 	List<HhQdPduyetKqlcntHdr> selectAll(String namKh, String loaiVthh, String soQd, String tuNgayQd, String denNgayQd, String trangThai,String maDvi);
 
 	List<HhQdPduyetKqlcntHdr> findAllByIdIn(List<Long> ids);
-
+	Optional<HhQdPduyetKqlcntHdr> findByIdQdPdKhlcnt (Long id);
 
 }
