@@ -14,4 +14,10 @@ public interface XhQdPdKhBttDviRepository extends JpaRepository<XhQdPdKhBttDvi, 
     List<XhQdPdKhBttDvi> findAllByIdDtl(Long idDtl);
 
     List<XhQdPdKhBttDvi> findByIdDtlIn(List<Long> listId);
+
+    void deleteAllByIdQdKqHdr(Long idQdKqHdr);
+
+    List<XhQdPdKhBttDvi> findAllByIdQdKqHdr(Long idQdKqHdr);
+
+    List<XhQdPdKhBttDvi> findByIdQdKqHdrIn(List<Long> listId);
 }
