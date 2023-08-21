@@ -26,6 +26,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Transient;
@@ -306,20 +307,22 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         }
         optional.get().setTrangThai(statusReq.getTrangThai());
         QuyChuanQuocGiaHdr created = quyChuanQuocGiaHdrRepository.save(optional.get());
-//        if (created.getIdVanBanThayThe() != null && created.getTrangThai().equals(Contains.BAN_HANH)) {
-//            Long[] idsVanBanThayThes = Arrays.stream(created.getIdVanBanThayThe().split(","))
-//                    .map(String::trim)
-//                    .map(Long::valueOf)
-//                    .toArray(Long[]::new);
-//            if (idsVanBanThayThes.length > 0) {
-//                List<QuyChuanQuocGiaHdr> allByIdIn = quyChuanQuocGiaHdrRepository.findAllByIdIn(Arrays.asList(idsVanBanThayThes));
-//                allByIdIn.forEach(item -> {
-//                    item.setNgayHetHieuLuc(LocalDate.now());
-//                    item.setTrangThaiHl(Contains.HET_HIEU_LUC);
-//                });
-//                quyChuanQuocGiaHdrRepository.saveAll(allByIdIn);
-//            }
-//        }
+        if (!ObjectUtils.isEmpty(created.getIdVanBanThayThe()) && created.getTrangThaiHl().equals("01")) {
+            if (!created.getIdVanBanThayThe().split(",")[0].equals(created.getId().toString())) {
+                Long[] idsVanBanThayThes = Arrays.stream(created.getIdVanBanThayThe().split(","))
+                        .map(String::trim)
+                        .map(Long::valueOf)
+                        .toArray(Long[]::new);
+                if (idsVanBanThayThes.length > 0) {
+                    List<QuyChuanQuocGiaHdr> allByIdIn = quyChuanQuocGiaHdrRepository.findAllByIdIn(Arrays.asList(idsVanBanThayThes));
+                    allByIdIn.forEach(item -> {
+                        item.setNgayHetHieuLuc(LocalDate.now());
+                        item.setTrangThaiHl(Contains.HET_HIEU_LUC);
+                    });
+                    quyChuanQuocGiaHdrRepository.saveAll(allByIdIn);
+                }
+            }
+        }
         return created;
     }
 
