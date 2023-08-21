@@ -1,69 +1,42 @@
 package com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet;
+
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import lombok.Data;
-import javax.persistence.Transient;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 public class XhQdPdKhBttHdrReq extends BaseRequest {
-
     private Long id;
-
     private Integer namKh;
-
     private String maDvi;
-
+    private Long idGoc;
     private String soQdPd;
-
     private LocalDate ngayKyQd;
-
     private LocalDate ngayHluc;
-
     private Long idThHdr;
-
-    private String soTrHdr;
-
     private Long idTrHdr;
-
+    private String soTrHdr;
     private String trichYeu;
-
-    private String loaiVthh;
-
-    private String cloaiVthh;
-
-    private String  moTaHangHoa;
-
-    private String tchuanCluong;
-
-    private Integer lastest ;
-
-    private String phanLoai;
-
-    private Integer slDviTsan;
-
-    private String soHopDong;
-
     private String soQdCc;
-
+    private String loaiVthh;
+    private String cloaiVthh;
+    private String moTaHangHoa;
     private String loaiHinhNx;
-
     private String kieuNx;
-
-    @Transient
-    private List<XhQdPdKhBttDtlReq> children;
-
-    @Transient
-    private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
-
-    @Transient
+    private String tchuanCluong;
+    private Boolean lastest;
+    private Integer slDviTsan;
+    private String slHdongDaKy;
+    private String phanLoai;
+    private String trangThai;
+    private List<FileDinhKemReq> canCuPhapLy = new ArrayList<>();
     private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();
-
+    private List<XhQdPdKhBttDtlReq> children;
     private LocalDate ngayKyQdTu;
-
     private LocalDate ngayKyQdDen;
-
-    private String maCuc;
+    private String dvql;
 }

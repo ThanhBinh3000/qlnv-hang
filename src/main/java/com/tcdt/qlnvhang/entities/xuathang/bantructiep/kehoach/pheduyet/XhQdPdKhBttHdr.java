@@ -1,101 +1,124 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Entity
-@Table(name = "XH_QD_PD_KH_BTT_HDR")
+@Table(name = XhQdPdKhBttHdr.TABLE_NAME)
 @Data
-public class XhQdPdKhBttHdr implements Serializable {
-
+public class XhQdPdKhBttHdr extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_QD_PD_KH_BTT_HDR";
-
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_QD_PD_KH_BTT_HDR_SEQ")
-    @SequenceGenerator(sequenceName = "XH_QD_PD_KH_BTT_HDR_SEQ", allocationSize = 1, name = "XH_QD_PD_KH_BTT_HDR_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhQdPdKhBttHdr.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = XhQdPdKhBttHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhQdPdKhBttHdr.TABLE_NAME + "_SEQ")
     private Long id;
-
     private Integer namKh;
-
     private String maDvi;
+    private Long idGoc;
+    private String soQdPd;
+    private LocalDate ngayKyQd;
+    private LocalDate ngayHluc;
+    private Long idThHdr;
+    private Long idTrHdr;
+    private String soTrHdr;
+    private String trichYeu;
+    private String soQdCc;
+    private String loaiVthh;
+    private String cloaiVthh;
+    private String moTaHangHoa;
+    private String loaiHinhNx;
+    private String kieuNx;
+    private String tchuanCluong;
+    private Boolean lastest;
+    private Integer slDviTsan;
+    private String slHdongDaKy;
+    private String phanLoai;
+    private String trangThai;
+    private LocalDate ngayGuiDuyet;
+    private Long nguoiGuiDuyetId;
+    private LocalDate ngayPduyet;
+    private Long nguoiPduyetId;
     @Transient
     private String tenDvi;
-
-    private String soQdPd;
-
-    private LocalDate ngayKyQd;
-
-    private LocalDate ngayHluc;
-
-    private Long idThHdr;
-
-    private String soTrHdr;
-
-    private Long idTrHdr;
-
-    private String trichYeu;
-
-    private String loaiVthh;
+    @Transient
+    private String tenLoaiHinhNx;
+    @Transient
+    private String tenKieuNx;
     @Transient
     private String tenLoaiVthh;
-
-    private String cloaiVthh;
     @Transient
     private String tenCloaiVthh;
-
-    private String  moTaHangHoa;
-
-    private String tchuanCluong;
-
-    private Boolean lastest;
-
-    private String phanLoai;
-
-    private Long idGoc;
-
-    private Integer slDviTsan;
-
-    private String soHopDong;
-
-    private String soQdCc;
-
-    private String loaiHinhNx;
-
-    private String kieuNx;
-
-    private String trangThai;
     @Transient
     private String tenTrangThai;
 
-    private LocalDate ngayTao;
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucDvi;
 
-    private Long nguoiTaoId;
+    public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+        this.mapDmucDvi = mapDmucDvi;
+        if (!DataUtils.isNullObject(getMaDvi())) {
+            setTenDvi(mapDmucDvi.containsKey(getMaDvi()) ? mapDmucDvi.get(getMaDvi()) : null);
+        }
+    }
 
-    private LocalDate ngaySua;
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapLoaiHinhNx;
 
-    private Long nguoiSuaId;
+    public void setMapLoaiHinhNx(Map<String, String> mapLoaiHinhNx) {
+        this.mapLoaiHinhNx = mapLoaiHinhNx;
+        if (!DataUtils.isNullObject(getLoaiHinhNx())) {
+            setTenLoaiHinhNx(mapLoaiHinhNx.containsKey(getLoaiHinhNx()) ? mapLoaiHinhNx.get(getLoaiHinhNx()) : null);
+        }
+    }
 
-    private LocalDate ngayGuiDuyet;
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapKieuNx;
 
-    private Long nguoiGuiDuyetId;
+    public void setMapKieuNx(Map<String, String> mapKieuNx) {
+        this.mapKieuNx = mapKieuNx;
+        if (!DataUtils.isNullObject(getKieuNx())) {
+            setTenKieuNx(mapKieuNx.containsKey(getKieuNx()) ? mapKieuNx.get(getKieuNx()) : null);
+        }
+    }
 
-    private LocalDate ngayPduyet;
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapVthh;
 
-    private Long nguoiPduyetId;
+    public void setMapVthh(Map<String, String> mapVthh) {
+        this.mapVthh = mapVthh;
+        if (!DataUtils.isNullObject(getLoaiVthh())) {
+            setTenLoaiVthh(mapVthh.containsKey(getLoaiVthh()) ? mapVthh.get(getLoaiVthh()) : null);
+        }
+        if (!DataUtils.isNullObject(getCloaiVthh())) {
+            setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
+        }
+    }
 
-    private String lyDoTuChoi;
+    public String getTrangThai() {
+        setTenTrangThai(TrangThaiAllEnum.getLabelById(trangThai));
+        return trangThai;
+    }
 
     @Transient
-    private List<XhQdPdKhBttDtl> children = new ArrayList<>();
-
-    @Transient
-    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
-
+    private List<FileDinhKem> canCuPhapLy = new ArrayList<>();
     @Transient
     private List<FileDinhKem> fileDinhKem = new ArrayList<>();
+    @Transient
+    private List<XhQdPdKhBttDtl> children = new ArrayList<>();
 }

@@ -19,23 +19,15 @@ public class XhQdPdKhBttDvi implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_QD_PD_KH_BTT_DVI_SEQ ")
     @SequenceGenerator(sequenceName = "XH_QD_PD_KH_BTT_DVI_SEQ ", allocationSize = 1, name = "XH_QD_PD_KH_BTT_DVI_SEQ ")
     private Long id;
-
-    private Long idQdDtl;
-
-    private BigDecimal soLuongChiCuc;
-
+    private Long idDtl;
     private String maDvi;
+    private BigDecimal soLuongChiCuc;
+    private String diaChi;
+    private BigDecimal soLuongChiTieu;
+    private BigDecimal soLuongKhDaDuyet;
+    private String donViTinh;
     @Transient
     private String tenDvi;
-
-    private String diaChi;
-
-    private BigDecimal soLuongChiTieu;
-
-    private BigDecimal soLuongKhDaDuyet;
-
-    private String donViTinh;
-
     @Transient
     List<XhQdPdKhBttDviDtl> children =new ArrayList<>();
 }
