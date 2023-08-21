@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ScKiemTraChatLuongDtlRepository extends JpaRepository<ScKiemTraChatLuongDtl,Long> {
-    List<ScKiemTraChatLuongDtl> findAllByIdHdrOrderByThuTu(Long id);
+    List<ScKiemTraChatLuongDtl> findAllByIdHdrOrderByThuTuHt (Long id);
 
     void deleteAllByIdHdr(Long idHdr);
 

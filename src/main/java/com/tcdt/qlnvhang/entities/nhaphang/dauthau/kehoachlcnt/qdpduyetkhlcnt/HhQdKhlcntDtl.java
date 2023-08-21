@@ -76,7 +76,15 @@ public class HhQdKhlcntDtl implements Serializable {
 	Long idNhaThau;
 	@Column(name="ID_DC_DX_HDR")
 	Long idDcDxHdr;
-
+	BigDecimal tongTien;
+	@Temporal(TemporalType.DATE)
+	Date tgianBdauTchuc;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
+	Date tgianMthau;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
+	Date tgianDthau;
+	@Temporal(TemporalType.DATE)
+	Date tgianNhang;
 	@Transient
 	private HhQdKhlcntHdr hhQdKhlcntHdr;
 

@@ -25,6 +25,7 @@ import java.util.List;
 @Slf4j
 @Api(tags = "Sửa chữa hàng DTQG - Phiếu xuất kho")
 public class ScBienBanKtController {
+
     @Autowired
     ScBienBanKtService service;
 

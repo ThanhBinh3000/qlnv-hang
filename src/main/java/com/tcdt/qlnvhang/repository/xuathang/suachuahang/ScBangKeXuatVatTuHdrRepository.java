@@ -37,8 +37,13 @@ public interface ScBangKeXuatVatTuHdrRepository extends JpaRepository<ScBangKeXu
             " LEFT JOIN ScPhieuXuatKhoHdr pxk on qd.idPhieuXuatKho = pxk.id " +
             " WHERE 1 = 1 " +
             "AND (:#{#param.nam} IS NULL OR qd.nam = :#{#param.nam}) " +
+            "AND (:#{#param.maDviSr} IS NULL OR qd.maDvi = :#{#param.maDviSr}) " +
             "AND (:#{#param.idScDanhSachHdr} IS NULL OR pxk.idScDanhSachHdr = :#{#param.idScDanhSachHdr}) " +
-            "AND (:#{#param.soPhieuXuatKho} IS NULL OR qd.soPhieuXuatKho LIKE CONCAT(:#{#param.soPhieuXuatKho},'%'))")
+            "AND (:#{#param.soPhieuXuatKho} IS NULL OR qd.soPhieuXuatKho LIKE CONCAT(:#{#param.soPhieuXuatKho},'%'))" +
+            "AND (:#{#param.soBangKe} IS NULL OR qd.soBangKe LIKE CONCAT(:#{#param.soBangKe},'%'))" +
+            "AND ((:#{#param.ngayTu} IS NULL OR qd.ngayXuatKho >= :#{#param.ngayTu}) AND (:#{#param.ngayDen} IS NULL OR qd.ngayXuatKho <= :#{#param.ngayDen})) " +
+            " ORDER BY qd.ngaySua desc , qd.ngayTao desc, qd.id desc "
+    )
     List<ScBangKeXuatVatTuHdr> searchList(@Param("param") ScBangKeXuatVatTuReq req);
 
 }

@@ -130,7 +130,7 @@ public class Contains {
     public static final String DA_PHANBO_DC_CHODUYET_LDC = "67";
     public static final String DA_PHANBO_DC_TUCHOI_LDC = "68";
     public static final String DA_PHANBO_DC_DADUYET_LDC = "69";
-
+    public static final String DANG_DUYET_CB_VU = "77";
     public static final String DANG_NHAP_DU_LIEU = "78";
     public static final String TU_CHOI_BAN_HANH_QD = "79";
     public static final String DA_LAP = "80";

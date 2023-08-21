@@ -105,13 +105,15 @@ public class XhPhieuKnclHdr extends BaseEntity implements Serializable {
 
   public void setMapVthh(Map<String, Map<String, Object>> mapVthh) {
     this.mapVthh = mapVthh;
-    if (mapVthh.containsKey(getLoaiVthh())) {
-      setTenLoaiVthh(DataUtils.safeToString(mapVthh.get(getLoaiVthh()).get("ten")));
-      setDonViTinh(DataUtils.safeToString(mapVthh.get(getLoaiVthh()).get("maDviTinh")));
-    }
-    if (mapVthh.containsKey(getCloaiVthh())) {
-      setTenCloaiVthh(DataUtils.safeToString(mapVthh.get(getCloaiVthh()).get("ten")));
-      setDonViTinh(DataUtils.safeToString(mapVthh.get(getLoaiVthh()).get("maDviTinh")));
+    if (mapVthh != null) {
+      if (mapVthh.containsKey(getLoaiVthh())) {
+        setTenLoaiVthh(DataUtils.safeToString(mapVthh.get(getLoaiVthh()).get("ten")));
+        setDonViTinh(DataUtils.safeToString(mapVthh.get(getLoaiVthh()).get("maDviTinh")));
+      }
+      if (mapVthh.containsKey(getCloaiVthh())) {
+        setTenCloaiVthh(DataUtils.safeToString(mapVthh.get(getCloaiVthh()).get("ten")));
+        setDonViTinh(DataUtils.safeToString(mapVthh.get(getLoaiVthh()).get("maDviTinh")));
+      }
     }
   }
 
@@ -129,7 +131,11 @@ public class XhPhieuKnclHdr extends BaseEntity implements Serializable {
   private Long idBbLayMau;
   private String soBbLayMau;
   private LocalDate ngayBbLayMau;
+  private String soBbTinhKho;
+  private LocalDate ngayBbTinhKho;
   private LocalDate ngayKiemNghiem;
+  private String ktvBaoQuan;
+  private String dviKiemNghiem;
   private String ketQua;
   private String ketLuan;
   private String loaiBb;

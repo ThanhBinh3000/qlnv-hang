@@ -36,4 +36,10 @@ public class ScBienBanKtReq extends BaseRequest {
 
     private List<FileDinhKemReq> fileCanCuReq = new ArrayList<>();
 
+    //
+    private String maDviSr;
+    private LocalDate ngayTu;
+    private LocalDate ngayDen;
+    private LocalDate ngayNhapTu;
+    private LocalDate ngayNhapDen;
 }

@@ -5,7 +5,10 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhScRepository;
+import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScTongHopHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScTrinhThamDinhRepository;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhScReq;
+import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhXuatHangReq;
 import com.tcdt.qlnvhang.request.suachua.ScTongHopReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -14,7 +17,9 @@ import com.tcdt.qlnvhang.service.suachuahang.ScQuyetDinhScService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhSc;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhXuatHang;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTongHopHdr;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTrinhThamDinhHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +27,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
@@ -41,6 +47,9 @@ public class ScQuyetDinhScImpl extends BaseServiceImpl implements ScQuyetDinhScS
     @Autowired
     private ScTrinhThamDinhServiceImpl scTrinhThamDinhServiceImpl;
 
+    @Autowired
+    private ScTrinhThamDinhRepository scTrinhThamDinhRepository;
+
     @Override
     public Page<ScQuyetDinhSc> searchPage(ScQuyetDinhScReq req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
@@ -51,14 +60,46 @@ public class ScQuyetDinhScImpl extends BaseServiceImpl implements ScQuyetDinhScS
     @Override
     public ScQuyetDinhSc create(ScQuyetDinhScReq req) throws Exception {
         ScQuyetDinhSc hdr = new ScQuyetDinhSc();
+        validateData(req);
         BeanUtils.copyProperties(req, hdr);
         hdr.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         ScQuyetDinhSc created = scQuyetDinhScRepository.save(hdr);
+        this.updateScTongHopHdr(created,false);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), ScQuyetDinhSc.TABLE_NAME + "_CAN_CU");
         created.setFileCanCu(canCu);
         List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), ScQuyetDinhSc.TABLE_NAME + "_DINH_KEM");
         created.setFileDinhKem(fileDinhKem);
         return created;
+    }
+
+    void updateScTongHopHdr(ScQuyetDinhSc sc,boolean isDelete) throws Exception {
+        Optional<ScTrinhThamDinhHdr> byId = scTrinhThamDinhRepository.findById(sc.getIdTtr());
+        if(byId.isPresent()){
+            ScTrinhThamDinhHdr data = byId.get();
+            if(isDelete){
+                data.setIdQdSc(null);
+                data.setSoQdSc(null);
+            }else{
+                data.setIdQdSc(sc.getId());
+                data.setSoQdSc(sc.getSoQd());
+            }
+            scTrinhThamDinhRepository.save(data);
+        }else{
+            throw new Exception("Không tìm thấy số tờ trình cần sửa chữa");
+        }
+    }
+
+    void validateData(ScQuyetDinhScReq req) throws Exception {
+        Optional<ScQuyetDinhSc> bySoQd = scQuyetDinhScRepository.findBySoQd(req.getSoQd());
+        if(bySoQd.isPresent()){
+            if(ObjectUtils.isEmpty(req.getId())){
+                throw new Exception("Số quyết định " + bySoQd.get().getSoQd() +" đã tồn tại");
+            }else{
+                if(!req.getId().equals(bySoQd.get().getId())){
+                    throw new Exception("Số quyết định " + bySoQd.get().getSoQd() +" đã tồn tại");
+                }
+            }
+        }
     }
 
     @Override
@@ -67,9 +108,11 @@ public class ScQuyetDinhScImpl extends BaseServiceImpl implements ScQuyetDinhScS
         if (!optional.isPresent()){
             throw new Exception("Bản ghi không tồn tại");
         }
+        validateData(req);
         ScQuyetDinhSc hdr = optional.get();
         BeanUtils.copyProperties(req, hdr);
         ScQuyetDinhSc created = scQuyetDinhScRepository.save(hdr);
+        this.updateScTongHopHdr(created,false);
         fileDinhKemService.delete(req.getId(), Lists.newArrayList(ScQuyetDinhSc.TABLE_NAME + "_CAN_CU"));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), ScQuyetDinhSc.TABLE_NAME + "_CAN_CU");
         created.setFileCanCu(canCu);
@@ -122,6 +165,7 @@ public class ScQuyetDinhScImpl extends BaseServiceImpl implements ScQuyetDinhScS
         }
         fileDinhKemService.delete(id, Lists.newArrayList(ScQuyetDinhSc.TABLE_NAME + "_CAN_CU"));
         fileDinhKemService.delete(id, Lists.newArrayList(ScQuyetDinhSc.TABLE_NAME + "_DINH_KEM"));
+        this.updateScTongHopHdr(optional.get(),true);
         scQuyetDinhScRepository.delete(optional.get());
     }
 

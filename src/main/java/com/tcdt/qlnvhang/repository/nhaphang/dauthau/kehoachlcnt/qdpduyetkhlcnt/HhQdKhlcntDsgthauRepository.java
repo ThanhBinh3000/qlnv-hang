@@ -12,7 +12,9 @@ import java.util.List;
 public interface HhQdKhlcntDsgthauRepository extends BaseRepository<HhQdKhlcntDsgthau, Long> {
 
     List<HhQdKhlcntDsgthau> findByIdQdDtl(Long IdQdDtl);
+    List<HhQdKhlcntDsgthau> findByIdQdDtlOrderByGoiThauAsc(Long IdQdDtl);
     List<HhQdKhlcntDsgthau> findByIdQdHdr(Long IdQdHdr);
+    List<HhQdKhlcntDsgthau> findByIdQdHdrOrderByGoiThauAsc(Long IdQdHdr);
 
     @Transactional()
     @Modifying

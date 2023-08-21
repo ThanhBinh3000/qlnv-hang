@@ -43,7 +43,7 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
             nativeQuery = true)
     List<Object[]> sumTongTienByIdHdr(Collection<Long> qdIds);
 
-    @Query(value = " SELECT DTL.ID, DTL.ID_QD_HDR, DTL.MA_DVI, DTL.SO_DXUAT, DTL.NGAY_TAO, DTL.TEN_DU_AN, DTL.SO_LUONG, DTL.DON_GIA_VAT, DTL.SO_GTHAU, DTL.NAM_KHOACH, DTL.ID_DX_HDR, DTL.TRANG_THAI, DTL.NGAY_PDUYET, DTL.DIA_CHI_DVI, DTL.TRICH_YEU, DTL.SO_QD_PD_KQ_LCNT, DTL.DON_GIA_TAM_TINH, DTL.GOI_THAU, DTL.CLOAI_VTHH, DTL.LOAI_VTHH, DTL.TEN_NHA_THAU, DTL.DON_GIA_NHA_THAU, DTL.ID_NHA_THAU, DTL.ID_DC_DX_HDR FROM HH_QD_KHLCNT_DTL DTL " +
+    @Query(value = " SELECT * FROM HH_QD_KHLCNT_DTL DTL " +
             " LEFT JOIN HH_QD_KHLCNT_HDR HDR ON HDR.ID = DTL.ID_QD_HDR " +
             " LEFT JOIN HH_QD_PDUYET_KQLCNT_HDR PD_HDR ON PD_HDR.ID_QD_PD_KHLCNT_DTL = DTL.ID " +
             " WHERE (:namKh IS NULL OR HDR.NAM_KHOACH = TO_NUMBER(:namKh)) " +
@@ -57,10 +57,10 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
             " AND (:trangThaiDt IS NULL OR HDR.TRANG_THAI_DT = :trangThaiDt )" +
             " AND (:tuNgayQd IS NULL OR PD_HDR.NGAY_KY >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) " +
             " AND (:denNgayQd IS NULL OR PD_HDR.NGAY_KY <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) " +
-            " AND HDR.LASTEST = 1 " +
-            " GROUP BY DTL.ID, DTL.ID_QD_HDR, DTL.MA_DVI, DTL.SO_DXUAT, DTL.NGAY_TAO, DTL.TEN_DU_AN, DTL.SO_LUONG, DTL.DON_GIA_VAT, DTL.SO_GTHAU, DTL.NAM_KHOACH, DTL.ID_DX_HDR, DTL.TRANG_THAI, DTL.NGAY_PDUYET, DTL.DIA_CHI_DVI, DTL.TRICH_YEU, DTL.SO_QD_PD_KQ_LCNT, DTL.DON_GIA_TAM_TINH, DTL.GOI_THAU, DTL.CLOAI_VTHH, DTL.LOAI_VTHH, DTL.TEN_NHA_THAU, DTL.DON_GIA_NHA_THAU, DTL.ID_NHA_THAU, DTL.ID_DC_DX_HDR",
+            " AND HDR.LASTEST = 1 " ,
+//            " GROUP BY DTL.ID, DTL.ID_QD_HDR, DTL.MA_DVI, DTL.SO_DXUAT, DTL.NGAY_TAO, DTL.TEN_DU_AN, DTL.SO_LUONG, DTL.DON_GIA_VAT, DTL.SO_GTHAU, DTL.NAM_KHOACH, DTL.ID_DX_HDR, DTL.TRANG_THAI, DTL.NGAY_PDUYET, DTL.DIA_CHI_DVI, DTL.TRICH_YEU, DTL.SO_QD_PD_KQ_LCNT, DTL.DON_GIA_TAM_TINH, DTL.GOI_THAU, DTL.CLOAI_VTHH, DTL.LOAI_VTHH, DTL.TEN_NHA_THAU, DTL.DON_GIA_NHA_THAU, DTL.ID_NHA_THAU, DTL.ID_DC_DX_HDR",
             countQuery = "SELECT COUNT(*) FROM (" +
-                    " SELECT DTL.ID, DTL.ID_QD_HDR, DTL.MA_DVI, DTL.SO_DXUAT, DTL.NGAY_TAO, DTL.TEN_DU_AN, DTL.SO_LUONG, DTL.DON_GIA_VAT, DTL.SO_GTHAU, DTL.NAM_KHOACH, DTL.ID_DX_HDR, DTL.TRANG_THAI, DTL.NGAY_PDUYET, DTL.DIA_CHI_DVI, DTL.TRICH_YEU, DTL.SO_QD_PD_KQ_LCNT, DTL.DON_GIA_TAM_TINH, DTL.GOI_THAU, DTL.CLOAI_VTHH, DTL.LOAI_VTHH, DTL.TEN_NHA_THAU, DTL.DON_GIA_NHA_THAU, DTL.ID_NHA_THAU, DTL.ID_DC_DX_HDR FROM HH_QD_KHLCNT_DTL DTL " +
+                    " SELECT * FROM HH_QD_KHLCNT_DTL DTL " +
                     " LEFT JOIN HH_QD_KHLCNT_HDR HDR ON HDR.ID = DTL.ID_QD_HDR " +
                     " LEFT JOIN HH_QD_PDUYET_KQLCNT_HDR PD_HDR ON PD_HDR.ID_QD_PD_KHLCNT_DTL = DTL.ID " +
                     " WHERE (:namKh IS NULL OR HDR.NAM_KHOACH = TO_NUMBER(:namKh)) " +
@@ -75,9 +75,13 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
                     " AND (:tuNgayQd IS NULL OR PD_HDR.NGAY_KY >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) " +
                     " AND (:denNgayQd IS NULL OR PD_HDR.NGAY_KY <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) " +
                     " AND HDR.LASTEST = 1 " +
-                    " GROUP BY DTL.ID, DTL.ID_QD_HDR, DTL.MA_DVI, DTL.SO_DXUAT, DTL.NGAY_TAO, DTL.TEN_DU_AN, DTL.SO_LUONG, DTL.DON_GIA_VAT, DTL.SO_GTHAU, DTL.NAM_KHOACH, DTL.ID_DX_HDR, DTL.TRANG_THAI, DTL.NGAY_PDUYET, DTL.DIA_CHI_DVI, DTL.TRICH_YEU, DTL.SO_QD_PD_KQ_LCNT, DTL.DON_GIA_TAM_TINH, DTL.GOI_THAU, DTL.CLOAI_VTHH, DTL.LOAI_VTHH, DTL.TEN_NHA_THAU, DTL.DON_GIA_NHA_THAU, DTL.ID_NHA_THAU, DTL.ID_DC_DX_HDR" +
+//                    " GROUP BY DTL.ID, DTL.ID_QD_HDR, DTL.MA_DVI, DTL.SO_DXUAT, DTL.NGAY_TAO, DTL.TEN_DU_AN, DTL.SO_LUONG, DTL.DON_GIA_VAT, DTL.SO_GTHAU, DTL.NAM_KHOACH, DTL.ID_DX_HDR, DTL.TRANG_THAI, DTL.NGAY_PDUYET, DTL.DIA_CHI_DVI, DTL.TRICH_YEU, DTL.SO_QD_PD_KQ_LCNT, DTL.DON_GIA_TAM_TINH, DTL.GOI_THAU, DTL.CLOAI_VTHH, DTL.LOAI_VTHH, DTL.TEN_NHA_THAU, DTL.DON_GIA_NHA_THAU, DTL.ID_NHA_THAU, DTL.ID_DC_DX_HDR" +
                     ")",
             nativeQuery = true )
-    Page<HhQdKhlcntDtl> selectPage(Integer namKh , String loaiVthh, String maDvi, String trangThai,String trangThaiCuc,String trangThaiDt, String soQd, String tuNgayQd, String denNgayQd, String soQdPdKhlcnt, String soQdPdKqlcnt, Pageable pageable);
+    Page<HhQdKhlcntDtl> selectPage(Integer namKh , String loaiVthh,
+                                   String maDvi, String trangThai,String trangThaiCuc,String trangThaiDt,
+                                   String soQd,
+                                   String tuNgayQd, String denNgayQd,
+                                   String soQdPdKhlcnt, String soQdPdKqlcnt, Pageable pageable);
 
 }

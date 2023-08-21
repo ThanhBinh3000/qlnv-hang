@@ -34,5 +34,8 @@ public class ScQuyetDinhNhapHangReq extends BaseRequest {
 
     private String maDviSr;
 
+    // Search
+    private LocalDate thoiHanNhapTu;
+    private LocalDate thoiHanNhapDen;
 
 }

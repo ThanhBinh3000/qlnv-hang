@@ -53,6 +53,28 @@ public class DcnbBbThuaThieuDtl {
     private String donViTinh;
     @Column(name = "TEN_DON_VI_TINH")
     private String tenDonViTinh;
+
+    @Column(name = "MA_DVI_NHAN")
+    private String maDviNhan;
+    @Column(name = "TEN_DVI_NHAN")
+    private String tenDviNhan;
+    @Column(name = "MA_DIEM_KHO_NHAN")
+    private String maDiemKhoNhan;
+    @Column(name = "TEN_DIEM_KHO_NHAN")
+    private String tenDiemKhoNhan;
+    @Column(name = "MA_NHA_KHO_NHAN")
+    private String maNhaKhoNhan;
+    @Column(name = "TEN_NHA_KHO_NHAN")
+    private String tenNhaKhoNhan;
+    @Column(name = "MA_NGAN_KHO_NHAN")
+    private String maNganKhoNhan;
+    @Column(name = "TEN_NGAN_KHO_NHAN")
+    private String tenNganKhoNhan;
+    @Column(name = "MA_LO_KHO_NHAN")
+    private String maLoKhoNhan;
+    @Column(name = "TEN_LO_KHO_NHAN")
+    private String tenLoKhoNhan;
+
     @Column(name = "SL_TON")
     private BigDecimal slTon;
     @Column(name = "SL_DIEU_CHUYEN_QD")

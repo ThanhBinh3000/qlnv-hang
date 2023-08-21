@@ -66,7 +66,25 @@ public class DcnbBbChuanBiKhoServiceImpl implements DcnbBbChuanBiKhoService {
         } else {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
+        req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         searchDto = hdrRepository.searchPage(req, pageable);
+        return searchDto;
+    }
+
+    public List<DcnbBbChuanBiKhoHdr> list(DcnbBbChuanBiKhoHdrReq req) throws Exception {
+        CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
+        req.setMaDvi(currentUser.getDvql());
+        List<DcnbBbChuanBiKhoHdr> searchDto = null;
+        if (req.getIsVatTu() == null) {
+            req.setIsVatTu(false);
+        }
+        if (req.getIsVatTu()) {
+            req.setDsLoaiHang(Arrays.asList("VT"));
+        } else {
+            req.setDsLoaiHang(Arrays.asList("LT", "M"));
+        }
+        req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
+        searchDto = hdrRepository.searchList(req);
         return searchDto;
     }
 

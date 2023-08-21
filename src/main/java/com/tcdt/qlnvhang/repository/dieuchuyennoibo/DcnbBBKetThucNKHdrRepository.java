@@ -19,8 +19,8 @@ public interface DcnbBBKetThucNKHdrRepository extends JpaRepository<DcnbBBKetThu
     Optional<DcnbBBKetThucNKHdr> findFirstBySoBb(String soBb);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBKetThucNKHdrDTO(" +
-            "bbkt.id,qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKho,khdcd.tenNhaKho, khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
-            "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho,khdcd.loaiVthh,khdcd.tenLoaiVthh, khdcd.cloaiVthh, khdcd.tenCloaiVthh,khdcd.soLuongDc,khdcd.donViTinh, khdcd.tenDonViTinh ," +
+            "bbkt.id,qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan, khdcd.maDiemKhoNhan,khdcd.tenDiemKhoNhan,khdcd.maLoKhoNhan," +
+            "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan,khdcd.loaiVthh,khdcd.tenLoaiVthh, khdcd.cloaiVthh, khdcd.tenCloaiVthh,khdcd.soLuongDc,khdcd.donViTinh, khdcd.tenDonViTinh ," +
             "bbkt.soBb, bbkt.ngayKetThucNhap, hskt.soHoSoKyThuat,hskt.id, bbktd.soPhieuNhapKho, bbktd.phieuNhapKhoId,bbktd.ngayNhap, bblm.soBbLayMau,bblm.id," +
             "bblm.soBbLayMau,bblm.id, bbkt.trangThai, bbkt.trangThai) " +
             "FROM DcnbQuyetDinhDcCHdr qdc " +
@@ -38,17 +38,22 @@ public interface DcnbBBKetThucNKHdrRepository extends JpaRepository<DcnbBBKetThu
             "WHERE 1 =1 " +
             "AND qdc.parentId is not null and qdc.trangThai = '29'" +
             "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
+            "AND ((:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho})) " +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
-            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
+            "AND ((:#{#param.maDvi} IS NULL OR LOWER(qdc.maDvi) LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
+            "AND ((:#{#param.maDvi} IS NULL OR LOWER(bbkt.maDvi) LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
+            "AND ((:#{#param.loaiDc} IS NULL OR qdc.loaiDc = :#{#param.loaiDc}))" +
+            "AND (qdc.loaiDc= 'DCNB' OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
             "AND (:#{#param.soBb} IS NULL OR LOWER(bbkt.soBb) LIKE CONCAT('%',LOWER(:#{#param.soBb}),'%')) " +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.trangThai} IS NULL OR bbkt.trangThai = :#{#param.trangThai}) " +
             "AND ((:#{#param.tuNgayKtnk}  IS NULL OR bbkt.ngayKetThucNhap >= :#{#param.tuNgayKtnk})" +
             "AND (:#{#param.denNgayKtnk}  IS NULL OR bbkt.ngayKetThucNhap <= :#{#param.denNgayKtnk}) ) " +
             "AND ((:#{#param.tuNgayThoiHanNhap}  IS NULL OR khdcd.thoiGianDkDc >= :#{#param.tuNgayThoiHanNhap})" +
             "AND (:#{#param.denNgayThoiHanNhap}  IS NULL OR khdcd.thoiGianDkDc <= :#{#param.denNgayThoiHanNhap}) ) " +
-            "GROUP BY bbkt.id,qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKho,khdcd.tenNhaKho, khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
-            "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho,khdcd.loaiVthh,khdcd.tenLoaiVthh, khdcd.cloaiVthh, khdcd.tenCloaiVthh,khdcd.soLuongDc,khdcd.donViTinh, khdcd.tenDonViTinh ," +
+            "GROUP BY bbkt.id,qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan, khdcd.maDiemKhoNhan,khdcd.tenDiemKhoNhan,khdcd.maLoKhoNhan," +
+            "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan,khdcd.loaiVthh,khdcd.tenLoaiVthh, khdcd.cloaiVthh, khdcd.tenCloaiVthh,khdcd.soLuongDc,khdcd.donViTinh, khdcd.tenDonViTinh ," +
             "bbkt.soBb, bbkt.ngayKetThucNhap, hskt.soHoSoKyThuat,hskt.id, bbktd.soPhieuNhapKho, bbktd.phieuNhapKhoId,bbktd.ngayNhap, bblm.soBbLayMau,bblm.id," +
             "bblm.soBbLayMau,bblm.id, bbkt.trangThai, bbkt.trangThai "+
             "ORDER BY qdc.soQdinh DESC")
@@ -62,7 +67,9 @@ public interface DcnbBBKetThucNKHdrRepository extends JpaRepository<DcnbBBKetThu
             "AND qdc.trangThai = '29'" +
             "AND ((:#{#param.qDinhDccId} IS NULL OR qdc.id = :#{#param.qDinhDccId})) " +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
-            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))" +
+            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
+            "AND ((:#{#param.loaiDc} IS NULL OR qdc.loaiDc = :#{#param.loaiDc}))" +
+            "AND (qdc.loaiDc= 'DCNB' OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
             "ORDER BY bbkt.soBb desc, bbkt.nam desc")
     List<DcnbBBKetThucNKHdrListDTO> searchList(@Param("param") DcnbBBKetThucNKReq req);

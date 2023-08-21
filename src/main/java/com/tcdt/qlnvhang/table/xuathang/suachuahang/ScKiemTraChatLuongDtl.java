@@ -26,11 +26,15 @@ public class ScKiemTraChatLuongDtl {
 
     private Long idHdr;
 
-    private Integer thuTu;
+    private Integer thuTuHt;
 
-    private String tenTchuan;
+    private String tenChiTieu;
 
-    private String chiSoNhap;
+    private String mucYeuCauNhap;
+
+    private String mucYeuCauNhapToiDa;
+
+    private String mucYeuCauNhapToiThieu;
 
     private String ketQua;
 

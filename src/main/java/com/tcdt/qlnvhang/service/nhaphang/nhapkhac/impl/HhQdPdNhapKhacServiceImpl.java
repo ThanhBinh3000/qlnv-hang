@@ -128,7 +128,7 @@ public class HhQdPdNhapKhacServiceImpl extends BaseServiceImpl implements HhQdPd
         dataMap.setNguoiTao(getUser().getUsername());
         dataMap.setFileDinhKems(fileDinhKemList);
         dataMap.setLastest(req.getLastest());
-        dataMap.setMaDvi(getUser().getDvql());
+//        dataMap.setMaDvi(getUser().getDvql());
         hhQdPdNhapKhacHdrRepository.save(dataMap);
 
         // Update trạng thái tổng hợp dxkhclnt
@@ -251,6 +251,7 @@ public class HhQdPdNhapKhacServiceImpl extends BaseServiceImpl implements HhQdPd
         List<HhQdPdNhapKhacDtl> dtls = new ArrayList<>();
         List<HhDxuatKhNhapKhacDtl> dxDtls = new ArrayList<>();
         if(qOptional.get().getIdTh() != null){
+            qOptional.get().setPhanLoai("TH");
             qOptional.get().setChildren(hhDxuatKhNhapKhacHdrRepository.findAllByThopId(qOptional.get().getIdTh()));
             for (HhDxuatKhNhapKhacHdr child : qOptional.get().getChildren()) {
                 dxDtls = new ArrayList<>();
@@ -259,15 +260,18 @@ public class HhQdPdNhapKhacServiceImpl extends BaseServiceImpl implements HhQdPd
                 for (HhQdPdNhapKhacDtl dtl : dtls) {
                     HhDxuatKhNhapKhacDtl dxDtl = new HhDxuatKhNhapKhacDtl();
                     BeanUtils.copyProperties(dtl, dxDtl);
+                    dxDtl.setTenCloaiVthh(mapVthh.get(dxDtl.getCloaiVthh()));
                     dxDtls.add(dxDtl);
                 }
                     child.setDetails(dxDtls);
 //                child.getDetails().addAll(dxDtls);
             }
         }else{
+            qOptional.get().setPhanLoai("TTr");
             dtls = hhQdPdNhapKhacDtlRepository.findAllByIdHdr(qOptional.get().getId());
         }
-        Integer sumSlNhap = 0;
+        BigDecimal tongSlNhap = BigDecimal.ZERO;
+        BigDecimal tongThanhTien = BigDecimal.ZERO;
         for (HhQdPdNhapKhacDtl dtl : dtls) {
             dtl.setTenCuc(mapDmucDvi.get(dtl.getMaCuc()));
             dtl.setTenChiCuc(mapDmucDvi.get(dtl.getMaChiCuc()));
@@ -275,8 +279,19 @@ public class HhQdPdNhapKhacServiceImpl extends BaseServiceImpl implements HhQdPd
             dtl.setTenNhaKho(mapDmucDvi.get(dtl.getMaNhaKho()));
             dtl.setTenNganLoKho(mapDmucDvi.get(dtl.getMaLoKho()) + " - " + mapDmucDvi.get(dtl.getMaNganKho()));
             dtl.setTenCloaiVthh(mapVthh.get(dtl.getCloaiVthh()));
-            qOptional.get().setTongSlNhap(sumSlNhap +=  dtl.getSlDoiThua().intValue());
+            if (dtl.getSlDoiThua() != null) {
+                tongSlNhap = tongSlNhap.add(dtl.getSlDoiThua());
+                tongThanhTien = tongThanhTien.add(dtl.getSlDoiThua().multiply(dtl.getDonGia()));
+            } else if(dtl.getSlTonKhoThucTe() != null) {
+                tongSlNhap = tongSlNhap.add(dtl.getSlTonKhoThucTe().subtract(dtl.getSlTonKho()) );
+                tongThanhTien = tongThanhTien.add((dtl.getSlTonKhoThucTe().subtract(dtl.getSlTonKho())).multiply(dtl.getDonGia()));
+            } else if (dtl.getSlNhap() != null) {
+                tongSlNhap = tongSlNhap.add(dtl.getSlNhap());
+                tongThanhTien = tongThanhTien.add(dtl.getSlNhap().multiply(dtl.getDonGia()));
+            }
         }
+        qOptional.get().setTongSlNhap(tongSlNhap);
+        qOptional.get().setTongThanhTien(tongThanhTien);
         qOptional.get().setDetails(dtls);
         return qOptional.get();
     }
@@ -334,9 +349,9 @@ public class HhQdPdNhapKhacServiceImpl extends BaseServiceImpl implements HhQdPd
             throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp hoặc từ chối");
         }
         if(qOptional.get().getIdTh() != null){
-            hhThopKhNhapKhacRepository.updateTrangThai(qOptional.get().getIdTh(), Contains.CHUATONGHOP);
+            hhThopKhNhapKhacRepository.updateTrangThai(qOptional.get().getIdTh(), Contains.CHUATAO_QD);
         }else{
-            hhDxuatKhNhapKhacHdrRepository.updateStatusInList(Arrays.asList(qOptional.get().getSoDxuat()), NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId());
+            hhDxuatKhNhapKhacHdrRepository.updateStatusInList(Arrays.asList(qOptional.get().getSoDxuat()), NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
         }
         fileDinhKemService.delete(qOptional.get().getId(), Lists.newArrayList(HhQdPdNhapKhacHdr.TABLE_NAME + CAN_CU));
         fileDinhKemService.delete(qOptional.get().getId(), Lists.newArrayList(HhQdPdNhapKhacHdr.TABLE_NAME));

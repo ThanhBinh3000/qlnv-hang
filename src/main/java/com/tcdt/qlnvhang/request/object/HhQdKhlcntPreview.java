@@ -16,6 +16,7 @@ public class HhQdKhlcntPreview {
     private String tenCloaiVthh;
     private String namKhoach;
     private String tongSl;
+    private String tenDvi;
     private List<HhQdKhlcntDsgthau> dsGthau;
     private List<DsGthauPreview> dsGthauKq;
     private List<HhQdKhlcntDtl> qdKhlcntDtls;

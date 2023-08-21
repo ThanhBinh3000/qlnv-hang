@@ -44,6 +44,7 @@ public class HhChiTietKqTTinChaoGia implements Serializable {
     private BigDecimal thanhTien;
 
     private Boolean luaChon;
+    private Boolean signed;
 
     @Transient
     private FileDinhKem fileDinhKems ;

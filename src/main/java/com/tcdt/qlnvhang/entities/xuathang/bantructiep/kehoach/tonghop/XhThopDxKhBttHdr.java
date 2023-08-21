@@ -1,77 +1,78 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Entity
-@Table(name = "XH_THOP_DX_KH_BTT_HDR")
+@Table(name = XhThopDxKhBttHdr.TABLE_NAME)
 @Data
-public class XhThopDxKhBttHdr implements Serializable {
-
+public class XhThopDxKhBttHdr extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_THOP_DX_KH_BTT_HDR";
-
     @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_THOP_DX_KH_MTT_SEQ")
-//    @SequenceGenerator(sequenceName = "XH_THOP_DX_KH_MTT_SEQ", allocationSize = 1, name = "XH_THOP_DX_KH_MTT_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhThopDxKhBttHdr.TABLE_NAME + "_SEQ")
+//    @SequenceGenerator(sequenceName = XhThopDxKhBttHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhThopDxKhBttHdr.TABLE_NAME + "_SEQ")
     private Long id;
-
     private LocalDate ngayThop;
-
     private String loaiVthh;
+    private String cloaiVthh;
+    private LocalDate ngayDuyetTu;
+    private LocalDate ngayDuyetDen;
+    private String noiDungThop;
+    private Integer namKh;
+    private String maDvi;
+    private Long idSoQdPd;
+    private String soQdPd;
+    private String trangThai;
+    private LocalDate ngayGuiDuyet;
+    private Long nguoiGuiDuyetId;
+    private LocalDate ngayPduyet;
+    private Long nguoiPduyetId;
     @Transient
     private String tenLoaiVthh;
-
-    private String cloaiVthh;
     @Transient
     private String tenCloaiVthh;
-
-    private LocalDate ngayDuyetTu;
-
-    private LocalDate ngayDuyetDen;
-
-    private String noiDungThop;
-
-    private Integer namKh;
-
-    private String maDvi;
-
-    private Long idSoQdPd;
-
-    private String soQdPd;
-
-    private String loaiHinhNx;
-
-    private String kieuNx;
-
-    private String trangThai;
     @Transient
     private String tenTrangThai;
 
-    private LocalDate ngayTao;
-
-    private Long nguoiTaoId;
-
-    private LocalDate ngaySua;
-
-    private Long nguoiSuaId;
-
-    private LocalDate ngayGuiDuyet;
-
-    private Long nguoiGuiDuyetId;
-
-    private LocalDate ngayPduyet;
-
-    private Long nguoiPduyetId;
-
-    private String lyDoTuChoi;
-
+    @JsonIgnore
     @Transient
+    private Map<String, String> mapVthh;
+
+    public void setMapVthh(Map<String, String> mapVthh) {
+        this.mapVthh = mapVthh;
+        if (!DataUtils.isNullObject(getLoaiVthh())) {
+            setTenLoaiVthh(mapVthh.containsKey(getLoaiVthh()) ? mapVthh.get(getLoaiVthh()) : null);
+        }
+        if (!DataUtils.isNullObject(getCloaiVthh())) {
+            setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
+        }
+    }
+
+    public String getTrangThai() {
+        setTenTrangThai(TrangThaiAllEnum.getLabelById(trangThai));
+        return trangThai;
+    }
+
+    @OneToMany(mappedBy = "tongHopHdr", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<XhThopDxKhBttDtl> children = new ArrayList<>();
+    public void setChildren(List<XhThopDxKhBttDtl> children){
+        this.getChildren().clear();
+        if (!DataUtils.isNullOrEmpty(children)) {
+            children.forEach(f -> {
+                f.setTongHopHdr(this);
+            });
+            this.children.addAll(children);
+        }
+    }
 }

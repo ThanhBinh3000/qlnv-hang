@@ -286,7 +286,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl implements XhKqBttHdr
                 Optional<XhQdPdKhBttDtl> qdPdKhBttDtl = xhQdPdKhBttDtlRepository.findById(data.getIdPdKhDtl());
                 if (qdPdKhBttDtl.isPresent()){
                     qdPdKhBttDtl.get().setSoQdKq(data.getSoQdKq());
-                    qdPdKhBttDtl.get().setIdSoQdKq(data.getId());
+                    qdPdKhBttDtl.get().setIdQdKq(data.getId());
                     xhQdPdKhBttDtlRepository.save(qdPdKhBttDtl.get());
                 }
             }

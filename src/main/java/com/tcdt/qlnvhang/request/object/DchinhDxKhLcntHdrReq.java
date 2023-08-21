@@ -111,7 +111,7 @@ public class DchinhDxKhLcntHdrReq extends BaseRequest {
 	//	@Size(max = 200, message = "Bảo lãnh dự thầu không được vượt quá 200 ký tự")
 	@ApiModelProperty(example = "Số tiền bảo lãnh dự thầu")
 	String blanhDthau;
-
+	private Integer lanDieuChinh;
 	String maTrHdr;
 	String noiDungQd;
 	String tenDuAn;

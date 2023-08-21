@@ -134,5 +134,16 @@ public class DocxToPdfConverter {
         }
         return "";
     }
+
+    public String convertBigDecimalToStrNotDecimal(BigDecimal num){
+        if (num != null) {
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+            symbols.setDecimalSeparator(',');
+            symbols.setGroupingSeparator('.');
+            DecimalFormat df = new DecimalFormat("#,##0", symbols);
+            return df.format(num);
+        }
+        return "";
+    }
 }
 

@@ -25,6 +25,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
@@ -72,6 +73,7 @@ public class ScTrinhThamDinhServiceImpl extends BaseServiceImpl implements ScTri
         if(!userInfo.getCapDvi().equals(Contains.CAP_CUC)){
             throw new Exception("Đơn vị lưu phải là cấp cục");
         }
+        validateData(req);
         ScTrinhThamDinhHdr hdr = new ScTrinhThamDinhHdr();
         BeanUtils.copyProperties(req, hdr);
         hdr.setNam(LocalDate.now().getYear());
@@ -85,6 +87,19 @@ public class ScTrinhThamDinhServiceImpl extends BaseServiceImpl implements ScTri
         List<ScTrinhThamDinhDtl> scTrinhThamDinhDtls = this.saveDtl(req, created.getId());
         created.setChildren(scTrinhThamDinhDtls);
         return created;
+    }
+
+    void validateData(ScTrinhThamDinhHdrReq req) throws Exception {
+        Optional<ScTrinhThamDinhHdr> bySoQd = hdrRepository.findBySoTtr(req.getSoTtr());
+        if(bySoQd.isPresent()){
+            if(ObjectUtils.isEmpty(req.getId())){
+                throw new Exception("Số tờ trình " + bySoQd.get().getSoTtr() +" đã tồn tại");
+            }else{
+                if(!req.getId().equals(bySoQd.get().getId())){
+                    throw new Exception("Số tờ trình " + bySoQd.get().getSoTtr() +" đã tồn tại");
+                }
+            }
+        }
     }
 
     private List<ScTrinhThamDinhDtl> saveDtl(ScTrinhThamDinhHdrReq req,Long idHdr) throws Exception {
@@ -120,11 +135,15 @@ public class ScTrinhThamDinhServiceImpl extends BaseServiceImpl implements ScTri
         if (!optional.isPresent()){
             throw new Exception("Bản ghi không tồn tại");
         }
+        validateData(req);
         ScTrinhThamDinhHdr hdr = optional.get();
         BeanUtils.copyProperties(req, hdr);
 
         hdr.setNam(LocalDate.now().getYear());
         hdr.setMaDvi(userInfo.getDvql());
+        if(hdr.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDC.getId())){
+            hdr.setTrangThai(TrangThaiAllEnum.DANG_DUYET_CB_VU.getId());
+        }
         ScTrinhThamDinhHdr created = hdrRepository.save(hdr);
         fileDinhKemService.delete(req.getId(), Lists.newArrayList(ScTrinhThamDinhHdr.TABLE_NAME + "_CAN_CU"));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), ScTrinhThamDinhHdr.TABLE_NAME + "_CAN_CU");
@@ -183,6 +202,7 @@ public class ScTrinhThamDinhServiceImpl extends BaseServiceImpl implements ScTri
             case Contains.TUCHOI_TP + Contains.DUTHAO:
             case Contains.TUCHOI_LDC + Contains.DUTHAO:
             case Contains.TUCHOI_LDV + Contains.DUTHAO:
+            case Contains.TU_CHOI_CBV + Contains.DUTHAO:
             case Contains.TUCHOI_LDTC + Contains.DUTHAO:
                 break;
             // Arena các cấp duuyệt
@@ -198,7 +218,7 @@ public class ScTrinhThamDinhServiceImpl extends BaseServiceImpl implements ScTri
                 }
                 hdr.setNgayDuyetLdc(LocalDate.now());
                 break;
-            case Contains.DADUYET_LDC + Contains.CHODUYET_LDV:
+            case Contains.DANG_DUYET_CB_VU + Contains.CHODUYET_LDV:
                 if(!userInfo.getCapDvi().equals(Contains.CAP_TONG_CUC)){
                     throw new Exception("Đơn vị gửi duyệt phải là cấp Tổng cục");
                 }
@@ -218,8 +238,18 @@ public class ScTrinhThamDinhServiceImpl extends BaseServiceImpl implements ScTri
             // Arena từ chối
             case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
             case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
+            case Contains.DA_DUYET_LDC + Contains.TU_CHOI_CBV:
+            case Contains.DANG_DUYET_CB_VU + Contains.TU_CHOI_CBV:
+                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                break;
             case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
+                hdr.setNgayDuyetLdv(LocalDate.now());
+                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                break;
             case Contains.CHODUYET_LDTC + Contains.TUCHOI_LDTC:
+                hdr.setNgayDuyetLdtc(LocalDate.now());
+                hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                this.rollBackDataDsHdr();
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -228,6 +258,12 @@ public class ScTrinhThamDinhServiceImpl extends BaseServiceImpl implements ScTri
         ScTrinhThamDinhHdr save = hdrRepository.save(hdr);
         return save;
     }
+
+    // Khi lãnh đạo tồng cục từ chối thì coi như phải làm lại luồng này từ đầu cho lần sau chẳng hạn
+    void rollBackDataDsHdr(){
+
+    }
+
     @Transient
     @Override
     public void delete(Long id) throws Exception {

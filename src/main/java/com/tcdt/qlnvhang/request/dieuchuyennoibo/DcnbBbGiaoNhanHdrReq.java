@@ -20,6 +20,7 @@ public class DcnbBbGiaoNhanHdrReq extends BaseRequest {
     private Long id;
     private String loaiQdinh;
     private String loaiDc;
+    private String typeQd;
     private Integer nam;
     private String maDvi;
     private String tenDvi;

@@ -16,6 +16,7 @@ public class HhQdPdNhapKhacHdrReq {
     private Long IdTh;
     private String maTh;
     private Integer namKhoach;
+    private Integer tongThanhTien;
     private String maDvi;
     private String dvt;
     private String loaiHinhNx;
@@ -28,9 +29,11 @@ public class HhQdPdNhapKhacHdrReq {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayDxuat;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayHluc;
+    private Date ngayHieuLuc;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayQd;
+    private Date ngayKyQd;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayPduyet;
     private String trangThai;
     private Boolean lastest;
     private List<FileDinhKemReq> fileDinhKems;

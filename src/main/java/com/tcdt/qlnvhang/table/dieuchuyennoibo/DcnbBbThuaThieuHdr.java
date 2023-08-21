@@ -1,12 +1,15 @@
 package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
+import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +19,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DcnbBbThuaThieuHdr {
+public class DcnbBbThuaThieuHdr extends BaseEntity implements Serializable, Cloneable{
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_BB_THUA_THIEU_HDR";
 
@@ -30,14 +33,15 @@ public class DcnbBbThuaThieuHdr {
     private String tenDvi;
     private String maDviNhan;
     private String tenCanBo;
+    private String tenBaoCao;
     private String canBoId;
-    private String soBc;
+    private String soBb;
     private LocalDate ngayLap;
     private Long qdDcCucId;
     private String soQdDcCuc;
     private LocalDate ngayKyQdCuc;
     private String soBcKetQuaDc;
-    private String bcKetQuaDcId;
+    private Long bcKetQuaDcId;
     private LocalDate ngayLapBcKetQuaDc;
     private String nguyenNhan;
     private String kienNghi;
@@ -45,6 +49,8 @@ public class DcnbBbThuaThieuHdr {
     @Access(value = AccessType.PROPERTY)
     private String trangThai;
 
+    @Transient
+    private List<FileDinhKem> fileBienBanHaoDois = new ArrayList<>();
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)

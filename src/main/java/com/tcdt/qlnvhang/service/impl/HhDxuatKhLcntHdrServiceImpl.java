@@ -364,7 +364,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
     }
 
     private List<HhDxKhlcntDsgthau> getDsGthau (Long dxId, Map<String, String> mapVthh, Map<String, String> mapDmucDvi) {
-        List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(dxId);
+        List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcntOrderByGoiThau(dxId);
         for (HhDxKhlcntDsgthau dsG : dsGthauList) {
             dsG.setTenDvi(mapDmucDvi.get(dsG.getMaDvi()));
             dsG.setTenCloaiVthh(mapVthh.get(dsG.getCloaiVthh()));
@@ -380,6 +380,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
                 f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
                 f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho()) ? null : mapDmucDvi.get(f.getMaDiemKho()));
                 if (dsG.getDonGiaVat() != null) {
+                    f.setThanhTien(dsG.getDonGiaVat().multiply(f.getSoLuong()));
                     f.setThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(dsG.getDonGiaVat().multiply(f.getSoLuong())));
                 }
                 List<HhDxKhlcntDsgthauCtietVt> byIdGoiThauCtiet = hhDxKhlcntDsgthauCtietVtRepository.findByIdGoiThauCtiet(f.getId());
@@ -526,7 +527,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         object.setSoGoiThau(hhDxuatKhLcntDsgtDtlRepository.countByIdDxKhlcnt(hhDxuatKhLcntHdrReq.getId()));
         String diaDiem = "";
         if (object.getId() != null) {
-            List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(object.getId());
+            List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcntOrderByGoiThau(object.getId());
             for (HhDxKhlcntDsgthau dsG : dsGthauList) {
                 diaDiem = "";
                 HhDxKhlcntDsgthauReport data = new ModelMapper().map(dsG, HhDxKhlcntDsgthauReport.class);
@@ -557,6 +558,19 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         List<HhDxKhlcntDsgthau> dsgthau = getDsGthau(hhDxuatKhLcntHdrReq.getId(), mapVthh, mapDmucDvi);
+        BigDecimal tongThanhTien = BigDecimal.ZERO;
+        BigDecimal tongThucHien = BigDecimal.ZERO;
+        BigDecimal tongDx = BigDecimal.ZERO;
+        for (HhDxKhlcntDsgthau hhDxKhlcntDsgthau : dsgthau) {
+            for (HhDxKhlcntDsgthauCtiet child : hhDxKhlcntDsgthau.getChildren()) {
+                tongThanhTien = tongThanhTien.add(child.getThanhTien());
+                tongThucHien = tongThucHien.add(child.getSoLuongDaMua());
+                tongDx = tongDx.add(child.getSoLuong());
+            }
+        }
+        object.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStrNotDecimal(tongThanhTien));
+        object.setTongThucHien(docxToPdfConverter.convertBigDecimalToStrNotDecimal(tongThucHien));
+        object.setTongDeXuat(docxToPdfConverter.convertBigDecimalToStrNotDecimal(tongDx));
         object.setDsGtVt(dsgthau);
         return docxToPdfConverter.convertDocxToPdf(inputStream, object);
     }
@@ -1090,7 +1104,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 //		UnitScaler.formatList(dtls2, Contains.DVT_TAN);
 
 
-        List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(qOptional.get().getId());
+        List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcntOrderByGoiThau(qOptional.get().getId());
         for (HhDxKhlcntDsgthau dsG : dsGthauList) {
             dsG.setTenDvi(mapDmucDvi.get(dsG.getMaDvi()));
             dsG.setTenHthucLcnt(StringUtils.isEmpty(dsG.getHthucLcnt()) ? null : hashMapHtLcnt.get(dsG.getHthucLcnt()));

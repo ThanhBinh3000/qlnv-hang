@@ -147,6 +147,11 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         }
                         e.getDanhSachKeHoach().forEach(e1 -> {
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr.get());
+                            e1.setThayDoiThuKho(true);
+                            Optional<DcnbKeHoachDcDtl> dcnbKeHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(e1.getHdrId());
+                            if (dcnbKeHoachDcDtl.isPresent()) {
+                                e1.setParentId(dcnbKeHoachDcDtl.get().getParentId());
+                            }
                         });
                         dcnbKeHoachDcHdr.get().setDanhSachHangHoa(e.getDanhSachKeHoach());
                         DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr.get());
@@ -189,6 +194,15 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                     req.setDsLoaiHang(Arrays.asList("VT"));
                 } else {
                     req.setDsLoaiHang(Arrays.asList("LT", "M"));
+                }
+            }
+            if("00".equals(req.getType())){
+                req.setType(Contains.DIEU_CHUYEN);
+            }else if("01".equals(req.getType())){
+                if(Contains.DCNB.equals(req.getLoaiDc())){
+                    req.setType(Contains.DIEU_CHUYEN);
+                }else {
+                    req.setType(Contains.NHAN_DIEU_CHUYEN);
                 }
             }
             List<DcnbQuyetDinhDcCHdrDTO> danhSachSoQdDieuChuyen = dcnbQuyetDinhDcCHdrRepository.searchListChiCuc(req);
@@ -284,6 +298,10 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                     if (e.getDanhSachKeHoach() != null && !e.getDanhSachKeHoach().isEmpty()) {
                         e.getDanhSachKeHoach().forEach(e1 -> {
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
+                            Optional<DcnbKeHoachDcDtl> dcnbKeHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(e1.getHdrId());
+                            if (dcnbKeHoachDcDtl.isPresent()) {
+                                e1.setParentId(dcnbKeHoachDcDtl.get().getParentId());
+                            }
                             e1.setDaXdinhDiemNhap(true);
                         });
                     }
@@ -301,6 +319,10 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         }
                         e.getDanhSachKeHoach().forEach(e1 -> {
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr.get());
+                            Optional<DcnbKeHoachDcDtl> dcnbKeHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(e1.getHdrId());
+                            if (dcnbKeHoachDcDtl.isPresent()) {
+                                e1.setParentId(dcnbKeHoachDcDtl.get().getParentId());
+                            }
                         });
                         dcnbKeHoachDcHdr.get().setDanhSachHangHoa(e.getDanhSachKeHoach());
                         DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr.get());
@@ -443,9 +465,14 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                 List<DcnbQuyetDinhDcCDtl> danhSachQuyetDinh = optional.get().getDanhSachQuyetDinh();
                 for (DcnbQuyetDinhDcCDtl hh : danhSachQuyetDinh) {
                     List<DcnbKeHoachDcDtl> danhSachKeHoach = hh.getDanhSachKeHoach();
+                    hh.getDcnbKeHoachDcHdr().setDaXdinhDiemNhap(true);
+                    dcnbKeHoachDcHdrRepository.save(hh.getDcnbKeHoachDcHdr());
+                    Set<Long> parentIds = new HashSet<>();
                     for (DcnbKeHoachDcDtl kh : danhSachKeHoach) {
                         Optional<DcnbKeHoachDcDtl> parentDtl = dcnbKeHoachDcDtlRepository.findById(kh.getParentId());
-                        if (parentDtl.isPresent()) {
+                        boolean contains = parentIds.contains(hh.getParentId());
+                        if (parentDtl.isPresent() && !contains) {
+                            parentIds.add(hh.getParentId());
                             parentDtl.get().setMaDiemKhoNhan(kh.getMaDiemKhoNhan());
                             parentDtl.get().setTenDiemKhoNhan(kh.getTenDiemKhoNhan());
                             parentDtl.get().setMaNhaKhoNhan(kh.getMaNhaKhoNhan());
@@ -458,6 +485,9 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                             parentDtl.get().setTichLuongKd(kh.getTichLuongKd());
                             parentDtl.get().setSoLuongPhanBo(kh.getSoLuongPhanBo());
                             parentDtl.get().setSlDcConLai(kh.getSlDcConLai());
+                            parentDtl.get().setThuKhoNhan(kh.getThuKhoNhan());
+                            parentDtl.get().setThuKhoNhanId(kh.getThuKhoNhanId());
+                            parentDtl.get().setThayDoiThuKho(kh.getThayDoiThuKho());
                             parentDtl.get().setDaXdinhDiemNhap(true);
                             dcnbKeHoachDcDtlRepository.save(parentDtl.get());
 
@@ -466,6 +496,37 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                             dataLink.setKeHoachDcHdrId(kh.getHdrId());
                             dataLink.setKeHoachDcDtlParentId(parentDtl.get().getId());
                             dataLink.setKeHoachDcHdrParentId(parentDtl.get().getHdrId());
+                            dataLink.setQdCcId(optional.get().getId());
+                            dataLink.setQdCcParentId(optional.get().getParentId());
+                            dataLink.setQdCtcId(optional.get().getCanCuQdTc());
+                            dataLink.setType(Contains.NHAN_DIEU_CHUYEN);
+                            dcnbDataLinkHdrRepository.save(dataLink);
+                        }else  if (parentDtl.isPresent()){
+                            DcnbKeHoachDcDtl clone = SerializationUtils.clone(parentDtl.get());
+                            clone.setId(null);
+                            clone.setMaDiemKhoNhan(kh.getMaDiemKhoNhan());
+                            clone.setTenDiemKhoNhan(kh.getTenDiemKhoNhan());
+                            clone.setMaNhaKhoNhan(kh.getMaNhaKhoNhan());
+                            clone.setTenNhaKhoNhan(kh.getTenNhaKhoNhan());
+                            clone.setMaNganKhoNhan(kh.getMaNganKhoNhan());
+                            clone.setTenNganKhoNhan(kh.getTenNganKhoNhan());
+                            clone.setCoLoKhoNhan(kh.getCoLoKhoNhan());
+                            clone.setMaLoKhoNhan(kh.getMaLoKhoNhan());
+                            clone.setTenLoKhoNhan(kh.getTenLoKhoNhan());
+                            clone.setTichLuongKd(kh.getTichLuongKd());
+                            clone.setSoLuongPhanBo(kh.getSoLuongPhanBo());
+                            clone.setSlDcConLai(kh.getSlDcConLai());
+                            clone.setThuKhoNhan(kh.getThuKhoNhan());
+                            clone.setThuKhoNhanId(kh.getThuKhoNhanId());
+                            clone.setThayDoiThuKho(kh.getThayDoiThuKho());
+                            clone.setDaXdinhDiemNhap(true);
+                            clone = dcnbKeHoachDcDtlRepository.save(clone);
+
+                            DcnbDataLinkHdr dataLink = new DcnbDataLinkHdr();
+                            dataLink.setKeHoachDcDtlId(kh.getId());
+                            dataLink.setKeHoachDcHdrId(kh.getHdrId());
+                            dataLink.setKeHoachDcDtlParentId(clone.getId());
+                            dataLink.setKeHoachDcHdrParentId(clone.getHdrId());
                             dataLink.setQdCcId(optional.get().getId());
                             dataLink.setQdCcParentId(optional.get().getParentId());
                             dataLink.setQdCtcId(optional.get().getCanCuQdTc());
@@ -480,7 +541,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                     Optional<DcnbKeHoachDcHdr> hdr = dcnbKeHoachDcHdrRepository.findById(hh.getKeHoachDcHdrId());
                     Optional<DcnbKeHoachDcHdr> parentHdr = dcnbKeHoachDcHdrRepository.findById(hdr.get().getParentId());
                     if (parentHdr.isPresent()) {
-                        boolean allMatch = parentHdr.get().getDanhSachHangHoa().stream().allMatch(n -> (n.getDaXdinhDiemNhap() != null && n.getDaXdinhDiemNhap() == true));
+                        boolean allMatch = parentHdr.get().getDanhSachHangHoa().stream().allMatch(n -> (n.getDaXdinhDiemNhap() != null && n.getDaXdinhDiemNhap()));
                         if (allMatch) {
                             parentHdr.get().setDaXdinhDiemNhap(true);
                             dcnbKeHoachDcHdrRepository.save(parentHdr.get());

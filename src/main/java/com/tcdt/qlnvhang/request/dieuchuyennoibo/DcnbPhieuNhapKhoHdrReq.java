@@ -16,7 +16,9 @@ public class DcnbPhieuNhapKhoHdrReq extends BaseRequest {
 
     private Long id;
     private String loaiQdinh;
+    private String typeQd;
     private String loaiDc;
+    private Boolean thayDoiThuKho;
     private Integer nam;
     private String maDvi;
     private String tenDvi;

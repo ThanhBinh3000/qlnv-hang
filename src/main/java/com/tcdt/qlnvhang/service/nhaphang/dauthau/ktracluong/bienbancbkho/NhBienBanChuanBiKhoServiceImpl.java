@@ -1,7 +1,10 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.bienbancbkho;
 
+import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bienbanchuanbikho.NhBienBanChuanBiKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bienbanchuanbikho.NhBienBanChuanBiKhoCt;
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhBbNghiemThuNhapKhac;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
@@ -10,8 +13,11 @@ import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.bienbanchuanbikho
 import com.tcdt.qlnvhang.request.object.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.HhQdPduyetKqlcntHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -46,6 +52,9 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
 
     private final HttpServletRequest req;
 
+    @Autowired
+    private FileDinhKemService fileDinhKemService;
+
     @Override
     public Page<NhBienBanChuanBiKho> searchPage(NhBienBanChuanBiKhoReq req) {
         return null;
@@ -66,18 +75,21 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
         item.setNam(LocalDate.now().getYear());
         item.setId(Long.parseLong(req.getSoBienBan().split("/")[0]));
         nhBienBanChuanBiKhoRepository.save(item);
+        if (!DataUtils.isNullOrEmpty(req.getListFileDinhKem())) {
+            fileDinhKemService.saveListFileDinhKem(req.getListFileDinhKem(), item.getId(), "NH_BIEN_BAN_CHUAN_BI_KHO");
+        }
         saveDetail(req,item.getId());
         return item;
     }
 
     @Transactional
     void saveDetail(NhBienBanChuanBiKhoReq req,Long id){
-        nhBienBanChuanBiKhoCtRepository.deleteAllByIdBbChuanBiKho(id);
+        nhBienBanChuanBiKhoCtRepository.deleteAllByHdrId(id);
         for(NhBienBanChuanBiKhoCtReq ctReq : req.getChildren()){
             NhBienBanChuanBiKhoCt ct = new NhBienBanChuanBiKhoCt();
-            BeanUtils.copyProperties(req,ct,"id");
+            BeanUtils.copyProperties(ctReq, ct,"id");
             ct.setId(null);
-            ct.setIdBbChuanBiKho(id);
+            ct.setHdrId(id);
             nhBienBanChuanBiKhoCtRepository.save(ct);
         }
     }
@@ -100,6 +112,10 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
         item.setNgaySua(new Date());
         item.setNguoiSuaId(userInfo.getId());
         nhBienBanChuanBiKhoRepository.save(item);
+        fileDinhKemService.delete(item.getId(), Lists.newArrayList("NH_BIEN_BAN_CHUAN_BI_KHO"));
+        if (!DataUtils.isNullObject(req.getListFileDinhKem())) {
+            fileDinhKemService.saveListFileDinhKem(req.getListFileDinhKem(), item.getId(), "NH_BIEN_BAN_CHUAN_BI_KHO");
+        }
         this.saveDetail(req,item.getId());
         return item;
     }
@@ -113,7 +129,8 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
         }
         Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
         NhBienBanChuanBiKho item = optional.get();
-        item.setChildren(nhBienBanChuanBiKhoCtRepository.findAllByIdBbChuanBiKho(item.getId()));
+        item.setChildren(nhBienBanChuanBiKhoCtRepository.findAllByHdrId(item.getId()));
+        item.setFileDinhKems(fileDinhKemService.search(item.getId(), Collections.singletonList("NH_BIEN_BAN_CHUAN_BI_KHO")));
         item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
         item.setTenDiemKho(listDanhMucDvi.get(item.getMaDiemKho()));
         item.setTenNhaKho(listDanhMucDvi.get(item.getMaNhaKho()));
@@ -179,7 +196,7 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
         if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(item.getTrangThai())) {
             throw new Exception("Không thể xóa biên bản đã đã duyệt");
         }
-        nhBienBanChuanBiKhoCtRepository.deleteAllByIdBbChuanBiKho(item.getId());
+        nhBienBanChuanBiKhoCtRepository.deleteAllByHdrId(item.getId());
         nhBienBanChuanBiKhoRepository.delete(item);
     }
 

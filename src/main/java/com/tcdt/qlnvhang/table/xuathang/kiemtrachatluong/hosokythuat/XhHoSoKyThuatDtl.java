@@ -85,7 +85,6 @@ public class XhHoSoKyThuatDtl extends BaseEntity implements Serializable {
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   @Fetch(value = FetchMode.SUBSELECT)
   @JoinColumn(name = "dataId")
-  @JsonManagedReference
   @Where(clause = "data_type='" + XhHoSoKyThuatDtl.TABLE_NAME + "_DINH_KEM'")
   private List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem = new ArrayList<>();
 

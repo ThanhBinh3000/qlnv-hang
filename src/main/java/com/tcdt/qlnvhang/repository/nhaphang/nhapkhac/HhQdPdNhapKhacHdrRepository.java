@@ -27,7 +27,7 @@ public interface HhQdPdNhapKhacHdrRepository extends JpaRepository<HhQdPdNhapKha
                     "  AND (:#{#req.tuNgayDuyetStr} IS NULL OR qdnk.ngayPduyet >= TO_DATE(:#{#req.tuNgayDuyetStr}, 'YYYY-MM-DD HH24:MI:SS'))" +
                     "  AND (:#{#req.denNgayDuyetStr} IS NULL OR qdnk.ngayPduyet <= TO_DATE(:#{#req.denNgayDuyetStr}, 'YYYY-MM-DD HH24:MI:SS'))" +
                     "  AND (:#{#req.trangThai} IS NULL OR qdnk.trangThai = :#{#req.trangThai}) "+
-                    "  ORDER BY qdnk.ngaySua desc , qdnk.ngayTao desc, qdnk.id desc"
+                    "  ORDER BY qdnk.id desc, qdnk.ngayTao desc, qdnk.ngaySua desc"
             )
     Page<HhQdPdNhapKhacHdr> search(HhQdPdNhapKhacSearch req, Pageable pageable);
     Optional<HhQdPdNhapKhacHdr> findById(Long id);

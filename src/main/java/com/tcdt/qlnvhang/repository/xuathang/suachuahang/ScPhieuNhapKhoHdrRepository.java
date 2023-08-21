@@ -19,6 +19,16 @@ public interface ScPhieuNhapKhoHdrRepository extends JpaRepository<ScPhieuNhapKh
 
     Optional<ScPhieuNhapKhoHdr> findBySoPhieuNhapKho(String soPhieuNhapKho);
 
+    @Query(value = "SELECT qd FROM ScPhieuNhapKhoHdr qd WHERE 1 = 1 " +
+            "AND (:#{#param.nam} IS NULL OR qd.nam = :#{#param.nam}) " +
+            "AND (:#{#param.idQdNh} IS NULL OR qd.idQdNh = :#{#param.idQdNh}) " +
+            "AND (:#{#param.idScDanhSachHdr} IS NULL OR qd.idScDanhSachHdr = :#{#param.idScDanhSachHdr}) " +
+            "AND (:#{#param.soPhieuNhapKho} IS NULL OR qd.soPhieuNhapKho LIKE CONCAT(:#{#param.soPhieuNhapKho},'%'))" +
+            "AND ((:#{#param.ngayTu} IS NULL OR qd.ngayNhapKho >= :#{#param.ngayTu}) AND (:#{#param.ngayDen}  IS NULL OR qd.ngayNhapKho <= :#{#param.ngayDen})) " +
+            " ORDER BY qd.ngaySua desc , qd.ngayTao desc, qd.id desc "
+    )
+    List<ScPhieuNhapKhoHdr> searchList(@Param("param") ScPhieuNhapKhoReq req);
+
     List<ScPhieuNhapKhoHdr> findAllByIdScDanhSachHdrAndIdQdNh(Long idScDanhSachHdr,Long idQdNh);
 
     @Query(value = "SELECT qd FROM ScPhieuNhapKhoHdr qd " +

@@ -328,7 +328,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 				item.setTenNhaKho(mapDmucDvi.get(item.getMaNhaKho()));
 				item.setTenNganKho(mapDmucDvi.get(item.getMaNganKho()));
 				item.setTenLoKho(mapDmucDvi.get(item.getMaLoKho()));
-				this.setDataPhieu(null,item);
+				this.setDataPhieu(null,item, null);
 			});
 			dtl.setChildren(allByIdCt);
 		}
@@ -734,35 +734,35 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 				dtl.setListBienBanNhapDayKho(bbNhapDayKho);
 
 				// Set biên bản nghiệm thu bảo quản
-				List<HhBbNghiemthuKlstHdr> bbNghiemThuBq = hhBbNghiemthuKlstRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
+				List<HhBbNghiemthuKlstHdr> bbNghiemThuBq = hhBbNghiemthuKlstRepository.findByIdQdGiaoNvNhAndMaDviStartsWith(f.getId(), dtl.getMaDvi());
 				bbNghiemThuBq.forEach( item ->  {
 					item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
 				});
 				dtl.setListBienBanNghiemThuBq(bbNghiemThuBq);
 
 				// Set biên bản lấy mẫu/ bàn giao mẫu
-				req.setIdQdGiaoNvNh(f.getId());
-				req.setMaDviDtl(dtl.getMaDvi());
-				List<BienBanLayMau> bbLayMau = bienBanLayMauRepository.timKiemList(req);
-				bbLayMau.forEach( item -> {
-					item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
-					item.setTenDiemKho(mapDmucDvi.get(item.getMaDiemKho()));
-					item.setTenNhaKho(mapDmucDvi.get(item.getMaNhaKho()));
-					item.setTenNganKho(mapDmucDvi.get(item.getMaNganKho()));
-					item.setTenLoKho(mapDmucDvi.get(item.getMaLoKho()));
-					NhBbNhapDayKho nhBbNhapDayKhoStream = bbNhapDayKho.stream().filter(x -> Objects.equals(x.getId(), item.getIdBbNhapDayKho())).findAny().orElse(null);
-					item.setBbNhapDayKho(nhBbNhapDayKhoStream);
-				});
-				dtl.setListBienBanLayMau(bbLayMau);
+//				req.setIdQdGiaoNvNh(f.getId());
+//				req.setMaDviDtl(dtl.getMaDvi());
+//				List<BienBanLayMau> bbLayMau = bienBanLayMauRepository.timKiemList(req);
+//				bbLayMau.forEach( item -> {
+//					item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+//					item.setTenDiemKho(mapDmucDvi.get(item.getMaDiemKho()));
+//					item.setTenNhaKho(mapDmucDvi.get(item.getMaNhaKho()));
+//					item.setTenNganKho(mapDmucDvi.get(item.getMaNganKho()));
+//					item.setTenLoKho(mapDmucDvi.get(item.getMaLoKho()));
+//					NhBbNhapDayKho nhBbNhapDayKhoStream = bbNhapDayKho.stream().filter(x -> Objects.equals(x.getId(), item.getIdBbNhapDayKho())).findAny().orElse(null);
+//					item.setBbNhapDayKho(nhBbNhapDayKhoStream);
+//				});
+//				dtl.setListBienBanLayMau(bbLayMau);
 
 				// Set biên bản chuẩn bị kho
-				if(req.getBienBan().contains("bienBanChuanBiKho")){
-					List<NhBienBanChuanBiKho> bbChuanBiKho = nhBienBanChuanBiKhoRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
-					bbChuanBiKho.forEach( item -> {
-						item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
-					});
-					dtl.setListBienBanChuanBiKho(bbChuanBiKho);
-				}
+//				if(req.getBienBan().contains("bienBanChuanBiKho")){
+//					List<NhBienBanChuanBiKho> bbChuanBiKho = nhBienBanChuanBiKhoRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
+//					bbChuanBiKho.forEach( item -> {
+//						item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+//					});
+//					dtl.setListBienBanChuanBiKho(bbChuanBiKho);
+//				}
 
 				dtl.setTenLoaiVthh(tenCloaiVthh.get(dtl.getLoaiVthh()));
 				dtl.setTenCloaiVthh(tenCloaiVthh.get(dtl.getCloaiVthh()));
@@ -777,7 +777,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					item.setTenNhaKho(mapDmucDvi.get(item.getMaNhaKho()));
 					item.setTenNganKho(mapDmucDvi.get(item.getMaNganKho()));
 					item.setTenLoKho(mapDmucDvi.get(item.getMaLoKho()));
-					this.setDataPhieu(null,item);
+					this.setDataPhieu(null,item, req);
 				});
 				dtl.setChildren(allByIdCt);
 			}
@@ -809,23 +809,31 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		return data;
 	}
 
-	void setBbien(HhQdNhapxuatSearchReq req, NhQdGiaoNvuNhapxuatDtl dtl){
 
-	}
-
-
-	void setDataPhieu(NhQdGiaoNvuNhapxuatDtl dtl , NhQdGiaoNvuNxDdiem ddNhap){
+	void setDataPhieu(NhQdGiaoNvuNhapxuatDtl dtl , NhQdGiaoNvuNxDdiem ddNhap, HhQdNhapxuatSearchReq req){
 		if(dtl != null){
 //			dtl.setListPhieuKtraCl(nhPhieuKtChatLuongService.findAllByIdQdGiaoNvNh(dtl.getIdHdr()));
 //			dtl.setListPhieuNhapKho(nhPhieuNhapKhoService.findAllByIdQdGiaoNvNh(dtl.getIdHdr()));
 //			dtl.setListBangKeCanHang(nhBangKeCanHangService.findAllByIdQdGiaoNvNh(dtl.getIdHdr()));
 		}else{
+			if (req != null) {
+				req.setIdDdiemGiaoNvNh(ddNhap.getId());
+				// Lay Bb Lay mau
+				req.setNgayLayMauTuStr(convertFullDateToString(req.getNgayLayMauTu()));
+				req.setNgayLayMauDenStr(convertFullDateToString(req.getNgayLayMauDen()));
+				ddNhap.setBienBanLayMau(bienBanLayMauRepository.timKiemByDiaDiemNh(req));
+				// Lay Bb Chuan bi kho
+				req.setTuNgayTaoStr(convertFullDateToString(req.getTuNgayTao()));
+				req.setDenNgayTaoStr(convertFullDateToString(req.getDenNgayTao()));
+				ddNhap.setBienBanChuanBiKho(nhBienBanChuanBiKhoRepository.timKiemByDiaDiemNh(req));
+			} else {
+				ddNhap.setBienBanLayMau(bienBanLayMauRepository.findByIdDdiemGiaoNvNh(ddNhap.getId()));
+				ddNhap.setBienBanChuanBiKho(nhBienBanChuanBiKhoRepository.findByIdDdiemGiaoNvNh(ddNhap.getId()));
+			}
 			ddNhap.setListPhieuKtraCl(nhPhieuKtChatLuongService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
 			ddNhap.setListPhieuNhapKho(nhPhieuNhapKhoService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
 			ddNhap.setListBangKeCanHang(nhBangKeCanHangService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
 			ddNhap.setBienBanNhapDayKho(nhBbNhapDayKhoRepository.findByIdDdiemGiaoNvNh(ddNhap.getId()));
-			ddNhap.setBienBanLayMau(bienBanLayMauRepository.findByIdDdiemGiaoNvNh(ddNhap.getId()));
-			ddNhap.setBienBanChuanBiKho(nhBienBanChuanBiKhoRepository.findByIdDdiemGiaoNvNh(ddNhap.getId()));
 			ddNhap.setPhieuNhapKhoTamGui(nhPhieuNhapKhoTamGuiRepository.findByIdDdiemGiaoNvNh(ddNhap.getId()));
 			ddNhap.setBienBanGuiHang(nhBienBanGuiHangRepository.findByIdDdiemGiaoNvNh(ddNhap.getId()));
 			ddNhap.setListPhieuNhapKho(nhPhieuNhapKhoService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));

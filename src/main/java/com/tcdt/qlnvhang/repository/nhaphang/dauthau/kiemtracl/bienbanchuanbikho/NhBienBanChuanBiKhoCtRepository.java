@@ -14,7 +14,7 @@ public interface NhBienBanChuanBiKhoCtRepository extends BaseRepository<NhBienBa
 //    @Modifying
 //    void deleteByBbChuanBiKhoIdIn(Collection<Long> bbCbkIds);
 
-    List<NhBienBanChuanBiKhoCt> findAllByIdBbChuanBiKho(Long idBbChuanBiKho);
+    List<NhBienBanChuanBiKhoCt> findAllByHdrId(Long idBbChuanBiKho);
 
-    void deleteAllByIdBbChuanBiKho(Long idBbChuanBiKho);
+    void deleteAllByHdrId(Long idBbChuanBiKho);
 }

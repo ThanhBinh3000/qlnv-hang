@@ -21,6 +21,7 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
     @Query(value = "SELECT distinct c FROM DcnbBangKeCanHangHdr c LEFT JOIN QlnvDmDonvi dvi ON dvi.maDvi = c.maDvi WHERE 1=1 " +
             "AND (:#{#param.soBangKe} IS NULL OR LOWER(c.soBangKe) LIKE CONCAT('%',LOWER(:#{#param.soBangKe}),'%')) " +
             "AND ((:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi}) " +
+            "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
             "OR (:#{#param.maDvi} IS NULL OR dvi.parent.maDvi = :#{#param.maDvi}))" +
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR c.ngayXuatKho >= :#{#param.tuNgay})" +
@@ -55,23 +56,29 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.parentId is not null and qdc.trangThai = '29'" +
+            "AND ((:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho})) " +
             "AND ((:#{#param.loaiDc} IS NULL OR qdc.loaiDc = :#{#param.loaiDc})) " +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
             "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
+            "AND (qdc.loaiDc= 'DCNB' OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.trangThai} IS NULL OR pnk.trangThai = :#{#param.trangThai}) " +
             "GROUP BY pnk.id,qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan, khdcd.maDiemKhoNhan,khdcd.tenDiemKhoNhan,khdcd.maLoKhoNhan," +
             "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, khdcd.thayDoiThuKho,pnk.soPhieuNhapKho, pnk.ngayLap,  pnk.bangKeVtId, pnk.soBangKeVt," +
             "khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh, khdcd.tenCloaiVthh,khdcd.donViTinh, khdcd.tenDonViTinh,khdcd.soLuongDc,khdcd.duToanKphi," +
             "pnk.idPhieuKtraCluong, pnk.soPhieuKtraCluong, pktcl.ngayGiamDinh, " +
-            "pnk.bangKeChId, pnk.soBangKeCh, " +
+            "bkch.id, bkch.soBangKe, " +
             "pnk.trangThai, pnk.trangThai " +
             "ORDER BY qdc.soQdinh DESC")
     Page<DcnbPhieuNhapKhoHdrDTO> searchPage(@Param("param")DcnbPhieuNhapKhoHdrReq req, Pageable pageable);
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuNhapKhoHdrListDTO(" +
             "pnk.id,pnk.soPhieuNhapKho,pnk.ngayLap) " +
             "FROM DcnbPhieuNhapKhoHdr pnk " +
+            "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = pnk.cloaiVthh " +
             "WHERE 1 =1 " +
+            "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
+            "AND (:#{#param.trangThai} IS NULL OR pnk.trangThai = :#{#param.trangThai}) " +
             "AND ((:#{#param.qdDcCucId} IS NULL OR pnk.qdDcCucId = :#{#param.qdDcCucId}))"+
             "AND ((:#{#param.maLoKho} IS NULL OR pnk.maLoKho = :#{#param.maLoKho}))" +
             "AND ((:#{#param.maNganKho} IS NULL OR pnk.maNganKho = :#{#param.maNganKho}))" +
@@ -79,16 +86,20 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
     List<DcnbPhieuNhapKhoHdrListDTO> searchList(@Param("param")DcnbPhieuNhapKhoHdrReq objReq);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuNhapKhoHdrListDTO(" +
-            "pnk.id,pnk.soPhieuNhapKho,pnk.ngayLap,pnk.tongSoLuong, pktcl.id, pktcl.soPhieu,bkchh.id, bkchh.soBangKe,bknvt.id, bknvt.soBangKe, bbcbkh.id, bbcbkh.soBban ) " +
+            "pnk.id,pnk.soPhieuNhapKho, pnk.id ,pnk.ngayLap,pnk.tongSoLuong, pktcl.id, pktcl.soPhieu,bkchh.id, bkchh.soBangKe,bknvt.id, bknvt.soBangKe, bbcbkh.id, bbcbkh.soBban ) " +
             "FROM DcnbPhieuNhapKhoHdr pnk " +
             "LEFT JOIN DcnbPhieuKtChatLuongHdr pktcl On pktcl.id = pnk.idPhieuKtraCluong " +
             "LEFT JOIN DcnbBangKeCanHangHdr bkchh On bkchh.phieuNhapKhoId = pnk.id " +
             "LEFT JOIN DcnbBangKeNhapVTHdr bknvt On bknvt.phieuNhapKhoId = pnk.id " +
             "LEFT JOIN DcnbBbChuanBiKhoHdr bbcbkh On bbcbkh.idPhieuNhapKho = pnk.id " +
+            "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = pnk.cloaiVthh " +
             "WHERE 1 =1 " +
+            "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
+            "AND (:#{#param.trangThai} IS NULL OR pnk.trangThai = :#{#param.trangThai}) " +
             "AND ((:#{#param.qdDcCucId} IS NULL OR pnk.qdDcCucId = :#{#param.qdDcCucId}))" +
             "AND ((:#{#param.maLoKho} IS NULL OR pnk.maLoKho = :#{#param.maLoKho}))" +
-            "AND ((:#{#param.maNganKho} IS NULL OR pnk.maNganKho = :#{#param.maNganKho}))" +
-            "ORDER BY pnk.soPhieuNhapKho desc, pnk.nam desc")
+            "AND ((:#{#param.maNganKho} IS NULL OR pnk.maNganKho = :#{#param.maNganKho})) " +
+            "GROUP BY pnk.id,pnk.soPhieuNhapKho, pnk.id ,pnk.ngayLap,pnk.tongSoLuong, pktcl.id, pktcl.soPhieu,bkchh.id, bkchh.soBangKe,bknvt.id, bknvt.soBangKe, bbcbkh.id, bbcbkh.soBban "+
+            "ORDER BY pnk.soPhieuNhapKho desc")
     List<DcnbPhieuNhapKhoHdrListDTO> searchListChung(@Param("param")DcnbPhieuNhapKhoHdrReq objReq);
 }

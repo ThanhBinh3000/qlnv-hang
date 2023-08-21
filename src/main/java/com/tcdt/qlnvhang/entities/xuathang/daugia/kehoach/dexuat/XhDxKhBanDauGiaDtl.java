@@ -9,40 +9,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "XH_DX_KH_BAN_DAU_GIA_DTL")
+@Table(name = XhDxKhBanDauGiaDtl.TABLE_NAME)
 @Data
 public class XhDxKhBanDauGiaDtl implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "XH_DX_KH_BAN_DAU_GIA_DTL ";
+    public static final String TABLE_NAME = "XH_DX_KH_BAN_DAU_GIA_DTL";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_DX_KH_BAN_DAU_GIA_DTL_SEQ")
-    @SequenceGenerator(sequenceName = "XH_DX_KH_BAN_DAU_GIA_DTL_SEQ", allocationSize = 1, name = "XH_DX_KH_BAN_DAU_GIA_DTL_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhDxKhBanDauGiaDtl.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = XhDxKhBanDauGiaDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhDxKhBanDauGiaDtl.TABLE_NAME + "_SEQ")
     private Long id;
-
     private Long idHdr;
-
     private String maDvi;
-    @Transient
-    private String tenDvi;
-
     private BigDecimal slChiTieu;
-
-    private BigDecimal slKeHoachDd;
-
-    private BigDecimal soLuongChiCuc;
-
+    private BigDecimal tongSlKeHoachDd;
+    private BigDecimal tongSlXuatBanDx;
+    private BigDecimal tongTienDatTruocDx;
     private String donViTinh;
-
     private String diaChi;
 
     @Transient
-    private BigDecimal soTienDtruocDxChiCuc;
-
-    @Transient
-    private BigDecimal soTienDtruocDdChiCuc;
-
+    private String tenDvi;
     @Transient
     private List<XhDxKhBanDauGiaPhanLo> children = new ArrayList<>();
-
 }

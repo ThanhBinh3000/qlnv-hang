@@ -3,8 +3,6 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKtChatLuongDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKtChatLuongHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -64,11 +62,8 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
             req.setDsLoaiHang(Arrays.asList("LT","M"));
         }
         Page<DcnbPhieuKtChatLuongHdrDTO> search = null;
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            search = dcnbPhieuKtChatLuongHdrRepository.searchChiCuc(req, pageable);
-        }else {
-            search = dcnbPhieuKtChatLuongHdrRepository.search(req, pageable);
-        }
+        req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
+        search = dcnbPhieuKtChatLuongHdrRepository.searchPage(req, pageable);
 
         return search;
     }
@@ -78,8 +73,8 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
-        if(!currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)){
-            throw new Exception("Chức năng thêm mới chỉ dành cho cấp cục");
+        if(!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)){
+            throw new Exception("Chức năng thêm mới chỉ dành cho cấp chi cục");
         }
 //        Optional<DcnbPhieuKtChatLuongHdr> optional = dcnbPhieuKtChatLuongHdrRepository.findFirstBySoPhieu(objReq.getSoPhieu());
 //        if (optional.isPresent() && objReq.getSoPhieu().split("/").length == 1) {
@@ -108,7 +103,7 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
-        if(!currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)){
+        if(!currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)){
             throw new Exception("Chức năng cập nhật chỉ dành cho cấp cục");
         }
         Optional<DcnbPhieuKtChatLuongHdr> optional = dcnbPhieuKtChatLuongHdrRepository.findById(objReq.getId());
@@ -203,27 +198,17 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
     public DcnbPhieuKtChatLuongHdr approve(CustomUserDetails currentUser, StatusReq statusReq, Optional<DcnbPhieuKtChatLuongHdr> optional) throws Exception {
         String status = optional.get().getTrangThai() + statusReq.getTrangThai();
         switch (status) {
-            case Contains.DUTHAO + Contains.CHODUYET_TP:
-            case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
-            case Contains.TU_CHOI_LDC + Contains.CHODUYET_TP:
+            case Contains.DUTHAO + Contains.CHODUYET_LDCC:
+            case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
                 optional.get().setNguoiGDuyet(currentUser.getUser().getId());
                 optional.get().setNgayGDuyet(LocalDate.now());
                 break;
-            case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
-                optional.get().setNguoiDuyetTp(currentUser.getUser().getId());
-                optional.get().setNgayDuyetTp(LocalDate.now());
-                optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
-                break;
-            case Contains.CHODUYET_TP + Contains.CHODUYET_LDC:
-                optional.get().setNguoiDuyetTp(currentUser.getUser().getId());
-                optional.get().setNgayDuyetTp(LocalDate.now());
-                break;
-            case Contains.CHODUYET_LDC + Contains.TU_CHOI_LDC:
+            case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
                 optional.get().setNguoiPDuyet(currentUser.getUser().getId());
                 optional.get().setNgayPDuyet(LocalDate.now());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
-            case Contains.CHODUYET_LDC + Contains.DA_DUYET_LDC:
+            case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 optional.get().setNguoiPDuyet(currentUser.getUser().getId());
                 optional.get().setNgayPDuyet(LocalDate.now());
 //                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkCuc(optional.get().getMaDvi(),
@@ -272,7 +257,7 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
 
     public List<DcnbPhieuKtChatLuongHdrLsDTO> searchList(CustomUserDetails currentUser, SearchPhieuKtChatLuong req) {
         String dvql = currentUser.getDvql();
-        req.setMaDvi(dvql.substring(0, 6));
+        req.setMaDvi(dvql);
         if(req.getIsVatTu() == null){
             req.setIsVatTu(false);
         }

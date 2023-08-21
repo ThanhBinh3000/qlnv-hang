@@ -13,7 +13,7 @@ public class SearchXhCtvtDeXuatHdrReq extends BaseRequest {
   private Long id;
   private Integer nam;
   private String maDvi;
-  private String maDviCuc;
+  private String maDviDx;
   private String dvql;
   private String soDx;
   private LocalDate ngayDxTu;
@@ -23,6 +23,7 @@ public class SearchXhCtvtDeXuatHdrReq extends BaseRequest {
   private String trangThai;
   private String type;
 
+  private String tenVthh;
   private String loaiVthh;
   private String loaiNhapXuat;
   private List<String> trangThaiList = new ArrayList<>();

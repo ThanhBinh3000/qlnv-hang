@@ -12,6 +12,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,8 +36,8 @@ public class HhQdPdNhapKhacHdr {
     private String soDxuat;
     private Long idTh;
     private String maTh;
-    private Integer tongSlNhap;
-    private Integer tongThanhTien;
+    private BigDecimal tongSlNhap;
+    private BigDecimal tongThanhTien;
     private String dvt;
     private String noiDung;
     private String trichYeu;
@@ -53,6 +54,8 @@ public class HhQdPdNhapKhacHdr {
     private String tenDvi;
     @Transient
     private String tenTrangThai;
+    @Transient
+    private String phanLoai;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyQd;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)

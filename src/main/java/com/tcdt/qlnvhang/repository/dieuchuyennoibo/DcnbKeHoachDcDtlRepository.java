@@ -12,9 +12,9 @@ import java.util.List;
 @Repository
 public interface DcnbKeHoachDcDtlRepository extends JpaRepository<DcnbKeHoachDcDtl, Long> {
 
-    List<DcnbKeHoachDcDtl> findByDcnbKeHoachDcHdrId(Long idHdr);
-
     List<DcnbKeHoachDcDtl> findByDcnbKeHoachDcHdrIdIn(List<Long> ids);
+
+    List<DcnbKeHoachDcDtl> findByDcnbKeHoachDcHdrId(Long idHdr);
 
     @Query(value ="SELECT distinct dtl FROM DcnbKeHoachDcDtl dtl left join DcnbKeHoachDcHdr hdr on hdr.id = dtl.hdrId " +
             "WHERE hdr.maDvi = ?1 AND hdr.trangThai = ?2 AND hdr.type = ?3 AND hdr.loaiDc = ?4 AND hdr.ngayTao <= ?5 AND hdr.idThop is null ")

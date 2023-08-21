@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.repository.xuathang.suachuahang;
 
 import com.tcdt.qlnvhang.request.suachua.ScTongHopReq;
 import com.tcdt.qlnvhang.request.suachua.ScTrinhThamDinhHdrReq;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhSc;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTongHopHdr;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTrinhThamDinhHdr;
 import org.springframework.data.domain.Page;
@@ -11,13 +12,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ScTrinhThamDinhRepository extends JpaRepository<ScTrinhThamDinhHdr, Long> {
-    @Query(value = "SELECT t FROM ScTrinhThamDinhHdr t WHERE 1 = 1 "
-//            "AND (:#{#param.soQdSc} IS NULL OR t.soQdSc LIKE CONCAT(:#{#param.soQdSc},'%')) " +
-//            "AND (:#{#param.trangThai} IS NULL OR t.trangThai = :#{#param.trangThai}) " +
-//            "AND ((:#{#param.ngayDuyetTu}  IS NULL OR t.ngayDuyetLdc >= :#{#param.ngayDuyetTu})" +
-//            "AND (:#{#param.ngayDuyetDen}  IS NULL OR t.ngayDuyetLdc <= :#{#param.ngayDuyetDen})) "
+    @Query(value = "SELECT t FROM ScTrinhThamDinhHdr t WHERE 1 = 1 " +
+        "AND (:#{#param.soTtr} IS NULL OR t.soTtr LIKE CONCAT(:#{#param.soTtr},'%')) " +
+        "AND (:#{#param.soQdScSr} IS NULL OR t.soQdSc LIKE CONCAT(:#{#param.soQdScSr},'%')) " +
+        "AND (:#{#param.trangThai} IS NULL OR t.trangThai = :#{#param.trangThai}) " +
+        "AND ((:#{#param.ngayTuCuc}  IS NULL OR t.ngayDuyetLdc >= :#{#param.ngayTuCuc}) AND (:#{#param.ngayDenCuc}  IS NULL OR t.ngayDuyetLdc <= :#{#param.ngayDenCuc})) " +
+        "AND ((:#{#param.ngayTuTc}  IS NULL OR t.ngayDuyetLdtc >= :#{#param.ngayTuTc}) AND (:#{#param.ngayDenTc}  IS NULL OR t.ngayDuyetLdtc <= :#{#param.ngayDenTc})) " +
+        " ORDER BY t.ngaySua desc , t.ngayTao desc, t.id desc "
     )
     Page<ScTrinhThamDinhHdr> searchPage(@Param("param") ScTrinhThamDinhHdrReq req, Pageable pageable);
 
@@ -30,5 +34,6 @@ public interface ScTrinhThamDinhRepository extends JpaRepository<ScTrinhThamDinh
     )
     List<ScTrinhThamDinhHdr> listQuyetDinhSuaChua(@Param("param") ScTrinhThamDinhHdrReq req);
 
+    Optional<ScTrinhThamDinhHdr> findBySoTtr(String soTtr);
 
 }

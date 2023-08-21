@@ -11,4 +11,6 @@ public interface HhDcQdPdKhmttSlddDtlRepository extends JpaRepository<HhDcQdPdKh
     List<HhDcQdPdKhmttSlddDtl> findAllByIdDiaDiem (Long idDiaDiem);
 
     List<HhDcQdPdKhmttSlddDtl> findAllByIdDiaDiemIn (List<Long> ids);
+
+    void deleteAllByIdDiaDiem(Long idDiaDiem);
 }

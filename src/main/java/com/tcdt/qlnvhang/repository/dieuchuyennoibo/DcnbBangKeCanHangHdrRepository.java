@@ -32,12 +32,16 @@ public interface DcnbBangKeCanHangHdrRepository extends JpaRepository<DcnbBangKe
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.parentId is not null and qdc.trangThai = '29' " +
-            "AND qdc.loaiDc = :#{#param.loaiDc} AND (bkch.type IS NULL OR (:#{#param.type} IS NULL OR bkch.type = :#{#param.type}))" +
+            "AND ((:#{#param.loaiDc} IS NULL OR qdc.loaiDc = :#{#param.loaiDc}))" +
+            "AND (bkch.type IS NULL OR (:#{#param.type} IS NULL OR bkch.type = :#{#param.type}))" +
             "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
             "AND (:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho}) " +
-            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
+            "AND ((:#{#param.maDvi} IS NULL OR LOWER(qdc.maDvi) LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
+            "AND ((:#{#param.maDvi} IS NULL OR LOWER(bkch.maDvi) LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
+            "AND (qdc.loaiDc= 'DCNB' OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.trangThai} IS NULL OR bkch.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.soBangKe} IS NULL OR LOWER(bkch.soBangKe) LIKE CONCAT('%',LOWER(:#{#param.soBangKe}),'%')) " +
             "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
             "AND (:#{#param.maLoKho} IS NULL OR bkch.maLoKho = :#{#param.maLoKho}) " +
@@ -68,18 +72,21 @@ public interface DcnbBangKeCanHangHdrRepository extends JpaRepository<DcnbBangKe
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
             "LEFT JOIN DcnbBangKeCanHangHdr bkch ON bkch.qDinhDccId = qdc.id " +
-            "and ((khdcd.maLoKhoNhan is not null and  khdcd.maLoKhoNhan = bkch.maLoKho and khdcd.maNganKhoNhan = bkch.maNganKho ) or (khdcd.maLoKho is null and khdcd.maNganKhoNhan = bkch.maNganKho))" +
+            "and ((khdcd.maLoKhoNhan is not null and  khdcd.maLoKhoNhan = bkch.maLoKho and khdcd.maNganKhoNhan = bkch.maNganKho ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = bkch.maNganKho))" +
             "LEFT JOIN DcnbPhieuXuatKhoHdr pxk ON pxk.id = bkch.phieuXuatKhoId " +
             "LEFT JOIN DcnbPhieuNhapKhoHdr pnk ON pnk.id = bkch.phieuNhapKhoId " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.parentId is not null and qdc.trangThai = '29' " +
-            "AND qdc.loaiDc = :#{#param.loaiDc} AND (bkch.type IS NULL OR (:#{#param.type} IS NULL OR bkch.type = :#{#param.type}))" +
+            "AND ((:#{#param.loaiDc} IS NULL OR qdc.loaiDc = :#{#param.loaiDc}))" +
+            "AND (bkch.type IS NULL OR (:#{#param.type} IS NULL OR bkch.type = :#{#param.type}))" +
             "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
             "AND (:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho}) " +
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
+            "AND (qdc.loaiDc= 'DCNB' OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.trangThai} IS NULL OR bkch.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.soBangKe} IS NULL OR LOWER(bkch.soBangKe) LIKE CONCAT('%',LOWER(:#{#param.soBangKe}),'%')) " +
             "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
             "AND (:#{#param.maLoKho} IS NULL OR bkch.maLoKho = :#{#param.maLoKho}) " +
@@ -109,12 +116,16 @@ public interface DcnbBangKeCanHangHdrRepository extends JpaRepository<DcnbBangKe
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.parentId is not null and qdc.trangThai = '29' " +
-            "AND qdc.loaiDc = :#{#param.loaiDc} AND (bkch.type IS NULL OR (:#{#param.type} IS NULL OR bkch.type = :#{#param.type}))" +
+            "AND ((:#{#param.loaiDc} IS NULL OR qdc.loaiDc = :#{#param.loaiDc}))" +
+            "AND (bkch.type IS NULL OR (:#{#param.type} IS NULL OR bkch.type = :#{#param.type}))" +
             "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
             "AND (:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho}) " +
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
+            "AND (qdc.loaiDc= 'DCNB' OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
+            "AND ((:#{#param.maDvi} IS NULL OR bkch.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.trangThai} IS NULL OR bkch.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.soBangKe} IS NULL OR LOWER(bkch.soBangKe) LIKE CONCAT('%',LOWER(:#{#param.soBangKe}),'%')) " +
             "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
             "AND (:#{#param.maLoKho} IS NULL OR bkch.maLoKho = :#{#param.maLoKho}) " +
@@ -138,18 +149,22 @@ public interface DcnbBangKeCanHangHdrRepository extends JpaRepository<DcnbBangKe
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
             "LEFT JOIN DcnbBangKeCanHangHdr bkch ON bkch.qDinhDccId = qdc.id " +
-            "and ((khdcd.maLoKhoNhan is not null and  khdcd.maLoKhoNhan = bkch.maLoKho and khdcd.maNganKhoNhan = bkch.maNganKho ) or (khdcd.maLoKho is null and khdcd.maNganKhoNhan = bkch.maNganKho))" +
+            "and ((khdcd.maLoKhoNhan is not null and  khdcd.maLoKhoNhan = bkch.maLoKho and khdcd.maNganKhoNhan = bkch.maNganKho ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = bkch.maNganKho))" +
             "LEFT JOIN DcnbPhieuXuatKhoHdr pxk ON pxk.id = bkch.phieuXuatKhoId " +
             "LEFT JOIN DcnbPhieuNhapKhoHdr pnk ON pnk.id = bkch.phieuNhapKhoId " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.parentId is not null and qdc.trangThai = '29' " +
-            "AND qdc.loaiDc = :#{#param.loaiDc} AND (bkch.type IS NULL OR (:#{#param.type} IS NULL OR bkch.type = :#{#param.type}))" +
+            "AND ((:#{#param.loaiDc} IS NULL OR qdc.loaiDc = :#{#param.loaiDc}))" +
+            "AND (bkch.type IS NULL OR (:#{#param.type} IS NULL OR bkch.type = :#{#param.type}))" +
             "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
             "AND (:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho}) " +
             "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
+            "AND (qdc.loaiDc= 'DCNB' OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
+            "AND ((:#{#param.maDvi} IS NULL OR bkch.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
+            "AND (:#{#param.trangThai} IS NULL OR bkch.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.soBangKe} IS NULL OR LOWER(bkch.soBangKe) LIKE CONCAT('%',LOWER(:#{#param.soBangKe}),'%')) " +
             "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
             "AND (:#{#param.maLoKho} IS NULL OR bkch.maLoKho = :#{#param.maLoKho}) " +

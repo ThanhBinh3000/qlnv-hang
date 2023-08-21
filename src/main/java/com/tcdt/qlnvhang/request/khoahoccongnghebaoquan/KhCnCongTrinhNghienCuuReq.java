@@ -27,6 +27,7 @@ public class KhCnCongTrinhNghienCuuReq {
     private String sdt;
     private String dviChuTri;
     private String dviPhoiHop;
+    private String dviThucHien;
     private String nguonVon;
     private String soQdPd;
     private String suCanThiet;

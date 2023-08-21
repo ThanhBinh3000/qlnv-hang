@@ -25,4 +25,12 @@ public class ScBangKeNhapVtReq extends BaseRequest {
     private String lyDoTuChoi;
     private String trangThai;
     private List<ScBangKeNhapVtDtl> children = new ArrayList<>();
+
+    //Param search
+
+    private LocalDate ngayTu;
+    private LocalDate ngayDen;
+    private LocalDate ngayTuNh;
+    private LocalDate ngayDenNh;
+    private List<Long> idPhieuNhapKhoList;
 }

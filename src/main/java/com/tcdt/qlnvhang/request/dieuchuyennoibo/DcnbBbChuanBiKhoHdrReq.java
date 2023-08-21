@@ -20,6 +20,7 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
 
     private Long id;
     private String loaiDc;
+    private String typeQd;
     private Integer nam;
     private String maDvi;
     private String tenDvi;
@@ -43,6 +44,9 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
     private String loaiHinhKho;
     private String loaiVthh;
     private String cloaiVthh;
+    private String tenLoaiVthh;
+    private String tenCloaiVthh;
+    private String donViTinh;
     private BigDecimal tichLuong;
     private Long idPhieuNhapKho;
     private String soPhieuNhapKho;
@@ -54,7 +58,8 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
     private String nhanXet;
     private String trangThai;
     private String lyDoTuChoi;
-
+    private Boolean thayDoiThuKho;
+    private String loaiQdinh;
     private List<DcnbBbChuanBiKhoDtl> children = new ArrayList<>();
     private LocalDate tuNgayLapBb;
     private LocalDate denNgayLapBb;
