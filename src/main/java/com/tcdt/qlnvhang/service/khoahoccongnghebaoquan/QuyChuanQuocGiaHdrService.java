@@ -85,7 +85,20 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         }
 //        List<String> listCloai = quyChuanQuocGiaDtlRepository.findAllCloaiHoatDong(Contains.HOAT_DONG, null);
         List<QuyChuanQuocGiaHdr> allHdrCoHieuLuc = quyChuanQuocGiaHdrRepository.findAll().stream().filter(item -> item.getTrangThaiHl().equals("01")).collect(Collectors.toList());
-        List<String> listCloai = quyChuanQuocGiaDtlRepository.findAllByIdHdrIn(allHdrCoHieuLuc.stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList())).stream().map(QuyChuanQuocGiaDtl::getCloaiVthh).collect(Collectors.toList());
+        //loai bỏ những id được thay thế
+        List<Long> listIdThayThe = new ArrayList<>();
+        if (!ObjectUtils.isEmpty(objReq.getIdVanBanThayThe())) {
+            listIdThayThe = Arrays.asList(Arrays.stream(objReq.getIdVanBanThayThe().split(","))
+                    .map(String::trim)
+                    .map(Long::valueOf)
+                    .toArray(Long[]::new));
+        }
+        List<Long> finalListIdThayThe = listIdThayThe;
+        List<Long> listHdrCoHieuLuc = allHdrCoHieuLuc.stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList()).stream()
+                .filter(item -> !finalListIdThayThe.contains(item))
+                .collect(Collectors.toList());
+
+        List<String> listCloai = quyChuanQuocGiaDtlRepository.findAllByIdHdrIn(listHdrCoHieuLuc).stream().map(QuyChuanQuocGiaDtl::getCloaiVthh).collect(Collectors.toList());
         List<String> listCloaiReq = objReq.getTieuChuanKyThuat().stream().map(QuyChuanQuocGiaDtlReq::getCloaiVthh).distinct().collect(Collectors.toList());
         listCloai.retainAll(listCloaiReq);
         if (!listCloai.isEmpty()) {
@@ -94,27 +107,18 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         QuyChuanQuocGiaHdr data = new ModelMapper().map(objReq, QuyChuanQuocGiaHdr.class);
         data.setMaDvi(userInfo.getDvql());
         data.setTrangThai(Contains.DUTHAO);
-//        if (DataUtils.isNullObject(objReq.getIdVanBanThayThe())) {
-//            data.setIdVanBanThayThe(data.getId().toString());
-//        }
         QuyChuanQuocGiaHdr created = quyChuanQuocGiaHdrRepository.save(data);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), data.getId(), "KHCN_QUY_CHUAN_QG_HDR");
         created.setFileDinhKems(fileDinhKems);
         this.saveCtiet(data, objReq);
         //Check bản ghi vừa thêm có hiệu lực và có văn bản thay thế ko , nếu có vb thay thế thì hết hiệu lực vb thay thế luôn
-        if (created.getTrangThaiHl().equals("01") && !DataUtils.isNullObject(objReq.getIdVanBanThayThe())) {
-            Long[] idsVanBanThayThes = Arrays.stream(created.getIdVanBanThayThe().split(","))
-                    .map(String::trim)
-                    .map(Long::valueOf)
-                    .toArray(Long[]::new);
-            if (idsVanBanThayThes.length > 0) {
-                List<QuyChuanQuocGiaHdr> allByIdIn = quyChuanQuocGiaHdrRepository.findAllByIdIn(Arrays.asList(idsVanBanThayThes));
-                allByIdIn.forEach(item -> {
-                    item.setNgayHetHieuLuc(LocalDate.now());
-                    item.setTrangThaiHl(Contains.HET_HIEU_LUC);
-                });
-                quyChuanQuocGiaHdrRepository.saveAll(allByIdIn);
-            }
+        if (created.getTrangThaiHl().equals("01") && !listIdThayThe.isEmpty() && listIdThayThe.size() > 0) {
+            List<QuyChuanQuocGiaHdr> allByIdIn = quyChuanQuocGiaHdrRepository.findAllByIdIn(listIdThayThe);
+            allByIdIn.forEach(item -> {
+                item.setNgayHetHieuLuc(LocalDate.now());
+                item.setTrangThaiHl(Contains.HET_HIEU_LUC);
+            });
+            quyChuanQuocGiaHdrRepository.saveAll(allByIdIn);
         }
         return created;
     }
@@ -136,7 +140,20 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             throw new Exception("Không tìm thấy thông tin tiêu chuẩn kỹ thuật");
         }
         List<QuyChuanQuocGiaHdr> allHdrCoHieuLuc = quyChuanQuocGiaHdrRepository.findAll().stream().filter(item -> item.getTrangThaiHl().equals("01")).collect(Collectors.toList());
-        List<String> listCloai = quyChuanQuocGiaDtlRepository.findAllByIdHdrIn(allHdrCoHieuLuc.stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList())).stream().map(QuyChuanQuocGiaDtl::getCloaiVthh).collect(Collectors.toList());
+        //loai bỏ những id được thay thế
+        List<Long> listIdThayThe = new ArrayList<>();
+        if (!ObjectUtils.isEmpty(objReq.getIdVanBanThayThe())) {
+            listIdThayThe = Arrays.asList(Arrays.stream(objReq.getIdVanBanThayThe().split(","))
+                    .map(String::trim)
+                    .map(Long::valueOf)
+                    .toArray(Long[]::new));
+        }
+        List<Long> finalListIdThayThe = listIdThayThe;
+        List<Long> listHdrCoHieuLuc = allHdrCoHieuLuc.stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList()).stream()
+                .filter(item -> !finalListIdThayThe.contains(item))
+                .collect(Collectors.toList());
+
+        List<String> listCloai = quyChuanQuocGiaDtlRepository.findAllByIdHdrIn(listHdrCoHieuLuc).stream().map(QuyChuanQuocGiaDtl::getCloaiVthh).collect(Collectors.toList());
         List<String> listCloaiReq = objReq.getTieuChuanKyThuat().stream().map(QuyChuanQuocGiaDtlReq::getCloaiVthh).distinct().collect(Collectors.toList());
         listCloai.retainAll(listCloaiReq);
         if (!listCloai.isEmpty()) {
@@ -149,19 +166,13 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         quyChuanQuocGiaDtlRepository.deleteAll(dtlList);
         this.saveCtiet(data, objReq);
         //Check bản ghi vừa thêm có hiệu lực và có văn bản thay thế ko , nếu có vb thay thế thì hết hiệu lực vb thay thế luôn
-        if (created.getTrangThaiHl().equals("01") && !DataUtils.isNullObject(objReq.getIdVanBanThayThe())) {
-            Long[] idsVanBanThayThes = Arrays.stream(created.getIdVanBanThayThe().split(","))
-                    .map(String::trim)
-                    .map(Long::valueOf)
-                    .toArray(Long[]::new);
-            if (idsVanBanThayThes.length > 0) {
-                List<QuyChuanQuocGiaHdr> allByIdIn = quyChuanQuocGiaHdrRepository.findAllByIdIn(Arrays.asList(idsVanBanThayThes));
-                allByIdIn.forEach(item -> {
-                    item.setNgayHetHieuLuc(LocalDate.now());
-                    item.setTrangThaiHl(Contains.HET_HIEU_LUC);
-                });
-                quyChuanQuocGiaHdrRepository.saveAll(allByIdIn);
-            }
+        if (created.getTrangThaiHl().equals("01") && listIdThayThe.size() > 0) {
+            List<QuyChuanQuocGiaHdr> allByIdIn = quyChuanQuocGiaHdrRepository.findAllByIdIn(listIdThayThe);
+            allByIdIn.forEach(item -> {
+                item.setNgayHetHieuLuc(LocalDate.now());
+                item.setTrangThaiHl(Contains.HET_HIEU_LUC);
+            });
+            quyChuanQuocGiaHdrRepository.saveAll(allByIdIn);
         }
         return created;
     }
