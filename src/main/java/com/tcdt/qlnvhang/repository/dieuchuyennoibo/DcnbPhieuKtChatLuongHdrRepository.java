@@ -26,8 +26,7 @@ public interface DcnbPhieuKtChatLuongHdrRepository extends JpaRepository<DcnbPhi
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKtChatLuongHdrLsDTO(pktcl.id, pktcl.soPhieu) " +
             "FROM DcnbPhieuKtChatLuongHdr pktcl " +
             "WHERE 1 =1 " +
-            "AND pktcl.trangThai = '05' " +
-            "AND ((:#{#param.maDvi} IS NULL OR pktcl.maDvi = :#{#param.maDvi}))" +
+            "AND ((:#{#param.maDvi} IS NULL OR LOWER(pktcl.maDvi) LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND (:#{#param.nam} IS NULL OR pktcl.nam = :#{#param.nam}) " +
             "AND (:#{#param.trangThai} IS NULL OR pktcl.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.maNganKho} IS NULL OR pktcl.maNganKho = :#{#param.maNganKho}) " +
