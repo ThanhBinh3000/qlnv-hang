@@ -44,6 +44,9 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
     private String loaiHinhKho;
     private String loaiVthh;
     private String cloaiVthh;
+    private String tenLoaiVthh;
+    private String tenCloaiVthh;
+    private String donViTinh;
     private BigDecimal tichLuong;
     private Long idPhieuNhapKho;
     private String soPhieuNhapKho;
