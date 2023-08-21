@@ -99,12 +99,11 @@ public class QuyChuanQuocGiaHdr extends BaseEntity implements Serializable {
             }
             return "01";
         } else {
-            if (ObjectUtils.isEmpty(getNgayHieuLuc()) || (!ObjectUtils.isEmpty(getNgayHetHieuLuc()) && getNgayHetHieuLuc().isBefore(dateNow))) {
+            if ((!ObjectUtils.isEmpty(getNgayHetHieuLuc()) && getNgayHetHieuLuc().isBefore(dateNow))) {
                 return "00";
-            } else if ((!ObjectUtils.isEmpty(getNgayHieuLuc()) && getNgayHieuLuc().isAfter(dateNow))) {
+            } else {
                 return "02";
             }
-            return "00";
         }
     }
 }
