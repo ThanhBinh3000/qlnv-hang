@@ -257,7 +257,7 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
 
     public List<DcnbPhieuKtChatLuongHdrLsDTO> searchList(CustomUserDetails currentUser, SearchPhieuKtChatLuong req) {
         String dvql = currentUser.getDvql();
-        req.setMaDvi(dvql.substring(0, 6));
+        req.setMaDvi(dvql);
         if(req.getIsVatTu() == null){
             req.setIsVatTu(false);
         }

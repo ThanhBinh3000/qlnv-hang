@@ -551,10 +551,16 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
     @Override
     public ReportTemplateResponse previewVt(HhDxuatKhLcntHdrReq hhDxuatKhLcntHdrReq) throws Exception {
+        Optional<HhDxuatKhLcntHdr> qOptional = hhDxuatKhLcntHdrRepository.findById(hhDxuatKhLcntHdrReq.getId());
+        if (!qOptional.isPresent()) {
+            throw new UnsupportedOperationException("Không tồn tại bản ghi");
+        }
+        Map<String, String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
+        Map<String, String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
         ReportTemplate model = findByTenFile(hhDxuatKhLcntHdrReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        HhDxuatKhLcntHdrPreview object = new ModelMapper().map(hhDxuatKhLcntHdrReq, HhDxuatKhLcntHdrPreview.class);
+        HhDxuatKhLcntHdrPreview object = new ModelMapper().map(qOptional.get(), HhDxuatKhLcntHdrPreview.class);
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         List<HhDxKhlcntDsgthau> dsgthau = getDsGthau(hhDxuatKhLcntHdrReq.getId(), mapVthh, mapDmucDvi);
@@ -571,6 +577,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         object.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStrNotDecimal(tongThanhTien));
         object.setTongThucHien(docxToPdfConverter.convertBigDecimalToStrNotDecimal(tongThucHien));
         object.setTongDeXuat(docxToPdfConverter.convertBigDecimalToStrNotDecimal(tongDx));
+        object.setTenHthucLcnt(StringUtils.isEmpty(object.getHthucLcnt()) ? null : hashMapHtLcnt.get(object.getHthucLcnt()));
+        object.setTenPthucLcnt(StringUtils.isEmpty(object.getPthucLcnt()) ? null : hashMapPthucDthau.get(object.getPthucLcnt()));
         object.setDsGtVt(dsgthau);
         return docxToPdfConverter.convertDocxToPdf(inputStream, object);
     }

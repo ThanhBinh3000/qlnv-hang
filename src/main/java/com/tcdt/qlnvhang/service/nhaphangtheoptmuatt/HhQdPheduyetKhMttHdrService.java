@@ -533,6 +533,12 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         hdr.setFileDinhKems(fileDinhKemHdr);
         dtl.setHhQdPheduyetKhMttHdr(hdr);
         if (hdr.getIsChange() != null) {
+            dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi())? null : hashMapDvi.get(dtl.getMaDvi()));
+            dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
+            dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh())? null : hashMapVthh.get(dtl.getLoaiVthh()));
+            dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh())? null : hashMapVthh.get(dtl.getCloaiVthh()));
+            dtl.setTenNguonVon(StringUtils.isEmpty(dtl.getNguonVon())? null : hashMapNguonVon.get(dtl.getNguonVon()));
+            dtl.setTenPthucMuaTrucTiep(Contains.getPthucMtt(dtl.getPthucMuaTrucTiep()));
             dtl.setChildren2(detailDc(hdr));
         }else{
             List<HhQdPheduyetKhMttSLDD> byIdSldd = hhQdPheduyetKhMttSLDDRepository.findAllByIdQdDtl(dtl.getId());

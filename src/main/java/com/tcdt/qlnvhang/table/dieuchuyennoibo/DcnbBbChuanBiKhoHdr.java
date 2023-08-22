@@ -59,6 +59,7 @@ public class DcnbBbChuanBiKhoHdr extends BaseEntity implements Serializable, Clo
     private String cloaiVthh;
     private String tenLoaiVthh;
     private String tenCloaiVthh;
+    private String donViTinh;
     private BigDecimal tichLuong;
     private Long idPhieuNhapKho;
     private String soPhieuNhapKho;

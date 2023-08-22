@@ -528,6 +528,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		data.setTenLoaiHdong(hashMapLoaiHdong.get(data.getLoaiHdong()));
 		data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
 		List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdHdrOrderByGoiThauAsc(data.getId());
+		Long countGoiTrung = 0L;
 		for(HhQdKhlcntDsgthau dsg : hhQdKhlcntDsgthauData){
 			List<HhQdKhlcntDsgthauCtiet> listGtCtiet = hhQdKhlcntDsgthauCtietRepository.findByIdGoiThau(dsg.getId());
 			listGtCtiet.forEach(f -> {
@@ -544,8 +545,13 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			dsg.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dsg.getTrangThai()));
 			dsg.setChildren(listGtCtiet);
 			dsg.setKqlcntDtl(hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndType(dsg.getId(), "GOC"));
+			if (dsg.getTrangThaiDt().equals(NhapXuatHangTrangThaiEnum.THANH_CONG.getId())) {
+				countGoiTrung += 1L;
+			}
 		}
 		data.setDsGthau(hhQdKhlcntDsgthauData);
+		data.setSoGthau((long)hhQdKhlcntDsgthauData.size());
+		data.setSoGthauTrung(countGoiTrung);
 		data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
 		data.setTenTrangThaiDt(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiDt()));
 		if (data.getIdTrHdr() != null) {
@@ -1095,7 +1101,15 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
 			Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 			Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
+			Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
+			Map<String,String> hashMapLoaiHdong = getListDanhMucChung("HINH_THUC_HOP_DONG");
 			object.setHthucLcnt(hashMapHtLcnt.get(qOptional.get().getHthucLcnt()));
+			object.setPthucLcnt(hashMapPthucDthau.get(qOptional.get().getPthucLcnt()));
+			if (hashMapLoaiHdong.get(qOptional.get().getLoaiHdong()) != null) {
+				object.setLoaiHdong(hashMapLoaiHdong.get(qOptional.get().getLoaiHdong()));
+			} else {
+				object.setLoaiHdong("");
+			}
 			object.setTgianThienHd(qOptional.get().getTgianThienHd() + " ngày (" + qOptional.get().getDienGiai() + ")");
 			if (qOptional.get().getIdTrHdr() != null) {
 				Optional<HhDxuatKhLcntHdr> dxuatKhLcntHdr = hhDxuatKhLcntHdrRepository.findById(qOptional.get().getIdTrHdr());
@@ -1110,6 +1124,9 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				listGtCtiet.forEach(f -> {
 					f.setTenDvi(mapDmucDvi.get(f.getMaDvi()));
 				});
+				if (dsg.getDonGiaVat() != null && dsg.getSoLuong() != null) {
+					dsg.setThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(dsg.getDonGiaVat().multiply(dsg.getSoLuong())));
+				}
 				dsg.setTenDvi(mapDmucDvi.get(dsg.getMaDvi()));
 				dsg.setTenCloaiVthh(hashMapDmHh.get(dsg.getCloaiVthh()));
 				dsg.setChildren(listGtCtiet);

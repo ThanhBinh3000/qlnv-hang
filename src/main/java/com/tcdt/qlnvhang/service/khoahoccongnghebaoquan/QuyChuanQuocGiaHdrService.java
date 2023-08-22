@@ -9,12 +9,16 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.*;
+import com.tcdt.qlnvhang.response.khoahoccongnghebaoquan.KhCnBaoQuanPreviewRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.DmDonViDTO;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -26,13 +30,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -349,5 +356,31 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         }
         return listQuyChuanApDung;
     }
+
+    public ReportTemplateResponse preview(QuyChuanQuocGiaHdrReq req) throws Exception {
+        Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
+        List<String> listDvi = new ArrayList<>();
+        listDvi.add(req.getMaBn());
+        Map<String, DmDonViDTO> mapDmucDvi = getListDanhMucDviByMadviIn(listDvi, "01");
+        ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        KhCnBaoQuanPreviewRes previewRes = new KhCnBaoQuanPreviewRes();
+        previewRes.setTenLoaiVthh(ObjectUtils.isEmpty(req.getLoaiVthh()) ? "" : hashMapDmHh.get(req.getLoaiVthh()).toUpperCase());
+        previewRes.setTenDvi(ObjectUtils.isEmpty(req.getMaBn()) ? "" : mapDmucDvi.get(req.getMaBn()).getTenDvi().toUpperCase());
+        previewRes.setNgayHieuLuc(!ObjectUtils.isEmpty(req.getNgayHieuLuc()) ? req.getNgayHieuLuc().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "");
+        previewRes.setNgayHetHieuLuc( !ObjectUtils.isEmpty(req.getNgayHetHieuLuc())?req.getNgayHetHieuLuc().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "");
+        List<QuyChuanQuocGiaDtlReq> dtlList = req.getTieuChuanKyThuat();
+        if (!CollectionUtils.isEmpty(dtlList)) {
+            for (int i = 0; i < dtlList.size(); i++) {
+                dtlList.get(i).setStt(String.valueOf(i+1));
+                dtlList.get(i).setTenCloaiVthh(!ObjectUtils.isEmpty(dtlList.get(i).getCloaiVthh()) ? hashMapDmHh.get(dtlList.get(i).getCloaiVthh()) : "Toàn bộ" );
+            }
+        }
+        previewRes.setTieuChuanList(dtlList);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, previewRes);
+    }
+
+
 
 }

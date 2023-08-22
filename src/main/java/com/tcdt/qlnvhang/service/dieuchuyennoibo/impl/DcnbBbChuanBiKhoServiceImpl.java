@@ -71,10 +71,10 @@ public class DcnbBbChuanBiKhoServiceImpl implements DcnbBbChuanBiKhoService {
         return searchDto;
     }
 
-    public List<DcnbBbChuanBiKhoHdrDTO> list(DcnbBbChuanBiKhoHdrReq req) throws Exception {
+    public List<DcnbBbChuanBiKhoHdr> list(DcnbBbChuanBiKhoHdrReq req) throws Exception {
         CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
         req.setMaDvi(currentUser.getDvql());
-        List<DcnbBbChuanBiKhoHdrDTO> searchDto = null;
+        List<DcnbBbChuanBiKhoHdr> searchDto = null;
         if (req.getIsVatTu() == null) {
             req.setIsVatTu(false);
         }

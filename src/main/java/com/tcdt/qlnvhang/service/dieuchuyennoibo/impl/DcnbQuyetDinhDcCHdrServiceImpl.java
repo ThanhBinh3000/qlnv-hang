@@ -125,6 +125,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                 .map(kphi -> kphi != null ? kphi : BigDecimal.ZERO)
                                 .reduce(BigDecimal.ZERO, BigDecimal::add);
                         dcnbKeHoachDcHdr.setTongDuToanKp(total);
+                        data.setTongDuToanKp(total);
                         e.getDanhSachKeHoach().forEach(e1 -> {
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
                             e1.setDaXdinhDiemNhap(true);
@@ -152,6 +153,11 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                             if (dcnbKeHoachDcDtl.isPresent()) {
                                 e1.setParentId(dcnbKeHoachDcDtl.get().getParentId());
                             }
+                            BigDecimal total = e.getDanhSachKeHoach().stream()
+                                    .map(DcnbKeHoachDcDtl::getDuToanKphi)
+                                    .map(kphi -> kphi != null ? kphi : BigDecimal.ZERO)
+                                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+                            data.setTongDuToanKp(total);
                         });
                         dcnbKeHoachDcHdr.get().setDanhSachHangHoa(e.getDanhSachKeHoach());
                         DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr.get());
@@ -256,6 +262,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                 .map(kphi -> kphi != null ? kphi : BigDecimal.ZERO)
                                 .reduce(BigDecimal.ZERO, BigDecimal::add);
                         dcnbKeHoachDcHdr.setTongDuToanKp(total);
+                        data.setTongDuToanKp(total);
                         e.getDanhSachKeHoach().forEach(e1 -> {
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
                             e1.setDaXdinhDiemNhap(true);
@@ -276,6 +283,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                 .map(kphi -> kphi != null ? kphi : BigDecimal.ZERO)
                                 .reduce(BigDecimal.ZERO, BigDecimal::add);
                         dcnbKeHoachDcHdr.setTongDuToanKp(total);
+                        data.setTongDuToanKp(total);
                         e.getDanhSachKeHoach().forEach(e1 -> {
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
                             e1.setDaXdinhDiemNhap(true);
@@ -303,6 +311,11 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                 e1.setParentId(dcnbKeHoachDcDtl.get().getParentId());
                             }
                             e1.setDaXdinhDiemNhap(true);
+                            BigDecimal total = e.getDanhSachKeHoach().stream()
+                                    .map(DcnbKeHoachDcDtl::getDuToanKphi)
+                                    .map(kphi -> kphi != null ? kphi : BigDecimal.ZERO)
+                                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+                            data.setTongDuToanKp(total);
                         });
                     }
                     dcnbKeHoachDcHdr.setDanhSachHangHoa(e.getDanhSachKeHoach());
@@ -328,6 +341,11 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr.get());
                         e.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdrNew);
                         e.setKeHoachDcHdrId(dcnbKeHoachDcHdrNew.getId());
+                        BigDecimal total = e.getDanhSachKeHoach().stream()
+                                .map(DcnbKeHoachDcDtl::getDuToanKphi)
+                                .map(kphi -> kphi != null ? kphi : BigDecimal.ZERO)
+                                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                        data.setTongDuToanKp(total);
                     }
                 } else {
                     throw new Exception("dcnbKeHoachDcHdr.id phải khác null!");
