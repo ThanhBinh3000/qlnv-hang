@@ -76,4 +76,31 @@ public class XhCtvtQuyetDinhPdDtl implements Serializable {
   @JoinColumn(name = "idHdr")
   @JsonIgnore
   private XhCtvtQuyetDinhPdHdr xhCtvtQuyetDinhPdHdr;
+
+  public XhCtvtQuyetDinhPdDtl(Long id, Long idDx, String soDx, LocalDate ngayKyDx, String trichYeuDx, BigDecimal soLuongDx, String loaiHinhNhapXuat, String kieuNhapXuat, String mucDichXuat, String noiDungDx, String loaiVthh, String cloaiVthh, String maDvi, BigDecimal soLuong, BigDecimal tonKhoDvi, BigDecimal tonKhoLoaiVthh, BigDecimal tonKhoCloaiVthh, String donViTinh, Map<String, String> mapVthh, String tenLoaiVthh, String tenCloaiVthh, Map<String, String> mapDmucDvi, String tenDvi, XhCtvtQuyetDinhPdHdr xhCtvtQuyetDinhPdHdr) {
+    this.id = id;
+    this.idDx = idDx;
+    this.soDx = soDx;
+    this.ngayKyDx = ngayKyDx;
+    this.trichYeuDx = trichYeuDx;
+    this.soLuongDx = soLuongDx;
+    this.loaiHinhNhapXuat = loaiHinhNhapXuat;
+    this.kieuNhapXuat = kieuNhapXuat;
+    this.mucDichXuat = mucDichXuat;
+    this.noiDungDx = noiDungDx;
+    this.loaiVthh = loaiVthh;
+    this.cloaiVthh = cloaiVthh;
+    this.maDvi = maDvi;
+    this.soLuong = soLuong;
+    this.tonKhoDvi = tonKhoDvi;
+    this.tonKhoLoaiVthh = tonKhoLoaiVthh;
+    this.tonKhoCloaiVthh = tonKhoCloaiVthh;
+    this.donViTinh = donViTinh;
+    this.mapVthh = mapVthh;
+    this.tenLoaiVthh = tenLoaiVthh;
+    this.tenCloaiVthh = tenCloaiVthh;
+    this.mapDmucDvi = mapDmucDvi;
+    this.tenDvi = tenDvi;
+    this.xhCtvtQuyetDinhPdHdr = xhCtvtQuyetDinhPdHdr;
+  }
 }

@@ -74,5 +74,4 @@ public class XhCtvtTongHopDtl implements Serializable {
   @JoinColumn(name = "idHdr")
   @JsonIgnore
   private XhCtvtTongHopHdr xhCtvtTongHopHdr;
-
 }
