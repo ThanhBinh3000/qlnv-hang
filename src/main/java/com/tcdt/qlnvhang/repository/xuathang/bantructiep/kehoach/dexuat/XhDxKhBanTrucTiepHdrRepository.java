@@ -76,9 +76,9 @@ public interface XhDxKhBanTrucTiepHdrRepository extends JpaRepository<XhDxKhBanT
             nativeQuery = true)
     BigDecimal getDonGiaDuocDuyetLt(String cloaiVthh, String maDvi, Integer namKhoach);
 
-    @Query(value = " SELECT dtl.GIA_QD FROM KH_PAG_TT_CHUNG dtl " +
+    @Query(value = " SELECT dtl.GIA_QD_BTC FROM KH_PAG_TT_CHUNG dtl " +
             "JOIN KH_PAG_QD_BTC hdr ON dtl.QD_BTC_ID = hdr.ID " +
-            " WHERE hdr.TRANG_THAI = '29' AND hdr.LOAI_GIA = 'LG02'  AND dtl.CLOAI_VTHH = :cloaiVthh AND hdr.NAM_KE_HOACH = :namKhoach AND hdr.NGAY_HIEU_LUC <= SYSDATE " +
+            " WHERE hdr.TRANG_THAI = '29' AND hdr.LOAI_GIA = 'LG02'  AND dtl.LOAI_VTHH = :cloaiVthh AND hdr.NAM_KE_HOACH = :namKhoach AND hdr.NGAY_HIEU_LUC <= SYSDATE " +
             " FETCH FIRST 1 ROWS ONLY ",
             nativeQuery = true)
     BigDecimal getGiaBanToiThieuVt(String cloaiVthh, Integer namKhoach);

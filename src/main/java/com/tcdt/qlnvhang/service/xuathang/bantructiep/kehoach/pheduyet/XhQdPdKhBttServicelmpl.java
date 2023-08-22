@@ -150,12 +150,14 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
                 XhQdPdKhBttDvi dvi = new XhQdPdKhBttDvi();
                 BeanUtils.copyProperties(dviReq, dvi, "id");
                 dvi.setIdDtl(dtl.getId());
+                dvi.setTypeQdKq(false);
                 xhQdPdKhBttDviRepository.save(dvi);
                 xhQdPdKhBttDviDtlRepository.deleteAllByIdDvi(dviReq.getId());
                 for (XhQdPdKhBttDviDtlReq dviDtlReq : dviReq.getChildren()) {
                     XhQdPdKhBttDviDtl dviDtl = new XhQdPdKhBttDviDtl();
                     BeanUtils.copyProperties(dviDtlReq, dviDtl, "id");
                     dviDtl.setIdDvi(dvi.getId());
+                    dviDtl.setTypeQdKq(false);
                     xhQdPdKhBttDviDtlRepository.save(dviDtl);
                 }
             }
