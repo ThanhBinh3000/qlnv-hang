@@ -271,8 +271,15 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
         String status= statusReq.getTrangThai()+optional.get().getTrangThai();
         switch (status){
             case Contains.CHODUYET_TK + Contains.DUTHAO:
+                optional.get().setNguoiGuiDuyet(userInfo.getFullName());
+                optional.get().setNgayGuiDuyet(getDateTimeNow());
+                break;
             case Contains.CHODUYET_KT + Contains.CHODUYET_TK:
+                optional.get().setThuKho(userInfo.getFullName());
+                break;
             case Contains.CHODUYET_LDCC + Contains.CHODUYET_KT:
+                optional.get().setKeToan(userInfo.getFullName());
+                break;
             case Contains.CHODUYET_TK + Contains.TUCHOI_TK:
             case Contains.CHODUYET_TK + Contains.TUCHOI_KT:
             case Contains.CHODUYET_TK + Contains.TUCHOI_LDCC:
@@ -282,12 +289,12 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
             case Contains.TUCHOI_TK + Contains.CHODUYET_TK:
             case Contains.TUCHOI_KT + Contains.CHODUYET_KT:
             case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
-                optional.get().setNguoiPduyet(getUser().getUsername());
+                optional.get().setNguoiPduyet(getUser().getFullName());
                 optional.get().setNgayPduyet(getDateTimeNow());
                 optional.get().setLdoTuChoi(statusReq.getLyDo());
                 break;
             case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
-                optional.get().setNguoiPduyet(getUser().getUsername());
+                optional.get().setNguoiPduyet(getUser().getFullName());
                 optional.get().setNgayPduyet(getDateTimeNow());
                 break;
             default:
