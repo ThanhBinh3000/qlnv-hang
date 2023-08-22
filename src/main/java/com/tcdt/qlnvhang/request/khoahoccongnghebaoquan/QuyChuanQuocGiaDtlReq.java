@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 public class QuyChuanQuocGiaDtlReq {
     private Long id;
+    private String stt;
     private Long idHdr;
     private String tenChiTieu;
     private String thuTuHt;
@@ -20,5 +21,6 @@ public class QuyChuanQuocGiaDtlReq {
     private String phuongPhapXd;
     private String loaiVthh;
     private String cloaiVthh;
+    private String tenCloaiVthh;
 
 }
