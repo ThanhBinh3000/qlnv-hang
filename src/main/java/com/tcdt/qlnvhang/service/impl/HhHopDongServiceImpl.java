@@ -244,7 +244,6 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
     qOptional.get().setTenLoaiVthh(mapVthh.get(qOptional.get().getLoaiVthh()));
     qOptional.get().setTenCloaiVthh(mapVthh.get(qOptional.get().getCloaiVthh()));
     qOptional.get().setTenDvi(qlnvDmDonviRepository.findByMaDvi(qOptional.get().getMaDvi()).getTenDvi());
-    qOptional.get().setDonViTinh( mapVthh.get(qOptional.get().getDonViTinh()));
     qOptional.get().setHhPhuLucHdongList(hhPhuLucRepository.findBySoHd(qOptional.get().getSoHd()));
     List<FileDinhKem> fileDinhKem = fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhHopDongHdr.TABLE_NAME));
     qOptional.get().setListFileDinhKem(fileDinhKem);

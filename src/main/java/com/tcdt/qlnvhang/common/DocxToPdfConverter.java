@@ -82,6 +82,7 @@ public class DocxToPdfConverter {
             reportTemplateResponse.setWordSrc(convertToBase64(wordBytes));
             outputStreamPdf.close();
             outputStreamWord.close();
+            System.out.println(reportTemplateResponse.getWordSrc());
             return reportTemplateResponse;
         }
         catch ( Throwable e )

@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKh
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBtt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviRepository;
@@ -50,6 +51,8 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
     private XhQdPdKhBttDviRepository xhQdPdKhBttDviRepository;
     @Autowired
     private XhQdPdKhBttDviDtlRepository xhQdPdKhBttDviDtlRepository;
+    @Autowired
+    private XhHopDongBttHdrRepository xhHopDongBttHdrRepository;
     @Autowired
     private FileDinhKemService fileDinhKemService;
 
@@ -132,6 +135,7 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
                     BeanUtils.copyProperties(chaoGiaReq, chaoGia, "id");
                     chaoGia.setId(null);
                     chaoGia.setIdQdPdDtl(req.getIdDtl());
+                    chaoGia.setTypeQdKq(false);
                     XhTcTtinBtt create = xhTcTtinBttRepository.save(chaoGia);
                     fileDinhKemService.delete(create.getId(), Collections.singleton(XhTcTtinBtt.TABLE_NAME));
                     if (!DataUtils.isNullObject(chaoGiaReq.getFileDinhKems())) {
@@ -184,6 +188,7 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
             data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh()) ? null : mapDmucVthh.get(data.getCloaiVthh()));
             data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
             data.setXhQdPdKhBttHdr(xhQdPdKhBttHdrRepository.findById(data.getIdHdr()).get());
+            data.setListHopDongBtt(xhHopDongBttHdrRepository.findAllByIdQdPdDtl(data.getId()));
             data.setChildren(dvi);
             if (!DataUtils.isNullObject(data.getPthucBanTrucTiep())) {
                 if (data.getPthucBanTrucTiep().equals(Contains.UY_QUYEN)) {

@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.entities;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdr;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgHdr;
 import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.bienbanlaymau.XhBienBanLayMauHdr;
@@ -117,4 +118,9 @@ public class FileDKemJoinHoSoKyThuatDtl implements Serializable {
   @JoinColumn(name = "dataId", insertable = false, updatable = false)
   @JsonIgnore
   private XhCtvtQuyetDinhPdHdr xhCtvtQuyetDinhPdHdr;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "dataId", insertable = false, updatable = false)
+  @JsonIgnore
+  private XhKqBttHdr xhKqBttHdr;
 }
