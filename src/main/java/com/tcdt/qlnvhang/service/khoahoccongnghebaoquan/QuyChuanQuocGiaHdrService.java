@@ -366,15 +366,15 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
         KhCnBaoQuanPreviewRes previewRes = new KhCnBaoQuanPreviewRes();
-        previewRes.setTenLoaiVthh(hashMapDmHh.get(req.getLoaiVthh()));
-        previewRes.setTenDvi(mapDmucDvi.get(req.getMaBn()).getTenDvi());
-        previewRes.setNgayHieuLuc(req.getNgayHieuLuc().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        previewRes.setNgayHetHieuLuc(req.getNgayHetHieuLuc().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        previewRes.setTenLoaiVthh(ObjectUtils.isEmpty(req.getLoaiVthh()) ? "" : hashMapDmHh.get(req.getLoaiVthh()));
+        previewRes.setTenDvi(ObjectUtils.isEmpty(req.getMaBn()) ? "" : mapDmucDvi.get(req.getMaBn()).getTenDvi());
+        previewRes.setNgayHieuLuc(!ObjectUtils.isEmpty(req.getNgayHieuLuc()) ? req.getNgayHieuLuc().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "");
+        previewRes.setNgayHetHieuLuc( !ObjectUtils.isEmpty(req.getNgayHetHieuLuc())?req.getNgayHetHieuLuc().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "");
         List<QuyChuanQuocGiaDtlReq> dtlList = req.getTieuChuanKyThuat();
         if (!CollectionUtils.isEmpty(dtlList)) {
             for (int i = 0; i < dtlList.size(); i++) {
                 dtlList.get(i).setStt(String.valueOf(i+1));
-                dtlList.get(i).setTenCloaiVthh(ObjectUtils.isEmpty(dtlList.get(i).getCloaiVthh()) ? hashMapDmHh.get(dtlList.get(i).getCloaiVthh()) : "");
+                dtlList.get(i).setTenCloaiVthh(!ObjectUtils.isEmpty(dtlList.get(i).getCloaiVthh()) ? hashMapDmHh.get(dtlList.get(i).getCloaiVthh()) : "");
             }
         }
         previewRes.setTieuChuanList(dtlList);
