@@ -1101,7 +1101,15 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
 			Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 			Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
+			Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
+			Map<String,String> hashMapLoaiHdong = getListDanhMucChung("HINH_THUC_HOP_DONG");
 			object.setHthucLcnt(hashMapHtLcnt.get(qOptional.get().getHthucLcnt()));
+			object.setPthucLcnt(hashMapPthucDthau.get(qOptional.get().getPthucLcnt()));
+			if (hashMapLoaiHdong.get(qOptional.get().getLoaiHdong()) != null) {
+				object.setLoaiHdong(hashMapLoaiHdong.get(qOptional.get().getLoaiHdong()));
+			} else {
+				object.setLoaiHdong("");
+			}
 			object.setTgianThienHd(qOptional.get().getTgianThienHd() + " ngày (" + qOptional.get().getDienGiai() + ")");
 			if (qOptional.get().getIdTrHdr() != null) {
 				Optional<HhDxuatKhLcntHdr> dxuatKhLcntHdr = hhDxuatKhLcntHdrRepository.findById(qOptional.get().getIdTrHdr());
@@ -1116,6 +1124,9 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				listGtCtiet.forEach(f -> {
 					f.setTenDvi(mapDmucDvi.get(f.getMaDvi()));
 				});
+				if (dsg.getDonGiaVat() != null && dsg.getSoLuong() != null) {
+					dsg.setThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(dsg.getDonGiaVat().multiply(dsg.getSoLuong())));
+				}
 				dsg.setTenDvi(mapDmucDvi.get(dsg.getMaDvi()));
 				dsg.setTenCloaiVthh(hashMapDmHh.get(dsg.getCloaiVthh()));
 				dsg.setChildren(listGtCtiet);

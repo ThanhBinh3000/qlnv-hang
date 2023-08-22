@@ -10,6 +10,8 @@ import java.util.List;
 public class HhQdKhlcntPreview {
     private String nguonVon;
     private String hthucLcnt;
+    private String pthucLcnt;
+    private String loaiHdong;
     private String tgianBdauTchuc;
     private String tgianThienHd;
     private String tenLoaiVthh;

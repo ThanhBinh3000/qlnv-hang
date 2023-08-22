@@ -231,7 +231,7 @@ public class HhBienBanDayKhoService extends BaseServiceImpl {
 
         String status = statusReq.getTrangThai() + optional.get().getTrangThai();
         switch (status){
-            case Contains.CHODUYET_LDCC + Contains.DUTHAO:
+            case Contains.CHODUYET_KTVBQ + Contains.DUTHAO:
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
                 optional.get().setNguoiGuiDuyet(getUser().getUsername());
                 optional.get().setNgayGuiDuyet(getDateTimeNow());
