@@ -109,6 +109,7 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
             objReq.getDanhSachHangHoa().forEach(e -> {
                 e.setDcnbKeHoachDcHdr(data);
                 e.setDaXdinhDiemNhap(false);
+                e.setThayDoiThuKho(true);
             });
         }
         if (objReq.getPhuongAnDieuChuyen() != null) {
@@ -158,6 +159,7 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
             data.setTongDuToanKp(total);
             objReq.getDanhSachHangHoa().forEach(e -> {
                 e.setDaXdinhDiemNhap(false);
+                e.setThayDoiThuKho(true);
             });
         }
         DcnbKeHoachDcHdr created = dcnbKeHoachDcHdrRepository.save(data);

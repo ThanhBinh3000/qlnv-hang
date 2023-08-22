@@ -7,41 +7,26 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "XH_TCTTIN_BTT")
+@Table(name = XhTcTtinBtt.TABLE_NAME)
 @Data
 public class XhTcTtinBtt implements Serializable {
-
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_TCTTIN_BTT";
-
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_TCTTIN_BTT_SEQ")
-    @SequenceGenerator(sequenceName = "XH_TCTTIN_BTT_SEQ", allocationSize = 1, name = "XH_TCTTIN_BTT_SEQ")
-
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTcTtinBtt.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = XhTcTtinBtt.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTcTtinBtt.TABLE_NAME + "_SEQ")
     private Long id;
-
     private Long idDviDtl;
-
     private Long idQdPdDtl;
-
     private String tochucCanhan;
-
     private String mst;
-
     private String diaDiemChaoGia;
-
     private String sdt;
-
     private LocalDate ngayChaoGia;
-
     private BigDecimal soLuong;
-
     private BigDecimal donGia;
-
     private BigDecimal thueGtgt;
-
     private Boolean luaChon;
-
     @Transient
     private FileDinhKem fileDinhKems;
 }

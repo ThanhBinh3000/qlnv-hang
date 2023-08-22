@@ -9,34 +9,14 @@ import java.util.List;
 @Getter
 @Setter
 public class SearchXhTcTtinBttReq extends BaseRequest {
-
     private Integer namKh;
-
-    private String maDvi;
-
     private LocalDate ngayCgiaTu;
-
     private LocalDate  ngayCgiaDen;
-
-    private LocalDate ngayTaoTu;
-
-    private LocalDate ngayTaoDen;
-
-    private LocalDate ngayDuyetTu;
-
-    private LocalDate ngayDuyetDen;
-
-    private String maDviChiCuc;
-
     private String tochucCanhan;
-
+    private String maDviChiCuc;
     private Integer lastest ;
-
     private String loaiVthh;
-
     private String soDxuat;
-
     private List<String> pthucBanTrucTiep = new ArrayList<>();
-
-    private Integer typeSoQdKq;
+    private String dvql;
 }

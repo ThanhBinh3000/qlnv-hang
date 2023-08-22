@@ -76,4 +76,18 @@ public interface DcnbBbChuanBiKhoHdrRepository extends JpaRepository<DcnbBbChuan
             "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.soLuongDc,bbcb.trangThai "+
             "ORDER BY qdc.soQdinh DESC")
     Page<DcnbBbChuanBiKhoHdrDTO> searchPage(@Param("param") DcnbBbChuanBiKhoHdrReq req, Pageable pageable);
+
+    @Query(value = "SELECT bbcb " +
+            "FROM DcnbBbChuanBiKhoHdr bbcb " +
+            "WHERE 1 =1 " +
+            "AND ((:#{#param.maDvi} IS NULL OR LOWER(bbcb.maDvi) LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%'))) " +
+            "AND (:#{#param.soQdDcCuc} IS NULL OR LOWER(bbcb.soQdDcCuc) LIKE CONCAT('%',LOWER(:#{#param.soQdDcCuc}),'%')) " +
+            "AND (:#{#param.soBban} IS NULL OR LOWER(bbcb.soBban) LIKE CONCAT('%',LOWER(:#{#param.soBban}),'%')) " +
+            "AND (:#{#param.nam} IS NULL OR bbcb.nam = :#{#param.nam}) " +
+            "AND (:#{#param.loaiDc} IS NULL OR bbcb.loaiDc = :#{#param.loaiDc}) " +
+            "AND (:#{#param.trangThai} IS NULL OR bbcb.trangThai = :#{#param.trangThai}) " +
+            "AND ((:#{#param.tuNgayLapBb}  IS NULL OR bbcb.ngayLap >= :#{#param.tuNgayLapBb})" +
+            "AND (:#{#param.denNgayLapBb}  IS NULL OR bbcb.ngayLap <= :#{#param.denNgayLapBb}) ) " +
+            "ORDER BY bbcb.soQdDcCuc DESC")
+    List<DcnbBbChuanBiKhoHdr> searchList(@Param("param") DcnbBbChuanBiKhoHdrReq req);
 }
