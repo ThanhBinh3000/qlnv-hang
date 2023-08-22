@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.thongtin;
+
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -27,6 +29,7 @@ public class XhTcTtinBtt implements Serializable {
     private BigDecimal donGia;
     private BigDecimal thueGtgt;
     private Boolean luaChon;
+    private Boolean typeQdKq;
     @Transient
     private FileDinhKem fileDinhKems;
 }

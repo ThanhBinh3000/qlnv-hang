@@ -62,6 +62,7 @@ public class HhHopDongHdr extends BaseEntity implements Serializable  {
 	String diaChi;
 	String mst;
 	String tenNguoiDdien;
+	String idNguoiDdien;
 	String fax;
 	String moTai;
 	String giayUyQuyen;

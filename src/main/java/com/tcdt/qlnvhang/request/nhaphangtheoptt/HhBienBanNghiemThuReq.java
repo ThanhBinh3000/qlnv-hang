@@ -50,6 +50,9 @@ public class HhBienBanNghiemThuReq {
 
     private Long idQdGiaoNvNh;
 
+    private String tenThuKho;
+    private String tenKeToan;
+    private String tenNguoiPduyet;
     private String soQdGiaoNvNh;
 
     private Long idDdiemGiaoNvNh;

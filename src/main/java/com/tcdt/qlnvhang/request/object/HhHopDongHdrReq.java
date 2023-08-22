@@ -58,6 +58,7 @@ public class HhHopDongHdrReq {
 	String diaChi;
 	String mst;
 	String tenNguoiDdien;
+	String idNguoiDdien;
 	String chucVu;
 	String sdt;
 	String stk;

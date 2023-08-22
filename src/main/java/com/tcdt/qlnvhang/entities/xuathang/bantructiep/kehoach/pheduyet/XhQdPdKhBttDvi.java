@@ -9,15 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "XH_QD_PD_KH_BTT_DVI")
+@Table(name = XhQdPdKhBttDvi.TABLE_NAME)
 @Data
 public class XhQdPdKhBttDvi implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_QD_PD_KH_BTT_DVI";
-
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_QD_PD_KH_BTT_DVI_SEQ ")
-    @SequenceGenerator(sequenceName = "XH_QD_PD_KH_BTT_DVI_SEQ ", allocationSize = 1, name = "XH_QD_PD_KH_BTT_DVI_SEQ ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhQdPdKhBttDvi.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = XhQdPdKhBttDvi.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhQdPdKhBttDvi.TABLE_NAME + "_SEQ")
     private Long id;
     private Long idDtl;
     private String maDvi;
@@ -26,8 +25,10 @@ public class XhQdPdKhBttDvi implements Serializable {
     private BigDecimal soLuongChiTieu;
     private BigDecimal soLuongKhDaDuyet;
     private String donViTinh;
+    private Long idQdKqHdr;
+    private Boolean typeQdKq;
     @Transient
     private String tenDvi;
     @Transient
-    List<XhQdPdKhBttDviDtl> children =new ArrayList<>();
+    List<XhQdPdKhBttDviDtl> children = new ArrayList<>();
 }

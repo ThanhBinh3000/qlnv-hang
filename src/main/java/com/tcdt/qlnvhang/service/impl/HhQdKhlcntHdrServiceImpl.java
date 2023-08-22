@@ -528,6 +528,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		data.setTenLoaiHdong(hashMapLoaiHdong.get(data.getLoaiHdong()));
 		data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
 		List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdHdrOrderByGoiThauAsc(data.getId());
+		Long countGoiTrung = 0L;
 		for(HhQdKhlcntDsgthau dsg : hhQdKhlcntDsgthauData){
 			List<HhQdKhlcntDsgthauCtiet> listGtCtiet = hhQdKhlcntDsgthauCtietRepository.findByIdGoiThau(dsg.getId());
 			listGtCtiet.forEach(f -> {
@@ -544,8 +545,13 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			dsg.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dsg.getTrangThai()));
 			dsg.setChildren(listGtCtiet);
 			dsg.setKqlcntDtl(hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndType(dsg.getId(), "GOC"));
+			if (dsg.getTrangThaiDt().equals(NhapXuatHangTrangThaiEnum.THANH_CONG.getId())) {
+				countGoiTrung += 1L;
+			}
 		}
 		data.setDsGthau(hhQdKhlcntDsgthauData);
+		data.setSoGthau((long)hhQdKhlcntDsgthauData.size());
+		data.setSoGthauTrung(countGoiTrung);
 		data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
 		data.setTenTrangThaiDt(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiDt()));
 		if (data.getIdTrHdr() != null) {
