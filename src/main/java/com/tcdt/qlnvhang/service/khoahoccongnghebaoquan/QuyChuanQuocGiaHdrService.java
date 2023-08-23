@@ -366,21 +366,27 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
         KhCnBaoQuanPreviewRes previewRes = new KhCnBaoQuanPreviewRes();
-        previewRes.setTenLoaiVthh(ObjectUtils.isEmpty(req.getLoaiVthh()) ? "" : hashMapDmHh.get(req.getLoaiVthh()).toUpperCase());
+        List<String> listVthh = Arrays.asList(req.getLoaiVthh().split(","));
+        String tenVthh = "";
+        if (!listVthh.isEmpty()) {
+            for (int i = 0; i < listVthh.size(); i++) {
+                tenVthh = tenVthh + hashMapDmHh.get(listVthh.get(i)).toUpperCase() + (listVthh.size() > i + 1 ? ", " : "");
+            }
+        }
+        previewRes.setTenLoaiVthh(tenVthh);
         previewRes.setTenDvi(ObjectUtils.isEmpty(req.getMaBn()) ? "" : mapDmucDvi.get(req.getMaBn()).getTenDvi().toUpperCase());
         previewRes.setNgayHieuLuc(!ObjectUtils.isEmpty(req.getNgayHieuLuc()) ? req.getNgayHieuLuc().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "");
-        previewRes.setNgayHetHieuLuc( !ObjectUtils.isEmpty(req.getNgayHetHieuLuc())?req.getNgayHetHieuLuc().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "");
+        previewRes.setNgayHetHieuLuc(!ObjectUtils.isEmpty(req.getNgayHetHieuLuc()) ? req.getNgayHetHieuLuc().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "");
         List<QuyChuanQuocGiaDtlReq> dtlList = req.getTieuChuanKyThuat();
         if (!CollectionUtils.isEmpty(dtlList)) {
             for (int i = 0; i < dtlList.size(); i++) {
-                dtlList.get(i).setStt(String.valueOf(i+1));
-                dtlList.get(i).setTenCloaiVthh(!ObjectUtils.isEmpty(dtlList.get(i).getCloaiVthh()) ? hashMapDmHh.get(dtlList.get(i).getCloaiVthh()) : "Toàn bộ" );
+                dtlList.get(i).setStt(String.valueOf(i + 1));
+                dtlList.get(i).setTenCloaiVthh(!ObjectUtils.isEmpty(dtlList.get(i).getCloaiVthh()) ? hashMapDmHh.get(dtlList.get(i).getCloaiVthh()) : "Toàn bộ");
             }
         }
         previewRes.setTieuChuanList(dtlList);
         return docxToPdfConverter.convertDocxToPdf(inputStream, previewRes);
     }
-
 
 
 }

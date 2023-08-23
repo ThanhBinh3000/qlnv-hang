@@ -141,15 +141,6 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
                     dataDiaDiem.setTenLoKho(StringUtils.isEmpty(dataDiaDiem.getMaLoKho()) ? null : mapDmucDvi.get(dataDiaDiem.getMaLoKho()));
                     dataDiaDiem.setTenLoaiVthh(StringUtils.isEmpty(dataDiaDiem.getLoaiVthh()) ? null : mapVthh.get(dataDiaDiem.getLoaiVthh()));
                     dataDiaDiem.setTenCloaiVthh(StringUtils.isEmpty(dataDiaDiem.getCloaiVthh()) ? null : mapVthh.get(dataDiaDiem.getCloaiVthh()));
-                    if (data.getCloaiVthh().startsWith("02")) {
-                        BigDecimal donGiaDuocDuyet;
-                        donGiaDuocDuyet = xhDxKhBanTrucTiepHdrRepository.getDonGiaDuocDuyetVt(data.getCloaiVthh(), data.getNamKh());
-                        dataDiaDiem.setDonGiaDuocDuyet(donGiaDuocDuyet);
-                    } else {
-                        BigDecimal donGiaDuocDuyet;
-                        donGiaDuocDuyet = xhDxKhBanTrucTiepHdrRepository.getDonGiaDuocDuyetLt(data.getCloaiVthh(), dataDtl.getMaDvi(), data.getNamKh());
-                        dataDiaDiem.setDonGiaDuocDuyet(donGiaDuocDuyet);
-                    }
                 });
                 dataDtl.setTenDvi(StringUtils.isEmpty(dataDtl.getMaDvi()) ? null : mapDmucDvi.get(dataDtl.getMaDvi()));
                 dataDtl.setChildren(listDiaDiem);
@@ -274,21 +265,5 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
 
     public BigDecimal countSoLuongKeHoachNam(CountKhlcntSlReq req) {
         return xhDxKhBanTrucTiepHdrRepository.countSLDalenKh(req.getYear(), req.getLoaiVthh(), req.getMaDvi(), req.getLastest());
-    }
-
-    public BigDecimal getGiaBanToiThieu(String cloaiVthh, String maDvi, Integer namKh) {
-        if (cloaiVthh.startsWith("02")) {
-            return xhDxKhBanTrucTiepHdrRepository.getGiaBanToiThieuVt(cloaiVthh, namKh);
-        } else {
-            return xhDxKhBanTrucTiepHdrRepository.getGiaBanToiThieuLt(cloaiVthh, maDvi, namKh);
-        }
-    }
-
-    public BigDecimal getDonGiaDuocDuyet(String cloaiVthh, String maDvi, Integer nam) {
-        if (cloaiVthh.startsWith("02")) {
-            return xhDxKhBanTrucTiepHdrRepository.getDonGiaDuocDuyetVt(cloaiVthh, nam);
-        } else {
-            return xhDxKhBanTrucTiepHdrRepository.getDonGiaDuocDuyetLt(cloaiVthh, maDvi, nam);
-        }
     }
 }
