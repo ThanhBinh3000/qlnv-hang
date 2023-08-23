@@ -24,6 +24,8 @@ public class DcnbBbChuanBiKhoDtl implements Serializable, Cloneable{
     private Long id;
     @Column(name = "HDR_ID", insertable = true, updatable = true)
     private Long hdrId;
+    private String nhomHang;
+    private String matHang;
     private String noiDung;
     private String dviTinh;
     private BigDecimal soLuongTrongNam;

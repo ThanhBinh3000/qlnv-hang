@@ -519,8 +519,11 @@ public class HopDongMttHdrService extends BaseServiceImpl {
       }
       optional.get().setTrangThaiPhuLuc(req.getTrangThaiPhuLuc());
     }
-    Optional<HhChiTietKqTTinChaoGia> hhChiTietKqTTinChaoGia = hhCtietKqTtinCgiaRepository.findById(optional.get().getIdKqCgia());
-    hhChiTietKqTTinChaoGia.get().setSigned(true);
+    if(optional.get().getIdKqCgia() != null){
+      Optional<HhChiTietKqTTinChaoGia> hhChiTietKqTTinChaoGia = hhCtietKqTtinCgiaRepository.findById(optional.get().getIdKqCgia());
+      hhChiTietKqTTinChaoGia.get().setSigned(true);
+      hhCtietKqTtinCgiaRepository.save(hhChiTietKqTTinChaoGia.get());
+    }
     return hopDongHdrRepository.save(optional.get());
   }
 
