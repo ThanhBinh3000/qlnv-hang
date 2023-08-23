@@ -432,6 +432,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:hashMapDmhh.get(data.getCloaiVthh()));
         data.setTenDvi(StringUtils.isEmpty(data.getTenDvi())?null:hashMapDmdv.get(data.getMaDvi()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+        data.setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiHd()));
 
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList("HH_QD_GIAO_NV_NHAP_HANG"));
         if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
