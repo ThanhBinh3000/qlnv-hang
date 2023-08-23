@@ -93,7 +93,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
       throw new Exception("Bad request.");
     }
     if (!DataUtils.isNullObject(objReq.getSoQd())) {
-      Optional<XhCtvtQuyetDinhPdHdr> optional = xhCtvtQdPdHdrRepository.findBySoQd(objReq.getSoQd());
+      Optional<XhCtvtQuyetDinhPdHdr> optional = xhCtvtQdPdHdrRepository.findBySoBbQd(objReq.getSoQd());
       if (optional.isPresent()) {
         throw new Exception("số quyết định đã tồn tại");
       }
@@ -133,7 +133,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu cần sửa");
     }
-    Optional<XhCtvtQuyetDinhPdHdr> soDx = xhCtvtQdPdHdrRepository.findBySoQd(objReq.getSoQd());
+    Optional<XhCtvtQuyetDinhPdHdr> soDx = xhCtvtQdPdHdrRepository.findBySoBbQd(objReq.getSoQd());
     if (soDx.isPresent()) {
       if (!soDx.get().getId().equals(objReq.getId())) {
         throw new Exception("số quyết định đã tồn tại");
