@@ -152,15 +152,6 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
                     dataPhanLo.setTenLoKho(StringUtils.isEmpty(dataPhanLo.getMaLoKho()) ? null : mapDmucDvi.get(dataPhanLo.getMaLoKho()));
                     dataPhanLo.setTenLoaiVthh(StringUtils.isEmpty(dataPhanLo.getLoaiVthh()) ? null : mapVthh.get(dataPhanLo.getLoaiVthh()));
                     dataPhanLo.setTenCloaiVthh(StringUtils.isEmpty(dataPhanLo.getCloaiVthh()) ? null : mapVthh.get(dataPhanLo.getCloaiVthh()));
-                    if (dataPhanLo.getCloaiVthh().startsWith("02")) {
-                        BigDecimal donGiaDuocDuyet;
-                        donGiaDuocDuyet = xhDxKhBanDauGiaRepository.getDonGiaDuocDuyetVt(data.getCloaiVthh(), data.getNamKh());
-                        dataPhanLo.setDonGiaDuocDuyet(donGiaDuocDuyet);
-                    } else {
-                        BigDecimal donGiaDuocDuyet;
-                        donGiaDuocDuyet = xhDxKhBanDauGiaRepository.getDonGiaDuocDuyetLt(data.getCloaiVthh(), dataDtl.getMaDvi(), data.getNamKh());
-                        dataPhanLo.setDonGiaDuocDuyet(donGiaDuocDuyet);
-                    }
                 });
                 dataDtl.setTenDvi(StringUtils.isEmpty(dataDtl.getMaDvi()) ? null : mapDmucDvi.get(dataDtl.getMaDvi()));
                 dataDtl.setChildren(dauGiaPhanLo);
@@ -297,22 +288,6 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
 
     public BigDecimal countSoLuongKeHoachNam(CountKhlcntSlReq req) {
         return xhDxKhBanDauGiaRepository.countSLDalenKh(req.getYear(), req.getLoaiVthh(), req.getMaDvi(), req.getLastest());
-    }
-
-    public BigDecimal getGiaBanToiThieu(String cloaiVthh, String maDvi, Integer namKh) {
-        if (cloaiVthh.startsWith("02")) {
-            return xhDxKhBanDauGiaRepository.getGiaBanToiThieuVt(cloaiVthh, namKh);
-        } else {
-            return xhDxKhBanDauGiaRepository.getGiaBanToiThieuLt(cloaiVthh, maDvi, namKh);
-        }
-    }
-
-    public BigDecimal getDonGiaDuocDuyet(String cloaiVthh, String maDvi, Integer nam) {
-        if (cloaiVthh.startsWith("02")) {
-            return xhDxKhBanDauGiaRepository.getDonGiaDuocDuyetVt(cloaiVthh, nam);
-        } else {
-            return xhDxKhBanDauGiaRepository.getDonGiaDuocDuyetLt(cloaiVthh, maDvi, nam);
-        }
     }
 
     public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {

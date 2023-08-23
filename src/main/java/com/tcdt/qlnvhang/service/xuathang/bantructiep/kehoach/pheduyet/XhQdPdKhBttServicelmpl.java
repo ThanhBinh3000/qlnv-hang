@@ -232,15 +232,6 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
                         dataDviDtl.setTenLoKho(StringUtils.isEmpty(dataDviDtl.getMaLoKho()) ? null : mapDmucDvi.get(dataDviDtl.getMaLoKho()));
                         dataDviDtl.setTenLoaiVthh(StringUtils.isEmpty(dataDviDtl.getLoaiVthh()) ? null : mapVthh.get(dataDviDtl.getLoaiVthh()));
                         dataDviDtl.setTenCloaiVthh(StringUtils.isEmpty(dataDviDtl.getCloaiVthh()) ? null : mapVthh.get(dataDviDtl.getCloaiVthh()));
-                        if (data.getCloaiVthh().startsWith("02")) {
-                            BigDecimal donGiaDuocDuyet;
-                            donGiaDuocDuyet = xhDxKhBanTrucTiepHdrRepository.getDonGiaDuocDuyetVt(data.getCloaiVthh(), data.getNamKh());
-                            dataDviDtl.setDonGiaDuocDuyet(donGiaDuocDuyet);
-                        } else {
-                            BigDecimal donGiaDuocDuyet;
-                            donGiaDuocDuyet = xhDxKhBanTrucTiepHdrRepository.getDonGiaDuocDuyetLt(data.getCloaiVthh(), dataDvi.getMaDvi(), data.getNamKh());
-                            dataDviDtl.setDonGiaDuocDuyet(donGiaDuocDuyet);
-                        }
                     });
                     dataDvi.setTenDvi(StringUtils.isEmpty(dataDvi.getMaDvi()) ? null : mapDmucDvi.get(dataDvi.getMaDvi()));
                     dataDvi.setChildren(qdDviDtl);
@@ -373,7 +364,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
         data.setTrangThai(statusReq.getTrangThai());
         if (statusReq.getTrangThai().equals(Contains.BAN_HANH)) {
             if (data.getPhanLoai().equals("TH")) {
-                Optional<XhThopDxKhBttHdr> optionalTh = xhThopDxKhBttRepository.findById(data.getIdTrHdr());
+                Optional<XhThopDxKhBttHdr> optionalTh = xhThopDxKhBttRepository.findById(data.getIdThHdr());
                 if (optionalTh.isPresent()) {
                     if (optionalTh.get().getTrangThai().equals(Contains.DABANHANH_QD)) {
                         throw new Exception("Tổng hợp đề xuất kế hoạch đã được quyết định");

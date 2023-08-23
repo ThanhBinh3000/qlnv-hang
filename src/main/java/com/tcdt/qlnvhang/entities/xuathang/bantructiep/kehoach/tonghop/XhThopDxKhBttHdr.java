@@ -34,6 +34,7 @@ public class XhThopDxKhBttHdr extends BaseEntity implements Serializable {
     private Long idSoQdPd;
     private String soQdPd;
     private String trangThai;
+    private String ghiChu;
     private LocalDate ngayGuiDuyet;
     private Long nguoiGuiDuyetId;
     private LocalDate ngayPduyet;
@@ -66,7 +67,8 @@ public class XhThopDxKhBttHdr extends BaseEntity implements Serializable {
 
     @OneToMany(mappedBy = "tongHopHdr", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<XhThopDxKhBttDtl> children = new ArrayList<>();
-    public void setChildren(List<XhThopDxKhBttDtl> children){
+
+    public void setChildren(List<XhThopDxKhBttDtl> children) {
         this.getChildren().clear();
         if (!DataUtils.isNullOrEmpty(children)) {
             children.forEach(f -> {

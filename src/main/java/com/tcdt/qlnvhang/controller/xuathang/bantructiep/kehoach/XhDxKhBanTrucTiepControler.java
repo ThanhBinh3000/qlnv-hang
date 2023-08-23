@@ -189,44 +189,4 @@ public class XhDxKhBanTrucTiepControler extends BaseController {
         }
         return ResponseEntity.ok(resp);
     }
-
-    @ApiOperation(value = "Lấy giá bán tối thiểu", response = List.class)
-    @GetMapping(value = PathContains.GIA_BAN_TOI_THIEU + "/{cloaiVthh}/{maDvi}/{namKhoach}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> getGiaBanToiDa(
-            @ApiParam(value = "cloaiVthh", example = "010101", required = true) @PathVariable("cloaiVthh") String cloaiVthh,
-            @ApiParam(value = "maDvi", example = "010101", required = true) @PathVariable("maDvi") String maDvi,
-            @ApiParam(value = "namKhoach", example = "2023", required = true) @PathVariable("namKhoach") Integer namKhoach) {
-        BaseResponse resp = new BaseResponse();
-        try {
-            resp.setData(xhDxKhBanTrucTiepService.getGiaBanToiThieu(cloaiVthh, maDvi, namKhoach));
-            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (Exception e) {
-            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-            resp.setMsg(e.getMessage());
-            log.error("Lấy giá bán tối đa trace: {}", e);
-        }
-        return ResponseEntity.ok(resp);
-    }
-
-    @ApiOperation(value = "Lấy đơn giá được duyệt", response = List.class)
-    @GetMapping(value = PathContains.DON_GIA_DUOC_DUYET + "/{cloaiVthh}/{maDvi}/{nam}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> getDonGiaDuocDuyet(
-            @ApiParam(value = "cloaiVthh", example = "010101", required = true) @PathVariable("cloaiVthh") String cloaiVthh,
-            @ApiParam(value = "maDvi", example = "010101", required = true) @PathVariable("maDvi") String maDvi,
-            @ApiParam(value = "nam", example = "2023", required = true) @PathVariable("nam") Integer nam) {
-        BaseResponse resp = new BaseResponse();
-        try {
-            resp.setData(xhDxKhBanTrucTiepService.getDonGiaDuocDuyet(cloaiVthh, maDvi, nam));
-            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (Exception e) {
-            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-            resp.setMsg(e.getMessage());
-            log.error("Lấy giá bán tối đa trace: {}", e);
-        }
-        return ResponseEntity.ok(resp);
-    }
 }
