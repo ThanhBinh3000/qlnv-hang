@@ -130,9 +130,9 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
         Map<String, String> mapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
         Map<String, String> mapPthucTtoan = getListDanhMucChung("PHUONG_THUC_TT");
         List<XhDxKhBanTrucTiepHdr> allById = xhDxKhBanTrucTiepHdrRepository.findAllById(ids);
-        allById.forEach(data -> {
+        for (XhDxKhBanTrucTiepHdr data : allById) {
             List<XhDxKhBanTrucTiepDtl> listDtl = xhDxKhBanTrucTiepDtlRepository.findAllByIdHdr(data.getId());
-            listDtl.forEach(dataDtl -> {
+            for (XhDxKhBanTrucTiepDtl dataDtl : listDtl) {
                 List<XhDxKhBanTrucTiepDdiem> listDiaDiem = xhDxKhBanTrucTiepDdiemRepository.findAllByIdDtl(dataDtl.getId());
                 listDiaDiem.forEach(dataDiaDiem -> {
                     dataDiaDiem.setTenDiemKho(StringUtils.isEmpty(dataDiaDiem.getMaDiemKho()) ? null : mapDmucDvi.get(dataDiaDiem.getMaDiemKho()));
@@ -144,7 +144,7 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
                 });
                 dataDtl.setTenDvi(StringUtils.isEmpty(dataDtl.getMaDvi()) ? null : mapDmucDvi.get(dataDtl.getMaDvi()));
                 dataDtl.setChildren(listDiaDiem);
-            });
+            }
             data.setMapDmucDvi(mapDmucDvi);
             data.setMapVthh(mapVthh);
             data.setMapLoaiHinhNx(mapLoaiHinhNx);
@@ -152,7 +152,7 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
             data.setMapPthucTtoan(mapPthucTtoan);
             data.setTrangThai(data.getTrangThai());
             data.setChildren(listDtl);
-        });
+        }
         return allById;
     }
 

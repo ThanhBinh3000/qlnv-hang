@@ -60,7 +60,7 @@ public class XhQdPdKhBttDtl implements Serializable {
     private String loaiVthh;
     private String cloaiVthh;
     private String moTaHangHoa;
-    private String ghiChu;
+    private String ghiChuChaoGia;
     private LocalDate thoiHanBan;
     private String trangThai;
     private Long idQdNv;

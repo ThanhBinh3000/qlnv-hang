@@ -141,9 +141,9 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
         Map<String, String> mapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
         Map<String, String> mapPhuongThucTt = getListDanhMucChung("PHUONG_THUC_TT");
         List<XhDxKhBanDauGia> allById = xhDxKhBanDauGiaRepository.findAllById(ids);
-        allById.forEach(data -> {
+        for (XhDxKhBanDauGia data : allById) {
             List<XhDxKhBanDauGiaDtl> dauGiaDtl = xhDxKhBanDauGiaDtlRepository.findAllByIdHdr(data.getId());
-            dauGiaDtl.forEach(dataDtl -> {
+            for (XhDxKhBanDauGiaDtl dataDtl : dauGiaDtl) {
                 List<XhDxKhBanDauGiaPhanLo> dauGiaPhanLo = xhDxKhBanDauGiaPhanLoRepository.findAllByIdDtl(dataDtl.getId());
                 dauGiaPhanLo.forEach(dataPhanLo -> {
                     dataPhanLo.setTenDiemKho(StringUtils.isEmpty(dataPhanLo.getMaDiemKho()) ? null : mapDmucDvi.get(dataPhanLo.getMaDiemKho()));
@@ -155,7 +155,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
                 });
                 dataDtl.setTenDvi(StringUtils.isEmpty(dataDtl.getMaDvi()) ? null : mapDmucDvi.get(dataDtl.getMaDvi()));
                 dataDtl.setChildren(dauGiaPhanLo);
-            });
+            }
             data.setMapDmucDvi(mapDmucDvi);
             data.setMapVthh(mapVthh);
             data.setMapLoaiHinhNx(mapLoaiHinhNx);
@@ -163,7 +163,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
             data.setMapPhuongThucTt(mapPhuongThucTt);
             data.setTrangThai(data.getTrangThai());
             data.setChildren(dauGiaDtl);
-        });
+        }
         return allById;
     }
 
@@ -202,12 +202,11 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
                 throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp hoặc từ chối");
             }
         }
-        List<Long> listIdDxuat = list.stream().map(XhDxKhBanDauGia::getId).collect(Collectors.toList());
-        List<XhDxKhBanDauGiaDtl> listDtl = xhDxKhBanDauGiaDtlRepository.findByIdHdrIn(listIdDxuat);
-        listDtl.forEach(dataDtl -> {
-            List<XhDxKhBanDauGiaPhanLo> listPhanLo = xhDxKhBanDauGiaPhanLoRepository.findAllByIdDtl(dataDtl.getId());
-            xhDxKhBanDauGiaPhanLoRepository.deleteAll(listPhanLo);
-        });
+        List<Long> idHdr = list.stream().map(XhDxKhBanDauGia::getId).collect(Collectors.toList());
+        List<XhDxKhBanDauGiaDtl> listDtl = xhDxKhBanDauGiaDtlRepository.findByIdHdrIn(idHdr);
+        List<Long> idDtl = listDtl.stream().map(XhDxKhBanDauGiaDtl::getId).collect(Collectors.toList());
+        List<XhDxKhBanDauGiaPhanLo> listPhanLo = xhDxKhBanDauGiaPhanLoRepository.findByIdDtlIn(idDtl);
+        xhDxKhBanDauGiaPhanLoRepository.deleteAll(listPhanLo);
         xhDxKhBanDauGiaDtlRepository.deleteAll(listDtl);
         xhDxKhBanDauGiaRepository.deleteAll(list);
     }
