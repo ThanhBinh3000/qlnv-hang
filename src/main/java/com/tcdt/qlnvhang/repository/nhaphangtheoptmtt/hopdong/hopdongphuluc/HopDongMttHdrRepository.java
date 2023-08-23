@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,5 +48,8 @@ public interface HopDongMttHdrRepository extends JpaRepository<HopDongMttHdr, Lo
   List<HopDongMttHdr> findAllByIdQdPdSldd(Long idQdPdKqSldd);
 
   void deleteAllByIdQdPdSldd(Long idQdPdKqSldd);
+
+  @Transactional
+  List<HopDongMttHdr> findByIdIn(Collection<Long> ids);
 
 }
