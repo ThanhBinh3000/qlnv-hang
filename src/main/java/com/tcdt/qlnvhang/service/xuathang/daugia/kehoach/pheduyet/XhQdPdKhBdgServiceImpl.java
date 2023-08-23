@@ -233,15 +233,6 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
                         dataPhanLoDtl.setTenLoKho(StringUtils.isEmpty(dataPhanLoDtl.getMaLoKho()) ? null : mapDmucDvi.get(dataPhanLoDtl.getMaLoKho()));
                         dataPhanLoDtl.setTenLoaiVthh(StringUtils.isEmpty(dataPhanLoDtl.getLoaiVthh()) ? null : mapVthh.get(dataPhanLoDtl.getLoaiVthh()));
                         dataPhanLoDtl.setTenCloaiVthh(StringUtils.isEmpty(dataPhanLoDtl.getCloaiVthh()) ? null : mapVthh.get(dataPhanLoDtl.getCloaiVthh()));
-                        if (dataDtl.getCloaiVthh().startsWith("02")) {
-                            BigDecimal donGiaDuocDuyet;
-                            donGiaDuocDuyet = xhDxKhBanDauGiaRepository.getDonGiaDuocDuyetVt(dataDtl.getCloaiVthh(), data.getNam());
-                            dataPhanLoDtl.setDonGiaDuocDuyet(donGiaDuocDuyet);
-                        } else {
-                            BigDecimal donGiaDuocDuyet;
-                            donGiaDuocDuyet = xhDxKhBanDauGiaRepository.getDonGiaDuocDuyetLt(dataDtl.getCloaiVthh(), dataPhanLo.getMaDvi(), data.getNam());
-                            dataPhanLoDtl.setDonGiaDuocDuyet(donGiaDuocDuyet);
-                        }
                     });
                     dataPhanLo.setTenDvi(StringUtils.isEmpty(dataPhanLo.getMaDvi()) ? null : mapDmucDvi.get(dataPhanLo.getMaDvi()));
                     dataPhanLo.setChildren(qdPhanLoDtl);

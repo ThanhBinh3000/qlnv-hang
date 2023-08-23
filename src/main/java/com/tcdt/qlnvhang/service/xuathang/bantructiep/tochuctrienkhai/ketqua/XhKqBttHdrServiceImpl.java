@@ -309,18 +309,18 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
         ex.export();
     }
 
-//    @Override
-//    public XhKqBttTchuc detailToChuc(Long id) throws Exception {
-//        if (org.apache.commons.lang3.ObjectUtils.isEmpty(id)){
-//            throw new Exception("Không tồn tại bản ghi.");
-//        }
-//        Optional<XhKqBttTchuc> byIdTc = xhKqBttTchucRepository.findById(id);
-//        if (!byIdTc.isPresent()){
-//            throw new UnsupportedOperationException("Bản ghi không tồn tại.");
-//        }
-//        XhKqBttTchuc tchuc = byIdTc.get();
-//        XhKqBttDdiem ddiem = xhKqBttDdiemRepository.findById(tchuc.getIdDdiem()).get();
-//        tchuc.setXhKqBttDdiem(ddiem);
-//        return tchuc;
-//    }
+
+    public XhTcTtinBtt detailToChuc(Long id) throws Exception {
+        if (org.apache.commons.lang3.ObjectUtils.isEmpty(id)) {
+            throw new Exception("Không tồn tại bản ghi.");
+        }
+        Optional<XhTcTtinBtt> byIdTc = xhTcTtinBttRepository.findById(id);
+        if (!byIdTc.isPresent()) {
+            throw new UnsupportedOperationException("Bản ghi không tồn tại.");
+        }
+        XhTcTtinBtt tchuc = byIdTc.get();
+//        XhQdPdKhBttDviDtl dviDtl = xhQdPdKhBttDviDtlRepository.findById(tchuc.getIdDviDtl()).get();
+//        tchuc.setXhQdPdKhBttDviDtl(dviDtl);
+        return tchuc;
+    }
 }

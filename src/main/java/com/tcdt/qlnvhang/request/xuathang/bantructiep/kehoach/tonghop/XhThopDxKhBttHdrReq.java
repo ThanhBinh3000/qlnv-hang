@@ -27,6 +27,7 @@ public class XhThopDxKhBttHdrReq extends XhThopChiTieuReq {
     private Long idSoQdPd;
     private String soQdPd;
     private String trangThai;
+    private String ghiChu;
     private LocalDate ngayGuiDuyet;
     private Long nguoiGuiDuyetId;
     private LocalDate ngayPduyet;

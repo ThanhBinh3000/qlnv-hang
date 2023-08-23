@@ -62,34 +62,6 @@ public interface XhDxKhBanTrucTiepHdrRepository extends JpaRepository<XhDxKhBanT
     @Query(value = "UPDATE XH_DX_KH_BAN_TRUC_TIEP_HDR SET TRANG_THAI_TH = :trangThaiTh , ID_THOP = :idTh WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
     void updateStatusInList(List<String> soDxuatList, String trangThaiTh, Long idTh);
 
-    @Query(value = " SELECT dtl.GIA_QD_TCDT FROM KH_PAG_TT_CHUNG dtl " +
-            "JOIN KH_PAG_GCT_QD_TCDTNN hdr ON dtl.QD_TCDTNN_ID = hdr.ID " +
-            " WHERE hdr.TRANG_THAI = '29' AND LOAI_GIA = 'LG04'  AND dtl.CLOAI_VTHH = :cloaiVthh AND hdr.NAM_KE_HOACH = :namKhoach AND hdr.NGAY_HIEU_LUC <= SYSDATE " +
-            " FETCH FIRST 1 ROWS ONLY ",
-            nativeQuery = true)
-    BigDecimal getDonGiaDuocDuyetVt(String cloaiVthh, Integer namKhoach);
-
-    @Query(value = " SELECT dtl.GIA_QD_TCDTNN FROM KH_PAG_TONG_HOP_CTIET dtl " +
-            "JOIN KH_PAG_GCT_QD_TCDTNN hdr ON dtl.QD_TCDTNN_ID = hdr.ID " +
-            " WHERE hdr.TRANG_THAI = '29' AND hdr.LOAI_GIA = 'LG04'  AND hdr.CLOAI_VTHH = :cloaiVthh AND dtl.MA_CHI_CUC = :maDvi AND hdr.NAM_KE_HOACH = :namKhoach AND hdr.NGAY_HIEU_LUC <= SYSDATE " +
-            " FETCH FIRST 1 ROWS ONLY ",
-            nativeQuery = true)
-    BigDecimal getDonGiaDuocDuyetLt(String cloaiVthh, String maDvi, Integer namKhoach);
-
-    @Query(value = " SELECT dtl.GIA_QD_BTC FROM KH_PAG_TT_CHUNG dtl " +
-            "JOIN KH_PAG_QD_BTC hdr ON dtl.QD_BTC_ID = hdr.ID " +
-            " WHERE hdr.TRANG_THAI = '29' AND hdr.LOAI_GIA = 'LG02'  AND dtl.LOAI_VTHH = :cloaiVthh AND hdr.NAM_KE_HOACH = :namKhoach AND hdr.NGAY_HIEU_LUC <= SYSDATE " +
-            " FETCH FIRST 1 ROWS ONLY ",
-            nativeQuery = true)
-    BigDecimal getGiaBanToiThieuVt(String cloaiVthh, Integer namKhoach);
-
-    @Query(value = " SELECT dtl.GIA_QD_BTC FROM KH_PAG_QD_BTC_CTIET dtl " +
-            "JOIN KH_PAG_QD_BTC hdr ON dtl.QD_BTC_ID = hdr.ID " +
-            " WHERE hdr.TRANG_THAI = '29' AND hdr.LOAI_GIA = 'LG02'  AND hdr.CLOAI_VTHH = :cloaiVthh AND dtl.MA_DVI = :maDvi AND hdr.NAM_KE_HOACH = :namKhoach AND hdr.NGAY_HIEU_LUC <= SYSDATE " +
-            " FETCH FIRST 1 ROWS ONLY ",
-            nativeQuery = true)
-    BigDecimal getGiaBanToiThieuLt(String cloaiVthh, String maDvi, Integer namKhoach);
-
     Optional<XhDxKhBanTrucTiepHdr> findBySoDxuat(String soDxuat);
 
     List<XhDxKhBanTrucTiepHdr> findByIdIn(List<Long> idDxList);
