@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.service.xuathang.daugia.kehoach.tonghop;
 
-import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdg;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaRepository;
@@ -32,12 +31,10 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class XhThopDxKhBdgService extends BaseServiceImpl {
@@ -47,7 +44,8 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
     @Autowired
     private XhDxKhBanDauGiaRepository xhDxKhBanDauGiaRepository;
     @Autowired
-    XhDxKhBanDauGiaServiceImpl xhDxKhBanDauGiaServiceImpl;
+    private XhDxKhBanDauGiaServiceImpl xhDxKhBanDauGiaServiceImpl;
+
     public Page<XhThopDxKhBdg> searchPage(CustomUserDetails currentUser, SearchXhThopDxKhBdg req) throws Exception {
         req.setDvql(currentUser.getDvql());
         if (!DataUtils.isNullObject(req.getNgayThopTu())) {
@@ -188,7 +186,6 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         xhThopDxKhBdgRepository.deleteAll(list);
     }
 
-
     public void export(CustomUserDetails currentUser, SearchXhThopDxKhBdg req, HttpServletResponse response) throws Exception {
         PaggingReq paggingReq = new PaggingReq();
         paggingReq.setPage(0);
@@ -231,11 +228,10 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
             XhThopDxKhBdg xhThopDxKhBdg = detail.get(0);
             List<Long> listIdChild = xhThopDxKhBdg.getChildren().stream().map(XhThopDxKhBdgDtl::getIdDxHdr).collect(Collectors.toList());
             List<XhDxKhBanDauGia> tableData = xhDxKhBanDauGiaServiceImpl.detail(listIdChild);
-
             HashMap<Object, Object> hashMap = new HashMap<>();
-            hashMap.put("nam",xhThopDxKhBdg.getNamKh());
-            hashMap.put("tenCloaiVthh",xhThopDxKhBdg.getTenCloaiVthh().toUpperCase());
-            hashMap.put("table",tableData);
+            hashMap.put("nam", xhThopDxKhBdg.getNamKh());
+            hashMap.put("tenCloaiVthh", xhThopDxKhBdg.getTenCloaiVthh().toUpperCase());
+            hashMap.put("table", tableData);
             String s = objectMapper.writeValueAsString(hashMap);
             return docxToPdfConverter.convertDocxToPdf(inputStream, hashMap);
         } catch (IOException e) {

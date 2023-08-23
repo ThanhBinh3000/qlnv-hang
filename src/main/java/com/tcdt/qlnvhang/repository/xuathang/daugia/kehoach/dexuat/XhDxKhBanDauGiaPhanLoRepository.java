@@ -10,4 +10,6 @@ public interface XhDxKhBanDauGiaPhanLoRepository extends JpaRepository<XhDxKhBan
     void deleteAllByIdDtl(Long idDtl);
 
     List<XhDxKhBanDauGiaPhanLo> findAllByIdDtl(Long idDtl);
+
+    List<XhDxKhBanDauGiaPhanLo> findByIdDtlIn(List<Long> listId);
 }

@@ -40,7 +40,7 @@ public class XhQdPdKhBttDtlReq {
     private String kieuNx;
     private LocalDate ngayMkho;
     private LocalDate ngayKthuc;
-    private String ghiChu;
+    private String ghiChuChaoGia;
     private LocalDate thoiHanBan;
     private List<FileDinhKemReq> fileUyQuyen = new ArrayList<>();
     private List<FileDinhKemReq> fileBanLe = new ArrayList<>();
