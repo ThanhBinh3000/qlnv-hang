@@ -44,6 +44,7 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -590,7 +591,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
             ReportTemplate model = findByTenFile(reportTemplateRequest);
             byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
             ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-//      FileInputStream inputStream = new FileInputStream("src/main/resources/Quyết định phê duyệt kế hoạch bán đấu giá.docx");
+//      FileInputStream inputStream = new FileInputStream("src/main/resources/reports/bandaugia/Quyết định phê duyệt kế hoạch bán đấu giá.docx");
             XhQdPdKhBdg detail = this.detail(DataUtils.safeToLong(body.get("id")));
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
         } catch (IOException e) {
