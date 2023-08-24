@@ -110,7 +110,7 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
         data.setDiaDiemChaoGia(req.getDiaDiemChaoGia());
         data.setNgayMkho(req.getNgayMkho());
         data.setNgayKthuc(req.getNgayKthuc());
-        data.setGhiChu(req.getGhiChu());
+        data.setGhiChuChaoGia(req.getGhiChuChaoGia());
         data.setThoiHanBan(req.getThoiHanBan());
         data.setTrangThai(Contains.DANGCAPNHAT);
         if (req.getPthucBanTrucTiep().equals(Contains.UY_QUYEN)) {
@@ -158,11 +158,11 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
         Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
         Map<String, String> mapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
         List<XhQdPdKhBttDtl> allById = xhQdPdKhBttDtlRepository.findAllById(ids);
-        allById.forEach(data -> {
+        for (XhQdPdKhBttDtl data : allById) {
             List<XhQdPdKhBttDvi> dvi = xhQdPdKhBttDviRepository.findAllByIdDtl(data.getId());
-            dvi.forEach(dataDvi -> {
+            for (XhQdPdKhBttDvi dataDvi : dvi) {
                 List<XhQdPdKhBttDviDtl> dviDtl = xhQdPdKhBttDviDtlRepository.findAllByIdDvi(dataDvi.getId());
-                dviDtl.forEach(dataDviDtl -> {
+                for (XhQdPdKhBttDviDtl dataDviDtl : dviDtl) {
                     List<XhTcTtinBtt> toChuc = xhTcTtinBttRepository.findAllByIdDviDtl(dataDviDtl.getId());
                     toChuc.forEach(dataToChuc -> {
                         List<FileDinhKem> fileDinhKems = fileDinhKemService.search(dataToChuc.getId(), Arrays.asList(XhTcTtinBtt.TABLE_NAME));
@@ -177,10 +177,10 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
                     dataDviDtl.setTenLoaiVthh(StringUtils.isEmpty(dataDviDtl.getLoaiVthh()) ? null : mapDmucVthh.get(dataDviDtl.getLoaiVthh()));
                     dataDviDtl.setTenCloaiVthh(StringUtils.isEmpty(dataDviDtl.getCloaiVthh()) ? null : mapDmucVthh.get(dataDviDtl.getCloaiVthh()));
                     dataDviDtl.setChildren(toChuc);
-                });
+                }
                 dataDvi.setTenDvi(StringUtils.isEmpty(dataDvi.getMaDvi()) ? null : mapDmucDvi.get(dataDvi.getMaDvi()));
                 dataDvi.setChildren(dviDtl);
-            });
+            }
             data.setTenDvi(StringUtils.isEmpty(data.getMaDvi()) ? null : mapDmucDvi.get(data.getMaDvi()));
             data.setTenLoaiHinhNx(StringUtils.isEmpty(data.getLoaiHinhNx()) ? null : mapLoaiHinhNx.get(data.getLoaiHinhNx()));
             data.setTenKieuNx(StringUtils.isEmpty(data.getKieuNx()) ? null : mapKieuNx.get(data.getKieuNx()));
@@ -199,9 +199,8 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
                     List<FileDinhKem> fileBanLe = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBttDtl.TABLE_NAME + "_BAN_LE"));
                     data.setFileBanLe(fileBanLe);
                 }
-
             }
-        });
+        }
         return allById;
     }
 
