@@ -50,9 +50,10 @@ public interface HhQdKhlcntHdrRepository extends BaseRepository<HhQdKhlcntHdr, L
 			" AND (:soQd IS NULL OR QDKHLCNT.SO_QD = :soQd) "+
 			" AND (:tuNgayQd IS NULL OR QDKHLCNT.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
 			" AND (:denNgayQd IS NULL OR QDKHLCNT.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) " +
-			" AND (:trangThai IS NULL OR QDKHLCNT.TRANG_THAI = :trangThai) ",
+			" AND (:trangThai IS NULL OR QDKHLCNT.TRANG_THAI = :trangThai) " +
+			" AND (:lastest IS NULL OR QDKHLCNT.LASTEST = :lastest) ",
 			nativeQuery = true)
-	List<HhQdKhlcntHdr> selectAll(Integer namKh, String loaiVthh, String cloaiVthh, String soQd, String tuNgayQd, String denNgayQd,String trangThai);
+	List<HhQdKhlcntHdr> selectAll(Integer namKh, String loaiVthh, String cloaiVthh, String soQd, String tuNgayQd, String denNgayQd,String trangThai, Integer lastest);
 
 
 

@@ -10,15 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "XH_QD_PD_KH_BTT_DVI_DTL")
+@Table(name = XhQdPdKhBttDviDtl.TABLE_NAME)
 @Data
 public class XhQdPdKhBttDviDtl implements Serializable {
     private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "XH_QD_PD_KH_BDG_PL_DTL";
+    public static final String TABLE_NAME = "XH_QD_PD_KH_BTT_DVI_DTL";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_QD_PD_KH_BTT_DVI_DTL_SEQ")
-    @SequenceGenerator(sequenceName = "XH_QD_PD_KH_BTT_DVI_DTL_SEQ", allocationSize = 1, name = "XH_QD_PD_KH_BTT_DVI_DTL_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhQdPdKhBttDviDtl.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = XhQdPdKhBttDviDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhQdPdKhBttDviDtl.TABLE_NAME + "_SEQ")
     private Long id;
     private Long idDvi;
     private String maDiemKho;
@@ -33,6 +33,7 @@ public class XhQdPdKhBttDviDtl implements Serializable {
     private BigDecimal donGiaDuocDuyet;
     private String loaiVthh;
     private String cloaiVthh;
+    private Boolean typeQdKq;
     @Transient
     private String tenDiemKho;
     @Transient

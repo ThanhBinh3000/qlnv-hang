@@ -11,6 +11,7 @@ import java.util.Date;
 public class SearchHhQdGiaoNvNhReq extends BaseRequest {
     private Integer namNhap;
     private String soQd;
+    private String soPnk;
     private String loaiVthh;
     private String cloaiVthh;
     private String trichyeu;
@@ -41,5 +42,9 @@ public class SearchHhQdGiaoNvNhReq extends BaseRequest {
     Date tuNgayGiamDinh;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     Date denNgayGiamDinh;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    Date tuNgayNkho;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    Date denNgayNkho;
 
 }

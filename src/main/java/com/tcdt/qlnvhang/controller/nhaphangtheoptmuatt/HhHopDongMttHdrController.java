@@ -161,6 +161,23 @@ public class HhHopDongMttHdrController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
+    @ApiOperation(value = "Lấy thông tin nhiều hợp đồng", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value =  PathContains.URL_CHI_TIET + "/multi", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> dsHDongByListId(@Valid @RequestBody IdSearchReq idSearchReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(hopDongMttHdrService.dsHDongByListId(idSearchReq.getIds()));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Xoá thông tin : {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
     @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin", response = List.class)
     @PostMapping(value =  PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> updateStatus(@Valid HttpServletRequest req, @RequestBody HopDongMttHdrReq stReq) {

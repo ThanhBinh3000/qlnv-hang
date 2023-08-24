@@ -13,9 +13,14 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.tonghop.XhThopDxKhBdgDtl;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.tonghop.XhThopDxKhBdg;
+import com.tcdt.qlnvhang.service.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaServiceImpl;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,6 +30,8 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,6 +43,8 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
     private XhThopDxKhBdgRepository xhThopDxKhBdgRepository;
     @Autowired
     private XhDxKhBanDauGiaRepository xhDxKhBanDauGiaRepository;
+    @Autowired
+    private XhDxKhBanDauGiaServiceImpl xhDxKhBanDauGiaServiceImpl;
 
     public Page<XhThopDxKhBdg> searchPage(CustomUserDetails currentUser, SearchXhThopDxKhBdg req) throws Exception {
         req.setDvql(currentUser.getDvql());
@@ -177,7 +186,6 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         xhThopDxKhBdgRepository.deleteAll(list);
     }
 
-
     public void export(CustomUserDetails currentUser, SearchXhThopDxKhBdg req, HttpServletResponse response) throws Exception {
         PaggingReq paggingReq = new PaggingReq();
         paggingReq.setPage(0);
@@ -206,5 +214,31 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
+    }
+
+    public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
+        try {
+            ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
+            reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
+            ReportTemplate model = findByTenFile(reportTemplateRequest);
+            byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+//      FileInputStream inputStream = new FileInputStream("src/main/resources/Tổng hợp kế hoạch bán đấu giá.docx");
+            List<XhThopDxKhBdg> detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
+            XhThopDxKhBdg xhThopDxKhBdg = detail.get(0);
+            List<Long> listIdChild = xhThopDxKhBdg.getChildren().stream().map(XhThopDxKhBdgDtl::getIdDxHdr).collect(Collectors.toList());
+            List<XhDxKhBanDauGia> tableData = xhDxKhBanDauGiaServiceImpl.detail(listIdChild);
+            HashMap<Object, Object> hashMap = new HashMap<>();
+            hashMap.put("nam", xhThopDxKhBdg.getNamKh());
+            hashMap.put("tenCloaiVthh", xhThopDxKhBdg.getTenCloaiVthh().toUpperCase());
+            hashMap.put("table", tableData);
+            String s = objectMapper.writeValueAsString(hashMap);
+            return docxToPdfConverter.convertDocxToPdf(inputStream, hashMap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
