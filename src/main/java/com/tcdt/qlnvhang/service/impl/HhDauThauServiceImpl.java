@@ -68,9 +68,6 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
     private HhDchinhDxKhLcntHdrRepository hhDchinhDxKhLcntHdrRepository;
 
     @Autowired
-    private HhDchinhDxKhLcntDsgthauRepository gThauRepository;
-
-    @Autowired
     private HhQdPduyetKqlcntDtlRepository hhQdPduyetKqlcntDtlRepository;
 
     @Autowired
@@ -398,7 +395,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
             if (qOptional.get().getDieuChinh().equals(Boolean.TRUE)) {
                 Optional<HhDchinhDxKhLcntHdr> dchinhDxKhLcntHdr = hhDchinhDxKhLcntHdrRepository.findByIdQdGocAndLastest(qOptional.get().getId(), Boolean.TRUE);
                 if (dchinhDxKhLcntHdr.isPresent()) {
-                    List<HhDchinhDxKhLcntDsgthau> gThauList = gThauRepository.findAllByIdDcDxHdr(dchinhDxKhLcntHdr.get().getId());
+                    List<HhDchinhDxKhLcntDsgthau> gThauList = dchinhDxKhLcntDsgthauRepository.findAllByIdDcDxHdr(dchinhDxKhLcntHdr.get().getId());
 
                     for(HhDchinhDxKhLcntDsgthau gThau : gThauList){
                         DsGthauPreview gthauPreview = new DsGthauPreview();

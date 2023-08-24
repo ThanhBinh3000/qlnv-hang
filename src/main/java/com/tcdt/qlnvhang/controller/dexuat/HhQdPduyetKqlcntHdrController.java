@@ -9,8 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tcdt.qlnvhang.request.search.HhDthauSearchReq;
-import com.tcdt.qlnvhang.request.search.HhDxuatKhLcntSearchReq;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -255,5 +253,20 @@ public class HhQdPduyetKqlcntHdrController extends BaseController {
 		}
 	}
 
-
+	@ApiOperation(value = "Xem trước", response = List.class)
+	@PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> preview(@RequestBody HhQdPduyetKqlcntHdrReq objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.preview(objReq));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Xem trước: {?}", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
 }

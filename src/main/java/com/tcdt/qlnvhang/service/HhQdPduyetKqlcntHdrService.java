@@ -4,7 +4,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import com.tcdt.qlnvhang.request.object.HhQdKhlcntHdrReq;
 import com.tcdt.qlnvhang.response.dauthauvattu.HhQdPduyetKqlcntRes;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import org.springframework.data.domain.Page;
 
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -48,4 +50,5 @@ public interface HhQdPduyetKqlcntHdrService {
 
 	void exportList(@Valid @RequestBody HhQdPduyetKqlcntSearchReq req, HttpServletResponse response) throws  Exception;
 	void exportListHd(@Valid @RequestBody HhQdPduyetKqlcntSearchReq req, HttpServletResponse response) throws  Exception;
+	ReportTemplateResponse preview(HhQdPduyetKqlcntHdrReq objReq) throws Exception;
 }
