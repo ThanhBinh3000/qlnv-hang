@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.request.xuathang.bantructiep.dieuchinh;
 
 import lombok.Data;
 
-import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,22 +9,12 @@ import java.util.List;
 @Data
 public class XhQdDchinhKhBttSlReq {
     private Long id;
-
     private Long idDtl;
-
-    private BigDecimal soLuongChiCuc;
-
     private String maDvi;
-
+    private BigDecimal soLuongChiCuc;
     private String diaChi;
-
     private BigDecimal soLuongChiTieu;
-
     private BigDecimal soLuongKhDaDuyet;
-
     private String donViTinh;
-
-    @Transient
-    private List<XhQdDchinhKhBttSlDtlReq> children= new ArrayList<>();
-
+    private List<XhQdDchinhKhBttSlDtlReq> children = new ArrayList<>();
 }

@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.repository.xuathang.bantructiep.dieuchinh;
 
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.dieuchinh.XhQdDchinhKhBttSl;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgPl;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +11,7 @@ public interface XhQdDchinhKhBttSlRepository extends JpaRepository<XhQdDchinhKhB
 
     void deleteAllByIdDtl(Long idDtl);
 
+    List<XhQdDchinhKhBttSl> findAllByIdDtl(Long idDtl);
 
-    List<XhQdDchinhKhBttSl> findByIdDtl(Long idDtl);
+    List<XhQdDchinhKhBttSl> findByIdDtlIn(List<Long> listId);
 }
