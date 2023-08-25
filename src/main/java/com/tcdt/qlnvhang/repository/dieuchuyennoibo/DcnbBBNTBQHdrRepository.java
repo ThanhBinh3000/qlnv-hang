@@ -69,5 +69,5 @@ public interface DcnbBBNTBQHdrRepository extends JpaRepository<DcnbBBNTBQHdr, Lo
             "AND (:#{#param.maNganKho} IS NULL OR LOWER(c.maNganKho) = :#{#param.maNganKho}) " +
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
             "ORDER BY c.nam desc, c.id desc")
-    List<DcnbBBNTBQHdrDTO> list(@Param("param") DcnbBBNTBQHdrReq req);
+    List<DcnbBBNTBQHdr> list(@Param("param") DcnbBBNTBQHdrReq req);
 }
