@@ -59,13 +59,13 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         req.setMaDvi(currentUser.getDvql());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbPhieuNhapKhoHdrDTO> searchDto = null;
-        if(req.getIsVatTu() == null){
+        if (req.getIsVatTu() == null) {
             req.setIsVatTu(false);
         }
-        if(req.getIsVatTu()){
+        if (req.getIsVatTu()) {
             req.setDsLoaiHang(Arrays.asList("VT"));
-        }else {
-            req.setDsLoaiHang(Arrays.asList("LT","M"));
+        } else {
+            req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         searchDto = hdrRepository.searchPage(req, pageable);
@@ -97,16 +97,16 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         double sum = req.getChildren().stream().map(DcnbPhieuNhapKhoDtl::getThucTeKinhPhi).mapToDouble(BigDecimal::doubleValue).sum();
         data.setTongKinhPhi(new BigDecimal(sum));
         DcnbPhieuNhapKhoHdr created = hdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/PNK-"+ userInfo.getDvqlTenVietTat();
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/PNK-" + userInfo.getDvqlTenVietTat();
         created.setSoPhieuNhapKho(so);
         hdrRepository.save(created);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbPhieuNhapKhoHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
         // lưu biên bản nghiệp thu bảo quản lần đầu
         List<DcnbBBNTBQHdr> bbntbqHdrList = new ArrayList<>();
-        if(created.getMaLoKho() == null){
+        if (created.getMaLoKho() == null) {
             bbntbqHdrList = dcnbBBNTBQHdrRepository.findByQdDcCucIdAndMaNganKho(created.getQdDcCucId(), created.getMaNganKho());
-        }else {
+        } else {
             bbntbqHdrList = dcnbBBNTBQHdrRepository.findByQdDcCucIdAndMaNganKhoAndMaLoKho(created.getQdDcCucId(), created.getMaNganKho(), created.getMaLoKho());
         }
         String bbntbqld = bbntbqHdrList.stream().map(DcnbBBNTBQHdr::getSoBban).collect(Collectors.joining(","));
@@ -132,7 +132,7 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         BeanUtils.copyProperties(req, data);
         data.setChildren(req.getChildren());
         DcnbPhieuNhapKhoHdr update = hdrRepository.save(data);
-        String so = update.getId() + "/" + (new Date().getYear() + 1900) +"/PNK-"+ userInfo.getDvqlTenVietTat();
+        String so = update.getId() + "/" + (new Date().getYear() + 1900) + "/PNK-" + userInfo.getDvqlTenVietTat();
         update.setSoPhieuNhapKho(so);
         double sum = req.getChildren().stream().map(DcnbPhieuNhapKhoDtl::getThucTeKinhPhi).mapToDouble(BigDecimal::doubleValue).sum();
         data.setTongKinhPhi(new BigDecimal(sum));
@@ -142,9 +142,9 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         update.setFileDinhKems(canCu);
         // lưu biên bản nghiệp thu bảo quản lần đầu
         List<DcnbBBNTBQHdr> bbntbqHdrList = new ArrayList<>();
-        if(update.getMaLoKho() == null){
+        if (update.getMaLoKho() == null) {
             bbntbqHdrList = dcnbBBNTBQHdrRepository.findByQdDcCucIdAndMaNganKho(update.getQdDcCucId(), update.getMaNganKho());
-        }else {
+        } else {
             bbntbqHdrList = dcnbBBNTBQHdrRepository.findByQdDcCucIdAndMaNganKhoAndMaLoKho(update.getQdDcCucId(), update.getMaNganKho(), update.getMaLoKho());
         }
         String bbntbqld = bbntbqHdrList.stream().map(DcnbBBNTBQHdr::getSoBban).collect(Collectors.joining(","));
@@ -187,7 +187,7 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
                 hdr.setNgayGDuyet(LocalDate.now());
                 break;
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
-                if(hdr.getIdLanhDao() ==null){
+                if (hdr.getIdLanhDao() == null) {
                     hdr.setIdLanhDao(userInfo.getId());
                     hdr.setTenLanhDao(userInfo.getFullName());
                 }
@@ -196,7 +196,7 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
-                if(hdr.getIdLanhDao() ==null){
+                if (hdr.getIdLanhDao() == null) {
                     hdr.setIdLanhDao(userInfo.getId());
                     hdr.setTenLanhDao(userInfo.getFullName());
                 }
@@ -211,6 +211,25 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
 //                dataLinkDtl.setHdrId(dataLink.getId());
 //                dataLinkDtl.setType(DcnbPhieuNhapKhoHdr.TABLE_NAME);
 //                dcnbDataLinkDtlRepository.save(dataLinkDtl);
+
+                List<DcnbBBNTBQHdr> bbntbqHdrList = new ArrayList<>();
+                if (hdr.getMaLoKho() == null) {
+                    bbntbqHdrList = dcnbBBNTBQHdrRepository.findByQdDcCucIdAndMaNganKho(hdr.getQdDcCucId(), hdr.getMaNganKho());
+                } else {
+                    bbntbqHdrList = dcnbBBNTBQHdrRepository.findByQdDcCucIdAndMaNganKhoAndMaLoKho(hdr.getQdDcCucId(), hdr.getMaNganKho(), hdr.getMaLoKho());
+                }
+
+                // lưu biên bản nghiệp thu bảo quản lần đầu
+                for (DcnbBBNTBQHdr hdrbq : bbntbqHdrList) {
+                    if (hdrbq.getDsPhieuNhapKho() == null) {
+                        hdrbq.setDsPhieuNhapKho(hdr.getSoPhieuNhapKho());
+                        hdrbq.setSlThucNhapDc(hdr.getTongSoLuong());
+                    } else {
+                        hdrbq.setDsPhieuNhapKho(hdrbq.getDsPhieuNhapKho() + "," + hdr.getSoPhieuNhapKho());
+                        hdrbq.setSlThucNhapDc(hdrbq.getSlThucNhapDc().add(hdr.getTongSoLuong()));
+                    }
+                    dcnbBBNTBQHdrRepository.save(hdrbq);
+                }
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -257,15 +276,16 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
         objReq.setMaDvi(currentUser.getDvql());
         objReq.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
-        if(objReq.getIsVatTu() == null){
+        if (objReq.getIsVatTu() == null) {
             objReq.setIsVatTu(false);
         }
-        if(objReq.getIsVatTu()){
+        if (objReq.getIsVatTu()) {
             objReq.setDsLoaiHang(Arrays.asList("VT"));
-        }else {
-            objReq.setDsLoaiHang(Arrays.asList("LT","M"));
+        } else {
+            objReq.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
-        List<DcnbPhieuNhapKhoHdrListDTO> searchDto =  hdrRepository.searchList(objReq);;
+        List<DcnbPhieuNhapKhoHdrListDTO> searchDto = hdrRepository.searchList(objReq);
+        ;
         return searchDto;
     }
 
@@ -274,15 +294,16 @@ public class DcnbPhieuNhapKhoServiceImpl implements DcnbPhieuNhapKhoService {
         CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
         objReq.setMaDvi(currentUser.getDvql());
         objReq.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
-        if(objReq.getIsVatTu() == null){
+        if (objReq.getIsVatTu() == null) {
             objReq.setIsVatTu(false);
         }
-        if(objReq.getIsVatTu()){
+        if (objReq.getIsVatTu()) {
             objReq.setDsLoaiHang(Arrays.asList("VT"));
-        }else {
-            objReq.setDsLoaiHang(Arrays.asList("LT","M"));
+        } else {
+            objReq.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
-        List<DcnbPhieuNhapKhoHdrListDTO> searchDto =  hdrRepository.searchListChung(objReq);;
+        List<DcnbPhieuNhapKhoHdrListDTO> searchDto = hdrRepository.searchListChung(objReq);
+        ;
         return searchDto;
     }
 }
