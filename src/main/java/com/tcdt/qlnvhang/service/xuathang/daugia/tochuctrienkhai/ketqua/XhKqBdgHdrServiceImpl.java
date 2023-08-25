@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.xuathang.daugia.tochuctrienkhai.ketqua;
 
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdg;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgDtl;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.hopdong.XhHopDongHdrRepository;
@@ -11,11 +12,15 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdr;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +32,9 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -332,6 +340,23 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
     ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
     ex.export();
   }
-
+  @Override
+  public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
+    try {
+//      ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
+//      reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
+//      ReportTemplate model = findByTenFile(reportTemplateRequest);
+//      byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+//      ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+      FileInputStream inputStream = new FileInputStream("src/main/resources/reports/bandaugia/Quyết định phê duyệt kết quả.docx");
+      XhKqBdgHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
+      return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (XDocReportException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
 }
 

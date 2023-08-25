@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class SearchXhCtvtQdGiaoNvXh extends BaseRequest {
+public class SearchXhCtvtQuyetDinhGnv extends BaseRequest {
   private Long id;
   private Integer nam;
   private String maDvi;
   private String dvql;
-  private String soQdPd;
+  private String soQd;
   private String loaiVthh;
   private String trichYeu;
   private LocalDate ngayKyTu;
@@ -22,4 +22,8 @@ public class SearchXhCtvtQdGiaoNvXh extends BaseRequest {
   private String trangThaiXh;
   private List<String> listTrangThaiXh = new ArrayList<>();
   private String type;
+
+  //dung cho chuc nang list cua man hình Qdpd
+  private List<Long> idQdPdList = new ArrayList<>();
+  private Boolean idQdPdNull = false;
 }

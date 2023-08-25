@@ -2,10 +2,8 @@ package com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovien
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
-import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
+import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
-import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThuatDtl;
-import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.phieukncl.XhPhieuKnclHdr;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -90,8 +88,8 @@ public class XhCtvtDeXuatHdr extends BaseEntity implements Serializable {
   @Fetch(value = FetchMode.SUBSELECT)
   @JoinColumn(name = "dataId")
   @Where(clause = "data_type='" + XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU'")
-  private List<FileDKemJoinHoSoKyThuatDtl> canCu = new ArrayList<>();
-  public void setCanCu(List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem) {
+  private List<FileDinhKemJoinTable> canCu = new ArrayList<>();
+  public void setCanCu(List<FileDinhKemJoinTable> fileDinhKem) {
     this.canCu.clear();
     if (!DataUtils.isNullObject(fileDinhKem)) {
       fileDinhKem.forEach(s -> {

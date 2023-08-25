@@ -2,7 +2,7 @@ package com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
-import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
+import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
@@ -129,9 +129,9 @@ public class XhTlTinhKhoHdr extends BaseEntity implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "dataId")
     @Where(clause = "data_type='" + XhTlTinhKhoHdr.TABLE_NAME + "_DINH_KEM'")
-    private List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem = new ArrayList<>();
+    private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
 
-    public void setFileDinhKem(List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem) {
+    public void setFileDinhKem(List<FileDinhKemJoinTable> fileDinhKem) {
         this.fileDinhKem.clear();
         if (!DataUtils.isNullObject(fileDinhKem)) {
             fileDinhKem.forEach(s -> {

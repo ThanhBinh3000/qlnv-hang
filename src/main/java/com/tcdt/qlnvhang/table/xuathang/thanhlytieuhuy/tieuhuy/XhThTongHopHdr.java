@@ -1,8 +1,15 @@
 package com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,6 +17,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = XhThTongHopHdr.TABLE_NAME)
@@ -61,4 +69,37 @@ public class XhThTongHopHdr extends BaseEntity implements Serializable {
 
   @OneToMany(mappedBy = "tongHopHdr", cascade = CascadeType.ALL)
   private List<XhThTongHopDtl> tongHopDtl = new ArrayList<>();
+
+  @JsonIgnore
+  @Transient
+  private Map<String, String> mapDmucDvi;
+
+  public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+    this.mapDmucDvi = mapDmucDvi;
+    if (!DataUtils.isNullObject(getMaDvi())) {
+      setTenDvi(mapDmucDvi.containsKey(getMaDvi()) ? mapDmucDvi.get(getMaDvi()) : null);
+    }
+  }
+
+  public String getTrangThai() {
+    setTenTrangThai(TrangThaiAllEnum.getLabelById(trangThai));
+    return trangThai;
+  }
+
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @Fetch(value = FetchMode.SUBSELECT)
+  @JoinColumn(name = "dataId")
+  @Where(clause = "data_type='" + XhThTongHopHdr.TABLE_NAME + "_FILE_DINH_KEM'")
+  private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
+
+  public void setFileDinhKem(List<FileDinhKemJoinTable> fileDinhKem) {
+    this.fileDinhKem.clear();
+    if (!DataUtils.isNullObject(fileDinhKem)) {
+      fileDinhKem.forEach(s -> {
+        s.setDataType(XhThTongHopHdr.TABLE_NAME + "_FILE_DINH_KEM");
+        s.setXhThTongHopHdr(this);
+      });
+      this.fileDinhKem.addAll(fileDinhKem);
+    }
+  }
 }

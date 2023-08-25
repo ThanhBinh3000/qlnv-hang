@@ -8,7 +8,11 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbQuyetDinhDcCHdr;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface DcnbBBNTBQHdrService extends BaseService<DcnbBBNTBQHdr, DcnbBBNTBQHdrReq,Long> {
 
     public Page<DcnbBBNTBQHdrDTO> searchPage(CustomUserDetails currentUser, DcnbBBNTBQHdrReq req) throws Exception;
+
+    List<DcnbBBNTBQHdr> searchList(CustomUserDetails currentUser, DcnbBBNTBQHdrReq objReq);
 }
