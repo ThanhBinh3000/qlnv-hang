@@ -9,10 +9,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
-public interface XhQdPdKhBdgDtlRepository extends JpaRepository<XhQdPdKhBdgDtl,Long> {
+public interface XhQdPdKhBdgDtlRepository extends JpaRepository<XhQdPdKhBdgDtl, Long> {
 
     @Query("SELECT DISTINCT dtl FROM XhQdPdKhBdgDtl dtl " +
             " left join XhQdPdKhBdg hdr on hdr.id = dtl.idQdHdr WHERE 1=1 " +
@@ -32,7 +33,7 @@ public interface XhQdPdKhBdgDtlRepository extends JpaRepository<XhQdPdKhBdgDtl,L
             " INNER JOIN XH_TC_TTIN_BDG_HDR TTHDR on DTL.ID = TTHDR.ID_QD_PD_DTL" +
             " WHERE TTHDR.KET_QUA = 1 AND DTL.ID = :idQdPdDtl AND DTL.MA_DVI = :maDvi AND TTHDR.TRANG_THAI='45'",
             nativeQuery = true)
-    Integer countSlDviTsanThanhCong(Long idQdPdDtl, String maDvi);
+    BigDecimal countSlDviTsanThanhCong(Long idQdPdDtl, String maDvi);
 
     void deleteAllByIdQdHdr(Long idQdHdr);
 
