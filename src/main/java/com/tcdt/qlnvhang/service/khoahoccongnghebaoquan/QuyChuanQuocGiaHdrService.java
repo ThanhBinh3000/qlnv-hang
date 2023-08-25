@@ -100,6 +100,9 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                     .map(Long::valueOf)
                     .toArray(Long[]::new));
         }
+        if (!ObjectUtils.isEmpty(objReq.getIdVanBanSuaDoi())) {
+            listIdThayThe.add(objReq.getIdVanBanSuaDoi());
+        }
         List<Long> finalListIdThayThe = listIdThayThe;
         List<Long> listHdrCoHieuLuc = allHdrCoHieuLuc.stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList()).stream()
                 .filter(item -> !finalListIdThayThe.contains(item))
@@ -154,6 +157,9 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                     .map(String::trim)
                     .map(Long::valueOf)
                     .toArray(Long[]::new));
+        }
+        if (!ObjectUtils.isEmpty(objReq.getIdVanBanSuaDoi())) {
+            listIdThayThe.add(objReq.getIdVanBanSuaDoi());
         }
         List<Long> finalListIdThayThe = listIdThayThe;
         List<Long> listHdrCoHieuLuc = allHdrCoHieuLuc.stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList()).stream()
