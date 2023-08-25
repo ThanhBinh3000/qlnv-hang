@@ -194,5 +194,25 @@ public class XhPdKqBdgController extends BaseController {
     }
 
 
+    @ApiOperation(value = "Xem truoc", response = List.class)
+    @PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> preview(@RequestBody HashMap<String, Object> body) {
+        BaseResponse resp = new BaseResponse();
+        try {
+      /*ReportTemplateResponse preview = xhQdPdKhBdgService.preview(body);
+      Path destinationFile = Paths.get("src/main/resources", new Date().getTime()+".docx");
+      byte[] decodedImg = Base64.getDecoder()
+          .decode(preview.getWordSrc().getBytes(StandardCharsets.UTF_8));
+      Files.write(destinationFile, decodedImg);*/
 
+            resp.setData(xhKqBdgHdrService.preview(body));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+        }
+        return ResponseEntity.ok(resp);
+    }
 }
