@@ -348,7 +348,7 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl implements XhKqBdgHdr
 //      ReportTemplate model = findByTenFile(reportTemplateRequest);
 //      byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
 //      ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-      FileInputStream inputStream = new FileInputStream("src/main/resources/reports/bandaugia/quyet-dinh.docx");
+      FileInputStream inputStream = new FileInputStream("src/main/resources/reports/bandaugia/Quyết định phê duyệt kết quả.docx");
       XhKqBdgHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
       return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
     } catch (IOException e) {
