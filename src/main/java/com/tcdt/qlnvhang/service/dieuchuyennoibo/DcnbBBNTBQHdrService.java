@@ -14,5 +14,5 @@ public interface DcnbBBNTBQHdrService extends BaseService<DcnbBBNTBQHdr, DcnbBBN
 
     public Page<DcnbBBNTBQHdrDTO> searchPage(CustomUserDetails currentUser, DcnbBBNTBQHdrReq req) throws Exception;
 
-    List<DcnbBBNTBQHdrDTO> searchList(CustomUserDetails currentUser, DcnbBBNTBQHdrReq objReq);
+    List<DcnbBBNTBQHdr> searchList(CustomUserDetails currentUser, DcnbBBNTBQHdrReq objReq);
 }
