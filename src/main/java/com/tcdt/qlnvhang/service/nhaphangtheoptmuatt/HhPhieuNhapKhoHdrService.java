@@ -182,16 +182,16 @@ public class HhPhieuNhapKhoHdrService  extends BaseServiceImpl {
         switch (status){
             case Contains.CHODUYET_LDCC + Contains.DUTHAO:
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
-                optional.get().setNguoiGuiDuyet(getUser().getUsername());
+                optional.get().setNguoiGuiDuyet(getUser().getFullName());
                 optional.get().setNgayGuiDuyet(getDateTimeNow());
                 break;
             case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
-                optional.get().setNguoiPduyet(getUser().getUsername());
+                optional.get().setNguoiPduyet(getUser().getFullName());
                 optional.get().setNgayPduyet(getDateTimeNow());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
             case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
-                optional.get().setNguoiPduyet(getUser().getUsername());
+                optional.get().setNguoiPduyet(getUser().getFullName());
                 optional.get().setNgayPduyet(getDateTimeNow());
                 break;
             default:

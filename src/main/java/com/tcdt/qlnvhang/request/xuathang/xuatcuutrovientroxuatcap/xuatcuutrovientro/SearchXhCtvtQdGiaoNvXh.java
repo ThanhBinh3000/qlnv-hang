@@ -13,7 +13,7 @@ public class SearchXhCtvtQdGiaoNvXh extends BaseRequest {
   private Integer nam;
   private String maDvi;
   private String dvql;
-  private String soQd;
+  private String soQdPd;
   private String loaiVthh;
   private String trichYeu;
   private LocalDate ngayKyTu;

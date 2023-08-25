@@ -93,7 +93,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
       throw new Exception("Bad request.");
     }
     if (!DataUtils.isNullObject(objReq.getSoQd())) {
-      Optional<XhCtvtQuyetDinhPdHdr> optional = xhCtvtQdPdHdrRepository.findBySoQd(objReq.getSoQd());
+      Optional<XhCtvtQuyetDinhPdHdr> optional = xhCtvtQdPdHdrRepository.findBySoBbQd(objReq.getSoQd());
       if (optional.isPresent()) {
         throw new Exception("số quyết định đã tồn tại");
       }
@@ -108,7 +108,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     if (!DataUtils.isNullOrEmpty(created.getMaTongHop())) {
       Optional<XhCtvtTongHopHdr> tongHopHdr = xhCtvtTongHopHdrRepository.findById(created.getIdTongHop());
       XhCtvtTongHopHdr tongHop = tongHopHdr.get();
-      tongHop.setSoQdPd(created.getSoQd());
+      tongHop.setSoQdPd(created.getSoBbQd());
       tongHop.setIdQdPd(created.getId());
       tongHop.setNgayKyQd(created.getNgayKy());
       xhCtvtTongHopHdrRepository.save(tongHop);
@@ -116,7 +116,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     if (!DataUtils.isNullOrEmpty(created.getSoDx())) {
       Optional<XhCtvtDeXuatHdr> deXuatHdr = xhCtvtDeXuatHdrRepository.findById(created.getIdDx());
       XhCtvtDeXuatHdr deXuat = deXuatHdr.get();
-      deXuat.setSoQdPd(created.getSoQd());
+      deXuat.setSoQdPd(created.getSoBbQd());
       deXuat.setIdQdPd(created.getId());
       deXuat.setNgayKyQd(created.getNgayKy());
       xhCtvtDeXuatHdrRepository.save(deXuat);
@@ -133,7 +133,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu cần sửa");
     }
-    Optional<XhCtvtQuyetDinhPdHdr> soDx = xhCtvtQdPdHdrRepository.findBySoQd(objReq.getSoQd());
+    Optional<XhCtvtQuyetDinhPdHdr> soDx = xhCtvtQdPdHdrRepository.findBySoBbQd(objReq.getSoQd());
     if (soDx.isPresent()) {
       if (!soDx.get().getId().equals(objReq.getId())) {
         throw new Exception("số quyết định đã tồn tại");
@@ -271,7 +271,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
       XhCtvtQuyetDinhPdHdr dx = data.get(i);
       objs = new Object[rowsName.length];
       objs[0] = i;
-      objs[1] = dx.getSoQd();
+      objs[1] = dx.getSoBbQd();
       objs[2] = dx.getNgayKy();
       objs[3] = dx.getMaTongHop();
       objs[4] = dx.getNgayThop();

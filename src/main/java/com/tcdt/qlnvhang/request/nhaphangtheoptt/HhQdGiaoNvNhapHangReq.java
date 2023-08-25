@@ -21,7 +21,7 @@ public class HhQdGiaoNvNhapHangReq {
     private Date ngayKyHd;
     private String maDvi;
     private String tenDvi;
-    private Long idHd;
+    private String idHd;
     private String soHd;
     private String tenHd;
     private String loaiQd;

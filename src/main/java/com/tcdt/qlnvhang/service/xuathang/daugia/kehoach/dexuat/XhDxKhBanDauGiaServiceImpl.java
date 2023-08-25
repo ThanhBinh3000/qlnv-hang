@@ -16,9 +16,12 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,6 +32,8 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
@@ -136,9 +141,9 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
         Map<String, String> mapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
         Map<String, String> mapPhuongThucTt = getListDanhMucChung("PHUONG_THUC_TT");
         List<XhDxKhBanDauGia> allById = xhDxKhBanDauGiaRepository.findAllById(ids);
-        allById.forEach(data -> {
+        for (XhDxKhBanDauGia data : allById) {
             List<XhDxKhBanDauGiaDtl> dauGiaDtl = xhDxKhBanDauGiaDtlRepository.findAllByIdHdr(data.getId());
-            dauGiaDtl.forEach(dataDtl -> {
+            for (XhDxKhBanDauGiaDtl dataDtl : dauGiaDtl) {
                 List<XhDxKhBanDauGiaPhanLo> dauGiaPhanLo = xhDxKhBanDauGiaPhanLoRepository.findAllByIdDtl(dataDtl.getId());
                 dauGiaPhanLo.forEach(dataPhanLo -> {
                     dataPhanLo.setTenDiemKho(StringUtils.isEmpty(dataPhanLo.getMaDiemKho()) ? null : mapDmucDvi.get(dataPhanLo.getMaDiemKho()));
@@ -147,19 +152,10 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
                     dataPhanLo.setTenLoKho(StringUtils.isEmpty(dataPhanLo.getMaLoKho()) ? null : mapDmucDvi.get(dataPhanLo.getMaLoKho()));
                     dataPhanLo.setTenLoaiVthh(StringUtils.isEmpty(dataPhanLo.getLoaiVthh()) ? null : mapVthh.get(dataPhanLo.getLoaiVthh()));
                     dataPhanLo.setTenCloaiVthh(StringUtils.isEmpty(dataPhanLo.getCloaiVthh()) ? null : mapVthh.get(dataPhanLo.getCloaiVthh()));
-                    if (dataPhanLo.getCloaiVthh().startsWith("02")) {
-                        BigDecimal donGiaDuocDuyet;
-                        donGiaDuocDuyet = xhDxKhBanDauGiaRepository.getDonGiaDuocDuyetVt(data.getCloaiVthh(), data.getNamKh());
-                        dataPhanLo.setDonGiaDuocDuyet(donGiaDuocDuyet);
-                    } else {
-                        BigDecimal donGiaDuocDuyet;
-                        donGiaDuocDuyet = xhDxKhBanDauGiaRepository.getDonGiaDuocDuyetLt(data.getCloaiVthh(), dataDtl.getMaDvi(), data.getNamKh());
-                        dataPhanLo.setDonGiaDuocDuyet(donGiaDuocDuyet);
-                    }
                 });
                 dataDtl.setTenDvi(StringUtils.isEmpty(dataDtl.getMaDvi()) ? null : mapDmucDvi.get(dataDtl.getMaDvi()));
                 dataDtl.setChildren(dauGiaPhanLo);
-            });
+            }
             data.setMapDmucDvi(mapDmucDvi);
             data.setMapVthh(mapVthh);
             data.setMapLoaiHinhNx(mapLoaiHinhNx);
@@ -167,7 +163,7 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
             data.setMapPhuongThucTt(mapPhuongThucTt);
             data.setTrangThai(data.getTrangThai());
             data.setChildren(dauGiaDtl);
-        });
+        }
         return allById;
     }
 
@@ -206,12 +202,11 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
                 throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp hoặc từ chối");
             }
         }
-        List<Long> listIdDxuat = list.stream().map(XhDxKhBanDauGia::getId).collect(Collectors.toList());
-        List<XhDxKhBanDauGiaDtl> listDtl = xhDxKhBanDauGiaDtlRepository.findByIdHdrIn(listIdDxuat);
-        listDtl.forEach(dataDtl -> {
-            List<XhDxKhBanDauGiaPhanLo> listPhanLo = xhDxKhBanDauGiaPhanLoRepository.findAllByIdDtl(dataDtl.getId());
-            xhDxKhBanDauGiaPhanLoRepository.deleteAll(listPhanLo);
-        });
+        List<Long> idHdr = list.stream().map(XhDxKhBanDauGia::getId).collect(Collectors.toList());
+        List<XhDxKhBanDauGiaDtl> listDtl = xhDxKhBanDauGiaDtlRepository.findByIdHdrIn(idHdr);
+        List<Long> idDtl = listDtl.stream().map(XhDxKhBanDauGiaDtl::getId).collect(Collectors.toList());
+        List<XhDxKhBanDauGiaPhanLo> listPhanLo = xhDxKhBanDauGiaPhanLoRepository.findByIdDtlIn(idDtl);
+        xhDxKhBanDauGiaPhanLoRepository.deleteAll(listPhanLo);
         xhDxKhBanDauGiaDtlRepository.deleteAll(listDtl);
         xhDxKhBanDauGiaRepository.deleteAll(list);
     }
@@ -294,36 +289,20 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
         return xhDxKhBanDauGiaRepository.countSLDalenKh(req.getYear(), req.getLoaiVthh(), req.getMaDvi(), req.getLastest());
     }
 
-    public BigDecimal getGiaBanToiThieu(String cloaiVthh, String maDvi, Integer namKh) {
-        if (cloaiVthh.startsWith("02")) {
-            return xhDxKhBanDauGiaRepository.getGiaBanToiThieuVt(cloaiVthh, namKh);
-        } else {
-            return xhDxKhBanDauGiaRepository.getGiaBanToiThieuLt(cloaiVthh, maDvi, namKh);
-        }
-    }
-
-    public BigDecimal getDonGiaDuocDuyet(String cloaiVthh, String maDvi, Integer nam) {
-        if (cloaiVthh.startsWith("02")) {
-            return xhDxKhBanDauGiaRepository.getDonGiaDuocDuyetVt(cloaiVthh, nam);
-        } else {
-            return xhDxKhBanDauGiaRepository.getDonGiaDuocDuyetLt(cloaiVthh, maDvi, nam);
-        }
-    }
-
     public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
-//        try {
-//            ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
-//            reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
-//            ReportTemplate model = findByTenFile(reportTemplateRequest);
-//            byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-//            ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-//            XhDxKhBanDauGia detail = this.detail(DataUtils.safeToLong(body.get("id")));
-//            return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (XDocReportException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
+            reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
+            ReportTemplate model = findByTenFile(reportTemplateRequest);
+            byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+            List<XhDxKhBanDauGia> detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
+            return docxToPdfConverter.convertDocxToPdf(inputStream, detail.get(0));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 }

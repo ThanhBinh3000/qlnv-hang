@@ -10,9 +10,11 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatkhac.XhXkTongHopRequest;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkDanhSachHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtBbLayMauHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -90,6 +92,8 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
         XhXkTongHopHdr created = xhXkTongHopRepository.save(data);
         created.setMaDanhSach(created.getMaDanhSach() + "_" + created.getId());
         created = xhXkTongHopRepository.save(created);
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtBbLayMauHdr.TABLE_NAME);
+        created.setFileDinhKems(fileDinhKems);
         Long id = created.getId();
         String ma = created.getMaDanhSach();
         //set ma tong hop cho danh sach
@@ -117,11 +121,14 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
         List<XhXkTongHopHdr> allById = xhXkTongHopRepository.findAllById(ids);
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
+
         allById.forEach(data -> {
             data.getTongHopDtl().forEach(s -> {
                 s.setMapDmucDvi(mapDmucDvi);
                 s.setMapVthh(mapVthh);
             });
+            List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhXkVtBbLayMauHdr.TABLE_NAME));
+            data.setFileDinhKems(fileDinhKem);
             data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
             data.setTenDvi(mapDmucDvi.containsKey(data.getMaDvi()) ? mapDmucDvi.get(data.getMaDvi()) : null);
             String maDvql = DataUtils.isNullOrEmpty(data.getMaDvi()) ? data.getMaDvi() : data.getMaDvi().substring(0, data.getMaDvi().length() - 2);
@@ -147,6 +154,7 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
                 xhXkDanhSachRepository.save(item);
             });
         }
+        fileDinhKemService.deleteMultiple(Collections.singleton(data.getId()), Collections.singleton(XhXkVtBbLayMauHdr.TABLE_NAME));
         xhXkTongHopRepository.delete(data);
     }
 

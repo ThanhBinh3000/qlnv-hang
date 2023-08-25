@@ -1,14 +1,9 @@
 package com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
-import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
+import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
-import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhCtvtQdXuatCapHdr;
 import com.tcdt.qlnvhang.util.DataUtils;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
@@ -37,7 +32,7 @@ public class XhCtvtQuyetDinhPdHdr extends BaseEntity implements Serializable {
   private Long id;
   private String maDvi;
   private Integer nam;
-  private String soQd;
+  private String soBbQd;
   private LocalDate ngayKy;
   private LocalDate ngayHluc;
   private Long idTongHop;
@@ -79,8 +74,9 @@ public class XhCtvtQuyetDinhPdHdr extends BaseEntity implements Serializable {
   @Transient
   private String tenTrangThai;
 
-  @OneToMany(mappedBy = "xhCtvtQuyetDinhPdHdr", cascade = CascadeType.ALL,orphanRemoval = true)
+  @OneToMany(mappedBy = "xhCtvtQuyetDinhPdHdr", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<XhCtvtQuyetDinhPdDtl> quyetDinhPdDtl = new ArrayList<>();
+
   public void setQuyetDinhPdDtl(List<XhCtvtQuyetDinhPdDtl> data) {
     quyetDinhPdDtl.clear();
     if (!DataUtils.isNullOrEmpty(data)) {
@@ -95,8 +91,9 @@ public class XhCtvtQuyetDinhPdHdr extends BaseEntity implements Serializable {
   @Fetch(value = FetchMode.SUBSELECT)
   @JoinColumn(name = "dataId")
   @Where(clause = "data_type='" + XhCtvtQuyetDinhPdHdr.TABLE_NAME + "_FILE_DINH_KEM'")
-  private List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem = new ArrayList<>();
-  public void setFileDinhKem(List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem) {
+  private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
+
+  public void setFileDinhKem(List<FileDinhKemJoinTable> fileDinhKem) {
     this.fileDinhKem.clear();
     if (!DataUtils.isNullObject(fileDinhKem)) {
       fileDinhKem.forEach(s -> {
@@ -111,8 +108,9 @@ public class XhCtvtQuyetDinhPdHdr extends BaseEntity implements Serializable {
   @Fetch(value = FetchMode.SUBSELECT)
   @JoinColumn(name = "dataId")
   @Where(clause = "data_type='" + XhCtvtQuyetDinhPdHdr.TABLE_NAME + "_CAN_CU'")
-  private List<FileDKemJoinHoSoKyThuatDtl> canCu = new ArrayList<>();
-  public void setCanCu(List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem) {
+  private List<FileDinhKemJoinTable> canCu = new ArrayList<>();
+
+  public void setCanCu(List<FileDinhKemJoinTable> fileDinhKem) {
     this.canCu.clear();
     if (!DataUtils.isNullObject(fileDinhKem)) {
       fileDinhKem.forEach(s -> {

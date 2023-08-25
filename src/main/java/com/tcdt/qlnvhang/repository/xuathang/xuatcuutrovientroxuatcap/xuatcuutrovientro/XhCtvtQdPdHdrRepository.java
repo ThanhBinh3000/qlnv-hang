@@ -27,10 +27,11 @@ public interface XhCtvtQdPdHdrRepository extends JpaRepository<XhCtvtQuyetDinhPd
 //      "AND (:#{#param.ngayKetThucDxDen}  IS NULL OR e.ngayKetThucDx <= :#{#param.ngayKetThucDxDen}) ) " +
       "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
       "AND (:#{#param.xuatCap} IS NULL OR c.xuatCap = :#{#param.xuatCap}) " +
-      "AND (:#{#param.soQd} IS NULL OR LOWER(c.soQd) LIKE CONCAT('%',LOWER(:#{#param.soQd}),'%')) " +
+      "AND (:#{#param.soBbQd} IS NULL OR LOWER(c.soBbQd) LIKE CONCAT('%',LOWER(:#{#param.soBbQd}),'%')) " +
       "AND (:#{#param.loaiVthh} IS NULL OR c.loaiVthh = :#{#param.loaiVthh}) " +
       "AND ((:#{#param.ngayKyTu}  IS NULL OR c.ngayKy >= :#{#param.ngayKyTu})" +
       "AND (:#{#param.ngayKyDen}  IS NULL OR c.ngayKy <= :#{#param.ngayKyDen}) ) " +
+      "AND (:#{#param.idQdGnvNull } = false OR (:#{#param.idQdPdNull } = true AND c.idQdGiaoNv IS NULL)) " +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
   Page<XhCtvtQuyetDinhPdHdr> search(@Param("param") SearchXhCtvtQuyetDinhPdHdr param, Pageable pageable);
@@ -42,7 +43,7 @@ public interface XhCtvtQdPdHdrRepository extends JpaRepository<XhCtvtQuyetDinhPd
 
   List<XhCtvtQuyetDinhPdHdr> findAllByIdIn(List<Long> listId);
 
-  Optional<XhCtvtQuyetDinhPdHdr> findBySoQd(String soQd);
+  Optional<XhCtvtQuyetDinhPdHdr> findBySoBbQd(String soBbQd);
 
   @Query("SELECT DISTINCT  c FROM XhCtvtQuyetDinhPdHdr c " +
       " WHERE 1=1 " +

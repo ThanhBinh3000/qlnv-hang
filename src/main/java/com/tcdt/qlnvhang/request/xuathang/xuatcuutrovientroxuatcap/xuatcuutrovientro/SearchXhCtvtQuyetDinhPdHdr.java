@@ -15,7 +15,7 @@ public class SearchXhCtvtQuyetDinhPdHdr extends BaseRequest {
     private List<String> listMaDviGiao;
     private String dvql;
     private String soDx;
-    private String soQd;
+    private String soBbQd;
     private String loaiVthh;
     private LocalDate ngayKyTu;
     private LocalDate ngayKyDen;
@@ -27,7 +27,9 @@ public class SearchXhCtvtQuyetDinhPdHdr extends BaseRequest {
     private String type;
     private Boolean xuatCap;
 
-    //dung cho chuc nang list cua man hình Qdpd
+    //dung cho chuc nang danh sach cua man hình chon
     private List<Long> idQdPdList = new ArrayList<>();
     private Boolean idQdPdNull = false;
+    private List<Long> idQdGnvList = new ArrayList<>();
+    private Boolean idQdGnvNull = false;
 }

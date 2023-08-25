@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.khoahoccongnghebaoquan;
 
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -37,4 +38,5 @@ public class QuyChuanQuocGiaHdrReq {
     private String maBn;
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
     private List<QuyChuanQuocGiaDtlReq> tieuChuanKyThuat = new ArrayList<>();
+    private ReportTemplateRequest reportTemplateRequest;
 }
