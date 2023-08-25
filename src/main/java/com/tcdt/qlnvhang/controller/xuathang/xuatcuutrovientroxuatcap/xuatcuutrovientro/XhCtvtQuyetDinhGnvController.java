@@ -32,7 +32,7 @@ import java.util.Map;
 @RequestMapping(value = PathContains.XUAT_CUU_TRO + PathContains.QUYET_DINH_GIAO_NHIEM_VU)
 @Slf4j
 @Api(tags = "Xuất hàng DTQG - Xuất cứu trợ viện trợ - Quyết định giao nhiệm vụ xuất hàng cứu trợ, viện trợ")
-public class XhCtvtQuyetDinhGnvController extends BaseController {/*
+public class XhCtvtQuyetDinhGnvController extends BaseController {
 
   @Autowired
   XhCtvtQuyetDinhGnvService xhCtvtQuyetDinhGnvService;
@@ -180,5 +180,5 @@ public class XhCtvtQuyetDinhGnvController extends BaseController {/*
       mapper.writeValue(response.getOutputStream(), body);
 
     }
-  }*/
+  }
 }
