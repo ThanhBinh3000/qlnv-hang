@@ -1,30 +1,24 @@
 package com.tcdt.qlnvhang.request.xuathang.daugia.tochuctrienkhai.thongtin;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 public class ThongTinDauGiaDtlReq extends BaseRequest {
-  private Long id;
+    private Long id;
+    private Long idHdr;
+    private String maDvi;
+    private String diaChi;
+    private BigDecimal soLuongXuatBan;
+    private BigDecimal tienDatTruoc;
 
-  private Long idTtinHdr;
+    public void setSoLuongChiCuc(BigDecimal soLuongXuatBan) {
+        this.soLuongXuatBan = soLuongXuatBan;
+    }
 
-  private String maDvi;
-  private BigDecimal soLuongChiCuc;
-
-  private String diaChi;
-
-  private BigDecimal soTienDatTruocChiCuc;
-
-  public void setSoLuongChiCuc(BigDecimal soLuongChiCuc) {
-    this.soLuongChiCuc = soLuongChiCuc;
-  }
-
-  private List<ThongTinDauGiaPloReq> children = new ArrayList<>();
+    private List<ThongTinDauGiaPloReq> children = new ArrayList<>();
 }

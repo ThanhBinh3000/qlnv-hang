@@ -147,6 +147,8 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
             XhQdPdKhBdgDtl dtl = new XhQdPdKhBdgDtl();
             BeanUtils.copyProperties(dtlReq, dtl, "id");
             dtl.setIdQdHdr(idHdr);
+            dtl.setNam(req.getNam());
+            dtl.setSoQdPd(req.getSoQdPd());
             dtl.setTrangThai(Contains.CHUACAPNHAT);
             xhQdPdKhBdgDtlRepository.save(dtl);
             xhQdPdKhBdgPlRepository.deleteAllByIdQdDtl(dtlReq.getId());
@@ -455,25 +457,34 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
 
     public Page<XhQdPdKhBdgDtl> searchPageDtl(CustomUserDetails currentUser, XhQdPdKhBdgDtlReq req) throws Exception {
         String dvql = currentUser.getDvql();
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
+        Integer lastest = 1;
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
             req.setDvql(dvql.substring(0, 4));
-        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
+            req.setTrangThai(Contains.HOANTHANHCAPNHAT);
+        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
             req.setDvql(dvql);
+            req.setLastest(lastest);
         }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhQdPdKhBdgDtl> search = xhQdPdKhBdgDtlRepository.searchDtl(req, pageable);
+        Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
-        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-        search.getContent().forEach(dataDtl -> {
+        search.getContent().forEach(data -> {
             try {
-                dataDtl.setTenLoaiVthh(StringUtils.isEmpty(dataDtl.getLoaiVthh()) ? null : mapDmucVthh.get(dataDtl.getLoaiVthh()));
-                dataDtl.setTenCloaiVthh(StringUtils.isEmpty(dataDtl.getCloaiVthh()) ? null : mapDmucVthh.get(dataDtl.getCloaiVthh()));
-                dataDtl.setTenDvi(StringUtils.isEmpty(dataDtl.getMaDvi()) ? null : mapDmucDvi.get(dataDtl.getMaDvi()));
-                dataDtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(dataDtl.getTrangThai()));
-                XhQdPdKhBdg hdr = xhQdPdKhBdgRepository.findById(dataDtl.getIdQdHdr()).get();
-                dataDtl.setNam(hdr.getNam());
-                dataDtl.setSoQdPd(hdr.getSoQdPd());
-                dataDtl.setXhQdPdKhBdg(hdr);
+                if (mapDmucDvi.containsKey((data.getMaDvi()))) {
+                    Map<String, Object> objDonVi = mapDmucDvi.get(data.getMaDvi());
+                    data.setTenDvi(objDonVi.get("tenDvi").toString());
+                }
+                if (mapDmucVthh.get((data.getLoaiVthh())) != null) {
+                    data.setTenLoaiVthh(mapDmucVthh.get(data.getLoaiVthh()));
+                }
+                if (mapDmucVthh.get((data.getCloaiVthh())) != null) {
+                    data.setTenCloaiVthh(mapDmucVthh.get(data.getCloaiVthh()));
+                }
+                if (data.getTrangThai() != null) {
+                    data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+                }
+                data.setXhQdPdKhBdg(xhQdPdKhBdgRepository.findById(data.getIdQdHdr()).get());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -487,6 +498,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
         if (DataUtils.isNullOrEmpty(list)) throw new Exception("Không tìm thấy dữ liệu");
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
+        Map<String, String> mapPhuongThucTt = getListDanhMucChung("PHUONG_THUC_TT");
         List<XhQdPdKhBdgDtl> allByIdDtl = xhQdPdKhBdgDtlRepository.findAllById(ids);
         for (XhQdPdKhBdgDtl dataDtl : allByIdDtl) {
             List<XhQdPdKhBdgPl> phanLo = xhQdPdKhBdgPlRepository.findAllByIdQdDtl(dataDtl.getId());
@@ -505,6 +517,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
             dataDtl.setTenLoaiVthh(StringUtils.isEmpty(dataDtl.getLoaiVthh()) ? null : mapVthh.get(dataDtl.getLoaiVthh()));
             dataDtl.setTenCloaiVthh(StringUtils.isEmpty(dataDtl.getCloaiVthh()) ? null : mapVthh.get(dataDtl.getCloaiVthh()));
             dataDtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dataDtl.getTrangThai()));
+            dataDtl.setTenPthucTtoan(StringUtils.isEmpty(dataDtl.getPthucTtoan()) ? null : mapPhuongThucTt.get(dataDtl.getPthucTtoan()));
             dataDtl.setChildren(phanLo);
             List<XhTcTtinBdgHdr> xhTcTtinBdgHdrs = xhTcTtinBdgHdrRepository.findByIdQdPdDtlOrderByLanDauGia(dataDtl.getId());
             dataDtl.setListTtinDg(xhTcTtinBdgHdrs);

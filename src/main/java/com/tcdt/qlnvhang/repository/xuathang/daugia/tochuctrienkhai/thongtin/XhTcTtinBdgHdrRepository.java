@@ -12,19 +12,16 @@ import java.util.List;
 
 public interface XhTcTtinBdgHdrRepository extends JpaRepository<XhTcTtinBdgHdr, Long> {
 
-  @Query("SELECT c FROM XhTcTtinBdgHdr c " +
-          " left join XhQdPdKhBdgDtl dtl on c.idQdPdDtl = dtl.id " +
-          " left join XhQdPdKhBdg hdr on hdr.id = dtl.idQdHdr WHERE 1=1 " +
-      "AND (:#{#param.maDvi} IS NULL OR dtl.maDvi = :#{#param.maDvi}) " +
-      "AND (:#{#param.nam} IS NULL OR hdr.nam = :#{#param.nam}) " +
-      "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
-      "AND (:#{#param.loaiVthh } IS NULL OR LOWER(hdr.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) "
-  )
-  Page<XhTcTtinBdgHdr> search(@Param("param") ThongTinDauGiaReq param, Pageable pageable);
+    @Query("SELECT TT FROM XhTcTtinBdgHdr TT " +
+            " WHERE 1=1 " +
+            "AND (:#{#param.dvql} IS NULL OR TT.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
+            "AND (:#{#param.nam} IS NULL OR TT.nam = :#{#param.nam}) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR TT.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+            "AND (:#{#param.trangThai} IS NULL OR TT.trangThai = :#{#param.trangThai}) " +
+            "ORDER BY TT.ngaySua desc , TT.ngayTao desc, TT.id desc")
+    Page<XhTcTtinBdgHdr> searchPage(@Param("param") ThongTinDauGiaReq param, Pageable pageable);
 
-  void deleteAllByIdIn(List<Long> listId);
+    List<XhTcTtinBdgHdr> findByIdQdPdDtlOrderByLanDauGia(Long idQdPdDtl);
 
-  List<XhTcTtinBdgHdr> findByIdIn(List<Long> ids);
-
-  List<XhTcTtinBdgHdr> findByIdQdPdDtlOrderByLanDauGia(Long idQdPdDtl);
+    List<XhTcTtinBdgHdr> findByIdIn(List<Long> ids);
 }

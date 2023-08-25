@@ -67,14 +67,14 @@ public class XhQdPdKhBdgDtl implements Serializable {
     private String soQdPdKqBdg;
     @Column(name = "NGAY_KY_QD_PD_KQ_BDG")
     private LocalDate ngayKyQdPdKqBdg;
-    private Integer soDviTsanThanhCong;
-    private Integer soDviTsanKhongThanh;
+    private BigDecimal soDviTsanThanhCong;
+    private BigDecimal soDviTsanKhongThanh;
     private String ketQuaDauGia;
     private String soQdDcBdg;
-    @Transient
     private Integer nam;
-    @Transient
     private String soQdPd;
+    @Transient
+    private String tenPthucTtoan;
     @Transient
     private XhQdPdKhBdg xhQdPdKhBdg;
     @Transient
