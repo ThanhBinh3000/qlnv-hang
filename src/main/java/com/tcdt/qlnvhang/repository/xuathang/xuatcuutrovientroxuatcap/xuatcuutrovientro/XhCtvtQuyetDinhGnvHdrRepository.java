@@ -39,5 +39,4 @@ public interface XhCtvtQuyetDinhGnvHdrRepository extends JpaRepository<XhCtvtQuy
 
   Optional<XhCtvtQuyetDinhGnvHdr> findBySoBbQd(String soQd);
 
-
 }
