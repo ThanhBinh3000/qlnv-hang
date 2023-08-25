@@ -1,15 +1,13 @@
 package com.tcdt.qlnvhang.request.xuathang.kiemtrachatluong;
 
-import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
+import com.tcdt.qlnvhang.entities.FileDKemJoinTable;
 import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.bienbanlaymau.XhBienBanLayMauDtl;
 import lombok.Getter;
 import lombok.Setter;
-import org.olap4j.impl.ArrayMap;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Getter
 @Setter
@@ -49,8 +47,8 @@ public class XhBienBanLayMauReq {
   private String niemPhong;
   private String loaiBb;
   private String type;
-  private List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem = new ArrayList<>();
-  private List<FileDKemJoinHoSoKyThuatDtl> canCu = new ArrayList<>();
+  private List<FileDKemJoinTable> fileDinhKem = new ArrayList<>();
+  private List<FileDKemJoinTable> canCu = new ArrayList<>();
   private List<XhBienBanLayMauDtl> xhBienBanLayMauDtl = new ArrayList<>();
 
 }

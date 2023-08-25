@@ -2,7 +2,7 @@ package com.tcdt.qlnvhang.service.xuathang.kiemtrachatluong;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
+import com.tcdt.qlnvhang.entities.FileDKemJoinTable;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoBienBan;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoBienBanCt;
@@ -287,7 +287,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
           xhHoSoKyThuatDtl.setTgianBsung(DataUtils.convertToLocalDate(nhHoSoBienBan.getTgianBsung()));
           xhHoSoKyThuatDtl.setMapVthh(mapVthh);
           String sFileDinhKem = objectMapper.writeValueAsString(nhHoSoBienBan.getFileDinhKems());
-          List<FileDKemJoinHoSoKyThuatDtl> listFileDinhKem = objectMapper.readValue(sFileDinhKem, new TypeReference<List<FileDKemJoinHoSoKyThuatDtl>>() {
+          List<FileDKemJoinTable> listFileDinhKem = objectMapper.readValue(sFileDinhKem, new TypeReference<List<FileDKemJoinTable>>() {
           });
           xhHoSoKyThuatDtl.setFileDinhKem(listFileDinhKem);
 

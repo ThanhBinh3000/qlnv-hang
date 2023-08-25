@@ -2,7 +2,7 @@ package com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
-import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
+import com.tcdt.qlnvhang.entities.FileDKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
@@ -124,9 +124,9 @@ public class XhTlToChucHdr extends BaseEntity implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "dataId")
     @Where(clause = "data_type='" + XhTlToChucHdr.TABLE_NAME + "_CAN_CU'")
-    private List<FileDKemJoinHoSoKyThuatDtl> fileCanCu = new ArrayList<>();
+    private List<FileDKemJoinTable> fileCanCu = new ArrayList<>();
 
-    public void setFileCanCu(List<FileDKemJoinHoSoKyThuatDtl> fileCanCu) {
+    public void setFileCanCu(List<FileDKemJoinTable> fileCanCu) {
         this.fileCanCu.clear();
         if (!DataUtils.isNullObject(fileCanCu)) {
             fileCanCu.forEach(f -> {
@@ -141,9 +141,9 @@ public class XhTlToChucHdr extends BaseEntity implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "dataId")
     @Where(clause = "data_type='" + XhTlToChucHdr.TABLE_NAME + "_DINH_KEM'")
-    private List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem = new ArrayList<>();
+    private List<FileDKemJoinTable> fileDinhKem = new ArrayList<>();
 
-    public void setFileDinhKem(List<FileDKemJoinHoSoKyThuatDtl> fileCanCu) {
+    public void setFileDinhKem(List<FileDKemJoinTable> fileCanCu) {
         this.fileDinhKem.clear();
         if (!DataUtils.isNullObject(fileCanCu)) {
             fileCanCu.forEach(f -> {
@@ -158,9 +158,9 @@ public class XhTlToChucHdr extends BaseEntity implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "dataId")
     @Where(clause = "data_type='" + XhTlToChucHdr.TABLE_NAME + "_DA_KY'")
-    private List<FileDKemJoinHoSoKyThuatDtl> fileDinhKemDaKy = new ArrayList<>();
+    private List<FileDKemJoinTable> fileDinhKemDaKy = new ArrayList<>();
 
-    public void setFileDinhKemDaKy(List<FileDKemJoinHoSoKyThuatDtl> fileCanCu) {
+    public void setFileDinhKemDaKy(List<FileDKemJoinTable> fileCanCu) {
         this.fileDinhKemDaKy.clear();
         if (!DataUtils.isNullObject(fileCanCu)) {
             fileCanCu.forEach(f -> {

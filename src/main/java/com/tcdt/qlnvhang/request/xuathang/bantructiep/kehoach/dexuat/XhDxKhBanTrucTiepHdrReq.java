@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.dexuat;
 
-import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
+import com.tcdt.qlnvhang.entities.FileDKemJoinTable;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepDtl;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import lombok.Data;
@@ -49,7 +49,7 @@ public class XhDxKhBanTrucTiepHdrReq extends BaseRequest {
     private LocalDate ngayPduyet;
     private BigDecimal donGia;
     private BigDecimal thanhTien;
-    private List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem = new ArrayList<>();
+    private List<FileDKemJoinTable> fileDinhKem = new ArrayList<>();
     private List<XhDxKhBanTrucTiepDtl> children = new ArrayList<>();
     private String dvql;
     private LocalDate ngayTaoTu;

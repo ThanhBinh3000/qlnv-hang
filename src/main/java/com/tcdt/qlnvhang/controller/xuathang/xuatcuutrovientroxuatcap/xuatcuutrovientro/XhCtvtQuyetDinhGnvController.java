@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = PathContains.XUAT_CUU_TRO +PathContains.QUYET_DINH_GIAO_NHIEM_VU)
+@RequestMapping(value = PathContains.XUAT_CUU_TRO + PathContains.QUYET_DINH_GIAO_NHIEM_VU)
 @Slf4j
 @Api(tags = "Xuất hàng DTQG - Xuất cứu trợ viện trợ - Quyết định giao nhiệm vụ xuất hàng cứu trợ, viện trợ")
 public class XhCtvtQuyetDinhGnvController extends BaseController {
@@ -45,7 +45,7 @@ public class XhCtvtQuyetDinhGnvController extends BaseController {
                                                 @RequestBody SearchXhCtvtQuyetDinhGnv objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhCtvtQuyetDinhGnvService.searchPage(currentUser,objReq));
+      resp.setData(xhCtvtQuyetDinhGnvService.searchPage(currentUser, objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (
@@ -59,12 +59,12 @@ public class XhCtvtQuyetDinhGnvController extends BaseController {
   }
 
   @ApiOperation(value = "Tạo mới thông tin quyết định gnv", response = List.class)
-  @PostMapping(value =  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
   public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhCtvtQuyetDinhGnvHdrReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhCtvtQuyetDinhGnvService.save(currentUser,objReq));
+      resp.setData(xhCtvtQuyetDinhGnvService.save(currentUser, objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -77,11 +77,11 @@ public class XhCtvtQuyetDinhGnvController extends BaseController {
 
 
   @ApiOperation(value = "Cập nhật thông tin quyết định gnv", response = List.class)
-  @PostMapping(value =  PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhCtvtQuyetDinhGnvHdrReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhCtvtQuyetDinhGnvService.update(currentUser,objReq));
+      resp.setData(xhCtvtQuyetDinhGnvService.update(currentUser, objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -93,10 +93,10 @@ public class XhCtvtQuyetDinhGnvController extends BaseController {
   }
 
   @ApiOperation(value = "Lấy chi tiết thông tin quyết định gnv", response = List.class)
-  @GetMapping(value =  PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<BaseResponse> detail(
-      @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids")List<Long> ids) {
+      @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids") List<Long> ids) {
     BaseResponse resp = new BaseResponse();
     try {
       resp.setData(xhCtvtQuyetDinhGnvService.detail(ids).get(0));
@@ -111,11 +111,11 @@ public class XhCtvtQuyetDinhGnvController extends BaseController {
   }
 
   @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin", response = List.class)
-  @PostMapping(value =  PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<BaseResponse> updateStatus( @CurrentUser CustomUserDetails currentUser,@Valid @RequestBody StatusReq stReq) {
+  @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody StatusReq stReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      xhCtvtQuyetDinhGnvService.approve(currentUser,stReq);
+      xhCtvtQuyetDinhGnvService.approve(currentUser, stReq);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -128,7 +128,7 @@ public class XhCtvtQuyetDinhGnvController extends BaseController {
 
 
   @ApiOperation(value = "Xoá thông tin quyết định gnv", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-  @PostMapping(value =  PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
     BaseResponse resp = new BaseResponse();
@@ -146,7 +146,7 @@ public class XhCtvtQuyetDinhGnvController extends BaseController {
   }
 
   @ApiOperation(value = "Xoá danh sách thông tin quyết định gnv", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-  @PostMapping(value =  PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
     BaseResponse resp = new BaseResponse();
@@ -163,11 +163,11 @@ public class XhCtvtQuyetDinhGnvController extends BaseController {
   }
 
   @ApiOperation(value = "Kết xuất danh sách mua", response = List.class)
-  @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody  SearchXhCtvtQuyetDinhGnv objReq, HttpServletResponse response) throws Exception {
+  public void exportList(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody SearchXhCtvtQuyetDinhGnv objReq, HttpServletResponse response) throws Exception {
     try {
-      xhCtvtQuyetDinhGnvService.export( currentUser,objReq, response);
+      xhCtvtQuyetDinhGnvService.export(currentUser, objReq, response);
 
     } catch (Exception e) {
       log.error("Kết xuất danh sách dánh sách mua : {}", e);

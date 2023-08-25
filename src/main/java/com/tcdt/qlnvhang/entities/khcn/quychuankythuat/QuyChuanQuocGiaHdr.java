@@ -1,15 +1,9 @@
 package com.tcdt.qlnvhang.entities.khcn.quychuankythuat;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tcdt.qlnvhang.entities.BaseEntity;
-import com.tcdt.qlnvhang.entities.FileDKemJoinDxuatCuuTro;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.XhDxCuuTroDtl;
 import lombok.Data;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Where;
 import org.springframework.util.ObjectUtils;
 
 import javax.persistence.*;

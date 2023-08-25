@@ -1,9 +1,8 @@
 package com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tcdt.qlnvhang.entities.BaseEntity;
-import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
+import com.tcdt.qlnvhang.entities.FileDKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
@@ -86,11 +85,11 @@ public class XhHoSoKyThuatDtl extends BaseEntity implements Serializable {
   @Fetch(value = FetchMode.SUBSELECT)
   @JoinColumn(name = "dataId")
   @Where(clause = "data_type='" + XhHoSoKyThuatDtl.TABLE_NAME + "_DINH_KEM'")
-  private List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem = new ArrayList<>();
+  private List<FileDKemJoinTable> fileDinhKem = new ArrayList<>();
 
-  public void setFileDinhKem(List<FileDKemJoinHoSoKyThuatDtl> children) {
+  public void setFileDinhKem(List<FileDKemJoinTable> children) {
     this.fileDinhKem.clear();
-    for (FileDKemJoinHoSoKyThuatDtl child : children) {
+    for (FileDKemJoinTable child : children) {
       child.setDataType(XhHoSoKyThuatDtl.TABLE_NAME + "_DINH_KEM");
       child.setParent(this);
     }
@@ -101,11 +100,11 @@ public class XhHoSoKyThuatDtl extends BaseEntity implements Serializable {
   @Fetch(value = FetchMode.SUBSELECT)
   @JoinColumn(name = "dataId")
   @Where(clause = "data_type='" + XhHoSoKyThuatDtl.TABLE_NAME + "_CAN_CU'")
-  private List<FileDKemJoinHoSoKyThuatDtl> canCu = new ArrayList<>();
+  private List<FileDKemJoinTable> canCu = new ArrayList<>();
 
-  public void setCanCu(List<FileDKemJoinHoSoKyThuatDtl> children) {
+  public void setCanCu(List<FileDKemJoinTable> children) {
     this.canCu.clear();
-    for (FileDKemJoinHoSoKyThuatDtl child : children) {
+    for (FileDKemJoinTable child : children) {
       child.setDataType(XhHoSoKyThuatDtl.TABLE_NAME + "_CAN_CU");
       child.setParent(this);
     }
@@ -116,11 +115,11 @@ public class XhHoSoKyThuatDtl extends BaseEntity implements Serializable {
   @Fetch(value = FetchMode.SUBSELECT)
   @JoinColumn(name = "dataId")
   @Where(clause = "data_type='" + XhHoSoKyThuatDtl.TABLE_NAME + "_VAN_BAN_BSUNG'")
-  private List<FileDKemJoinHoSoKyThuatDtl> vanBanBsung = new ArrayList<>();
+  private List<FileDKemJoinTable> vanBanBsung = new ArrayList<>();
 
-  public void setVanBanBsung(List<FileDKemJoinHoSoKyThuatDtl> children) {
+  public void setVanBanBsung(List<FileDKemJoinTable> children) {
     this.vanBanBsung.clear();
-    for (FileDKemJoinHoSoKyThuatDtl child : children) {
+    for (FileDKemJoinTable child : children) {
       child.setDataType(XhHoSoKyThuatDtl.TABLE_NAME + "_VAN_BAN_BSUNG");
       child.setParent(this);
     }
