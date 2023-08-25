@@ -2,7 +2,7 @@ package com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
-import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
+import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
@@ -126,9 +126,9 @@ public class XhTcTtinBdgHdr extends BaseEntity implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "dataId")
     @Where(clause = "data_type='" + XhTcTtinBdgHdr.TABLE_NAME + "_CAN_CU'")
-    private List<FileDKemJoinHoSoKyThuatDtl> canCu = new ArrayList<>();
+    private List<FileDinhKemJoinTable> canCu = new ArrayList<>();
 
-    public void setCanCu(List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem) {
+    public void setCanCu(List<FileDinhKemJoinTable> fileDinhKem) {
         this.canCu.clear();
         if (!DataUtils.isNullObject(fileDinhKem)) {
             fileDinhKem.forEach(s -> {
@@ -143,9 +143,9 @@ public class XhTcTtinBdgHdr extends BaseEntity implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "dataId")
     @Where(clause = "data_type='" + XhTcTtinBdgHdr.TABLE_NAME + "_DINH_KEM'")
-    private List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem = new ArrayList<>();
+    private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
 
-    public void setFileDinhKem(List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem) {
+    public void setFileDinhKem(List<FileDinhKemJoinTable> fileDinhKem) {
         this.fileDinhKem.clear();
         if (!DataUtils.isNullObject(fileDinhKem)) {
             fileDinhKem.forEach(s -> {
