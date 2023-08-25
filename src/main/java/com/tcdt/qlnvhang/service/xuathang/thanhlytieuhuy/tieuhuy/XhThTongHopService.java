@@ -190,7 +190,7 @@ public class XhThTongHopService extends BaseServiceImpl {
     }
 
     String status = optional.get().getTrangThai() + statusReq.getTrangThai();
-    if (status.equals(TrangThaiAllEnum.DU_THAO.getId() + TrangThaiAllEnum.DA_TONG_HOP.getId())) {
+    if (status.equals(TrangThaiAllEnum.DU_THAO.getId() + TrangThaiAllEnum.GUI_DUYET.getId())) {
       optional.get().setNguoiGduyetId(currentUser.getUser().getId());
       optional.get().setNgayGduyet(LocalDate.now());
     } else {
