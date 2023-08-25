@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.ketqua;
 
-import com.tcdt.qlnvhang.entities.FileDKemJoinTable;
+import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviReq;
 import lombok.Data;
@@ -35,9 +35,9 @@ public class XhKqBttHdrReq extends BaseRequest {
     private String trangThai;
     private String trangThaiHd;
     private String trangThaiXh;
-    private List<FileDKemJoinTable> fileCanCu = new ArrayList<>();
-    private List<FileDKemJoinTable> fileDaKy = new ArrayList<>();
-    private List<FileDKemJoinTable> fileQd = new ArrayList<>();
+    private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
+    private List<FileDinhKemJoinTable> fileDaKy = new ArrayList<>();
+    private List<FileDinhKemJoinTable> fileQd = new ArrayList<>();
     private List<XhQdPdKhBttDviReq> children = new ArrayList<>();
     private String dvql;
     private LocalDate ngayCgiaTu;

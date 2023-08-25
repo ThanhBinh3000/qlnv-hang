@@ -23,7 +23,7 @@ import java.util.Date;
 @Entity
 @Table(name = "FILE_DINH_KEM")
 @Data
-public class FileDKemJoinTable implements Serializable {
+public class FileDinhKemJoinTable implements Serializable {
 
   private static final long serialVersionUID = 1L;
 

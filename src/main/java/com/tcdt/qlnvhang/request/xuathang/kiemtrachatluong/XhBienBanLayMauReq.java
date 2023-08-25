@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.request.xuathang.kiemtrachatluong;
 
-import com.tcdt.qlnvhang.entities.FileDKemJoinTable;
+import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.bienbanlaymau.XhBienBanLayMauDtl;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,8 +47,8 @@ public class XhBienBanLayMauReq {
   private String niemPhong;
   private String loaiBb;
   private String type;
-  private List<FileDKemJoinTable> fileDinhKem = new ArrayList<>();
-  private List<FileDKemJoinTable> canCu = new ArrayList<>();
+  private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
+  private List<FileDinhKemJoinTable> canCu = new ArrayList<>();
   private List<XhBienBanLayMauDtl> xhBienBanLayMauDtl = new ArrayList<>();
 
 }
