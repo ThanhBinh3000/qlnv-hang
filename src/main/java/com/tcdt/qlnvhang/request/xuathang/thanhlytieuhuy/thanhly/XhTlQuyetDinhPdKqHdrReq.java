@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly;
 
-import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
+import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhPdKqDtl;
 import lombok.Data;
@@ -44,7 +44,7 @@ public class XhTlQuyetDinhPdKqHdrReq extends BaseRequest {
     private String trangThaiHd;
     private String trangThaiXh;
     private List<XhTlQuyetDinhPdKqDtl> quyetDinhDtl = new ArrayList<>();
-    private List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem;
-    private List<FileDKemJoinHoSoKyThuatDtl> canCu;
+    private List<FileDinhKemJoinTable> fileDinhKem;
+    private List<FileDinhKemJoinTable> canCu;
     private String dvql;
 }

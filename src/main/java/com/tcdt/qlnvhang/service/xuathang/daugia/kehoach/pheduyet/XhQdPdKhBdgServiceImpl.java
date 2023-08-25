@@ -45,7 +45,6 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
@@ -127,9 +126,14 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
             created.setFileDinhKem(fileDinhKem);
         }
         if (req.getPhanLoai().equals("TH")) {
+            dataTh.setIdQdPd(data.getId());
+            dataTh.setSoQdPd(data.getSoQdPd());
             dataTh.setTrangThai(Contains.DADUTHAO_QD);
             xhThopDxKhBdgRepository.save(dataTh);
         } else {
+            dataDx.setIdSoQdPd(data.getId());
+            dataDx.setSoQdPd(data.getSoQdPd());
+            dataDx.setNgayKyQd(data.getNgayKyQd());
             dataDx.setTrangThaiTh(Contains.DADUTHAO_QD);
             xhDxKhBanDauGiaRepository.save(dataDx);
         }
@@ -182,6 +186,22 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
         fileDinhKemService.delete(data.getId(), Collections.singleton(XhQdPdKhBdg.TABLE_NAME + "_BAN_HANH"));
         List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), updated.getId(), XhQdPdKhBdg.TABLE_NAME + "_BAN_HANH");
         updated.setFileDinhKem(fileDinhKem);
+        if (updated.getPhanLoai().equals("TH")) {
+            Optional<XhThopDxKhBdg> optionalTh = xhThopDxKhBdgRepository.findById(updated.getIdThHdr());
+            if (optionalTh.isPresent()) {
+                optionalTh.get().setIdQdPd(updated.getId());
+                optionalTh.get().setSoQdPd(updated.getSoQdPd());
+                xhThopDxKhBdgRepository.save(optionalTh.get());
+            }
+        } else {
+            Optional<XhDxKhBanDauGia> optionalDx = xhDxKhBanDauGiaRepository.findById(updated.getIdTrHdr());
+            if (optionalDx.isPresent()) {
+                optionalDx.get().setIdSoQdPd(data.getId());
+                optionalDx.get().setSoQdPd(data.getSoQdPd());
+                optionalDx.get().setNgayKyQd(data.getNgayKyQd());
+                xhDxKhBanDauGiaRepository.save(optionalDx.get());
+            }
+        }
         this.saveDetail(req, updated.getId());
         return updated;
     }
@@ -256,25 +276,22 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
         xhQdPdKhBdgRepository.delete(data);
         fileDinhKemService.delete(data.getId(), Collections.singleton(XhQdPdKhBdg.TABLE_NAME));
         fileDinhKemService.delete(data.getId(), Collections.singleton(XhQdPdKhBdg.TABLE_NAME + "_BAN_HANH"));
-        Long idThHdr = data.getIdThHdr();
-        if (!DataUtils.isNullObject(idThHdr)) {
-            XhThopDxKhBdg tongHop = xhThopDxKhBdgRepository.findById(data.getIdThHdr()).orElse(null);
-            if (tongHop != null) {
-                tongHop.setIdQdPd(null);
-                tongHop.setSoQdPd(null);
-                tongHop.setTrangThai(Contains.CHUATAO_QD);
-                xhThopDxKhBdgRepository.save(tongHop);
+        if (data.getPhanLoai().equals("TH")) {
+            Optional<XhThopDxKhBdg> tongHop = xhThopDxKhBdgRepository.findById(data.getIdThHdr());
+            if (tongHop.isPresent()) {
+                tongHop.get().setIdQdPd(null);
+                tongHop.get().setSoQdPd(null);
+                tongHop.get().setTrangThai(Contains.CHUATAO_QD);
+                xhThopDxKhBdgRepository.save(tongHop.get());
             }
-        }
-        Long idTrHdr = data.getIdTrHdr();
-        if (!DataUtils.isNullObject(idTrHdr)) {
-            XhDxKhBanDauGia deXuat = xhDxKhBanDauGiaRepository.findById(data.getIdTrHdr()).orElse(null);
-            if (deXuat != null) {
-                deXuat.setIdSoQdPd(null);
-                deXuat.setSoQdPd(null);
-                deXuat.setNgayKyQd(null);
-                deXuat.setTrangThaiTh(Contains.CHUATONGHOP);
-                xhDxKhBanDauGiaRepository.save(deXuat);
+        } else {
+            Optional<XhDxKhBanDauGia> deXuat = xhDxKhBanDauGiaRepository.findById(data.getIdTrHdr());
+            if (deXuat.isPresent()) {
+                deXuat.get().setIdSoQdPd(null);
+                deXuat.get().setSoQdPd(null);
+                deXuat.get().setNgayKyQd(null);
+                deXuat.get().setTrangThaiTh(Contains.CHUATONGHOP);
+                xhDxKhBanDauGiaRepository.save(deXuat.get());
             }
         }
     }
@@ -346,24 +363,23 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
                     if (optionalTh.get().getTrangThai().equals(Contains.DABANHANH_QD)) {
                         throw new Exception("Tổng hợp đề xuất kế hoạch đã được quyết định");
                     }
-                    optionalTh.get().setIdQdPd(data.getId());
-                    optionalTh.get().setSoQdPd(data.getSoQdPd());
                     optionalTh.get().setTrangThai(Contains.DABANHANH_QD);
+                    List<XhDxKhBanDauGia> listDx = xhDxKhBanDauGiaRepository.findAllByIdThop(optionalTh.get().getId());
+                    listDx.forEach(dataDx -> {
+                        dataDx.setIdSoQdPd(data.getId());
+                        dataDx.setSoQdPd(data.getSoQdPd());
+                        dataDx.setNgayKyQd(data.getNgayKyQd());
+                        dataDx.setTrangThaiTh(Contains.DABANHANH_QD);
+                        xhDxKhBanDauGiaRepository.save(dataDx);
+                    });
                     xhThopDxKhBdgRepository.save(optionalTh.get());
-                } else {
-                    throw new Exception("Không tìm thấy tổng hợp đề xuất kế hoạch bán đấu giá");
                 }
-            }
-            List<XhQdPdKhBdgDtl> listDtl = xhQdPdKhBdgDtlRepository.findAllByIdQdHdr(data.getId());
-            for (XhQdPdKhBdgDtl dataDtl : listDtl) {
-                Optional<XhDxKhBanDauGia> optionalDx = xhDxKhBanDauGiaRepository.findById(dataDtl.getIdDxHdr());
+            } else {
+                Optional<XhDxKhBanDauGia> optionalDx = xhDxKhBanDauGiaRepository.findById(data.getIdTrHdr());
                 if (optionalDx.isPresent()) {
                     if (optionalDx.get().getTrangThai().equals(Contains.DABANHANH_QD)) {
                         throw new Exception("Đề xuất kế hoạch này đã được quyết định");
                     }
-                    optionalDx.get().setIdSoQdPd(data.getId());
-                    optionalDx.get().setSoQdPd(data.getSoQdPd());
-                    optionalDx.get().setNgayKyQd(data.getNgayKyQd());
                     optionalDx.get().setTrangThaiTh(Contains.DABANHANH_QD);
                     xhDxKhBanDauGiaRepository.save(optionalDx.get());
                 }

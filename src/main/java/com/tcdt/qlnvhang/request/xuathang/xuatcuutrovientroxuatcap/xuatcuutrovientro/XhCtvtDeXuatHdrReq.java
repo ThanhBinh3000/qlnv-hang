@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
-import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
-import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatPa;
 import lombok.Data;
 
@@ -44,7 +43,7 @@ public class XhCtvtDeXuatHdrReq {
     private String type;
     private BigDecimal thanhTien;
 
-    private List<FileDKemJoinHoSoKyThuatDtl> canCu = new ArrayList<>();
+    private List<FileDinhKemJoinTable> canCu = new ArrayList<>();
 
     private List<XhCtvtDeXuatPa> deXuatPhuongAn = new ArrayList<>();
 }

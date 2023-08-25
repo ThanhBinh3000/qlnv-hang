@@ -12,47 +12,33 @@ import java.math.BigDecimal;
 public class XhQdDchinhKhBttSlDtl implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_QD_DC_KH_BTT_SL_DTL";
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = TABLE_NAME + "_SEQ", allocationSize = 1, name = TABLE_NAME + "_SEQ")
     private Long id;
-
     private Long idSl;
-
     private String maDiemKho;
+    private String maNhaKho;
+    private String maNganKho;
+    private String maLoKho;
+    private String maDviTsan;
+    private BigDecimal tonKho;
+    private BigDecimal soLuongDeXuat;
+    private String donViTinh;
+    private BigDecimal donGiaDeXuat;
+    private BigDecimal donGiaDuocDuyet;
+    private String loaiVthh;
+    private String cloaiVthh;
     @Transient
     private String tenDiemKho;
-
-    private String maNhaKho;
     @Transient
     private String tenNhaKho;
-
-    private String maNganKho;
     @Transient
     private String tenNganKho;
-
-    private String maLoKho;
     @Transient
     private String tenLoKho;
-
-    private String maDviTsan;
-
-    private BigDecimal tonKho;
-
-    private BigDecimal soLuongDeXuat;
-
-    private String donViTinh;
-
-    private BigDecimal donGiaDeXuat;
-
-    private BigDecimal donGiaDuocDuyet;
-
-    private String loaiVthh;
     @Transient
     private String tenLoaiVthh;
-
-    private String cloaiVthh;
     @Transient
     private String tenCloaiVthh;
 }
