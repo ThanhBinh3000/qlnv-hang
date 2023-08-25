@@ -2,7 +2,7 @@ package com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.bienbanlaymau;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
-import com.tcdt.qlnvhang.entities.FileDKemJoinHoSoKyThuatDtl;
+import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
@@ -143,9 +143,9 @@ public class XhBienBanLayMauHdr extends BaseEntity implements Serializable {
   @Fetch(value = FetchMode.SUBSELECT)
   @JoinColumn(name = "dataId")
   @Where(clause = "data_type='" + XhBienBanLayMauHdr.TABLE_NAME + "_DINH_KEM'")
-  private List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem = new ArrayList<>();
+  private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
 
-  public void setFileDinhKem(List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem) {
+  public void setFileDinhKem(List<FileDinhKemJoinTable> fileDinhKem) {
     this.fileDinhKem.clear();
     if (!DataUtils.isNullObject(fileDinhKem)) {
       fileDinhKem.forEach(s -> {
@@ -161,9 +161,9 @@ public class XhBienBanLayMauHdr extends BaseEntity implements Serializable {
   @Fetch(value = FetchMode.SUBSELECT)
   @JoinColumn(name = "dataId")
   @Where(clause = "data_type='" + XhBienBanLayMauHdr.TABLE_NAME + "_CAN_CU'")
-  private List<FileDKemJoinHoSoKyThuatDtl> canCu = new ArrayList<>();
+  private List<FileDinhKemJoinTable> canCu = new ArrayList<>();
 
-  public void setCanCu(List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem) {
+  public void setCanCu(List<FileDinhKemJoinTable> fileDinhKem) {
     this.canCu.clear();
     if (!DataUtils.isNullObject(fileDinhKem)) {
       fileDinhKem.forEach(s -> {
@@ -178,9 +178,9 @@ public class XhBienBanLayMauHdr extends BaseEntity implements Serializable {
   @Fetch(value = FetchMode.SUBSELECT)
   @JoinColumn(name = "dataId")
   @Where(clause = "data_type='" + XhBienBanLayMauHdr.TABLE_NAME + "_ANH_CHUP'")
-  private List<FileDKemJoinHoSoKyThuatDtl> anhChupMauNiemPhong = new ArrayList<>();
+  private List<FileDinhKemJoinTable> anhChupMauNiemPhong = new ArrayList<>();
 
-  public void setAnhChupMauNiemPhong(List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem) {
+  public void setAnhChupMauNiemPhong(List<FileDinhKemJoinTable> fileDinhKem) {
     this.anhChupMauNiemPhong.clear();
     if (!DataUtils.isNullObject(fileDinhKem)) {
       fileDinhKem.forEach(s -> {

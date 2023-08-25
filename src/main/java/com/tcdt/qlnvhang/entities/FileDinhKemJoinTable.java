@@ -12,6 +12,7 @@ import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThu
 import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.phieukncl.XhPhieuKnclHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.*;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdHdr;
 import lombok.Data;
 
@@ -22,7 +23,7 @@ import java.util.Date;
 @Entity
 @Table(name = "FILE_DINH_KEM")
 @Data
-public class FileDKemJoinHoSoKyThuatDtl implements Serializable {
+public class FileDinhKemJoinTable implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
@@ -129,4 +130,9 @@ public class FileDKemJoinHoSoKyThuatDtl implements Serializable {
   @JoinColumn(name = "dataId", insertable = false, updatable = false)
   @JsonIgnore
   private XhQdDchinhKhBttHdr xhQdDchinhKhBttHdr;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "dataId", insertable = false, updatable = false)
+  @JsonIgnore
+  private XhCtvtQuyetDinhGnvHdr xhCtvtQuyetDinhGnvHdr;
 }
