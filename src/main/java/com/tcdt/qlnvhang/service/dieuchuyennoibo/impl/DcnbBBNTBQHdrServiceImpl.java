@@ -75,6 +75,7 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
 
     @Override
     public List<DcnbBBNTBQHdrDTO> searchList(CustomUserDetails currentUser, DcnbBBNTBQHdrReq req) {
+        req.setTrangThai("17");
         List<DcnbBBNTBQHdrDTO> search = hdrRepository.list(req);
         return search;
     }
