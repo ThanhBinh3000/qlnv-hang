@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhHdr;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -87,18 +86,18 @@ public class XhThTongHopHdr extends BaseEntity implements Serializable {
     return trangThai;
   }
 
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   @Fetch(value = FetchMode.SUBSELECT)
   @JoinColumn(name = "dataId")
-  @Where(clause = "data_type='" + XhTlQuyetDinhHdr.TABLE_NAME + "_FILE_DINH_KEM")
+  @Where(clause = "data_type='" + XhThTongHopHdr.TABLE_NAME + "_FILE_DINH_KEM'")
   private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
 
   public void setFileDinhKem(List<FileDinhKemJoinTable> fileDinhKem) {
     this.fileDinhKem.clear();
     if (!DataUtils.isNullObject(fileDinhKem)) {
-      fileDinhKem.forEach(f -> {
-        f.setDataType(XhThTongHopHdr.TABLE_NAME + "_FILE_DINH_KEM");
-        f.setXhThTongHopHdr(this);
+      fileDinhKem.forEach(s -> {
+        s.setDataType(XhThTongHopHdr.TABLE_NAME + "_FILE_DINH_KEM");
+        s.setXhThTongHopHdr(this);
       });
       this.fileDinhKem.addAll(fileDinhKem);
     }
