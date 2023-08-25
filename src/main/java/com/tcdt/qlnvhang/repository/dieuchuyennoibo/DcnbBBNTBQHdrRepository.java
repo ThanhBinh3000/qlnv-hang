@@ -62,4 +62,12 @@ public interface DcnbBBNTBQHdrRepository extends JpaRepository<DcnbBBNTBQHdr, Lo
     List<DcnbBBNTBQHdr> findByQdDcCucIdAndMaNganKho(Long qdDcCucId, String maNganKho);
 
     List<DcnbBBNTBQHdr> findByQdDcCucIdAndMaNganKhoAndMaLoKho(Long qdDcCucId, String maNganKho, String maLoKho);
+    @Query(value = "SELECT distinct c FROM DcnbBBNTBQHdr c " +
+            " WHERE 1=1 " +
+            "AND ((:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
+            "AND (:#{#param.maLoKho} IS NULL OR LOWER(c.maLoKho) = :#{#param.maLoKho}) " +
+            "AND (:#{#param.maNganKho} IS NULL OR LOWER(c.maNganKho) = :#{#param.maNganKho}) " +
+            "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
+            "ORDER BY c.nam desc, c.id desc")
+    List<DcnbBBNTBQHdrDTO> list(@Param("param") DcnbBBNTBQHdrReq req);
 }

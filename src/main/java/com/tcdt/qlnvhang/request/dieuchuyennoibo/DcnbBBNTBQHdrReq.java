@@ -21,6 +21,7 @@ public class DcnbBBNTBQHdrReq extends BaseRequest {
     private Boolean thayDoiThuKho;
     private String loaiQdinh;
     private String typeQd;
+    private String type;
     private String loaiVthh;
     private String tenLoaiVthh;
     private String cloaiVthh;

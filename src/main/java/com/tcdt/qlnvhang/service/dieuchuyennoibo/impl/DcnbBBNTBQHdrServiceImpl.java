@@ -52,6 +52,7 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
         Page<DcnbBBNTBQHdr> search = hdrRepository.search(req, pageable);
         return search;
     }
+
     @Override
     public Page<DcnbBBNTBQHdrDTO> searchPage(CustomUserDetails currentUser, DcnbBBNTBQHdrReq req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -71,6 +72,13 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
 
         return searchDto;
     }
+
+    @Override
+    public List<DcnbBBNTBQHdrDTO> searchList(CustomUserDetails currentUser, DcnbBBNTBQHdrReq req) {
+        List<DcnbBBNTBQHdrDTO> search = hdrRepository.list(req);
+        return search;
+    }
+
     @Override
     public DcnbBBNTBQHdr create(DcnbBBNTBQHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
@@ -92,7 +100,7 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
             e.setDcnbBBNTBQHdr(data);
         });
         DcnbBBNTBQHdr created = hdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBBQLD-"+ userInfo.getDvqlTenVietTat();
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BBBQLD-" + userInfo.getDvqlTenVietTat();
         created.setSoBban(so);
         hdrRepository.save(created);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBBNTBQHdr.TABLE_NAME);
@@ -117,7 +125,7 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
         BeanUtils.copyProperties(req, data);
         data.setDcnbBBNTBQDtl(req.getDcnbBBNTBQDtl());
         DcnbBBNTBQHdr created = hdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBBQLD-"+ userInfo.getDvqlTenVietTat();
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BBBQLD-" + userInfo.getDvqlTenVietTat();
         created.setSoBban(so);
         hdrRepository.save(created);
         fileDinhKemService.delete(created.getId(), Lists.newArrayList(DcnbBBNTBQHdr.TABLE_NAME));
