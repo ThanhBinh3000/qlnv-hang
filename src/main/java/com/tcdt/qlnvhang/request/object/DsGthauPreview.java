@@ -10,6 +10,12 @@ public class DsGthauPreview {
     private String goiThau;
     private BigDecimal soLuong;
     private String dvt;
+    private String tenCloaiVthh;
+    private String donGia;
+    private String thanhTien;
+    private String donGiaNhaThau;
+    private String thanhTienNhaThau;
+    private String chenhLech;
     private List<HhDthauNthauDuthau> dsNhaThau;
     private String nhaThauTrungThau;
 }

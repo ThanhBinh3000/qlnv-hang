@@ -28,7 +28,7 @@ public class HhDchinhDxKhLcntDsgthau implements Serializable {
 	String maDvi;
 	@Transient
 	String tenDvi;
-	BigDecimal donGia;
+	BigDecimal donGiaVat;
 	BigDecimal thanhTien;
 	String loaiVthh;
 	String cloaiVthh;

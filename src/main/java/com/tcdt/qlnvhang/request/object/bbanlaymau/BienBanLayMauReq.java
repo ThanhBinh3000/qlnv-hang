@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.object.bbanlaymau;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -69,4 +70,5 @@ public class BienBanLayMauReq extends BaseRequest {
 	private Long idDdiemGiaoNvNh;
 
 	private List<BienBanLayMauCtReq> chiTiets = new ArrayList<>();
+	private ReportTemplateRequest reportTemplateRequest;
 }
