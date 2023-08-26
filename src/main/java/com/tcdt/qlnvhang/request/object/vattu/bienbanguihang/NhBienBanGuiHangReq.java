@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.request.object.vattu.bienbanguihang;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -73,4 +74,5 @@ public class NhBienBanGuiHangReq extends BaseRequest {
     private BigDecimal soLuongDdiemGiaoNvNh;
 
     private List<NhBienBanGuiHangCtReq> children = new ArrayList<>();
+    private ReportTemplateRequest reportTemplateRequest;
 }

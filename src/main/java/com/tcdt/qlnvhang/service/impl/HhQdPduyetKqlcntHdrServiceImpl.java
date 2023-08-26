@@ -634,30 +634,41 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
 		HhQdKhlcntPreview object = new HhQdKhlcntPreview();
+		BigDecimal tongSl = BigDecimal.ZERO;
+		BigDecimal tongThanhTien = BigDecimal.ZERO;
+		BigDecimal tongThanhTienNhaThau = BigDecimal.ZERO;
+		BigDecimal tongChenhLech = BigDecimal.ZERO;
 		if (objReq.getLoaiVthh().startsWith("02")) {
 			Optional<HhQdKhlcntHdr> qOptional = hhQdKhlcntHdrRepository.findById(qdPduyetKqlcntHdr.get().getIdQdPdKhlcnt());
 			if (!qOptional.isPresent()) {
 				throw new UnsupportedOperationException("Không tồn tại bản ghi");
 			}
+			Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 			if (qOptional.get().getIdTrHdr() != null) {
 				Optional<HhDxuatKhLcntHdr> dxuatKhLcntHdr = hhDxuatKhLcntHdrRepository.findById(qOptional.get().getIdTrHdr());
 				if (dxuatKhLcntHdr.isPresent()) {
-					Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 					object.setTenLoaiVthh(StringUtils.isEmpty(dxuatKhLcntHdr.get().getLoaiVthh()) ? null : hashMapDmHh.get(dxuatKhLcntHdr.get().getLoaiVthh()).toUpperCase());
 					object.setNamKhoach(dxuatKhLcntHdr.get().getNamKhoach().toString());
 				}
 			}
-			BigDecimal tongSl = BigDecimal.ZERO;
 			List<DsGthauPreview> dsGthau = new ArrayList<>();
 			if (qOptional.get().getDieuChinh().equals(Boolean.TRUE)) {
 				Optional<HhDchinhDxKhLcntHdr> dchinhDxKhLcntHdr = hhDchinhDxKhLcntHdrRepository.findByIdQdGocAndLastest(qOptional.get().getId(), Boolean.TRUE);
 				if (dchinhDxKhLcntHdr.isPresent()) {
 					List<HhDchinhDxKhLcntDsgthau> gThauList = dchinhDxKhLcntDsgthauRepository.findAllByIdDcDxHdr(dchinhDxKhLcntHdr.get().getId());
-
 					for(HhDchinhDxKhLcntDsgthau gThau : gThauList){
 						DsGthauPreview gthauPreview = new DsGthauPreview();
 						gthauPreview.setGoiThau(gThau.getGoiThau());
 						gthauPreview.setSoLuong(gThau.getSoLuong());
+						gthauPreview.setDonGia(docxToPdfConverter.convertBigDecimalToStr(gThau.getDonGiaVat()));
+						gthauPreview.setTenCloaiVthh(StringUtils.isEmpty(gThau.getCloaiVthh()) ? "" : hashMapDmHh.get(gThau.getCloaiVthh()).toUpperCase());
+						gthauPreview.setDonGiaNhaThau(docxToPdfConverter.convertBigDecimalToStr(gThau.getDonGiaNhaThau()));
+						gthauPreview.setThanhTien(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaVat())));
+						gthauPreview.setThanhTienNhaThau(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau())));
+						gthauPreview.setChenhLech(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaVat()).subtract((gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau())))));
+						tongThanhTien = tongThanhTien.add(gThau.getSoLuong().multiply(gThau.getDonGiaVat()));
+						tongThanhTienNhaThau = tongThanhTienNhaThau.add(gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau()));
+						tongChenhLech = tongChenhLech.add(gThau.getSoLuong().multiply(gThau.getDonGiaVat()).subtract((gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau()))));
 						tongSl = tongSl.add(gThau.getSoLuong());
 						gthauPreview.setDvt(gThau.getDviTinh());
 						HhQdPduyetKqlcntDtl kq = hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndType(gThau.getId(), "DC");
@@ -676,20 +687,30 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 					gthauPreview.setGoiThau(gThau.getGoiThau());
 					gthauPreview.setSoLuong(gThau.getSoLuong());
 					gthauPreview.setDvt(gThau.getDviTinh());
+					gthauPreview.setDonGia(docxToPdfConverter.convertBigDecimalToStr(gThau.getDonGiaVat()));
+					gthauPreview.setTenCloaiVthh(StringUtils.isEmpty(gThau.getCloaiVthh()) ? "" : hashMapDmHh.get(gThau.getCloaiVthh()).toUpperCase());
+					gthauPreview.setDonGiaNhaThau(docxToPdfConverter.convertBigDecimalToStr(gThau.getDonGiaNhaThau()));
+					gthauPreview.setChenhLech(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaVat()).subtract((gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau())))));
+					gthauPreview.setThanhTien(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaVat())));
+					gthauPreview.setThanhTienNhaThau(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau())));
+					tongThanhTien = tongThanhTien.add(gThau.getSoLuong().multiply(gThau.getDonGiaVat()));
+					tongThanhTienNhaThau = tongThanhTienNhaThau.add(gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau()));
+					tongChenhLech = tongChenhLech.add(gThau.getSoLuong().multiply(gThau.getDonGiaVat()).subtract((gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau()))));
 					tongSl = tongSl.add(gThau.getSoLuong());
 					HhQdPduyetKqlcntDtl kq = hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndType(gThau.getId(), "GOC");
 					if (kq != null) {
 						gthauPreview.setNhaThauTrungThau(kq.getTenNhaThau());
 					}
-					List<HhDthauNthauDuthau> byIdDtGt = nhaThauDuthauRepository.findByIdDtGtAndType(gThau.getId(), "GOC");
-					gthauPreview.setDsNhaThau(byIdDtGt);
 					dsGthau.add(gthauPreview);
 				}
 			}
 			object.setDsGthauKq(dsGthau);
-			object.setTongSl(tongSl.toString());
+			object.setTongSl(docxToPdfConverter.convertBigDecimalToStr(tongSl));
+			object.setTongThanhTien(docxToPdfConverter.convertBigDecimalToStr(tongThanhTien));
+			object.setTongThanhTienNhaThau(docxToPdfConverter.convertBigDecimalToStr(tongThanhTienNhaThau));
+			object.setTongChenhLech(docxToPdfConverter.convertBigDecimalToStr(tongChenhLech));
 		} else {
-			Optional<HhQdKhlcntDtl> byId = hhQdKhlcntDtlRepository.findById(objReq.getId());
+			Optional<HhQdKhlcntDtl> byId = hhQdKhlcntDtlRepository.findById(objReq.getIdQdPdKhlcntDtl());
 			if(!byId.isPresent()){
 				throw new Exception("Không tìm thấy dữ liệu");
 			}
@@ -703,13 +724,34 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			object.setNamKhoach(hdr.get().getNamKhoach().toString());
 			object.setTenDvi(mapDmucDvi.get(byId.get().getMaDvi()).toUpperCase());
 			List<HhQdKhlcntDsgthau> byIdQdDtl = hhQdKhlcntDsgthauRepository.findByIdQdDtl(byId.get().getId());
-			BigDecimal soLuong = BigDecimal.ZERO;
-			for(HhQdKhlcntDsgthau dsg : byIdQdDtl){
-				dsg.setDsNhaThauDthau(nhaThauDuthauRepository.findByIdDtGtAndType(dsg.getId(), null));
-				soLuong = soLuong.add(dsg.getSoLuong());
+			List<DsGthauPreview> dsGthau = new ArrayList<>();
+			for(HhQdKhlcntDsgthau gThau : byIdQdDtl){
+
+				DsGthauPreview gthauPreview = new DsGthauPreview();
+				gthauPreview.setGoiThau(gThau.getGoiThau());
+				gthauPreview.setSoLuong(gThau.getSoLuong());
+				gthauPreview.setDvt(gThau.getDviTinh());
+				gthauPreview.setDonGia(docxToPdfConverter.convertBigDecimalToStr(gThau.getDonGiaTamTinh()));
+				gthauPreview.setTenCloaiVthh(StringUtils.isEmpty(gThau.getCloaiVthh()) ? "" : hashMapDmHh.get(gThau.getCloaiVthh()).toUpperCase());
+				HhQdPduyetKqlcntDtl qdPduyetKqlcntDtl = hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndIdQdPdHdr(gThau.getId(), qdPduyetKqlcntHdr.get().getId());
+				if (qdPduyetKqlcntDtl != null) {
+					gthauPreview.setNhaThauTrungThau(qdPduyetKqlcntDtl.getTenNhaThau());
+					gthauPreview.setDonGiaNhaThau(docxToPdfConverter.convertBigDecimalToStr(qdPduyetKqlcntDtl.getDonGiaVat()));
+					gthauPreview.setChenhLech(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(qdPduyetKqlcntDtl.getDonGiaVat()).subtract((gThau.getSoLuong().multiply(gThau.getDonGiaTamTinh())))));
+					gthauPreview.setThanhTienNhaThau(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(qdPduyetKqlcntDtl.getDonGiaVat())));
+					tongThanhTienNhaThau = tongThanhTienNhaThau.add(gThau.getSoLuong().multiply(qdPduyetKqlcntDtl.getDonGiaVat()));
+					tongChenhLech = tongChenhLech.add(gThau.getSoLuong().multiply(qdPduyetKqlcntDtl.getDonGiaVat()).subtract((gThau.getSoLuong().multiply(gThau.getDonGiaTamTinh()))));
+				}
+				gthauPreview.setThanhTien(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaTamTinh())));
+				tongThanhTien = tongThanhTien.add(gThau.getSoLuong().multiply(gThau.getDonGiaTamTinh()));
+				tongSl = tongSl.add(gThau.getSoLuong());
+				dsGthau.add(gthauPreview);
 			}
-			object.setDsGthau(byIdQdDtl);
-			object.setTongSl(docxToPdfConverter.convertBigDecimalToStr(soLuong));
+			object.setDsGthauKq(dsGthau);
+			object.setTongSl(docxToPdfConverter.convertBigDecimalToStr(tongSl));
+			object.setTongThanhTien(docxToPdfConverter.convertBigDecimalToStr(tongThanhTien));
+			object.setTongThanhTienNhaThau(docxToPdfConverter.convertBigDecimalToStr(tongThanhTienNhaThau));
+			object.setTongChenhLech(docxToPdfConverter.convertBigDecimalToStr(tongChenhLech));
 		}
 		return docxToPdfConverter.convertDocxToPdf(inputStream, object);
 	}

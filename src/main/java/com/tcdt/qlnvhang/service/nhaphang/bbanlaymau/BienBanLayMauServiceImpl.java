@@ -14,11 +14,15 @@ import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKhoRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangRepository;
+import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.kiemtrachatluong.BienBanLayMauPreview;
+import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.nhapkho.NhBienBanGuiHangPreview;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauCtReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.extern.log4j.Log4j2;
@@ -32,6 +36,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.util.*;
 
 @Service
@@ -292,6 +297,19 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 			bienBanLayMauCtRepository.saveAll(chiTiets);
 		}
 		return chiTiets;
+	}
+
+	@Override
+	public ReportTemplateResponse preview(BienBanLayMauReq req) throws Exception {
+		BienBanLayMau bienBanLayMau = detail(req.getId());
+		if (bienBanLayMau == null) {
+			throw new Exception("Biên bản lấy mẫu không tồn tại.");
+		}
+		BienBanLayMauPreview object = new BienBanLayMauPreview();
+		ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
+		byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+		return docxToPdfConverter.convertDocxToPdf(inputStream, object);
 	}
 //
 //	@Override
