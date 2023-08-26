@@ -10,13 +10,16 @@ import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.bienbanchuanbikho.NhBienBanChuanBiKhoCtRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.bienbanchuanbikho.NhBienBanChuanBiKhoRepository;
+import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.kiemtrachatluong.NhBienBanChuanBiKhoPreview;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.HhQdPduyetKqlcntHdr;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +33,7 @@ import org.springframework.util.ObjectUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -208,6 +212,20 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
     @Override
     public void export(NhBienBanChuanBiKhoReq req, HttpServletResponse response) throws Exception {
 //        return false;
+    }
+
+    @Override
+    public ReportTemplateResponse preview(NhBienBanChuanBiKhoReq req) throws Exception {
+        NhBienBanChuanBiKho bienBanChuanBiKho = detail(req.getId());
+        if (bienBanChuanBiKho == null) {
+            throw new Exception("Biên bản chuẩn bị kho không tồn tại.");
+        }
+        NhBienBanChuanBiKhoPreview object = new NhBienBanChuanBiKhoPreview();
+        object.setSoBienBan(bienBanChuanBiKho.getSoBienBan());
+        ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
     }
 
 

@@ -9,13 +9,16 @@ import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiCtRepository;
 import com.tcdt.qlnvhang.repository.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiRepository;
+import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.nhapkho.NhPhieuNhapKhoTamGuiPreview;
 import com.tcdt.qlnvhang.request.object.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -27,6 +30,7 @@ import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -204,6 +208,21 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
     @Override
     public void export(NhPhieuNhapKhoTamGuiReq req, HttpServletResponse response) throws Exception {
 //        return false;
+    }
+
+    @Override
+    public ReportTemplateResponse preview(NhPhieuNhapKhoTamGuiReq req) throws Exception {
+        NhPhieuNhapKhoTamGui bienBanChuanBiKho = detail(req.getId());
+        if (bienBanChuanBiKho == null) {
+            throw new Exception("Biên bản chuẩn bị kho không tồn tại.");
+        }
+        NhPhieuNhapKhoTamGuiPreview object = new NhPhieuNhapKhoTamGuiPreview();
+        object.setNguoiGiaoHang(bienBanChuanBiKho.getNguoiGiaoHang());
+        object.setDonViGiaoHang(bienBanChuanBiKho.getDonViGiaoHang());
+        ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
     }
 
 //    @Override

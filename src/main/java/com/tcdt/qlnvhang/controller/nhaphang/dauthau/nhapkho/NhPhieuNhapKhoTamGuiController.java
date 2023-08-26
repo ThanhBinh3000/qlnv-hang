@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.controller.nhaphang.dauthau.nhapkho;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
+import com.tcdt.qlnvhang.request.object.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoReq;
 import com.tcdt.qlnvhang.request.object.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiReq;
 import com.tcdt.qlnvhang.request.search.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
@@ -156,4 +157,20 @@ public class NhPhieuNhapKhoTamGuiController {
 
     }
 
+    @ApiOperation(value = "Xem trước", response = List.class)
+    @PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> previewVt(@RequestBody NhPhieuNhapKhoTamGuiReq objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.preview(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Xem trước: {?}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
 }
