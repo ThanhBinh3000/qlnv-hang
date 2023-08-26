@@ -13,25 +13,27 @@ import java.util.Optional;
 
 public interface XhKqBdgHdrRepository extends JpaRepository<XhKqBdgHdr, Long> {
 
-    @Query("SELECT c FROM XhKqBdgHdr c where 1 = 1" +
-            "AND (:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi}) " +
-            "AND (:#{#param.soQdKq} IS NULL OR LOWER(c.soQdKq) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdKq}),'%' ) ) )" +
-            "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
-            "AND (:#{#param.trichYeu} IS NULL OR LOWER(c.trichYeu) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.trichYeu}),'%'))) " +
-            "AND (:#{#param.loaiVthh } IS NULL OR LOWER(c.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
-            "AND (:#{#param.cloaiVthh } IS NULL OR LOWER(c.cloaiVthh) LIKE CONCAT(:#{#param.cloaiVthh},'%')) " +
-            "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
-            "AND (:#{#param.ngayKyTu} IS NULL OR c.ngayKy >= :#{#param.ngayKyTu}) " +
-            "AND (:#{#param.ngayKyDen} IS NULL OR c.ngayKy <= :#{#param.ngayKyDen}) " +
-            "AND (:#{#param.trangThaiHd} IS NULL OR c.trangThaiHd = :#{#param.trangThaiHd}) "
-    )
-    Page<XhKqBdgHdr> search(@Param("param") XhKqBdgHdrReq param, Pageable pageable);
-
-    XhKqBdgHdr findByMaThongBao(String maThongBao);
+    @Query("SELECT KQ FROM XhKqBdgHdr KQ " + " WHERE 1=1 " +
+            "AND (:#{#param.dvql} IS NULL OR KQ.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
+            "AND (:#{#param.nam} IS NULL OR KQ.nam = :#{#param.nam}) " +
+            "AND (:#{#param.soQdKq} IS NULL OR LOWER(KQ.soQdKq) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdKq}),'%' ) ) )" +
+            "AND (:#{#param.trichYeu} IS NULL OR LOWER(KQ.trichYeu) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.trichYeu}),'%'))) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR KQ.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+            "AND (:#{#param.cloaiVthh } IS NULL OR LOWER(KQ.cloaiVthh) LIKE CONCAT(:#{#param.cloaiVthh},'%')) " +
+            "AND (:#{#param.ngayKyTu} IS NULL OR KQ.ngayKy >= :#{#param.ngayKyTu}) " +
+            "AND (:#{#param.ngayKyDen} IS NULL OR KQ.ngayKy <= :#{#param.ngayKyDen}) " +
+            "AND (:#{#param.trangThai} IS NULL OR KQ.trangThai = :#{#param.trangThai}) " +
+            "AND (:#{#param.trangThaiHd} IS NULL OR KQ.trangThaiHd = :#{#param.trangThaiHd}) " +
+            "ORDER BY KQ.ngaySua desc , KQ.ngayTao desc, KQ.id desc")
+    Page<XhKqBdgHdr> searchPage(@Param("param") XhKqBdgHdrReq param, Pageable pageable);
 
     Optional<XhKqBdgHdr> findBySoQdKq(String soQdKq);
 
-  Optional<XhKqBdgHdr> findFirstBySoQdKq(String soQdKq);
+    Optional<XhKqBdgHdr> findByMaThongBao(String maThongBao);
 
-    List<XhKqBdgHdr> findByIdIn(List<Long> idQdPdList);
+    List<XhKqBdgHdr> findByIdIn(List<Long> idQdList);
+
+    List<XhKqBdgHdr> findAllByIdIn(List<Long> listId);
+
+    Optional<XhKqBdgHdr> findFirstBySoQdKq(String soQdKq);
 }
