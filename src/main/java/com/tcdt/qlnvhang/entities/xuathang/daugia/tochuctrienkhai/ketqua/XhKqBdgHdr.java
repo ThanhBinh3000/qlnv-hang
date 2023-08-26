@@ -196,12 +196,12 @@ public class XhKqBdgHdr extends BaseEntity implements Serializable {
     @Transient
     private String tenTrangThaiXh;
 
-    public String getTenTrangThaiHd() {
+    public String getTrangThaiHd() {
         setTenTrangThaiHd(TrangThaiAllEnum.getLabelById(trangThaiHd));
         return trangThaiHd;
     }
 
-    public String getTenTrangThaiXh() {
+    public String getTrangThaiXh() {
         setTenTrangThaiXh(TrangThaiAllEnum.getLabelById(trangThaiXh));
         return trangThaiXh;
     }

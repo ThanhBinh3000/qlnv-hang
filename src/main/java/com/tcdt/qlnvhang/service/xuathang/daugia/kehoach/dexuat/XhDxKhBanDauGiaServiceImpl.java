@@ -75,6 +75,9 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
         if (!StringUtils.isEmpty(req.getSoDxuat())) {
             Optional<XhDxKhBanDauGia> optional = xhDxKhBanDauGiaRepository.findBySoDxuat(req.getSoDxuat());
             if (optional.isPresent()) throw new Exception("Số đề xuất " + req.getSoDxuat() + " đã tồn tại");
+        }else {
+            Optional<XhDxKhBanDauGia> optional = xhDxKhBanDauGiaRepository.findBySoDxuat(req.getSoDxuat());
+            if (optional.isPresent()) throw new Exception("Số đề xuất đã tồn tại");
         }
         XhDxKhBanDauGia data = new XhDxKhBanDauGia();
         BeanUtils.copyProperties(req, data);
