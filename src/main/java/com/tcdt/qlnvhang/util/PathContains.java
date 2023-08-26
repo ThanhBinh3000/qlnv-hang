@@ -305,6 +305,7 @@ public class PathContains {
     public static final String XUAT_THANH_LY = "/xuat-thanh-ly";
 
     public static final String SUA_CHUA = "/sua-chua";
+    public static final String QUAN_TRI_HE_THONG = "/quan-tri-he-thong";
 
     // xuất khác
     public static final String XUAT_KHAC = "/xuat-khac";
@@ -367,4 +368,8 @@ public class PathContains {
     public static final String TH_NK = "/thop-kh-nk";
     public static final String DS_DX_CHUA_TH = "/dx-chua-th";
     public static final String NHAP_XUAT_HISTORY = "/lich-su-nhap-xuat";
+
+    //
+    public static final String CHOT_GIA_NHAP_XUAT = "/chot-gia-nhap-xuat";
+
 }

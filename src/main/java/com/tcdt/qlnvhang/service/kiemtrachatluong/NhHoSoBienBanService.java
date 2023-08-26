@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.kiemtrachatluong;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHang;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.kiemtrachatluong.NhHoSoBienBanCtRepository;
 import com.tcdt.qlnvhang.repository.kiemtrachatluong.NhHoSoBienBanRepository;
@@ -8,13 +9,19 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.kiemtrachatluong.NhHoSoBienBanCtReq;
 import com.tcdt.qlnvhang.request.kiemtrachatluong.NhHoSoBienBanReq;
+import com.tcdt.qlnvhang.request.kiemtrachatluong.SearchNhHoSoBienBan;
+import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.kiemtrachatluong.NhHoSoBienBanPreview;
+import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.nhapkho.NhBienBanGuiHangPreview;
+import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoBienBan;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoBienBanCt;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
@@ -24,6 +31,7 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.Transient;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -167,4 +175,15 @@ public class NhHoSoBienBanService extends BaseServiceImpl {
         return created;
     }
 
+    public ReportTemplateResponse preview(SearchNhHoSoBienBan req) throws Exception {
+        NhHoSoBienBan hoSoBienBan = detail(req.getId().toString());
+        if (hoSoBienBan == null) {
+            throw new Exception("Hồ sơ kỹ thuật không tồn tại.");
+        }
+        NhHoSoBienBanPreview object = new NhHoSoBienBanPreview();
+        ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+    }
 }

@@ -9,21 +9,21 @@ import java.util.List;
 
 @Data
 public class SearchXhCtvtQuyetDinhGnv extends BaseRequest {
-  private Long id;
-  private Integer nam;
-  private String maDvi;
-  private String dvql;
-  private String soQd;
-  private String loaiVthh;
-  private String trichYeu;
-  private LocalDate ngayKyTu;
-  private LocalDate ngayKyDen;
-  private String trangThai;
-  private String trangThaiXh;
-  private List<String> listTrangThaiXh = new ArrayList<>();
-  private String type;
+   Long id;
+   Integer nam;
+   String maDvi;
+   String dvql;
+   String soBbQd;
+   String loaiVthh;
+   String trichYeu;
+   LocalDate ngayKyTu;
+   LocalDate ngayKyDen;
+   String trangThai;
+   String trangThaiXh;
+   List<String> listTrangThaiXh = new ArrayList<>();
+   String type;
 
   //dung cho chuc nang list cua man hình Qdpd
-  private List<Long> idQdPdList = new ArrayList<>();
-  private Boolean idQdPdNull = false;
+   List<Long> idQdPdList = new ArrayList<>();
+   Boolean idQdPdNull = false;
 }

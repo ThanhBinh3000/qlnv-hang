@@ -89,7 +89,7 @@ public class DcnbBBNTBQHdr extends BaseEntity implements Serializable, Cloneable
     @Column(name = "DS_PHIEU_NHAP_KHO")
     private String dsPhieuNhapKho;
     @Column(name = "SL_THUC_NHAP_DC")
-    private Double slThucNhapDc;
+    private BigDecimal slThucNhapDc;
     @Column(name = "SO_BB_NHAP_DAY_KHO")
     private String soBbNhapDayKho;
     @Column(name = "BB_NHAP_DAY_KHO_ID")

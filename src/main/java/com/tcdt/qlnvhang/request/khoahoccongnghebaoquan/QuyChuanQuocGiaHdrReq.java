@@ -39,4 +39,6 @@ public class QuyChuanQuocGiaHdrReq {
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
     private List<QuyChuanQuocGiaDtlReq> tieuChuanKyThuat = new ArrayList<>();
     private ReportTemplateRequest reportTemplateRequest;
+    private Long idVanBanSuaDoi;
+    private String soVanBanSuaDoi;
 }

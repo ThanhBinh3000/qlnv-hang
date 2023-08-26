@@ -4,9 +4,19 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.olap4j.impl.ArrayMap;
 
 import javax.persistence.*;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Map;
@@ -107,4 +117,5 @@ public class XhCtvtQuyetDinhGnvDtl implements Serializable {
   @JoinColumn(name = "idHdr")
   @JsonIgnore
   private XhCtvtQuyetDinhGnvHdr xhCtvtQuyetDinhGnvHdr;
+
 }

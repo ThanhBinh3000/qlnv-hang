@@ -16,7 +16,7 @@ public class HhQdPdNhapKhacHdrReq {
     private Long IdTh;
     private String maTh;
     private Integer namKhoach;
-    private Integer tongThanhTien;
+    private BigDecimal tongThanhTien;
     private String maDvi;
     private String dvt;
     private String loaiHinhNx;

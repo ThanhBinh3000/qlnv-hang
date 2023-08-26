@@ -20,6 +20,8 @@ public class HhQdKhlcntPreview {
     private String tongSl;
     private String tenDvi;
     private String tongThanhTien;
+    private String tongThanhTienNhaThau;
+    private String tongChenhLech;
     private List<HhQdKhlcntDsgthau> dsGthau;
     private List<DsGthauPreview> dsGthauKq;
     private List<HhQdKhlcntDtl> qdKhlcntDtls;

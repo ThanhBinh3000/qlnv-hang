@@ -1,8 +1,10 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bienbanguihang;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHang;
+import com.tcdt.qlnvhang.request.object.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangReq;
 import com.tcdt.qlnvhang.service.BaseService;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 
 public interface NhBienBanGuiHangService extends BaseService<NhBienBanGuiHang,NhBienBanGuiHangReq,Long> {
 //    NhBienBanGuiHangRes create(NhBienBanGuiHangReq req) throws Exception;
@@ -27,4 +29,5 @@ public interface NhBienBanGuiHangService extends BaseService<NhBienBanGuiHang,Nh
 //    Integer getSo() throws Exception;
 //
 //    BaseNhapHangCount count(Set<String> maDvis) throws Exception;
+    ReportTemplateResponse preview(NhBienBanGuiHangReq req) throws Exception;
 }

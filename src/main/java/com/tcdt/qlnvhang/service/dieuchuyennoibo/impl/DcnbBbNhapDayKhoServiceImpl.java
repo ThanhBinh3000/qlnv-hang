@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBNTBQHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbNhapDayKhoDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbNhapDayKhoHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
@@ -12,6 +13,7 @@ import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBbNhapDayKhoService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbNhapDayKhoHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -40,6 +42,8 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
 
     @Autowired
     private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
+    @Autowired
+    private DcnbBBNTBQHdrRepository dcnbBBNTBQHdrRepository;
 
     @Override
     public Page<DcnbBbNhapDayKhoHdr> searchPage(DcnbBbNhapDayKhoHdrReq req) throws Exception {
@@ -180,6 +184,21 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
                 hdr.setNgayPDuyet(LocalDate.now());
                 hdr.setNguoiPDuyet(userInfo.getId());
                 hdr.setIdLanhDao(userInfo.getId());
+
+                List<DcnbBBNTBQHdr> bbntbqHdrList = new ArrayList<>();
+                if (hdr.getMaLoKho() == null) {
+                    bbntbqHdrList = dcnbBBNTBQHdrRepository.findByQdDcCucIdAndMaNganKho(hdr.getQdDcCucId(), hdr.getMaNganKho());
+                } else {
+                    bbntbqHdrList = dcnbBBNTBQHdrRepository.findByQdDcCucIdAndMaNganKhoAndMaLoKho(hdr.getQdDcCucId(), hdr.getMaNganKho(), hdr.getMaLoKho());
+                }
+
+                // lưu biên bản nghiệp thu bảo quản lần đầu
+                for (DcnbBBNTBQHdr hdrbq : bbntbqHdrList) {
+                    hdrbq.setBbNhapDayKhoId(hdr.getId());
+                    hdrbq.setSoBbNhapDayKho(hdr.getSoBb());
+                    dcnbBBNTBQHdrRepository.save(hdrbq);
+                }
+
                 break;
             // Arena từ chối
             case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_KTVBQ:

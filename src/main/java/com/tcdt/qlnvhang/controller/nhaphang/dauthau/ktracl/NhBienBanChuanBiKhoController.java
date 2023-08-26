@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.controller.nhaphang.dauthau.ktracl;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.object.HhQdKhlcntHdrReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoReq;
 import com.tcdt.qlnvhang.request.search.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
@@ -155,4 +156,21 @@ public class NhBienBanChuanBiKhoController {
 //            log.error("Error can not export", e);
 //        }
 //    }
+
+    @ApiOperation(value = "Xem trước", response = List.class)
+    @PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> previewVt(@RequestBody NhBienBanChuanBiKhoReq objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.preview(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Xem trước: {?}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
 }

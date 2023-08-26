@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -72,5 +73,6 @@ public class NhBienBanChuanBiKhoReq extends BaseRequest {
     private List<FileDinhKemReq> listFileDinhKem;
 
     private List<NhBienBanChuanBiKhoCtReq> children = new ArrayList<>();
+    private ReportTemplateRequest reportTemplateRequest;
 }
 
