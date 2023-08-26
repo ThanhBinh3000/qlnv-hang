@@ -499,6 +499,8 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> mapPhuongThucTt = getListDanhMucChung("PHUONG_THUC_TT");
+        Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
+        Map<String, String> mapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
         List<XhQdPdKhBdgDtl> allByIdDtl = xhQdPdKhBdgDtlRepository.findAllById(ids);
         for (XhQdPdKhBdgDtl dataDtl : allByIdDtl) {
             List<XhQdPdKhBdgPl> phanLo = xhQdPdKhBdgPlRepository.findAllByIdQdDtl(dataDtl.getId());
@@ -521,7 +523,11 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
             dataDtl.setChildren(phanLo);
             List<XhTcTtinBdgHdr> xhTcTtinBdgHdrs = xhTcTtinBdgHdrRepository.findByIdQdPdDtlOrderByLanDauGia(dataDtl.getId());
             dataDtl.setListTtinDg(xhTcTtinBdgHdrs);
-            dataDtl.setXhQdPdKhBdg(xhQdPdKhBdgRepository.findById(dataDtl.getIdQdHdr()).get());
+            XhQdPdKhBdg hdr = xhQdPdKhBdgRepository.findById(dataDtl.getIdQdHdr()).get();
+            hdr.setMapVthh(mapVthh);
+            hdr.setMapKieuNx(mapKieuNx);
+            hdr.setMapLoaiHinhNx(mapLoaiHinhNx);
+            dataDtl.setXhQdPdKhBdg(hdr);
         }
         return allByIdDtl;
     }
