@@ -56,6 +56,7 @@ public class XhThHoSoService extends BaseServiceImpl {
         s.setTenDvi(objDonVi.get("tenDvi").toString());
       }
       s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
+      s.setTenTrangThaiTc(TrangThaiAllEnum.getLabelById(s.getTrangThaiTc()));
     });
     return search;
   }
@@ -144,6 +145,7 @@ public class XhThHoSoService extends BaseServiceImpl {
     List<XhThHoSoHdr> allById = xhThHoSoRepository.findAllById(ids);
     allById.forEach(data -> {
       data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
+      data.setTenTrangThaiTc(TrangThaiAllEnum.getLabelById(data.getTrangThaiTc()));
       List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhThHoSoHdr.TABLE_NAME));
       data.setFileDinhKem(fileDinhKem);
 
@@ -236,6 +238,7 @@ public class XhThHoSoService extends BaseServiceImpl {
           break;
         case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
         case Contains.TUCHOI_LDTC + Contains.CHODUYET_LDTC:
+        case Contains.TU_CHOI_BTC + Contains.CHO_DUYET_BTC:
           optional.get().setNguoiPduyetId(currentUser.getUser().getId());
           optional.get().setNgayPduyet(LocalDate.now());
           optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
@@ -243,6 +246,10 @@ public class XhThHoSoService extends BaseServiceImpl {
         case Contains.DADUYET_LDTC + Contains.CHODUYET_LDTC:
           optional.get().setNguoiPduyetId(currentUser.getUser().getId());
           optional.get().setNgayDuyetLan2(LocalDate.now());
+          break;
+        case Contains.DA_DUYET_BTC + Contains.CHO_DUYET_BTC:
+          optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+          optional.get().setNgayDuyetLan3(LocalDate.now());
           break;
         default:
           throw new Exception("Phê duyệt không thành công");
