@@ -15,7 +15,14 @@ import java.util.List;
 public interface QthtChotGiaNhapXuatRepository extends JpaRepository<QthtChotGiaNhapXuat, Long> {
 
 
-    @Query(value = "SELECT q FROM QthtChotGiaNhapXuat q WHERE 1 = 1" +
+    @Query(value = "SELECT q FROM QthtChotGiaNhapXuat q " +
+            " LEFT JOIN UserInfo u on u.id = q.nguoiTaoId" +
+            " WHERE 1 = 1 " +
+            " AND (:#{#param.type} IS NULL OR q.type = :#{#param.type}) " +
+            " AND (:#{#param.ngayChotSr} IS NULL OR q.ngayChot >= :#{#param.ngayChotSr}) " +
+            " AND (:#{#param.ngayHlucSr} IS NULL OR q.ngayHluc >= :#{#param.ngayHlucSr}) " +
+            " AND (:#{#param.ngayHuySr} IS NULL OR q.ngayHuy >= :#{#param.ngayHuySr}) " +
+            " AND (:#{#param.taiKhoanSr} IS NULL OR lower(u.fullName) LIKE lower(concat('%',CONCAT(:#{#param.taiKhoanSr},'%'))))" +
             " ORDER BY q.ngaySua desc , q.ngayTao desc, q.id desc "
     )
     Page<QthtChotGiaNhapXuat> searchPage(@Param("param") QthtChotGiaNhapXuatReq req, Pageable pageable);
