@@ -13,6 +13,7 @@ import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovie
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdHdr;
+import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
@@ -65,6 +66,8 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
 
     XhCtvtQuyetDinhGnvHdr saveData = new XhCtvtQuyetDinhGnvHdr();
     DataUtils.copyProperties(objReq, saveData, "id");
+    saveData.setMaDvi(currentUser.getUser().getDepartment());
+    saveData.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
     XhCtvtQuyetDinhGnvHdr created = xhCtvtQuyetDinhGnvHdrRepository.save(saveData);
 
     if (!DataUtils.isNullObject(created)) {

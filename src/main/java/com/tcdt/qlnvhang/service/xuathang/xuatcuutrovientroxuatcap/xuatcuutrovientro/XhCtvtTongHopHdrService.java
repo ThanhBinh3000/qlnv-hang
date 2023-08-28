@@ -101,7 +101,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
   public XhCtvtTongHopHdr save(CustomUserDetails currentUser, XhCtvtTongHopHdrReq objReq) throws Exception {
     XhCtvtTongHopHdr thopHdr = new XhCtvtTongHopHdr();
     DataUtils.copyProperties(objReq, thopHdr, "id");
-    thopHdr.setTrangThai(Contains.DUTHAO);
+    thopHdr.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
     thopHdr.setMaDvi(currentUser.getUser().getDepartment());
 
     XhCtvtTongHopHdr created = xhCtvtTongHopHdrRepository.save(thopHdr);

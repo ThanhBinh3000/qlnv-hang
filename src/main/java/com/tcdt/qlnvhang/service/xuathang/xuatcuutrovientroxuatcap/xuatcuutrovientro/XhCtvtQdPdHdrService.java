@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -102,7 +103,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     XhCtvtQuyetDinhPdHdr data = new XhCtvtQuyetDinhPdHdr();
     BeanUtils.copyProperties(objReq, data);
     data.setMaDvi(currentUser.getUser().getDepartment());
-    data.setTrangThai(Contains.DUTHAO);
+    data.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
     XhCtvtQuyetDinhPdHdr created = xhCtvtQdPdHdrRepository.save(data);
 
     if (!DataUtils.isNullOrEmpty(created.getMaTongHop())) {
