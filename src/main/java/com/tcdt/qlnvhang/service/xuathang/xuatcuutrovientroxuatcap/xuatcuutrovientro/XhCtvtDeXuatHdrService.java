@@ -101,7 +101,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     XhCtvtDeXuatHdr data = new XhCtvtDeXuatHdr();
     BeanUtils.copyProperties(objReq, data);
     data.setMaDvi(currentUser.getUser().getDepartment());
-    data.setTrangThai(Contains.DUTHAO);
+    data.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
     XhCtvtDeXuatHdr created = xhCtvtDeXuatHdrRepository.save(data);
     xhCtvtDeXuatHdrRepository.save(created);
     return created;

@@ -118,4 +118,34 @@ public class XhCtvtQuyetDinhGnvDtl implements Serializable {
   @JsonIgnore
   private XhCtvtQuyetDinhGnvHdr xhCtvtQuyetDinhGnvHdr;
 
+  public XhCtvtQuyetDinhGnvDtl(Long id, Long idDx, BigDecimal soLuongDx, String loaiHinhNhapXuat, String kieuNhapXuat, String mucDichXuat, String noiDungDx, String loaiVthh, String cloaiVthh, String maDvi, BigDecimal soLuong, BigDecimal tonKhoDvi, BigDecimal tonKhoLoaiVthh, BigDecimal tonKhoCloaiVthh, String donViTinh, String trangThai, Map<String, String> mapVthh, String tenLoaiVthh, String tenCloaiVthh, Map<String, String> mapDmucDvi, String tenDvi, String tenCuc, String tenChiCuc, String tenDiemKho, String tenNhaKho, String tenNganKho, String tenLoKho, XhCtvtQuyetDinhGnvHdr xhCtvtQuyetDinhGnvHdr) {
+    this.id = id;
+    this.idDx = idDx;
+    this.soLuongDx = soLuongDx;
+    this.loaiHinhNhapXuat = loaiHinhNhapXuat;
+    this.kieuNhapXuat = kieuNhapXuat;
+    this.mucDichXuat = mucDichXuat;
+    this.noiDungDx = noiDungDx;
+    this.loaiVthh = loaiVthh;
+    this.cloaiVthh = cloaiVthh;
+    this.maDvi = maDvi;
+    this.soLuong = soLuong;
+    this.tonKhoDvi = tonKhoDvi;
+    this.tonKhoLoaiVthh = tonKhoLoaiVthh;
+    this.tonKhoCloaiVthh = tonKhoCloaiVthh;
+    this.donViTinh = donViTinh;
+    this.trangThai = trangThai;
+    this.mapVthh = mapVthh;
+    this.tenLoaiVthh = tenLoaiVthh;
+    this.tenCloaiVthh = tenCloaiVthh;
+    this.mapDmucDvi = mapDmucDvi;
+    this.tenDvi = tenDvi;
+    this.tenCuc = tenCuc;
+    this.tenChiCuc = tenChiCuc;
+    this.tenDiemKho = tenDiemKho;
+    this.tenNhaKho = tenNhaKho;
+    this.tenNganKho = tenNganKho;
+    this.tenLoKho = tenLoKho;
+    this.xhCtvtQuyetDinhGnvHdr = xhCtvtQuyetDinhGnvHdr;
+  }
 }
