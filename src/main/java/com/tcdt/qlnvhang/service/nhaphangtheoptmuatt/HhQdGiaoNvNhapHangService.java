@@ -378,7 +378,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
             hhQdPheduyetKhMttHdr.get().setSoQdGnvu(data.getSoQd());
             hhQdPheduyetKhMttHdrRepository.save(hhQdPheduyetKhMttHdr.get());
         }
-        if(objReq.getIdHd() != null){
+        if(!StringUtils.isEmpty(objReq.getIdHd())){
             String[] idHds = objReq.getIdHd().split(",");
             for (int i = 0; i < idHds.length; i++) {
                 Optional<HopDongMttHdr> hopDongMttHdr = hopDongMttHdrRepository.findById(Long.valueOf(idHds[i]));

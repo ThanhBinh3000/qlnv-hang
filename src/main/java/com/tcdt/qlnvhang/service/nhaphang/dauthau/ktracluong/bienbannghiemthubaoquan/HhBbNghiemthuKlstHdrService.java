@@ -1,10 +1,12 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.bienbannghiemthubaoquan;
 
+import com.tcdt.qlnvhang.request.object.HhQdKhlcntHdrReq;
 import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
 import com.tcdt.qlnvhang.service.BaseService;
 
 import com.tcdt.qlnvhang.request.object.HhBbNghiemthuKlstHdrReq;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
@@ -19,6 +21,8 @@ public interface HhBbNghiemthuKlstHdrService extends BaseService<HhBbNghiemthuKl
 //
 //	HhBbNghiemthuKlstHdr detail(Long ids) throws Exception;
 	Object getDataKho(String maDvi) throws Exception;
+
+	ReportTemplateResponse preview(HhBbNghiemthuKlstHdrReq objReq) throws Exception;
 //
 //	Page<HhBbNghiemthuKlstHdr> colection(HhBbNghiemthuKlstSearchReq objReq, HttpServletRequest req) throws Exception;
 //

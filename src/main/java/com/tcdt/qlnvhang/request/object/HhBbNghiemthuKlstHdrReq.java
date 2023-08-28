@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -94,5 +95,7 @@ public class HhBbNghiemthuKlstHdrReq extends BaseRequest {
 	private List<HhBbNghiemthuKlstDtlReq> detail;
 
 	private List<FileDinhKemReq> fileDinhKems;
+
+	private ReportTemplateRequest reportTemplateRequest;
 
 }

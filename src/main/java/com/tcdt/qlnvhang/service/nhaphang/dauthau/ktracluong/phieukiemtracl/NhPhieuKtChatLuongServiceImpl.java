@@ -1,18 +1,25 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.phieukiemtracl;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuongCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.phieuktracl.QlpktclhKetQuaKiemTraRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuongRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNxDdiemRepository;
+import com.tcdt.qlnvhang.request.object.HhBbNghiemThuKlstPreview;
+import com.tcdt.qlnvhang.request.object.HhBbNghiemthuKlstHdrReq;
+import com.tcdt.qlnvhang.request.object.NnPhieuKtChatLuongPreview;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongRequestDto;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNxDdiem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -28,6 +35,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
@@ -288,6 +296,21 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 			item.setPhieuNhapKho(nhPhieuNhapKhoRepository.findBySoPhieuKtraCl(item.getSoPhieu()));
 		});
 		return list;
+	}
+
+	@Override
+	public ReportTemplateResponse preview(QlpktclhPhieuKtChatLuongRequestDto objReq) throws Exception {
+		Optional<NhPhieuKtChatLuong> qOptional = qlpktclhPhieuKtChatLuongRepo.findById(objReq.getId());
+		if (!qOptional.isPresent()) {
+			throw new UnsupportedOperationException("Không tồn tại bản ghi");
+		}
+		ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+		byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+		NnPhieuKtChatLuongPreview object = new NnPhieuKtChatLuongPreview();
+		NhPhieuKtChatLuong nhPhieuKtChatLuong = this.detail(objReq.getId());
+		BeanUtils.copyProperties(nhPhieuKtChatLuong, object);
+		return docxToPdfConverter.convertDocxToPdf(inputStream, object);
 	}
 
 }
