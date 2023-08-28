@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.request.phieuktracluong;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -86,5 +87,8 @@ public class QlpktclhPhieuKtChatLuongRequestDto extends BaseRequest {
 	private List<QlpktclhKetQuaKiemTraRequestDto> ketQuaKiemTra;
 	private List<FileDinhKemReq> fileDinhKems;
 	private List<FileDinhKemReq> fileDinhKemsKtcl;
+
+
+	private ReportTemplateRequest reportTemplateRequest;
 
 }
