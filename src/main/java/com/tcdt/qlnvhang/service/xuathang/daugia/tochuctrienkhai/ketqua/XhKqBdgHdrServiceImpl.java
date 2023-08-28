@@ -289,12 +289,12 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl {
 
   public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
     try {
-//      ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
-//      reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
-//      ReportTemplate model = findByTenFile(reportTemplateRequest);
-//      byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-//      ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-      FileInputStream inputStream = new FileInputStream("src/main/resources/reports/bandaugia/Quyết định phê duyệt kết quả vật tư.docx");
+      ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
+      reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
+      ReportTemplate model = findByTenFile(reportTemplateRequest);
+      byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+      ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+//      FileInputStream inputStream = new FileInputStream("src/main/resources/reports/bandaugia/Quyết định phê duyệt kết quả vật tư.docx");
       List<XhKqBdgHdr> detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
       List<XhTcTtinBdgHdr> detail1 = xhTcTtinBdgHdrServiceImpl.detail(Arrays.asList(detail.get(0).getIdThongTin()));
       for (XhTcTtinBdgDtl dataDtl : detail1.get(0).getChildren()) {
