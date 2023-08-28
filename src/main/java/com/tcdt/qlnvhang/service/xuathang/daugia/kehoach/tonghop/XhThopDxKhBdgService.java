@@ -235,14 +235,14 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
       List<XhDxKhBanDauGia> tableData = xhDxKhBanDauGiaServiceImpl.detail(listIdChild);
 
       //set thong tin gia duoc duyet
-      Map<String, Map<String, Object>> mapThongTinGia = keHoachService.getThongTinGia(DataUtils.safeToLong(xhThopDxKhBdg.getNamKh()), "LG04", xhThopDxKhBdg.getLoaiVthh(), xhThopDxKhBdg.getCloaiVthh(), "0101");
+//      Map<String, Map<String, Object>> mapThongTinGia = keHoachService.getThongTinGia(DataUtils.safeToLong(xhThopDxKhBdg.getNamKh()), "LG04", xhThopDxKhBdg.getLoaiVthh(), xhThopDxKhBdg.getCloaiVthh(), "0101");
       tableData.forEach(s -> {
         String maDviCuc = s.getMaDvi().substring(0, 6);
         if (mapDmucDvi.containsKey((maDviCuc))) {
           Map<String, Object> objDonVi = mapDmucDvi.get(maDviCuc);
           s.setTenDvi(objDonVi.get("tenDvi").toString());
         }
-        s.getChildren().forEach(s1 -> {
+        /*s.getChildren().forEach(s1 -> {
           s1.getChildren().forEach(s2 -> {
             if (mapThongTinGia.containsKey((s1.getMaDvi()))) {
               s2.setDonGiaDuocDuyet(DataUtils.safeToBigDecimal(mapThongTinGia.get(s1.getMaDvi()).get("giaQdTcdt")));
@@ -250,7 +250,7 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
               s2.setDonGiaDuocDuyet(new BigDecimal(BigInteger.ZERO));
             }
           });
-        });
+        });*/
       });
 
       HashMap<Object, Object> hashMap = new HashMap<>();
