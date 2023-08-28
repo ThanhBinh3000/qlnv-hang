@@ -28,7 +28,7 @@ public interface XhThHoSoRepository extends JpaRepository<XhThHoSoHdr, Long> {
 
   void deleteAllByIdIn(List<Long> listId);
 
-  List<XhThHoSoHdr> findByIdIn(List<Long> ids);
+  List<XhThHoSoHdr> findByIdIn( List<Long> ids);
 
   List<XhThHoSoHdr> findAllByIdIn(List<Long> listId);
 
