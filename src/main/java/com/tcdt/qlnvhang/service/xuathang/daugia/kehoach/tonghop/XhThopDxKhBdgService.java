@@ -33,6 +33,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -241,7 +243,13 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
           s.setTenDvi(objDonVi.get("tenDvi").toString());
         }
         s.getChildren().forEach(s1 -> {
-          s1.getChildren().forEach(s2 -> s2.setDonGiaDuocDuyet(DataUtils.safeToBigDecimal(mapThongTinGia.get(s1.getMaDvi()).get("giaQdTcdt"))));
+          s1.getChildren().forEach(s2 -> {
+            if (mapThongTinGia.containsKey((s1.getMaDvi()))) {
+              s2.setDonGiaDuocDuyet(DataUtils.safeToBigDecimal(mapThongTinGia.get(s1.getMaDvi()).get("giaQdTcdt")));
+            } else {
+              s2.setDonGiaDuocDuyet(new BigDecimal(BigInteger.ZERO));
+            }
+          });
         });
       });
 
