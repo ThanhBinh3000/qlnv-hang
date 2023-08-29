@@ -25,6 +25,8 @@ import java.util.Map;
 @Table(name = XhCtvtQuyetDinhGnvDtl.TABLE_NAME)
 @Getter
 @Setter
+
+
 public class XhCtvtQuyetDinhGnvDtl implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -118,7 +120,7 @@ public class XhCtvtQuyetDinhGnvDtl implements Serializable {
   @JsonIgnore
   private XhCtvtQuyetDinhGnvHdr xhCtvtQuyetDinhGnvHdr;
 
-  public XhCtvtQuyetDinhGnvDtl(Long id, Long idDx, BigDecimal soLuongDx, String loaiHinhNhapXuat, String kieuNhapXuat, String mucDichXuat, String noiDungDx, String loaiVthh, String cloaiVthh, String maDvi, BigDecimal soLuong, BigDecimal tonKhoDvi, BigDecimal tonKhoLoaiVthh, BigDecimal tonKhoCloaiVthh, String donViTinh, String trangThai, Map<String, String> mapVthh, String tenLoaiVthh, String tenCloaiVthh, Map<String, String> mapDmucDvi, String tenDvi, String tenCuc, String tenChiCuc, String tenDiemKho, String tenNhaKho, String tenNganKho, String tenLoKho, XhCtvtQuyetDinhGnvHdr xhCtvtQuyetDinhGnvHdr) {
+  /*public XhCtvtQuyetDinhGnvDtl(Long id, Long idDx, BigDecimal soLuongDx, String loaiHinhNhapXuat, String kieuNhapXuat, String mucDichXuat, String noiDungDx, String loaiVthh, String cloaiVthh, String maDvi, BigDecimal soLuong, BigDecimal tonKhoDvi, BigDecimal tonKhoLoaiVthh, BigDecimal tonKhoCloaiVthh, String donViTinh, String trangThai, Map<String, String> mapVthh, String tenLoaiVthh, String tenCloaiVthh, Map<String, String> mapDmucDvi, String tenDvi, String tenCuc, String tenChiCuc, String tenDiemKho, String tenNhaKho, String tenNganKho, String tenLoKho, XhCtvtQuyetDinhGnvHdr xhCtvtQuyetDinhGnvHdr) {
     this.id = id;
     this.idDx = idDx;
     this.soLuongDx = soLuongDx;
@@ -147,5 +149,5 @@ public class XhCtvtQuyetDinhGnvDtl implements Serializable {
     this.tenNganKho = tenNganKho;
     this.tenLoKho = tenLoKho;
     this.xhCtvtQuyetDinhGnvHdr = xhCtvtQuyetDinhGnvHdr;
-  }
+  }*/
 }

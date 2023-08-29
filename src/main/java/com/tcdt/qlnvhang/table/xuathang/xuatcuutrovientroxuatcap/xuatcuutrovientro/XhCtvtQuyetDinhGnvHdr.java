@@ -4,7 +4,9 @@ import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
@@ -18,7 +20,9 @@ import java.util.List;
 
 @Entity
 @Table(name = XhCtvtQuyetDinhGnvHdr.TABLE_NAME)
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class XhCtvtQuyetDinhGnvHdr extends BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -67,14 +71,12 @@ public class XhCtvtQuyetDinhGnvHdr extends BaseEntity implements Serializable {
   private String tenTrangThai;
   @Transient
   private String tenTrangThaiXh;
-  @Transient
-  private List<XhCtvtQdGiaoNvXhDtl> noiDungCuuTro = new ArrayList<>();
 
 
   @OneToMany(mappedBy = "xhCtvtQuyetDinhGnvHdr", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<XhCtvtQuyetDinhGnvDtl> dataDtl = new ArrayList<>();
 
-  public void setChildren(List<XhCtvtQuyetDinhGnvDtl> children) {
+  public void setDataDtl(List<XhCtvtQuyetDinhGnvDtl> children) {
     dataDtl.clear();
     if (!DataUtils.isNullOrEmpty(children)) {
       children.forEach(s -> {
