@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
+import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdDtl;
 import lombok.Data;
@@ -44,9 +45,9 @@ public class XhCtvtQuyetDinhPdHdrReq {
   private Long idQdGiaoNv;
   private String soQdGiaoNv;
 
-  private List<FileDinhKemReq> fileDinhKem;
+  private List<FileDinhKemJoinTable> fileDinhKem;
 
-  private List<FileDinhKemReq> canCu = new ArrayList<>();
+  private List<FileDinhKemJoinTable> canCu = new ArrayList<>();
 
   private List<XhCtvtQuyetDinhPdDtl> quyetDinhPdDtl = new ArrayList<>();
 }
