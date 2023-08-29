@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhBienBanLayMauReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhBbanLayMau;
+import com.tcdt.qlnvhang.request.object.vattu.bangke.NhBangKeVtReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.HhBienBanLayMauService;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -210,4 +211,20 @@ public class HhBienBanLayMauController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
+    @ApiOperation(value = "Xem trước", response = List.class)
+    @PostMapping(value = PathContains.BB_LM + PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> preview(@RequestBody HhBienBanLayMauReq objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(hhBienBanLayMauService.preview(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Xem trước: {?}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
 }

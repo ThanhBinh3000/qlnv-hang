@@ -7,11 +7,14 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.vattu.bienbangiaonhan.NhBbGiaoNhanVtCtRepository;
 import com.tcdt.qlnvhang.repository.vattu.bienbangiaonhan.NhBbGiaoNhanVtRepository;
+import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.nhapkho.NhBbGiaoNhanVtPreview;
 import com.tcdt.qlnvhang.request.object.vattu.bienbangiaonhan.NhBbGiaoNhanVtCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbangiaonhan.NhBbGiaoNhanVtReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -192,6 +196,19 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
     @Override
     public void export(NhBbGiaoNhanVtReq req, HttpServletResponse response) throws Exception {
 //        return false;
+    }
+
+    @Override
+    public ReportTemplateResponse preview(NhBbGiaoNhanVtReq req) throws Exception {
+        NhBbGiaoNhanVt nhBbGiaoNhanVt = detail(req.getId());
+        if (nhBbGiaoNhanVt == null) {
+            throw new Exception("Bản kê nhập vật tư không tồn tại.");
+        }
+        NhBbGiaoNhanVtPreview object = new NhBbGiaoNhanVtPreview();
+        ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
     }
 
 //    @Override

@@ -6,12 +6,15 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.vattu.bangke.NhBangKeVtCtRepository;
 import com.tcdt.qlnvhang.repository.vattu.bangke.NhBangKeVtRepository;
+import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.nhapkho.NhBangKeVtPreview;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauReq;
 import com.tcdt.qlnvhang.request.object.vattu.bangke.NhBangKeVtCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bangke.NhBangKeVtReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
 import java.util.*;
 
 @Service
@@ -204,6 +208,19 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
     @Override
     public void export(NhBangKeVtReq req, HttpServletResponse response) throws Exception {
 //        return false;
+    }
+
+    @Override
+    public ReportTemplateResponse preview(NhBangKeVtReq req) throws Exception {
+        NhBangKeVt nhBangKeVt = detail(req.getId());
+        if (nhBangKeVt == null) {
+            throw new Exception("Bản kê nhập vật tư không tồn tại.");
+        }
+        NhBangKeVtPreview object = new NhBangKeVtPreview();
+        ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
     }
 
 //    @Override

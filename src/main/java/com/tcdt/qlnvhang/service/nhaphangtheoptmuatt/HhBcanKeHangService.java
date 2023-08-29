@@ -7,17 +7,14 @@ import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhPhieuNhapKhoHdrRepositor
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhBcanKeHangDtlReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhBcanKeHangHdrReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhBcanKeHangReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhPhieuNhapKhoReq;
+import com.tcdt.qlnvhang.request.nhaphang.nhaptructiep.HhBcanKeHangHdrPreview;
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBcanKeHangDtl;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBcanKeHangHdr;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoCt;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoHdr;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
@@ -33,10 +30,8 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.io.ByteArrayInputStream;
+import java.util.*;
 
 @Service
 public class HhBcanKeHangService extends BaseServiceImpl {
@@ -268,4 +263,15 @@ public class HhBcanKeHangService extends BaseServiceImpl {
         exportExcel.export();
     }
 
+    public ReportTemplateResponse preview(HhBcanKeHangHdrReq req) throws Exception {
+        HhBcanKeHangHdr bcanKeHangHdr = detail(req.getId());
+        if (bcanKeHangHdr == null) {
+            throw new Exception("Bảng kê cân hàng không tồn tại.");
+        }
+        HhBcanKeHangHdrPreview object = new HhBcanKeHangHdrPreview();
+        ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+    }
 }

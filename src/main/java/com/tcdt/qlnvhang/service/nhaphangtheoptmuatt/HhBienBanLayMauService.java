@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaDtl;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangke.NhBangKeVt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan.QuyChuanQuocGiaDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhBbanLayMauDtlRepository;
@@ -10,14 +11,19 @@ import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhBienBanLayMauRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.nhapkho.NhBangKeVtPreview;
+import com.tcdt.qlnvhang.request.nhaphang.nhaptructiep.HhBienBanLayMauPreview;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.*;
+import com.tcdt.qlnvhang.request.object.vattu.bangke.NhBangKeVtReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBienBanLayMau;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -35,6 +41,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -337,5 +344,16 @@ public class HhBienBanLayMauService extends BaseServiceImpl {
     public List<QuyChuanQuocGiaDtl> getAllQuyChuanByCloaiVthh(String loaiVthh) throws Exception {
         return quyChuanQuocGiaDtlRepository.getAllQuyChuanByCloaiVthh(loaiVthh).isEmpty() ? new ArrayList<>() : quyChuanQuocGiaDtlRepository.getAllQuyChuanByCloaiVthh(loaiVthh);
     }
-    
+
+    public ReportTemplateResponse preview(HhBienBanLayMauReq req) throws Exception {
+        HhBienBanLayMau nhBangKeVt = detail(req.getId().toString());
+        if (nhBangKeVt == null) {
+            throw new Exception("Bản kê nhập vật tư không tồn tại.");
+        }
+        HhBienBanLayMauPreview object = new HhBienBanLayMauPreview();
+        ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+    }
 }

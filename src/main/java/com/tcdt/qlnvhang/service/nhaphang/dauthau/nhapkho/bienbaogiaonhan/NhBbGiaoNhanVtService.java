@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bienbaogiaonhan;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbangiaonhan.NhBbGiaoNhanVt;
 import com.tcdt.qlnvhang.request.object.vattu.bienbangiaonhan.NhBbGiaoNhanVtReq;
 import com.tcdt.qlnvhang.service.BaseService;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 
 public interface NhBbGiaoNhanVtService extends BaseService<NhBbGiaoNhanVt,NhBbGiaoNhanVtReq,Long> {
 
@@ -26,4 +27,5 @@ public interface NhBbGiaoNhanVtService extends BaseService<NhBbGiaoNhanVt,NhBbGi
 //    boolean exportToExcel(NhBbGiaoNhanVtSearchReq objReq, HttpServletResponse response) throws Exception;
 //
 //    BaseNhapHangCount count(Set<String> maDvis) throws Exception;
+ReportTemplateResponse preview(NhBbGiaoNhanVtReq req) throws Exception;
 }
