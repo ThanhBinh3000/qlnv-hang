@@ -64,7 +64,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     req.setDvql(currentUser.getDvql());
     //cuc xem cac quyet dinh tu tong cuc
     if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
-      req.setMaDviGiao(currentUser.getDvql());
+      req.setMaDviDx(currentUser.getDvql());
     }
 
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
@@ -93,8 +93,8 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     if (currentUser == null) {
       throw new Exception("Bad request.");
     }
-    if (!DataUtils.isNullObject(objReq.getSoQd())) {
-      Optional<XhCtvtQuyetDinhPdHdr> optional = xhCtvtQdPdHdrRepository.findBySoBbQd(objReq.getSoQd());
+    if (!DataUtils.isNullObject(objReq.getSoBbQd())) {
+      Optional<XhCtvtQuyetDinhPdHdr> optional = xhCtvtQdPdHdrRepository.findBySoBbQd(objReq.getSoBbQd());
       if (optional.isPresent()) {
         throw new Exception("số quyết định đã tồn tại");
       }
@@ -134,7 +134,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu cần sửa");
     }
-    Optional<XhCtvtQuyetDinhPdHdr> soDx = xhCtvtQdPdHdrRepository.findBySoBbQd(objReq.getSoQd());
+    Optional<XhCtvtQuyetDinhPdHdr> soDx = xhCtvtQdPdHdrRepository.findBySoBbQd(objReq.getSoBbQd());
     if (soDx.isPresent()) {
       if (!soDx.get().getId().equals(objReq.getId())) {
         throw new Exception("số quyết định đã tồn tại");
