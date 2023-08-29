@@ -12,6 +12,7 @@ public class SearchXhCtvtQuyetDinhGnv extends BaseRequest {
    Long id;
    Integer nam;
    String maDvi;
+   String maDviGiao;
    String dvql;
    String soBbQd;
    String loaiVthh;
