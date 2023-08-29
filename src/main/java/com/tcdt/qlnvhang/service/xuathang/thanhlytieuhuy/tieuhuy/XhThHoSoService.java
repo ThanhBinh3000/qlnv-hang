@@ -11,6 +11,7 @@ import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoRequest
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -55,6 +56,7 @@ public class XhThHoSoService extends BaseServiceImpl {
         s.setTenDvi(objDonVi.get("tenDvi").toString());
       }
       s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
+      s.setTenTrangThaiTc(TrangThaiAllEnum.getLabelById(s.getTrangThaiTc()));
     });
     return search;
   }
@@ -143,6 +145,7 @@ public class XhThHoSoService extends BaseServiceImpl {
     List<XhThHoSoHdr> allById = xhThHoSoRepository.findAllById(ids);
     allById.forEach(data -> {
       data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
+      data.setTenTrangThaiTc(TrangThaiAllEnum.getLabelById(data.getTrangThaiTc()));
       List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhThHoSoHdr.TABLE_NAME));
       data.setFileDinhKem(fileDinhKem);
 
@@ -196,47 +199,64 @@ public class XhThHoSoService extends BaseServiceImpl {
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
-
-    String status = statusReq.getTrangThai() + optional.get().getTrangThai();
-    switch (status) {
-      case Contains.CHODUYET_TP + Contains.DUTHAO:
-      case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
-      case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
-      case Contains.CHODUYET_TP + Contains.TUCHOI_LDV:
-      case Contains.CHODUYET_TP + Contains.TUCHOI_LDTC:
-      case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
-      case Contains.CHODUYET_LDV + Contains.DADUYET_LDC:
-        optional.get().setNguoiGduyetId(currentUser.getUser().getId());
-        optional.get().setNgayGduyet(LocalDate.now());
-        break;
-      case Contains.CHODUYET_LDV + Contains.CHODUYET_LDC:
-        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
-        optional.get().setNgayDuyetLan1(LocalDate.now());
-        break;
-      case Contains.CHODUYET_LDTC + Contains.CHODUYET_LDV:
-        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
-        optional.get().setNgayDuyetLan2(LocalDate.now());
-        break;
-      case Contains.DADUYET_LDTC + Contains.CHODUYET_LDTC:
-        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
-        optional.get().setNgayDuyetLan3(LocalDate.now());
-        break;
-      case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
-      case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
-      case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
-      case Contains.TUCHOI_LDTC + Contains.CHODUYET_LDTC:
-        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
-        optional.get().setNgayPduyet(LocalDate.now());
-        optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
-        break;
-      case Contains.DA_DUYET_BTC + Contains.DADUYET_LDTC:
-        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
-        optional.get().setNgayPduyet(LocalDate.now());
-        break;
-      default:
-        throw new Exception("Phê duyệt không thành công");
+    if(currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)){
+      String status = statusReq.getTrangThai() + optional.get().getTrangThai();
+      switch (status) {
+        case Contains.CHODUYET_TP + Contains.DUTHAO:
+        case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+        case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
+        case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+          optional.get().setNguoiGduyetId(currentUser.getUser().getId());
+          optional.get().setNgayGduyet(LocalDate.now());
+          break;
+        case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+        case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
+          optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+          optional.get().setNgayPduyet(LocalDate.now());
+          optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
+          break;
+        case Contains.DA_DUYET_LDC + Contains.CHODUYET_LDC:
+          optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+          optional.get().setNgayPduyet(LocalDate.now());
+          break;
+        default:
+          throw new Exception("Phê duyệt không thành công");
+      }
+      optional.get().setTrangThai(statusReq.getTrangThai());
+      if (statusReq.getTrangThai().equals(Contains.DADUYET_LDC)) {
+        optional.get().setTrangThaiTc(Contains.DUTHAO);
+      }
+    }else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)){
+      String status = statusReq.getTrangThai() + optional.get().getTrangThaiTc();
+      switch (status) {
+        case Contains.CHODUYET_LDV + Contains.DUTHAO:
+        case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
+        case Contains.CHODUYET_LDV + Contains.TUCHOI_LDTC:
+        case Contains.CHODUYET_LDTC + Contains.CHODUYET_LDV:
+          optional.get().setNguoiGduyetId(currentUser.getUser().getId());
+          optional.get().setNgayGduyet(LocalDate.now());
+          break;
+        case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
+        case Contains.TUCHOI_LDTC + Contains.CHODUYET_LDTC:
+        case Contains.TU_CHOI_BTC + Contains.CHO_DUYET_BTC:
+          optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+          optional.get().setNgayPduyet(LocalDate.now());
+          optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
+          break;
+        case Contains.DADUYET_LDTC + Contains.CHODUYET_LDTC:
+          optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+          optional.get().setNgayDuyetLan2(LocalDate.now());
+          break;
+        case Contains.DA_DUYET_BTC + Contains.CHO_DUYET_BTC:
+          optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+          optional.get().setNgayDuyetLan3(LocalDate.now());
+          break;
+        default:
+          throw new Exception("Phê duyệt không thành công");
+      }
+      optional.get().setTrangThaiTc(statusReq.getTrangThai());
     }
-    optional.get().setTrangThai(statusReq.getTrangThai());
+
     XhThHoSoHdr created = xhThHoSoRepository.save(optional.get());
     return created;
   }

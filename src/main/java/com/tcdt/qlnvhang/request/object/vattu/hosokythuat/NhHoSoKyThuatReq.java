@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.kiemtrachatluong.NhHoSoBienBanReq;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -50,4 +51,5 @@ public class NhHoSoKyThuatReq extends BaseRequest {
 //    private List<FileDinhKemReq> fileDinhKemReqs = new ArrayList<>();
 //
 //    private List<FileDinhKemReq> fdkCanCus = new ArrayList<>();
+private ReportTemplateRequest reportTemplateRequest;
 }
