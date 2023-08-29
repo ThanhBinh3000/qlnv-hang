@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.request.nhaphangtheoptt;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -86,5 +87,5 @@ public class HhBienBanDayKhoHdrReq {
 
     @Transient
     private List<HhBienBanDayKhoDtlReq> hhBienBanDayKhoDtlReqList = new ArrayList<>();
-
+    private ReportTemplateRequest reportTemplateRequest;
 }

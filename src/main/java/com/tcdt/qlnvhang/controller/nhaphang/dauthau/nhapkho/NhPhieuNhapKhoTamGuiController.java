@@ -160,7 +160,7 @@ public class NhPhieuNhapKhoTamGuiController {
     @ApiOperation(value = "Xem trước", response = List.class)
     @PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> previewVt(@RequestBody NhPhieuNhapKhoTamGuiReq objReq) {
+    public ResponseEntity<BaseResponse> preview(@RequestBody NhPhieuNhapKhoTamGuiReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(service.preview(objReq));

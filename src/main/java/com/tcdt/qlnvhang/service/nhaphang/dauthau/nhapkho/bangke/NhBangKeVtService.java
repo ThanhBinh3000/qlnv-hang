@@ -2,7 +2,9 @@ package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bangke;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangke.NhBangKeVt;
 import com.tcdt.qlnvhang.request.object.vattu.bangke.NhBangKeVtReq;
+import com.tcdt.qlnvhang.request.object.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiReq;
 import com.tcdt.qlnvhang.service.BaseService;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 
 public interface NhBangKeVtService extends BaseService<NhBangKeVt,NhBangKeVtReq,Long> {
 //    NhBangKeVtRes create(NhBangKeVtReq req) throws Exception;
@@ -25,4 +27,5 @@ public interface NhBangKeVtService extends BaseService<NhBangKeVt,NhBangKeVtReq,
 //    boolean exportToExcel(NhBangKeVtSearchReq objReq, HttpServletResponse response) throws Exception;
 //
 //    BaseNhapHangCount count(Set<String> maDvis) throws Exception;
+ReportTemplateResponse preview(NhBangKeVtReq req) throws Exception;
 }

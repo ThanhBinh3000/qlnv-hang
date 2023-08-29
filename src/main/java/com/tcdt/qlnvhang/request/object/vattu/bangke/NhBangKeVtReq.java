@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.object.vattu.bangke;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -66,4 +67,5 @@ public class NhBangKeVtReq {
     private String maDvi;
 
     private List<NhBangKeVtCtReq> children = new ArrayList<>();
+    private ReportTemplateRequest reportTemplateRequest;
 }

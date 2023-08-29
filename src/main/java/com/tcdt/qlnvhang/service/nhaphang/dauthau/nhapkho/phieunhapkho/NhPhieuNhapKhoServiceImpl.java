@@ -1,29 +1,14 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieunhapkho;
 
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthau;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthauCtiet;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtl;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
-import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
-import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuongRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHangRepository;
-import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoCt1Repository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoCtRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoRepository;
-import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
-import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatRepository;
-import com.tcdt.qlnvhang.request.object.HhQdKhlcntHdrReq;
-import com.tcdt.qlnvhang.request.object.HhQdKhlcntPreview;
-import com.tcdt.qlnvhang.request.object.NhPhieuNhapKhoPreview;
+import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.nhapkho.NhPhieuNhapKhoPreview;
 import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCtReq;
 import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoReq;
 import com.tcdt.qlnvhang.request.object.sokho.LkPhieuNhapKhoReq;
@@ -305,6 +290,27 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
         return pages;
     }
 
+    @Override
+    public ReportTemplateResponse preview(NhPhieuNhapKhoReq req) throws Exception {
+        NhPhieuNhapKho nhPhieuNhapKho = detail(req.getId());
+        if (nhPhieuNhapKho == null) {
+            throw new Exception("Phiếu nhập kho không tồn tại.");
+        }
+        NhPhieuNhapKhoPreview object = new NhPhieuNhapKhoPreview();
+        if (req.getLoaiVthh().startsWith("02")) {
+
+        } else {
+            for (NhPhieuNhapKhoCt nhPhieuNhapKhoCt : nhPhieuNhapKho.getHangHoaList()) {
+                nhPhieuNhapKhoCt.setThanhTien(nhPhieuNhapKhoCt.getDonGia().multiply(nhPhieuNhapKhoCt.getSoLuongThucNhap()));
+            }
+            BeanUtils.copyProperties(nhPhieuNhapKho, object);
+        }
+        ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+    }
+
     List<NhPhieuNhapKho> setDetailList(List<NhPhieuNhapKho> list){
         list.forEach( item -> {
             List<NhPhieuNhapKhoCt> allByIdPhieuNkHdr = nhPhieuNhapKhoCtRepository.findAllByIdPhieuNkHdr(item.getId());
@@ -314,21 +320,6 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
             item.setBangKeCanHang(nhBangKeCanHangRepository.findBySoPhieuNhapKho(item.getSoPhieuNhapKho()));
         });
         return list;
-    }
-
-    @Override
-    public ReportTemplateResponse preview(NhPhieuNhapKhoReq objReq) throws Exception {
-        NhPhieuNhapKho qOptional = this.detail(objReq.getId());
-
-        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        NhPhieuNhapKhoPreview object = new NhPhieuNhapKhoPreview();
-        for (NhPhieuNhapKhoCt nhPhieuNhapKhoCt : qOptional.getHangHoaList()) {
-            nhPhieuNhapKhoCt.setThanhTien(nhPhieuNhapKhoCt.getDonGia().multiply(nhPhieuNhapKhoCt.getSoLuongThucNhap()));
-        }
-        BeanUtils.copyProperties(qOptional, object);
-        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
     }
 
 
