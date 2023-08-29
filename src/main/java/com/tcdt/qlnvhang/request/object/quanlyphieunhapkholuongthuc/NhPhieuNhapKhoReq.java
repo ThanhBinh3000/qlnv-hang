@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuN
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -122,4 +123,6 @@ public class NhPhieuNhapKhoReq extends BaseRequest {
 
     @Transient
     private List<NhPhieuNhapKhoCt1> chiTiet1s = new ArrayList<>();
+
+    private ReportTemplateRequest reportTemplateRequest;
 }

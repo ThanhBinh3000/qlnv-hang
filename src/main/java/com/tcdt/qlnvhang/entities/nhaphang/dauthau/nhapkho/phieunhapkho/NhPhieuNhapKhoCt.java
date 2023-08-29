@@ -47,5 +47,7 @@ public class NhPhieuNhapKhoCt implements Serializable {
 
     @Column(name = "MA_SO")
     private String maSo;
+    @Transient
+    private BigDecimal thanhTien;
 
 }

@@ -20,6 +20,7 @@ public interface XhThHoSoRepository extends JpaRepository<XhThHoSoHdr, Long> {
       "AND (:#{#param.soQd} IS NULL OR LOWER(c.soQd) LIKE CONCAT('%',LOWER(:#{#param.soQd}),'%')) " +
       "AND (:#{#param.soHoSo} IS NULL OR LOWER(c.soHoSo) LIKE CONCAT('%',LOWER(:#{#param.soHoSo}),'%')) " +
       "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
+      "AND (:#{#param.trangThaiTc} IS NULL OR c.trangThaiTc = :#{#param.trangThaiTc}) " +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
   Page<XhThHoSoHdr> searchPage(@Param("param") XhThHoSoRequest param, Pageable pageable);
@@ -27,7 +28,7 @@ public interface XhThHoSoRepository extends JpaRepository<XhThHoSoHdr, Long> {
 
   void deleteAllByIdIn(List<Long> listId);
 
-  List<XhThHoSoHdr> findByIdIn(List<Long> ids);
+  List<XhThHoSoHdr> findByIdIn( List<Long> ids);
 
   List<XhThHoSoHdr> findAllByIdIn(List<Long> listId);
 

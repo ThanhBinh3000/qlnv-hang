@@ -49,8 +49,7 @@ public class XhCtvtQuyetDinhGnvHdrReq {
   String tenCloaiVthh;
   String tenTrangThai;
   String tenTrangThaiXh;
-  List<XhCtvtQdGiaoNvXhDtl> noiDungCuuTro;
-  List<XhCtvtQuyetDinhGnvDtl> children;
+  List<XhCtvtQuyetDinhGnvDtl> dataDtl;
   List<FileDinhKemJoinTable> fileDinhKem;
   List<FileDinhKemJoinTable> canCu;
 }

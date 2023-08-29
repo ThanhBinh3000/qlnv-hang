@@ -10,6 +10,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.KhCnCongTrinhNghienCuuReq;
 import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.KhCnNghiemThuThanhLyReq;
 import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.KhCnTienDoThucHienReq;
+import com.tcdt.qlnvhang.request.nhaphang.nhaptructiep.HhBienBanNghiemThuPreview;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhBbanNghiemThuDtlReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhBienBanNghiemThuReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhBbNghiemThu;
@@ -17,12 +18,14 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.khoahoccongnghebaoquan.KhCnCongTrinhNghienCuu;
 import com.tcdt.qlnvhang.table.khoahoccongnghebaoquan.KhCnNghiemThuThanhLy;
 import com.tcdt.qlnvhang.table.khoahoccongnghebaoquan.KhCnTienDoThucHien;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBbanNghiemThuDtl;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBienBanNghiemThu;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -39,6 +42,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -303,5 +307,17 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
         optional.get().setTrangThai(statusReq.getTrangThai());
         HhBienBanNghiemThu created = hhBienBanNghiemThuRepository.save(optional.get());
         return created;
+    }
+
+    public ReportTemplateResponse preview(HhBienBanNghiemThuReq req) throws Exception {
+        HhBienBanNghiemThu hhBienBanNghiemThu = detail(req.getId().toString());
+        if (hhBienBanNghiemThu == null) {
+            throw new Exception("Biên bản không tồn tại.");
+        }
+        HhBienBanNghiemThuPreview object = new HhBienBanNghiemThuPreview();
+        ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
     }
 }

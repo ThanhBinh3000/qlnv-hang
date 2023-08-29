@@ -22,4 +22,11 @@ public class QthtChotGiaNhapXuatReq extends BaseRequest {
     private List<String> listMaDvi = new ArrayList<>();
 
     private String type;
+
+    //Param search
+
+    private LocalDate ngayChotSr;
+    private LocalDate ngayHlucSr;
+    private LocalDate ngayHuySr;
+    private String taiKhoanSr;
 }

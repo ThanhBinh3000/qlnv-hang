@@ -36,6 +36,9 @@ public class QthtChotGiaNhapXuat extends BaseEntity implements Serializable {
     private LocalDate ngayHluc;
 
     private LocalDate ngayHlucQdDC;
+
+    private LocalDate ngayHuy;
+
     //  CHOT_GIA = "CHOT_GIA",
     //  CHOT_NHAP_XUAT = "CHOT_NHAP_XUAT",
 
@@ -46,7 +49,10 @@ public class QthtChotGiaNhapXuat extends BaseEntity implements Serializable {
     @Transient
     private List<String> listMaDvi = new ArrayList<>();
 
-    public List<String> getListDonVi() {
+    @Transient
+    private String tenNguoiTao;
+
+    public List<String> getListMaDvi() {
         if(StringUtils.isEmpty(maDonVi)){
             return listMaDvi;
         }else{

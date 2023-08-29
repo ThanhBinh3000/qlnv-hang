@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhPhieuKngiemCluongReposit
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.nhaphang.nhaptructiep.HhPhieuKngiemCluongPreview;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhPhieuKnCluongDtlReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhPhieuKngiemCluongReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhPhieuKnCluong;
@@ -14,9 +15,11 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuKnCluongDtl;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuKngiemCluong;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -33,6 +36,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -269,4 +273,15 @@ public class HhPhieuKngiemCluongService extends BaseServiceImpl {
         return created;
     }
 
+    public ReportTemplateResponse preview(HhPhieuKngiemCluongReq req) throws Exception {
+        HhPhieuKngiemCluong nhBangKeVt = detail(req.getId().toString());
+        if (nhBangKeVt == null) {
+            throw new Exception("Phiếu kiểm nghiệm chất lượng không tồn tại.");
+        }
+        HhPhieuKngiemCluongPreview object = new HhPhieuKngiemCluongPreview();
+        ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+    }
 }

@@ -1,19 +1,11 @@
 package com.tcdt.qlnvhang.service.chotdulieu;
 
-import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.chotdulieu.QthtChotGiaNhapXuatRepository;
-import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScBaoCaoDtlRepository;
-import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScBaoCaoHdrRepository;
-import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScDanhSachRepository;
 import com.tcdt.qlnvhang.request.chotdulieu.QthtChotGiaNhapXuatReq;
-import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.service.suachuahang.impl.ScDanhSachServiceImpl;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.chotdulieu.QthtChotGiaNhapXuat;
-import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScBaoCaoDtl;
-import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScBaoCaoHdr;
-import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhSc;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
@@ -26,9 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -37,11 +27,16 @@ public class QthtChotGiaNhapXuatServiceImpl extends BaseServiceImpl implements Q
   @Autowired
   private QthtChotGiaNhapXuatRepository hdrRepository;
 
+  @Autowired
+  private UserInfoRepository userInfoRepository;
 
   @Override
   public Page<QthtChotGiaNhapXuat> searchPage(QthtChotGiaNhapXuatReq req) throws Exception {
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<QthtChotGiaNhapXuat> search = hdrRepository.searchPage(req, pageable);
+    search.getContent().forEach( item -> {
+      item.setTenNguoiTao(userInfoRepository.findById(item.getNguoiTaoId()).get().getFullName());
+    });
     return search;
   }
 
@@ -60,12 +55,13 @@ public class QthtChotGiaNhapXuatServiceImpl extends BaseServiceImpl implements Q
   @Override
   public QthtChotGiaNhapXuat update(QthtChotGiaNhapXuatReq req) throws Exception {
     UserInfo userInfo = UserUtils.getUserInfo();
-    if (!userInfo.getCapDvi().equals(Contains.CAP_CUC)) {
-      throw new Exception("Chức năng chỉ dành cho cấp cục");
-    }
+
     Optional<QthtChotGiaNhapXuat> optional = hdrRepository.findById(req.getId());
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu");
+    }
+    if(optional.get().getNgayHuy() != null){
+      throw new Exception("Dữ liệu đã bị hủy bỏ ");
     }
     QthtChotGiaNhapXuat data = optional.get();
     BeanUtils.copyProperties(req, data);
@@ -88,7 +84,16 @@ public class QthtChotGiaNhapXuatServiceImpl extends BaseServiceImpl implements Q
 
   @Override
   public void delete(Long id) throws Exception {
-
+    Optional<QthtChotGiaNhapXuat> optional = hdrRepository.findById(id);
+    if (!optional.isPresent()) {
+      throw new Exception("Không tìm thấy dữ liệu");
+    }
+    QthtChotGiaNhapXuat data = optional.get();
+    if(data.getNgayHuy() != null){
+      throw new Exception("Dữ liệu đã bị hủy bỏ ");
+    }
+    data.setNgayHuy(LocalDate.now());
+    hdrRepository.save(data);
   }
 
   @Override

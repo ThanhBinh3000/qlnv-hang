@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhBcanKeHangHdrReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhPhieuNhapKhoHdrReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhBcanKeHangReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhPhieuNhapKhoReq;
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.HhBcanKeHangService;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBcanKeHangHdr;
@@ -179,4 +176,20 @@ public class HhBcanKeHangControler {
 
     }
 
+    @ApiOperation(value = "Xem trước", response = List.class)
+    @PostMapping(value = PathContains.BANG_CAN_KE_MTT + PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> preview(@RequestBody HhBcanKeHangHdrReq objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(hhBcanKeHangService.preview(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Xem trước: {?}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
 }

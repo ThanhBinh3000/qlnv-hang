@@ -9,17 +9,17 @@ import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhBienBanDayKhoHdrReposito
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.nhaphang.nhaptructiep.HhBienBanDayKhoHdrPreview;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.service.BaseService;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBienBanDayKhoDtl;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBienBanDayKhoHdr;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoCt;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoHdr;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.docx4j.wml.P;
@@ -35,6 +35,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
 import java.util.*;
 
 @Service
@@ -293,5 +294,17 @@ public class HhBienBanDayKhoService extends BaseServiceImpl {
         }
         ExportExcel exportExcel = new ExportExcel(title,fileName,rowsName,dataList,response);
         exportExcel.export();
+    }
+
+    public ReportTemplateResponse preview(HhBienBanDayKhoHdrReq req) throws Exception {
+        HhBienBanDayKhoHdr bienBanDayKhoHdr = detail(req.getId());
+        if (bienBanDayKhoHdr == null) {
+            throw new Exception("Biên bản nhập đầy kho không tồn tại.");
+        }
+        HhBienBanDayKhoHdrPreview object = new HhBienBanDayKhoHdrPreview();
+        ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
     }
 }

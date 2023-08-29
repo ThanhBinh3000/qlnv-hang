@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -60,13 +61,14 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
 
 
   public Page<XhCtvtQuyetDinhPdHdr> searchPage(CustomUserDetails currentUser, SearchXhCtvtQuyetDinhPdHdr req) throws Exception {
-    req.setDvql(currentUser.getDvql());
+//    req.setDvql(currentUser.getDvql());
     //cuc xem cac quyet dinh tu tong cuc
     if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
-      req.setMaDviGiao(currentUser.getDvql());
+      req.setMaDviDx(currentUser.getDvql());
     }
 
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+    System.out.println(req);
     Page<XhCtvtQuyetDinhPdHdr> search = xhCtvtQdPdHdrRepository.search(req, pageable);
     Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
 
@@ -92,8 +94,8 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     if (currentUser == null) {
       throw new Exception("Bad request.");
     }
-    if (!DataUtils.isNullObject(objReq.getSoQd())) {
-      Optional<XhCtvtQuyetDinhPdHdr> optional = xhCtvtQdPdHdrRepository.findBySoBbQd(objReq.getSoQd());
+    if (!DataUtils.isNullObject(objReq.getSoBbQd())) {
+      Optional<XhCtvtQuyetDinhPdHdr> optional = xhCtvtQdPdHdrRepository.findBySoBbQd(objReq.getSoBbQd());
       if (optional.isPresent()) {
         throw new Exception("số quyết định đã tồn tại");
       }
@@ -102,7 +104,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     XhCtvtQuyetDinhPdHdr data = new XhCtvtQuyetDinhPdHdr();
     BeanUtils.copyProperties(objReq, data);
     data.setMaDvi(currentUser.getUser().getDepartment());
-    data.setTrangThai(Contains.DUTHAO);
+    data.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
     XhCtvtQuyetDinhPdHdr created = xhCtvtQdPdHdrRepository.save(data);
 
     if (!DataUtils.isNullOrEmpty(created.getMaTongHop())) {
@@ -133,7 +135,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu cần sửa");
     }
-    Optional<XhCtvtQuyetDinhPdHdr> soDx = xhCtvtQdPdHdrRepository.findBySoBbQd(objReq.getSoQd());
+    Optional<XhCtvtQuyetDinhPdHdr> soDx = xhCtvtQdPdHdrRepository.findBySoBbQd(objReq.getSoBbQd());
     if (soDx.isPresent()) {
       if (!soDx.get().getId().equals(objReq.getId())) {
         throw new Exception("số quyết định đã tồn tại");

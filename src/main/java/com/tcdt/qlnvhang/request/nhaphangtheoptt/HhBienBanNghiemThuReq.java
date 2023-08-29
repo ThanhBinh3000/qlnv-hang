@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBbanNghiemThuDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -68,4 +69,5 @@ public class HhBienBanNghiemThuReq {
     private List<HhBbanNghiemThuDtlReq> dmTongCucPdTruocThucHien =new ArrayList<>();
 
     private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
+    private ReportTemplateRequest reportTemplateRequest;
 }

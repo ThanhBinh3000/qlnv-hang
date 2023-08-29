@@ -1,0 +1,76 @@
+package com.tcdt.qlnvhang.request.object;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.entities.FileDKemJoinKeLot;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstDtl;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuongCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
+import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.util.Contains;
+import lombok.Data;
+
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Transient;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+@Data
+public class NnPhieuKtChatLuongPreview {
+    private Long id;
+    private Integer nam;
+    private String maDvi;
+    private String tenDvi;
+    private String soPhieu;
+    private String maQhns;
+    private Long idQdGiaoNvNh;
+    private String soQdGiaoNvNh;
+    private LocalDate ngayQdGiaoNvNh;
+    private String loaiVthh;
+    private String tenLoaiVthh;
+    private String cloaiVthh;
+    private String tenCloaiVthh;
+    private String moTaHangHoa;
+    private String soHd;
+    private String maDiemKho;
+    private String tenDiemKho;
+    private String maNhaKho;
+    private String tenNhaKho;
+    private String maNganKho;
+    private String tenNganKho;
+    private String maLoKho;
+    private String tenLoKho;
+    private String nguoiGiaoHang;
+    private String cmtNguoiGiaoHang;
+    private String donViGiaoHang;
+    private String diaChi;
+    private String bienSoXe;
+    private BigDecimal soLuongDeNghiKt;
+    private BigDecimal soLuongNhapKho;
+    private String soChungThuGiamDinh;
+    private LocalDate ngayGdinh;
+    private String tchucGdinh;
+    private String ketLuan;
+    private String kqDanhGia;
+    private Long idDdiemGiaoNvNh;
+    private List<NhPhieuKtChatLuongCt> ketQuaKiemTra = new ArrayList<>();
+    private NhPhieuNhapKho phieuNhapKho;
+    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+    private List<FileDinhKem> fileDinhKemsKtcl = new ArrayList<>();
+    private String trangThai;
+    private String tenTrangThai;
+    private Date ngayTao;
+    private Long nguoiTaoId;
+    private String tenNguoiTao;
+    private Date ngaySua;
+    private Long nguoiSuaId;
+    private Long nguoiGuiDuyetId;
+    private Date ngayGuiDuyet;
+    private Long nguoiPduyetId;
+    private String tenNguoiPduyet;
+    private Date ngayPduyet;
+    private String lyDoTuChoi;
+}
