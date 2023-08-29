@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.request.xuathang.bantructiep.hopdong;
 
 import lombok.Data;
 
-import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,22 +9,13 @@ import java.util.List;
 @Data
 public class XhHopDongBttDtlReq {
     private Long id;
-
     private Long idHdr;
-
     private BigDecimal soLuongChiCuc;
-
     private BigDecimal soLuongBanTrucTiepHd;
-
     private String maDvi;
-
     private String diaChi;
 
-    //    phu luc
+    //phu luc
     private Long idHdDtl;
-
-    @Transient
     private List<XhHopDongBttDviReq> children = new ArrayList<>();
-
-
 }
