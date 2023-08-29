@@ -187,8 +187,9 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
             data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : mapDmucVthh.get(data.getLoaiVthh()));
             data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh()) ? null : mapDmucVthh.get(data.getCloaiVthh()));
             data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+            data.setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiHd()));
             data.setXhQdPdKhBttHdr(xhQdPdKhBttHdrRepository.findById(data.getIdHdr()).get());
-            data.setListHopDongBtt(xhHopDongBttHdrRepository.findAllByIdQdPdDtl(data.getId()));
+            data.setListHopDongBtt(xhHopDongBttHdrRepository.findAllByIdChaoGia(data.getId()));
             data.setChildren(dvi);
             if (!DataUtils.isNullObject(data.getPthucBanTrucTiep())) {
                 if (data.getPthucBanTrucTiep().equals(Contains.UY_QUYEN)) {
@@ -223,6 +224,15 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
     }
 
     public void export(CustomUserDetails currentUser, SearchXhTcTtinBttReq req, HttpServletResponse response) throws Exception {
+        String capDvi = (currentUser.getUser().getCapDvi());
+        if (Contains.CAP_CUC.equals(capDvi)) {
+            this.exportCuc(currentUser, req, response);
+        } else {
+            this.exportChiCuc(currentUser, req, response);
+        }
+    }
+
+    void exportCuc(CustomUserDetails currentUser, SearchXhTcTtinBttReq req, HttpServletResponse response) throws Exception {
         PaggingReq paggingReq = new PaggingReq();
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);
@@ -231,8 +241,8 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
         List<XhQdPdKhBttDtl> data = page.getContent();
         String title = " Danh sách thông tin triển khai kế hoạch bán trực tiếp";
         String[] rowsName = new String[]{"STT", "Số QĐ phê duyệt KH bán trực tiếp",
-                "Phương thức bán trực tiếp", "Ngày nhận chào giá/Ngày ủy quyền", "Số QĐ PD KQ chào giá",
-                "Loại hàng hóa", "Chủng loại hàng hóa", "Trạng thái"};
+                "Số đề xuất KH bán trực tiếp", "Phương thức bán trực tiếp", "Ngày nhận chào giá/Ngày ủy quyền",
+                "Số QĐ PD KQ chào giá", "Loại hàng hóa", "Chủng loại hàng hóa", "Trạng thái"};
         String fileName = "Danh-sach-thong-tin-trien-khai-ke-hoach-ban-truc-tiep.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
@@ -241,12 +251,83 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
             objs = new Object[rowsName.length];
             objs[0] = i;
             objs[1] = dtl.getSoQdPd();
-            objs[2] = dtl.getPthucBanTrucTiep();
-            objs[3] = dtl.getNgayNhanCgia();
-            objs[4] = dtl.getSoQdKq();
-            objs[5] = dtl.getTenLoaiVthh();
-            objs[6] = dtl.getTenCloaiVthh();
-            objs[7] = dtl.getTenTrangThai();
+            objs[2] = dtl.getSoDxuat();
+            objs[3] = dtl.getPthucBanTrucTiep();
+            objs[4] = dtl.getNgayNhanCgia();
+            objs[5] = dtl.getSoQdKq();
+            objs[6] = dtl.getTenLoaiVthh();
+            objs[7] = dtl.getTenCloaiVthh();
+            objs[8] = dtl.getTenTrangThai();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+        ex.export();
+    }
+
+    void exportChiCuc(CustomUserDetails currentUser, SearchXhTcTtinBttReq req, HttpServletResponse response) throws Exception {
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        Page<XhQdPdKhBttDtl> page = this.searchPage(currentUser, req);
+        List<XhQdPdKhBttDtl> data = page.getContent();
+        String title = "Danh sách quyết định phê duyệt bán trực tiếp ủy quyền/bán lẻ";
+        String[] rowsName = new String[]{"STT", "Số quyết định",
+                "Số kế hoạch", "Năm kế hoạch", "Ngày duyệt",
+                "Ngày ủy quyền", "Trích yếu", "Loại hàng hóa", "Chủng loại hàng hóa", "Số lượng", "Phương thức bán trực tiếp", "Trạng thái"};
+        String fileName = "Danh-sach-quyet-dinh-phe-duyet-bán-truc-tiep-uy-quyen-ban-le.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        for (int i = 0; i < data.size(); i++) {
+            XhQdPdKhBttDtl dtl = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = dtl.getSoQdPd();
+            objs[2] = dtl.getSoDxuat();
+            objs[3] = dtl.getNamKh();
+            objs[4] = dtl.getNgayPduyet();
+            objs[5] = dtl.getNgayNhanCgia();
+            objs[6] = dtl.getTrichYeu();
+            objs[7] = dtl.getTenLoaiVthh();
+            objs[8] = dtl.getTenCloaiVthh();
+            objs[9] = dtl.getTongSoLuong();
+            objs[10] = dtl.getPthucBanTrucTiep();
+            objs[11] = dtl.getTenTrangThai();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+        ex.export();
+    }
+
+    public void exportHd(CustomUserDetails currentUser, SearchXhTcTtinBttReq req, HttpServletResponse response) throws Exception {
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        Page<XhQdPdKhBttDtl> page = this.searchPage(currentUser, req);
+        List<XhQdPdKhBttDtl> data = page.getContent();
+        String title = "Danh sách hợp đồng bán trực tiếp";
+        String[] rowsName = new String[]{"STT", "Năm KH",
+                "QĐ PD KHBTT", "SL HĐ cần ký", "SL HĐ đã ký",
+                "Thời hạn xuất kho", "Loại hàng hóa", "Chủng loại hàng hóa", "Tổng giá trị hợp đồng",
+                "Trạng thái hợp đồng", "Trạng thái xuất hàng"};
+        String fileName = "Danh-sach-hop-dong-ban-truc-tiep.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        for (int i = 0; i < data.size(); i++) {
+            XhQdPdKhBttDtl dtl = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = dtl.getNamKh();
+            objs[2] = dtl.getSoQdPd();
+            objs[3] = dtl.getSlHdChuaKy();
+            objs[4] = dtl.getSlHdDaKy();
+            objs[5] = dtl.getNgayMkho();
+            objs[6] = dtl.getTenLoaiVthh();
+            objs[7] = dtl.getTenCloaiVthh();
+            objs[8] = null;
+            objs[9] = dtl.getTenTrangThaiHd();
+            objs[10] = dtl.getTenTrangThaiXh();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
