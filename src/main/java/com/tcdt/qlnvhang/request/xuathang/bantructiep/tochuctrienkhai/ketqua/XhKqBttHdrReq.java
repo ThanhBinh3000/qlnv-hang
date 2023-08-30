@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviReq;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,7 @@ public class XhKqBttHdrReq extends BaseRequest {
     private String ghiChu;
     private Integer slHdDaKy;
     private Integer slHdChuaKy;
+    private BigDecimal tongSoLuong;
     private String trangThai;
     private String trangThaiHd;
     private String trangThaiXh;
