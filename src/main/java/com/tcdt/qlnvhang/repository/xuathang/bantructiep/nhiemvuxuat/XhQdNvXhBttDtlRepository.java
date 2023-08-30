@@ -12,4 +12,6 @@ public interface XhQdNvXhBttDtlRepository extends JpaRepository<XhQdNvXhBttDtl, 
     void deleteAllByIdHdr(Long idHdr);
 
     List<XhQdNvXhBttDtl> findAllByIdHdr(Long idHdr);
+
+    List<XhQdNvXhBttDtl> findByIdHdrIn(List<Long> listId);
 }

@@ -53,6 +53,7 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
         String dvql = currentUser.getDvql();
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
             req.setDvql(dvql.substring(0, 4));
+            req.setTrangThai(Contains.DAKY);
         } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
             req.setDvql(dvql.substring(0, 6));
         } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
@@ -113,14 +114,20 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
             data.setMaDviTsan(String.join(",", req.getListMaDviTsan()));
         }
         XhHopDongBttHdr created = xhHopDongBttHdrRepository.save(data);
-        if (!DataUtils.isNullObject(data.getSoQdKq())) {
-            Optional<XhKqBttHdr> ketQua = xhKqBttHdrRepository.findById(data.getIdQdKq());
+        if (!DataUtils.isNullObject(created.getIdQdKq())) {
+            Optional<XhKqBttHdr> ketQua = xhKqBttHdrRepository.findById(created.getIdQdKq());
             if (ketQua.isPresent()) {
-                Integer slHdChuaKy = xhHopDongBttHdrRepository.countSlHopDongChuaKykq(data.getIdQdKq());
-                BigDecimal slXuatBanKyHdong = xhHopDongBttHdrRepository.countSlXuatBanKyHdong(Contains.DAKY);
+                Integer slHdChuaKy = xhHopDongBttHdrRepository.countSlHopDongChuaKyCuc(created.getIdQdKq());
                 ketQua.get().setSlHdChuaKy(slHdChuaKy);
-                ketQua.get().setTongSlDaKyHdong(slXuatBanKyHdong);
-                ketQua.get().setTongSlChuaKyHdong(ketQua.get().getTongSoLuong().subtract(ketQua.get().getTongSlDaKyHdong()));
+                BigDecimal slXuatBanKyHdong = xhHopDongBttHdrRepository.countSlXuatBanKyHdongCuc(created.getIdQdKq());
+                if (slXuatBanKyHdong != null) {
+                    ketQua.get().setTongSlDaKyHdong(slXuatBanKyHdong);
+                    ketQua.get().setTongSlChuaKyHdong(ketQua.get().getTongSoLuong().subtract(ketQua.get().getTongSlDaKyHdong()));
+                } else {
+                    slXuatBanKyHdong = BigDecimal.ZERO;
+                    ketQua.get().setTongSlDaKyHdong(slXuatBanKyHdong);
+                    ketQua.get().setTongSlChuaKyHdong(ketQua.get().getTongSoLuong().subtract(ketQua.get().getTongSlDaKyHdong()));
+                }
                 xhKqBttHdrRepository.save(ketQua.get());
             }
         }
@@ -199,14 +206,20 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
             data.setMaDviTsan(String.join(",", req.getListMaDviTsan()));
         }
         XhHopDongBttHdr created = xhHopDongBttHdrRepository.save(data);
-        if (!DataUtils.isNullObject(data.getIdChaoGia())) {
-            Optional<XhQdPdKhBttDtl> chaoGia = xhQdPdKhBttDtlRepository.findById(data.getIdChaoGia());
+        if (!DataUtils.isNullObject(created.getIdChaoGia())) {
+            Optional<XhQdPdKhBttDtl> chaoGia = xhQdPdKhBttDtlRepository.findById(created.getIdChaoGia());
             if (chaoGia.isPresent()) {
-                Integer slHdChuaKy = xhHopDongBttHdrRepository.countSlHopDongChuaKyTt(data.getIdChaoGia());
-                BigDecimal slXuatBanKyHdong = xhHopDongBttHdrRepository.countSlXuatBanKyHdong(Contains.DAKY);
+                Integer slHdChuaKy = xhHopDongBttHdrRepository.countSlHopDongChuaKyChiCuc(created.getIdChaoGia());
                 chaoGia.get().setSlHdChuaKy(slHdChuaKy);
-                chaoGia.get().setTongSlDaKyHdong(slXuatBanKyHdong);
-                chaoGia.get().setTongSlChuaKyHdong(chaoGia.get().getTongSoLuong().subtract(chaoGia.get().getTongSlDaKyHdong()));
+                BigDecimal slXuatBanKyHdong = xhHopDongBttHdrRepository.countSlXuatBanKyHdongChiCuc(created.getIdChaoGia());
+                if (slXuatBanKyHdong != null) {
+                    chaoGia.get().setTongSlDaKyHdong(slXuatBanKyHdong);
+                    chaoGia.get().setTongSlChuaKyHdong(chaoGia.get().getTongSoLuong().subtract(chaoGia.get().getTongSlDaKyHdong()));
+                } else {
+                    slXuatBanKyHdong = BigDecimal.ZERO;
+                    chaoGia.get().setTongSlDaKyHdong(slXuatBanKyHdong);
+                    chaoGia.get().setTongSlChuaKyHdong(chaoGia.get().getTongSoLuong().subtract(chaoGia.get().getTongSlDaKyHdong()));
+                }
                 xhQdPdKhBttDtlRepository.save(chaoGia.get());
             }
         }
@@ -252,8 +265,42 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
         }
         XhHopDongBttHdr update = xhHopDongBttHdrRepository.save(data);
         if (Contains.CAP_CUC.equals(capDvi)) {
+            if (!DataUtils.isNullObject(update.getIdQdKq())) {
+                Optional<XhKqBttHdr> ketQua = xhKqBttHdrRepository.findById(update.getIdQdKq());
+                if (ketQua.isPresent()) {
+                    Integer slHdChuaKy = xhHopDongBttHdrRepository.countSlHopDongChuaKyCuc(update.getIdQdKq());
+                    ketQua.get().setSlHdChuaKy(slHdChuaKy);
+                    BigDecimal slXuatBanKyHdong = xhHopDongBttHdrRepository.countSlXuatBanKyHdongCuc(update.getIdQdKq());
+                    if (slXuatBanKyHdong != null) {
+                        ketQua.get().setTongSlDaKyHdong(slXuatBanKyHdong);
+                        ketQua.get().setTongSlChuaKyHdong(ketQua.get().getTongSoLuong().subtract(ketQua.get().getTongSlDaKyHdong()));
+                    } else {
+                        slXuatBanKyHdong = BigDecimal.ZERO;
+                        ketQua.get().setTongSlDaKyHdong(slXuatBanKyHdong);
+                        ketQua.get().setTongSlChuaKyHdong(ketQua.get().getTongSoLuong().subtract(ketQua.get().getTongSlDaKyHdong()));
+                    }
+                    xhKqBttHdrRepository.save(ketQua.get());
+                }
+            }
             this.saveDetailCuc(req, update.getId());
         } else {
+            if (!DataUtils.isNullObject(update.getIdChaoGia())) {
+                Optional<XhQdPdKhBttDtl> chaoGia = xhQdPdKhBttDtlRepository.findById(update.getIdChaoGia());
+                if (chaoGia.isPresent()) {
+                    Integer slHdChuaKy = xhHopDongBttHdrRepository.countSlHopDongChuaKyChiCuc(update.getIdChaoGia());
+                    chaoGia.get().setSlHdChuaKy(slHdChuaKy);
+                    BigDecimal slXuatBanKyHdong = xhHopDongBttHdrRepository.countSlXuatBanKyHdongChiCuc(update.getIdChaoGia());
+                    if (slXuatBanKyHdong != null) {
+                        chaoGia.get().setTongSlDaKyHdong(slXuatBanKyHdong);
+                        chaoGia.get().setTongSlChuaKyHdong(chaoGia.get().getTongSoLuong().subtract(chaoGia.get().getTongSlDaKyHdong()));
+                    } else {
+                        slXuatBanKyHdong = BigDecimal.ZERO;
+                        chaoGia.get().setTongSlDaKyHdong(slXuatBanKyHdong);
+                        chaoGia.get().setTongSlChuaKyHdong(chaoGia.get().getTongSoLuong().subtract(chaoGia.get().getTongSlDaKyHdong()));
+                    }
+                    xhQdPdKhBttDtlRepository.save(chaoGia.get());
+                }
+            }
             this.saveDetailChiCuc(req, update.getId());
         }
         return update;
@@ -356,6 +403,43 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
             xhHopDongBttDviRepository.deleteAllByIdHdr(data.getId());
         }
         xhHopDongBttHdrRepository.delete(data);
+        if (Contains.CAP_CUC.equals(capDvi)) {
+            if (!DataUtils.isNullObject(data.getIdQdKq())) {
+                Optional<XhKqBttHdr> ketQua = xhKqBttHdrRepository.findById(data.getIdQdKq());
+                if (ketQua.isPresent()) {
+                    Integer slHdChuaKy = xhHopDongBttHdrRepository.countSlHopDongChuaKyCuc(data.getIdQdKq());
+                    ketQua.get().setSlHdChuaKy(slHdChuaKy);
+                    BigDecimal slXuatBanKyHdong = xhHopDongBttHdrRepository.countSlXuatBanKyHdongCuc(data.getIdQdKq());
+                    if (slXuatBanKyHdong != null) {
+                        ketQua.get().setTongSlDaKyHdong(slXuatBanKyHdong);
+                        ketQua.get().setTongSlChuaKyHdong(ketQua.get().getTongSoLuong().subtract(ketQua.get().getTongSlDaKyHdong()));
+                    } else {
+                        slXuatBanKyHdong = BigDecimal.ZERO;
+                        ketQua.get().setTongSlDaKyHdong(slXuatBanKyHdong);
+                        ketQua.get().setTongSlChuaKyHdong(ketQua.get().getTongSoLuong().subtract(ketQua.get().getTongSlDaKyHdong()));
+                    }
+                    xhKqBttHdrRepository.save(ketQua.get());
+                }
+            }
+        } else {
+            if (!DataUtils.isNullObject(data.getIdChaoGia())) {
+                Optional<XhQdPdKhBttDtl> chaoGia = xhQdPdKhBttDtlRepository.findById(data.getIdChaoGia());
+                if (chaoGia.isPresent()) {
+                    Integer slHdChuaKy = xhHopDongBttHdrRepository.countSlHopDongChuaKyChiCuc(data.getIdChaoGia());
+                    chaoGia.get().setSlHdChuaKy(slHdChuaKy);
+                    BigDecimal slXuatBanKyHdong = xhHopDongBttHdrRepository.countSlXuatBanKyHdongChiCuc(data.getIdChaoGia());
+                    if (slXuatBanKyHdong != null) {
+                        chaoGia.get().setTongSlDaKyHdong(slXuatBanKyHdong);
+                        chaoGia.get().setTongSlChuaKyHdong(chaoGia.get().getTongSoLuong().subtract(chaoGia.get().getTongSlDaKyHdong()));
+                    } else {
+                        slXuatBanKyHdong = BigDecimal.ZERO;
+                        chaoGia.get().setTongSlDaKyHdong(slXuatBanKyHdong);
+                        chaoGia.get().setTongSlChuaKyHdong(chaoGia.get().getTongSoLuong().subtract(chaoGia.get().getTongSlDaKyHdong()));
+                    }
+                    xhQdPdKhBttDtlRepository.save(chaoGia.get());
+                }
+            }
+        }
     }
 
     public XhHopDongBttHdr approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
@@ -380,13 +464,19 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
             if (!DataUtils.isNullObject(create.getIdQdKq())) {
                 Optional<XhKqBttHdr> ketQua = xhKqBttHdrRepository.findById(create.getIdQdKq());
                 if (ketQua.isPresent()) {
-                    Integer slHdongDaKy = xhHopDongBttHdrRepository.countSlHopDongDaKyKq(create.getIdQdKq());
-                    Integer slHdChuaKy = xhHopDongBttHdrRepository.countSlHopDongChuaKykq(create.getIdQdKq());
+                    Integer slHdongDaKy = xhHopDongBttHdrRepository.countSlHopDongDaKyCuc(create.getIdQdKq());
+                    Integer slHdChuaKy = xhHopDongBttHdrRepository.countSlHopDongChuaKyCuc(create.getIdQdKq());
                     ketQua.get().setSlHdDaKy(slHdongDaKy);
                     ketQua.get().setSlHdChuaKy(slHdChuaKy);
-                    BigDecimal slXuatBanKyHdong = xhHopDongBttHdrRepository.countSlXuatBanKyHdong(Contains.DAKY);
-                    ketQua.get().setTongSlDaKyHdong(slXuatBanKyHdong);
-                    ketQua.get().setTongSlChuaKyHdong(ketQua.get().getTongSoLuong().subtract(ketQua.get().getTongSlDaKyHdong()));
+                    BigDecimal slXuatBanKyHdong = xhHopDongBttHdrRepository.countSlXuatBanKyHdongCuc(create.getIdQdKq());
+                    if (slXuatBanKyHdong != null) {
+                        ketQua.get().setTongSlDaKyHdong(slXuatBanKyHdong);
+                        ketQua.get().setTongSlChuaKyHdong(ketQua.get().getTongSoLuong().subtract(ketQua.get().getTongSlDaKyHdong()));
+                    } else {
+                        slXuatBanKyHdong = BigDecimal.ZERO;
+                        ketQua.get().setTongSlDaKyHdong(slXuatBanKyHdong);
+                        ketQua.get().setTongSlChuaKyHdong(ketQua.get().getTongSoLuong().subtract(ketQua.get().getTongSlDaKyHdong()));
+                    }
                     xhKqBttHdrRepository.save(ketQua.get());
                 }
             }
@@ -394,13 +484,20 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
             if (!DataUtils.isNullObject(create.getIdChaoGia())) {
                 Optional<XhQdPdKhBttDtl> chaoGia = xhQdPdKhBttDtlRepository.findById(create.getIdChaoGia());
                 if (chaoGia.isPresent()) {
-                    Integer slHdongDaKy = xhHopDongBttHdrRepository.countSlHopDongDaKyTt(create.getIdChaoGia());
-                    Integer slHdChuaKy = xhHopDongBttHdrRepository.countSlHopDongChuaKyTt(create.getIdChaoGia());
+                    Integer slHdongDaKy = xhHopDongBttHdrRepository.countSlHopDongDaKyChiCuc(create.getIdChaoGia());
+                    Integer slHdChuaKy = xhHopDongBttHdrRepository.countSlHopDongChuaKyChiCuc(create.getIdChaoGia());
                     chaoGia.get().setSlHdDaKy(slHdongDaKy);
                     chaoGia.get().setSlHdChuaKy(slHdChuaKy);
-                    BigDecimal slXuatBanKyHdong = xhHopDongBttHdrRepository.countSlXuatBanKyHdong(Contains.DAKY);
-                    chaoGia.get().setTongSlDaKyHdong(slXuatBanKyHdong);
-                    chaoGia.get().setTongSlChuaKyHdong(chaoGia.get().getTongSoLuong().subtract(chaoGia.get().getTongSlDaKyHdong()));
+
+                    BigDecimal slXuatBanKyHdong = xhHopDongBttHdrRepository.countSlXuatBanKyHdongChiCuc(create.getIdChaoGia());
+                    if (slXuatBanKyHdong != null) {
+                        chaoGia.get().setTongSlDaKyHdong(slXuatBanKyHdong);
+                        chaoGia.get().setTongSlChuaKyHdong(chaoGia.get().getTongSoLuong().subtract(chaoGia.get().getTongSlDaKyHdong()));
+                    } else {
+                        slXuatBanKyHdong = BigDecimal.ZERO;
+                        chaoGia.get().setTongSlDaKyHdong(slXuatBanKyHdong);
+                        chaoGia.get().setTongSlChuaKyHdong(chaoGia.get().getTongSoLuong().subtract(chaoGia.get().getTongSlDaKyHdong()));
+                    }
                     xhQdPdKhBttDtlRepository.save(chaoGia.get());
                 }
             }

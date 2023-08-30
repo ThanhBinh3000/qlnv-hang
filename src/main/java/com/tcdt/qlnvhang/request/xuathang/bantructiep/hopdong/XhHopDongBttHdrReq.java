@@ -20,7 +20,7 @@ public class XhHopDongBttHdrReq extends BaseRequest {
     private LocalDate thoiHanXuatKho;
     private Long idQdPd;
     private String soQdPd;
-    private LocalDate ngayKyQdPd;
+    private LocalDate NgayKyUyQuyen;
     private String tenDviMua;
     private String maDviTsan;
     private String loaiHinhNx;
