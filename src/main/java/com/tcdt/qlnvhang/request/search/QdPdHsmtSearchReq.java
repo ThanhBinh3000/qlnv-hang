@@ -17,7 +17,7 @@ public class QdPdHsmtSearchReq extends BaseRequest {
     Date denNgayKy;
     private String namKhoach;
     private String soQd;
-    private String soQdPdkhlcnt;
+    private String soQdPdKhlcnt;
     private String loaiVthh;
     private String trichYeu;
     private String maDvi;
