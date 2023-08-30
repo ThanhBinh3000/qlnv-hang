@@ -60,6 +60,7 @@ public class DiaDiemGiaoNhanMtt implements Serializable {
   private BigDecimal tongThanhTienVat;
 
   private BigDecimal soLuong;
+  private BigDecimal soLuongHd;
 
 //  phụ lục
   private Long idHdDtl;

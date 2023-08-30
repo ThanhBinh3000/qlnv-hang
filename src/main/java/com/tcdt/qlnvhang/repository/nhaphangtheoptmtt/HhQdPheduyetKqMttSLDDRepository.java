@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.table.HhQdPheduyetKqMttSLDD;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface HhQdPheduyetKqMttSLDDRepository extends JpaRepository<HhQdPheduyetKqMttSLDD, Long> {
 
@@ -14,7 +15,7 @@ public interface HhQdPheduyetKqMttSLDDRepository extends JpaRepository<HhQdPhedu
     void deleteByIdQdPdKq(Long idQdPdKq);
 
     List<HhQdPheduyetKqMttSLDD> findAllByIdQdPdKq(Long idQdPdKq);
-    List<HhQdPheduyetKqMttSLDD> findAllByIdQdPdKqAndMaDvi(Long idQdPdKq, String maDvi);
+    Optional<HhQdPheduyetKqMttSLDD> findAllByIdQdPdKqAndMaDvi(Long idQdPdKq, String maDvi);
 
 
 }

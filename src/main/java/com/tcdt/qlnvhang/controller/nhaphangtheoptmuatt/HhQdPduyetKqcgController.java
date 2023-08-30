@@ -153,7 +153,7 @@ public class HhQdPduyetKqcgController extends BaseController {
     public ResponseEntity<BaseResponse> deleteMulti(@RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            hhQdPduyetKqcgService.deleteMulti(idSearchReq.getIds());
+            hhQdPduyetKqcgService.deleteMulti(idSearchReq.getIdList());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

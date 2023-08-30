@@ -52,6 +52,7 @@ public class HhQdPheduyetKqMttSLDD implements Serializable {
     private BigDecimal tongThanhTienVat;
 
     private BigDecimal soLuong;
+    private BigDecimal soLuongHd;
 
     @Transient
     private List<HhQdPdKQMttSlddDtl> children = new ArrayList<>();

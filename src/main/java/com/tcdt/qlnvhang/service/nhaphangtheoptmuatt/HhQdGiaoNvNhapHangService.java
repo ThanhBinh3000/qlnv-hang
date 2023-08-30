@@ -611,7 +611,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
 
         String status= statusReq.getTrangThai()+optional.get().getTrangThai();
         switch (status){
-            case Contains.CHO_DUYET_TP + Contains.DUTHAO:
+            case Contains.CHO_DUYET_TP + Contains.DANG_NHAP_DU_LIEU:
             case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
             case Contains.CHO_DUYET_TP + Contains.TUCHOI_TP:
             case Contains.CHO_DUYET_TP + Contains.TUCHOI_LDC:
