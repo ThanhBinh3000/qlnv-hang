@@ -284,7 +284,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
                 req.getTrangThai(), req.getLastest(),
                 req.getMaDvi(),
                 req.getTrangThaiDtl(),
-                req.getTrangThaiDt(),
+                req.getTrangThaiDt(), req.getSoQdPdKhlcnt(), req.getSoQdPdKqlcnt(),
                 pageable);
         return data;
     }
