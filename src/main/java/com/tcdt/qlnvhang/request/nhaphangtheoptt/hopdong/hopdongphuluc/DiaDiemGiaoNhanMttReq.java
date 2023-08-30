@@ -36,6 +36,7 @@ public class DiaDiemGiaoNhanMttReq {
     private BigDecimal tongThanhTienVat;
 
     private BigDecimal soLuong;
+    private BigDecimal soLuongHd;
     private Date ngayPduyet;
     private Date ngayHlucPhuLuc;
     private Date thoiGianDuKienSauDc;

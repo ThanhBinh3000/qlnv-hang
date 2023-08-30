@@ -233,6 +233,11 @@ public class HopDongMttHdrService extends BaseServiceImpl {
       BeanUtils.copyProperties(diaDiemReq, diaDiem, "id");
       diaDiem.setIdHdr(idHdr);
       DiaDiemGiaoNhanMtt create = diaDiemGiaoNhanRepository.save(diaDiem);
+      Optional<HhQdPheduyetKqMttSLDD> sldd = hhQdPheduyetKqMttSLDDRepository.findAllByIdQdPdKqAndMaDvi(req.getIdQdKq(), create.getMaDvi());
+      if(sldd.isPresent()){
+        sldd.get().setSoLuongHd(create.getSoLuongHd());
+        hhQdPheduyetKqMttSLDDRepository.save(sldd.get());
+      }
       List<DiaDiemGiaoNhanMtt> phuLucDtl = diaDiemGiaoNhanRepository.findAllByIdHdDtl(diaDiemReq.getId());
       if (!DataUtils.isNullOrEmpty(phuLucDtl)) {
         phuLucDtl.forEach(s -> {
@@ -248,6 +253,11 @@ public class HopDongMttHdrService extends BaseServiceImpl {
         diaDiemCt.setId(null);
         diaDiemCt.setIdDiaDiem(diaDiem.getId());
         diaDiemGiaoNhanMttCtRepository.save(diaDiemCt);
+        Optional<HhQdPdKQMttSlddDtl> hhQdPdKQMttSlddDtl = hhQdPdKqMttSlddDtlRepository.findAllByIdDiaDiemAndMaDiemKho(sldd.get().getId(), diaDiemCt.getMaDiemKho());
+        if(hhQdPdKQMttSlddDtl.isPresent()){
+          hhQdPdKQMttSlddDtl.get().setSoLuongHd(diaDiemCt.getSoLuongHd());
+          hhQdPdKqMttSlddDtlRepository.save(hhQdPdKQMttSlddDtl.get());
+        }
       }
     }
 
@@ -279,7 +289,7 @@ public class HopDongMttHdrService extends BaseServiceImpl {
     }
 
     if (DataUtils.isNullObject(req.getIdHd())) {
-      if (qOptional.get().getSoHd() != null && !qOptional.get().getSoHd().equals(req.getSoHd())) {
+      if (req.getSoHd() != null) {
         Optional<HopDongMttHdr> qOpHdong = hopDongHdrRepository.findBySoHd(req.getSoHd());
         if (qOpHdong.isPresent())
           throw new Exception("Hợp đồng số " + req.getSoHd() + " đã tồn tại");
