@@ -27,6 +27,7 @@ public class HhQdPdKQMttSlddDtl implements Serializable {
     private String diaDiemNhap;
 
     private BigDecimal soLuong;
+    private BigDecimal soLuongHd;
 
     private BigDecimal donGia;
 

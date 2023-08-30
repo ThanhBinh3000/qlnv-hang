@@ -26,6 +26,7 @@ public class DiaDiemGiaoNhanMttCt {
     private Long idDiaDiem;
 
     private BigDecimal soLuong;
+    private BigDecimal soLuongHd;
 
     private BigDecimal donGia;
 
