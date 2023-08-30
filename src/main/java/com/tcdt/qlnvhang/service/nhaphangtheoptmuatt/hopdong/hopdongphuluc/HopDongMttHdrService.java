@@ -289,7 +289,7 @@ public class HopDongMttHdrService extends BaseServiceImpl {
     }
 
     if (DataUtils.isNullObject(req.getIdHd())) {
-      if (req.getSoHd() != null) {
+      if (req.getSoHd() != null && !req.getSoHd().equals(qOptional.get().getSoHd())) {
         Optional<HopDongMttHdr> qOpHdong = hopDongHdrRepository.findBySoHd(req.getSoHd());
         if (qOpHdong.isPresent())
           throw new Exception("Hợp đồng số " + req.getSoHd() + " đã tồn tại");
@@ -601,6 +601,7 @@ public class HopDongMttHdrService extends BaseServiceImpl {
       if ((Contains.DAKY + Contains.DUTHAO).equals(status)) {
         optional.get().setNguoiPduyetId(getUser().getId());
         optional.get().setNgayPduyet(getDateTimeNow());
+        optional.get().setTrangThaiNh(Contains.CHUA_THUC_HIEN);
       } else {
         throw new Exception("Phê duyệt không thành công");
       }

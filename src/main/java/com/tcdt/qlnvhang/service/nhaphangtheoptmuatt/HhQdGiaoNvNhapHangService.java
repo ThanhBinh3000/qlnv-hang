@@ -312,7 +312,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data, "id");
         data.setNgayTao(new Date());
         data.setNguoiTao(userInfo.getUsername());
-        data.setTrangThai(Contains.DUTHAO);
+        data.setTrangThai(Contains.DANG_NHAP_DU_LIEU);
         data.setMaDvi(userInfo.getDvql());
         data.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));
         HhQdGiaoNvNhapHang created= hhQdGiaoNvNhapHangRepository.save(data);
@@ -505,7 +505,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         if (!optional.isPresent()){
             throw new Exception("Bản ghi không tồn tại");
         }
-        if (!optional.get().getTrangThai().equals(Contains.DUTHAO)
+        if (!optional.get().getTrangThai().equals(Contains.DANG_NHAP_DU_LIEU)
                 && !optional.get().getTrangThai().equals(Contains.TUCHOI_TP)
                 && !optional.get().getTrangThai().equals(Contains.TUCHOI_LDC)){
             throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
@@ -539,7 +539,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         for (HhQdGiaoNvNhapHang nvNhapHang : list){
-            if (!nvNhapHang.getTrangThai().equals(Contains.DUTHAO)
+            if (!nvNhapHang.getTrangThai().equals(Contains.DANG_NHAP_DU_LIEU)
                     && !nvNhapHang.getTrangThai().equals(Contains.TUCHOI_TP)
                     && !nvNhapHang.getTrangThai().equals(Contains.TUCHOI_LDC)){
                 throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
