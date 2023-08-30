@@ -27,6 +27,8 @@ public class XhCtvtQuyetDinhGnvHdrReq {
   String cloaiVthh;
   String tenVthh;
   BigDecimal soLuong;
+  BigDecimal soLuongDx;
+  BigDecimal soLuongGiao;
   LocalDate thoiGianGiaoNhan;
   String trichYeu;
   String trangThai;
