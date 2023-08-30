@@ -1,70 +1,75 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.bangkebanle;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Map;
 
 @Entity
-@Table(name = "XH_BANG_KE_BTT")
+@Table(name = XhBangKeBtt.TABLE_NAME)
 @Data
-public class XhBangKeBtt  implements Serializable {
-
+public class XhBangKeBtt implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_BANG_KE_BTT";
-
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_BANG_KE_BTT_SEQ")
-    @SequenceGenerator(sequenceName = "XH_BANG_KE_BTT_SEQ", allocationSize = 1, name = "XH_BANG_KE_BTT_SEQ")
-
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhBangKeBtt.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = XhBangKeBtt.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhBangKeBtt.TABLE_NAME + "_SEQ")
     private Long id;
-
     private Integer namKh;
-
-    private String soBangKe;
-
     private String maDvi;
+    private String soBangKe;
+    private String idQdNv;
+    private String soQdNv;
+    private BigDecimal soLuongBanTrucTiep;
+    private BigDecimal soLuongConLai;
+    private String nguoiPhuTrach;
+    private String diaChi;
+    private LocalDate ngayBanHang;
+    private String loaiVthh;
+    private String cloaiVthh;
+    private BigDecimal soLuongBanLe;
+    private BigDecimal donGia;
+    private BigDecimal thanhTien;
+    private String tenNguoiMua;
+    private String diaChiNguoiMua;
+    private String cmt;
+    private String ghiChu;
+    private LocalDate ngayTao;
+    private Long nguoiTaoId;
     @Transient
     private String tenDvi;
-
-    private String idQdNv;
-
-    private String soQdNv;
-
-    private BigDecimal soLuongBanTrucTiep;
-
-    private BigDecimal soLuongConLai;
-
-    private String nguoiPhuTrach;
-
-    private String diaChi;
-
-    private LocalDate ngayBanHang;
-
-    private String loaiVthh;
     @Transient
     private String tenLoaiVthh;
-
-    private String cloaiVthh;
     @Transient
     private String tenCloaiVthh;
 
-    private BigDecimal soLuongBanLe;
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucDvi;
 
-    private BigDecimal donGia;
+    public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+        this.mapDmucDvi = mapDmucDvi;
+        if (!DataUtils.isNullObject(getMaDvi())) {
+            setTenDvi(mapDmucDvi.containsKey(getMaDvi()) ? mapDmucDvi.get(getMaDvi()) : null);
+        }
+    }
 
-    private BigDecimal thanhTien;
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapVthh;
 
-    private String tenNguoiMua;
-
-    private String diaChiNguoiMua;
-
-    private String cmt;
-
-    private String ghiChu;
-
-    private LocalDate ngayTao;
-
-    private Long nguoiTaoId;
-
+    public void setMapVthh(Map<String, String> mapVthh) {
+        this.mapVthh = mapVthh;
+        if (!DataUtils.isNullObject(getLoaiVthh())) {
+            setTenLoaiVthh(mapVthh.containsKey(getLoaiVthh()) ? mapVthh.get(getLoaiVthh()) : null);
+        }
+        if (!DataUtils.isNullObject(getCloaiVthh())) {
+            setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
+        }
+    }
 }

@@ -10,12 +10,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface XhBangKeBttRepository extends JpaRepository<XhBangKeBtt, Long> {
 
-    @Query("SELECT BK from XhBangKeBtt BK WHERE 1 = 1 " +
+    @Query("SELECT BK FROM XhBangKeBtt BK " +
+            " WHERE 1=1 " +
+            "AND (:#{#param.dvql} IS NULL OR BK.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
             "AND (:#{#param.namKh} IS NULL OR BK.namKh = :#{#param.namKh}) " +
             "AND (:#{#param.soBangKe} IS NULL OR LOWER(BK.soBangKe) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soBangKe}),'%' ) ) )" +
             "AND (:#{#param.soQdNv} IS NULL OR LOWER(BK.soQdNv) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdNv}),'%'))) " +
@@ -23,10 +24,10 @@ public interface XhBangKeBttRepository extends JpaRepository<XhBangKeBtt, Long> 
             "AND (:#{#param.ngayBanHangTu} IS NULL OR BK.ngayBanHang >= :#{#param.ngayBanHangTu}) " +
             "AND (:#{#param.ngayBanHangDen} IS NULL OR BK.ngayBanHang <= :#{#param.ngayBanHangDen}) " +
             "AND (:#{#param.loaiVthh} IS NULL OR BK.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
-            "AND (:#{#param.maDvi} IS NULL OR BK.maDvi = :#{#param.maDvi})")
+            "ORDER BY BK.ngayTao desc, BK.id desc")
     Page<XhBangKeBtt> searchPage(@Param("param") XhBangKeBttReq param, Pageable pageable);
 
-    Optional<XhBangKeBtt> findBySoBangKe(String soBangKe);
+    List<XhBangKeBtt> findByIdIn(List<Long> idBkList);
 
-    List<XhBangKeBtt> findByIdIn(List<Long> idDxList);
+    List<XhBangKeBtt> findAllByIdIn(List<Long> listId);
 }

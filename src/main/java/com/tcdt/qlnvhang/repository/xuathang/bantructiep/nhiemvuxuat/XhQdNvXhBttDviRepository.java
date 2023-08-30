@@ -13,4 +13,5 @@ public interface XhQdNvXhBttDviRepository extends JpaRepository<XhQdNvXhBttDvi, 
 
     List<XhQdNvXhBttDvi> findAllByIdDtl(Long idDtl);
 
+    List<XhQdNvXhBttDvi> findByIdDtlIn(List<Long> listId);
 }

@@ -10,15 +10,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface XhQdNvXhBttHdrRepository extends JpaRepository<XhQdNvXhBttHdr, Long> {
 
-
     @Query("SELECT DISTINCT QD FROM XhQdNvXhBttHdr QD " +
             " LEFT JOIN XhQdNvXhBttDtl DTL on QD.id = DTL.idHdr " +
-            " WHERE 1 = 1 " +
-            "AND (:#{#param.maDvi} IS NULL OR QD.maDvi = :#{#param.maDvi}) " +
+            " WHERE 1=1 " +
+            "AND (:#{#param.dvql} IS NULL OR QD.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
             "AND (:#{#param.namKh} IS NULL OR QD.namKh = :#{#param.namKh}) " +
             "AND (:#{#param.soQdNv} IS NULL OR LOWER(QD.soQdNv) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdNv}),'%' ) ) )" +
             "AND (:#{#param.loaiVthh } IS NULL OR LOWER(QD.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
@@ -26,13 +26,14 @@ public interface XhQdNvXhBttHdrRepository extends JpaRepository<XhQdNvXhBttHdr, 
             "AND (:#{#param.ngayTaoTu} IS NULL OR QD.ngayTao >= :#{#param.ngayTaoTu}) " +
             "AND (:#{#param.ngayTaoDen} IS NULL OR QD.ngayTao <= :#{#param.ngayTaoDen}) " +
             "AND (:#{#param.trangThai} IS NULL OR QD.trangThai = :#{#param.trangThai}) " +
+            "AND (:#{#param.maChiCuc} IS NULL OR DTL.maDvi = :#{#param.maChiCuc}) " +
             "AND (:#{#param.pthucBanTrucTiep} IS NULL OR LOWER(QD.pthucBanTrucTiep) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.pthucBanTrucTiep}),'%' ) ) )" +
-            "AND (:#{#param.maChiCuc} IS NULL OR DTL.maDvi = :#{#param.maChiCuc}) "
-    )
+            "ORDER BY QD.ngaySua desc , QD.ngayTao desc, QD.id desc")
     Page<XhQdNvXhBttHdr> searchPage(@Param("param") XhQdNvXhBttHdrReq param, Pageable pageable);
 
-    List<XhQdNvXhBttHdr> findBySoQdNv(String soQdNv);
+    Optional<XhQdNvXhBttHdr> findBySoQdNv(String soQdNv);
 
-    List<XhQdNvXhBttHdr> findByIdIn(List<Long> idDxList);
+    List<XhQdNvXhBttHdr> findByIdIn(List<Long> idQdList);
 
+    List<XhQdNvXhBttHdr> findAllByIdIn(List<Long> listId);
 }

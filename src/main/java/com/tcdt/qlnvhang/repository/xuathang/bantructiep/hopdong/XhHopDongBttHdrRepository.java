@@ -29,33 +29,37 @@ public interface XhHopDongBttHdrRepository extends JpaRepository<XhHopDongBttHdr
             "ORDER BY HD.ngaySua desc , HD.ngayTao desc, HD.id desc")
     Page<XhHopDongBttHdr> searchPage(@Param("param") XhHopDongBttHdrReq param, Pageable pageable);
 
+    @Query(value = "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '00' AND ID_QD_KQ =:idQdKq",
+            nativeQuery = true)
+    Integer countSlHopDongChuaKyCuc(Long idQdKq);
+
+    @Query(value = "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '00' AND ID_CHAO_GIA =:idChaoGia",
+            nativeQuery = true)
+    Integer countSlHopDongChuaKyChiCuc(Long idChaoGia);
+
+    @Query(value = "SELECT SUM(SO_LUONG_BAN_TRUC_TIEP) AS total_amount FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '30' AND ID_QD_KQ =:idQdKq",
+            nativeQuery = true)
+    BigDecimal countSlXuatBanKyHdongCuc(Long idQdKq);
+
+    @Query(value = "SELECT SUM(SO_LUONG_BAN_TRUC_TIEP) AS total_amount FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '30' AND ID_CHAO_GIA =:idChaoGia",
+            nativeQuery = true)
+    BigDecimal countSlXuatBanKyHdongChiCuc(Long idChaoGia);
+
+    @Query(value = "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '30' AND ID_QD_KQ =:idQdKq",
+            nativeQuery = true)
+    Integer countSlHopDongDaKyCuc(Long idQdKq);
+
+    @Query(value = "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '30' AND ID_CHAO_GIA =:idChaoGia",
+            nativeQuery = true)
+    Integer countSlHopDongDaKyChiCuc(Long idChaoGia);
+
     Optional<XhHopDongBttHdr> findBySoHd(String soHd);
 
     Optional<XhHopDongBttHdr> findBySoPhuLuc(String soPhuLuc);
 
-    @Query(value = "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '00' AND ID_QD_KQ =:idQdKq",
-            nativeQuery = true)
-    Integer countSlHopDongChuaKykq(Long idQdKq);
-
-    @Query(value = "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '00' AND ID_CHAO_GIA =:idChaoGia",
-            nativeQuery = true)
-    Integer countSlHopDongChuaKyTt(Long idChaoGia);
-
-    @Query(value = "SELECT SUM(SO_LUONG_BAN_TRUC_TIEP) AS total_amount FROM XH_HOP_DONG_BTT_HDR where TRANG_THAI =:trangThai",
-            nativeQuery = true)
-    BigDecimal countSlXuatBanKyHdong(String trangThai);
-
     List<XhHopDongBttHdr> findByIdIn(List<Long> idHdList);
 
     List<XhHopDongBttHdr> findAllByIdHd(Long idHd);
-
-    @Query(value = "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '30' AND ID_QD_KQ =:idQdKq",
-            nativeQuery = true)
-    Integer countSlHopDongDaKyKq(Long idQdKq);
-
-    @Query(value = "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '30' AND ID_CHAO_GIA =:idChaoGia",
-            nativeQuery = true)
-    Integer countSlHopDongDaKyTt(Long idChaoGia);
 
     List<XhHopDongBttHdr> findAllByIdChaoGia(Long idChaoGia);
 

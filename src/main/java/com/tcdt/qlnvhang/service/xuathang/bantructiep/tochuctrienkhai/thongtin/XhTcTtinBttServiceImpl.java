@@ -61,10 +61,15 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
         Integer lastest = 1;
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
             req.setDvql(dvql.substring(0, 4));
+            req.setLastest(lastest);
             req.setTrangThai(Contains.HOANTHANHCAPNHAT);
         } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
             req.setDvql(dvql);
             req.setLastest(lastest);
+        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            req.setMaDviChiCuc(dvql.substring(0, 8));
+            req.setLastest(lastest);
+            req.setTrangThai(Contains.HOANTHANHCAPNHAT);
         }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhQdPdKhBttDtl> search = xhQdPdKhBttDtlRepository.searchPage(req, pageable);
@@ -212,13 +217,18 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
         if (!optional.isPresent()) throw new Exception("Không tìm thấy dữ liệu");
         XhQdPdKhBttDtl data = optional.get();
         String status = statusReq.getTrangThai() + data.getTrangThai();
-        switch (status) {
-            case Contains.HOANTHANHCAPNHAT + Contains.DANGCAPNHAT:
-                break;
-            default:
-                throw new Exception("Phê duyệt không thành công");
+        if (statusReq.getTrangThai().equals(NhapXuatHangTrangThaiEnum.DA_HOAN_THANH.getId())
+                && data.getTrangThaiHd().equals(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId())) {
+            data.setTrangThaiHd(statusReq.getTrangThai());
+        } else {
+            switch (status) {
+                case Contains.HOANTHANHCAPNHAT + Contains.DANGCAPNHAT:
+                    break;
+                default:
+                    throw new Exception("Phê duyệt không thành công");
+            }
+            data.setTrangThai(statusReq.getTrangThai());
         }
-        data.setTrangThai(statusReq.getTrangThai());
         XhQdPdKhBttDtl created = xhQdPdKhBttDtlRepository.save(data);
         return created;
     }
