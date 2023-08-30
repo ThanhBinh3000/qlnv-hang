@@ -1,153 +1,122 @@
 package com.tcdt.qlnvhang.service.xuathang.bantructiep.hopdong.bangkebanle;
+
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.bangkebanle.XhBangKeBtt;
+import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.bangkebanle.XhBangKeBttRepository;
+import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.hopdong.bangkebanle.XhBangKeBttReq;
-import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDate;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class XhBangKeBttServiceImpl extends BaseServiceImpl implements XhBangKeBttService {
+public class XhBangKeBttServiceImpl extends BaseServiceImpl {
 
     @Autowired
     private XhBangKeBttRepository xhBangKeBttRepository;
 
-    @Override
-    public Page<XhBangKeBtt> searchPage(XhBangKeBttReq req) throws Exception {
-        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
-                req.getPaggingReq().getLimit(), Sort.by("id").descending());
-        Page<XhBangKeBtt> data = xhBangKeBttRepository.searchPage(
-                req,
-                pageable);
-        Map<String, String> hashMapVthh = getListDanhMucHangHoa();
-        Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
-        data.getContent().forEach(f ->{
-            f.setTenDvi(StringUtils.isEmpty(f.getMaDvi())?null:hashMapDvi.get(f.getMaDvi()));
-            f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh())?null:hashMapVthh.get(f.getLoaiVthh()));
-            f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh())?null:hashMapVthh.get(f.getCloaiVthh()));
+    public Page<XhBangKeBtt> searchPage(CustomUserDetails currentUser, XhBangKeBttReq req) throws Exception {
+        String dvql = currentUser.getDvql();
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
+            req.setDvql(dvql.substring(0, 4));
+        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            req.setDvql(dvql);
+        }
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+        Page<XhBangKeBtt> search = xhBangKeBttRepository.searchPage(req, pageable);
+        Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        search.getContent().forEach(data -> {
+            data.setMapVthh(mapDmucVthh);
+            data.setMapDmucDvi(mapDmucDvi);
         });
-        return data;
+        return search;
     }
 
-    @Override
-    public XhBangKeBtt create(XhBangKeBttReq req) throws Exception {
-        if(req == null) return null;
-
-        UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null) throw new Exception("Bad request.");
-
-        if (!StringUtils.isEmpty(req.getSoBangKe())){
-            Optional<XhBangKeBtt> qOptional = xhBangKeBttRepository.findBySoBangKe(req.getSoBangKe());
-            if (qOptional.isPresent()){
-                throw new Exception("Số bảng kê" + req.getSoBangKe() + " đã tồn tại");
-            }
-        }
+    @Transactional
+    public XhBangKeBtt create(CustomUserDetails currentUser, XhBangKeBttReq req) throws Exception {
+        if (currentUser == null) throw new Exception("Bad request.");
         XhBangKeBtt data = new XhBangKeBtt();
-        BeanUtils.copyProperties(req, data, "id");
-        data.setNgayTao(LocalDate.now());
-        data.setNguoiTaoId(userInfo.getId());
-        xhBangKeBttRepository.save(data);
-        return data;
+        BeanUtils.copyProperties(req, data);
+        data.setMaDvi(currentUser.getUser().getDepartment());
+        XhBangKeBtt created = xhBangKeBttRepository.save(data);
+        return created;
     }
 
-    @Override
-    public XhBangKeBtt update(XhBangKeBttReq req) throws Exception {
-        return null;
+    public List<XhBangKeBtt> detail(List<Long> ids) throws Exception {
+        if (DataUtils.isNullOrEmpty(ids)) throw new Exception("Tham số không hợp lệ.");
+        List<XhBangKeBtt> list = xhBangKeBttRepository.findByIdIn(ids);
+        if (DataUtils.isNullOrEmpty(list)) throw new Exception("Không tìm thấy dữ liệu");
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        Map<String, String> mapVthh = getListDanhMucHangHoa();
+        List<XhBangKeBtt> allById = xhBangKeBttRepository.findAllById(ids);
+        allById.forEach(data -> {
+            data.setMapDmucDvi(mapDmucDvi);
+            data.setMapVthh(mapVthh);
+        });
+        return allById;
     }
 
-
-    @Override
-    public XhBangKeBtt detail(Long id) throws Exception {
-        UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null) throw new Exception("Bad request.");
-
-        Optional<XhBangKeBtt> qOptional = xhBangKeBttRepository.findById(id);
-        if (!qOptional.isPresent()) throw new UnsupportedOperationException("Bảng kê bán lẻ không tồn tại");
-
-        XhBangKeBtt data = qOptional.get();
-        Map<String, String> hashMapVthh = getListDanhMucHangHoa();
-        Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
-        data.setTenDvi(StringUtils.isEmpty(data.getMaDvi())?null:hashMapDvi.get(data.getMaDvi()));
-        data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:hashMapVthh.get(data.getLoaiVthh()));
-        data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:hashMapVthh.get(data.getCloaiVthh()));
-        return data;
+    @Transactional
+    public void delete(IdSearchReq idSearchReq) throws Exception {
+        Optional<XhBangKeBtt> optional = xhBangKeBttRepository.findById(idSearchReq.getId());
+        if (!optional.isPresent()) throw new Exception("Bản ghi không tồn tại");
+        XhBangKeBtt data = optional.get();
+        xhBangKeBttRepository.delete(data);
     }
 
-    @Override
-    public XhBangKeBtt approve(XhBangKeBttReq req) throws Exception {
-        return null;
+    @Transactional
+    public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
+        List<XhBangKeBtt> list = xhBangKeBttRepository.findAllByIdIn(idSearchReq.getIdList());
+        if (list.isEmpty()) throw new Exception("Bản ghi không tồn tại");
+        xhBangKeBttRepository.deleteAll(list);
     }
 
-    @Override
-    public void delete(Long id) throws Exception {
-        if (StringUtils.isEmpty(id)){
-            throw new Exception("Xóa thất bại không tìm thấy dữ liệu");
-        }
-        Optional<XhBangKeBtt> optional = xhBangKeBttRepository.findById(id);
-        if (!optional.isPresent()){
-            throw new Exception("Không tìm thấy dữ liệu cần xóa");
-        }
-        xhBangKeBttRepository.delete(optional.get());
-    }
-
-    @Override
-    public void deleteMulti(List<Long> listMulti) throws Exception {
-        if (StringUtils.isEmpty(listMulti)) {
-            throw new Exception("Xóa thất bại, không tìm thấy dữ liệu");
-        }
-        List<XhBangKeBtt> list = xhBangKeBttRepository.findByIdIn(listMulti);
-        if (list.isEmpty()){
-            throw new Exception(" Không tìm thấy dữ liệu cần xóa");
-        }
-        for (XhBangKeBtt bangKeBtt : list){
-            this.delete(bangKeBtt.getId());
-        }
-    }
-
-    @Override
-    public void export(XhBangKeBttReq req, HttpServletResponse response) throws Exception {
+    public void export(CustomUserDetails currentUser, XhBangKeBttReq req, HttpServletResponse response) throws Exception {
         PaggingReq paggingReq = new PaggingReq();
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);
         req.setPaggingReq(paggingReq);
-        Page<XhBangKeBtt> page = this.searchPage(req);
+        Page<XhBangKeBtt> page = this.searchPage(currentUser, req);
         List<XhBangKeBtt> data = page.getContent();
-        String title="Danh sách bảng kê bán lẻ";
-        String[] rowsName = new String[]{"STT","Năm kế hoạch", "Số bảng kê", "Số quyết định", "Tên người mua", "Địa chỉ", "Số CMT/CCCD", "Loại hàng hóa", "Chủng loại hàng hóa", "Số lượng", "Đơn giá", "Thanh tiền"};
-        String filename="danh-sach-dx-kh-ban-truc-tiep.xlsx";
+        String title = "Danh sách bảng kê bán lẻ";
+        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số bảng kê",
+                "Số quyết định", "Tên người mua", "Địa chỉ", "Số CMT/CCCD",
+                "Loại hàng hóa", "Chủng loại hàng hóa", "Số lượng",
+                "Đơn giá", "Thanh tiền"};
+        String filename = "danh-sach-dx-kh-ban-truc-tiep.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
-        Object[] objs=null;
+        Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
             XhBangKeBtt hdr = data.get(i);
-            objs=new Object[rowsName.length];
-            objs[0]=i;
-            objs[1]=hdr.getNamKh();
-            objs[2]=hdr.getSoBangKe();
-            objs[3]=hdr.getSoQdNv();
-            objs[4]=hdr.getTenNguoiMua();
-            objs[5]=hdr.getDiaChi();
-            objs[6]=hdr.getCmt();
-            objs[7]=hdr.getTenLoaiVthh();
-            objs[8]=hdr.getTenCloaiVthh();
-            objs[9]=hdr.getSoLuongBanLe();
-            objs[10]=hdr.getDonGia();
-            objs[11]=hdr.getThanhTien();
+            objs = new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = hdr.getNamKh();
+            objs[2] = hdr.getSoBangKe();
+            objs[3] = hdr.getSoQdNv();
+            objs[4] = hdr.getTenNguoiMua();
+            objs[5] = hdr.getDiaChi();
+            objs[6] = hdr.getCmt();
+            objs[7] = hdr.getTenLoaiVthh();
+            objs[8] = hdr.getTenCloaiVthh();
+            objs[9] = hdr.getSoLuongBanLe();
+            objs[10] = hdr.getDonGia();
+            objs[11] = hdr.getThanhTien();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);

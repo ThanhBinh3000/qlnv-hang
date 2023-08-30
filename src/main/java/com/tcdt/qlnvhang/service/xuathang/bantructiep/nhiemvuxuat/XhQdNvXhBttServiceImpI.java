@@ -72,9 +72,14 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl {
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         search.getContent().forEach(data -> {
-            data.setMapVthh(mapDmucVthh);
-            data.setMapDmucDvi(mapDmucDvi);
-            data.setTrangThai(data.getTrangThai());
+            try {
+                data.setMapVthh(mapDmucVthh);
+                data.setMapDmucDvi(mapDmucDvi);
+                data.setTrangThai(data.getTrangThai());
+                data.setChildren(xhQdNvXhBttDtlRepository.findAllByIdHdr(data.getId()));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
         return search;
     }
