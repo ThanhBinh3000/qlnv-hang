@@ -1,22 +1,13 @@
 package com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.olap4j.impl.ArrayMap;
 
 import javax.persistence.*;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Map;
@@ -25,6 +16,8 @@ import java.util.Map;
 @Table(name = XhCtvtQuyetDinhGnvDtl.TABLE_NAME)
 @Getter
 @Setter
+
+
 public class XhCtvtQuyetDinhGnvDtl implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -36,6 +29,7 @@ public class XhCtvtQuyetDinhGnvDtl implements Serializable {
   private Long id;
   private Long idDx;
   private BigDecimal soLuongDx;
+  private BigDecimal soLuongGiao;
   private String loaiHinhNhapXuat;
   private String kieuNhapXuat;
   private String mucDichXuat;
@@ -74,6 +68,8 @@ public class XhCtvtQuyetDinhGnvDtl implements Serializable {
   private String tenNganKho;
   @Transient
   private String tenLoKho;
+  @Transient
+  private String tenTrangThai;
 
 
   public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
@@ -118,34 +114,8 @@ public class XhCtvtQuyetDinhGnvDtl implements Serializable {
   @JsonIgnore
   private XhCtvtQuyetDinhGnvHdr xhCtvtQuyetDinhGnvHdr;
 
-  public XhCtvtQuyetDinhGnvDtl(Long id, Long idDx, BigDecimal soLuongDx, String loaiHinhNhapXuat, String kieuNhapXuat, String mucDichXuat, String noiDungDx, String loaiVthh, String cloaiVthh, String maDvi, BigDecimal soLuong, BigDecimal tonKhoDvi, BigDecimal tonKhoLoaiVthh, BigDecimal tonKhoCloaiVthh, String donViTinh, String trangThai, Map<String, String> mapVthh, String tenLoaiVthh, String tenCloaiVthh, Map<String, String> mapDmucDvi, String tenDvi, String tenCuc, String tenChiCuc, String tenDiemKho, String tenNhaKho, String tenNganKho, String tenLoKho, XhCtvtQuyetDinhGnvHdr xhCtvtQuyetDinhGnvHdr) {
-    this.id = id;
-    this.idDx = idDx;
-    this.soLuongDx = soLuongDx;
-    this.loaiHinhNhapXuat = loaiHinhNhapXuat;
-    this.kieuNhapXuat = kieuNhapXuat;
-    this.mucDichXuat = mucDichXuat;
-    this.noiDungDx = noiDungDx;
-    this.loaiVthh = loaiVthh;
-    this.cloaiVthh = cloaiVthh;
-    this.maDvi = maDvi;
-    this.soLuong = soLuong;
-    this.tonKhoDvi = tonKhoDvi;
-    this.tonKhoLoaiVthh = tonKhoLoaiVthh;
-    this.tonKhoCloaiVthh = tonKhoCloaiVthh;
-    this.donViTinh = donViTinh;
-    this.trangThai = trangThai;
-    this.mapVthh = mapVthh;
-    this.tenLoaiVthh = tenLoaiVthh;
-    this.tenCloaiVthh = tenCloaiVthh;
-    this.mapDmucDvi = mapDmucDvi;
-    this.tenDvi = tenDvi;
-    this.tenCuc = tenCuc;
-    this.tenChiCuc = tenChiCuc;
-    this.tenDiemKho = tenDiemKho;
-    this.tenNhaKho = tenNhaKho;
-    this.tenNganKho = tenNganKho;
-    this.tenLoKho = tenLoKho;
-    this.xhCtvtQuyetDinhGnvHdr = xhCtvtQuyetDinhGnvHdr;
+  public String getTrangThai() {
+    setTenTrangThai(TrangThaiAllEnum.getLabelById(trangThai));
+    return trangThai;
   }
 }

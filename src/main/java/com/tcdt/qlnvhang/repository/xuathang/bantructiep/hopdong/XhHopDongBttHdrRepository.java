@@ -9,14 +9,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface XhHopDongBttHdrRepository extends JpaRepository<XhHopDongBttHdr, Long> {
 
-    @Query("SELECT HD from XhHopDongBttHdr HD WHERE 1 = 1 " +
+    @Query("SELECT HD FROM XhHopDongBttHdr HD  WHERE 1=1 " +
+            "AND (:#{#param.dvql} IS NULL OR HD.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
             "AND (:#{#param.namHd} IS NULL OR HD.namHd = :#{#param.namHd}) " +
             "AND (:#{#param.soHd} IS NULL OR LOWER(HD.soHd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soHd}),'%' ) ) )" +
             "AND (:#{#param.tenHd} IS NULL OR LOWER(HD.tenHd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.tenHd}),'%'))) " +
@@ -25,37 +26,40 @@ public interface XhHopDongBttHdrRepository extends JpaRepository<XhHopDongBttHdr
             "AND (:#{#param.soQdKq} IS NULL OR LOWER(HD.soQdKq) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdKq}),'%' ) ) )" +
             "AND (:#{#param.soQdNv} IS NULL OR LOWER(HD.soQdNv) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdNv}),'%' ) ) )" +
             "AND (:#{#param.trangThai} IS NULL OR HD.trangThai = :#{#param.trangThai}) " +
-            "AND (:#{#param.maDvi} IS NULL OR HD.maDvi = :#{#param.maDvi})")
+            "ORDER BY HD.ngaySua desc , HD.ngayTao desc, HD.id desc")
     Page<XhHopDongBttHdr> searchPage(@Param("param") XhHopDongBttHdrReq param, Pageable pageable);
 
     Optional<XhHopDongBttHdr> findBySoHd(String soHd);
 
-    @Transactional
-    List<XhHopDongBttHdr> findAllByIdQdKq(Long idQdKq);
+    Optional<XhHopDongBttHdr> findBySoPhuLuc(String soPhuLuc);
 
-    @Transactional
-    List<XhHopDongBttHdr> findAllByIdQdNv(Long idQdNv);
+    @Query(value = "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '00' AND ID_QD_KQ =:idQdKq",
+            nativeQuery = true)
+    Integer countSlHopDongChuaKykq(Long idQdKq);
 
-    @Transactional
+    @Query(value = "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '00' AND ID_CHAO_GIA =:idChaoGia",
+            nativeQuery = true)
+    Integer countSlHopDongChuaKyTt(Long idChaoGia);
+
+    @Query(value = "SELECT SUM(SO_LUONG_BAN_TRUC_TIEP) AS total_amount FROM XH_HOP_DONG_BTT_HDR where TRANG_THAI =:trangThai",
+            nativeQuery = true)
+    BigDecimal countSlXuatBanKyHdong(String trangThai);
+
+    List<XhHopDongBttHdr> findByIdIn(List<Long> idHdList);
+
     List<XhHopDongBttHdr> findAllByIdHd(Long idHd);
 
-    @Transactional
-    List<XhHopDongBttHdr> findAllByIdQdPdDtl(Long idQdPdDtl);
-
-    @Query(value =  "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '30' AND SO_QD_KQ =:soQdKq",
+    @Query(value = "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '30' AND ID_QD_KQ =:idQdKq",
             nativeQuery = true)
-    Integer countSlHopDongDaKyKq(String soQdKq);
+    Integer countSlHopDongDaKyKq(Long idQdKq);
 
-    @Query(value =  "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '00' AND SO_QD_KQ =:soQdKq",
+    @Query(value = "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '30' AND ID_CHAO_GIA =:idChaoGia",
             nativeQuery = true)
-    Integer countSlHopDongChuaKykq(String soQdKq);
+    Integer countSlHopDongDaKyTt(Long idChaoGia);
 
-    @Query(value =  "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '00' AND ID_QD_PD_DTL =:idQdPdDtl",
-            nativeQuery = true)
-    Integer countSlHopDongChuaKyTt(Long idQdPdDtl);
+    List<XhHopDongBttHdr> findAllByIdChaoGia(Long idChaoGia);
 
-    @Query(value =  "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '30' AND ID_QD_PD_DTL =:idQdPdDtl",
-            nativeQuery = true)
-    Integer countSlHopDongDaKyTt(Long idQdPdDtl);
+    List<XhHopDongBttHdr> findAllByIdQdKq(Long idQdKq);
 
+    List<XhHopDongBttHdr> findAllByIdQdNv(Long idQdNv);
 }

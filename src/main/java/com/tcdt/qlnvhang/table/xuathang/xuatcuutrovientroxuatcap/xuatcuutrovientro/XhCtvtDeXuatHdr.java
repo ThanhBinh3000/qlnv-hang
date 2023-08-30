@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -24,6 +25,7 @@ import java.util.Map;
 @Table(name = XhCtvtDeXuatHdr.TABLE_NAME)
 @Getter
 @Setter
+@NoArgsConstructor
 public class XhCtvtDeXuatHdr extends BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;

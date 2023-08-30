@@ -319,6 +319,40 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
         ex.export();
     }
 
+    public void exportHdong(CustomUserDetails currentUser, XhKqBttHdrReq req, HttpServletResponse response) throws Exception {
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        Page<XhKqBttHdr> page = this.searchPage(currentUser, req);
+        List<XhKqBttHdr> data = page.getContent();
+        String title = "Quản lý ký hợp đồng bán hàng DTQG theo phương thức bán trực tiếp";
+        String[] rowsName = new String[]{"STT", "Năm KH", "QĐ PD KHBTT",
+                "QĐ PD KQ chào giá", "Sl HĐ cần ký", "Sl HĐ đã ký",
+                "Thời hạn xuất kho", "Loại hàng háo", "Chủng loại hàng hóa", "Tổng giá trị hợp đồng", "Trạng thái HĐ", "Trạng thái XH"};
+        String fileName = "danh-sach-dx-pd-kq-chao-gia.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        for (int i = 0; i < data.size(); i++) {
+            XhKqBttHdr hdr = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = hdr.getNamKh();
+            objs[2] = hdr.getSoQdPd();
+            objs[3] = hdr.getSoQdKq();
+            objs[4] = hdr.getSlHdChuaKy();
+            objs[5] = hdr.getSlHdDaKy();
+            objs[6] = hdr.getNgayMkho();
+            objs[8] = hdr.getTenLoaiVthh();
+            objs[9] = hdr.getTenCloaiVthh();
+            objs[10] = null;
+            objs[11] = hdr.getTenTrangThaiHd();
+            objs[12] = hdr.getTenTrangThaiXh();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+        ex.export();
+    }
 
     public XhTcTtinBtt detailToChuc(Long id) throws Exception {
         if (org.apache.commons.lang3.ObjectUtils.isEmpty(id)) {

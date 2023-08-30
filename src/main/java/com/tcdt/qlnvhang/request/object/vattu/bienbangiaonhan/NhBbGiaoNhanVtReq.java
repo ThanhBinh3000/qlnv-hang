@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.request.object.vattu.bienbangiaonhan;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -67,5 +68,5 @@ public class NhBbGiaoNhanVtReq extends BaseRequest {
     private List<FileDinhKemReq> fileDinhKemReqs = new ArrayList<>();
 
     private List<FileDinhKemReq> canCus = new ArrayList<>();
-
+    private ReportTemplateRequest reportTemplateRequest;
 }

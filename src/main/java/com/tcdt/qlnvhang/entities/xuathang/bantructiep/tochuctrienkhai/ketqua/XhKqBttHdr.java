@@ -14,6 +14,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,9 @@ public class XhKqBttHdr extends BaseEntity implements Serializable {
     private String ghiChu;
     private Integer slHdDaKy;
     private Integer slHdChuaKy;
+    private BigDecimal tongSlDaKyHdong;
+    private BigDecimal tongSlChuaKyHdong;
+    private BigDecimal tongSoLuong;
     private String trangThai;
     private String trangThaiHd;
     private String trangThaiXh;

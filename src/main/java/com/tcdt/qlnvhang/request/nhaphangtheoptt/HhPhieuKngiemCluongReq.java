@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.nhaphangtheoptt;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
@@ -45,4 +46,5 @@ public class HhPhieuKngiemCluongReq {
     private String ketQuaDanhGia;
     private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
     List<HhPhieuKnCluongDtlReq> phieuKnCluongDtlReqList = new ArrayList<>();
+    private ReportTemplateRequest reportTemplateRequest;
 }

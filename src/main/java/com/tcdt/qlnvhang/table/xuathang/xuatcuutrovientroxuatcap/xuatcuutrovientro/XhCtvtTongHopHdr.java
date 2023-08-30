@@ -4,7 +4,9 @@ import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,7 +17,8 @@ import java.util.List;
 
 @Entity
 @Table(name = XhCtvtTongHopHdr.TABLE_NAME)
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class XhCtvtTongHopHdr extends BaseEntity implements Serializable {
 

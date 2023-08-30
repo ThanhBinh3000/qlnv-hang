@@ -69,6 +69,8 @@ public class XhQdPdKhBttDtl implements Serializable {
     private String trangThaiXh;
     private Integer slHdDaKy;
     private Integer slHdChuaKy;
+    private BigDecimal tongSlDaKyHdong;
+    private BigDecimal tongSlChuaKyHdong;
     private Integer namKh;
     @Transient
     private String tenLoaiHinhNx;
