@@ -41,6 +41,7 @@ public class HhQdPheduyetKqMttSLDDReq {
     private BigDecimal tongThanhTienVat;
 
     private BigDecimal soLuong;
+    private BigDecimal soLuongHd;
 
     List<HhQdPdKqMttSlddDtlReq> children = new ArrayList<>();
     @Transient
