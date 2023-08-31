@@ -220,4 +220,20 @@ public class HhQdPheduyetKhMttHdrControler {
         return ResponseEntity.ok(resp);
     }
 
+    @ApiOperation(value = "Xem trước", response = List.class)
+    @PostMapping(value = PathContains.QD_PD_MTT + PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> preview(@RequestBody HhQdPheduyetKhMttHdrReq objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(hhQdPheduyetKhMttHdrService.preview(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Xem trước: {?}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
 }

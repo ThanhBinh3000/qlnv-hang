@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
 import com.tcdt.qlnvhang.request.*;
+import com.tcdt.qlnvhang.request.nhaphang.nhaptructiep.HhQdPheduyetKhMttPreview;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhChiTietTTinChaoGiaReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhQdPdKhMttSlddDtlReq;
 import com.tcdt.qlnvhang.service.UserService;
@@ -12,6 +13,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -28,7 +30,10 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -608,5 +613,24 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
             children.add(sldd);
         }
         return children;
+    }
+
+    public ReportTemplateResponse preview(HhQdPheduyetKhMttHdrReq req) throws Exception {
+        HhQdPheduyetKhMttHdr qdPheduyetKhMttHdr = detail(req.getId());
+        HhQdPheduyetKhMttPreview object = new HhQdPheduyetKhMttPreview();
+        ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        object.setTenCloaiVthh(qdPheduyetKhMttHdr.getTenCloaiVthh().toUpperCase());
+        object.setNamKhoach(qdPheduyetKhMttHdr.getNamKh().toString());
+        qdPheduyetKhMttHdr.getChildren().forEach(cuc -> {
+            AtomicReference<BigDecimal> tongThanhTien = new AtomicReference<>(BigDecimal.ZERO);
+            cuc.getChildren().forEach(chiCuc -> {
+                tongThanhTien.updateAndGet(v -> v.add(chiCuc.getDonGia().multiply(chiCuc.getSoLuong())));
+            });
+            cuc.setTongThanhTien(docxToPdfConverter.convertBigDecimalToStr(tongThanhTien.get()));
+        });
+        object.setDetails(qdPheduyetKhMttHdr.getChildren());
+        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
     }
 }
