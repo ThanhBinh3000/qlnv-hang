@@ -21,6 +21,7 @@ import org.apache.velocity.tools.generic.DateTool;
 import org.apache.velocity.tools.generic.MathTool;
 import org.apache.velocity.tools.generic.NumberTool;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -45,9 +46,8 @@ import java.util.stream.Collectors;
 @Component
 public class DocxToPdfConverter {
 
-    @Autowired
-    private Environment env;
-
+    @Value("${path.url}")
+    public String font;
 
     @Transactional
     public ReportTemplateResponse convertDocxToPdf(InputStream inputFile, Object data) {
@@ -68,7 +68,7 @@ public class DocxToPdfConverter {
             PdfOptions pdfOptions = PdfOptions.create();
             pdfOptions.fontProvider((familyName, encoding, size, style, color) -> {
                 try {
-                    BaseFont baseFont = BaseFont.createFont(env.getProperty("path.url"), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                    BaseFont baseFont = BaseFont.createFont(font, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
                     return new Font(baseFont, size, style, color);
                 } catch (Exception e) {
                     throw new IllegalArgumentException("Font was not found" + e);
