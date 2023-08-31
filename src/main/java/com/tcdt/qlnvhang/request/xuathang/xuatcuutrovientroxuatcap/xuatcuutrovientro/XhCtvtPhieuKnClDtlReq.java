@@ -11,6 +11,7 @@ public class XhCtvtPhieuKnClDtlReq {
   private String danhMuc;
   private String phuongPhap;
   private String tenTchuan;
+  private String maChiTieu;
   private String trangThai;
   private Long thuTu;
   private String ketQuaPt;

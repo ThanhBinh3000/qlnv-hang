@@ -36,5 +36,10 @@ public class HhDxuatKhMttSlddReq {
 
     private BigDecimal soLuong;
 
+    private String dvt;
+    private String cloaiVthh;
+    private String tenCloaiVthh;
+    private BigDecimal donGiaTdVat;
+
     List<HhDxuatKhMttSlddDtlReq> children = new ArrayList<>();
 }

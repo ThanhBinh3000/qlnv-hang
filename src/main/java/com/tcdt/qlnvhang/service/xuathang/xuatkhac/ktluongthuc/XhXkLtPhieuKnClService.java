@@ -43,7 +43,6 @@ import java.util.*;
 @Service
 public class XhXkLtPhieuKnClService extends BaseServiceImpl {
 
-
   @Autowired
   private XhXkLtPhieuKnClRepository xhXkLtPhieuKnClRepository;
 

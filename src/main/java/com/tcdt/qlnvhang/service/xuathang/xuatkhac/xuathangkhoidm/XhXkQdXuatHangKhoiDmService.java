@@ -208,10 +208,12 @@ public class XhXkQdXuatHangKhoiDmService extends BaseServiceImpl {
         }
         List<XhXkDsHangDtqgDtl> treeNodes = new ArrayList<>();
         for (XhXkDsHangDtqgDtl node : flatNodes) {
+            node.setTenNhomHang(node.getLoaiHang().equals("VT") ? "Vật tư" : "Lương Thực");
             XhXkDsHangDtqgDtl parent = nodeMap.get(node.getMaCha());
             if (parent == null) {
                 treeNodes.add(node);
             } else {
+                node.setTenCha(parent.getTen());
                 parent.getChildren().add(node);
             }
         }
