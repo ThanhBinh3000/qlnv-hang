@@ -316,9 +316,7 @@ public class XhCtvtPhieuKnClHdrService extends BaseServiceImpl {
       FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
       List<XhCtvtPhieuKnClHdr> detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
       return docxToPdfConverter.convertDocxToPdf(inputStream, detail.get(0));
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (XDocReportException e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
     return null;
