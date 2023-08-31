@@ -22,6 +22,8 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.hosokythuat.NhHoSoKyThuatService;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThuatDtl;
 import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThuatHdr;
 import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThuatRow;
@@ -37,6 +39,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -374,12 +377,12 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
   }
   public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
     try {
-//      ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
-//      reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
-//      ReportTemplate model = findByTenFile(reportTemplateRequest);
-//      byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-//      ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-      FileInputStream inputStream = new FileInputStream("src/main/resources/reports/xuatcuutrovientro/Hồ sơ kĩ thuật.docx");
+      ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
+      reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
+      ReportTemplate model = findByTenFile(reportTemplateRequest);
+      byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+      ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+//      FileInputStream inputStream = new FileInputStream("src/main/resources/reports/xuatcuutrovientro/Hồ sơ kĩ thuật.docx");
       SearchHoSoKyThuatReq req = new SearchHoSoKyThuatReq();
       req.setId(DataUtils.safeToLong(body.get("id")));
       req.setType("CTVT");
