@@ -351,10 +351,10 @@ public class HhQdPdNhapKhacServiceImpl extends BaseServiceImpl implements HhQdPd
         if(qOptional.get().getIdTh() != null){
             hhThopKhNhapKhacRepository.updateTrangThai(qOptional.get().getIdTh(), Contains.CHUATAO_QD);
         }else{
-            hhDxuatKhNhapKhacHdrRepository.updateStatusInList(Arrays.asList(qOptional.get().getSoDxuat()), NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
+            hhDxuatKhNhapKhacHdrRepository.updateStatusInList(Arrays.asList(qOptional.get().getSoDxuat()), NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId());
         }
-        fileDinhKemService.delete(qOptional.get().getId(), Lists.newArrayList(HhQdPdNhapKhacHdr.TABLE_NAME + CAN_CU));
-        fileDinhKemService.delete(qOptional.get().getId(), Lists.newArrayList(HhQdPdNhapKhacHdr.TABLE_NAME));
+//        fileDinhKemService.delete(qOptional.get().getId(), Lists.newArrayList(HhQdPdNhapKhacHdr.TABLE_NAME + CAN_CU));
+//        fileDinhKemService.delete(qOptional.get().getId(), Lists.newArrayList(HhQdPdNhapKhacHdr.TABLE_NAME));
         hhQdPdNhapKhacDtlRepository.deleteAllByIdHdr(qOptional.get().getId());
         hhQdPdNhapKhacHdrRepository.delete(qOptional.get());
     }

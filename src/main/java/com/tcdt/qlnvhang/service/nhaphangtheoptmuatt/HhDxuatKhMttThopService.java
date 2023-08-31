@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.nhaphang.nhaptructiep.HhDxKhMttThopPreview;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhDxKhMttTChiThopReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhDxKhMttThopHdrReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhDxKhMttThopReq;
@@ -11,8 +12,10 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttHdr;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -29,7 +32,10 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,7 +53,8 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
     private HhQdPheduyetKhMttHdrRepository hhQdPheduyetKhMttHdrRepository;
     @Autowired
     private FileDinhKemService fileDinhKemService;
-
+    @Autowired
+    private HhDxuatKhMttSlddRepository hhDxuatKhMttSlddRepository;
 
 
     public Page<HhDxKhMttThopHdr> searchPage(SearchHhDxKhMttThopReq req) throws Exception {
@@ -257,6 +264,47 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
         ex.export();
     }
 
-
+    public ReportTemplateResponse preview(HhDxKhMttThopHdrReq req) throws Exception {
+        Optional<HhDxKhMttThopHdr> qOptional = hhDxuatKhMttThopRepository.findById(req.getId());
+        if (!qOptional.isPresent()) {
+            throw new UnsupportedOperationException("Không tồn tại bản ghi");
+        }
+        List<HhDxKhMttThopDtl> listTh = hhDxuatKhMttThopDtlRepository.findByIdThopHdr(qOptional.get().getId());
+        Map<String, String> mapDmucDvi = getMapTenDvi();
+        Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+        AtomicReference<BigDecimal> tongSl = new AtomicReference<>(BigDecimal.ZERO);
+        AtomicReference<BigDecimal> tongThanhTien = new AtomicReference<>(BigDecimal.ZERO);
+        listTh.forEach(f -> {
+            Optional<HhDxuatKhMttHdr> dxuatKhMttHdr = hhDxuatKhMttRepository.findById(f.getIdDxHdr());
+            if (!dxuatKhMttHdr.isPresent()){
+                throw new UnsupportedOperationException("Không tồn tại bản ghi đề xuất");
+            }
+            try {
+                f.setTgianKthuc(convertDate(dxuatKhMttHdr.get().getTgianKthuc()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
+            List<HhDxuatKhMttSldd> dsSlDdList = hhDxuatKhMttSlddRepository.findAllByIdHdr(f.getIdDxHdr());
+            for(HhDxuatKhMttSldd dsG : dsSlDdList){
+                dsG.setTenDvi(mapDmucDvi.get(dsG.getMaDvi()));
+                dsG.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(dsG.getDonGia().multiply(dsG.getSoLuong())));
+                tongThanhTien.updateAndGet(v -> v.add(dsG.getDonGia().multiply(dsG.getSoLuong())));
+            }
+            f.setDsChiCucPreviews(dsSlDdList);
+            tongSl.updateAndGet(v -> v.add(f.getTongSoLuong()));
+            f.setSoLuongStr(docxToPdfConverter.convertBigDecimalToStr(f.getTongSoLuong()));
+        });
+        HhDxKhMttThopPreview object = new HhDxKhMttThopPreview();
+        ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        object.setNamKhoach(qOptional.get().getNamKh().toString());
+        object.setTenCloaiVthh(hashMapDmHh.get(qOptional.get().getCloaiVthh()).toUpperCase());
+        object.setDetails(listTh);
+        object.setTongSl(docxToPdfConverter.convertBigDecimalToStr(tongSl.get()));
+        object.setTongThanhTien(docxToPdfConverter.convertBigDecimalToStr(tongThanhTien.get()));
+        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+    }
 
 }
