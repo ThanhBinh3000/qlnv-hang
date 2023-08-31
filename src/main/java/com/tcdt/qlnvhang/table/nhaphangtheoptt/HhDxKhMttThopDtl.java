@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "HH_DX_KHMTT_THOP_DTL")
@@ -46,5 +47,10 @@ public class HhDxKhMttThopDtl implements Serializable {
     private BigDecimal tongMucDt;
 
     private BigDecimal donGiaVat;
-
+    @Transient
+    private List<HhDxuatKhMttSldd> dsChiCucPreviews;
+    @Transient
+    private String tgianKthuc;
+    @Transient
+    private String soLuongStr;
 }

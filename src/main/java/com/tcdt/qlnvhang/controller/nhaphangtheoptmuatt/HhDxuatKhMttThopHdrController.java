@@ -7,8 +7,6 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhDxKhMttTChiThopReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhDxKhMttThopHdrReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhDxKhMttThopReq;
-import com.tcdt.qlnvhang.request.object.HhDxKhLcntThopHdrReq;
-import com.tcdt.qlnvhang.request.search.HhDxKhLcntTChiThopReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.HhDxuatKhMttThopService;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -187,6 +185,23 @@ public class HhDxuatKhMttThopHdrController  extends BaseController {
             mapper.writeValue(response.getOutputStream(), body);
         }
 
+    }
+
+    @ApiOperation(value = "Xem trước", response = List.class)
+    @PostMapping(value = PathContains.TH_MUA_TT + PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> preview(@RequestBody HhDxKhMttThopHdrReq objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(hhDxuatKhMttThopService.preview(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Xem trước: {?}", e);
+        }
+        return ResponseEntity.ok(resp);
     }
 
 }
