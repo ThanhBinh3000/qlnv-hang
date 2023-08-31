@@ -215,10 +215,14 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         data.setFileDinhKems(fileDinhKems);
         List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
         if (!dtlList.isEmpty()) {
+            Map<String, String> mapTenChiTieu = getListDanhMucChung("CHI_TIEU_CL");
             if (data.getApDungCloaiVthh() == false) {
                 for (QuyChuanQuocGiaDtl dtl : dtlList) {
                     dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh()) ? null : hashMapDmHh.get(dtl.getLoaiVthh()));
                     dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh()) ? null : hashMapDmHh.get(dtl.getCloaiVthh()));
+                    if (!ObjectUtils.isEmpty(dtl.getMaChiTieu())) {
+                        dtl.setTenChiTieu(mapTenChiTieu.get(dtl.getMaChiTieu()));
+                    }
                 }
                 data.setTieuChuanKyThuat(dtlList);
             } else {
