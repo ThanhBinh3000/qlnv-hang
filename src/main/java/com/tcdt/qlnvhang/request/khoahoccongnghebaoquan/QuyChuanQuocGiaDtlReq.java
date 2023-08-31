@@ -10,6 +10,7 @@ public class QuyChuanQuocGiaDtlReq {
     private String stt;
     private Long idHdr;
     private String tenChiTieu;
+    private String maChiTieu;
     private String thuTuHt;
     private boolean chiTieuCha;
     private String maDvi;

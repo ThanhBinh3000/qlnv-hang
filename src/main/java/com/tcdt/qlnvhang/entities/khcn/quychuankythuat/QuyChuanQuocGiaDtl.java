@@ -18,6 +18,7 @@ public class QuyChuanQuocGiaDtl extends BaseEntity {
       + "_SEQ", allocationSize = 1, name = QuyChuanQuocGiaDtl.TABLE_NAME + "_SEQ")
   private Long id;
   private Long idHdr;
+  private String maChiTieu;
   private String tenChiTieu;
   private String thuTuHt;
   private boolean chiTieuCha;

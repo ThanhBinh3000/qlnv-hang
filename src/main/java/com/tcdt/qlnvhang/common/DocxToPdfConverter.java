@@ -83,6 +83,7 @@ public class DocxToPdfConverter {
             outputStreamPdf.close();
             outputStreamWord.close();
             System.out.println(reportTemplateResponse.getWordSrc());
+            System.out.println(reportTemplateResponse.getPdfSrc());
             return reportTemplateResponse;
         }
         catch ( Throwable e )
