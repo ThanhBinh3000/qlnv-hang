@@ -23,6 +23,7 @@ public class XhXuatCapPhieuKnClDtl implements Serializable {
   private String danhMuc;
   private String phuongPhap;
   private String tenTchuan;
+  private String maChiTieu;
   private String trangThai;
   private String ketQuaPt;
   private Long thuTu;

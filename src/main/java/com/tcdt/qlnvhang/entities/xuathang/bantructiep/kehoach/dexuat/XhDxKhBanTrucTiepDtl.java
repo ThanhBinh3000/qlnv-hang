@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat;
 
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -28,5 +29,17 @@ public class XhDxKhBanTrucTiepDtl implements Serializable {
     @Transient
     private String tenDvi;
     @Transient
+    private BigDecimal donGiaDeXuat;
+    @Transient
+    private BigDecimal thanhTienDeXuat;
+    @Transient
     private List<XhDxKhBanTrucTiepDdiem> children = new ArrayList<>();
+
+    public void setChildren(List<XhDxKhBanTrucTiepDdiem> children) {
+        this.children = children;
+        if (!DataUtils.isNullOrEmpty(children)) {
+            this.donGiaDeXuat = children.stream().map(XhDxKhBanTrucTiepDdiem::getDonGiaDeXuat).reduce(BigDecimal.ZERO, BigDecimal::add);
+            this.thanhTienDeXuat = children.stream().map(XhDxKhBanTrucTiepDdiem::getThanhTienDeXuat).reduce(BigDecimal.ZERO, BigDecimal::add);
+        }
+    }
 }

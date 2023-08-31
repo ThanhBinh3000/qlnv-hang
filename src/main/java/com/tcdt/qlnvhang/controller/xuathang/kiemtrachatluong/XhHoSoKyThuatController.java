@@ -18,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -171,4 +172,20 @@ public class XhHoSoKyThuatController extends BaseController {
 //
 //    }
 //  }
+@ApiOperation(value = "Xem truoc", response = List.class)
+@PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
+@ResponseStatus(HttpStatus.OK)
+public ResponseEntity<BaseResponse> preview(@RequestBody HashMap<String, Object> body) {
+  BaseResponse resp = new BaseResponse();
+  try {
+
+    resp.setData(xhHoSoKyThuatService.preview(body));
+    resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+    resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+  } catch (Exception e) {
+    resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+    resp.setMsg(e.getMessage());
+  }
+  return ResponseEntity.ok(resp);
+}
 }

@@ -45,6 +45,8 @@ public class HhDxuatKhMttSldd implements Serializable {
     private BigDecimal tongThanhTienVat;
 
     private BigDecimal soLuong;
+    @Transient
+    private String tongThanhTienStr;
     private String dvt;
     private String cloaiVthh;
     private String tenCloaiVthh;

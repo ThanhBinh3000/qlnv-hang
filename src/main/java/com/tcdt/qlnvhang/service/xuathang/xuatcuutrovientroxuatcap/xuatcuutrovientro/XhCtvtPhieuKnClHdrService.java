@@ -309,12 +309,12 @@ public class XhCtvtPhieuKnClHdrService extends BaseServiceImpl {
 
   public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
     try {
-//      ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
-//      reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
-//      ReportTemplate model = findByTenFile(reportTemplateRequest);
-//      byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-//      ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-      FileInputStream inputStream = new FileInputStream("src/main/resources/reports/xuatcuutrovientro/Phiếu kiểm nghiệm chất lượng.docx");
+      ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
+      reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
+      ReportTemplate model = findByTenFile(reportTemplateRequest);
+      byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+      ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+//      FileInputStream inputStream = new FileInputStream("src/main/resources/reports/xuatcuutrovientro/Phiếu kiểm nghiệm chất lượng.docx");
       List<XhCtvtPhieuKnClHdr> detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
       return docxToPdfConverter.convertDocxToPdf(inputStream, detail.get(0));
     } catch (IOException e) {

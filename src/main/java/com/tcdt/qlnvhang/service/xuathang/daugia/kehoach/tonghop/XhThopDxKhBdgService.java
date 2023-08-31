@@ -16,8 +16,6 @@ import com.tcdt.qlnvhang.service.feign.KeHoachService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaServiceImpl;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
-import com.tcdt.qlnvhang.table.report.ReportTemplate;
-import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -31,10 +29,8 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -222,13 +218,13 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
   public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
     try {
       Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
-
+/*
       ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
       reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
       ReportTemplate model = findByTenFile(reportTemplateRequest);
       byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-      ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-//      FileInputStream inputStream = new FileInputStream("src/main/resources/Tổng hợp kế hoạch bán đấu giá.docx");
+      ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);*/
+      FileInputStream inputStream = new FileInputStream(baseReportFolder + "bandaugia/Tổng hợp kế hoạch bán đấu giá.docx");
       List<XhThopDxKhBdg> detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
       XhThopDxKhBdg xhThopDxKhBdg = detail.get(0);
       List<Long> listIdChild = xhThopDxKhBdg.getChildren().stream().map(XhThopDxKhBdgDtl::getIdDxHdr).collect(Collectors.toList());

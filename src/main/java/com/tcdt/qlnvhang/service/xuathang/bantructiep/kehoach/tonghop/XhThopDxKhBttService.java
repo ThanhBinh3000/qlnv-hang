@@ -13,9 +13,12 @@ import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.tonghop.SearchXhTh
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttHdrReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.XhThopChiTieuReq;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.service.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepServicelmpl;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,6 +28,8 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,6 +41,8 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
     private XhThopDxKhBttRepository xhThopDxKhBttRepository;
     @Autowired
     private XhDxKhBanTrucTiepHdrRepository xhDxKhBanTrucTiepHdrRepository;
+    @Autowired
+    private XhDxKhBanTrucTiepServicelmpl xhDxKhBanTrucTiepService;
 
     public Page<XhThopDxKhBttHdr> searchPage(CustomUserDetails currentUser, SearchXhThopDxKhBtt req) throws Exception {
         req.setDvql(currentUser.getDvql());
@@ -204,5 +211,34 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
+    }
+
+    public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
+        try {
+            Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + "bantructiep/Tổng hợp kế hoạch bán trực tiếp.docx");
+            List<XhThopDxKhBttHdr> detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
+            XhThopDxKhBttHdr tongHop = detail.get(0);
+            List<Long> idDxHdr = tongHop.getChildren().stream().map(XhThopDxKhBttDtl::getIdDxHdr).collect(Collectors.toList());
+            List<XhDxKhBanTrucTiepHdr> tableData = xhDxKhBanTrucTiepService.detail(idDxHdr);
+            tableData.forEach(dataDx -> {
+                String maDviCuc = dataDx.getMaDvi().substring(0, 6);
+                if (mapDmucDvi.containsKey((maDviCuc))) {
+                    Map<String, Object> objDonVi = mapDmucDvi.get(maDviCuc);
+                    dataDx.setTenDvi(objDonVi.get("tenDvi").toString());
+                }
+            });
+            HashMap<Object, Object> hashMap = new HashMap<>();
+            hashMap.put("nam", tongHop.getNamKh());
+            hashMap.put("tenCloaiVthh", tongHop.getTenCloaiVthh().toUpperCase());
+            hashMap.put("table", tableData);
+            String s = objectMapper.writeValueAsString(hashMap);
+            return docxToPdfConverter.convertDocxToPdf(inputStream, hashMap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

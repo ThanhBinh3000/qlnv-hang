@@ -20,12 +20,17 @@ import com.tcdt.qlnvhang.response.xuathang.NhHoSoKyThuatDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.hosokythuat.NhHoSoKyThuatService;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThuatDtl;
 import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThuatHdr;
 import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThuatRow;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuKnClHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,6 +39,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -366,5 +374,25 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
       }
     }
     return xhHskt;
+  }
+  public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
+    try {
+      ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
+      reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
+      ReportTemplate model = findByTenFile(reportTemplateRequest);
+      byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+      ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+//      FileInputStream inputStream = new FileInputStream("src/main/resources/reports/xuatcuutrovientro/Hồ sơ kĩ thuật.docx");
+      SearchHoSoKyThuatReq req = new SearchHoSoKyThuatReq();
+      req.setId(DataUtils.safeToLong(body.get("id")));
+      req.setType("CTVT");
+      XhHoSoKyThuatHdr detail = this.detailXh(req);
+      return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (XDocReportException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }
