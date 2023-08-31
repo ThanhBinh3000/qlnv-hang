@@ -41,4 +41,6 @@ public class XhXkDsHangDtqgDtl {
     private String tenLoaiHinhXuat;
     @Transient
     private String tenCha;
+    @Transient
+    private String tenNhomHang;
 }
