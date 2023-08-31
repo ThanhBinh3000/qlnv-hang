@@ -39,4 +39,6 @@ public class XhXkDsHangDtqgDtl {
     private List<XhXkDsHangDtqgDtl> children = new ArrayList<>();
     @Transient
     private String tenLoaiHinhXuat;
+    @Transient
+    private String tenCha;
 }

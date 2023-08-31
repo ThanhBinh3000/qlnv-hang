@@ -212,6 +212,7 @@ public class XhXkQdXuatHangKhoiDmService extends BaseServiceImpl {
             if (parent == null) {
                 treeNodes.add(node);
             } else {
+                node.setTenCha(parent.getTen());
                 parent.getChildren().add(node);
             }
         }
