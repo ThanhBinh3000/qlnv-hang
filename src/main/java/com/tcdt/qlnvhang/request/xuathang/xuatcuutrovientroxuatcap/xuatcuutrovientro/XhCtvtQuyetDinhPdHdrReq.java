@@ -29,6 +29,7 @@ public class XhCtvtQuyetDinhPdHdrReq {
   private Long soLuongXuaCap;
   private String loaiVthh;
   private String cloaiVthh;
+  private String tenVthh;
   private String loaiNhapXuat;
   private String kieuNhapXuat;
   private String mucDichXuat;
