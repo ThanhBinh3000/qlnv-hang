@@ -103,7 +103,7 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
         XhThopDxKhBttHdr data = new XhThopDxKhBttHdr();
         BeanUtils.copyProperties(req, data);
         data.setId(req.getIdTh());
-        data.setMaDvi(currentUser.getUser().getDepartment());
+        data.setMaDvi(currentUser.getUser().getDvql());
         data.setTrangThai(Contains.CHUATAO_QD);
         XhThopDxKhBttHdr created = xhThopDxKhBttRepository.save(data);
 

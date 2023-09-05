@@ -76,7 +76,7 @@ public class XhQdDchinhKhBttServiceImpl extends BaseServiceImpl {
         }
         XhQdDchinhKhBttHdr data = new XhQdDchinhKhBttHdr();
         BeanUtils.copyProperties(req, data);
-        data.setMaDvi(currentUser.getUser().getDepartment());
+        data.setMaDvi(currentUser.getUser().getDvql());
         data.setTrangThai(Contains.DUTHAO);
         XhQdDchinhKhBttHdr created = xhQdDchinhKhBttHdrRepository.save(data);
         this.saveDetail(req, created.getId());

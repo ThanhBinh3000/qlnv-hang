@@ -109,7 +109,7 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl {
         }
         XhQdNvXhBttHdr data = new XhQdNvXhBttHdr();
         BeanUtils.copyProperties(req, data);
-        data.setMaDvi(currentUser.getUser().getDepartment());
+        data.setMaDvi(currentUser.getUser().getDvql());
         data.setTrangThai(Contains.DU_THAO);
         data.setTrangThaiXh(Contains.DANG_THUC_HIEN);
         if (!ObjectUtils.isEmpty(req.getListMaDviTsan())) {

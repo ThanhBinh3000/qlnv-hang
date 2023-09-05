@@ -107,7 +107,7 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
         }
         XhHopDongBttHdr data = new XhHopDongBttHdr();
         BeanUtils.copyProperties(req, data);
-        data.setMaDvi(currentUser.getUser().getDepartment());
+        data.setMaDvi(currentUser.getUser().getDvql());
         data.setTrangThai(Contains.DU_THAO);
         data.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
         if (!ObjectUtils.isEmpty(req.getListMaDviTsan())) {
@@ -199,7 +199,7 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
         }
         XhHopDongBttHdr data = new XhHopDongBttHdr();
         BeanUtils.copyProperties(req, data);
-        data.setMaDvi(currentUser.getUser().getDepartment());
+        data.setMaDvi(currentUser.getUser().getDvql());
         data.setTrangThai(Contains.DU_THAO);
         data.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
         if (!ObjectUtils.isEmpty(req.getListMaDviTsan())) {
