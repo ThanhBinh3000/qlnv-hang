@@ -7,13 +7,16 @@ import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = XhBbLayMau.TABLE_NAME)
@@ -131,4 +134,32 @@ public class XhBbLayMau extends TrangThaiBaseEntity implements Serializable {
 	@Transient
 	private List<XhBbLayMauCt> children = new ArrayList<>();
 
+	// Print preview
+
+	@Transient
+	private String tenCloaiVthhUpper;
+	@Transient
+	private String ngayLayMauFormat;
+	@Transient
+	private String ngayHdFormat;
+	@Transient
+	private String tenPpLayMau;
+	@Transient
+	private String maDviCha;
+	@Transient
+	private String tenDviCha;
+
+	public String getTenCloaiVthhUpper() {
+		return StringUtils.isEmpty(tenCloaiVthh) ? null : tenCloaiVthh.toUpperCase();
+	}
+
+	public String getNgayLayMauFormat() {
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		return Objects.isNull(ngayLayMau) ? null : formatter.format(ngayLayMau);
+	}
+
+	public String getNgayHdFormat() {
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		return Objects.isNull(ngayHd) ? null : formatter.format(ngayHd);
+	}
 }
