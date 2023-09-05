@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
@@ -268,12 +269,9 @@ public class XhCtvtPhieuXuatKhoService extends BaseServiceImpl {
 
   public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
     try {
-      ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
-      reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
-      ReportTemplate model = findByTenFile(reportTemplateRequest);
-      byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-      ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-//      FileInputStream inputStream = new FileInputStream("src/main/resources/reports/xuatcuutrovientro/Phiếu xuất kho.docx");
+      String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
+      String fileTemplate = "xuatcuutrovientro/" + fileName;
+      FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
       List<XhCtvtPhieuXuatKho> detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
       return docxToPdfConverter.convertDocxToPdf(inputStream, detail.get(0));
     } catch (IOException e) {
