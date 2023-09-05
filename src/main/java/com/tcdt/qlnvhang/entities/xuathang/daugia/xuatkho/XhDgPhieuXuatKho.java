@@ -95,6 +95,9 @@ public class XhDgPhieuXuatKho extends BaseEntity implements Serializable {
   @Transient
   private String tenKtv;
   @Transient
+  private String tenTtcn;
+  @Transient
+  private String tenDviCha;
+  @Transient
   private List<FileDinhKem> fileDinhKems = new ArrayList<>();
-
 }
