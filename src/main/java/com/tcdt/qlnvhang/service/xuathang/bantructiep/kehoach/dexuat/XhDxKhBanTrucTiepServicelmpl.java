@@ -71,7 +71,7 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
         }
         XhDxKhBanTrucTiepHdr data = new XhDxKhBanTrucTiepHdr();
         BeanUtils.copyProperties(req, data);
-        data.setMaDvi(currentUser.getUser().getDepartment());
+        data.setMaDvi(currentUser.getUser().getDvql());
         data.setTrangThai(Contains.DUTHAO);
         data.setTrangThaiTh(Contains.CHUATONGHOP);
         int slDviTsan = data.getChildren().stream()
