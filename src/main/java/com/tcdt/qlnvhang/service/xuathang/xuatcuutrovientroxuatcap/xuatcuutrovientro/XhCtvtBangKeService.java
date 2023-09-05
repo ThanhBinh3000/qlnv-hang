@@ -303,8 +303,7 @@ public class XhCtvtBangKeService extends BaseServiceImpl {
 
   public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
     try {
-      JsonNode reportTemplateRequest1 = objectMapper.readTree(DataUtils.safeToString(body.get("reportTemplateRequest")));
-      String fileName = reportTemplateRequest1.get("fileName").textValue();
+      String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
       String fileTemplate = "xuatcuutrovientro/" + fileName;
       FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
       List<XhCtvtBangKeHdr> detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
