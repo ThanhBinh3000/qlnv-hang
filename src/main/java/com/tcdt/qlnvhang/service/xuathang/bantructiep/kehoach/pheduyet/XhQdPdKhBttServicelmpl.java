@@ -458,6 +458,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
     }
 
     public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {
+        if (currentUser == null) throw new Exception("Bad request.");
         String capDvi = (currentUser.getUser().getCapDvi());
         try {
             if (Contains.CAP_TONG_CUC.equals(capDvi)) {

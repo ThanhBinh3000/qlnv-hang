@@ -38,7 +38,7 @@ public class XhDxKhBanTrucTiepDtl implements Serializable {
     public void setChildren(List<XhDxKhBanTrucTiepDdiem> children) {
         this.children = children;
         if (!DataUtils.isNullOrEmpty(children)) {
-            this.donGiaDeXuat = children.stream().map(XhDxKhBanTrucTiepDdiem::getDonGiaDeXuat).reduce(BigDecimal.ZERO, BigDecimal::add);
+            this.donGiaDeXuat = children.get(0).getDonGiaDeXuat();
             this.thanhTienDeXuat = children.stream().map(XhDxKhBanTrucTiepDdiem::getThanhTienDeXuat).reduce(BigDecimal.ZERO, BigDecimal::add);
         }
     }
