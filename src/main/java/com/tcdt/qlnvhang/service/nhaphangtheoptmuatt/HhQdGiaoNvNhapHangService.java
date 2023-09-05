@@ -312,7 +312,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data, "id");
         data.setNgayTao(new Date());
         data.setNguoiTao(userInfo.getUsername());
-        data.setTrangThai(Contains.DANG_NHAP_DU_LIEU);
+        data.setTrangThai(Contains.DU_THAO);
         data.setMaDvi(userInfo.getDvql());
         data.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));
         HhQdGiaoNvNhapHang created= hhQdGiaoNvNhapHangRepository.save(data);
@@ -505,7 +505,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         if (!optional.isPresent()){
             throw new Exception("Bản ghi không tồn tại");
         }
-        if (!optional.get().getTrangThai().equals(Contains.DANG_NHAP_DU_LIEU)
+        if (!optional.get().getTrangThai().equals(Contains.DU_THAO)
                 && !optional.get().getTrangThai().equals(Contains.TUCHOI_TP)
                 && !optional.get().getTrangThai().equals(Contains.TUCHOI_LDC)){
             throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
@@ -539,7 +539,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         for (HhQdGiaoNvNhapHang nvNhapHang : list){
-            if (!nvNhapHang.getTrangThai().equals(Contains.DANG_NHAP_DU_LIEU)
+            if (!nvNhapHang.getTrangThai().equals(Contains.DU_THAO)
                     && !nvNhapHang.getTrangThai().equals(Contains.TUCHOI_TP)
                     && !nvNhapHang.getTrangThai().equals(Contains.TUCHOI_LDC)){
                 throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
@@ -611,7 +611,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
 
         String status= statusReq.getTrangThai()+optional.get().getTrangThai();
         switch (status){
-            case Contains.CHO_DUYET_TP + Contains.DANG_NHAP_DU_LIEU:
+            case Contains.CHO_DUYET_TP + Contains.DU_THAO:
             case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
             case Contains.CHO_DUYET_TP + Contains.TUCHOI_TP:
             case Contains.CHO_DUYET_TP + Contains.TUCHOI_LDC:
