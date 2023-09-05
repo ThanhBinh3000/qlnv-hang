@@ -38,7 +38,7 @@ public class XhQdPdKhBttDvi implements Serializable {
     public void setChildren(List<XhQdPdKhBttDviDtl> children) {
         this.children = children;
         if (!DataUtils.isNullOrEmpty(children)) {
-            this.donGiaDuocDuyet = children.stream().map(XhQdPdKhBttDviDtl::getDonGiaDuocDuyet).reduce(BigDecimal.ZERO, BigDecimal::add);
+            this.donGiaDuocDuyet = children.get(0).getDonGiaDuocDuyet();
         }
     }
 }
