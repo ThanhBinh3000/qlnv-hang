@@ -1,7 +1,10 @@
 package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdr;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgDtl;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdr;
@@ -310,13 +313,14 @@ public class XhCtvtPhieuKnClHdrService extends BaseServiceImpl {
 
   public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
     try {
-      JsonNode reportTemplateRequest1 = objectMapper.readTree(DataUtils.safeToString(body.get("reportTemplateRequest")));
-      String fileName = reportTemplateRequest1.get("fileName").textValue();
+      String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
       String fileTemplate = "xuatcuutrovientro/" + fileName;
       FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
       List<XhCtvtPhieuKnClHdr> detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
       return docxToPdfConverter.convertDocxToPdf(inputStream, detail.get(0));
-    } catch (Exception e) {
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (XDocReportException e) {
       e.printStackTrace();
     }
     return null;
