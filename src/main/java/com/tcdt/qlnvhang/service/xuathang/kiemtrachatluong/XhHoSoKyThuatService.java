@@ -385,7 +385,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
 //      FileInputStream inputStream = new FileInputStream("src/main/resources/reports/xuatcuutrovientro/Hồ sơ kĩ thuật.docx");
       SearchHoSoKyThuatReq req = new SearchHoSoKyThuatReq();
       req.setId(DataUtils.safeToLong(body.get("id")));
-      req.setType("CTVT");
+//      req.setType("CTVT");
       XhHoSoKyThuatHdr detail = this.detailXh(req);
       return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
     } catch (IOException e) {
