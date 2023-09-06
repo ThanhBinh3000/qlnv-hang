@@ -1,9 +1,11 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bangkecanhang;
 
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -131,5 +133,18 @@ public class XhBkeCanHangBttHdr implements Serializable {
     private LocalDate ngayTaoBangKe;
 
     @Transient
+    private BigDecimal trongLuongCaBaoBi;
+    @Transient
+    private BigDecimal trongLuongBaoBi;
+
+    @Transient
     private List<XhBkeCanHangBttDtl> children = new ArrayList<>();
+
+    public void setChildren(List<XhBkeCanHangBttDtl> children) {
+        this.children = children;
+        if (!DataUtils.isNullOrEmpty(children)) {
+            this.trongLuongCaBaoBi = children.stream().map(XhBkeCanHangBttDtl::getTrongLuongCaBaoBi).reduce(BigDecimal.ZERO, BigDecimal::add);
+            this.trongLuongBaoBi = children.stream().map(XhBkeCanHangBttDtl::getTrongLuongBaoBi).reduce(BigDecimal.ZERO, BigDecimal::add);
+        }
+    }
 }
