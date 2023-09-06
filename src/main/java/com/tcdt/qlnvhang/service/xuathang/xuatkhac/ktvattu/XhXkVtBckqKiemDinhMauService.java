@@ -63,22 +63,27 @@ public class XhXkVtBckqKiemDinhMauService extends BaseServiceImpl {
         req.setDvql(ObjectUtils.isEmpty(req.getDvql()) ? currentUser.getDvql() : req.getDvql());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhXkVtBckqKiemDinhMau> search = xhXkVtBckqKiemDinhMauRepository.search(req, pageable);
-        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-        Map<String, String> mapVthh = getListDanhMucHangHoa();
-        List<Long> idsBcKqKdMaus = search.getContent().stream().map(XhXkVtBckqKiemDinhMau::getId).collect(Collectors.toList());
-        List<XhXkVtPhieuXuatNhapKho> allByIdBcKqkdMauIn = xhXkVtPhieuXuatNhapKhoRepository.findAllByIdBcKqkdMauIn(idsBcKqKdMaus);
-        Map<Long, List<XhXkVtPhieuXuatNhapKho>> mapPxk = allByIdBcKqkdMauIn.stream()
-                .collect(groupingBy(XhXkVtPhieuXuatNhapKho::getIdBcKqkdMau));
-        search.getContent().forEach(s -> {
-            s.setTenDvi(mapDmucDvi.get(s.getMaDvi()));
-            s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
-            List<XhXkVtPhieuXuatNhapKho> listByBcId = mapPxk.get(s.getId());
-            listByBcId.forEach(item -> {
-                item.setMapDmucDvi(mapDmucDvi);
-                item.setMapVthh(mapVthh);
+        List<XhXkVtBckqKiemDinhMau> listData = search.getContent();
+        if (!listData.isEmpty()) {
+            Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+            Map<String, String> mapVthh = getListDanhMucHangHoa();
+            List<Long> idsBcKqKdMaus = listData.stream().map(XhXkVtBckqKiemDinhMau::getId).collect(Collectors.toList());
+            List<XhXkVtPhieuXuatNhapKho> allByIdBcKqkdMauIn = xhXkVtPhieuXuatNhapKhoRepository.findAllByIdBcKqkdMauIn(idsBcKqKdMaus);
+            Map<Long, List<XhXkVtPhieuXuatNhapKho>> mapPxk = allByIdBcKqkdMauIn.stream()
+                    .collect(groupingBy(XhXkVtPhieuXuatNhapKho::getIdBcKqkdMau));
+            listData.forEach(s -> {
+                s.setTenDvi(mapDmucDvi.get(s.getMaDvi()));
+                s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
+                List<XhXkVtPhieuXuatNhapKho> listByBcId = mapPxk.get(s.getId());
+                if (!ObjectUtils.isEmpty(listByBcId)) {
+                    listByBcId.forEach(item -> {
+                        item.setMapDmucDvi(mapDmucDvi);
+                        item.setMapVthh(mapVthh);
+                    });
+                    s.setXhXkVtPhieuXuatNhapKho(listByBcId);
+                }
             });
-            s.setXhXkVtPhieuXuatNhapKho(listByBcId);
-        });
+        }
         return search;
     }
 

@@ -1,16 +1,14 @@
-package com.tcdt.qlnvhang.controller.xuathang.daugia.xuatkho;
+package com.tcdt.qlnvhang.controller.xuathang.xuatkhac.xuathangkhoidanhmuc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho.SearchXhDgBangKeReq;
-import com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho.XhDgBangKeReq;
+import com.tcdt.qlnvhang.request.xuathang.xuatkhac.XhXkTongHopRequest;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.xuathang.daugia.xuatkho.XhDgBangKeService;
+import com.tcdt.qlnvhang.service.xuathang.xuatkhac.ktvattu.XhXkTongHopVttbService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,28 +27,23 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = PathContains.DAU_GIA + PathContains.XUAT_KHO + PathContains.BANG_KE)
+@RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.XUAT_KHAC + PathContains.XUAT_HANG_KHOI_DM + PathContains.TONG_HOP)
 @Slf4j
-@Api(tags = "Xuất hàng DTQG - Xuất đấu giá - Bảng kê cân hàng")
-
-public class XhDgBangKeController extends BaseController {
-
+@Api(tags = "Xuất hàng DTQG - Xuất khác - Xuất hàng khỏi danh mục - Tổng hợp")
+public class XhXkTongHopDsXuatHangKdmController {
     @Autowired
-    XhDgBangKeService xhDgBangKeService;
-//  XhCtvtBangKeHdr
+    XhXkTongHopVttbService xhXkTongHopVttbService;
 
     @ApiOperation(value = "Tra cứu", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser,
-                                                  @RequestBody SearchXhDgBangKeReq objReq) {
+    public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody XhXkTongHopRequest objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhDgBangKeService.searchPage(currentUser, objReq));
+            resp.setData(xhXkTongHopVttbService.searchPage(currentUser, objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
             log.error("Tra cứu thông tin : {}", e);
@@ -59,13 +52,13 @@ public class XhDgBangKeController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Tạo mới thông tin đề xuất ", response = List.class)
+    @ApiOperation(value = "Tạo mới", response = List.class)
     @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhDgBangKeReq objReq) {
+    public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhXkTongHopRequest objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhDgBangKeService.save(currentUser, objReq));
+            resp.setData(xhXkTongHopVttbService.save(currentUser, objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -77,30 +70,13 @@ public class XhDgBangKeController extends BaseController {
     }
 
 
-    @ApiOperation(value = "Cập nhật thông tin đề xuất", response = List.class)
-    @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhDgBangKeReq objReq) {
-        BaseResponse resp = new BaseResponse();
-        try {
-            resp.setData(xhDgBangKeService.update(currentUser, objReq));
-            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (Exception e) {
-            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-            resp.setMsg(e.getMessage());
-            log.error("Cập nhật thông tin : {}", e);
-        }
-        return ResponseEntity.ok(resp);
-    }
-
-    @ApiOperation(value = "Lấy chi tiết thông tin đề xuất", response = List.class)
+    @ApiOperation(value = "Lấy chi tiết", response = List.class)
     @GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> detail(
-            @ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids") List<Long> ids) {
+    public ResponseEntity<BaseResponse> detail(@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids") List<Long> ids) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhDgBangKeService.detail(ids).get(0));
+            resp.setData(xhXkTongHopVttbService.detail(ids).get(0));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -111,12 +87,12 @@ public class XhDgBangKeController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin", response = List.class)
+    @ApiOperation(value = "Trình duyệt", response = List.class)
     @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody StatusReq stReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            xhDgBangKeService.approve(currentUser, stReq);
+            xhXkTongHopVttbService.approve(currentUser, stReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -128,13 +104,13 @@ public class XhDgBangKeController extends BaseController {
     }
 
 
-    @ApiOperation(value = "Xoá thông tin đề xuất", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Xoá thông tin", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            xhDgBangKeService.delete(idSearchReq);
+            xhXkTongHopVttbService.delete(idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -146,13 +122,13 @@ public class XhDgBangKeController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xoá danh sách thông tin đề xuất", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Xoá danh sách thông tin", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value = PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            xhDgBangKeService.deleteMulti(idSearchReq);
+            xhXkTongHopVttbService.deleteMulti(idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -163,15 +139,14 @@ public class XhDgBangKeController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Kết xuất danh sách mua", response = List.class)
+    @ApiOperation(value = "Kết xuất danh sách", response = List.class)
     @PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportList(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody SearchXhDgBangKeReq objReq, HttpServletResponse response) throws Exception {
+    public void exportList(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhXkTongHopRequest objReq, HttpServletResponse response) throws Exception {
         try {
-            xhDgBangKeService.export(currentUser, objReq, response);
-
+            xhXkTongHopVttbService.export(currentUser, objReq, response);
         } catch (Exception e) {
-            log.error("Kết xuất danh sách dánh sách mua : {}", e);
+            log.error("Kết xuất danh sách: {}", e);
             final Map<String, Object> body = new HashMap<>();
             body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             body.put("msg", e.getMessage());
@@ -183,19 +158,4 @@ public class XhDgBangKeController extends BaseController {
         }
     }
 
-    @ApiOperation(value = "Xem trước", response = List.class)
-    @PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> preview(@RequestBody HashMap<String, Object> body, @CurrentUser CustomUserDetails currentUser) {
-        BaseResponse resp = new BaseResponse();
-        try {
-            resp.setData(xhDgBangKeService.preview(body, currentUser));
-            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (Exception e) {
-            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-            resp.setMsg(e.getMessage());
-        }
-        return ResponseEntity.ok(resp);
-    }
 }
