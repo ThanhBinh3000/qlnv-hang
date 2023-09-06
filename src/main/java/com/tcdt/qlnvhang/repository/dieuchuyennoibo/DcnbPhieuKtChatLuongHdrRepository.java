@@ -53,7 +53,7 @@ public interface DcnbPhieuKtChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
             "LEFT JOIN DcnbPhieuKtChatLuongHdr pktcl On pktcl.qdDcId = qdc.id " +
             "and ((khdcd.maLoKhoNhan is not null and khdcd.maLoKhoNhan = pktcl.maLoKho and khdcd.maNganKhoNhan = pktcl.maNganKho and khdcd.maLoKho = pktcl.maLoKhoXuat and khdcd.maNganKho = pktcl.maNganKhoXuat ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = pktcl.maNganKho and khdcd.maNganKho = pktcl.maNganKhoXuat))" +
-            "LEFT JOIN DcnbBBNTBQHdr bbntbq On bbntbq.qdDcCucId = qdc.id and bbntbq.trangThai = '17'" +
+            "LEFT JOIN DcnbBBNTBQHdr bbntbq On bbntbq.qdDcCucId = qdc.id and bbntbq.trangThai = '17' and bbntbq.lan = 1 " +
             "and ((khdcd.maLoKhoNhan is not null and khdcd.maLoKhoNhan = bbntbq.maLoKho and khdcd.maNganKhoNhan = bbntbq.maNganKho ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = bbntbq.maNganKho))" +
             "LEFT JOIN DcnbPhieuNhapKhoHdr pnk On pnk.qdDcCucId = qdc.id " +
             "and ((khdcd.maLoKhoNhan is not null and khdcd.maLoKhoNhan = pnk.maLoKho and khdcd.maNganKhoNhan = pnk.maNganKho ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = pnk.maNganKho))" +
