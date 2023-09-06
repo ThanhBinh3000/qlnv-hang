@@ -23,9 +23,9 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbBbNhapDayKhoHdr bbndk On bbndk.qdDcCucId = qdc.id " +
+            "LEFT JOIN DcnbBbNhapDayKhoHdr bbndk On bbndk.qdDcCucId = qdc.id and bbndk.trangThai = '17'" +
             "and ((khdcd.maLoKho is not null and bbndk.maLoKho = khdcd.maLoKho and bbndk.maNganKho = khdcd.maNganKho ) or (khdcd.maLoKho is null and bbndk.maNganKho = khdcd.maNganKho))" +
-            "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qdccId = qdc.id " +
+            "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qdccId = qdc.id and bblm.trangThai = '17'" +
             "and ((khdcd.maLoKho is not null and bblm.maLoKho = khdcd.maLoKho and bblm.maNganKho = khdcd.maNganKho ) or (khdcd.maLoKho is null and bblm.maNganKho = khdcd.maNganKho))" +
             "LEFT JOIN DcnbBienBanTinhKhoHdr bbtkh On bbtkh.qDinhDccId = qdc.id and bbtkh.maLoKho = khdcd.maLoKho and bbtkh.maNganKho = khdcd.maNganKho  " +
             "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On pkncl.bbLayMauId = bblm.id " +
@@ -103,10 +103,10 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qdccId = qdc.id " +
+            "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qdccId = qdc.id and bblm.trangThai = '17'" +
             "and ((khdcd.maLoKhoNhan is not null and bblm.maLoKho = khdcd.maLoKhoNhan and bblm.maNganKho = khdcd.maNganKhoNhan ) or (khdcd.maLoKhoNhan is null and bblm.maNganKho = khdcd.maNganKhoNhan))" +
             "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On pkncl.bbLayMauId = bblm.id " +
-            "LEFT JOIN DcnbBbNhapDayKhoHdr bbndk On bbndk.qdDcCucId = qdc.id " +
+            "LEFT JOIN DcnbBbNhapDayKhoHdr bbndk On bbndk.qdDcCucId = qdc.id and bbndk.trangThai = '17'" +
             "and ((khdcd.maLoKhoNhan is not null and bbndk.maLoKho = khdcd.maLoKhoNhan and bbndk.maNganKho = khdcd.maNganKhoNhan ) or (khdcd.maLoKhoNhan is null and bbndk.maNganKho = khdcd.maNganKhoNhan))" +
             "LEFT JOIN DcnbBienBanTinhKhoHdr bbtkh On bbtkh.qDinhDccId = qdc.id and bbtkh.maLoKho = khdcd.maLoKho and bbtkh.maNganKho = khdcd.maNganKho " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +

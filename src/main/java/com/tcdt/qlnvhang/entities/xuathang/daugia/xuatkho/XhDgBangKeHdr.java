@@ -1,17 +1,21 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaDtl;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
+import org.apache.poi.ss.formula.functions.T;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = XhDgBangKeHdr.TABLE_NAME)
@@ -85,5 +89,14 @@ public class XhDgBangKeHdr extends BaseEntity implements Serializable {
   @Transient
   private String nguoiGduyet;
   @Transient
+  private BigDecimal trongLuongCaBi;
+  @Transient
   private List<XhDgBangKeDtl> bangKeDtl = new ArrayList<>();
+
+  public void setBangKeDtl(List<XhDgBangKeDtl> bangKeDtl) {
+    this.bangKeDtl = bangKeDtl;
+    if (!DataUtils.isNullOrEmpty(bangKeDtl)) {
+      this.trongLuongCaBi = bangKeDtl.stream().map(XhDgBangKeDtl::getTrongLuongCaBi).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+  }
 }

@@ -125,6 +125,18 @@ public class XhPhieuKtraCluongBttHdr implements Serializable {
     private Long idHd;
 
     @Transient
+    private String tenChiCuc;
+
+    @Transient
+    private String tenNguoiPheDuyet;
+
+    @Transient
+    private String tenHthucBquan;
+
+    @Transient
+    private BigDecimal soLuongBaoQuan;
+
+    @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
     @Transient

@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.service.xuathang.bantructiep.xuatkho.phieuxuatkho;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBtt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBttReposytory;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -8,12 +10,15 @@ import com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhi
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.service.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttServiceImpI;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +28,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -31,6 +38,9 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl implements XhPhie
 
     @Autowired
     private XhPhieuXkhoBttReposytory xhPhieuXkhoBttReposytory;
+
+    @Autowired
+    private XhQdNvXhBttServiceImpI xhQdNvXhBttServiceImpI;
 
     @Autowired
     FileDinhKemService fileDinhKemService;
@@ -247,5 +257,23 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl implements XhPhie
         }
         ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
         ex.export();
+    }
+
+    @Override
+    public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {
+        if (currentUser == null) throw new Exception("Bad request.");
+        try {
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + "/bantructiep/Phiếu xuất kho bán trực tiếp.docx");
+            XhPhieuXkhoBtt detail = this.detail(DataUtils.safeToLong(body.get("id")));
+            XhQdNvXhBttHdr xhQdNvXhBttHdr = xhQdNvXhBttServiceImpI.detail(detail.getIdQdNv());
+            detail.setTenDviCungCap(xhQdNvXhBttHdr.getTenTccn());
+            detail.setTenDviCha(xhQdNvXhBttHdr.getTenDvi());
+            return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+        }catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -130,6 +130,21 @@ public class XhBbLayMauBttHdr implements Serializable {
     private LocalDate ngayTaoBangKe;
 
     @Transient
+    private String tenDviCungCap;
+
+    @Transient
+    private String donViTinh;
+
+    @Transient
+    private String tenPpLayMau;
+
+    @Transient
+    private String tenDviCha;
+
+    @Transient
+    private String tenNguoiPheDuyet;
+
+    @Transient
     private List<XhBbLayMauBttDtl> children = new ArrayList<>();
 
     @Transient
