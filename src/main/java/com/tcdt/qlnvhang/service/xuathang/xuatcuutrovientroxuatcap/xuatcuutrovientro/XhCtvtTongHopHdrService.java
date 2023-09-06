@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdrRepository;
@@ -12,12 +13,14 @@ import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovie
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtTongHopHdr;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtTongHopHdrReq;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtTongHopDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtTongHopHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,12 +32,13 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @Service
 public class XhCtvtTongHopHdrService extends BaseServiceImpl {
@@ -286,5 +290,25 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
     optional.get().setTrangThai(statusReq.getTrangThai());
     XhCtvtTongHopHdr created = xhCtvtTongHopHdrRepository.save(optional.get());
     return created;
+  }
+
+  public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
+    try {
+      String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
+      String fileTemplate = "xuatcuutrovientro/" + fileName;
+      FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
+      List<XhCtvtTongHopHdr> detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
+      Object children = body.get("children");
+      HashMap<Object, Object> hashMap = new HashMap<>();
+      hashMap.put("nam", detail.get(0).getNam());
+      hashMap.put("tenLoaiVthh", detail.get(0).getTenLoaiVthh());
+      hashMap.put("children", children);
+      return docxToPdfConverter.convertDocxToPdf(inputStream, hashMap);
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (XDocReportException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }
