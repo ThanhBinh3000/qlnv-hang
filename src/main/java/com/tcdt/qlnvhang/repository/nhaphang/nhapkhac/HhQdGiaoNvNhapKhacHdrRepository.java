@@ -89,7 +89,7 @@ public interface HhQdGiaoNvNhapKhacHdrRepository extends JpaRepository<HhQdGiaoN
                     " WHERE (:#{#req.namKhoach} IS NULL OR qdnk.nam = :#{#req.namKhoach}) " +
                     "  AND (:#{#req.soQd} IS NULL OR LOWER(qdnk.soQd) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.soQd}),'%'))) " +
                     "  AND (:#{#req.maDvi} IS NULL OR LOWER(qdnk.maDvi) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.maDvi}),'%')))" +
-                    "  AND (:#{#req.maDviChiCuc} IS NULL OR LOWER(pdtdl.maChiCuc) LIKE LOWER(CONCAT(:#{#req.maDviChiCuc},'%')))" +
+//                    "  AND (:#{#req.maDviChiCuc} IS NULL OR LOWER(pdtdl.maChiCuc) LIKE LOWER(CONCAT(:#{#req.maDviChiCuc},'%')))" +
                     "  AND (:#{#req.loaiVthh} IS NULL OR LOWER(qdnk.loaiVthh) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.loaiVthh}),'%')))" +
                     "  AND (:#{#req.tuNgayLPStr} IS NULL OR ktcl.ngayTao >= TO_DATE(:#{#req.tuNgayLPStr}, 'YYYY-MM-DD HH24:MI:SS'))" +
                     "  AND (:#{#req.denNgayLPStr} IS NULL OR ktcl.ngayTao <= TO_DATE(:#{#req.denNgayLPStr}, 'YYYY-MM-DD HH24:MI:SS'))" +
@@ -106,7 +106,8 @@ public interface HhQdGiaoNvNhapKhacHdrRepository extends JpaRepository<HhQdGiaoN
             value = " SELECT qdnk " +
                     " FROM HhQdGiaoNvuNhapHangKhacHdr qdnk " +
                     " LEFT JOIN HhQdPdNhapKhacDtl pdtdl ON pdtdl.idDxHdr = qdnk.idQdPdNk " +
-                    " WHERE (:#{#req.maDvi} IS NULL OR LOWER(pdtdl.maChiCuc) LIKE LOWER(CONCAT(:#{#req.maDvi},'%')))" +
+                    " WHERE 1=1 " +
+//                    "(:#{#req.maDvi} IS NULL OR LOWER(pdtdl.maChiCuc) LIKE LOWER(CONCAT(:#{#req.maDvi},'%')))" +
                     "  AND (:#{#req.loaiVthh} IS NULL OR LOWER(qdnk.loaiVthh) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.loaiVthh}),'%')))" +
                     "  AND (:#{#req.trangThai} IS NULL OR qdnk.trangThai = :#{#req.trangThai}) "+
                     "  ORDER BY qdnk.ngaySua desc , qdnk.ngayTao desc, qdnk.id desc"
