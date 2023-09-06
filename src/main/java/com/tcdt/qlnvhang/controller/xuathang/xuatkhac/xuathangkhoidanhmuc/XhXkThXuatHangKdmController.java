@@ -6,9 +6,9 @@ import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.xuathang.xuatkhac.XhXkTongHopRequest;
+import com.tcdt.qlnvhang.request.xuathang.xuatkhac.xuathangkhoidm.XhXkThXuatHangKdmRequest;
 import com.tcdt.qlnvhang.response.BaseResponse;
-import com.tcdt.qlnvhang.service.xuathang.xuatkhac.ktvattu.XhXkTongHopVttbService;
+import com.tcdt.qlnvhang.service.xuathang.xuatkhac.xuathangkhoidm.XhXkThXuatHangKdmService;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,17 +30,17 @@ import java.util.Map;
 @RequestMapping(value = PathContains.XUAT_HANG_DTQG + PathContains.XUAT_KHAC + PathContains.XUAT_HANG_KHOI_DM + PathContains.TONG_HOP)
 @Slf4j
 @Api(tags = "Xuất hàng DTQG - Xuất khác - Xuất hàng khỏi danh mục - Tổng hợp")
-public class XhXkTongHopDsXuatHangKdmController {
+public class XhXkThXuatHangKdmController {
     @Autowired
-    XhXkTongHopVttbService xhXkTongHopVttbService;
+    XhXkThXuatHangKdmService xhXkThXuatHangKdmService;
 
     @ApiOperation(value = "Tra cứu", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody XhXkTongHopRequest objReq) {
+    public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody XhXkThXuatHangKdmRequest objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhXkTongHopVttbService.searchPage(currentUser, objReq));
+            resp.setData(xhXkThXuatHangKdmService.searchPage(currentUser, objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -55,10 +55,10 @@ public class XhXkTongHopDsXuatHangKdmController {
     @ApiOperation(value = "Tạo mới", response = List.class)
     @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhXkTongHopRequest objReq) {
+    public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhXkThXuatHangKdmRequest objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhXkTongHopVttbService.save(currentUser, objReq));
+            resp.setData(xhXkThXuatHangKdmService.save(currentUser, objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -76,7 +76,7 @@ public class XhXkTongHopDsXuatHangKdmController {
     public ResponseEntity<BaseResponse> detail(@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids") List<Long> ids) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhXkTongHopVttbService.detail(ids).get(0));
+            resp.setData(xhXkThXuatHangKdmService.detail(ids).get(0));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -92,7 +92,7 @@ public class XhXkTongHopDsXuatHangKdmController {
     public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody StatusReq stReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            xhXkTongHopVttbService.approve(currentUser, stReq);
+            xhXkThXuatHangKdmService.approve(currentUser, stReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -110,7 +110,7 @@ public class XhXkTongHopDsXuatHangKdmController {
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            xhXkTongHopVttbService.delete(idSearchReq);
+            xhXkThXuatHangKdmService.delete(idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -128,7 +128,7 @@ public class XhXkTongHopDsXuatHangKdmController {
     public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            xhXkTongHopVttbService.deleteMulti(idSearchReq);
+            xhXkThXuatHangKdmService.deleteMulti(idSearchReq);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -142,9 +142,9 @@ public class XhXkTongHopDsXuatHangKdmController {
     @ApiOperation(value = "Kết xuất danh sách", response = List.class)
     @PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportList(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhXkTongHopRequest objReq, HttpServletResponse response) throws Exception {
+    public void exportList(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhXkThXuatHangKdmRequest objReq, HttpServletResponse response) throws Exception {
         try {
-            xhXkTongHopVttbService.export(currentUser, objReq, response);
+            xhXkThXuatHangKdmService.export(currentUser, objReq, response);
         } catch (Exception e) {
             log.error("Kết xuất danh sách: {}", e);
             final Map<String, Object> body = new HashMap<>();
