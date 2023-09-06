@@ -195,18 +195,6 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
     }
 
 
-    public void approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
-        if (StringUtils.isEmpty(statusReq.getId())) {
-            throw new Exception("Không tìm thấy dữ liệu");
-        }
-        DcnbBienBanLayMauHdr details = detail(Long.valueOf(statusReq.getId()));
-        Optional<DcnbBienBanLayMauHdr> optional = Optional.of(details);
-        if (!optional.isPresent()) {
-            throw new Exception("Không tìm thấy dữ liệu");
-        }
-        this.approve(currentUser, statusReq, optional); // Truyền giá trị của optional vào
-    }
-
     public DcnbBienBanLayMauHdr approve(CustomUserDetails currentUser, StatusReq statusReq, Optional<DcnbBienBanLayMauHdr> optional) throws Exception {
         String status = optional.get().getTrangThai() + statusReq.getTrangThai();
         switch (status) {
@@ -254,6 +242,18 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
         optional.get().setTrangThai(statusReq.getTrangThai());
         DcnbBienBanLayMauHdr created = dcnbBienBanLayMauHdrRepository.save(optional.get());
         return created;
+    }
+
+    public void approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
+        if (StringUtils.isEmpty(statusReq.getId())) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        DcnbBienBanLayMauHdr details = detail(Long.valueOf(statusReq.getId()));
+        Optional<DcnbBienBanLayMauHdr> optional = Optional.of(details);
+        if (!optional.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        this.approve(currentUser, statusReq, optional); // Truyền giá trị của optional vào
     }
 
     public void export(CustomUserDetails currentUser, SearchDcnbBienBanLayMau objReq, HttpServletResponse response) throws Exception {
