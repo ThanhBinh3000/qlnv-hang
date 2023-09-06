@@ -108,7 +108,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
         XhQdPdKhBttHdr data = new XhQdPdKhBttHdr();
         BeanUtils.copyProperties(req, data);
         data.setLastest(false);
-        data.setMaDvi(currentUser.getUser().getDepartment());
+        data.setMaDvi(currentUser.getUser().getDvql());
         data.setTrangThai(Contains.DU_THAO);
         XhQdPdKhBttHdr created = xhQdPdKhBttHdrRepository.save(data);
         if (!DataUtils.isNullOrEmpty(req.getCanCuPhapLy())) {
@@ -458,6 +458,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
     }
 
     public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {
+        if (currentUser == null) throw new Exception("Bad request.");
         String capDvi = (currentUser.getUser().getCapDvi());
         try {
             if (Contains.CAP_TONG_CUC.equals(capDvi)) {

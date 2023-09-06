@@ -70,4 +70,20 @@ public interface DcnbBBNTBQHdrRepository extends JpaRepository<DcnbBBNTBQHdr, Lo
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
             "ORDER BY c.nam desc, c.id desc")
     List<DcnbBBNTBQHdr> list(@Param("param") DcnbBBNTBQHdrReq req);
+    @Query(value = "SELECT distinct c FROM DcnbBBNTBQHdr c " +
+            "WHERE 1=1 " +
+            "AND c.maDvi = :dvql " +
+            "AND c.qdDcCucId = :qdDcCucId " +
+            "AND c.maNganKho = :maNganKho " +
+            "AND c.lan = :lan " +
+            "AND (:#{maLoKho}  IS NULL OR c.maLoKho = :maLoKho) ")
+    DcnbBBNTBQHdr findByMaDviAndQdDcCucIdAndMaNganKhoAndMaLoKhoAndLan(String dvql, Long qdDcCucId, String maNganKho, String maLoKho, Long lan);
+
+    @Query(value = "SELECT distinct c FROM DcnbBBNTBQHdr c " +
+            "WHERE 1=1 " +
+            "AND c.maDvi = :dvql " +
+            "AND c.qdDcCucId = :qdDcCucId " +
+            "AND c.maNganKho = :maNganKho " +
+            "AND c.lan = :lan ")
+    DcnbBBNTBQHdr findByMaDviAndQdDcCucIdAndMaNganKhoAndLan(String dvql, Long qdDcCucId, String maNganKho, Long lan);
 }

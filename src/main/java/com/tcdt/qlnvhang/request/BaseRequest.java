@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request;
 
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +24,8 @@ public class BaseRequest {
 	public static final String ORDER_BY = "id";
 
 	public static final String ORDER_TYPE = "asc";
+
+	private ReportTemplateRequest reportTemplateRequest;
 
 	PaggingReq paggingReq;
 	String trangThai;

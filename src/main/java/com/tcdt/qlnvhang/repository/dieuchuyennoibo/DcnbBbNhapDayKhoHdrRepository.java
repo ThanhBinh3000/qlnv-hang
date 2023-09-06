@@ -80,5 +80,12 @@ public interface DcnbBbNhapDayKhoHdrRepository extends JpaRepository<DcnbBbNhapD
             "bbndk.ngayLap, bbndk.trangThai,  bbndk.trangThai "+
             "ORDER BY qdc.soQdinh DESC")
     Page<DcnbBbNhapDayKhoHdrDTO> searchPage(@Param("param") DcnbBbNhapDayKhoHdrReq req, Pageable pageable);
-
+    @Query(value = "SELECT distinct c FROM DcnbBbNhapDayKhoHdr c " +
+            "WHERE 1=1 " +
+            "AND c.trangThai = :trangThai " +
+            "AND c.maDvi = :dvql " +
+            "AND c.qdDcCucId = :qdDcCucId " +
+            "AND c.maNganKho = :maNganKho " +
+            "AND (:#{maLoKho}  IS NULL OR c.maLoKho = :maLoKho) ")
+    DcnbBbNhapDayKhoHdr findByMaDviAndQdDcCucIdAndMaNganKhoAndMaLoKhoAndTrangThai(String dvql, Long qdDcCucId, String maNganKho, String maLoKho, String trangThai);
 }
