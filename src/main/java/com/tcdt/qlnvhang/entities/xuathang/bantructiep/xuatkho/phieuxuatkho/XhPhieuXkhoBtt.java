@@ -156,7 +156,10 @@ public class XhPhieuXkhoBtt implements Serializable {
 
     private LocalDate ngayTaoBangKe;
 
-
+    @Transient
+    private String tenDviCungCap;
+    @Transient
+    private String tenDviCha;
     @Transient
     private List<FileDinhKem> fileDinhKem = new ArrayList<>();
 }

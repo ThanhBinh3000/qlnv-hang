@@ -1,7 +1,10 @@
 package com.tcdt.qlnvhang.service.xuathang.bantructiep.ktracluong.bienbanlaymau;
+
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttHdr;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttHdrRepository;
@@ -11,12 +14,15 @@ import com.tcdt.qlnvhang.request.xuathang.bantructiep.ktracluong.bienbanlaymau.X
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.service.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttServiceImpI;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,19 +30,26 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
 @Service
-public class XhBbLayMauBttServiceImpl extends BaseServiceImpl implements  XhBbLayMauBttService {
+public class XhBbLayMauBttServiceImpl extends BaseServiceImpl implements XhBbLayMauBttService {
 
     @Autowired
     private XhBbLayMauBttHdrRepository xhBbLayMauBttHdrRepository;
 
     @Autowired
     private XhBbLayMauBttDtlRepository xhBbLayMauBttDtlRepository;
+
+    @Autowired
+    private XhQdNvXhBttServiceImpI xhQdNvXhBttServiceImpI;
 
     @Autowired
     FileDinhKemService fileDinhKemService;
@@ -54,27 +67,27 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl implements  XhBbLa
         );
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
-        data.getContent().forEach(f ->{
+        data.getContent().forEach(f -> {
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
-            f.setTenDvi(StringUtils.isEmpty(f.getMaDvi())?null:hashMapDvi.get(f.getMaDvi()));
-            f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho())?null:hashMapDvi.get(f.getMaDiemKho()));
-            f.setTenNhaKho(StringUtils.isEmpty(f.getMaNhaKho())?null:hashMapDvi.get(f.getMaNhaKho()));
-            f.setTenNganKho(StringUtils.isEmpty(f.getMaNganKho())?null:hashMapDvi.get(f.getMaNganKho()));
-            f.setTenLoKho(StringUtils.isEmpty(f.getMaLoKho())?null:hashMapDvi.get(f.getMaLoKho()));
-            f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh())?null:hashMapVthh.get(f.getLoaiVthh()));
-            f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh())?null:hashMapVthh.get(f.getCloaiVthh()));
+            f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : hashMapDvi.get(f.getMaDvi()));
+            f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho()) ? null : hashMapDvi.get(f.getMaDiemKho()));
+            f.setTenNhaKho(StringUtils.isEmpty(f.getMaNhaKho()) ? null : hashMapDvi.get(f.getMaNhaKho()));
+            f.setTenNganKho(StringUtils.isEmpty(f.getMaNganKho()) ? null : hashMapDvi.get(f.getMaNganKho()));
+            f.setTenLoKho(StringUtils.isEmpty(f.getMaLoKho()) ? null : hashMapDvi.get(f.getMaLoKho()));
+            f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapVthh.get(f.getLoaiVthh()));
+            f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapVthh.get(f.getCloaiVthh()));
         });
         return data;
     }
 
     @Override
     public XhBbLayMauBttHdr create(XhBbLayMauBttHdrReq req) throws Exception {
-        if(req == null) return null;
+        if (req == null) return null;
 
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null) throw new Exception("Bad request.");
 
-        if (!StringUtils.isEmpty(req.getSoBienBan())){
+        if (!StringUtils.isEmpty(req.getSoBienBan())) {
             Optional<XhBbLayMauBttHdr> qOptional = xhBbLayMauBttHdrRepository.findBySoBienBan(req.getSoBienBan());
             if (qOptional.isPresent()) throw new Exception("Số biên bản " + req.getSoBienBan() + " đã tồn tại ");
         }
@@ -106,9 +119,9 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl implements  XhBbLa
         return created;
     }
 
-    void saveDetail(XhBbLayMauBttHdrReq req, Long idHdr){
+    void saveDetail(XhBbLayMauBttHdrReq req, Long idHdr) {
         xhBbLayMauBttDtlRepository.deleteAllByIdHdr(idHdr);
-        for (XhBbLayMauBttDtlReq dtlReq : req.getChildren()){
+        for (XhBbLayMauBttDtlReq dtlReq : req.getChildren()) {
             XhBbLayMauBttDtl dtl = new XhBbLayMauBttDtl();
             BeanUtils.copyProperties(dtlReq, dtl, "id");
             dtl.setIdHdr(idHdr);
@@ -136,11 +149,11 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl implements  XhBbLa
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), created.getId(), XhBbLayMauBttHdr.TABLE_NAME);
         created.setFileDinhKems(fileDinhKems);
 
-        fileDinhKemService.delete(created.getId(), Collections.singleton(XhBbLayMauBttHdr.TABLE_NAME+ "_CAN_CU"));
+        fileDinhKemService.delete(created.getId(), Collections.singleton(XhBbLayMauBttHdr.TABLE_NAME + "_CAN_CU"));
         List<FileDinhKem> canCuPhapLy = fileDinhKemService.saveListFileDinhKem(req.getCanCuPhapLy(), created.getId(), XhBbLayMauBttHdr.TABLE_NAME + "_CAN_CU");
         created.setCanCuPhapLy(canCuPhapLy);
 
-        fileDinhKemService.delete(created.getId(), Collections.singleton(XhBbLayMauBttHdr.TABLE_NAME+ "_NIEM_PHONG"));
+        fileDinhKemService.delete(created.getId(), Collections.singleton(XhBbLayMauBttHdr.TABLE_NAME + "_NIEM_PHONG"));
         List<FileDinhKem> fileNiemPhong = fileDinhKemService.saveListFileDinhKem(req.getFileNiemPhong(), created.getId(), XhBbLayMauBttHdr.TABLE_NAME + "_NIEM_PHONG");
         created.setFileNiemPhong(fileNiemPhong);
 
@@ -154,23 +167,24 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl implements  XhBbLa
         if (userInfo == null) throw new Exception("Bad request.");
 
         Optional<XhBbLayMauBttHdr> optional = xhBbLayMauBttHdrRepository.findById(id);
-        if (!optional.isPresent()) throw new UnsupportedOperationException("Biên bản lấy mẫu/bàn giao mẫu không tồn tại");
+        if (!optional.isPresent())
+            throw new UnsupportedOperationException("Biên bản lấy mẫu/bàn giao mẫu không tồn tại");
 
         XhBbLayMauBttHdr data = optional.get();
 
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
 
-        data.setTenDvi(StringUtils.isEmpty(data.getMaDvi())?null:hashMapDvi.get(data.getMaDvi()));
-        data.setTenDiemKho(StringUtils.isEmpty(data.getMaDiemKho())?null:hashMapDvi.get(data.getMaDiemKho()));
-        data.setTenNhaKho(StringUtils.isEmpty(data.getMaNhaKho())?null:hashMapDvi.get(data.getMaNhaKho()));
-        data.setTenNganKho(StringUtils.isEmpty(data.getMaNganKho())?null:hashMapDvi.get(data.getMaNganKho()));
-        data.setTenLoKho(StringUtils.isEmpty(data.getMaLoKho())?null:hashMapDvi.get(data.getMaLoKho()));
-        data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:hashMapVthh.get(data.getLoaiVthh()));
-        data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh())?null:hashMapVthh.get(data.getCloaiVthh()));
+        data.setTenDvi(StringUtils.isEmpty(data.getMaDvi()) ? null : hashMapDvi.get(data.getMaDvi()));
+        data.setTenDiemKho(StringUtils.isEmpty(data.getMaDiemKho()) ? null : hashMapDvi.get(data.getMaDiemKho()));
+        data.setTenNhaKho(StringUtils.isEmpty(data.getMaNhaKho()) ? null : hashMapDvi.get(data.getMaNhaKho()));
+        data.setTenNganKho(StringUtils.isEmpty(data.getMaNganKho()) ? null : hashMapDvi.get(data.getMaNganKho()));
+        data.setTenLoKho(StringUtils.isEmpty(data.getMaLoKho()) ? null : hashMapDvi.get(data.getMaLoKho()));
+        data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : hashMapVthh.get(data.getLoaiVthh()));
+        data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh()) ? null : hashMapVthh.get(data.getCloaiVthh()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
-        if(!Objects.isNull(data.getIdKtv())){
-           data.setTenKtv(userInfoRepository.findById(data.getIdKtv()).get().getFullName());
+        if (!Objects.isNull(data.getIdKtv())) {
+            data.setTenKtv(userInfoRepository.findById(data.getIdKtv()).get().getFullName());
         }
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhBbLayMauBttHdr.TABLE_NAME));
         data.setFileDinhKems(fileDinhKem);
@@ -181,21 +195,21 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl implements  XhBbLa
         List<FileDinhKem> fileNiemPhong = fileDinhKemService.search(data.getId(), Arrays.asList(XhBbLayMauBttHdr.TABLE_NAME + "_NIEM_PHONG"));
         data.setFileNiemPhong(fileNiemPhong);
 
-       data.setChildren(xhBbLayMauBttDtlRepository.findAllByIdHdr(id));
-       return data;
+        data.setChildren(xhBbLayMauBttDtlRepository.findAllByIdHdr(id));
+        return data;
     }
 
     @Override
     public XhBbLayMauBttHdr approve(XhBbLayMauBttHdrReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
-        if(Objects.isNull(req.getId())){
+        if (Objects.isNull(req.getId())) {
             throw new Exception("Bad reqeust");
         }
-        if (!Contains.CAP_CHI_CUC.equals(userInfo.getCapDvi())){
+        if (!Contains.CAP_CHI_CUC.equals(userInfo.getCapDvi())) {
             throw new Exception("Bad Request");
         }
         Optional<XhBbLayMauBttHdr> optional = xhBbLayMauBttHdrRepository.findById(req.getId());
-        if (!optional.isPresent()){
+        if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
         XhBbLayMauBttHdr data = optional.get();
@@ -226,11 +240,11 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl implements  XhBbLa
 
     @Override
     public void delete(Long id) throws Exception {
-        if(Objects.isNull(id)){
+        if (Objects.isNull(id)) {
             throw new Exception("Bad request");
         }
         Optional<XhBbLayMauBttHdr> optional = xhBbLayMauBttHdrRepository.findById(id);
-        if (!optional.isPresent()){
+        if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
         if (NhapXuatHangTrangThaiEnum.DADUYET_LDCC.getId().equals(optional.get().getTrangThai())) {
@@ -249,10 +263,10 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl implements  XhBbLa
             throw new Exception("Xóa thất bại, không tìm thấy dữ liệu");
         }
         List<XhBbLayMauBttHdr> list = xhBbLayMauBttHdrRepository.findByIdIn(listMulti);
-        if (list.isEmpty()){
+        if (list.isEmpty()) {
             throw new Exception("Không tìm thấy dữ liệu cần xóa");
         }
-        for (XhBbLayMauBttHdr hdr : list){
+        for (XhBbLayMauBttHdr hdr : list) {
             this.delete(hdr.getId());
         }
     }
@@ -265,29 +279,51 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl implements  XhBbLa
         req.setPaggingReq(paggingReq);
         Page<XhBbLayMauBttHdr> page = this.searchPage(req);
         List<XhBbLayMauBttHdr> data = page.getContent();
-        String title="Danh sách biên bản lấy mẫu bán trực tiếp";
-        String[] rowsName = new String[]{"STT","Số QĐ giao nhiệm vụ XH", "Năm KH", "Thời hạn XH trước ngày", "Điển kho", "Lô kho", "Số BB LM/BGM", "Ngày lấy mẫu", "Số BB tịnh kho", "Ngày xuất dốc kho", "sô BB hao dôi", "Trạng thái"};
-        String filename="danh-sach-biển-ban-lay-mau-ban-truc-tiep.xlsx";
+        String title = "Danh sách biên bản lấy mẫu bán trực tiếp";
+        String[] rowsName = new String[]{"STT", "Số QĐ giao nhiệm vụ XH", "Năm KH", "Thời hạn XH trước ngày", "Điển kho", "Lô kho", "Số BB LM/BGM", "Ngày lấy mẫu", "Số BB tịnh kho", "Ngày xuất dốc kho", "sô BB hao dôi", "Trạng thái"};
+        String filename = "danh-sach-biển-ban-lay-mau-ban-truc-tiep.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
-        Object[] objs=null;
+        Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
             XhBbLayMauBttHdr hdr = data.get(i);
-            objs=new Object[rowsName.length];
-            objs[0]=i;
-            objs[1]=hdr.getSoQdNv();
-            objs[2]=hdr.getNamKh();
-            objs[3]=hdr.getNgayQdNv();
-            objs[4]=hdr.getTenDiemKho();
-            objs[5]=hdr.getTenLoKho();
-            objs[6]=hdr.getSoBienBan();
-            objs[7]=hdr.getNgayLayMau();
-            objs[8]=hdr.getSoBbTinhKho();
-            objs[9]=hdr.getNgayXuatDocKho();
-            objs[10]=hdr.getSoBbHaoDoi();
-            objs[11]=hdr.getTenTrangThai();
+            objs = new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = hdr.getSoQdNv();
+            objs[2] = hdr.getNamKh();
+            objs[3] = hdr.getNgayQdNv();
+            objs[4] = hdr.getTenDiemKho();
+            objs[5] = hdr.getTenLoKho();
+            objs[6] = hdr.getSoBienBan();
+            objs[7] = hdr.getNgayLayMau();
+            objs[8] = hdr.getSoBbTinhKho();
+            objs[9] = hdr.getNgayXuatDocKho();
+            objs[10] = hdr.getSoBbHaoDoi();
+            objs[11] = hdr.getTenTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
         ex.export();
+    }
+
+    @Override
+    public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {
+        if (currentUser == null) throw new Exception("Bad request.");
+        try {
+            Map<String,String> hashMapPpLayMau = getListDanhMucChung("PP_LAY_MAU");
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + "/bantructiep/Biên bản lấy mẫu bàn giao mẫu bán trực tiếp.docx");
+            XhBbLayMauBttHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
+            XhQdNvXhBttHdr xhQdNvXhBttHdr = xhQdNvXhBttServiceImpI.detail(detail.getIdQdNv());
+            detail.setTenPpLayMau(StringUtils.isEmpty(detail.getPpLayMau()) ? null : hashMapPpLayMau.get(detail.getPpLayMau()));
+            detail.setTenDviCungCap(xhQdNvXhBttHdr.getTenTccn());
+            detail.setDonViTinh(xhQdNvXhBttHdr.getDonViTinh());
+            detail.setTenDviCha(xhQdNvXhBttHdr.getTenDvi());
+            detail.setTenNguoiPheDuyet(ObjectUtils.isEmpty(detail.getNguoiPduyetId()) ? null : userInfoRepository.findById(detail.getNguoiPduyetId()).get().getFullName());
+            return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
