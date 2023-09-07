@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 @Entity
 @Table(name = DcnbPhieuKnChatLuongDtl.TABLE_NAME)
 @Data
@@ -20,19 +22,19 @@ public class DcnbPhieuKnChatLuongDtl {
 
     @Column(name = "HDR_ID")
     private Long hdrId;
-
+    @NotNull
     @Column(name = "CHI_TIEU_CL")
     private String chiTieuCl;
-
+    @NotNull
     @Column(name = "CHI_SO_CL")
     private String chiSoCl;
-
+    @NotNull
     @Column(name = "KET_QUA_PT")
     private String ketQuaPt;
-
+    @NotNull
     @Column(name = "PHUONG_PHAP")
     private String phuongPhap;
-
+    @NotNull
     @Column(name = "DANH_GIA")
     private Long danhGia;
 

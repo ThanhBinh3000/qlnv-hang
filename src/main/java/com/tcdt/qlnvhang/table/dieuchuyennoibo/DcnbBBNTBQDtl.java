@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.entities.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
@@ -23,17 +24,28 @@ public class DcnbBBNTBQDtl implements Serializable, Cloneable{
     private Long id;
     @Column(name = "HDR_ID")
     private Long hdrId;
+    @NotNull
     private String danhMuc;
     private String nhomHang;
+    @NotNull
     private String donViTinh;
+    @NotNull
     private String matHang;
+    @NotNull
     private String tenMatHang;
+    @NotNull
     private String donViTinhMh;
+    @NotNull
     private Double tongGiaTri;
+    @NotNull
     private Double soLuongTrongNam;
+    @NotNull
     private Double donGia;
+    @NotNull
     private Double thanhTienTrongNam;
+    @NotNull
     private Double soLuongNamTruoc;
+    @NotNull
     private Double thanhTienNamTruoc;
     private String type;
     private Boolean isParent;

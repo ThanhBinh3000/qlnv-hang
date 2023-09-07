@@ -5,6 +5,8 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuKnChatLuongDtl;
 import lombok.Data;
 
 import javax.persistence.Column;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,21 +14,21 @@ import java.util.List;
 @Data
 public class DcnbPhieuKnChatLuongHdrReq {
     private Long id;
-
+    @NotNull
     private Integer nam;
 
     private String maDvi;
 
     private String tenDvi;
-
+    @NotNull
     private String maQhns;
-
+    @NotNull
     private Long qdDcId;
-
+    @NotNull
     private String soQdinhDc;
 
     private String soPhieu;
-
+    @NotNull
     private LocalDate ngayLapPhieu;
 
     private String nguoiKt;
@@ -36,17 +38,17 @@ public class DcnbPhieuKnChatLuongHdrReq {
     private Long tpNguoiKtId;
 
     private String tpNguoiKt;
-
+    @NotNull
     private String maDiemKho;
-
+    @NotNull
     private String tenDiemKho;
-
+    @NotNull
     private String maNhaKho;
-
+    @NotNull
     private String tenNhaKho;
-
+    @NotNull
     private String maNganKho;
-
+    @NotNull
     private String tenNganKho;
 
     private String maLoKho;
@@ -116,6 +118,6 @@ public class DcnbPhieuKnChatLuongHdrReq {
     private String loaiDc;
 
     private List<FileDinhKemReq> bienBanLayMauDinhKem = new ArrayList<>();
-
+    @Valid
     private List<DcnbPhieuKnChatLuongDtl> dcnbPhieuKnChatLuongDtl = new ArrayList<>();
 }

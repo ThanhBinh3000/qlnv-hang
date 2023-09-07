@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -28,17 +29,22 @@ public class DcnbBBKetThucNKDtl {
 
     @Column(name = "HDR_ID",insertable = true, updatable = true)
     private Long hdrId;
-
+    @NotNull
     @Column(name = "PHIEU_NHAP_KHO_ID")
     private Long phieuNhapKhoId;
+    @NotNull
     @Column(name = "SO_PHIEU_NHAP_KHO")
     private String soPhieuNhapKho;
+    @NotNull
     @Column(name = "BANG_KE_NHAP_ID")
     private Long bangKeNhapKhoId;
+    @NotNull
     @Column(name = "SO_BANG_KE_NHAP")
     private String soBangKeNhap;
+    @NotNull
     @Column(name = "NGAY_NHAP")
     private LocalDate ngayNhap;
+    @NotNull
     @Column(name = "SO_LUONG")
     private BigDecimal soLuong;
 

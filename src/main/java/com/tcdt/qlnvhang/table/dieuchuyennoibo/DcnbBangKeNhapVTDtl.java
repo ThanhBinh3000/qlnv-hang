@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Data
@@ -28,10 +29,10 @@ public class DcnbBangKeNhapVTDtl {
 
     @Column(name = "HDR_ID",insertable = true, updatable = true)
     private Long hdrId;
-
+    @NotNull
     @Column(name = "SO_SERIAL")
     private String soSerial;
-
+    @NotNull
     @Column(name = "SO_LUONG")
     private BigDecimal soBaoBi;
 

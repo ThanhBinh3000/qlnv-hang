@@ -29,6 +29,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -73,6 +74,7 @@ public class XhXkThXuatHangKdmService extends BaseServiceImpl {
             s.getTongHopDtl().forEach(s1 -> {
                 s1.setMapDmucDvi(mapDmucDvi);
                 s1.setMapVthh(mapVthh);
+                s1.setTenLoaiHinhXuat(!ObjectUtils.isEmpty(s1.getLoaiHinhXuat()) ? (s1.getLoaiHinhXuat().equals("TL") ? "Thanh lý" : "Tiêu hủy") : "");
             });
             s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
             s.setTenDvi(mapDmucDvi.containsKey(s.getMaDvi()) ? mapDmucDvi.get(s.getMaDvi()) : null);
@@ -164,6 +166,7 @@ public class XhXkThXuatHangKdmService extends BaseServiceImpl {
             data.getTongHopDtl().forEach(s -> {
                 s.setMapDmucDvi(mapDmucDvi);
                 s.setMapVthh(mapVthh);
+                s.setTenLoaiHinhXuat(!ObjectUtils.isEmpty(s.getLoaiHinhXuat()) ? (s.getLoaiHinhXuat().equals("TL") ? "Thanh lý" : "Tiêu hủy") : "");
             });
             data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
             data.setTenDvi(mapDmucDvi.containsKey(data.getMaDvi()) ? mapDmucDvi.get(data.getMaDvi()) : null);
