@@ -7,6 +7,8 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanHaoDoiTtDtl;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,47 +17,47 @@ import java.util.List;
 @AllArgsConstructor
 public class DcnbBienBanHaoDoiHdrReq {
     private Long id;
-
+    @NotNull
     private String loaiDc;
 
     private Boolean thayDoiThuKho;
-
+    @NotNull
     private String loaiVthh;
-
+    @NotNull
     private String tenLoaiVthh;
-
+    @NotNull
     private String cloaiVthh;
-
+    @NotNull
     private String tenCloaiVthh;
-
+    @NotNull
     private Integer nam;
 
     private String maDvi;
 
     private String tenDvi;
-
+    @NotNull
     private String maQhns;
 
     private String soBienBan;
-
+    @NotNull
     private LocalDate ngayLap;
-
+    @NotNull
     private String soQdinhDcc;
-
+    @NotNull
     private Long qDinhDccId;
-
+    @NotNull
     private LocalDate ngayKyQdDcc;
-
+    @NotNull
     private String maDiemKho;
-
+    @NotNull
     private String tenDiemKho;
-
+    @NotNull
     private String maNhaKho;
-
+    @NotNull
     private String tenNhaKho;
-
+    @NotNull
     private String maNganKho;
-
+    @NotNull
     private String tenNganKho;
 
     private String maLoKho;
@@ -115,9 +117,9 @@ public class DcnbBienBanHaoDoiHdrReq {
     private Long nguoiGduyetId;
 
     private String lyDoTuChoi;
-
+    @Valid
     private List<DcnbBienBanHaoDoiTtDtl> danhSachBangKe = new ArrayList<>();
-
+    @Valid
     private List<DcnbBienBanHaoDoiDtl> thongTinHaoHut = new ArrayList<>();
 
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();

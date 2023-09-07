@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,17 +19,23 @@ import java.util.List;
 @NoArgsConstructor
 public class DcnbBbThuaThieuHdrReq extends BaseRequest {
     private Long id;
+    @NotNull
     private Integer nam;
     private String maDvi;
     private String tenDvi;
+    @NotNull
     private String maDviNhan;
     private String tenCanBo;
     private String tenBaoCao;
     private String canBoId;
     private String soBb;
+    @NotNull
     private LocalDate ngayLap;
+    @NotNull
     private Long qdDcCucId;
+    @NotNull
     private String soQdDcCuc;
+    @NotNull
     private LocalDate ngayKyQdCuc;
     private String soBcKetQuaDc;
     private Long bcKetQuaDcId;
@@ -39,6 +47,7 @@ public class DcnbBbThuaThieuHdrReq extends BaseRequest {
     private List<FileDinhKemReq> fileBienBanHaoDois = new ArrayList<>();
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
     private List<DcnbBbThuaThieuDtl> chiTiet = new ArrayList<>();
+    @Valid
     private List<DcnbBbThuaThieuKiemKeDtl> banKiemKe = new ArrayList<>();
 
     private LocalDate tuNgayLap;
