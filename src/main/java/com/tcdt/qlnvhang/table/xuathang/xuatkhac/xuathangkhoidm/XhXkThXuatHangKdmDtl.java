@@ -31,6 +31,8 @@ public class XhXkThXuatHangKdmDtl implements Serializable {
     private LocalDate ngayTongHop;
     private String lyDo;
     private String loaiHinhXuat;
+    private String soBcKqXhKdm;
+    private Long idBcKqXhKdm;
     @JsonIgnore
     @Transient
     private Map<String, String> mapVthh;
