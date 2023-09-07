@@ -7,6 +7,7 @@ import lombok.*;
 import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -176,6 +177,11 @@ public class DcnbBienBanHaoDoiHdr extends BaseEntity implements Serializable {
 
     @Column(name = "LY_DO_TU_CHOI")
     private String lyDoTuChoi;
+
+    @Column(name = "PHIEU_KT_CHAT_LUONG_HDR_ID")
+    private Long phieuKtChatLuongHdrId;
+    @Column(name = "SO_PHIEU_KT_CHAT_LUONG")
+    private String soPhieuKtChatLuong;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
