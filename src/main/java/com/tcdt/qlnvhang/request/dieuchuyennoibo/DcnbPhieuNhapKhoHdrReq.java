@@ -30,6 +30,7 @@ public class DcnbPhieuNhapKhoHdrReq extends BaseRequest {
     private String soBbCbKho;
     private Long bBCbKhoId;
     private String soQdDcCuc;
+    private Long qdinhDccId;
     private Long qdDcCucId;
     private LocalDate ngayQdDcCuc;
     private Long idKeHoachDtl;
