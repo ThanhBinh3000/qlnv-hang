@@ -392,17 +392,21 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
         List<XhHoSoKyThuatDtl> dtl = detail.getXhHoSoKyThuatDtl().stream().filter(s -> s.getLoaiBb().equals(BBAN_KTRA_NGOAI_QUAN) && s.getThoiDiemLap().equals(THOI_DIEM_XUAT_HANG)).collect(Collectors.toList());
         detail.setXhHoSoKyThuatDtl(dtl);
         XhHoSoKyThuatHdr xhHoSoKyThuatHdr = objectMapper.readValue(objectMapper.writeValueAsString(detail), XhHoSoKyThuatHdr.class);
-        return docxToPdfConverter.convertDocxToPdf(inputStream, xhHoSoKyThuatHdr);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, xhHoSoKyThuatHdr, xhHoSoKyThuatHdr.getXhHoSoKyThuatDtl().get(0));
       } else if (body.get("loai").equals(BB_KTRA_VAN_HANH)) {
         path = path + "Biên bản kiểm tra vận hành.docx";
         FileInputStream inputStream = new FileInputStream(path);
         List<XhHoSoKyThuatDtl> dtl = detail.getXhHoSoKyThuatDtl().stream().filter(s -> s.getLoaiBb().equals(BB_KTRA_VAN_HANH) && s.getThoiDiemLap().equals(THOI_DIEM_XUAT_HANG)).collect(Collectors.toList());
-        return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+        detail.setXhHoSoKyThuatDtl(dtl);
+        XhHoSoKyThuatHdr xhHoSoKyThuatHdr = objectMapper.readValue(objectMapper.writeValueAsString(detail), XhHoSoKyThuatHdr.class);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, xhHoSoKyThuatHdr, xhHoSoKyThuatHdr.getXhHoSoKyThuatDtl().get(0));
       } else if (body.get("loai").equals(BB_KTRA_HO_SO_KY_THUAT)) {
         path = path + "Biên bản kiểm tra hồ sơ kỹ thuật.docx";
         FileInputStream inputStream = new FileInputStream(path);
         List<XhHoSoKyThuatDtl> dtl = detail.getXhHoSoKyThuatDtl().stream().filter(s -> s.getLoaiBb().equals(BB_KTRA_HO_SO_KY_THUAT) && s.getThoiDiemLap().equals(THOI_DIEM_XUAT_HANG)).collect(Collectors.toList());
-        return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+        detail.setXhHoSoKyThuatDtl(dtl);
+        XhHoSoKyThuatHdr xhHoSoKyThuatHdr = objectMapper.readValue(objectMapper.writeValueAsString(detail), XhHoSoKyThuatHdr.class);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, xhHoSoKyThuatHdr, xhHoSoKyThuatHdr.getXhHoSoKyThuatDtl().get(0));
       }
     } catch (IOException e) {
       e.printStackTrace();
