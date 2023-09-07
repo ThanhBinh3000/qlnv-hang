@@ -22,12 +22,9 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.hosokythuat.NhHoSoKyThuatService;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.report.ReportTemplate;
-import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThuatDtl;
 import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThuatHdr;
 import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThuatRow;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuKnClHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import fr.opensagres.xdocreport.core.XDocReportException;
@@ -39,11 +36,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.tcdt.qlnvhang.util.Contains.HO_SO_KY_THUAT.*;
 
@@ -359,6 +356,8 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
         } else {
           maDiaDiem = firstBySoBienBan.get().getMaLoKho();
         }
+        xhHskt.setLoaiVthh(firstBySoBienBan.get().getLoaiVthh());
+        xhHskt.setCloaiVthh(firstBySoBienBan.get().getCloaiVthh());
         xhHskt.setMaDiaDiem(maDiaDiem);
         xhHskt.setTrangThai(nhHoSoKyThuat.getTrangThai());
         xhHskt.setXhHoSoKyThuatDtl(listDtl);
@@ -375,19 +374,36 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
     }
     return xhHskt;
   }
+
   public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
     try {
-      ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
-      reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
-      ReportTemplate model = findByTenFile(reportTemplateRequest);
-      byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-      ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-//      FileInputStream inputStream = new FileInputStream("src/main/resources/reports/xuatcuutrovientro/Hồ sơ kĩ thuật.docx");
       SearchHoSoKyThuatReq req = new SearchHoSoKyThuatReq();
       req.setId(DataUtils.safeToLong(body.get("id")));
-//      req.setType("CTVT");
+      req.setType(DataUtils.safeToString(body.get("type")));
       XhHoSoKyThuatHdr detail = this.detailXh(req);
-      return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+      String path = baseReportFolder + "/chung/hosokythuat/";
+      if (body.get("loai").equals(HO_SO)) {
+        path = path + "Hồ sơ kỹ thuật.docx";
+        FileInputStream inputStream = new FileInputStream(path);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+      } else if (body.get("loai").equals(BBAN_KTRA_NGOAI_QUAN)) {
+        path = path + "Biên bản kiểm tra ngoại quan.docx";
+        FileInputStream inputStream = new FileInputStream(path);
+        List<XhHoSoKyThuatDtl> dtl = detail.getXhHoSoKyThuatDtl().stream().filter(s -> s.getLoaiBb().equals(BBAN_KTRA_NGOAI_QUAN) && s.getThoiDiemLap().equals(THOI_DIEM_XUAT_HANG)).collect(Collectors.toList());
+        detail.setXhHoSoKyThuatDtl(dtl);
+        XhHoSoKyThuatHdr xhHoSoKyThuatHdr = objectMapper.readValue(objectMapper.writeValueAsString(detail), XhHoSoKyThuatHdr.class);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, xhHoSoKyThuatHdr);
+      } else if (body.get("loai").equals(BB_KTRA_VAN_HANH)) {
+        path = path + "Biên bản kiểm tra vận hành.docx";
+        FileInputStream inputStream = new FileInputStream(path);
+        List<XhHoSoKyThuatDtl> dtl = detail.getXhHoSoKyThuatDtl().stream().filter(s -> s.getLoaiBb().equals(BB_KTRA_VAN_HANH) && s.getThoiDiemLap().equals(THOI_DIEM_XUAT_HANG)).collect(Collectors.toList());
+        return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+      } else if (body.get("loai").equals(BB_KTRA_HO_SO_KY_THUAT)) {
+        path = path + "Biên bản kiểm tra hồ sơ kỹ thuật.docx";
+        FileInputStream inputStream = new FileInputStream(path);
+        List<XhHoSoKyThuatDtl> dtl = detail.getXhHoSoKyThuatDtl().stream().filter(s -> s.getLoaiBb().equals(BB_KTRA_HO_SO_KY_THUAT) && s.getThoiDiemLap().equals(THOI_DIEM_XUAT_HANG)).collect(Collectors.toList());
+        return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+      }
     } catch (IOException e) {
       e.printStackTrace();
     } catch (XDocReportException e) {
