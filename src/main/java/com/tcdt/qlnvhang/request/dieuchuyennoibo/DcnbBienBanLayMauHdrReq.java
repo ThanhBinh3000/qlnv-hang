@@ -44,6 +44,10 @@ public class DcnbBienBanLayMauHdrReq implements Serializable {
 
     private LocalDate ngayLayMau;
 
+    private String soBbNhapDayKho;
+    private String bBNhapDayKhoId;
+    private LocalDate ngayNhapDayKho;
+
     private String dViKiemNghiem;
 
     private String diaDiemLayMau;

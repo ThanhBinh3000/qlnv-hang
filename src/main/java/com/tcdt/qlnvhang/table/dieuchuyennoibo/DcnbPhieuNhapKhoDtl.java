@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.entities.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -24,11 +25,17 @@ public class DcnbPhieuNhapKhoDtl extends BaseEntity implements Serializable, Clo
     private Long id;
     @Column(name = "HDR_ID", insertable = true, updatable = true)
     private Long hdrId;
+    @NotNull
     private String noiDung;
+    @NotNull
     private String maSo;
+    @NotNull
     private String dviTinh;
+    @NotNull
     private BigDecimal soLuongNhapDc;
+    @NotNull
     private BigDecimal duToanKinhPhi;
+    @NotNull
     private BigDecimal thucTeKinhPhi;
 
     @ManyToOne(fetch = FetchType.LAZY)
