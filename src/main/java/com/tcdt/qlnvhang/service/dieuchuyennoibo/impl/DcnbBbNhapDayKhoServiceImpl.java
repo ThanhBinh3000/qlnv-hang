@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBNTBQHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbNhapDayKhoDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbNhapDayKhoHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbNhapDayKhoHdrReq;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbNhapDayKhoHdrDTO;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -16,8 +17,8 @@ import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbNhapDayKhoDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbNhapDayKhoHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoDtl;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -256,8 +257,40 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
     }
 
     @Override
-    public void export(DcnbBbNhapDayKhoHdrReq req, HttpServletResponse response) throws Exception {
+    public void export(DcnbBbNhapDayKhoHdrReq objReq, HttpServletResponse response) throws Exception {
+        CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        objReq.setPaggingReq(paggingReq);
+        objReq.setMaDvi(currentUser.getDvql());
+        Page<DcnbBbNhapDayKhoHdrDTO> page = search(objReq);
+        List<DcnbBbNhapDayKhoHdrDTO> data = page.getContent();
 
+        String title = "Danh sách biên bản nhập đầy kho";
+        String[] rowsName = new String[]{"STT", "Số QĐ điều chuyển", "Năm KH", "Thời hạn ĐC", "Điểm kho", "Lô kho", "Số BB kết thúc NH", "Ngày kết thúc NK", "Số HSKT", "Số phiếu nhập kho", "Ngày nhập kho", "Số BB lấy mẫu/BG mẫu", "Trạng thái"};
+        String fileName = "danh-sach-bien-ban-nhap-day-kho.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        for (int i = 0; i < data.size(); i++) {
+            DcnbBbNhapDayKhoHdrDTO dx = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i + 1;
+            objs[1] = dx.getSoQdinh();
+            objs[2] = dx.getNamKh();
+            objs[3] = dx.getThoiHanDieuChuyen();
+            objs[4] = dx.getTenDiemKho();
+            objs[5] = dx.getTenLoKho();
+            objs[6] = dx.getSoBBKetThucNK(); // Số BB kết thúc NH
+            objs[7] = dx.getNgayKetThucNhap(); // Ngày kết thúc NK
+            objs[8] = dx.getSoHskt();                // Số HSKT
+            objs[9] = dx.getSoPhieuNhapKho();
+            objs[10] = dx.getNgayNhapKho();
+            objs[11] = dx.getSoBbLayMau();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+        ex.export();
     }
 
     @Override

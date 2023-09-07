@@ -49,11 +49,8 @@ public class DcnbPhieuXuatKhoHdrReq {
     private String tenNganKho;
     private String maLoKho;
     private String tenLoKho;
-    @NotNull
     private Long phieuKnChatLuongHdrId;
-    @NotNull
     private String soPhieuKnChatLuong;
-    @NotNull
     private LocalDate ngayKyPhieuKnChatLuong;
     @NotNull
     private String loaiVthh;

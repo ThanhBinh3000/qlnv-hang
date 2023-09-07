@@ -116,6 +116,7 @@ public class DcnbBienBanLayMauHdrReq implements Serializable {
     private String soBbHaoDoi;
 
     private Long bbHaoDoiId;
+    private Long ghiChu;
 
     private List<FileDinhKemReq> canCu = new ArrayList<>();
     private List<FileDinhKemReq> bienBanLayMauDinhKem = new ArrayList<>();

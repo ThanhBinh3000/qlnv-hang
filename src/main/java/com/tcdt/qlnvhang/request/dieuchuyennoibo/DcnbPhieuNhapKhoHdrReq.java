@@ -95,7 +95,10 @@ public class DcnbPhieuNhapKhoHdrReq extends BaseRequest {
     private LocalDate tgianGiaoNhanHang;
     private String loaiHinhNx;
     private String kieuNx;
+    @NotNull
     private String bbNghiemThuBqld;
+    @NotNull
+    private Long bbNghiemThuBqldId;
     private BigDecimal soLuongQdDcCuc;
     private BigDecimal tongSoLuong;
     private String tongSoLuongBc;

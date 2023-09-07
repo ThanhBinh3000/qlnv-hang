@@ -81,7 +81,7 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     private String soBbNhapDayKho;
 
     @Column(name = "BB_NHAP_DAY_KHO_ID")
-    private String bBNhapDayKhoId;
+    private Long bBNhapDayKhoId;
 
     @Column(name = "NGAY_NHAP_DAY_KHO")
     private LocalDate ngayNhapDayKho;
@@ -185,6 +185,9 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
 
     @Column(name = "BB_HAO_DOI_ID")
     private Long bbHaoDoiId;
+
+    @Column(name = "GHI_CHU")
+    private Long ghiChu;
 
     @Transient
     private List<FileDinhKem> canCu = new ArrayList<>();
