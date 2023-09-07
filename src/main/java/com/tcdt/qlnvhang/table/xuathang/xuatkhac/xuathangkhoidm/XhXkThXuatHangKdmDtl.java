@@ -53,6 +53,8 @@ public class XhXkThXuatHangKdmDtl implements Serializable {
     private String tenNganKho;
     @Transient
     private String tenLoKho;
+    @Transient
+    private String tenLoaiHinhXuat;
 
     public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
         this.mapDmucDvi = mapDmucDvi;
