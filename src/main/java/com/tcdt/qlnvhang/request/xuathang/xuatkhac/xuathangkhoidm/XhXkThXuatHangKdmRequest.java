@@ -15,7 +15,6 @@ import java.util.List;
 @Data
 public class XhXkThXuatHangKdmRequest extends BaseRequest {
   private Long id;
-  private Integer nam;
   private String maDvi;
   private String maDanhSach;
   private String tenDanhSach;
@@ -27,12 +26,11 @@ public class XhXkThXuatHangKdmRequest extends BaseRequest {
   private Long nguoiPduyetId;
   private String lyDoTuChoi;
   private BigDecimal tongSlHienTai;
-  private Integer capTh;
   private String dvql;
   private String maCuc;
   private String maChiCuc;
-  private String loai;
-  private Integer soLanLm;
+  private Long idQdXhKdm;
+  private String soQdXhKdm;
   private LocalDateTime ngayTaoTu;
   private LocalDateTime ngayTaoDen;
   private List<XhXkThXuatHangKdmDtl> tongHopDtl = new ArrayList<>();
