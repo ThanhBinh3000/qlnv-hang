@@ -27,7 +27,6 @@ public class DcnbPhieuKnChatLuongDtl {
     private String chiTieuCl;
     @Column(name = "CHI_SO_CL")
     private String chiSoCl;
-    @NotNull
     @Column(name = "KET_QUA_PT")
     private String ketQuaPt;
     @Column(name = "PHUONG_PHAP")
