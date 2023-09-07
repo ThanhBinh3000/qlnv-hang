@@ -41,8 +41,8 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
     @Column(name = "SO_BANG_KE")
     private String soBangKe;
 
-    @Column(name = "NGAY_NHAP")
-    private LocalDate ngayNhap;
+    @Column(name = "NGAY_LAP")
+    private LocalDate ngayLap;
 
     @Column(name = "MA_DVI")
     private String maDvi;

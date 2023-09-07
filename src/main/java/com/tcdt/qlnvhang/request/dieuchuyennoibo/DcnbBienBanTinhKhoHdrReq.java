@@ -19,7 +19,7 @@ public class DcnbBienBanTinhKhoHdrReq {
 
     private String soBangKe;
 
-    private LocalDate ngayNhap;
+    private LocalDate ngayLap;
 
     private String maDvi;
 
