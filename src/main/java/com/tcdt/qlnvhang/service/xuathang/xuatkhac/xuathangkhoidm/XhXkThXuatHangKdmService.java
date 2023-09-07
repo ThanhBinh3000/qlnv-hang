@@ -73,6 +73,7 @@ public class XhXkThXuatHangKdmService extends BaseServiceImpl {
             s.getTongHopDtl().forEach(s1 -> {
                 s1.setMapDmucDvi(mapDmucDvi);
                 s1.setMapVthh(mapVthh);
+                s1.setTenLoaiHinhXuat(s1.getLoaiHinhXuat().equals("TL") ? "Thanh lý" : "Tiêu hủy");
             });
             s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
             s.setTenDvi(mapDmucDvi.containsKey(s.getMaDvi()) ? mapDmucDvi.get(s.getMaDvi()) : null);
@@ -164,6 +165,7 @@ public class XhXkThXuatHangKdmService extends BaseServiceImpl {
             data.getTongHopDtl().forEach(s -> {
                 s.setMapDmucDvi(mapDmucDvi);
                 s.setMapVthh(mapVthh);
+                s.setTenLoaiHinhXuat(s.getLoaiHinhXuat().equals("TL") ? "Thanh lý" : "Tiêu hủy");
             });
             data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
             data.setTenDvi(mapDmucDvi.containsKey(data.getMaDvi()) ? mapDmucDvi.get(data.getMaDvi()) : null);
