@@ -10,6 +10,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -55,6 +56,7 @@ public class DcnbBbNhapDayKhoHdrReq extends BaseRequest {
     private String ghiChu;
     private String trangThai;
     private String lyDoTuChoi;
+    @Valid
     private List<DcnbBbNhapDayKhoDtl> children = new ArrayList<>();
     private LocalDate tuNgayBdNhap;
     private LocalDate denNgayBdNhap;

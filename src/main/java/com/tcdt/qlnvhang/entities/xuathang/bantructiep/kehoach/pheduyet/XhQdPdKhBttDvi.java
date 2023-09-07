@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet;
 
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -30,5 +31,14 @@ public class XhQdPdKhBttDvi implements Serializable {
     @Transient
     private String tenDvi;
     @Transient
+    private BigDecimal donGiaDuocDuyet;
+    @Transient
     List<XhQdPdKhBttDviDtl> children = new ArrayList<>();
+
+    public void setChildren(List<XhQdPdKhBttDviDtl> children) {
+        this.children = children;
+        if (!DataUtils.isNullOrEmpty(children)) {
+            this.donGiaDuocDuyet = children.get(0).getDonGiaDuocDuyet();
+        }
+    }
 }

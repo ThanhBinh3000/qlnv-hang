@@ -103,7 +103,7 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
         XhThopDxKhBttHdr data = new XhThopDxKhBttHdr();
         BeanUtils.copyProperties(req, data);
         data.setId(req.getIdTh());
-        data.setMaDvi(currentUser.getUser().getDepartment());
+        data.setMaDvi(currentUser.getUser().getDvql());
         data.setTrangThai(Contains.CHUATAO_QD);
         XhThopDxKhBttHdr created = xhThopDxKhBttRepository.save(data);
 
@@ -213,7 +213,8 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
         ex.export();
     }
 
-    public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
+    public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {
+        if (currentUser == null) throw new Exception("Bad request.");
         try {
             Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
             FileInputStream inputStream = new FileInputStream(baseReportFolder + "bantructiep/Tổng hợp kế hoạch bán trực tiếp.docx");

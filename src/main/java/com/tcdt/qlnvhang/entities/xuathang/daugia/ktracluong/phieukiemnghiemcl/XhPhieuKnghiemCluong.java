@@ -8,12 +8,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = XhPhieuKnghiemCluong.TABLE_NAME )
@@ -123,4 +126,38 @@ public class XhPhieuKnghiemCluong extends TrangThaiBaseEntity implements Seriali
 
     @Transient
     private List<XhPhieuKnghiemCluongCt> children = new ArrayList<>();
+
+    // Print preview
+
+    @Transient
+    private String ngayLayMauFormat;
+    @Transient
+    private String ngayKnghiemFormat;
+    @Transient
+    private String tenHthucBquan;
+
+    @Transient
+    private String ngay;
+
+    @Transient
+    private String thang;
+
+
+    public String getNgayLayMauFormat() {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        return Objects.isNull(ngayLayMau) ? null : formatter.format(ngayLayMau);
+    }
+
+    public String getNgayKnghiemFormat() {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        return Objects.isNull(ngayKnghiem) ? null : formatter.format(ngayKnghiem);
+    }
+
+    public String getNgay() {
+        return Objects.isNull(this.getNgayTao()) ? null : String.valueOf(this.getNgayTao().getDate());
+    }
+
+    public String getThang() {
+        return Objects.isNull(this.getNgayTao()) ? null : String.valueOf(this.getNgayTao().getMonth()+1);
+    }
 }

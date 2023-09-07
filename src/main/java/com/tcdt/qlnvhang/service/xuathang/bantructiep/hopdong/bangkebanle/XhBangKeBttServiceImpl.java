@@ -53,7 +53,7 @@ public class XhBangKeBttServiceImpl extends BaseServiceImpl {
         if (currentUser == null) throw new Exception("Bad request.");
         XhBangKeBtt data = new XhBangKeBtt();
         BeanUtils.copyProperties(req, data);
-        data.setMaDvi(currentUser.getUser().getDepartment());
+        data.setMaDvi(currentUser.getUser().getDvql());
         XhBangKeBtt created = xhBangKeBttRepository.save(data);
         return created;
     }

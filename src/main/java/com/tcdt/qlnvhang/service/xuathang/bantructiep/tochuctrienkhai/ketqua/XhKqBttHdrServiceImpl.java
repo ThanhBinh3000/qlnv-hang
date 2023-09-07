@@ -24,9 +24,11 @@ import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.thongtin.X
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,6 +39,8 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
@@ -92,7 +96,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
         }
         XhKqBttHdr data = new XhKqBttHdr();
         BeanUtils.copyProperties(req, data);
-        data.setMaDvi(currentUser.getUser().getDepartment());
+        data.setMaDvi(currentUser.getUser().getDvql());
         data.setTrangThai(Contains.DUTHAO);
         data.setTrangThaiHd(Contains.CHUA_THUC_HIEN);
         data.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
@@ -187,7 +191,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
             data.setTrangThai(data.getTrangThai());
             data.setChildren(listDvi);
             List<XhHopDongBttHdr> listHd = xhHopDongBttHdrRepository.findAllByIdQdKq(data.getId());
-            listHd.forEach(dataHd ->{
+            listHd.forEach(dataHd -> {
                 dataHd.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(dataHd.getTrangThai()));
                 dataHd.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dataHd.getTrangThaiXh()));
             });
@@ -363,8 +367,21 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
             throw new UnsupportedOperationException("Bản ghi không tồn tại.");
         }
         XhTcTtinBtt tchuc = byIdTc.get();
-//        XhQdPdKhBttDviDtl dviDtl = xhQdPdKhBttDviDtlRepository.findById(tchuc.getIdDviDtl()).get();
-//        tchuc.setXhQdPdKhBttDviDtl(dviDtl);
         return tchuc;
+    }
+
+    public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {
+        if (currentUser == null) throw new Exception("Bad request.");
+        try {
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + "/bantructiep/Quyết định phê duyệt kết quả chào giá.docx");
+            List<XhKqBttHdr> listDetail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
+            XhKqBttHdr detail = listDetail.get(0);
+            return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+        }catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

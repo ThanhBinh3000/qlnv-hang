@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -121,5 +122,9 @@ public class XhXkVtPhieuKdclHdr extends BaseEntity implements Serializable {
         if (!DataUtils.isNullObject(getCloaiVthh())) {
             setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
         }
+    }
+
+    public void setDat(Boolean dat) {
+        isDat = ObjectUtils.isEmpty(dat) ? Boolean.FALSE : dat;
     }
 }

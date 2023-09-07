@@ -23,9 +23,11 @@ import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhB
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,6 +39,8 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -104,7 +108,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
         XhQdPdKhBttHdr data = new XhQdPdKhBttHdr();
         BeanUtils.copyProperties(req, data);
         data.setLastest(false);
-        data.setMaDvi(currentUser.getUser().getDepartment());
+        data.setMaDvi(currentUser.getUser().getDvql());
         data.setTrangThai(Contains.DU_THAO);
         XhQdPdKhBttHdr created = xhQdPdKhBttHdrRepository.save(data);
         if (!DataUtils.isNullOrEmpty(req.getCanCuPhapLy())) {
@@ -364,7 +368,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
                     }
                     optionalTh.get().setTrangThai(Contains.DABANHANH_QD);
                     List<XhDxKhBanTrucTiepHdr> listDx = xhDxKhBanTrucTiepHdrRepository.findAllByIdThop(optionalTh.get().getId());
-                    listDx.forEach(dataDx ->{
+                    listDx.forEach(dataDx -> {
                         dataDx.setIdSoQdPd(data.getId());
                         dataDx.setSoQdPd(data.getSoQdPd());
                         dataDx.setNgayKyQd(data.getNgayKyQd());
@@ -451,5 +455,26 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
+    }
+
+    public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {
+        if (currentUser == null) throw new Exception("Bad request.");
+        String capDvi = (currentUser.getUser().getCapDvi());
+        try {
+            if (Contains.CAP_TONG_CUC.equals(capDvi)) {
+                FileInputStream inputStream = new FileInputStream(baseReportFolder + "/bantructiep/Quyết định phê duyệt kế hoạch bán trực tiếp Tổng Cục.docx");
+                XhQdPdKhBttHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
+                return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+            } else {
+                FileInputStream inputStream = new FileInputStream(baseReportFolder + "/bantructiep/Quyết định phê duyệt kế hoạch bán trực tiếp Cục.docx");
+                XhQdPdKhBttHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
+                return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
