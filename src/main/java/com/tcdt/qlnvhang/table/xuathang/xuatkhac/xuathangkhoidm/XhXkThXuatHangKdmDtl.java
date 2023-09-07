@@ -23,9 +23,6 @@ public class XhXkThXuatHangKdmDtl implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXkThXuatHangKdmDtl.TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = XhXkThXuatHangKdmDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhXkThXuatHangKdmDtl.TABLE_NAME + "_SEQ")
     private Long id;
-    private Long idTongHop;
-    private Long idDsHdr;
-    private String maTongHop;
     private String maDiaDiem;
     private String loaiVthh;
     private String cloaiVthh;
