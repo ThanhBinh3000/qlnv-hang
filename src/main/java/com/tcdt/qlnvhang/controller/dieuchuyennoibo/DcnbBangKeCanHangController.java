@@ -168,7 +168,7 @@ public class DcnbBangKeCanHangController {
     @ApiOperation(value = "Kết xuất danh sách ", response = List.class)
     @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody  SearchBangKeCanHang objReq, HttpServletResponse response) throws Exception {
+    public void exportList(@CurrentUser CustomUserDetails currentUser ,@RequestBody  SearchBangKeCanHang objReq, HttpServletResponse response) throws Exception {
         try {
             dcnbBangKeCanHangServiceImpl.export( currentUser,objReq, response);
 
