@@ -12,6 +12,7 @@ import java.time.LocalDate;
 public class DcnbBienBanHaoDoiHdrDTO {
     private Long id;
     private Long bangKeCanHangId;
+    private String soBbTinhKho;
     private Long bbTinhKhoId;
     private Long qDinhDcId;
     private Long phieuXuatKhoId;
@@ -39,10 +40,12 @@ public class DcnbBienBanHaoDoiHdrDTO {
     private String maNganKho;
     private String tenNganKho;
     private LocalDate ngayKyQDinh;
-
-    public DcnbBienBanHaoDoiHdrDTO(Long id, Long bangKeCanHangId, Long bbTinhKhoId, Long qDinhDcId, Long phieuXuatKhoId, String soQdinh, Integer nam, LocalDate ngayHieuLuc, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String soBienBanHaoDoi, String soPhieuXuatKho, String soBangKeXuatDcLt, LocalDate ngayXuatKho, String trangThai, String tenTrangThai, String loaiVthh, String tenLoaiVthh, String cloaiVthh, String tenCloaiVthh, String maNhaKho, String tenNhaKho, String donViTinh, String tenDonViTinh, String maNganKho, String tenNganKho, LocalDate ngayKyQDinh) {
+    private LocalDate ngayBatDauXuat;
+    private LocalDate ngayKetThucXuat;
+    public DcnbBienBanHaoDoiHdrDTO(Long id, Long bangKeCanHangId,String soBbTinhKho, Long bbTinhKhoId, Long qDinhDcId, Long phieuXuatKhoId, String soQdinh, Integer nam, LocalDate ngayHieuLuc, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String soBienBanHaoDoi, String soPhieuXuatKho, String soBangKeXuatDcLt, LocalDate ngayXuatKho, String trangThai, String tenTrangThai, String loaiVthh, String tenLoaiVthh, String cloaiVthh, String tenCloaiVthh, String maNhaKho, String tenNhaKho, String donViTinh, String tenDonViTinh, String maNganKho, String tenNganKho, LocalDate ngayKyQDinh) {
         this.id = id;
         this.bangKeCanHangId = bangKeCanHangId;
+        this.soBbTinhKho= soBbTinhKho;
         this.bbTinhKhoId = bbTinhKhoId;
         this.qDinhDcId = qDinhDcId;
         this.phieuXuatKhoId = phieuXuatKhoId;

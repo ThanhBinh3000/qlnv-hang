@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuXuatKhoDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuXuatKhoHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuXuatKhoHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuXuatKho;
@@ -15,6 +16,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -203,36 +205,36 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
     }
 
     public void export(CustomUserDetails currentUser, SearchPhieuXuatKho objReq, HttpServletResponse response) throws Exception {
-//        PaggingReq paggingReq = new PaggingReq();
-//        paggingReq.setPage(0);
-//        paggingReq.setLimit(Integer.MAX_VALUE);
-//        objReq.setPaggingReq(paggingReq);
-//        Page<DcnbPhieuXuatKhoHdr> page = this.searchPage(currentUser, objReq);
-//        List<DcnbPhieuXuatKhoHdr> data = page.getContent();
-//
-//        String title = "Danh sách bảng kê cân hàng ";
-//        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số công văn/đề xuất", "Ngày lập KH", "Ngày duyệt LĐ Chi cục", "Loại điều chuyển", "Đơn vị đề xuất", "Trạng thái"};
-//        String fileName = "danh-sach-ke-hoach-dieu-chuyen-noi-bo-hang-dtqg.xlsx";
-//        List<Object[]> dataList = new ArrayList<Object[]>();
-//        Object[] objs = null;
-//        for (int i = 0; i < data.size(); i++) {
-//            DcnbPhieuXuatKhoHdr dx = data.get(i);
-//            objs = new Object[rowsName.length];
-//            objs[0] = i + 1;
-//            objs[1] = dx.getNam();
-//            objs[2] = dx.getSoQdinhDcc();
-//            objs[3] = dx.getNam();
-//            objs[4] = dx.getThoiHanDieuChuyen();
-//            objs[5] = dx.getTenDiemKho();
-//            objs[6] = dx.getTenLoKho();
-//            objs[7] = dx.getSoPhieuXuatKho();
-//            objs[8] = dx.getSoBangKe();
-//            objs[9] = dx.getNgayXuatKho();
-//            objs[10] = dx.getTrangThai();
-//            dataList.add(objs);
-//        }
-//        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
-//        ex.export();
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        objReq.setPaggingReq(paggingReq);
+        Page<DcnbPhieuXuatKhoHdrDTO> page = this.searchPage(currentUser, objReq);
+        List<DcnbPhieuXuatKhoHdrDTO> data = page.getContent();
+
+        String title = "Danh sách phiếu xuất kho";
+        String[] rowsName = new String[]{"STT", "Số QĐ ĐC của Cục", "Năm KH", "Thời hạn điều chuyển", "Điểm kho", "Lô kho", "Số phiếu KNCL", "Ngày giám định", "Số Phiếu xuất kho", "Ngày xuất kho", "Trạng thái"};
+        String fileName = "danh-sach-phieu-nhap-kho.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        for (int i = 0; i < data.size(); i++) {
+            DcnbPhieuXuatKhoHdrDTO dx = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i + 1;
+            objs[1] = dx.getSoQdinh();
+            objs[2] = dx.getNamKh();
+            objs[3] = dx.getThoiHanDieuChuyen();
+            objs[4] = dx.getTenDiemKho();
+            objs[5] = dx.getTenLoKho();
+            objs[6] = dx.getSoPhieuKiemNghiemCl();
+            objs[7] = dx.getNgayGiamDinh();
+            objs[8] = dx.getSoPhieuXuatKho();
+            objs[9] = dx.getNgayXuatKho();
+            objs[10] = dx.getTrangThai();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+        ex.export();
     }
 
     public List<DcnbPhieuXuatKhoHdrListDTO> searchList(CustomUserDetails currentUser, SearchPhieuXuatKho req) {
@@ -240,13 +242,13 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
         req.setMaDvi(dvql);
         List<DcnbPhieuXuatKhoHdrListDTO> searchDto = null;
         req.setTypeQd(Contains.DIEU_CHUYEN);
-        if(req.getIsVatTu() == null){
+        if (req.getIsVatTu() == null) {
             req.setIsVatTu(false);
         }
-        if(req.getIsVatTu()){
+        if (req.getIsVatTu()) {
             req.setDsLoaiHang(Arrays.asList("VT"));
-        }else {
-            req.setDsLoaiHang(Arrays.asList("LT","M"));
+        } else {
+            req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         searchDto = hdrRepository.searchList(req);
         return searchDto;
@@ -257,13 +259,13 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
         req.setMaDvi(dvql);
         List<DcnbPhieuXuatKhoHdrListDTO> searchDto = null;
         req.setTypeQd(Contains.DIEU_CHUYEN);
-        if(req.getIsVatTu() == null){
+        if (req.getIsVatTu() == null) {
             req.setIsVatTu(false);
         }
-        if(req.getIsVatTu()){
+        if (req.getIsVatTu()) {
             req.setDsLoaiHang(Arrays.asList("VT"));
-        }else {
-            req.setDsLoaiHang(Arrays.asList("LT","M"));
+        } else {
+            req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         searchDto = hdrRepository.searchListChung(req);
         return searchDto;
