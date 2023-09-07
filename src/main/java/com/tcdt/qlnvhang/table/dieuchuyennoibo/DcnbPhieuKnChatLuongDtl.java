@@ -25,13 +25,11 @@ public class DcnbPhieuKnChatLuongDtl {
     @NotNull
     @Column(name = "CHI_TIEU_CL")
     private String chiTieuCl;
-    @NotNull
     @Column(name = "CHI_SO_CL")
     private String chiSoCl;
     @NotNull
     @Column(name = "KET_QUA_PT")
     private String ketQuaPt;
-    @NotNull
     @Column(name = "PHUONG_PHAP")
     private String phuongPhap;
     @NotNull
