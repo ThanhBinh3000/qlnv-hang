@@ -20,7 +20,7 @@ public class XhTcTtinBttReq {
     private LocalDate ngayChaoGia;
     private BigDecimal soLuong;
     private BigDecimal donGia;
-    private BigDecimal thueGtgt;
+    private BigDecimal thanhTien;
     private Boolean luaChon;
     @Transient
     private FileDinhKemReq fileDinhKems;

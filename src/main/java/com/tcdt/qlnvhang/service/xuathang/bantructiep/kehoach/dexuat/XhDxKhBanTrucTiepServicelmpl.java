@@ -43,11 +43,10 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
 
     public Page<XhDxKhBanTrucTiepHdr> searchPage(CustomUserDetails currentUser, XhDxKhBanTrucTiepHdrReq req) throws Exception {
         String dvql = currentUser.getDvql();
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
-            req.setDvql(dvql);
-        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
-            req.setDvql(dvql.substring(0, 4));
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
             req.setTrangThai(Contains.DADUYET_LDC);
+        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
+            req.setDvql(dvql);
         }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhDxKhBanTrucTiepHdr> search = xhDxKhBanTrucTiepHdrRepository.searchPage(req, pageable);
@@ -71,7 +70,9 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
         }
         XhDxKhBanTrucTiepHdr data = new XhDxKhBanTrucTiepHdr();
         BeanUtils.copyProperties(req, data);
-        data.setMaDvi(currentUser.getUser().getDvql());
+        data.setMaDvi(currentUser.getDvql());
+//        data.setNgayTao(LocalDate.now());
+        data.setNguoiTaoId(currentUser.getUser().getId());
         data.setTrangThai(Contains.DUTHAO);
         data.setTrangThaiTh(Contains.CHUATONGHOP);
         int slDviTsan = data.getChildren().stream()
@@ -110,6 +111,8 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
             if (!bySoDxuat.get().getId().equals(req.getId())) throw new Exception("số đề xuất đã tồn tại");
         }
         XhDxKhBanTrucTiepHdr data = optional.get();
+        data.setNgaySua(LocalDate.now());
+        data.setNguoiSuaId(currentUser.getUser().getId());
         BeanUtils.copyProperties(req, data, "id", "maDvi", "trangThaiTh");
         int slDviTsan = data.getChildren().stream()
                 .flatMap(item -> item.getChildren().stream())

@@ -55,6 +55,7 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
 
     public Page<HhQdPheduyetKhMttDx> selectPage(SearchHhPthucTkhaiReq req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
+        req.setMaCuc(this.getUser().getDvql());
         Page<HhQdPheduyetKhMttDx> dtl = hhQdPheduyetKhMttDxRepository.search(
                 req,
                 pageable
@@ -104,14 +105,14 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
             dx.setSoQd(objReq.getSoQd());
 
             if (objReq.getPthucMuaTrucTiep().equals(Contains.UY_QUYEN)) {
-                dx.setTrangThai(NhapXuatHangTrangThaiEnum.HOANTHANHCAPNHAT.getId());
+                dx.setTrangThai(NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId());
                 if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKemUyQuyen())) {
                     List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemUyQuyen(), dx.getId(), HhQdPheduyetKhMttDx.TABLE_NAME);
                     dx.setFileDinhKemUyQuyen(fileDinhKemList);
                 }
             }
             if (objReq.getPthucMuaTrucTiep().equals(Contains.MUA_LE)) {
-                dx.setTrangThai(NhapXuatHangTrangThaiEnum.HOANTHANHCAPNHAT.getId());
+                dx.setTrangThai(NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId());
                 if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKemMuaLe())) {
                     List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemMuaLe(), dx.getId(), HhQdPheduyetKhMttDx.TABLE_NAME);
                     dx.setFileDinhKemMuaLe(fileDinhKemList);

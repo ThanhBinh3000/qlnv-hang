@@ -29,11 +29,13 @@ public class XhDxKhBanTrucTiepDtl implements Serializable {
     @Transient
     private String tenDvi;
     @Transient
+    private List<XhDxKhBanTrucTiepDdiem> children = new ArrayList<>();
+
+    //Print preview
+    @Transient
     private BigDecimal donGiaDeXuat;
     @Transient
     private BigDecimal thanhTienDeXuat;
-    @Transient
-    private List<XhDxKhBanTrucTiepDdiem> children = new ArrayList<>();
 
     public void setChildren(List<XhDxKhBanTrucTiepDdiem> children) {
         this.children = children;
