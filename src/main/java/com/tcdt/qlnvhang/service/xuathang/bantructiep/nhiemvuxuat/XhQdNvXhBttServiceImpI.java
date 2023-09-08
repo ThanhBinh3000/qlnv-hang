@@ -108,7 +108,9 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl {
         }
         XhQdNvXhBttHdr data = new XhQdNvXhBttHdr();
         BeanUtils.copyProperties(req, data);
-        data.setMaDvi(currentUser.getUser().getDvql());
+        data.setMaDvi(currentUser.getDvql());
+        data.setNgayTao(LocalDate.now());
+        data.setNguoiTaoId(currentUser.getUser().getId());
         data.setTrangThai(Contains.DU_THAO);
         data.setTrangThaiXh(Contains.DANG_THUC_HIEN);
         if (!ObjectUtils.isEmpty(req.getListMaDviTsan())) {
@@ -166,6 +168,8 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl {
             }
         }
         XhQdNvXhBttHdr data = optional.get();
+        data.setNgaySua(LocalDate.now());
+        data.setNguoiSuaId(currentUser.getUser().getId());
         BeanUtils.copyProperties(req, data, "id", "maDvi", "trangThaiXh");
         if (!ObjectUtils.isEmpty(req.getListMaDviTsan())) {
             data.setMaDviTsan(String.join(",", req.getListMaDviTsan()));

@@ -27,7 +27,7 @@ public class XhTcTtinBtt implements Serializable {
     private LocalDate ngayChaoGia;
     private BigDecimal soLuong;
     private BigDecimal donGia;
-    private BigDecimal thueGtgt;
+    private BigDecimal thanhTien;
     private Boolean luaChon;
     private Boolean typeQdKq;
     @Transient

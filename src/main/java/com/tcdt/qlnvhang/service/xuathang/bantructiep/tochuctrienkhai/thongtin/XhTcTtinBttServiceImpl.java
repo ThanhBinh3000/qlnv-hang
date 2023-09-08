@@ -65,14 +65,13 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
         String dvql = currentUser.getDvql();
         Integer lastest = 1;
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
-            req.setDvql(dvql.substring(0, 4));
             req.setLastest(lastest);
             req.setTrangThai(Contains.HOANTHANHCAPNHAT);
         } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
             req.setDvql(dvql);
             req.setLastest(lastest);
         } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            req.setMaDviChiCuc(dvql.substring(0, 8));
+            req.setMaChiCuc(dvql);
             req.setLastest(lastest);
             req.setTrangThai(Contains.HOANTHANHCAPNHAT);
         }
@@ -116,12 +115,12 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
         if (!optional.isPresent()) throw new Exception("Bản Ghi không tồn tại");
         XhQdPdKhBttDtl data = optional.get();
         data.setPthucBanTrucTiep(req.getPthucBanTrucTiep());
-        data.setNgayNhanCgia(LocalDate.now());
         data.setDiaDiemChaoGia(req.getDiaDiemChaoGia());
         data.setNgayMkho(req.getNgayMkho());
         data.setNgayKthuc(req.getNgayKthuc());
         data.setGhiChuChaoGia(req.getGhiChuChaoGia());
         data.setThoiHanBan(req.getThoiHanBan());
+        data.setTongGiaTriHdong(req.getTongGiaTriHdong());
         data.setTrangThai(Contains.DANGCAPNHAT);
         if (req.getPthucBanTrucTiep().equals(Contains.UY_QUYEN)) {
             if (!DataUtils.isNullOrEmpty(req.getFileUyQuyen())) {
@@ -228,6 +227,7 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
         } else {
             switch (status) {
                 case Contains.HOANTHANHCAPNHAT + Contains.DANGCAPNHAT:
+                    data.setNgayNhanCgia(LocalDate.now());
                     break;
                 default:
                     throw new Exception("Phê duyệt không thành công");
