@@ -32,6 +32,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
@@ -194,31 +195,38 @@ public class XhXkVtBhQdGiaonvXnService extends BaseServiceImpl {
   }
 
 
-  public XhXkVtBhQdGiaonvXnHdr pheDuyet(CustomUserDetails currentUser, StatusReq req) throws Exception {
-    Optional<XhXkVtBhQdGiaonvXnHdr> dx = xhXkVtBhQdGiaonvXnRepository.findById(req.getId());
-    if (!dx.isPresent()) {
+  public XhXkVtBhQdGiaonvXnHdr pheDuyet(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
+    if (StringUtils.isEmpty(statusReq.getId())) {
+      throw new Exception("Không tìm thấy dữ liệu");
+    }
+    Optional<XhXkVtBhQdGiaonvXnHdr> optional = xhXkVtBhQdGiaonvXnRepository.findById(statusReq.getId());
+    if (!optional.isPresent()) {
       throw new Exception("Không tồn tại bản ghi");
     }
-    XhXkVtBhQdGiaonvXnHdr xhXkVtBhQdGiaonvXnHdr = dx.get();
-    String status = xhXkVtBhQdGiaonvXnHdr.getTrangThai() + req.getTrangThai();
+    String status = statusReq.getTrangThai() + optional.get().getTrangThai();
     switch (status) {
-      case Contains.DU_THAO + Contains.CHO_DUYET_LDC:
-      case Contains.TU_CHOI_LDC + Contains.CHO_DUYET_LDC:
-        xhXkVtBhQdGiaonvXnHdr.setNguoiGduyetId(currentUser.getUser().getId());
-        xhXkVtBhQdGiaonvXnHdr.setNgayGduyet(LocalDate.now());
+      case Contains.CHODUYET_TP + Contains.DUTHAO:
+      case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+      case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+      case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
+        optional.get().setNguoiGduyetId(currentUser.getUser().getId());
+        optional.get().setNgayGduyet(LocalDate.now());
         break;
-      case Contains.CHO_DUYET_LDC + Contains.TU_CHOI_LDC:
-        xhXkVtBhQdGiaonvXnHdr.setLyDoTuChoi(req.getLyDoTuChoi());
+      case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+      case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
+        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+        optional.get().setNgayPduyet(LocalDate.now());
+        optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
         break;
-      case Contains.CHO_DUYET_LDC + Contains.DA_DUYET_LDC:
-        xhXkVtBhQdGiaonvXnHdr.setNguoiPduyetId(currentUser.getUser().getId());
-        xhXkVtBhQdGiaonvXnHdr.setNgayPduyet(LocalDate.now());
+      case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
+        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+        optional.get().setNgayPduyet(LocalDate.now());
         break;
       default:
-        throw new Exception("Phê duyệt không thành công.");
+        throw new Exception("Phê duyệt không thành công");
     }
-    xhXkVtBhQdGiaonvXnHdr.setTrangThai(req.getTrangThai());
-    XhXkVtBhQdGiaonvXnHdr model = xhXkVtBhQdGiaonvXnRepository.save(xhXkVtBhQdGiaonvXnHdr);
+    optional.get().setTrangThai(statusReq.getTrangThai());
+    XhXkVtBhQdGiaonvXnHdr model = xhXkVtBhQdGiaonvXnRepository.save(optional.get());
     return detail(model.getId());
   }
 

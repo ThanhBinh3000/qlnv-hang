@@ -67,11 +67,10 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
 
     public Page<XhKqBttHdr> searchPage(CustomUserDetails currentUser, XhKqBttHdrReq req) throws Exception {
         String dvql = currentUser.getDvql();
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
-            req.setDvql(dvql);
-        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
-            req.setDvql(dvql.substring(0, 4));
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
             req.setTrangThai(Contains.BAN_HANH);
+        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
+            req.setDvql(dvql);
         }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhKqBttHdr> search = xhKqBttHdrRepository.searchPage(req, pageable);
@@ -96,7 +95,9 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
         }
         XhKqBttHdr data = new XhKqBttHdr();
         BeanUtils.copyProperties(req, data);
-        data.setMaDvi(currentUser.getUser().getDvql());
+        data.setMaDvi(currentUser.getDvql());
+        data.setNgayTao(LocalDate.now());
+        data.setNguoiTaoId(currentUser.getUser().getId());
         data.setTrangThai(Contains.DUTHAO);
         data.setTrangThaiHd(Contains.CHUA_THUC_HIEN);
         data.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
@@ -146,6 +147,8 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
             if (!bySoQdKq.get().getId().equals(req.getId())) throw new Exception("số quyết định đã tồn tại");
         }
         XhKqBttHdr data = optional.get();
+        data.setNgaySua(LocalDate.now());
+        data.setNguoiSuaId(currentUser.getUser().getId());
         BeanUtils.copyProperties(req, data, "id", "maDvi", "trangThaiHd", "trangThaiXh");
         XhKqBttHdr updated = xhKqBttHdrRepository.save(data);
         this.saveDetail(req, updated.getId());
@@ -376,8 +379,13 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
             FileInputStream inputStream = new FileInputStream(baseReportFolder + "/bantructiep/Quyết định phê duyệt kết quả chào giá.docx");
             List<XhKqBttHdr> listDetail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
             XhKqBttHdr detail = listDetail.get(0);
+            List<XhQdPdKhBttDvi> listDvi = xhQdPdKhBttDviRepository.findAllByIdQdKqHdr(detail.getId());
+            listDvi.forEach(dataDvi -> {
+                List<XhQdPdKhBttDviDtl> listDviDtl = xhQdPdKhBttDviDtlRepository.findAllByIdDvi(dataDvi.getId());
+                dataDvi.setDonGiaDuocDuyet(listDviDtl.get(0).getDonGiaDuocDuyet());
+            });
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         } catch (XDocReportException e) {
             e.printStackTrace();
