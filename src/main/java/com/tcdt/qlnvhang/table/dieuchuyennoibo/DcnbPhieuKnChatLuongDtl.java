@@ -31,7 +31,6 @@ public class DcnbPhieuKnChatLuongDtl {
     private String ketQuaPt;
     @Column(name = "PHUONG_PHAP")
     private String phuongPhap;
-    @NotNull
     @Column(name = "DANH_GIA")
     private Long danhGia;
 
