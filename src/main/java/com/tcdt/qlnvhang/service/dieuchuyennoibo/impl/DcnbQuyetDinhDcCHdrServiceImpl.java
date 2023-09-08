@@ -118,6 +118,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                     if (e.getDanhSachKeHoach() != null && !e.getDanhSachKeHoach().isEmpty()) {
                         DcnbKeHoachDcHdr dcnbKeHoachDcHdr = new DcnbKeHoachDcHdr();
                         dcnbKeHoachDcHdr.setType(Contains.NHAN_DIEU_CHUYEN_TS);
+                        dcnbKeHoachDcHdr.setLoaiDc(Contains.DCNB);
                         dcnbKeHoachDcHdr.setMaDviPq(e.getDanhSachKeHoach().get(0).getMaChiCucNhan());
                         dcnbKeHoachDcHdr.setPhuongAnDieuChuyen(new ArrayList<>());
                         BigDecimal total = e.getDanhSachKeHoach().stream()
@@ -247,6 +248,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                     if (e.getDanhSachKeHoach() != null && !e.getDanhSachKeHoach().isEmpty()) {
                         DcnbKeHoachDcHdr dcnbKeHoachDcHdr = new DcnbKeHoachDcHdr();
                         dcnbKeHoachDcHdr.setType(Contains.NHAN_DIEU_CHUYEN_TS);
+                        dcnbKeHoachDcHdr.setLoaiDc(Contains.DCNB);
                         dcnbKeHoachDcHdr.setMaDviPq(e.getDanhSachKeHoach().get(0).getMaChiCucNhan());
                         dcnbKeHoachDcHdr.setPhuongAnDieuChuyen(new ArrayList<>());
                         Optional<DcnbKeHoachDcHdr> keHoachDcHdrOpt = dcnbKeHoachDcHdrRepository.findById(e.getKeHoachDcHdrId());
