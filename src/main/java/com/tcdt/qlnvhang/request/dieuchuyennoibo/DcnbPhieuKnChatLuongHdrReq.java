@@ -58,9 +58,9 @@ public class DcnbPhieuKnChatLuongHdrReq {
     private String tenThuKho;
 
     private Long thuKhoId;
-
+    @NotNull
     private String soBbLayMau;
-
+    @NotNull
     private Long bbLayMauId;
 
     private LocalDate ngayLayMau;
