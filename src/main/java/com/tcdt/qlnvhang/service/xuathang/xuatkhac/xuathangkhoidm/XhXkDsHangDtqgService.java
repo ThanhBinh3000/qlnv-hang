@@ -142,7 +142,7 @@ public class XhXkDsHangDtqgService extends BaseServiceImpl {
                 model.setIsNgoaiDanhMuc(item.getIsLoaiKhoiDm());
                 list.add(model);
             });
-        }else{
+        } else {
             throw new Exception("Không có hàng hóa nào thuộc danh sách này.");
         }
         List<XhXkDsHangDtqgDtl> xhXkDsHangDtqgDtls = xhXkDsHangDtqgDtlRepository.saveAll(list);
@@ -157,7 +157,7 @@ public class XhXkDsHangDtqgService extends BaseServiceImpl {
         }
         List<XhXkDsHangDtqgDtl> treeNodes = new ArrayList<>();
         for (XhXkDsHangDtqgDtl node : flatNodes) {
-            node.setTenNhomHang(node.getLoaiHang().equals("VT") ? "Vật tư" : "Lương Thực");
+            node.setTenNhomHang(!ObjectUtils.isEmpty(node.getLoaiHang()) ? (node.getLoaiHang().equals("VT") ? "Vật tư" : "Lương Thực") : "");
             XhXkDsHangDtqgDtl parent = nodeMap.get(node.getMaCha());
             if (parent == null) {
                 treeNodes.add(node);
