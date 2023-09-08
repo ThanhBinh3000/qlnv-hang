@@ -99,22 +99,24 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
         String ma = created.getMaDanhSach();
         //set ma tong hop cho danh sach
         List<Long> listIdDsHdr = created.getTongHopDtl().stream().map(XhXkTongHopDtl::getIdDsHdr).collect(Collectors.toList());
-        List<XhXkDanhSachHdr> listDsHdr = xhXkDanhSachRepository.findByIdIn(listIdDsHdr);
         if (created.getCapTh() == 2) {
+            List<XhXkDanhSachHdr> listDsHdr = xhXkDanhSachRepository.findByIdIn(listIdDsHdr);
             listDsHdr.forEach(s -> {
                 s.setIdTongHop(id);
                 s.setMaTongHop(ma);
                 s.setNgayTongHop(LocalDateTime.now());
                 s.setTrangThai(TrangThaiAllEnum.DA_CHOT.getId());
             });
+            xhXkDanhSachRepository.saveAll(listDsHdr);
         } else if (created.getCapTh() == 1) {
+            List<XhXkDanhSachHdr> listDsHdr = xhXkDanhSachRepository.findAllByIdTongHopIn(listIdDsHdr);
             listDsHdr.forEach(s -> {
                 s.setIdTongHopTc(id);
                 s.setMaTongHopTc(ma);
                 s.setNgayTongHopTc(LocalDateTime.now());
             });
+            xhXkDanhSachRepository.saveAll(listDsHdr);
         }
-        xhXkDanhSachRepository.saveAll(listDsHdr);
         return detail(Arrays.asList(created.getId())).get(0);
 
     }
@@ -154,8 +156,8 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
         }
         XhXkTongHopHdr data = optional.get();
         if (!DataUtils.isNullObject(data.getId())) {
-            List<XhXkDanhSachHdr> items = xhXkDanhSachRepository.findAllByIdTongHop(data.getId());
             if (data.getCapTh() == 2) {
+                List<XhXkDanhSachHdr> items = xhXkDanhSachRepository.findAllByIdTongHop(data.getId());
                 items.forEach(item -> {
                     item.setIdTongHop(null);
                     item.setMaTongHop(null);
@@ -164,6 +166,7 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
                     xhXkDanhSachRepository.save(item);
                 });
             } else if (data.getCapTh() == 1) {
+                List<XhXkDanhSachHdr> items = xhXkDanhSachRepository.findAllByIdTongHopTc(data.getId());
                 items.forEach(item -> {
                     item.setIdTongHopTc(null);
                     item.setMaTongHopTc(null);
@@ -184,8 +187,8 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
         }
         list.forEach(data -> {
             if (!DataUtils.isNullObject(data.getId())) {
-                List<XhXkDanhSachHdr> items = xhXkDanhSachRepository.findAllByIdTongHop(data.getId());
                 if (data.getCapTh() == 2) {
+                    List<XhXkDanhSachHdr> items = xhXkDanhSachRepository.findAllByIdTongHop(data.getId());
                     items.forEach(item -> {
                         item.setIdTongHop(null);
                         item.setMaTongHop(null);
@@ -194,6 +197,7 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
                         xhXkDanhSachRepository.save(item);
                     });
                 } else if (data.getCapTh() == 1) {
+                    List<XhXkDanhSachHdr> items = xhXkDanhSachRepository.findAllByIdTongHopTc(data.getId());
                     items.forEach(item -> {
                         item.setIdTongHopTc(null);
                         item.setMaTongHopTc(null);
