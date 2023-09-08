@@ -67,7 +67,7 @@ public interface DcnbBienBanLayMauHdrRepository extends JpaRepository<DcnbBienBa
             "AND ((:#{#param.tuNgay}  IS NULL OR hdr.ngayLayMau >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR hdr.ngayLayMau <= :#{#param.denNgay}) ) " +
             "AND (:#{#param.trangThai} IS NULL OR hdr.trangThai = :#{#param.trangThai}) " +
-            "AND (hdr.id not in (select hdrp.bbLayMauId FROM DcnbPhieuKnChatLuongHdr hdrp where 1 =1 AND hdrp.bbLayMauId is not null and (:#{#param.id} IS NULL OR hdrp.id != :#{#param.id}))) " +
+            "AND (hdr.id not in (select hdrp.bbLayMauId FROM DcnbPhieuKnChatLuongHdr hdrp where 1 =1 AND hdrp.bbLayMauId is not null AND (hdrp.type IS NULL OR (:#{#param.type} IS NULL OR hdrp.type = :#{#param.type})) and (:#{#param.id} IS NULL OR hdrp.id != :#{#param.id}))) " +
             "ORDER BY hdr.soQdinhDcc desc, hdr.nam desc")
     List<DcnbBienBanLayMauHdr> searchList(@Param("param") SearchDcnbBienBanLayMau param);
 
