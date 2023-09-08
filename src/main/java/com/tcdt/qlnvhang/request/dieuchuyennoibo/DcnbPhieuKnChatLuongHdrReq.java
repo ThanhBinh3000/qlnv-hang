@@ -26,7 +26,8 @@ public class DcnbPhieuKnChatLuongHdrReq {
     private Long qdDcId;
     @NotNull
     private String soQdinhDc;
-
+    @NotNull
+    private LocalDate ngayQdinhDc;
     private String soPhieu;
     @NotNull
     private LocalDate ngayLapPhieu;
