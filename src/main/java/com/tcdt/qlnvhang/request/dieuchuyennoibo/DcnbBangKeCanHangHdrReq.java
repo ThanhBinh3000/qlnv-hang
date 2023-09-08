@@ -31,8 +31,8 @@ public class DcnbBangKeCanHangHdrReq {
     private Long qDinhDccId;
     @NotNull
     private String soQdinhDcc;
-    @NotNull
-    private LocalDate ngayKyQdinh;
+//    @NotNull
+//    private LocalDate ngayKyQdinh;
     @NotNull
     private LocalDate thoiHanDieuChuyen;
     @NotNull
@@ -48,7 +48,6 @@ public class DcnbBangKeCanHangHdrReq {
     private LocalDate ngayNhapKho;
 
     private String soPhieuNhapKho;
-    @NotNull
     private String soBbLayMau;
     @NotNull
     private String loaiVthh;
