@@ -41,6 +41,7 @@ public class XhQdPdKhBttDtlReq {
     private LocalDate ngayMkho;
     private LocalDate ngayKthuc;
     private String ghiChuChaoGia;
+    private BigDecimal tongGiaTriHdong;
     private LocalDate thoiHanBan;
     private List<FileDinhKemReq> fileUyQuyen = new ArrayList<>();
     private List<FileDinhKemReq> fileBanLe = new ArrayList<>();

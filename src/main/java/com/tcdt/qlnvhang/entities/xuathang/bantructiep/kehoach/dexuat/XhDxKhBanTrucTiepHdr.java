@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -21,7 +20,7 @@ import java.util.Map;
 @Entity
 @Table(name = XhDxKhBanTrucTiepHdr.TABLE_NAME)
 @Data
-public class XhDxKhBanTrucTiepHdr extends BaseEntity implements Serializable {
+public class XhDxKhBanTrucTiepHdr implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_DX_KH_BAN_TRUC_TIEP_HDR";
     @Id
@@ -61,11 +60,14 @@ public class XhDxKhBanTrucTiepHdr extends BaseEntity implements Serializable {
     private String donViTinh;
     private String trangThai;
     private String lyDoTuChoi;
+    private LocalDate ngayTao;
+    private Long nguoiTaoId;
+    private LocalDate ngaySua;
+    private Long nguoiSuaId;
     private LocalDate ngayGuiDuyet;
     private Long nguoiGuiDuyetId;
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
-    private BigDecimal donGia;
     private BigDecimal thanhTien;
 
     @Transient

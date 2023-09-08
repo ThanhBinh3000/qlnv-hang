@@ -65,11 +65,11 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
 
     public Page<XhQdPdKhBttHdr> searchPage(CustomUserDetails currentUser, XhQdPdKhBttHdrReq req) throws Exception {
         String dvql = currentUser.getDvql();
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
-            req.setDvql(dvql.substring(0, 4));
-            req.setTrangThai(Contains.BAN_HANH);
-        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
             req.setDvql(dvql);
+        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
+            req.setMaCuc(dvql);
+            req.setTrangThai(Contains.BAN_HANH);
         }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhQdPdKhBttHdr> search = xhQdPdKhBttHdrRepository.searchPage(req, pageable);
@@ -108,7 +108,9 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
         XhQdPdKhBttHdr data = new XhQdPdKhBttHdr();
         BeanUtils.copyProperties(req, data);
         data.setLastest(false);
-        data.setMaDvi(currentUser.getUser().getDvql());
+        data.setMaDvi(currentUser.getDvql());
+        data.setNgayTao(LocalDate.now());
+        data.setNguoiTaoId(currentUser.getUser().getId());
         data.setTrangThai(Contains.DU_THAO);
         XhQdPdKhBttHdr created = xhQdPdKhBttHdrRepository.save(data);
         if (!DataUtils.isNullOrEmpty(req.getCanCuPhapLy())) {
@@ -184,6 +186,8 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
         }
         XhQdPdKhBttHdr data = optional.get();
         BeanUtils.copyProperties(req, data, "id", "maDvi", "lastest");
+        data.setNgaySua(LocalDate.now());
+        data.setNguoiSuaId(currentUser.getUser().getId());
         XhQdPdKhBttHdr updated = xhQdPdKhBttHdrRepository.save(data);
         fileDinhKemService.delete(data.getId(), Collections.singleton(XhQdPdKhBttHdr.TABLE_NAME));
         List<FileDinhKem> canCuPhapLy = fileDinhKemService.saveListFileDinhKem(req.getCanCuPhapLy(), updated.getId(), XhQdPdKhBttHdr.TABLE_NAME);
@@ -464,10 +468,26 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
             if (Contains.CAP_TONG_CUC.equals(capDvi)) {
                 FileInputStream inputStream = new FileInputStream(baseReportFolder + "/bantructiep/Quyết định phê duyệt kế hoạch bán trực tiếp Tổng Cục.docx");
                 XhQdPdKhBttHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
+                List<XhQdPdKhBttDtl> listDtl = xhQdPdKhBttDtlRepository.findAllByIdHdr(detail.getId());
+                listDtl.forEach(dataDtl ->{
+                    List<XhQdPdKhBttDvi> listDvi = xhQdPdKhBttDviRepository.findAllByIdDtl(dataDtl.getId());
+                    listDvi.forEach(dataDvi ->{
+                        List<XhQdPdKhBttDviDtl> listDviDtl = xhQdPdKhBttDviDtlRepository.findAllByIdDvi(dataDvi.getId());
+                        dataDvi.setDonGiaDuocDuyet(listDviDtl.get(0).getDonGiaDuocDuyet());
+                    });
+                });
                 return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
             } else {
                 FileInputStream inputStream = new FileInputStream(baseReportFolder + "/bantructiep/Quyết định phê duyệt kế hoạch bán trực tiếp Cục.docx");
                 XhQdPdKhBttHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
+                List<XhQdPdKhBttDtl> listDtl = xhQdPdKhBttDtlRepository.findAllByIdHdr(detail.getId());
+                listDtl.forEach(dataDtl ->{
+                    List<XhQdPdKhBttDvi> listDvi = xhQdPdKhBttDviRepository.findAllByIdDtl(dataDtl.getId());
+                    listDvi.forEach(dataDvi ->{
+                        List<XhQdPdKhBttDviDtl> listDviDtl = xhQdPdKhBttDviDtlRepository.findAllByIdDvi(dataDvi.getId());
+                        dataDvi.setDonGiaDuocDuyet(listDviDtl.get(0).getDonGiaDuocDuyet());
+                    });
+                });
                 return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
             }
         } catch (IOException e) {

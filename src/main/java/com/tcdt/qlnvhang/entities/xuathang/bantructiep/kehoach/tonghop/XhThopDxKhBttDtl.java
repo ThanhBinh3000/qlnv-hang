@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
@@ -23,13 +24,17 @@ public class XhThopDxKhBttDtl implements Serializable {
     private String trichYeu;
     private Integer slDviTsan;
     private BigDecimal tongSoLuong;
-    private BigDecimal donGia;
     private BigDecimal thanhTien;
     private String trangThai;
     @Transient
     private String tenDvi;
     @Transient
     private String tenTrangThai;
+
+    public String getTrangThai() {
+        setTenTrangThai(TrangThaiAllEnum.getLabelById(trangThai));
+        return trangThai;
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idHdr")

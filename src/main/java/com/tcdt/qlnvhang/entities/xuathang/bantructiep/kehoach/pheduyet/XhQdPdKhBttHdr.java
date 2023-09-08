@@ -17,7 +17,7 @@ import java.util.Map;
 @Entity
 @Table(name = XhQdPdKhBttHdr.TABLE_NAME)
 @Data
-public class XhQdPdKhBttHdr extends BaseEntity implements Serializable {
+public class XhQdPdKhBttHdr implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_QD_PD_KH_BTT_HDR";
     @Id
@@ -46,8 +46,10 @@ public class XhQdPdKhBttHdr extends BaseEntity implements Serializable {
     private String slHdongDaKy;
     private String phanLoai;
     private String trangThai;
-    private LocalDate ngayGuiDuyet;
-    private Long nguoiGuiDuyetId;
+    private LocalDate ngayTao;
+    private Long nguoiTaoId;
+    private LocalDate ngaySua;
+    private Long nguoiSuaId;
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
     @Transient
