@@ -30,6 +30,7 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -97,16 +98,23 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
         Long id = created.getId();
         String ma = created.getMaDanhSach();
         //set ma tong hop cho danh sach
+        List<Long> listIdDsHdr = created.getTongHopDtl().stream().map(XhXkTongHopDtl::getIdDsHdr).collect(Collectors.toList());
+        List<XhXkDanhSachHdr> listDsHdr = xhXkDanhSachRepository.findByIdIn(listIdDsHdr);
         if (created.getCapTh() == 2) {
-            List<Long> listIdDsHdr = created.getTongHopDtl().stream().map(XhXkTongHopDtl::getIdDsHdr).collect(Collectors.toList());
-            List<XhXkDanhSachHdr> listDsHdr = xhXkDanhSachRepository.findByIdIn(listIdDsHdr);
             listDsHdr.forEach(s -> {
                 s.setIdTongHop(id);
                 s.setMaTongHop(ma);
+                s.setNgayTongHop(LocalDateTime.now());
                 s.setTrangThai(TrangThaiAllEnum.DA_CHOT.getId());
             });
-            xhXkDanhSachRepository.saveAll(listDsHdr);
+        } else if (created.getCapTh() == 1) {
+            listDsHdr.forEach(s -> {
+                s.setIdTongHopTc(id);
+                s.setMaTongHopTc(ma);
+                s.setNgayTongHopTc(LocalDateTime.now());
+            });
         }
+        xhXkDanhSachRepository.saveAll(listDsHdr);
         return detail(Arrays.asList(created.getId())).get(0);
 
     }
