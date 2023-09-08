@@ -30,6 +30,7 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -97,16 +98,23 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
         Long id = created.getId();
         String ma = created.getMaDanhSach();
         //set ma tong hop cho danh sach
+        List<Long> listIdDsHdr = created.getTongHopDtl().stream().map(XhXkTongHopDtl::getIdDsHdr).collect(Collectors.toList());
+        List<XhXkDanhSachHdr> listDsHdr = xhXkDanhSachRepository.findByIdIn(listIdDsHdr);
         if (created.getCapTh() == 2) {
-            List<Long> listIdDsHdr = created.getTongHopDtl().stream().map(XhXkTongHopDtl::getIdDsHdr).collect(Collectors.toList());
-            List<XhXkDanhSachHdr> listDsHdr = xhXkDanhSachRepository.findByIdIn(listIdDsHdr);
             listDsHdr.forEach(s -> {
                 s.setIdTongHop(id);
                 s.setMaTongHop(ma);
+                s.setNgayTongHop(LocalDateTime.now());
                 s.setTrangThai(TrangThaiAllEnum.DA_CHOT.getId());
             });
-            xhXkDanhSachRepository.saveAll(listDsHdr);
+        } else if (created.getCapTh() == 1) {
+            listDsHdr.forEach(s -> {
+                s.setIdTongHopTc(id);
+                s.setMaTongHopTc(ma);
+                s.setNgayTongHopTc(LocalDateTime.now());
+            });
         }
+        xhXkDanhSachRepository.saveAll(listDsHdr);
         return detail(Arrays.asList(created.getId())).get(0);
 
     }
@@ -147,12 +155,22 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
         XhXkTongHopHdr data = optional.get();
         if (!DataUtils.isNullObject(data.getId())) {
             List<XhXkDanhSachHdr> items = xhXkDanhSachRepository.findAllByIdTongHop(data.getId());
-            items.forEach(item -> {
-                item.setIdTongHop(null);
-                item.setMaTongHop(null);
-                item.setTrangThai(TrangThaiAllEnum.CHUA_CHOT.getId());
-                xhXkDanhSachRepository.save(item);
-            });
+            if (data.getCapTh() == 2) {
+                items.forEach(item -> {
+                    item.setIdTongHop(null);
+                    item.setMaTongHop(null);
+                    item.setNgayTongHop(null);
+                    item.setTrangThai(TrangThaiAllEnum.CHUA_CHOT.getId());
+                    xhXkDanhSachRepository.save(item);
+                });
+            } else if (data.getCapTh() == 1) {
+                items.forEach(item -> {
+                    item.setIdTongHopTc(null);
+                    item.setMaTongHopTc(null);
+                    item.setNgayTongHopTc(null);
+                    xhXkDanhSachRepository.save(item);
+                });
+            }
         }
         fileDinhKemService.deleteMultiple(Collections.singleton(data.getId()), Collections.singleton(XhXkVtBbLayMauHdr.TABLE_NAME));
         xhXkTongHopRepository.delete(data);
@@ -161,23 +179,31 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
     @Transient
     public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
         List<XhXkTongHopHdr> list = xhXkTongHopRepository.findByIdIn(idSearchReq.getIdList());
-
         if (list.isEmpty()) {
             throw new Exception("Bản ghi không tồn tại");
         }
         list.forEach(data -> {
             if (!DataUtils.isNullObject(data.getId())) {
                 List<XhXkDanhSachHdr> items = xhXkDanhSachRepository.findAllByIdTongHop(data.getId());
-                items.forEach(item -> {
-                    item.setIdTongHop(null);
-                    item.setMaTongHop(null);
-                    xhXkDanhSachRepository.save(item);
-                });
+                if (data.getCapTh() == 2) {
+                    items.forEach(item -> {
+                        item.setIdTongHop(null);
+                        item.setMaTongHop(null);
+                        item.setNgayTongHop(null);
+                        item.setTrangThai(TrangThaiAllEnum.CHUA_CHOT.getId());
+                        xhXkDanhSachRepository.save(item);
+                    });
+                } else if (data.getCapTh() == 1) {
+                    items.forEach(item -> {
+                        item.setIdTongHopTc(null);
+                        item.setMaTongHopTc(null);
+                        item.setNgayTongHopTc(null);
+                        xhXkDanhSachRepository.save(item);
+                    });
+                }
             }
         });
-
         xhXkTongHopRepository.deleteAll(list);
-
     }
 
 

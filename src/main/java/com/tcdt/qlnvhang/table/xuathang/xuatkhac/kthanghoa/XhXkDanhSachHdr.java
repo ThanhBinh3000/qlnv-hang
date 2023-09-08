@@ -42,6 +42,9 @@ public class XhXkDanhSachHdr extends BaseEntity implements Serializable {
     private String lyDo;
     private String trangThai;
     private String loai;
+    private Long idTongHopTc;
+    private String maTongHopTc;
+    private LocalDateTime ngayTongHopTc;
 
 
     @JsonIgnore
