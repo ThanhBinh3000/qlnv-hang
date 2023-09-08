@@ -25,9 +25,7 @@ public class DcnbPhieuXuatKhoHdrReq {
     private LocalDate ngayTaoPhieu;
     @NotNull
     private LocalDate ngayXuatKho;
-    @NotNull
     private Integer taiKhoanNo;
-    @NotNull
     private Integer taiKhoanCo;
     @NotNull
     private Long qddcId;
