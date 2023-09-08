@@ -384,7 +384,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         String tenVthh = "";
         if (!listVthh.isEmpty()) {
             for (int i = 0; i < listVthh.size(); i++) {
-                tenVthh = tenVthh + hashMapDmHh.get(listVthh.get(i)).toUpperCase() + (listVthh.size() > i + 1 ? ", " : "");
+                tenVthh = tenVthh + (!ObjectUtils.isEmpty(hashMapDmHh.get(listVthh.get(i))) ? hashMapDmHh.get(listVthh.get(i)).toUpperCase() : "") + (listVthh.size() > (i + 1)  ? ", " : "");
             }
         }
         previewRes.setTenLoaiVthh(tenVthh);
