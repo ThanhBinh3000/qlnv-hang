@@ -13,10 +13,12 @@ import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhBaoCao
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,6 +31,8 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -244,6 +248,20 @@ public class XhXkVtBhBaoCaoKqService extends BaseServiceImpl {
         xhXkVtBhBbBaoHanhRepository.saveAll(listBbBaoHanh);
       }
     }
+  }
+  public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
+    try {
+      String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
+      String fileTemplate = "xuatcuutrovientro/" + fileName;
+      FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
+      XhXkVtBhBaoCaoKqHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
+      return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (XDocReportException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }
 

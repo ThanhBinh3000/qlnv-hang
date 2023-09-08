@@ -1,10 +1,14 @@
 package com.tcdt.qlnvhang.service.xuathang.bantructiep.kehoach.tonghop;
 
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepDdiem;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepDdiemRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -30,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -41,6 +46,10 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
     private XhThopDxKhBttRepository xhThopDxKhBttRepository;
     @Autowired
     private XhDxKhBanTrucTiepHdrRepository xhDxKhBanTrucTiepHdrRepository;
+    @Autowired
+    private XhDxKhBanTrucTiepDtlRepository xhDxKhBanTrucTiepDtlRepository;
+    @Autowired
+    private XhDxKhBanTrucTiepDdiemRepository xhDxKhBanTrucTiepDdiemRepository;
     @Autowired
     private XhDxKhBanTrucTiepServicelmpl xhDxKhBanTrucTiepService;
 
@@ -228,6 +237,16 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
                     Map<String, Object> objDonVi = mapDmucDvi.get(maDviCuc);
                     dataDx.setTenDvi(objDonVi.get("tenDvi").toString());
                 }
+                List<XhDxKhBanTrucTiepDtl> listDtl = xhDxKhBanTrucTiepDtlRepository.findAllByIdHdr(dataDx.getId());
+                listDtl.forEach(dataDtl ->{
+                    List<XhDxKhBanTrucTiepDdiem> listDdiem = xhDxKhBanTrucTiepDdiemRepository.findAllByIdDtl(dataDtl.getId());
+                    if (!listDdiem.isEmpty()) {
+                        dataDtl.setDonGiaDeXuat(listDdiem.get(0).getDonGiaDeXuat());
+                        dataDtl.setThanhTienDeXuat(listDdiem.stream()
+                                .map(item -> item.getThanhTienDeXuat() != null ? item.getThanhTienDeXuat() : BigDecimal.ZERO)
+                                .reduce(BigDecimal.ZERO, BigDecimal::add));
+                    }
+                });
             });
             HashMap<Object, Object> hashMap = new HashMap<>();
             hashMap.put("nam", tongHop.getNamKh());
