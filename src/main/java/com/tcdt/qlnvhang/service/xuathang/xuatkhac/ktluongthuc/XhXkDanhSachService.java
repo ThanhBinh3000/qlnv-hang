@@ -25,7 +25,7 @@ public class XhXkDanhSachService extends BaseServiceImpl {
     public Page<XhXkDanhSachHdr> searchPage(CustomUserDetails currentUser, XhXkDanhSachRequest req) throws Exception {
         String dvql = currentUser.getDvql();
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            req.setDvql(dvql.substring(0, 6));
+            req.setDvql(dvql.substring(0, 8));
         } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
             req.setDvql(dvql);
         }
