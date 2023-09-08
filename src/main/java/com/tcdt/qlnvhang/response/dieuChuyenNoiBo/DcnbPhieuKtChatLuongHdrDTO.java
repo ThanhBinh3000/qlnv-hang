@@ -25,6 +25,8 @@ public class DcnbPhieuKtChatLuongHdrDTO {
     private String tenLoKhoXuat;
     private String maNganKhoXuat;
     private String tenNganKhoXuat;
+    private String trangThaiXuat;
+    private String tenTrangThaiXuat;
     private String maHangHoa;
     private String tenHangHoa;
     private String maChLoaiHangHoa;
@@ -46,6 +48,8 @@ public class DcnbPhieuKtChatLuongHdrDTO {
     private String tenLoKhoNhan;
     private String maNganKhoNhan;
     private String tenNganKhoNhan;
+    private String trangThaiNhan;
+    private String tenTrangThaiNhan;
     private String trangThai;
     private String tenTrangThai;
 

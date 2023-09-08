@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cloneable{
+public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_BIEN_BAN_LAY_MAU_HDR";
 
@@ -77,6 +77,15 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     @Column(name = "NGAY_LAY_MAU")
     private LocalDate ngayLayMau;
 
+    @Column(name = "SO_BB_NHAP_DAY_KHO")
+    private String soBbNhapDayKho;
+
+    @Column(name = "BB_NHAP_DAY_KHO_ID")
+    private Long bBNhapDayKhoId;
+
+    @Column(name = "NGAY_NHAP_DAY_KHO")
+    private LocalDate ngayNhapDayKho;
+
     @Column(name = "DV_KIEM_NGHIEM")
     private String dViKiemNghiem;
 
@@ -132,7 +141,7 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     private String chiTieuKiemTra;
 
     @Column(name = "TRANG_THAI")
-    @Access(value=AccessType.PROPERTY)
+    @Access(value = AccessType.PROPERTY)
     private String trangThai;
 
     @Column(name = "LY_DO_TU_CHOI")
@@ -177,6 +186,9 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     @Column(name = "BB_HAO_DOI_ID")
     private Long bbHaoDoiId;
 
+    @Column(name = "GHI_CHU")
+    private Long ghiChu;
+
     @Transient
     private List<FileDinhKem> canCu = new ArrayList<>();
 
@@ -191,6 +203,7 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     private List<DcnbBienBanLayMauDtl> dcnbBienBanLayMauDtl = new ArrayList<>();
     @Transient
     private String tenTrangThai;
+
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
         this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);

@@ -84,9 +84,9 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
             thopDtl.setTrichYeu(dxuat.getTrichYeu());
             thopDtl.setSlDviTsan(dxuat.getSlDviTsan());
             thopDtl.setTongSoLuong(dxuat.getTongSoLuong());
-            thopDtl.setDonGia(dxuat.getDonGia());
             thopDtl.setThanhTien(dxuat.getThanhTien());
             thopDtl.setTrangThai(dxuat.getTrangThai());
+            thopDtl.setTenTrangThai(dxuat.getTrangThai());
             thopDtls.add(thopDtl);
         }
         thopHdr.setChildren(thopDtls);
@@ -103,7 +103,7 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
         XhThopDxKhBttHdr data = new XhThopDxKhBttHdr();
         BeanUtils.copyProperties(req, data);
         data.setId(req.getIdTh());
-        data.setMaDvi(currentUser.getUser().getDvql());
+        data.setMaDvi(currentUser.getDvql());
         data.setTrangThai(Contains.CHUATAO_QD);
         XhThopDxKhBttHdr created = xhThopDxKhBttRepository.save(data);
 

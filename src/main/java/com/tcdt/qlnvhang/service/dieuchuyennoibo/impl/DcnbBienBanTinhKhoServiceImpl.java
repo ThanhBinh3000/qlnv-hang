@@ -53,13 +53,13 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
         req.setMaDvi(dvql);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbBienBanTinhKhoHdrDTO> searchDto = null;
-        if(req.getIsVatTu() == null){
+        if (req.getIsVatTu() == null) {
             req.setIsVatTu(false);
         }
-        if(req.getIsVatTu()){
+        if (req.getIsVatTu()) {
             req.setDsLoaiHang(Arrays.asList("VT"));
-        }else {
-            req.setDsLoaiHang(Arrays.asList("LT","M"));
+        } else {
+            req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         req.setTypeQd(Contains.DIEU_CHUYEN);
         searchDto = dcnbBienBanTinhKhoHdrRepository.searchPage(req, pageable);
@@ -82,7 +82,7 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
         data.setType(objReq.getType());
         objReq.getDcnbBienBanTinhKhoDtl().forEach(e -> e.setDcnbBienBanTinhKhoHdr(data));
         DcnbBienBanTinhKhoHdr created = dcnbBienBanTinhKhoHdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBTK-"+ currentUser.getUser().getDvqlTenVietTat();
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BBTK-" + currentUser.getUser().getDvqlTenVietTat();
         created.setSoBbTinhKho(so);
         dcnbBienBanTinhKhoHdrRepository.save(created);
         List<FileDinhKem> bienBanTinhKhoDaKy = fileDinhKemService.saveListFileDinhKem(objReq.getFileBbTinhKhoDaKy(), created.getId(), DcnbBienBanTinhKhoHdr.TABLE_NAME + "_BB_TINH_KHO_DA_KY");
@@ -115,7 +115,7 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
         if (objReq.getDcnbBienBanTinhKhoDtl() != null) {
         }
         DcnbBienBanTinhKhoHdr created = dcnbBienBanTinhKhoHdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) +"/BBTK-"+ currentUser.getUser().getDvqlTenVietTat();
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BBTK-" + currentUser.getUser().getDvqlTenVietTat();
         created.setSoBbTinhKho(so);
         dcnbBienBanTinhKhoHdrRepository.save(created);
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbBienBanTinhKhoHdr.TABLE_NAME + "_BB_TINH_KHO_DA_KY"));
@@ -256,9 +256,9 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
         Page<DcnbBienBanTinhKhoHdrDTO> page = dcnbBienBanTinhKhoHdrRepository.searchPage(objReq, pageable);
         List<DcnbBienBanTinhKhoHdrDTO> data = page.getContent();
 
-        String title = "Danh sách bảng kê cân hàng ";
-        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số công văn/đề xuất", "Ngày lập KH", "Ngày duyệt LĐ Chi cục", "Loại điều chuyển", "Đơn vị đề xuất", "Trạng thái"};
-        String fileName = "danh-sach-ke-hoach-dieu-chuyen-noi-bo-hang-dtqg.xlsx";
+        String title = "Danh sách biên bản tịnh kho";
+        String[] rowsName = new String[]{"STT", "Số QĐ ĐC của Cục", "Năm KH", "Thời hạn điều chuyển", "Điểm Kho", "Lô kho", "Số BB tịnh kho", "Ngày bắt đầu xuất", "Ngày kết thúc xuất", "Số phiếu XK", "Số bảng kê", "Ngày xuất kho", "Trạng thái"};
+        String fileName = "danh-sach-bien-ban-tinh-kho.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
@@ -269,11 +269,14 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
             objs[2] = dx.getNam();
             objs[3] = dx.getThoiHanDieuChuyen();
             objs[4] = dx.getTenDiemKho();
-            objs[5] = dx.getTenLoKho();
-            objs[6] = dx.getSoPhieuXuatKho();
-            objs[7] = dx.getSoBbTinhKho();
-            objs[8] = dx.getNgayXuatKho();
-            objs[9] = dx.getTrangThai();
+            objs[5] = dx.getTenLoKho(); //"Số BB tịnh kho", "Ngày bắt đầu xuất", "Ngày kết thúc xuất", "Số phiếu XK", "Số bảng kê", "Ngày xuất kho"
+            objs[6] = dx.getSoBbTinhKho();
+            objs[7] = dx.getNgayBatDauXuat();
+            objs[8] = dx.getNgayKetThucXuat();
+            objs[9] = dx.getSoPhieuXuatKho();
+            objs[10] = dx.getSoBangKeXuatDcLt();
+            objs[11] = dx.getNgayXuatKho();
+            objs[12] = dx.getTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

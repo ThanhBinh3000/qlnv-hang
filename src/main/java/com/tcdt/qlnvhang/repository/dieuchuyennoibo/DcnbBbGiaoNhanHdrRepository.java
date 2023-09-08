@@ -43,7 +43,8 @@ public interface DcnbBbGiaoNhanHdrRepository extends JpaRepository<DcnbBbGiaoNha
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
             "LEFT JOIN DcnbBbGiaoNhanHdr bbgn On bbgn.qdDcCucId = qdc.id " +
             "and ((khdcd.maLoKhoNhan is not null and  khdcd.maLoKhoNhan = bbgn.maLoKho and khdcd.maNganKhoNhan = bbgn.maNganKho ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = bbgn.maNganKho ))" +
-            "LEFT JOIN XhHoSoKyThuatHdr hskt On bbgn.idHoSoKyThuat = hskt.id " +
+            "LEFT JOIN XhHoSoKyThuatHdr hskt On 1 = 1  " +
+            "and ((khdcd.maLoKhoNhan is not null and  khdcd.maLoKhoNhan = SUBSTRING(hskt.maDiaDiem, 1, 17) and khdcd.maNganKhoNhan = SUBSTRING(hskt.maDiaDiem, 1, 15) ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = SUBSTRING(hskt.maDiaDiem, 1, 15) ))" +
             "LEFT JOIN DcnbBBKetThucNKHdr bbktnk On bbktnk.qDinhDccId = qdc.id and bbgn.idBbKtNhapKho =  bbktnk.id " +
             "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qdccId = qdc.id " +
             "and ((khdcd.maLoKhoNhan is not null and bblm.maLoKho = khdcd.maLoKhoNhan and bblm.maNganKho = khdcd.maNganKhoNhan ) or (khdcd.maLoKhoNhan is null and bblm.maNganKho = khdcd.maNganKhoNhan ))" +

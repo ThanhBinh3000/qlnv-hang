@@ -274,8 +274,13 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
         List<DcnbBangKeCanHangHdrDTO> data = page.getContent();
 
         String title = "Danh sách bảng kê cân hàng ";
-        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số công văn/đề xuất", "Ngày lập KH", "Ngày duyệt LĐ Chi cục", "Loại điều chuyển", "Đơn vị đề xuất", "Trạng thái"};
-        String fileName = "danh-sach-ke-hoach-dieu-chuyen-noi-bo-hang-dtqg.xlsx";
+        String[] rowsName = null;
+        if ("00".equals(objReq.getType())) { // kiểu xuất
+            rowsName = new String[]{"STT", "Số QĐ ĐC của Cục", "Năm KH", "Thời hạn điều chuyển", "Điểm kho", "Lô kho", "Số phiếu XK", "Số bảng kê xuất ĐC LT", "Ngày xuất kho", "Trạng thái"};
+        } else if ("01".equals(objReq.getType())) { // kiểu nhan
+            rowsName = new String[]{"STT", "Số QĐ ĐC của Cục", "Năm KH", "Thời hạn ĐC", "Điểm kho", "Lô kho", "Số bảng kê", "Số phiếu nhập kho", "Ngày nhập kho", "Trạng thái"};
+        }
+        String fileName = "danh-sach-bang-ke-can-hang.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {

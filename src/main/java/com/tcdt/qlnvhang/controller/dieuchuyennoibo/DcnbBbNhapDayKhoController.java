@@ -183,7 +183,7 @@ public class DcnbBbNhapDayKhoController {
     @ApiOperation(value = "Kết xuất danh ", response = List.class)
     @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportList(@Valid @RequestBody  DcnbBbNhapDayKhoHdrReq objReq, HttpServletResponse response) throws Exception {
+    public void exportList(@RequestBody  DcnbBbNhapDayKhoHdrReq objReq, HttpServletResponse response) throws Exception {
         try {
             service.export(objReq, response);
         } catch (Exception e) {

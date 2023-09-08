@@ -207,8 +207,8 @@ public class DcnbBcKqDcServiceImpl implements DcnbBbKqDcService {
         Page<DcnbBcKqDcHdr> page = this.search(currentUser, objReq);
         List<DcnbBcKqDcHdr> data = page.getContent();
 
-        String title = "Danh sách phương án xuất cứu trợ, viện trợ ";
-        String[] rowsName = new String[]{"STT", "Năm kH", "Số công văn/đề xuất", "Ngày duyệt LĐ Cục", "Loại điều chuyển", "Đơn vị đề xuất", "Trạng thái",};
+        String title = "Danh sách báo cáo kết quả điều chuyển";
+        String[] rowsName = new String[]{"STT", "Năm báo cáo", "Số báo cáo", "Tên báo cáo", "Ngày báo cáo", "Số BB ghi nhận thừa/thiếu", "Số QĐ xuất/nhập ĐC của Cục", "Ngày QĐ của Cục", "Trạng thái"};
         String fileName = "danh-sach-ke-hoach-dieu-chuyen-noi-bo-hang-dtqg.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
@@ -216,7 +216,14 @@ public class DcnbBcKqDcServiceImpl implements DcnbBbKqDcService {
             DcnbBcKqDcHdr dx = data.get(i);
             objs = new Object[rowsName.length];
             objs[0] = i;
-            objs[2] = dx.getNam();
+            objs[1] = dx.getNam();
+            objs[2] = dx.getSoBc();
+            objs[3] = dx.getTenBc();
+            objs[4] = dx.getNgayBc();
+            objs[5] = dx.getSoBbThuaThieu();
+            objs[6] = dx.getSoQdDcCuc();
+            objs[7] = dx.getNgayKyQd();
+            objs[8] = dx.getTenTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
