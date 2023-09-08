@@ -43,6 +43,9 @@ public class DcnbPhieuKnChatLuongHdr extends BaseEntity implements Serializable,
     @Column(name = "SO_QDINH_DC")
     private String soQdinhDc;
 
+    @Column(name = "NGAY_QDINH_DC")
+    private String ngayQdinhDc;
+
     @Column(name = "SO_PHIEU")
     private String soPhieu;
 
