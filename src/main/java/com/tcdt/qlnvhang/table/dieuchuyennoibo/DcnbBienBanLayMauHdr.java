@@ -193,7 +193,7 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     private Long bbHaoDoiId;
 
     @Column(name = "GHI_CHU")
-    private Long ghiChu;
+    private String ghiChu;
 
     @Transient
     private List<FileDinhKem> canCu = new ArrayList<>();
