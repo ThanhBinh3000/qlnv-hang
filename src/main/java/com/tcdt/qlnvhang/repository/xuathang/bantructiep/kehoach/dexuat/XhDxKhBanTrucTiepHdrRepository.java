@@ -62,6 +62,8 @@ public interface XhDxKhBanTrucTiepHdrRepository extends JpaRepository<XhDxKhBanT
 
     boolean existsBySoDxuat(String soDxuat);
 
+    boolean existsBySoDxuatAndIdNot(String soDxuat, Long id);
+
     List<XhDxKhBanTrucTiepHdr> findByIdIn(List<Long> idDxList);
 
     List<XhDxKhBanTrucTiepHdr> findAllByIdIn(List<Long> listId);
