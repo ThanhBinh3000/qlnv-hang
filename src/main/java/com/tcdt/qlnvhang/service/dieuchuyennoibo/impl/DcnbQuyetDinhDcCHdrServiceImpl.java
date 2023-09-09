@@ -121,6 +121,10 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         dcnbKeHoachDcHdr.setLoaiDc(Contains.DCNB);
                         dcnbKeHoachDcHdr.setMaDviPq(e.getDanhSachKeHoach().get(0).getMaChiCucNhan());
                         dcnbKeHoachDcHdr.setPhuongAnDieuChuyen(new ArrayList<>());
+                        List<DcnbKeHoachDcDtl> duToanKp = e.getDanhSachKeHoach().stream().filter(item -> item.getDuToanKphi() == null).collect(Collectors.toList());
+                        if(!duToanKp.isEmpty()){
+                            throw new Exception("Dự toán kinh phí không được để trống!");
+                        }
                         BigDecimal total = e.getDanhSachKeHoach().stream()
                                 .map(DcnbKeHoachDcDtl::getDuToanKphi)
                                 .map(kphi -> kphi != null ? kphi : BigDecimal.ZERO)
