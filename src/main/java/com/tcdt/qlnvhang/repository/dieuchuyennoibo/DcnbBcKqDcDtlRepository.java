@@ -40,7 +40,7 @@ public interface DcnbBcKqDcDtlRepository extends JpaRepository<DcnbBcKqDcDtl, Lo
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.trangThai = '29'" +
-            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))" +
+            "AND ((:#{#param.maDvi} IS NULL OR LOWER(qdc.maDvi) = :#{#param.maDvi}))" +
             "AND (:#{#param.soQdinhCuc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinhCuc}),'%')) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR khdcd.thoiGianDkDc >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR khdcd.thoiGianDkDc <= :#{#param.denNgay}) ) " +
@@ -61,7 +61,7 @@ public interface DcnbBcKqDcDtlRepository extends JpaRepository<DcnbBcKqDcDtl, Lo
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.trangThai = '29'" +
-            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))" +
+            "AND ((:#{#param.maDvi} IS NULL OR LOWER(qdc.maDvi) = :#{#param.maDvi}))" +
             "AND (:#{#param.soQdinhCuc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinhCuc}),'%')) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR khdcd.thoiGianDkDc >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR khdcd.thoiGianDkDc <= :#{#param.denNgay}) ) " +
