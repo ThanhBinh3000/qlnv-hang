@@ -121,11 +121,15 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         dcnbKeHoachDcHdr.setLoaiDc(Contains.DCNB);
                         dcnbKeHoachDcHdr.setMaDviPq(e.getDanhSachKeHoach().get(0).getMaChiCucNhan());
                         dcnbKeHoachDcHdr.setPhuongAnDieuChuyen(new ArrayList<>());
-                        e.getDanhSachKeHoach().forEach(e1 -> {
+                        for(DcnbKeHoachDcDtl e1 : e.getDanhSachKeHoach()){
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
                             e1.setDaXdinhDiemNhap(true);
                             e1.setDuToanKphi(e1.getDuToanKphi() == null ? new BigDecimal(0) : e1.getDuToanKphi());
-                        });
+                            if(e1.getDonViTinh() == null){
+                                throw new Exception("Đơn vị tính không được để trống!");
+                            }
+                        }
+
                         BigDecimal totalDuT = e.getDanhSachKeHoach().stream()
                                 .map(DcnbKeHoachDcDtl::getDuToanKphi)
                                 .map(kphi -> kphi != null ? kphi : BigDecimal.ZERO)
@@ -154,6 +158,9 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                             Optional<DcnbKeHoachDcDtl> dcnbKeHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(e1.getHdrId());
                             if (dcnbKeHoachDcDtl.isPresent()) {
                                 e1.setParentId(dcnbKeHoachDcDtl.get().getParentId());
+                            }
+                            if(e1.getDonViTinh() == null){
+                                throw new Exception("Đơn vị tính không được để trống!");
                             }
                             BigDecimal totalDuT = e.getDanhSachKeHoach().stream()
                                     .map(DcnbKeHoachDcDtl::getDuToanKphi)
@@ -268,11 +275,14 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                 .reduce(BigDecimal.ZERO, BigDecimal::add);
                         dcnbKeHoachDcHdr.setTongDuToanKp(totalDuT);
                         total = total.add(totalDuT);
-                        e.getDanhSachKeHoach().forEach(e1 -> {
+                        for(DcnbKeHoachDcDtl e1 : e.getDanhSachKeHoach()){
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
                             e1.setDaXdinhDiemNhap(true);
                             e1.setDuToanKphi(e1.getDuToanKphi() == null ? new BigDecimal(0) : e1.getDuToanKphi());
-                        });
+                            if(e1.getDonViTinh() == null){
+                                throw new Exception("Đơn vị tính không được để trống!");
+                            }
+                        }
                         dcnbKeHoachDcHdr.setDaXdinhDiemNhap(true);
                         dcnbKeHoachDcHdr.setDanhSachHangHoa(e.getDanhSachKeHoach());
                         dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
@@ -290,10 +300,13 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                 .reduce(BigDecimal.ZERO, BigDecimal::add);
                         dcnbKeHoachDcHdr.setTongDuToanKp(totalDuT);
                         total = total.add(totalDuT);
-                        e.getDanhSachKeHoach().forEach(e1 -> {
+                        for(DcnbKeHoachDcDtl e1 : e.getDanhSachKeHoach()){
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
                             e1.setDaXdinhDiemNhap(true);
-                        });
+                            if(e1.getDonViTinh() == null){
+                                throw new Exception("Đơn vị tính không được để trống!");
+                            }
+                        }
                         dcnbKeHoachDcHdr.setDaXdinhDiemNhap(true);
                         dcnbKeHoachDcHdr.setDanhSachHangHoa(e.getDanhSachKeHoach());
                         DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
@@ -316,6 +329,9 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                             if (dcnbKeHoachDcDtl.isPresent()) {
                                 e1.setParentId(dcnbKeHoachDcDtl.get().getParentId());
                             }
+                            if(e1.getDonViTinh() == null){
+                                throw new Exception("Đơn vị tính không được để trống!");
+                            }
                             e1.setDaXdinhDiemNhap(true);
                             BigDecimal totalDuT = e.getDanhSachKeHoach().stream()
                                     .map(DcnbKeHoachDcDtl::getDuToanKphi)
@@ -336,13 +352,16 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         if (!dcnbKeHoachDcHdr.isPresent()) {
                             throw new Exception("Không tìm thấy kế hoạch id = " + e.getDanhSachKeHoach().get(0).getHdrId());
                         }
-                        e.getDanhSachKeHoach().forEach(e1 -> {
+                        for(DcnbKeHoachDcDtl e1: e.getDanhSachKeHoach()){
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr.get());
                             Optional<DcnbKeHoachDcDtl> dcnbKeHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(e1.getHdrId());
                             if (dcnbKeHoachDcDtl.isPresent()) {
                                 e1.setParentId(dcnbKeHoachDcDtl.get().getParentId());
                             }
-                        });
+                            if(e1.getDonViTinh() == null){
+                                throw new Exception("Đơn vị tính không được để trống!");
+                            }
+                        }
                         dcnbKeHoachDcHdr.get().setDanhSachHangHoa(e.getDanhSachKeHoach());
                         DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr.get());
                         e.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdrNew);
