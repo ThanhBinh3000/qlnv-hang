@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhBaoCaoKdmRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhPhieuKtclRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhPhieuXuatNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhQdGiaonvXnRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -15,6 +16,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhBaoCaoKdm;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuKtclHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuXuatNhapKho;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhQdGiaonvXnHdr;
 import com.tcdt.qlnvhang.util.Contains;
@@ -47,6 +49,10 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
 
   @Autowired
   private XhXkVtBhPhieuXuatNhapKhoRepository xhXkVtBhPhieuXuatNhapKhoRepository;
+
+  @Autowired
+  private XhXkVtBhPhieuKtclRepository xhXkVtBhPhieuKtclRepository;
+
 
   @Autowired
   private UserInfoRepository userInfoRepository;
@@ -103,6 +109,14 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
       });
       xhXkVtBhQdGiaonvXnRepository.saveAll(listQdGiaoNvXh);
     }
+    List<XhXkVtBhPhieuKtclHdr> listPhieuKtcl = xhXkVtBhPhieuKtclRepository.findByIdIn(Arrays.asList(idsQdGiaoNvXh));
+    if (!listPhieuKtcl.isEmpty()) {
+      listPhieuKtcl.forEach(item -> {
+        item.setSoBaoCaoKdm(created.getSoBaoCao());
+        item.setIdBaoCaoKdm(created.getId());
+      });
+      xhXkVtBhQdGiaonvXnRepository.saveAll(listQdGiaoNvXh);
+    }
     return created;
   }
 
@@ -125,7 +139,7 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
     XhXkVtBhBaoCaoKdm created = xhXkVtBhBaoCaoKdmRepository.save(data);
     fileDinhKemService.delete(data.getId(), Collections.singleton(XhXkVtBhBaoCaoKdm.TABLE_NAME));
     //save file đính kèm
-    fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtBhBaoCaoKdm.TABLE_NAME);
+    fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtBhBaoCaoKdm.TABLE_NAME);
     //lưu lại số báo cáo vào qd giao nv xh
     Long[] idsQdGiaoNvXh = Arrays.stream(objReq.getIdCanCu().split(","))
         .map(String::trim)
@@ -234,11 +248,14 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
     }
     String status = statusReq.getTrangThai() + optional.get().getTrangThai();
     switch (status) {
-      case Contains.CHODUYET_LDC + Contains.DUTHAO:
-      case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
+      case Contains.CHODUYET_TP + Contains.DUTHAO:
+      case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+      case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+      case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
         optional.get().setNguoiGduyetId(currentUser.getUser().getId());
         optional.get().setNgayGduyet(LocalDate.now());
         break;
+      case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
       case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
