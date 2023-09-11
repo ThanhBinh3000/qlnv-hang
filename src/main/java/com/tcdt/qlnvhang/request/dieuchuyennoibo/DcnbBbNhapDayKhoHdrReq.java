@@ -20,10 +20,8 @@ import java.util.List;
 @Data
 public class DcnbBbNhapDayKhoHdrReq extends BaseRequest {
     private Long id;
-    @NotNull
     private String loaiQdinh;
     private Boolean thayDoiThuKho;
-    @NotNull
     private String typeQd;
     @NotNull
     private String loaiDc;

@@ -20,11 +20,9 @@ import java.util.List;
 public class DcnbBbGiaoNhanHdrReq extends BaseRequest {
 
     private Long id;
-    @NotNull
     private String loaiQdinh;
     @NotNull
     private String loaiDc;
-    @NotNull
     private String typeQd;
     @NotNull
     private Integer nam;

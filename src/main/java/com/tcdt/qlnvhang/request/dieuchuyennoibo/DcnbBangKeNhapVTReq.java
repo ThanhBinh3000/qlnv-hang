@@ -18,9 +18,7 @@ public class DcnbBangKeNhapVTReq extends BaseRequest {
     private Long id;
     @NotNull
     private String loaiDc;
-    @NotNull
     private String loaiQdinh;
-    @NotNull
     private String typeQd;
     @NotNull
     private String loaiVthh;
