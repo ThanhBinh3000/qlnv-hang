@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuKnChatLuongDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -118,4 +119,5 @@ public class DcnbPhieuKnChatLuongHdrReq {
     private List<FileDinhKemReq> bienBanLayMauDinhKem = new ArrayList<>();
 
     private List<DcnbPhieuKnChatLuongDtl> dcnbPhieuKnChatLuongDtl = new ArrayList<>();
+    private ReportTemplateRequest reportTemplateRequest;
 }

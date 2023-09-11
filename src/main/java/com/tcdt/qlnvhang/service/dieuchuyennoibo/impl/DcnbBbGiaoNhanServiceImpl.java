@@ -1,19 +1,24 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.common.DocxToPdfConverter;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbGiaoNhanDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbGiaoNhanHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbGiaoNhanHdrReq;
+import com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang.DcnbBbGiaoNhanHdrPreview;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbGiaoNhanHdrDTO;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBbGiaoNhanService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
+import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbGiaoNhanHdr;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -25,11 +30,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
-public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
+public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBbGiaoNhanService {
 
     @Autowired
     private DcnbBbGiaoNhanHdrRepository hdrRepository;
@@ -42,6 +49,9 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
 
     @Autowired
     private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
+
+    @Autowired
+    public DocxToPdfConverter docxToPdfConverter;
 
     @Override
     public Page<DcnbBbGiaoNhanHdr> searchPage(DcnbBbGiaoNhanHdrReq req) throws Exception {
@@ -232,5 +242,40 @@ public class DcnbBbGiaoNhanServiceImpl implements DcnbBbGiaoNhanService {
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
+    }
+    @Override
+    public ReportTemplateResponse preview(DcnbBbGiaoNhanHdrReq objReq) throws Exception {
+        Optional<DcnbBbGiaoNhanHdr> dcnbBbGiaoNhanHdr = hdrRepository.findById(objReq.getId());
+        if (!dcnbBbGiaoNhanHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        DcnbBbGiaoNhanHdrPreview dcnbBbGiaoNhanHdrPreview = setDataToPreview(dcnbBbGiaoNhanHdr);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBbGiaoNhanHdrPreview);
+    }
+
+    private DcnbBbGiaoNhanHdrPreview setDataToPreview(Optional<DcnbBbGiaoNhanHdr> dcnbBBKetThucNKHdr) {
+        return DcnbBbGiaoNhanHdrPreview.builder()
+                .chungLoaiHangHoa("Chủng loại hàng DTQG")
+                .theoHopDongSo("Theo hợp đồng số")
+                .ngayKyHopDong("Ngày ký hợp đồng")
+                .donViCungCapHang("Đơn vị cung cấp hàng")
+                .quyChuanTieuChuan("Quy chuẩn, tiêu chuẩn")
+                .ngayLap(dcnbBBKetThucNKHdr.get().getNgayLap().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .chiCuc("Chi cục")
+                .tenDvi(dcnbBBKetThucNKHdr.get().getTenDvi())
+                .tenLanhDao(dcnbBBKetThucNKHdr.get().getTenLanhDao())
+                .tenCanBo(dcnbBBKetThucNKHdr.get().getTenCanBo())
+                .tenLanhDaoChiCuc("Lãnh đạo Chi cục")
+                .hoVatenDvCungCapHang("Họ và tên Đơn vị cung cấp hàng")
+                .tongSoLuongThucNhap("Tổng số lượng thực nhập")
+                .dviTinh(dcnbBBKetThucNKHdr.get().getDviTinh())
+                .tenDiemKho(dcnbBBKetThucNKHdr.get().getTenDiemKho())
+                .daiDienDonViCungCapHang("ĐẠI DIỆN ĐƠN VỊ CUNG CẤP HÀNG")
+                .truongBpKtbq("Trưởng BP KTBQ")
+                .daiDienCtyThienHoaAn("CÔNG TY TNHH THIÊN HÒA AN")
+                .daiDienCucDtnnVinhPhu("CỤC DTNN KHU VỰC VĨNH PHÚ")
+                .daiDienChiCucDtnnVietTri("CHI CỤC DTNN VIỆT TRÌ")
+                .build();
     }
 }

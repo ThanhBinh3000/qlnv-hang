@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeCanHangDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -121,4 +122,6 @@ public class DcnbBangKeCanHangHdrReq {
     private String tongTrongLuongTruBiText;
 
     private List<DcnbBangKeCanHangDtl> dcnbBangKeCanHangDtl = new ArrayList<>();
+
+    private ReportTemplateRequest reportTemplateRequest;
 }

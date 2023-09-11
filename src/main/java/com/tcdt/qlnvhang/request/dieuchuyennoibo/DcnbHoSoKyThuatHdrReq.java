@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbHoSoBienBanDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbHoSoTaiLieuDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -40,4 +41,5 @@ public class DcnbHoSoKyThuatHdrReq {
     private String tenTrangThai;
     private List<DcnbHoSoTaiLieuDtl> danhSachHoSoTaiLieu = new ArrayList<>();
     private List<DcnbHoSoBienBanDtl> danhSachHoSoBienBan = new ArrayList<>();
+    private ReportTemplateRequest reportTemplateRequest;
 }

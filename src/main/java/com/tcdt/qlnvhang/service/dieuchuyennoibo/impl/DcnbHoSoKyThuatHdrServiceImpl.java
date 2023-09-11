@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbHoSoBienBanDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbHoSoKyThuatHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbHoSoTaiLieuDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.THKeHoachDieuChuyenNoiBoCucDtlRepository;
@@ -10,11 +11,13 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbHoSoKyThuatHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbHoSoKyThuat;
+import com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang.DcnbHoSoKyThuatHdrPreview;
 import com.tcdt.qlnvhang.service.feign.LuuKhoClient;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbHoSoKyThuatHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbHoSoTaiLieuDtl;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -32,7 +35,9 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -51,6 +56,8 @@ public class DcnbHoSoKyThuatHdrServiceImpl extends BaseServiceImpl {
     private FileDinhKemService fileDinhKemService;
     @Autowired
     private LuuKhoClient luuKhoClient;
+    @Autowired
+    private DcnbHoSoBienBanDtlRepository dcnbHoSoBienBanDtlRepository;
 
     public Page<DcnbHoSoKyThuatHdr> searchPage(CustomUserDetails currentUser, SearchDcnbHoSoKyThuat req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -246,5 +253,36 @@ public class DcnbHoSoKyThuatHdrServiceImpl extends BaseServiceImpl {
             throw new Exception("Không tìm thấy dữ liệu");
         }
         return optional;
+    }
+
+    public ReportTemplateResponse preview(DcnbHoSoKyThuatHdrReq objReq) throws Exception {
+        Optional<DcnbHoSoKyThuatHdr> dcnbHoSoKyThuatHdr = dcnbHoSoKyThuatHdrRepository.findById(objReq.getId());
+        if (!dcnbHoSoKyThuatHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
+        List<DcnbHoSoTaiLieuDtl> dcnbHoSoTaiLieuDtlList = dcnbHoSoKyThuatDtlRepository.findByHoSoKyThuatHdrId(dcnbHoSoKyThuatHdr.get().getId());
+        List<DcnbHoSoBienBanDtl> dcnbHoSoBienBanDtlList = dcnbHoSoBienBanDtlRepository.findByHoSoKyThuatHdrId(dcnbHoSoKyThuatHdr.get().getId());
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        DcnbHoSoKyThuatHdrPreview dcnbBangKeCanHangPreview = setDataToPreview(dcnbHoSoKyThuatHdr, dcnbHoSoTaiLieuDtlList, dcnbHoSoBienBanDtlList);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBangKeCanHangPreview);
+    }
+
+    private DcnbHoSoKyThuatHdrPreview setDataToPreview(Optional<DcnbHoSoKyThuatHdr> dcnbHoSoKyThuatHdr,
+                                                       List<DcnbHoSoTaiLieuDtl> dcnbHoSoTaiLieuDtlList,
+                                                       List<DcnbHoSoBienBanDtl> dcnbHoSoBienBanDtlList) {
+        return DcnbHoSoKyThuatHdrPreview.builder()
+                .soHoSoKyThuat(dcnbHoSoKyThuatHdr.get().getSoHoSoKyThuat())
+                .chungLoaiHangHoa("Chủng loại hàng DTQG")
+                .namKhoach("Năm kế hoạch")
+                .tenNganKho(dcnbHoSoKyThuatHdr.get().getTenNganKho())
+                .tenLoKho(dcnbHoSoKyThuatHdr.get().getTenLoKho())
+                .tenDiemKho(dcnbHoSoKyThuatHdr.get().getTenDiemKho())
+                .tenDvi(dcnbHoSoKyThuatHdr.get().getTenDvi())
+                .ngayTao(dcnbHoSoKyThuatHdr.get().getNgayTao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .tenCbthskt(dcnbHoSoKyThuatHdr.get().getTenCbthsktKx())
+                .ngayDuyetHskt(dcnbHoSoKyThuatHdr.get().getNgayDuyetHskt().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .danhSachHoSoTaiLieu(dcnbHoSoTaiLieuDtlList)
+                .danhSachHoSoBienBan(dcnbHoSoBienBanDtlList)
+                .build();
     }
 }

@@ -1,19 +1,24 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.common.DocxToPdfConverter;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBNTBQDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBNTBQHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBBNTBQHdrReq;
+import com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang.DcnbBBNTBQHdrPreview;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBNTBQHdrDTO;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBBNTBQHdrService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
+import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +28,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
-public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
+public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBNTBQHdrService {
 
     @Autowired
     private DcnbBBNTBQHdrRepository hdrRepository;
@@ -44,6 +51,8 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
     private DcnbDataLinkDtlRepository dcnbDataLinkDtlRepository;
     @Autowired
     private DcnbQuyetDinhDcCHdrServiceImpl dcnbQuyetDinhDcCHdrServiceImpl;
+    @Autowired
+    public DocxToPdfConverter docxToPdfConverter;
 
 
     @Override
@@ -236,5 +245,45 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
     @Override
     public void export(DcnbBBNTBQHdrReq req, HttpServletResponse response) throws Exception {
 
+    }
+    @Override
+    public ReportTemplateResponse preview(DcnbBBNTBQHdrReq objReq) throws Exception {
+        Optional<DcnbBBNTBQHdr> dcnbBBNTBQHdr = hdrRepository.findById(objReq.getId());
+        if (!dcnbBBNTBQHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        DcnbBBNTBQHdrPreview dcnbBBNTBQHdrPreview = setDataToPreview(dcnbBBNTBQHdr);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBBNTBQHdrPreview);
+    }
+
+    private DcnbBBNTBQHdrPreview setDataToPreview(Optional<DcnbBBNTBQHdr> dcnbBBNTBQHdr) {
+        return DcnbBBNTBQHdrPreview.builder()
+                .maDvi(dcnbBBNTBQHdr.get().getMaDvi())
+                .tenDvi(dcnbBBNTBQHdr.get().getTenDvi())
+                .maQhns(dcnbBBNTBQHdr.get().getMaQhns())
+                .soBban(dcnbBBNTBQHdr.get().getSoBban())
+                .ngayLap(dcnbBBNTBQHdr.get().getNgayLap().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .tenChiCuc("Tên chi cục")
+                .ldChiCuc(dcnbBBNTBQHdr.get().getLdChiCuc())
+                .keToan(dcnbBBNTBQHdr.get().getKeToan())
+                .ktvBaoQuan("KTV bảo quản")
+                .thuKho(dcnbBBNTBQHdr.get().getThuKho())
+                .chungLoaiHangHoa("Chủng loại hàng DTQG")
+                .tenNganKho(dcnbBBNTBQHdr.get().getTenNganKho())
+                .tenLoKho(dcnbBBNTBQHdr.get().getTenLoKho())
+                .loaiHinhKho(dcnbBBNTBQHdr.get().getLoaiHinhKho())
+                .tichLuongKhaDung(dcnbBBNTBQHdr.get().getTichLuongKhaDung())
+                .slThucNhapDc(dcnbBBNTBQHdr.get().getSlThucNhapDc())
+                .phuongThucBaoQuan(dcnbBBNTBQHdr.get().getPhuongThucBaoQuan())
+                .hinhThucKeLot("Hình thức kê lót")
+                .hinhThucBaoQuan(dcnbBBNTBQHdr.get().getHinhThucBaoQuan())
+                .dinhMucDuocGiao(dcnbBBNTBQHdr.get().getDinhMucDuocGiao())
+                .dinhMucTT(dcnbBBNTBQHdr.get().getDinhMucTT())
+                .tongKinhPhiDaTh(dcnbBBNTBQHdr.get().getTongKinhPhiDaTh())
+                .tongKinhPhiDaThBc(dcnbBBNTBQHdr.get().getTongKinhPhiDaThBc())
+                .nhanXet(dcnbBBNTBQHdr.get().getNhanXet())
+                .dcnbBBNTBQDtl(dcnbBBNTBQHdr.get().getDcnbBBNTBQDtl())
+                .build();
     }
 }

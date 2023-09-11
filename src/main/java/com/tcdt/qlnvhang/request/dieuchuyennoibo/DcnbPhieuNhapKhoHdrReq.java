@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -79,4 +80,5 @@ public class DcnbPhieuNhapKhoHdrReq extends BaseRequest {
     private List<DcnbPhieuNhapKhoDtl> children = new ArrayList<>();
     private Boolean isVatTu = false;
     private List<String> dsLoaiHang = new ArrayList<>();
+    private ReportTemplateRequest reportTemplateRequest;
 }

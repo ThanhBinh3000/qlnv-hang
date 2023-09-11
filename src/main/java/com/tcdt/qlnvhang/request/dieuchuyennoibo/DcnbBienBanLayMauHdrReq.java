@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanLayMauDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -117,4 +118,5 @@ public class DcnbBienBanLayMauHdrReq implements Serializable {
     private List<FileDinhKemReq> bienBanLayMauDinhKem = new ArrayList<>();
     private List<FileDinhKemReq> fileDinhKemChupMauNiemPhong = new ArrayList<>();
     private List<DcnbBienBanLayMauDtl> dcnbBienBanLayMauDtl = new ArrayList<>();
+    private ReportTemplateRequest reportTemplateRequest;
 }

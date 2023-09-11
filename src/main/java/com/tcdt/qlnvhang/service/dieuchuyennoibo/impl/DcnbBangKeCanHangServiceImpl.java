@@ -2,17 +2,25 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.repository.khotang.KtNganKhoRepository;
+import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBangKeCanHangHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchBangKeCanHang;
+import com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang.DcnbBangKeCanHangPreview;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeCanHangDtlDto;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeCanHangHdrDTO;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeCanHangDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeCanHangHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuXuatKhoHdr;
+import com.tcdt.qlnvhang.table.khotang.KtNganKho;
+import com.tcdt.qlnvhang.table.khotang.KtNganLo;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -28,7 +36,9 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -49,6 +59,12 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
 
     @Autowired
     private DcnbPhieuNhapKhoHdrRepository dcnbPhieuNhapKhoHdrRepository;
+
+    @Autowired
+    private KtNganKhoRepository ktNganKhoRepository;
+
+    @Autowired
+    private KtNganLoRepository ktNganLoRepository;
 
     public Page<DcnbBangKeCanHangHdrDTO> searchPage(CustomUserDetails currentUser, SearchBangKeCanHang req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -331,4 +347,77 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
         }
         return searchDto;
     }
+    public ReportTemplateResponse preview(DcnbBangKeCanHangHdrReq objReq) throws Exception {
+        Optional<DcnbBangKeCanHangHdr> dcnbBangKeCanHangHdr = dcnbBangKeCanHangHdrRepository.findById(objReq.getId());
+        if (!dcnbBangKeCanHangHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        DcnbBangKeCanHangPreview dcnbBangKeCanHangPreview = setDataToPreview(dcnbBangKeCanHangHdr);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBangKeCanHangPreview);
+    }
+
+    private DcnbBangKeCanHangPreview setDataToPreview(Optional<DcnbBangKeCanHangHdr> dcnbBangKeCanHangHdr) {
+        return DcnbBangKeCanHangPreview.builder()
+                .maDvi(dcnbBangKeCanHangHdr.get().getMaDvi())
+                .maQhns(dcnbBangKeCanHangHdr.get().getMaQhns())
+                .soBangKe(dcnbBangKeCanHangHdr.get().getSoBangKe())
+                .tenThuKho(dcnbBangKeCanHangHdr.get().getTenThuKho())
+                .lhKho(getDataKho(dcnbBangKeCanHangHdr.get().getMaDvi())) // Loai hình kho
+                .tenNganKho(dcnbBangKeCanHangHdr.get().getTenNganKho())
+                .tenLoKho(dcnbBangKeCanHangHdr.get().getTenLoKho())
+                .tenDiemKho(dcnbBangKeCanHangHdr.get().getTenDiemKho())
+                .tenDvi(dcnbBangKeCanHangHdr.get().getTenDvi())
+                .chungLoaiHangHoa("Chủng loại hàng DTQG")
+                .tenDonViTinh(dcnbBangKeCanHangHdr.get().getTenDonViTinh())
+                .tenNguoiGiaoHang(dcnbBangKeCanHangHdr.get().getTenNguoiGiaoHang())
+                .soHd("Số hợp đồng")
+                .ngayHluc("Ngày ký hợp đồng")
+                .thoiGianGiaoNhan(dcnbBangKeCanHangHdr.get().getThoiGianGiaoNhan().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .nguoiGiamSat("Người giám sát")
+                .tongTrongLuongCabaoBi(dcnbBangKeCanHangHdr.get().getTongTrongLuongCabaoBi())
+                .tongTrongLuongBaoBi(dcnbBangKeCanHangHdr.get().getTongTrongLuongBaoBi())
+                .tongTrongLuongTruBi(dcnbBangKeCanHangHdr.get().getTongTrongLuongTruBi())
+                .tongTrongLuongTruBiText(dcnbBangKeCanHangHdr.get().getTongTrongLuongTruBiText())
+                .ngayNhap(dcnbBangKeCanHangHdr.get().getNgayNhap().getDayOfMonth())
+                .thangNhap(dcnbBangKeCanHangHdr.get().getNgayNhap().getMonth().getValue())
+                .namNhap(dcnbBangKeCanHangHdr.get().getNgayNhap().getYear())
+                .dcnbBangKeCanHangDtl(dcnbBangKeCanHangDtlToDto(dcnbBangKeCanHangHdr.get().getDcnbBangKeCanHangDtl()))
+                .build();
+    }
+
+    private List<DcnbBangKeCanHangDtlDto> dcnbBangKeCanHangDtlToDto(List<DcnbBangKeCanHangDtl> dcnbBangKeCanHangDtl) {
+        List<DcnbBangKeCanHangDtlDto> dcnbBangKeCanHangDtlDtoList = new ArrayList<>();
+        int stt = 1;
+        for (DcnbBangKeCanHangDtl res : dcnbBangKeCanHangDtl) {
+            DcnbBangKeCanHangDtlDto dcnbBangKeCanHangDtlDto = new DcnbBangKeCanHangDtlDto();
+            dcnbBangKeCanHangDtlDto.setStt(stt++);
+            dcnbBangKeCanHangDtlDto.setMaCan(res.getMaCan());
+            dcnbBangKeCanHangDtlDto.setSoBaoBi(res.getMaCan());
+            dcnbBangKeCanHangDtlDto.setTrongLuongCaBaoBi(res.getTrongLuongCaBaoBi());
+            dcnbBangKeCanHangDtlDtoList.add(dcnbBangKeCanHangDtlDto);
+        }
+        return dcnbBangKeCanHangDtlDtoList;
+    }
+
+    public String getDataKho(String maDvi){
+        try {
+            if (!StringUtils.isEmpty(maDvi)) {
+                Map<String, String> listLoaiKho = getListDanhMucChung("LOAI_KHO");
+                if (maDvi.length() == 14) { //ma kho
+                    KtNganKho ktNganKho = ktNganKhoRepository.findByMaNgankho(maDvi);
+                    ktNganKho.setLhKho(listLoaiKho.get(ktNganKho.getLoaikhoId()));
+                    return ktNganKho.getLhKho();
+                } else {
+                    KtNganLo nganLo = ktNganLoRepository.findFirstByMaNganlo(maDvi);
+                    nganLo.setLhKho(listLoaiKho.get(nganLo.getLoaikhoId()));
+                    return nganLo.getLhKho();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

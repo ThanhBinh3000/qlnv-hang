@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeCanHangDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -79,4 +80,5 @@ public class DcnbBBNTBQHdrReq extends BaseRequest {
     private LocalDate denNgayLap;
     private LocalDate tuNgayKtnt;
     private LocalDate denNgayKtnt;
+    private ReportTemplateRequest reportTemplateRequest;
 }

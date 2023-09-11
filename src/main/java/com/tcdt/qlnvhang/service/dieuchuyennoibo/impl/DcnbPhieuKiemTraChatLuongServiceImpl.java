@@ -9,12 +9,15 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang.DcnbPhieuKtChatLuongHdrPreview;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKtChatLuongHdrDTO;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKtChatLuongHdrLsDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -29,8 +32,10 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -268,5 +273,50 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         }
         List<DcnbPhieuKtChatLuongHdrLsDTO> search = dcnbPhieuKtChatLuongHdrRepository.searchList(req);
         return search;
+    }
+
+    public ReportTemplateResponse preview(DcnbPhieuKtChatLuongHdrReq objReq) throws Exception {
+        Optional<DcnbPhieuKtChatLuongHdr> dcnbPhieuKtChatLuongHdr = dcnbPhieuKtChatLuongHdrRepository.findById(objReq.getId());
+        if (!dcnbPhieuKtChatLuongHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        DcnbPhieuKtChatLuongHdrPreview dcnbPhieuKtChatLuongHdrPreview = setDataToPreview(dcnbPhieuKtChatLuongHdr);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbPhieuKtChatLuongHdrPreview);
+    }
+
+    private DcnbPhieuKtChatLuongHdrPreview setDataToPreview(Optional<DcnbPhieuKtChatLuongHdr> dcnbPhieuKtChatLuongHdr) {
+        return DcnbPhieuKtChatLuongHdrPreview.builder()
+                .tenDvi("Tên đơn vị")
+                .maDvi(dcnbPhieuKtChatLuongHdr.get().getMaDvi())
+                .maQhns(dcnbPhieuKtChatLuongHdr.get().getMaQhns())
+                .loaiHangHoa("Loại hàng DTQG")
+                .soPhieu(dcnbPhieuKtChatLuongHdr.get().getSoPhieu())
+                .nguoiGiaoHang(dcnbPhieuKtChatLuongHdr.get().getNguoiGiaoHang())
+                .dVGiaoHang(dcnbPhieuKtChatLuongHdr.get().getDVGiaoHang())
+                .diaChiDonViGiaoHang(dcnbPhieuKtChatLuongHdr.get().getDiaChiDonViGiaoHang())
+                .theoHopDongSo("Theo hợp đồng số")
+                .ngayKyHopDong("Ngày ký hợp đồng")
+                .chungLoaiHangHoa("Chủng loại hàng DTQG")
+                .soChungThuGiamDinh(dcnbPhieuKtChatLuongHdr.get().getSoChungThuGiamDinh())
+                .ngayGiamDinh(dcnbPhieuKtChatLuongHdr.get().getNgayGiamDinh().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .toChucGiamDinh(dcnbPhieuKtChatLuongHdr.get().getToChucGiamDinh())
+                .slNhapTheoKb(dcnbPhieuKtChatLuongHdr.get().getSlNhapTheoKb())
+                .slNhapTheoKt(dcnbPhieuKtChatLuongHdr.get().getSlNhapTheoKt())
+                .ngayLapPhieu(dcnbPhieuKtChatLuongHdr.get().getNgayLapPhieu().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .tenNganKho(dcnbPhieuKtChatLuongHdr.get().getTenNganKho())
+                .tenLoKho(dcnbPhieuKtChatLuongHdr.get().getTenLoKho())
+                .tenDiemKho(dcnbPhieuKtChatLuongHdr.get().getTenDiemKho())
+                .bienSoXe(dcnbPhieuKtChatLuongHdr.get().getBienSoXe())
+                .danhGiaCamQuan(dcnbPhieuKtChatLuongHdr.get().getDanhGiaCamQuan())
+                .nhanXetKetLuan(dcnbPhieuKtChatLuongHdr.get().getNhanXetKetLuan())
+                .ngayNhap(dcnbPhieuKtChatLuongHdr.get().getNgayLapPhieu().getDayOfMonth())
+                .thangNhap(dcnbPhieuKtChatLuongHdr.get().getNgayLapPhieu().getMonth().getValue())
+                .namNhap(dcnbPhieuKtChatLuongHdr.get().getNgayLapPhieu().getYear())
+                .ktvBaoQuan("KTV bảo quản")
+                .tenThuKho(dcnbPhieuKtChatLuongHdr.get().getTenThuKho())
+                .tenLanhDaoChiCuc("Lãnh đạo Chi cục")
+                .dcnbPhieuKtChatLuongDtl(dcnbPhieuKtChatLuongHdr.get().getDcnbPhieuKtChatLuongDtl())
+                .build();
     }
 }
