@@ -76,8 +76,6 @@ public class DcnbBcKqDcDtl extends BaseEntity implements Serializable, Cloneable
 
     @Column(name = "DON_VI_TINH")
     private String donViTinh;
-    @Column(name = "TEN_DON_VI_TINH")
-    private String tenDonViTinh;
     @Column(name = "SL_TON")
     private BigDecimal slTon;
     @Column(name = "SL_DIEU_CHUYEN_QD")
@@ -108,7 +106,7 @@ public class DcnbBcKqDcDtl extends BaseEntity implements Serializable, Cloneable
 
     public DcnbBcKqDcDtl(String loaiVthh, String cloaiVthh, String tenLoaiVthh, String tenCloaiVthh, String maDiemKho, String tenDiemKho, String maNhaKho, String tenNhaKho, String maNganKho, String tenNganKho, String maLoKho, String tenLoKho,
                          String maDviNhan, String tenDviNhan, String maDiemKhoNhan, String tenDiemKhoNhan, String maNhaKhoNhan, String tenNhaKhoNhan, String maNganKhoNhan, String tenNganKhoNhan, String maLoKhoNhan, String tenLoKhoNhan,
-                         String donViTinh, String tenDonViTinh, BigDecimal slTon, BigDecimal slDieuChuyenQd, BigDecimal slXuatTt, BigDecimal slNhapTt, BigDecimal kinhPhiTheoQd, BigDecimal kinhPhiXuatTt, BigDecimal kinhPhiNhapTt, Boolean ketQua, Boolean tinhTrang, String type) {
+                         String donViTinh, BigDecimal slTon, BigDecimal slDieuChuyenQd, BigDecimal slXuatTt, BigDecimal slNhapTt, BigDecimal kinhPhiTheoQd, BigDecimal kinhPhiXuatTt, BigDecimal kinhPhiNhapTt, Boolean ketQua, Boolean tinhTrang, String type) {
         this.loaiVthh = loaiVthh;
         this.cloaiVthh = cloaiVthh;
         this.tenLoaiVthh = tenLoaiVthh;
@@ -132,7 +130,6 @@ public class DcnbBcKqDcDtl extends BaseEntity implements Serializable, Cloneable
         this.maLoKhoNhan = maLoKhoNhan;
         this.tenLoKhoNhan = tenLoKhoNhan;
         this.donViTinh = donViTinh;
-        this.tenDonViTinh = tenDonViTinh;
         this.slTon = slTon;
         this.slDieuChuyenQd = slDieuChuyenQd;
         this.slXuatTt = slXuatTt;

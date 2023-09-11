@@ -68,9 +68,6 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     @Column(name = "DON_VI_TINH")
     private String donViTinh;
 
-    @Column(name = "TEN_DON_VI_TINH")
-    private String tenDonViTinh;
-
     @Column(name = "SO_BB_LAY_MAU")
     private String soBbLayMau;
 
