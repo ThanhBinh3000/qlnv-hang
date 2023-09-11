@@ -18,11 +18,12 @@ import java.util.Optional;
 public interface HhQdGiaoNvNhapKhacHdrRepository extends JpaRepository<HhQdGiaoNvuNhapHangKhacHdr, Long> {
     List<HhQdGiaoNvuNhapHangKhacHdr> findAllByIdIn (List<Long> ids);
     @Query(
-            value = "SELECT qdnk " +
+            value = "SELECT DISTINCT qdnk " +
                     "FROM HhQdGiaoNvuNhapHangKhacHdr qdnk " +
+                    " LEFT JOIN HhQdPdNhapKhacDtl dtl ON dtl.idHdr = qdnk.idQdPdNk " +
                     " WHERE (:#{#req.nam} IS NULL OR qdnk.nam = :#{#req.nam}) " +
                     "  AND (:#{#req.soQd} IS NULL OR LOWER(qdnk.soQd) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.soQd}),'%'))) " +
-                    "  AND (:#{#req.maDvi} IS NULL OR LOWER(qdnk.maDvi) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.maDvi}),'%')))" +
+                    "  AND (:#{#req.maDvi} IS NULL OR LOWER(dtl.maChiCuc) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.maDvi}),'%')))" +
                     "  AND (:#{#req.trichYeu} IS NULL OR LOWER(qdnk.trichYeu) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.trichYeu}),'%')))" +
                     "  AND (:#{#req.loaiVthh} IS NULL OR LOWER(qdnk.loaiVthh) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.loaiVthh}),'%')))" +
                     "  AND (:#{#req.tuNgayQdStr} IS NULL OR qdnk.ngayQd >= TO_DATE(:#{#req.tuNgayQdStr}, 'YYYY-MM-DD HH24:MI:SS'))" +
@@ -82,7 +83,7 @@ public interface HhQdGiaoNvNhapKhacHdrRepository extends JpaRepository<HhQdGiaoN
     )
     List<HhQdGiaoNvuNhapHangKhacHdr> dsQdNvuDuocLapBbNtBqLd(HhBbNghiemThuNhapKhacSearch req);
     @Query(
-            value = " SELECT qdnk " +
+            value = " SELECT DISTINCT qdnk " +
                     " FROM HhQdGiaoNvuNhapHangKhacHdr qdnk " +
                     " LEFT JOIN HhQdPdNhapKhacDtl pdtdl ON pdtdl.idDxHdr = qdnk.idQdPdNk " +
                     " LEFT JOIN HhNkPhieuKtcl ktcl ON qdnk.id = ktcl.idQdGiaoNvNh" +
