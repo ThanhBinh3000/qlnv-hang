@@ -5,7 +5,6 @@ import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanT
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttHdr;
-import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepDdiemRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepDtlRepository;
@@ -165,7 +164,7 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
                     Map<String, Object> objDonVi = mapDmucDvi.get(dataDtl.getMaDvi());
                     dataDtl.setTenDvi(objDonVi.get("tenDvi").toString());
                 }
-                dataDtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dataDtl.getTrangThai()));
+                dataDtl.setTenTrangThai(dataDtl.getTrangThai());
             }
             data.setMapVthh(mapVthh);
             data.setTrangThai(data.getTrangThai());

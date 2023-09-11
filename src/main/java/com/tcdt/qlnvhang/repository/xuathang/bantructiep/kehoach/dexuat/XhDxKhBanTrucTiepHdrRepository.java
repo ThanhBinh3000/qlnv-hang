@@ -36,17 +36,24 @@ public interface XhDxKhBanTrucTiepHdrRepository extends JpaRepository<XhDxKhBanT
             "ORDER BY DX.ngaySua DESC, DX.ngayTao DESC, DX.id DESC")
     Page<XhDxKhBanTrucTiepHdr> searchPage(@Param("param") XhDxKhBanTrucTiepHdrReq param, Pageable pageable);
 
-    @Query(value = " SELECT NVL(SUM(DVI.SO_LUONG_CHI_CUC),0) FROM XH_QD_PD_KH_BTT_HDR HDR " +
-            " INNER JOIN XH_QD_PD_KH_BTT_DTL DTL on HDR.ID = DTL.ID_HDR " +
-            " LEFT JOIN XH_QD_PD_KH_BTT_DVI DVI ON DTL.ID = DVI.ID_DTL " +
-            "WHERE HDR.NAM_KH = :namKh AND HDR.LOAI_VTHH = :loaiVthh AND DVI.MA_DVI = :maDvi AND HDR.LASTEST = :lastest",
+    @Query(value = "SELECT COALESCE(SUM(DVI.SO_LUONG_CHI_CUC), 0) " +
+                    "FROM XH_QD_PD_KH_BTT_HDR HDR " +
+                    "INNER JOIN XH_QD_PD_KH_BTT_DTL DTL ON HDR.ID = DTL.ID_HDR " +
+                    "LEFT JOIN XH_QD_PD_KH_BTT_DVI DVI ON DTL.ID = DVI.ID_DTL " +
+                    "WHERE HDR.NAM_KH = :namKh " +
+                    "  AND HDR.LOAI_VTHH = :loaiVthh " +
+                    "  AND DVI.MA_DVI = :maDvi " +
+                    "  AND HDR.LASTEST = :lastest",
             nativeQuery = true)
-    BigDecimal countSLDalenKh(Integer namKh, String loaiVthh, String maDvi, Integer lastest);
+    BigDecimal countSLDalenKh(@Param("namKh") Integer namKh,
+                              @Param("loaiVthh") String loaiVthh,
+                              @Param("maDvi") String maDvi,
+                              @Param("lastest") Integer lastest);
 
-    @Query("SELECT TH from XhDxKhBanTrucTiepHdr TH WHERE 1 = 1 " +
-            "AND (:#{#param.namKh} IS NULL OR TH.namKh = :#{#param.namKh}) " +
-            "AND (:#{#param.loaiVthh} IS NULL OR TH.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
-            "AND (:#{#param.cloaiVthh} IS NULL OR TH.cloaiVthh LIKE CONCAT(:#{#param.cloaiVthh},'%'))  " +
+    @Query("SELECT TH FROM XhDxKhBanTrucTiepHdr TH " +
+            "WHERE (:#{#param.namKh} IS NULL OR TH.namKh = :#{#param.namKh}) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR TH.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
+            "AND (:#{#param.cloaiVthh} IS NULL OR TH.cloaiVthh LIKE CONCAT(:#{#param.cloaiVthh}, '%')) " +
             "AND (:#{#param.ngayDuyetTu} IS NULL OR TH.ngayPduyet >= :#{#param.ngayDuyetTu}) " +
             "AND (:#{#param.ngayDuyetDen} IS NULL OR TH.ngayPduyet <= :#{#param.ngayDuyetDen}) " +
             "AND TH.idThop IS NULL " +
@@ -55,10 +62,14 @@ public interface XhDxKhBanTrucTiepHdrRepository extends JpaRepository<XhDxKhBanT
             "AND TH.trangThaiTh ='" + Contains.CHUATONGHOP + "'")
     List<XhDxKhBanTrucTiepHdr> listTongHop(@Param("param") XhThopChiTieuReq param);
 
-    @Transactional()
+    @Transactional
     @Modifying
-    @Query(value = "UPDATE XH_DX_KH_BAN_TRUC_TIEP_HDR SET TRANG_THAI_TH = :trangThaiTh , ID_THOP = :idTh WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
-    void updateStatusInList(List<String> soDxuatList, String trangThaiTh, Long idTh);
+    @Query(value = "UPDATE XH_DX_KH_BAN_TRUC_TIEP_HDR " +
+            "SET TRANG_THAI_TH = :trangThaiTh, ID_THOP = :idTh " +
+            "WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
+    void updateStatusInList(@Param("soDxuatList") List<String> soDxuatList,
+                            @Param("trangThaiTh") String trangThaiTh,
+                            @Param("idTh") Long idTh);
 
     boolean existsBySoDxuat(String soDxuat);
 
