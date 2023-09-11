@@ -23,7 +23,6 @@ public class DcnbBienBanTinhKhoDtl {
 
     @Column(name = "HDR_ID", insertable = true, updatable = true)
     private Long hdrId;
-    @NotNull
     @Column(name = "PHIEU_KT_CHAT_LUONG_HDR_ID")
     private Long phieuKtChatLuongHdrId;
     @NotNull
@@ -38,7 +37,6 @@ public class DcnbBienBanTinhKhoDtl {
     @NotNull
     @Column(name = "SO_LUONG_XUAT")
     private Long soLuongXuat;
-    @NotNull
     @Column(name = "SO_PHIEU_KT_CHAT_LUONG")
     private String soPhieuKtChatLuong;
     @NotNull
