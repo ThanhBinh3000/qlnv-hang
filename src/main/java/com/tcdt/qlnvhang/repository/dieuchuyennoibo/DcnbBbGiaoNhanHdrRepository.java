@@ -54,7 +54,6 @@ public interface DcnbBbGiaoNhanHdrRepository extends JpaRepository<DcnbBbGiaoNha
             "AND ((:#{#param.loaiDc} IS NULL OR qdc.loaiDc = :#{#param.loaiDc})) " +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
             "AND ((:#{#param.maDvi} IS NULL OR LOWER(qdc.maDvi) LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
-            "AND ((:#{#param.maDvi} IS NULL OR LOWER(bbgn.maDvi) LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%'))) " +
             "AND ((:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho})) " +
             "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +

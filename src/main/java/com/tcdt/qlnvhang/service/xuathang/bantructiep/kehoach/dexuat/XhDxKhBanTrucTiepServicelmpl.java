@@ -109,17 +109,14 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
-        Optional<XhDxKhBanTrucTiepHdr> optionalHdr = xhDxKhBanTrucTiepHdrRepository.findById(req.getId());
-        if (!optionalHdr.isPresent()) {
-            throw new Exception("Không tìm thấy dữ liệu cần sửa");
+        Optional<XhDxKhBanTrucTiepHdr> optional = xhDxKhBanTrucTiepHdrRepository.findById(req.getId());
+        XhDxKhBanTrucTiepHdr data = optional.orElseThrow(() -> new Exception("Không tìm thấy dữ liệu cần sửa"));
+        if (xhDxKhBanTrucTiepHdrRepository.existsBySoDxuatAndIdNot(req.getSoDxuat(), req.getId())){
+            throw new Exception("Số đề xuất " + req.getSoDxuat() + " đã tồn tại");
         }
-        XhDxKhBanTrucTiepHdr data = optionalHdr.get();
-        if (!req.getId().equals(data.getId()) && xhDxKhBanTrucTiepHdrRepository.existsBySoDxuat(req.getSoDxuat())) {
-            throw new Exception("Số đề xuất đã tồn tại");
-        }
+        BeanUtils.copyProperties(req, data, "id", "maDvi", "trangThaiTh");
         data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(currentUser.getUser().getId());
-        BeanUtils.copyProperties(req, data, "id", "maDvi", "trangThaiTh");
         int slDviTsan = data.getChildren().stream()
                 .flatMap(item -> item.getChildren().stream())
                 .map(XhDxKhBanTrucTiepDdiem::getMaDviTsan)
