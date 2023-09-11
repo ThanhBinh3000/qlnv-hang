@@ -31,7 +31,9 @@ public interface XhQdNvXhBttHdrRepository extends JpaRepository<XhQdNvXhBttHdr, 
             "ORDER BY QD.ngaySua desc , QD.ngayTao desc, QD.id desc")
     Page<XhQdNvXhBttHdr> searchPage(@Param("param") XhQdNvXhBttHdrReq param, Pageable pageable);
 
-    Optional<XhQdNvXhBttHdr> findBySoQdNv(String soQdNv);
+    boolean existsBySoQdNv(String soQdNv);
+
+    boolean existsBySoQdNvAndIdNot(String soQdNv, Long id);
 
     List<XhQdNvXhBttHdr> findByIdIn(List<Long> idQdList);
 
