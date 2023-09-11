@@ -139,7 +139,7 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
     XhXkVtBhBaoCaoKdm created = xhXkVtBhBaoCaoKdmRepository.save(data);
     fileDinhKemService.delete(data.getId(), Collections.singleton(XhXkVtBhBaoCaoKdm.TABLE_NAME));
     //save file đính kèm
-    fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtBhBaoCaoKdm.TABLE_NAME);
+    fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtBhBaoCaoKdm.TABLE_NAME);
     //lưu lại số báo cáo vào qd giao nv xh
     Long[] idsQdGiaoNvXh = Arrays.stream(objReq.getIdCanCu().split(","))
         .map(String::trim)
