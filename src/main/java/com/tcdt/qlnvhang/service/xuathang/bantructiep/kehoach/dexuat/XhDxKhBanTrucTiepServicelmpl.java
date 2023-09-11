@@ -43,11 +43,10 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
 
     public Page<XhDxKhBanTrucTiepHdr> searchPage(CustomUserDetails currentUser, XhDxKhBanTrucTiepHdrReq req) throws Exception {
         String dvql = currentUser.getDvql();
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
-            req.setDvql(dvql);
-        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
-            req.setDvql(dvql.substring(0, 4));
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
             req.setTrangThai(Contains.DADUYET_LDC);
+        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
+            req.setDvql(dvql);
         }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhDxKhBanTrucTiepHdr> search = xhDxKhBanTrucTiepHdrRepository.searchPage(req, pageable);
@@ -64,19 +63,24 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
 
     @Transactional
     public XhDxKhBanTrucTiepHdr create(CustomUserDetails currentUser, XhDxKhBanTrucTiepHdrReq req) throws Exception {
-        if (currentUser == null) throw new Exception("Bad request.");
-        if (!StringUtils.isEmpty(req.getSoDxuat())) {
-            Optional<XhDxKhBanTrucTiepHdr> optional = xhDxKhBanTrucTiepHdrRepository.findBySoDxuat(req.getSoDxuat());
-            if (optional.isPresent()) throw new Exception("Số đề xuất " + req.getSoDxuat() + " đã tồn tại");
+        if (currentUser == null) {
+            throw new Exception("Bad request.");
+        }
+        if (!StringUtils.isEmpty(req.getSoDxuat()) && xhDxKhBanTrucTiepHdrRepository.existsBySoDxuat(req.getSoDxuat())) {
+            throw new Exception("Số đề xuất " + req.getSoDxuat() + " đã tồn tại");
         }
         XhDxKhBanTrucTiepHdr data = new XhDxKhBanTrucTiepHdr();
         BeanUtils.copyProperties(req, data);
-        data.setMaDvi(currentUser.getUser().getDvql());
+        data.setMaDvi(currentUser.getDvql());
+        //data.setNgayTao(LocalDate.now());
+        data.setNguoiTaoId(currentUser.getUser().getId());
         data.setTrangThai(Contains.DUTHAO);
         data.setTrangThaiTh(Contains.CHUATONGHOP);
         int slDviTsan = data.getChildren().stream()
                 .flatMap(item -> item.getChildren().stream())
-                .map(XhDxKhBanTrucTiepDdiem::getMaDviTsan).collect(Collectors.toSet()).size();
+                .map(XhDxKhBanTrucTiepDdiem::getMaDviTsan)
+                .collect(Collectors.toSet())
+                .size();
         data.setSlDviTsan(DataUtils.safeToInt(slDviTsan));
         XhDxKhBanTrucTiepHdr created = xhDxKhBanTrucTiepHdrRepository.save(data);
         this.saveDetail(req, created.getId());
@@ -102,18 +106,22 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
 
     @Transactional
     public XhDxKhBanTrucTiepHdr update(CustomUserDetails currentUser, XhDxKhBanTrucTiepHdrReq req) throws Exception {
-        if (currentUser == null) throw new Exception("Bad request.");
-        Optional<XhDxKhBanTrucTiepHdr> optional = xhDxKhBanTrucTiepHdrRepository.findById(req.getId());
-        if (!optional.isPresent()) throw new Exception("Không tìm thấy dữ liệu cần sửa");
-        Optional<XhDxKhBanTrucTiepHdr> bySoDxuat = xhDxKhBanTrucTiepHdrRepository.findBySoDxuat(req.getSoDxuat());
-        if (bySoDxuat.isPresent()) {
-            if (!bySoDxuat.get().getId().equals(req.getId())) throw new Exception("số đề xuất đã tồn tại");
+        if (currentUser == null) {
+            throw new Exception("Bad request.");
         }
-        XhDxKhBanTrucTiepHdr data = optional.get();
+        Optional<XhDxKhBanTrucTiepHdr> optional = xhDxKhBanTrucTiepHdrRepository.findById(req.getId());
+        XhDxKhBanTrucTiepHdr data = optional.orElseThrow(() -> new Exception("Không tìm thấy dữ liệu cần sửa"));
+        if (xhDxKhBanTrucTiepHdrRepository.existsBySoDxuatAndIdNot(req.getSoDxuat(), req.getId())){
+            throw new Exception("Số đề xuất " + req.getSoDxuat() + " đã tồn tại");
+        }
         BeanUtils.copyProperties(req, data, "id", "maDvi", "trangThaiTh");
+        data.setNgaySua(LocalDate.now());
+        data.setNguoiSuaId(currentUser.getUser().getId());
         int slDviTsan = data.getChildren().stream()
                 .flatMap(item -> item.getChildren().stream())
-                .map(XhDxKhBanTrucTiepDdiem::getMaDviTsan).collect(Collectors.toSet()).size();
+                .map(XhDxKhBanTrucTiepDdiem::getMaDviTsan)
+                .collect(Collectors.toSet())
+                .size();
         data.setSlDviTsan(DataUtils.safeToInt(slDviTsan));
         XhDxKhBanTrucTiepHdr updated = xhDxKhBanTrucTiepHdrRepository.save(data);
         this.saveDetail(req, updated.getId());
@@ -121,16 +129,19 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
     }
 
     public List<XhDxKhBanTrucTiepHdr> detail(List<Long> ids) throws Exception {
-        if (DataUtils.isNullOrEmpty(ids)) throw new Exception("Tham số không hợp lệ.");
-        List<XhDxKhBanTrucTiepHdr> list = xhDxKhBanTrucTiepHdrRepository.findByIdIn(ids);
-        if (DataUtils.isNullOrEmpty(list)) throw new Exception("Không tìm thấy dữ liệu");
+        if (DataUtils.isNullOrEmpty(ids)) {
+            throw new Exception("Tham số không hợp lệ.");
+        }
+        List<XhDxKhBanTrucTiepHdr> list = xhDxKhBanTrucTiepHdrRepository.findAllById(ids);
+        if (DataUtils.isNullOrEmpty(list)) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
         Map<String, String> mapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
         Map<String, String> mapPthucTtoan = getListDanhMucChung("PHUONG_THUC_TT");
-        List<XhDxKhBanTrucTiepHdr> allById = xhDxKhBanTrucTiepHdrRepository.findAllById(ids);
-        for (XhDxKhBanTrucTiepHdr data : allById) {
+        for (XhDxKhBanTrucTiepHdr data : list) {
             List<XhDxKhBanTrucTiepDtl> listDtl = xhDxKhBanTrucTiepDtlRepository.findAllByIdHdr(data.getId());
             for (XhDxKhBanTrucTiepDtl dataDtl : listDtl) {
                 List<XhDxKhBanTrucTiepDdiem> listDiaDiem = xhDxKhBanTrucTiepDdiemRepository.findAllByIdDtl(dataDtl.getId());
@@ -153,13 +164,15 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
             data.setTrangThai(data.getTrangThai());
             data.setChildren(listDtl);
         }
-        return allById;
+        return list;
     }
 
     @Transactional
     public void delete(IdSearchReq idSearchReq) throws Exception {
         Optional<XhDxKhBanTrucTiepHdr> optional = xhDxKhBanTrucTiepHdrRepository.findById(idSearchReq.getId());
-        if (!optional.isPresent()) throw new Exception("Bản ghi không tồn tại");
+        if (!optional.isPresent()) {
+            throw new Exception("Bản ghi không tồn tại");
+        }
         XhDxKhBanTrucTiepHdr data = optional.get();
         if (!data.getTrangThai().equals(Contains.DUTHAO)
                 && !data.getTrangThai().equals(Contains.TU_CHOI_TP)
@@ -177,11 +190,14 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
     @Transactional
     public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
         List<XhDxKhBanTrucTiepHdr> list = xhDxKhBanTrucTiepHdrRepository.findAllByIdIn(idSearchReq.getIdList());
-        if (list.isEmpty()) throw new Exception("Bản ghi không tồn tại");
+        if (list.isEmpty()) {
+            throw new Exception("Bản ghi không tồn tại");
+        }
         for (XhDxKhBanTrucTiepHdr hdr : list) {
-            if (!hdr.getTrangThai().equals(Contains.DUTHAO)
-                    && !hdr.getTrangThai().equals(Contains.TU_CHOI_TP)
-                    && !hdr.getTrangThai().equals(Contains.TUCHOI_LDC)) {
+            String trangThai = hdr.getTrangThai();
+            if (!trangThai.equals(Contains.DUTHAO)
+                    && !trangThai.equals(Contains.TU_CHOI_TP)
+                    && !trangThai.equals(Contains.TUCHOI_LDC)) {
                 throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp hoặc từ chối");
             }
         }
@@ -195,13 +211,17 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
     }
 
     public XhDxKhBanTrucTiepHdr approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
-        if (currentUser == null) throw new Exception("Bad request.");
-        if (StringUtils.isEmpty(statusReq.getId())) throw new Exception("Không tìm thấy dữ liệu");
-        Optional<XhDxKhBanTrucTiepHdr> optional = xhDxKhBanTrucTiepHdrRepository.findById(Long.valueOf(statusReq.getId()));
-        if (!optional.isPresent()) throw new Exception("Không tìm thấy dữ liệu");
+        if (currentUser == null || StringUtils.isEmpty(statusReq.getId())) {
+            throw new Exception("Bad request.");
+        }
+        Long requestId = Long.valueOf(statusReq.getId());
+        Optional<XhDxKhBanTrucTiepHdr> optional = xhDxKhBanTrucTiepHdrRepository.findById(requestId);
+        if (!optional.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
         XhDxKhBanTrucTiepHdr data = optional.get();
-        String status = statusReq.getTrangThai() + data.getTrangThai();
-        switch (status) {
+        String newStatus = statusReq.getTrangThai() + data.getTrangThai();
+        switch (newStatus) {
             case Contains.CHODUYET_TP + Contains.DUTHAO:
             case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
             case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:

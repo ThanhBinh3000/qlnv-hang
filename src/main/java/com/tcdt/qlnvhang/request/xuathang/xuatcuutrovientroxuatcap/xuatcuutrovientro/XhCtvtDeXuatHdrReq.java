@@ -17,6 +17,7 @@ public class XhCtvtDeXuatHdrReq {
     private String maDvi;
     private String loaiNhapXuat;
     private String kieuNhapXuat;
+    private String mucDichXuat;
     private String soDx;
     private String trichYeu;
     private String loaiVthh;

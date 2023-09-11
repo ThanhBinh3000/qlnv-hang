@@ -34,6 +34,7 @@ public class XhKqBttHdrReq extends BaseRequest {
     private Integer slHdDaKy;
     private Integer slHdChuaKy;
     private BigDecimal tongSoLuong;
+    private BigDecimal tongGiaTriHdong;
     private String trangThai;
     private String trangThaiHd;
     private String trangThaiXh;

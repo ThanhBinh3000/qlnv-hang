@@ -64,7 +64,6 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl {
         } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
             req.setDvql(dvql.substring(0, 6));
         } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            req.setMaChiCuc(dvql.substring(0, 8));
             req.setTrangThai(Contains.BAN_HANH);
         }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
@@ -109,7 +108,9 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl {
         }
         XhQdNvXhBttHdr data = new XhQdNvXhBttHdr();
         BeanUtils.copyProperties(req, data);
-        data.setMaDvi(currentUser.getUser().getDvql());
+        data.setMaDvi(currentUser.getDvql());
+        data.setNgayTao(LocalDate.now());
+        data.setNguoiTaoId(currentUser.getUser().getId());
         data.setTrangThai(Contains.DU_THAO);
         data.setTrangThaiXh(Contains.DANG_THUC_HIEN);
         if (!ObjectUtils.isEmpty(req.getListMaDviTsan())) {
@@ -167,6 +168,8 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl {
             }
         }
         XhQdNvXhBttHdr data = optional.get();
+        data.setNgaySua(LocalDate.now());
+        data.setNguoiSuaId(currentUser.getUser().getId());
         BeanUtils.copyProperties(req, data, "id", "maDvi", "trangThaiXh");
         if (!ObjectUtils.isEmpty(req.getListMaDviTsan())) {
             data.setMaDviTsan(String.join(",", req.getListMaDviTsan()));
@@ -209,6 +212,11 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl {
             data.setChildren(listDtl);
         }
         return allById;
+    }
+
+    public XhQdNvXhBttHdr detail(Long id) throws Exception {
+        List<XhQdNvXhBttHdr> details = detail(Arrays.asList(id));
+        return details.isEmpty() ? null : details.get(0);
     }
 
     @Transactional

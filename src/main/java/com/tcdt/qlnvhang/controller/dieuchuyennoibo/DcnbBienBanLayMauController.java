@@ -148,7 +148,7 @@ public class DcnbBienBanLayMauController {
     @ApiOperation(value = "Kết xuất danh sách biên bản lấy mẫu", response = List.class)
     @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody  SearchDcnbBienBanLayMau objReq, HttpServletResponse response) throws Exception {
+    public void exportList(@CurrentUser CustomUserDetails currentUser ,@RequestBody  SearchDcnbBienBanLayMau objReq, HttpServletResponse response) throws Exception {
         try {
             dcnbBienBanLayMauServiceImpl.export( currentUser,objReq, response);
 

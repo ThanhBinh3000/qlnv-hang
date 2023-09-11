@@ -23,12 +23,12 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbBbNhapDayKhoHdr bbndk On bbndk.qdDcCucId = qdc.id " +
+            "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On pkncl.qdDcId = qdc.id " +
+            "and ((khdcd.maLoKho is not null and pkncl.maLoKho = khdcd.maLoKho and pkncl.maNganKho = khdcd.maNganKho ) or (khdcd.maLoKho is null and pkncl.maNganKho = khdcd.maNganKho))" +
+            "LEFT JOIN DcnbBienBanLayMauHdr bblm On pkncl.bbLayMauId = bblm.id " +
+            "LEFT JOIN DcnbBbNhapDayKhoHdr bbndk On bbndk.qdDcCucId = qdc.id and bbndk.trangThai = '17'" +
             "and ((khdcd.maLoKho is not null and bbndk.maLoKho = khdcd.maLoKho and bbndk.maNganKho = khdcd.maNganKho ) or (khdcd.maLoKho is null and bbndk.maNganKho = khdcd.maNganKho))" +
-            "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qdccId = qdc.id " +
-            "and ((khdcd.maLoKho is not null and bblm.maLoKho = khdcd.maLoKho and bblm.maNganKho = khdcd.maNganKho ) or (khdcd.maLoKho is null and bblm.maNganKho = khdcd.maNganKho))" +
             "LEFT JOIN DcnbBienBanTinhKhoHdr bbtkh On bbtkh.qDinhDccId = qdc.id and bbtkh.maLoKho = khdcd.maLoKho and bbtkh.maNganKho = khdcd.maNganKho  " +
-            "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On pkncl.bbLayMauId = bblm.id " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.parentId is not null and qdc.trangThai = '29' " +
@@ -36,7 +36,7 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "AND (pkncl.type IS NULL OR (:#{#param.type} IS NULL OR pkncl.type = :#{#param.type})) " +
             "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
-            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
+            "AND ((:#{#param.maDvi} IS NULL OR LOWER(qdc.maDvi) LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND (qdc.loaiDc= 'DCNB' OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
             "AND (:#{#param.trangThai} IS NULL OR pkncl.trangThai = :#{#param.trangThai}) " +
@@ -103,10 +103,10 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.qdccId = qdc.id " +
-            "and ((khdcd.maLoKhoNhan is not null and bblm.maLoKho = khdcd.maLoKhoNhan and bblm.maNganKho = khdcd.maNganKhoNhan ) or (khdcd.maLoKhoNhan is null and bblm.maNganKho = khdcd.maNganKhoNhan))" +
-            "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On pkncl.bbLayMauId = bblm.id " +
-            "LEFT JOIN DcnbBbNhapDayKhoHdr bbndk On bbndk.qdDcCucId = qdc.id " +
+            "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On pkncl.qdDcId = qdc.id " +
+            "and ((khdcd.maLoKhoNhan is not null and pkncl.maLoKho = khdcd.maLoKhoNhan and pkncl.maNganKho = khdcd.maNganKhoNhan ) or (khdcd.maLoKhoNhan is null and pkncl.maNganKho = khdcd.maNganKhoNhan))" +
+            "LEFT JOIN DcnbBienBanLayMauHdr bblm On pkncl.bbLayMauId = bblm.id " +
+            "LEFT JOIN DcnbBbNhapDayKhoHdr bbndk On bbndk.qdDcCucId = qdc.id and bbndk.trangThai = '17'" +
             "and ((khdcd.maLoKhoNhan is not null and bbndk.maLoKho = khdcd.maLoKhoNhan and bbndk.maNganKho = khdcd.maNganKhoNhan ) or (khdcd.maLoKhoNhan is null and bbndk.maNganKho = khdcd.maNganKhoNhan))" +
             "LEFT JOIN DcnbBienBanTinhKhoHdr bbtkh On bbtkh.qDinhDccId = qdc.id and bbtkh.maLoKho = khdcd.maLoKho and bbtkh.maNganKho = khdcd.maNganKho " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
@@ -117,7 +117,7 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
             "AND ((:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho})) " +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
-            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
+            "AND ((:#{#param.maDvi} IS NULL OR LOWER(qdc.maDvi) LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND (qdc.loaiDc= 'DCNB' OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
             "AND (:#{#param.trangThai} IS NULL OR pkncl.trangThai = :#{#param.trangThai}) " +

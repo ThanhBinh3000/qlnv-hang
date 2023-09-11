@@ -21,4 +21,5 @@ public class SearchQuyChuanQgReq extends BaseRequest {
     private LocalDate ngayHieuLucTu;
     private LocalDate ngayHieuLucDen;
     private Integer isMat;
+    private String maDvi;
 }

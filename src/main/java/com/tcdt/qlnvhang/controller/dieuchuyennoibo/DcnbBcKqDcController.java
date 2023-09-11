@@ -238,7 +238,7 @@ public class DcnbBcKqDcController {
     @ApiOperation(value = "Lấy thông tin nhập xuất hàng", response = List.class)
     @PostMapping(value = "/nhap-xuat-hang-cuc", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity thongTinNhapXuatHangCuc(@Valid @RequestBody DcnbBbKqDcSearch objReq) throws Exception {
+    public ResponseEntity thongTinNhapXuatHangCuc(@RequestBody DcnbBbKqDcSearch objReq) throws Exception {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(service.thongTinNhapXuatHangCuc(objReq));

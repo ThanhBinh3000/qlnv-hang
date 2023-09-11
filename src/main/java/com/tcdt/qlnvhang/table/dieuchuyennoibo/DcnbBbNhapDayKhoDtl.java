@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -24,16 +25,23 @@ public class DcnbBbNhapDayKhoDtl implements Serializable, Cloneable{
     private Long id;
     @Column(name = "HDR_ID", insertable = true, updatable = true)
     private Long hdrId;
-
+    @NotNull
     @Column(name = "PHIEU_KT_CLUONG")
     private String soPhieuKiemTraCl;
+    @NotNull
     @Column(name = "ID_PHIEU_KT_CLUONG")
     private Long phieuKiemTraClId;
+    @NotNull
     private String phieuNhapKho;
+    @NotNull
     private Long idPhieuNhapKho;
+    @NotNull
     private String soBangKeCh;
+    @NotNull
     private Long idBangKeCh;
+    @NotNull
     private LocalDate ngayNhap;
+    @NotNull
     private BigDecimal soLuong;
 
     @ManyToOne(fetch = FetchType.LAZY)

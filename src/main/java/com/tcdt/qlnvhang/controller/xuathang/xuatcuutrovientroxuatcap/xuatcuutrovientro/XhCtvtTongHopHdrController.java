@@ -41,7 +41,7 @@ public class XhCtvtTongHopHdrController extends BaseController {
 
     @ApiOperation(value = "Tổng hợp tổng hợp kế hoạch bán đấu giá  ", response = List.class)
     @PostMapping()
-    public ResponseEntity<BaseResponse> sumarryData(@CurrentUser CustomUserDetails currentUser,
+    public ResponseEntity<BaseResponse> summaryData(@CurrentUser CustomUserDetails currentUser,
             @Valid @RequestBody SearchXhCtvtDeXuatHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {

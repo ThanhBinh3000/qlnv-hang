@@ -22,9 +22,11 @@ import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.thongtin.X
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,8 +37,11 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
@@ -60,14 +65,13 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
         String dvql = currentUser.getDvql();
         Integer lastest = 1;
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
-            req.setDvql(dvql.substring(0, 4));
             req.setLastest(lastest);
             req.setTrangThai(Contains.HOANTHANHCAPNHAT);
         } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
             req.setDvql(dvql);
             req.setLastest(lastest);
         } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            req.setMaDviChiCuc(dvql.substring(0, 8));
+            req.setMaChiCuc(dvql);
             req.setLastest(lastest);
             req.setTrangThai(Contains.HOANTHANHCAPNHAT);
         }
@@ -111,12 +115,12 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
         if (!optional.isPresent()) throw new Exception("Bản Ghi không tồn tại");
         XhQdPdKhBttDtl data = optional.get();
         data.setPthucBanTrucTiep(req.getPthucBanTrucTiep());
-        data.setNgayNhanCgia(LocalDate.now());
         data.setDiaDiemChaoGia(req.getDiaDiemChaoGia());
         data.setNgayMkho(req.getNgayMkho());
         data.setNgayKthuc(req.getNgayKthuc());
         data.setGhiChuChaoGia(req.getGhiChuChaoGia());
         data.setThoiHanBan(req.getThoiHanBan());
+        data.setTongGiaTriHdong(req.getTongGiaTriHdong());
         data.setTrangThai(Contains.DANGCAPNHAT);
         if (req.getPthucBanTrucTiep().equals(Contains.UY_QUYEN)) {
             if (!DataUtils.isNullOrEmpty(req.getFileUyQuyen())) {
@@ -181,10 +185,10 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
                     dataDviDtl.setTenLoKho(StringUtils.isEmpty(dataDviDtl.getMaLoKho()) ? null : mapDmucDvi.get(dataDviDtl.getMaLoKho()));
                     dataDviDtl.setTenLoaiVthh(StringUtils.isEmpty(dataDviDtl.getLoaiVthh()) ? null : mapDmucVthh.get(dataDviDtl.getLoaiVthh()));
                     dataDviDtl.setTenCloaiVthh(StringUtils.isEmpty(dataDviDtl.getCloaiVthh()) ? null : mapDmucVthh.get(dataDviDtl.getCloaiVthh()));
-                    dataDviDtl.setChildren(toChuc);
+                    dataDviDtl.setChildren(toChuc.stream().filter(type -> !type.getTypeQdKq()).collect(Collectors.toList()));
                 }
                 dataDvi.setTenDvi(StringUtils.isEmpty(dataDvi.getMaDvi()) ? null : mapDmucDvi.get(dataDvi.getMaDvi()));
-                dataDvi.setChildren(dviDtl);
+                dataDvi.setChildren(dviDtl.stream().filter(type -> !type.getTypeQdKq()).collect(Collectors.toList()));
             }
             data.setTenDvi(StringUtils.isEmpty(data.getMaDvi()) ? null : mapDmucDvi.get(data.getMaDvi()));
             data.setTenLoaiHinhNx(StringUtils.isEmpty(data.getLoaiHinhNx()) ? null : mapLoaiHinhNx.get(data.getLoaiHinhNx()));
@@ -195,7 +199,7 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
             data.setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiHd()));
             data.setXhQdPdKhBttHdr(xhQdPdKhBttHdrRepository.findById(data.getIdHdr()).get());
             data.setListHopDongBtt(xhHopDongBttHdrRepository.findAllByIdChaoGia(data.getId()));
-            data.setChildren(dvi);
+            data.setChildren(dvi.stream().filter(type -> !type.getTypeQdKq()).collect(Collectors.toList()));
             if (!DataUtils.isNullObject(data.getPthucBanTrucTiep())) {
                 if (data.getPthucBanTrucTiep().equals(Contains.UY_QUYEN)) {
                     List<FileDinhKem> fileUyQuyen = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBttDtl.TABLE_NAME + "_UY_QUYEN"));
@@ -223,6 +227,7 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
         } else {
             switch (status) {
                 case Contains.HOANTHANHCAPNHAT + Contains.DANGCAPNHAT:
+                    data.setNgayNhanCgia(LocalDate.now());
                     break;
                 default:
                     throw new Exception("Phê duyệt không thành công");
@@ -342,5 +347,20 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
+    }
+
+    public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {
+        if (currentUser == null) throw new Exception("Bad request.");
+        try {
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + "/bantructiep/Thông tin chào giá bán trực tiếp.docx");
+            List<XhQdPdKhBttDtl> listDetail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
+            XhQdPdKhBttDtl detail = listDetail.get(0);
+            return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

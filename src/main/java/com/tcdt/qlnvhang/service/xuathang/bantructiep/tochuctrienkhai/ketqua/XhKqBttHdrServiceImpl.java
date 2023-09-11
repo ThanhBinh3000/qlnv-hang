@@ -24,9 +24,11 @@ import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.thongtin.X
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,6 +39,8 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
@@ -63,11 +67,10 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
 
     public Page<XhKqBttHdr> searchPage(CustomUserDetails currentUser, XhKqBttHdrReq req) throws Exception {
         String dvql = currentUser.getDvql();
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
-            req.setDvql(dvql);
-        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
-            req.setDvql(dvql.substring(0, 4));
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
             req.setTrangThai(Contains.BAN_HANH);
+        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
+            req.setDvql(dvql);
         }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhKqBttHdr> search = xhKqBttHdrRepository.searchPage(req, pageable);
@@ -92,7 +95,9 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
         }
         XhKqBttHdr data = new XhKqBttHdr();
         BeanUtils.copyProperties(req, data);
-        data.setMaDvi(currentUser.getUser().getDvql());
+        data.setMaDvi(currentUser.getDvql());
+        data.setNgayTao(LocalDate.now());
+        data.setNguoiTaoId(currentUser.getUser().getId());
         data.setTrangThai(Contains.DUTHAO);
         data.setTrangThaiHd(Contains.CHUA_THUC_HIEN);
         data.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
@@ -142,6 +147,8 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
             if (!bySoQdKq.get().getId().equals(req.getId())) throw new Exception("số quyết định đã tồn tại");
         }
         XhKqBttHdr data = optional.get();
+        data.setNgaySua(LocalDate.now());
+        data.setNguoiSuaId(currentUser.getUser().getId());
         BeanUtils.copyProperties(req, data, "id", "maDvi", "trangThaiHd", "trangThaiXh");
         XhKqBttHdr updated = xhKqBttHdrRepository.save(data);
         this.saveDetail(req, updated.getId());
@@ -187,7 +194,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
             data.setTrangThai(data.getTrangThai());
             data.setChildren(listDvi);
             List<XhHopDongBttHdr> listHd = xhHopDongBttHdrRepository.findAllByIdQdKq(data.getId());
-            listHd.forEach(dataHd ->{
+            listHd.forEach(dataHd -> {
                 dataHd.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(dataHd.getTrangThai()));
                 dataHd.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dataHd.getTrangThaiXh()));
             });
@@ -363,8 +370,26 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
             throw new UnsupportedOperationException("Bản ghi không tồn tại.");
         }
         XhTcTtinBtt tchuc = byIdTc.get();
-//        XhQdPdKhBttDviDtl dviDtl = xhQdPdKhBttDviDtlRepository.findById(tchuc.getIdDviDtl()).get();
-//        tchuc.setXhQdPdKhBttDviDtl(dviDtl);
         return tchuc;
+    }
+
+    public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {
+        if (currentUser == null) throw new Exception("Bad request.");
+        try {
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + "/bantructiep/Quyết định phê duyệt kết quả chào giá.docx");
+            List<XhKqBttHdr> listDetail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
+            XhKqBttHdr detail = listDetail.get(0);
+            List<XhQdPdKhBttDvi> listDvi = xhQdPdKhBttDviRepository.findAllByIdQdKqHdr(detail.getId());
+            listDvi.forEach(dataDvi -> {
+                List<XhQdPdKhBttDviDtl> listDviDtl = xhQdPdKhBttDviDtlRepository.findAllByIdDvi(dataDvi.getId());
+                dataDvi.setDonGiaDuocDuyet(listDviDtl.get(0).getDonGiaDuocDuyet());
+            });
+            return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

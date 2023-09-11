@@ -16,13 +16,15 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkDanhSachHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktluongthuc.XhXkLtPhieuKnClHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkKhXuatHang;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkKhXuatHangDtl;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtQdXuatGiamVattu;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -40,7 +42,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -427,10 +429,13 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
 
     public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
         try {
-            String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
-            String fileTemplate = "xuatcuutrovientro/" + fileName;
-            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
-            XhXkKhXuatHang detail = this.detail(DataUtils.safeToLong(body.get("id")));
+            ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
+            reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
+            ReportTemplate model = findByTenFile(reportTemplateRequest);
+            byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+//            FileInputStream inputStream = new FileInputStream("src/main/resources/reports/xuatcuutrovientro/Phiếu kiểm nghiệm chất lượng.docx");
+            XhXkKhXuatHang  detail = this.detailTongHop(DataUtils.safeToLong(body.get("id")));
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
         } catch (IOException e) {
             e.printStackTrace();
