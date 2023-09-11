@@ -111,7 +111,7 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
         }
         Optional<XhDxKhBanTrucTiepHdr> optional = xhDxKhBanTrucTiepHdrRepository.findById(req.getId());
         XhDxKhBanTrucTiepHdr data = optional.orElseThrow(() -> new Exception("Không tìm thấy dữ liệu cần sửa"));
-        if (xhDxKhBanTrucTiepHdrRepository.existsBySoDxuatAndIdNot(req.getSoDxuat(), req.getId())){
+        if (xhDxKhBanTrucTiepHdrRepository.existsBySoDxuatAndIdNot(req.getSoDxuat(), req.getId())) {
             throw new Exception("Số đề xuất " + req.getSoDxuat() + " đã tồn tại");
         }
         BeanUtils.copyProperties(req, data, "id", "maDvi", "trangThaiTh");
@@ -248,10 +248,8 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
     }
 
     public void export(CustomUserDetails currentUser, XhDxKhBanTrucTiepHdrReq req, HttpServletResponse response) throws Exception {
-        PaggingReq paggingReq = new PaggingReq();
-        paggingReq.setPage(0);
-        paggingReq.setLimit(Integer.MAX_VALUE);
-        req.setPaggingReq(paggingReq);
+        req.getPaggingReq().setPage(0);
+        req.getPaggingReq().setLimit(Integer.MAX_VALUE);
         Page<XhDxKhBanTrucTiepHdr> page = this.searchPage(currentUser, req);
         List<XhDxKhBanTrucTiepHdr> data = page.getContent();
         String title = "Danh sách đề xuất kế hoạch bán trực tiếp";
@@ -260,11 +258,10 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
                 "Trích yếu", "Loại hàng hóa", "Chủng loại hàng hóa",
                 "Số ĐV tài sản", "SL HĐ đã ký", "Số QĐ giao chỉ tiêu", "Trạng thái"};
         String fileName = "danh-sach-dx-kh-ban-truc-tiep.xlsx";
-        List<Object[]> dataList = new ArrayList<Object[]>();
-        Object[] objs = null;
+        List<Object[]> dataList = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
             XhDxKhBanTrucTiepHdr hdr = data.get(i);
-            objs = new Object[rowsName.length];
+            Object[] objs = new Object[rowsName.length];
             objs[0] = i;
             objs[1] = hdr.getNamKh();
             objs[2] = hdr.getSoDxuat();

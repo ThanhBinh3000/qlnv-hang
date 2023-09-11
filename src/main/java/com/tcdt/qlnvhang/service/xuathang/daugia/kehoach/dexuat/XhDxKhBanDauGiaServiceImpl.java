@@ -9,7 +9,6 @@ import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauG
 import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaRepository;
 import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.dexuat.XhDxKhBanDauGiaReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -51,11 +50,8 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
 
     public Page<XhDxKhBanDauGia> searchPage(CustomUserDetails currentUser, XhDxKhBanDauGiaReq req) throws Exception {
         String dvql = currentUser.getDvql();
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
-            req.setDvql(dvql);
-        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
-            req.setDvql(dvql.substring(0, 4));
-        }
+        String userCapDvi = currentUser.getUser().getCapDvi();
+        req.setDvql(userCapDvi.equals(Contains.CAP_CUC) ? dvql : userCapDvi.equals(Contains.CAP_TONG_CUC) ? dvql.substring(0, 4) : null);
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhDxKhBanDauGia> search = xhDxKhBanDauGiaRepository.searchPage(req, pageable);
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
@@ -71,22 +67,24 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
 
     @Transactional
     public XhDxKhBanDauGia create(CustomUserDetails currentUser, XhDxKhBanDauGiaReq req) throws Exception {
-        if (currentUser == null) throw new Exception("Bad request.");
-        if (!StringUtils.isEmpty(req.getSoDxuat())) {
-            Optional<XhDxKhBanDauGia> optional = xhDxKhBanDauGiaRepository.findBySoDxuat(req.getSoDxuat());
-            if (optional.isPresent()) throw new Exception("Số đề xuất " + req.getSoDxuat() + " đã tồn tại");
-        }else {
-            Optional<XhDxKhBanDauGia> optional = xhDxKhBanDauGiaRepository.findBySoDxuat(req.getSoDxuat());
-            if (optional.isPresent()) throw new Exception("Số đề xuất đã tồn tại");
+        if (currentUser == null) {
+            throw new Exception("Bad request.");
+        }
+        if (!StringUtils.isEmpty(req.getSoDxuat()) && xhDxKhBanDauGiaRepository.existsBySoDxuat(req.getSoDxuat())) {
+            throw new Exception("Số đề xuất " + req.getSoDxuat() + " đã tồn tại");
         }
         XhDxKhBanDauGia data = new XhDxKhBanDauGia();
         BeanUtils.copyProperties(req, data);
-        data.setMaDvi(currentUser.getUser().getDepartment());
+        data.setMaDvi(currentUser.getDvql());
+        //data.setNgayTao(LocalDate.now());
+        data.setNguoiTaoId(currentUser.getUser().getId());
         data.setTrangThai(Contains.DUTHAO);
         data.setTrangThaiTh(Contains.CHUATONGHOP);
         int slDviTsan = data.getChildren().stream()
                 .flatMap(item -> item.getChildren().stream())
-                .map(XhDxKhBanDauGiaPhanLo::getMaDviTsan).collect(Collectors.toSet()).size();
+                .map(XhDxKhBanDauGiaPhanLo::getMaDviTsan)
+                .collect(Collectors.toSet())
+                .size();
         data.setSlDviTsan(DataUtils.safeToInt(slDviTsan));
         XhDxKhBanDauGia created = xhDxKhBanDauGiaRepository.save(data);
         this.saveDetail(req, created.getId());
@@ -112,20 +110,22 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
 
     @Transactional
     public XhDxKhBanDauGia update(CustomUserDetails currentUser, XhDxKhBanDauGiaReq req) throws Exception {
-        if (currentUser == null) throw new Exception("Bad request.");
-        Optional<XhDxKhBanDauGia> optional = xhDxKhBanDauGiaRepository.findById(req.getId());
-        if (!optional.isPresent()) throw new Exception("Không tìm thấy dữ liệu cần sửa");
-        Optional<XhDxKhBanDauGia> soDxuat = xhDxKhBanDauGiaRepository.findBySoDxuat(req.getSoDxuat());
-        if (soDxuat.isPresent()) {
-            if (!soDxuat.get().getId().equals(req.getId())) {
-                throw new Exception("số đề xuất đã tồn tại");
-            }
+        if (currentUser == null) {
+            throw new Exception("Bad request.");
         }
-        XhDxKhBanDauGia data = optional.get();
+        Optional<XhDxKhBanDauGia> optional = xhDxKhBanDauGiaRepository.findById(req.getId());
+        XhDxKhBanDauGia data = optional.orElseThrow(() -> new Exception("Không tìm thấy dữ liệu cần sửa"));
+        if (xhDxKhBanDauGiaRepository.existsBySoDxuatAndIdNot(req.getSoDxuat(), req.getId())) {
+            throw new Exception("Số đề xuất " + req.getSoDxuat() + " đã tồn tại");
+        }
         BeanUtils.copyProperties(req, data, "id", "maDvi", "trangThaiTh");
+        data.setNgaySua(LocalDate.now());
+        data.setNguoiSuaId(currentUser.getUser().getId());
         int slDviTsan = data.getChildren().stream()
                 .flatMap(item -> item.getChildren().stream())
-                .map(XhDxKhBanDauGiaPhanLo::getMaDviTsan).collect(Collectors.toSet()).size();
+                .map(XhDxKhBanDauGiaPhanLo::getMaDviTsan)
+                .collect(Collectors.toSet())
+                .size();
         data.setSlDviTsan(DataUtils.safeToInt(slDviTsan));
         XhDxKhBanDauGia updated = xhDxKhBanDauGiaRepository.save(data);
         this.saveDetail(req, updated.getId());
@@ -133,11 +133,13 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
     }
 
     public List<XhDxKhBanDauGia> detail(List<Long> ids) throws Exception {
-        UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null) throw new Exception("Bad request.");
-        if (DataUtils.isNullOrEmpty(ids)) throw new Exception("Tham số không hợp lệ.");
+        if (DataUtils.isNullOrEmpty(ids)) {
+            throw new Exception("Tham số không hợp lệ.");
+        }
         List<XhDxKhBanDauGia> list = xhDxKhBanDauGiaRepository.findByIdIn(ids);
-        if (DataUtils.isNullOrEmpty(list)) throw new Exception("Không tìm thấy dữ liệu");
+        if (DataUtils.isNullOrEmpty(list)) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
@@ -172,8 +174,6 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
 
     @Transactional
     public void delete(IdSearchReq idSearchReq) throws Exception {
-        UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null) throw new Exception("Bad request.");
         Optional<XhDxKhBanDauGia> optional = xhDxKhBanDauGiaRepository.findById(idSearchReq.getId());
         if (!optional.isPresent()) throw new Exception("Bản ghi không tồn tại");
         XhDxKhBanDauGia data = optional.get();
@@ -215,11 +215,14 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
     }
 
     public XhDxKhBanDauGia approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
-        UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null) throw new Exception("Bad request.");
-        if (StringUtils.isEmpty(statusReq.getId())) throw new Exception("Không tìm thấy dữ liệu");
-        Optional<XhDxKhBanDauGia> optional = xhDxKhBanDauGiaRepository.findById(Long.valueOf(statusReq.getId()));
-        if (!optional.isPresent()) throw new Exception("Không tìm thấy dữ liệu");
+        if (currentUser == null || StringUtils.isEmpty(statusReq.getId())) {
+            throw new Exception("Bad request.");
+        }
+        Long requestId = Long.valueOf(statusReq.getId());
+        Optional<XhDxKhBanDauGia> optional = xhDxKhBanDauGiaRepository.findById(requestId);
+        if (!optional.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
         XhDxKhBanDauGia data = optional.get();
         String status = statusReq.getTrangThai() + data.getTrangThai();
         switch (status) {
@@ -252,10 +255,8 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
     }
 
     public void export(CustomUserDetails currentUser, XhDxKhBanDauGiaReq req, HttpServletResponse response) throws Exception {
-        PaggingReq paggingReq = new PaggingReq();
-        paggingReq.setPage(0);
-        paggingReq.setLimit(Integer.MAX_VALUE);
-        req.setPaggingReq(paggingReq);
+        req.getPaggingReq().setPage(0);
+        req.getPaggingReq().setLimit(Integer.MAX_VALUE);
         Page<XhDxKhBanDauGia> page = this.searchPage(currentUser, req);
         List<XhDxKhBanDauGia> data = page.getContent();
         String title = "Danh sách đề xuất kế hoạch bán đấu giá";
@@ -263,11 +264,10 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
                 "Số QĐ duyệt KH bán ĐG", "Ngày ký QĐ", "Trích yếu", "Loại hàng hóa", "Chủng loại hàng hóa",
                 "Số ĐV tài sản", "SL HĐ đã ký", "Số QĐ giao chỉ tiêu", "Trạng thái"};
         String fileName = "danh-sach-dx-kh-ban-dau-gia.xlsx";
-        List<Object[]> dataList = new ArrayList<Object[]>();
-        Object[] objs = null;
+        List<Object[]> dataList = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
             XhDxKhBanDauGia hdr = data.get(i);
-            objs = new Object[rowsName.length];
+            Object[] objs = new Object[rowsName.length];
             objs[0] = i;
             objs[1] = hdr.getNamKh();
             objs[2] = hdr.getSoDxuat();
@@ -292,18 +292,20 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
         return xhDxKhBanDauGiaRepository.countSLDalenKh(req.getYear(), req.getLoaiVthh(), req.getMaDvi(), req.getLastest());
     }
 
-    public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
+    public ReportTemplateResponse preview(HashMap<String, Object> body) {
         try {
+            String tenBaoCao = DataUtils.safeToString(body.get("tenBaoCao"));
+            Long id = DataUtils.safeToLong(body.get("id"));
             ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
-            reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
+            reportTemplateRequest.setFileName(tenBaoCao);
             ReportTemplate model = findByTenFile(reportTemplateRequest);
             byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
             ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
             List<XhDxKhBanDauGia> detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail.get(0));
-        } catch (IOException e) {
+        } catch (IOException | XDocReportException e) {
             e.printStackTrace();
-        } catch (XDocReportException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

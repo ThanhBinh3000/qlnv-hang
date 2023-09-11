@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.tonghop;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
@@ -16,12 +15,12 @@ import java.util.Map;
 @Entity
 @Table(name = XhThopDxKhBdg.TABLE_NAME)
 @Data
-public class XhThopDxKhBdg extends BaseEntity implements Serializable {
+public class XhThopDxKhBdg implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_THOP_DX_KH_BAN_DAU_GIA";
     @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_THOP_DX_KH_BDG_SEQ")
-//    @SequenceGenerator(sequenceName = "XH_THOP_DX_KH_BDG_SEQ", allocationSize = 1, name = "XH_THOP_DX_KH_BDG_SEQ")
+//  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_THOP_DX_KH_BDG_SEQ")
+//  @SequenceGenerator(sequenceName = "XH_THOP_DX_KH_BDG_SEQ", allocationSize = 1, name = "XH_THOP_DX_KH_BDG_SEQ")
     private Long id;
     private LocalDate ngayThop;
     private String loaiVthh;
@@ -34,6 +33,10 @@ public class XhThopDxKhBdg extends BaseEntity implements Serializable {
     private Long idQdPd;
     private String soQdPd;
     private String trangThai;
+    private LocalDate ngayTao;
+    private Long nguoiTaoId;
+    private LocalDate ngaySua;
+    private Long nguoiSuaId;
     private LocalDate ngayGuiDuyet;
     private Long nguoiGuiDuyetId;
     private LocalDate ngayPduyet;
