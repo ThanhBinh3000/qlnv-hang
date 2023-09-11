@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.khoahoccongnghebaoquan;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan.KhCnCongTrinhNghienCuuRepository;
 import com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan.KhCnNghiemThuThanhLyRepository;
 import com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan.KhCnTienDoThucHienRepository;
@@ -151,11 +152,19 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         KhCnCongTrinhNghienCuu data = optional.get();
-        Map<String, String> hashMapDmhh = getListDanhMucHangHoa();
+//        Map<String, String> hashMapDmhh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
+        Map<String, String> mapCapDeTai = getListDanhMucChung("CAP_DE_TAI");
+        Map<String, String> mapNguonVon = getListDanhMucChung("NGUON_VON");
         data.setTenDvi(StringUtils.isEmpty(data.getMaDvi()) ? null : hashMapDvi.get(data.getMaDvi()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         List<KhCnTienDoThucHien> tienDoThucHien = khCnTienDoThucHienRepository.findAllByIdHdr(data.getId());
+        tienDoThucHien.forEach(item -> {
+            item.setTenTrangThaiTd(TrangThaiAllEnum.getLabelById(item.getTrangThaiTd()));
+        });
+        data.setTenCapDeTai(mapCapDeTai.get(data.getCapDeTai()));
+        data.setTenNguonVon(mapNguonVon.get(data.getNguonVon()));
+        data.setTongChiPhiStr(docxToPdfConverter.convertBigDecimalToStrNotDecimal(data.getTongChiPhi()));
         List<KhCnNghiemThuThanhLy> nghiemThuThanhLy = khCnNghiemThuThanhLyRepository.findAllByIdHdr(data.getId());
         data.setChildren(nghiemThuThanhLy);
         data.setTienDoThucHien(tienDoThucHien);
