@@ -73,6 +73,7 @@ public class DcnbBangKeXuatVTReq extends BaseRequest {
     private String donViNguoiGiaoHang;
     private String diaChiDonViNguoiGiaoHang;
     private LocalDate thoiHanGiaoNhan;
+    @NotNull
     private String donViTinh;
     private String trangThai;
     private String lyDoTuChoi;
