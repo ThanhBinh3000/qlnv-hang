@@ -36,5 +36,5 @@ public interface XhBienBanLayMauRepository extends JpaRepository<XhBienBanLayMau
 
   List<XhBienBanLayMauHdr> findAllByIdIn(List<Long> listId);
 
-  Optional<XhBienBanLayMauHdr> findBySoBbQd(String soQd);
+  Optional<XhBienBanLayMauHdr> findFirstBySoBbQd(String soQd);
 }
