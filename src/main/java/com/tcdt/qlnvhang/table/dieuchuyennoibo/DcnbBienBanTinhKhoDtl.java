@@ -28,7 +28,6 @@ public class DcnbBienBanTinhKhoDtl {
     @NotNull
     @Column(name = "PHIEU_XUAT_KHO_HDR_ID")
     private Long phieuXuatKhoHdrId;
-    @NotNull
     @Column(name = "BANG_KE_CAN_HANG_HDR_ID")
     private Long bangKeCanHangHdrId;
     @NotNull
@@ -42,7 +41,6 @@ public class DcnbBienBanTinhKhoDtl {
     @NotNull
     @Column(name = "SO_PHIEU_XUAT_KHO")
     private String soPhieuXuatKho;
-    @NotNull
     @Column(name = "SO_BANG_KE_CAN_HANG")
     private String soBangKeCanHang;
 

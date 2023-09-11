@@ -47,8 +47,8 @@ public interface DcnbBienBanHaoDoiHdrRepository extends JpaRepository<DcnbBienBa
             "AND (:#{#param.denNgayLapBb}  IS NULL OR bbhd.ngayLap <= :#{#param.denNgayLapBb}) ) " +
             "AND ((:#{#param.tuNgayBdXuat}  IS NULL OR bbtk.ngayBatDauXuat >= :#{#param.tuNgayBdXuat})" +
             "AND (:#{#param.denNgayBdXuat}  IS NULL OR bbtk.ngayBatDauXuat <= :#{#param.denNgayBdXuat}) ) " +
-            "AND ((:#{#param.tuNgayKtXuat}  IS NULL OR bbtk.ngayKeThucXuat >= :#{#param.tuNgayKtXuat})" +
-            "AND (:#{#param.denNgayKtXuat}  IS NULL OR bbtk.ngayKeThucXuat <= :#{#param.denNgayKtXuat}) ) " +
+            "AND ((:#{#param.tuNgayKtXuat}  IS NULL OR bbtk.ngayKetThucXuat >= :#{#param.tuNgayKtXuat})" +
+            "AND (:#{#param.denNgayKtXuat}  IS NULL OR bbtk.ngayKetThucXuat <= :#{#param.denNgayKtXuat}) ) " +
             "AND ((:#{#param.tuNgayXhXuat}  IS NULL OR bbtk.thoiHanXuatHang >= :#{#param.tuNgayXhXuat})" +
             "AND (:#{#param.denNgayXhXuat}  IS NULL OR bbtk.thoiHanXuatHang <= :#{#param.denNgayXhXuat}) ) " +
             "GROUP BY bbhd.id,bkch.id,bbtk.soBbTinhKho,bbtk.id,qdc.id,pxk.id,qdc.soQdinh,qdc.nam,qdc.ngayHieuLuc,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho,khdcd.tenLoKho," +
