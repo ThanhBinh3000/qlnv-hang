@@ -143,7 +143,6 @@ public class KhCnCongTrinhNghienCuuController extends BaseController {
         try {
             khCnCongTrinhNghienCuuService.export(objReq,response);
         } catch (Exception e) {
-
             log.error("Kết xuất danh sách : {}", e);
             final Map<String, Object> body = new HashMap<>();
             body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -155,7 +154,6 @@ public class KhCnCongTrinhNghienCuuController extends BaseController {
             final ObjectMapper mapper = new ObjectMapper();
             mapper.writeValue(response.getOutputStream(), body);
         }
-
     }
 
     @ApiOperation(value = "Phê duyêt  ", response = List.class)
