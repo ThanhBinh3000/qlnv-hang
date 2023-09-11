@@ -41,9 +41,7 @@ public class DcnbBBNTBQDtl implements Serializable, Cloneable{
     private Double donGia;
     @NotNull
     private Double thanhTienTrongNam;
-    @NotNull
     private Double soLuongNamTruoc;
-    @NotNull
     private Double thanhTienNamTruoc;
     private String type;
     private Boolean isParent;
