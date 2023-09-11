@@ -53,9 +53,13 @@ public interface XhHopDongBttHdrRepository extends JpaRepository<XhHopDongBttHdr
             nativeQuery = true)
     Integer countSlHopDongDaKyChiCuc(Long idChaoGia);
 
-    Optional<XhHopDongBttHdr> findBySoHd(String soHd);
+    boolean existsBySoHd(String soHd);
 
-    Optional<XhHopDongBttHdr> findBySoPhuLuc(String soPhuLuc);
+    boolean existsBySoPhuLuc(String soPhuLuc);
+
+    boolean existsBySoHdAndIdNot(String soHd, Long id);
+
+    boolean existsBySoPhuLucAndIdNot(String soPhuLuc, Long id);
 
     List<XhHopDongBttHdr> findByIdIn(List<Long> idHdList);
 
