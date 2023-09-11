@@ -50,8 +50,6 @@ public class HhNkBangKeCanHangHdrReq {
 
     private String donViTinh;
 
-    private String tenDonViTinh;
-
     private String maDiemKho;
 
     private String tenDiemKho;

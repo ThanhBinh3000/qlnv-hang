@@ -54,9 +54,6 @@ public class DcnbPhieuKnChatLuongHdrReq {
     @NotNull
     private String donViTinh;
 
-    @NotNull
-    private String tenDonViTinh;
-
     private String maLoKho;
 
     private String tenLoKho;
