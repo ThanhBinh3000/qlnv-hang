@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbNhapDayKhoDtlRepositor
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbNhapDayKhoHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbNhapDayKhoHdrReq;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbNhapDayKhoHdrDTO;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -159,6 +160,11 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
 
     @Override
     public DcnbBbNhapDayKhoHdr approve(DcnbBbNhapDayKhoHdrReq req) throws Exception {
+        return null;
+    }
+
+    @Override
+    public DcnbBbNhapDayKhoHdr approve(StatusReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null) {
             throw new Exception("Access denied.");

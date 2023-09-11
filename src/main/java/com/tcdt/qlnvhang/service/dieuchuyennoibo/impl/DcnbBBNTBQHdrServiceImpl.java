@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBBNTBQHdrReq;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBNTBQHdrDTO;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -239,6 +240,11 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
 
     @Override
     public DcnbBBNTBQHdr approve(DcnbBBNTBQHdrReq req) throws Exception {
+        return null;
+    }
+
+    @Override
+    public DcnbBBNTBQHdr approve(StatusReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null) {
             throw new Exception("Access denied.");

@@ -17,9 +17,7 @@ public class DcnbBienBanTinhKhoHdrReq {
     @NotNull
     private Integer nam;
     private String soBbTinhKho;
-    @NotNull
     private Long bangKeCanHangId;
-    @NotNull
     private String soBangKe;
     @NotNull
     private LocalDate ngayLap;
@@ -34,16 +32,13 @@ public class DcnbBienBanTinhKhoHdrReq {
     @NotNull
     private LocalDate ngayBatDauXuat;
     @NotNull
-    private LocalDate ngayKeThucXuat;
-    @NotNull
+    private LocalDate ngayKetThucXuat;
     private LocalDate thoiHanXuatHang;
     @NotNull
     private Long qDinhDccId;
     @NotNull
     private String soQdinhDcc;
-    @NotNull
     private LocalDate ngayXuatKho;
-    @NotNull
     private LocalDate thoiHanDieuChuyen;
     @NotNull
     private LocalDate ngayKyQdDcc;

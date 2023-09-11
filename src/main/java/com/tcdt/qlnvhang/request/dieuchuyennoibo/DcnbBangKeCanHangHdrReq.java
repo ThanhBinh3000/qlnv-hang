@@ -75,7 +75,6 @@ public class DcnbBangKeCanHangHdrReq {
     private String maLoKho;
 
     private String tenLoKho;
-    @NotNull
     private Boolean thayDoiThuKho;
 
     private String trangThai;

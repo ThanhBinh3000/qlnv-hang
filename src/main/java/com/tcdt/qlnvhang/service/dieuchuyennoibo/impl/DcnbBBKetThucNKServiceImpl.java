@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBKetThucNKDtlRepository
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBKetThucNKHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuNhapKhoHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBBKetThucNKReq;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBKetThucNKHdrDTO;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBKetThucNKHdrListDTO;
@@ -138,6 +139,10 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
 
     @Override
     public DcnbBBKetThucNKHdr approve(DcnbBBKetThucNKReq req) throws Exception {
+        return null;
+    }
+    @Override
+    public DcnbBBKetThucNKHdr approve(StatusReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null) {
             throw new Exception("Access denied.");
