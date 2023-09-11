@@ -80,7 +80,6 @@ public class DcnbBienBanLayMauHdrReq implements Serializable {
     private String tenLoKho;
     private Long thuKho;
     private String tenThuKho;
-    @NotNull
     private String donViTinh;
     private Boolean thayDoiThuKho;
 
