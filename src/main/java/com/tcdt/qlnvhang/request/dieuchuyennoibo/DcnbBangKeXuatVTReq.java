@@ -20,9 +20,7 @@ public class DcnbBangKeXuatVTReq extends BaseRequest {
     private String maDvi;
     @NotNull
     private String loaiDc;
-    @NotNull
     private String loaiQdinh;
-    @NotNull
     private String typeQd;
     private Boolean isVatTu = false;
     private List<String> dsLoaiHang = new ArrayList<>();

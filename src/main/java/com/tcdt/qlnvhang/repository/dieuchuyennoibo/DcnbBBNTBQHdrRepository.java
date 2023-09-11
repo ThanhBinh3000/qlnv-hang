@@ -76,7 +76,7 @@ public interface DcnbBBNTBQHdrRepository extends JpaRepository<DcnbBBNTBQHdr, Lo
             "AND c.qdDcCucId = :qdDcCucId " +
             "AND c.maNganKho = :maNganKho " +
             "AND c.lan = :lan " +
-            "AND (:#{maLoKho}  IS NULL OR c.maLoKho = :maLoKho) ")
+            "AND (:maLoKho  IS NULL OR c.maLoKho = :maLoKho) ")
     DcnbBBNTBQHdr findByMaDviAndQdDcCucIdAndMaNganKhoAndMaLoKhoAndLan(String dvql, Long qdDcCucId, String maNganKho, String maLoKho, Long lan);
 
     @Query(value = "SELECT distinct c FROM DcnbBBNTBQHdr c " +

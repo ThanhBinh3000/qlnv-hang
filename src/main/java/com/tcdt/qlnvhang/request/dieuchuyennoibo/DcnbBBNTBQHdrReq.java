@@ -22,9 +22,7 @@ public class DcnbBBNTBQHdrReq extends BaseRequest {
     @NotNull
     private String loaiDc;
     private Boolean thayDoiThuKho;
-    @NotNull
     private String loaiQdinh;
-    @NotNull
     private String typeQd;
     private String type;
     @NotNull

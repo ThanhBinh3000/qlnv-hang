@@ -17,9 +17,7 @@ import java.util.List;
 public class DcnbPhieuNhapKhoHdrReq extends BaseRequest {
 
     private Long id;
-    @NotNull
     private String loaiQdinh;
-    @NotNull
     private String typeQd;
     @NotNull
     private String loaiDc;
