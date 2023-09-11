@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhBaoCaoKdmRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhPhieuKtclRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhPhieuXuatNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhQdGiaonvXnRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -15,6 +16,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhBaoCaoKdm;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuKtclHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuXuatNhapKho;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhQdGiaonvXnHdr;
 import com.tcdt.qlnvhang.util.Contains;
@@ -47,6 +49,10 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
 
   @Autowired
   private XhXkVtBhPhieuXuatNhapKhoRepository xhXkVtBhPhieuXuatNhapKhoRepository;
+
+  @Autowired
+  private XhXkVtBhPhieuKtclRepository xhXkVtBhPhieuKtclRepository;
+
 
   @Autowired
   private UserInfoRepository userInfoRepository;
@@ -98,6 +104,14 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
     List<XhXkVtBhQdGiaonvXnHdr> listQdGiaoNvXh = xhXkVtBhQdGiaonvXnRepository.findByIdIn(Arrays.asList(idsQdGiaoNvXh));
     if (!listQdGiaoNvXh.isEmpty()) {
       listQdGiaoNvXh.forEach(item -> {
+        item.setSoBaoCaoKdm(created.getSoBaoCao());
+        item.setIdBaoCaoKdm(created.getId());
+      });
+      xhXkVtBhQdGiaonvXnRepository.saveAll(listQdGiaoNvXh);
+    }
+    List<XhXkVtBhPhieuKtclHdr> listPhieuKtcl = xhXkVtBhPhieuKtclRepository.findByIdIn(Arrays.asList(idsQdGiaoNvXh));
+    if (!listPhieuKtcl.isEmpty()) {
+      listPhieuKtcl.forEach(item -> {
         item.setSoBaoCaoKdm(created.getSoBaoCao());
         item.setIdBaoCaoKdm(created.getId());
       });
