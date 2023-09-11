@@ -85,7 +85,6 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
     private String nhanXet;
     private String trangThai;
     private String lyDoTuChoi;
-    @NotNull
     private Boolean thayDoiThuKho;
     private String loaiQdinh;
     @Valid

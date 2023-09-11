@@ -60,7 +60,7 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
     private LocalDate ngayBatDauXuat;
 
     @Column(name = "NGAY_KET_THUC_XUAT")
-    private LocalDate ngayKeThucXuat;
+    private LocalDate ngayKetThucXuat;
 
     @Column(name = "THOI_HAN_XUAT_HANG")
     private LocalDate thoiHanXuatHang;
