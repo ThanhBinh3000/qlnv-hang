@@ -20,7 +20,6 @@ public class DcnbBienBanLayMauHdrReq implements Serializable {
     private Long id;
 
     private String loaiBb;
-    @NotNull
     private LocalDate thoiHanDieuChuyen;
     @NotNull
     private Integer nam;
