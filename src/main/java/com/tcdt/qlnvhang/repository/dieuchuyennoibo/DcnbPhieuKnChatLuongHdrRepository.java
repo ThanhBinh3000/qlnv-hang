@@ -31,7 +31,7 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "LEFT JOIN DcnbBienBanTinhKhoHdr bbtkh On bbtkh.qDinhDccId = qdc.id and bbtkh.maLoKho = khdcd.maLoKho and bbtkh.maNganKho = khdcd.maNganKho  " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
-            "AND qdc.parentId is not null and qdc.trangThai = '29' " +
+            "AND qdc.parentId is null and qdc.trangThai = '29' " +
             "AND ((:#{#param.loaiDc} IS NULL OR qdc.loaiDc = :#{#param.loaiDc}))" +
             "AND (pkncl.type IS NULL OR (:#{#param.type} IS NULL OR pkncl.type = :#{#param.type})) " +
             "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
