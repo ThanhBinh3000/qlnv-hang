@@ -29,9 +29,7 @@ public class DcnbBBNTBQDtl implements Serializable, Cloneable{
     private String nhomHang;
     @NotNull
     private String donViTinh;
-    @NotNull
     private String matHang;
-    @NotNull
     private String tenMatHang;
     @NotNull
     private Double tongGiaTri;
@@ -41,9 +39,7 @@ public class DcnbBBNTBQDtl implements Serializable, Cloneable{
     private Double donGia;
     @NotNull
     private Double thanhTienTrongNam;
-    @NotNull
     private Double soLuongNamTruoc;
-    @NotNull
     private Double thanhTienNamTruoc;
     private String type;
     private Boolean isParent;

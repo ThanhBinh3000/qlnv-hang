@@ -18,9 +18,7 @@ public class DcnbBBKetThucNKReq extends BaseRequest {
     private Long id;
     @NotNull
     private String loaiDc;
-    @NotNull
     private String typeQd;
-    @NotNull
     private String loaiQdinh;
     private Boolean thayDoiThuKho;
     @NotNull
