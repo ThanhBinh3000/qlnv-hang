@@ -106,8 +106,15 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
         });
         // check biên bản bảo quản lần mấy (nếu đã bảo biên bản nhập đầy kho thì lần 2, nếu không thì lần 1)
         Long lan = 1l;
-        DcnbBbNhapDayKhoHdr dcnbBbNhapDayKhoHdr = dcnbBbNhapDayKhoHdrRepository.findByMaDviAndQdDcCucIdAndMaNganKhoAndMaLoKhoAndTrangThai(userInfo.getDvql(),
-                req.getQdDcCucId(), req.getMaNganKho(), req.getMaLoKho(), Contains.DADUYET_LDCC);
+        DcnbBbNhapDayKhoHdr dcnbBbNhapDayKhoHdr = null;
+        if (req.getMaLoKho() != null) {
+            dcnbBbNhapDayKhoHdr = dcnbBbNhapDayKhoHdrRepository.findByMaDviAndQdDcCucIdAndMaNganKhoAndMaLoKhoAndTrangThai(userInfo.getDvql(),
+                    req.getQdDcCucId(), req.getMaNganKho(), req.getMaLoKho(), Contains.DADUYET_LDCC);
+        } else {
+            dcnbBbNhapDayKhoHdr = dcnbBbNhapDayKhoHdrRepository.findByMaDviAndQdDcCucIdAndMaNganKhoAndTrangThai(userInfo.getDvql(),
+                    req.getQdDcCucId(), req.getMaNganKho(), Contains.DADUYET_LDCC);
+        }
+
         if (dcnbBbNhapDayKhoHdr == null) {
             lan = 1l;
             if (req.getMaLoKho() != null) {
