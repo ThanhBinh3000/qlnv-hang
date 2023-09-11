@@ -60,7 +60,12 @@ public class XhXkVtBhBbLayMauService extends BaseServiceImpl {
   private FileDinhKemService fileDinhKemService;
 
   public Page<XhXkVtBhBbLayMauHdr> searchPage(CustomUserDetails currentUser, XhXkVtBhBbLayMauRequest req) throws Exception {
-    req.setDvql(currentUser.getDvql());
+    String dvql = currentUser.getDvql();
+    if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+      req.setDvql(dvql.substring(0, 6));
+    } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
+      req.setDvql(dvql);
+    }
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<XhXkVtBhBbLayMauHdr> search = xhXkVtBhBbLayMauRepository.search(req, pageable);
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
@@ -123,7 +128,7 @@ public class XhXkVtBhBbLayMauService extends BaseServiceImpl {
     this.updatePhieuXk(created, false);
     fileDinhKemService.delete(dx.getId(), Collections.singleton(XhXkVtBhBbLayMauHdr.TABLE_NAME));
     //save file đính kèm
-    List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtBhBbLayMauHdr.TABLE_NAME);
+    List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtBhBbLayMauHdr.TABLE_NAME);
     created.setFileDinhKems(fileDinhKems);
     return detail(created.getId());
   }
