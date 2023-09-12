@@ -49,8 +49,8 @@ public interface DcnbBienBanTinhKhoHdrRepository extends JpaRepository<DcnbBienB
             "AND (:#{#param.denNgayBdXuat}  IS NULL OR bbtk.ngayBatDauXuat <= :#{#param.denNgayBdXuat}) ) " +
             "AND ((:#{#param.tuNgayKtXuat}  IS NULL OR bbtk.ngayKetThucXuat >= :#{#param.tuNgayKtXuat})" +
             "AND (:#{#param.denNgayKtXuat}  IS NULL OR bbtk.ngayKetThucXuat <= :#{#param.denNgayKtXuat}) ) " +
-            "GROUP BY bbtk.id,qdc.id,pxk.id,bkch.id,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
-            "khdcd.tenLoKho,bbtk.soBbTinhKho,bbtk.ngayBatDauXuat, bbtk.ngayKetThucXuat,pxk.soPhieuXuatKho,bkch.soBangKe,pxk.ngayXuatKho," +
+            "GROUP BY bbtk.id,qdc.id,pxk.id,bbtkd.bangKeCanHangHdrId,qdc.soQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
+            "khdcd.tenLoKho,bbtk.soBbTinhKho,bbtk.ngayBatDauXuat, bbtk.ngayKetThucXuat,bbtkd.soPhieuXuatKho,bbtkd.soBangKeCanHang,bbtkd.ngayXuatKho," +
             "bbtk.trangThai,bbtk.trangThai,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.maNhaKho,khdcd.tenNhaKho," +
             "khdcd.maNganKho,khdcd.tenNganKho,qdc.ngayHieuLuc,qdc.ngayKyQdinh "+
             "ORDER BY qdc.soQdinh DESC")
