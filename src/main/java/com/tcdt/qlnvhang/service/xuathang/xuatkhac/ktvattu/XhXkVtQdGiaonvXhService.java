@@ -182,7 +182,7 @@ public class XhXkVtQdGiaonvXhService extends BaseServiceImpl {
                 xhXkVtQdGiaonvXhHdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             case Contains.CHO_DUYET_LDC + Contains.DA_DUYET_LDC:
-            case Contains.CHODUYET_LDC + Contains.CHO_DUYET_LDC:
+            case Contains.CHODUYET_TP + Contains.CHO_DUYET_LDC:
                 xhXkVtQdGiaonvXhHdr.setNguoiDuyetId(currentUser.getUser().getId());
                 xhXkVtQdGiaonvXhHdr.setNgayDuyet(LocalDate.now());
                 break;
