@@ -3,10 +3,12 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.common.DocxToPdfConverter;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBNTBQHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbNhapDayKhoDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbNhapDayKhoHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
+import com.tcdt.qlnvhang.repository.khotang.KtDiemKhoRepository;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbNhapDayKhoHdrReq;
 import com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang.DcnbBbNhapDayKhoHdrPreview;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbNhapDayKhoDtlDto;
@@ -18,6 +20,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
@@ -52,6 +55,10 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
     private DcnbBBNTBQHdrRepository dcnbBBNTBQHdrRepository;
     @Autowired
     public DocxToPdfConverter docxToPdfConverter;
+    @Autowired
+    private UserInfoRepository userInfoRepository;
+    @Autowired
+    private KtDiemKhoRepository ktDiemKhoRepository;
 
     @Override
     public Page<DcnbBbNhapDayKhoHdr> searchPage(DcnbBbNhapDayKhoHdrReq req) throws Exception {
@@ -274,10 +281,13 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
         List<DcnbBbNhapDayKhoDtl> dcnbBbNhapDayKhoDtls = dtlRepository.findByHdrId(dcnbBbNhapDayKhoHdr.get().getId());
 //        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
         List<DcnbBbNhapDayKhoDtlDto> dcnbBbNhapDayKhoDtlDtos = convertDcnbBbNhapDayKhoDtlToDto(dcnbBbNhapDayKhoDtls);
+        Optional<UserInfo> userInfo = userInfoRepository.findById(dcnbBbNhapDayKhoHdr.get().getNguoiPDuyet());
+        KtDiemKho ktDiemKho = ktDiemKhoRepository.findByMaDiemkho(dcnbBbNhapDayKhoHdr.get().getMaDiemKho());
         FileInputStream inputStream = new FileInputStream("/Users/lethanhdat/tecapro/qlnv-hang/src/main/resources/reports/dieuchuyennoibo/Nhập_LT_Biên bản nhập đầy kho.docx");
 //        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
 //        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        DcnbBbNhapDayKhoHdrPreview dcnbBbNhapDayKhoHdrPreview = setDataToPreview(dcnbBbNhapDayKhoHdr, dcnbBbNhapDayKhoDtlDtos);
+        DcnbBbNhapDayKhoHdrPreview dcnbBbNhapDayKhoHdrPreview = setDataToPreview(dcnbBbNhapDayKhoHdr,
+                dcnbBbNhapDayKhoDtlDtos, userInfo, ktDiemKho);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBbNhapDayKhoHdrPreview);
     }
 
@@ -293,7 +303,9 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
         return dcnbBbNhapDayKhoDtlDtos;
     }
 
-    private DcnbBbNhapDayKhoHdrPreview setDataToPreview(Optional<DcnbBbNhapDayKhoHdr> dcnbBbNhapDayKhoHdr, List<DcnbBbNhapDayKhoDtlDto> dcnbBbNhapDayKhoDtlDtos) {
+    private DcnbBbNhapDayKhoHdrPreview setDataToPreview(Optional<DcnbBbNhapDayKhoHdr> dcnbBbNhapDayKhoHdr,
+                                                        List<DcnbBbNhapDayKhoDtlDto> dcnbBbNhapDayKhoDtlDtos,
+                                                        Optional<UserInfo> userInfo, KtDiemKho ktDiemKho) {
         return DcnbBbNhapDayKhoHdrPreview.builder()
                 .tenDvi(dcnbBbNhapDayKhoHdr.get().getTenDvi())
                 .maQhns(dcnbBbNhapDayKhoHdr.get().getMaQhns())
@@ -301,15 +313,15 @@ public class DcnbBbNhapDayKhoServiceImpl implements DcnbBbNhapDayKhoService {
                 .ngayLap(dcnbBbNhapDayKhoHdr.get().getNgayLap().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .tenLanhDao(dcnbBbNhapDayKhoHdr.get().getTenLanhDao())
                 .tenKeToan(dcnbBbNhapDayKhoHdr.get().getTenKeToan())
-                .ktvBaoQuan("KTV bảo quản")
+                .ktvBaoQuan(userInfo.get().getFullName())
                 .tenThuKho(dcnbBbNhapDayKhoHdr.get().getTenThuKho())
-                .chungLoaiHangHoa("Chủng loại hàng DTQG")
-                .tenHangDtqg("Tên hàng DTQG")
+                .chungLoaiHangHoa(dcnbBbNhapDayKhoHdr.get().getTenCloaiVthh())
+                .tenHangDtqg(dcnbBbNhapDayKhoHdr.get().getTenCloaiVthh())
                 .tenNganKho(dcnbBbNhapDayKhoHdr.get().getTenNganKho())
                 .tenLoKho(dcnbBbNhapDayKhoHdr.get().getTenLoKho())
                 .tenNhaKho(dcnbBbNhapDayKhoHdr.get().getTenNhaKho())
                 .tenDiemKho(dcnbBbNhapDayKhoHdr.get().getTenDiemKho())
-                .tenDiaDiemKho("Địa điểm kho")
+                .tenDiaDiemKho(ktDiemKho.getTenDiemkho())
                 .ngayBdNhap(dcnbBbNhapDayKhoHdr.get().getNgayBdNhap().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .ngayKtNhap(dcnbBbNhapDayKhoHdr.get().getNgayKtNhap().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .dcnbBbNhapDayKhoDtls(dcnbBbNhapDayKhoDtlDtos)

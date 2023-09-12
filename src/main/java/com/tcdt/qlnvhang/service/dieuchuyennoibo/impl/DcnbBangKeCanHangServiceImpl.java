@@ -37,6 +37,7 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -350,9 +351,10 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
     public ReportTemplateResponse preview(DcnbBangKeCanHangHdrReq objReq) throws Exception {
         Optional<DcnbBangKeCanHangHdr> dcnbBangKeCanHangHdr = dcnbBangKeCanHangHdrRepository.findById(objReq.getId());
         if (!dcnbBangKeCanHangHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
-        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+//        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        FileInputStream inputStream = new FileInputStream("/Users/lethanhdat/tecapro/qlnv-hang/src/main/resources/reports/dieuchuyennoibo/Nhập_LT_Bảng kê cân hàng_nhập_LT.docx");
+//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
         DcnbBangKeCanHangPreview dcnbBangKeCanHangPreview = setDataToPreview(dcnbBangKeCanHangHdr);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBangKeCanHangPreview);
     }
@@ -368,11 +370,9 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
                 .tenLoKho(dcnbBangKeCanHangHdr.get().getTenLoKho())
                 .tenDiemKho(dcnbBangKeCanHangHdr.get().getTenDiemKho())
                 .tenDvi(dcnbBangKeCanHangHdr.get().getTenDvi())
-                .chungLoaiHangHoa("Chủng loại hàng DTQG")
+                .chungLoaiHangHoa(dcnbBangKeCanHangHdr.get().getCloaiVthh())
                 .tenDonViTinh(dcnbBangKeCanHangHdr.get().getTenDonViTinh())
                 .tenNguoiGiaoHang(dcnbBangKeCanHangHdr.get().getTenNguoiGiaoHang())
-                .soHd("Số hợp đồng")
-                .ngayHluc("Ngày ký hợp đồng")
                 .thoiGianGiaoNhan(dcnbBangKeCanHangHdr.get().getThoiGianGiaoNhan().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .nguoiGiamSat("Người giám sát")
                 .tongTrongLuongCabaoBi(dcnbBangKeCanHangHdr.get().getTongTrongLuongCabaoBi())

@@ -36,6 +36,7 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -260,9 +261,10 @@ public class DcnbHoSoKyThuatHdrServiceImpl extends BaseServiceImpl {
         if (!dcnbHoSoKyThuatHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
         List<DcnbHoSoTaiLieuDtl> dcnbHoSoTaiLieuDtlList = dcnbHoSoKyThuatDtlRepository.findByHoSoKyThuatHdrId(dcnbHoSoKyThuatHdr.get().getId());
         List<DcnbHoSoBienBanDtl> dcnbHoSoBienBanDtlList = dcnbHoSoBienBanDtlRepository.findByHoSoKyThuatHdrId(dcnbHoSoKyThuatHdr.get().getId());
-        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+//        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        FileInputStream inputStream = new FileInputStream("/Users/lethanhdat/tecapro/qlnv-hang/src/main/resources/reports/dieuchuyennoibo/Nhập_VT_Hồ sơ kỹ thuật.docx");
+//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
         DcnbHoSoKyThuatHdrPreview dcnbBangKeCanHangPreview = setDataToPreview(dcnbHoSoKyThuatHdr, dcnbHoSoTaiLieuDtlList, dcnbHoSoBienBanDtlList);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBangKeCanHangPreview);
     }

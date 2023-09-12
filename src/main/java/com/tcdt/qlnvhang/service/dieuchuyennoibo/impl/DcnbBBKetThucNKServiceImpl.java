@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -259,9 +260,10 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
         if (!dcnbBBKetThucNKHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
         List<DcnbBBKetThucNKDtl> dcnbBBKetThucNKDtlList = dtlRepository.findByHdrId(dcnbBBKetThucNKHdr.get().getId());
         List<DcnbBBKetThucNKDtlDto> dcnbBBKetThucNKDtlDtos = dcnbBBKetThucNKDtlToDto(dcnbBBKetThucNKDtlList);
-        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+//        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        FileInputStream inputStream = new FileInputStream("/Users/lethanhdat/tecapro/qlnv-hang/src/main/resources/reports/dieuchuyennoibo/Nhập_VT_Biên bản kết thúc nhập kho.docx");
+//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
         DcnbBBKetThucNKHdrPreview dcnbBangKeCanHangPreview = setDataToPreview(dcnbBBKetThucNKHdr, dcnbBBKetThucNKDtlDtos);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBangKeCanHangPreview);
     }
@@ -288,8 +290,8 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
                 .tenKeToanTruong(dcnbBBKetThucNKHdr.get().getTenKeToanTruong())
                 .ktvBQuan(dcnbBBKetThucNKHdr.get().getKtvBQuan())
                 .tenThuKho(dcnbBBKetThucNKHdr.get().getTenThuKho())
-                .chungLoaiHangHoa("Chủng loại hàng DTQG")
-                .tenHangDtqg("Tên hàng DTQG")
+                .chungLoaiHangHoa(dcnbBBKetThucNKHdr.get().getCloaiVthh())
+                .tenHangDtqg(dcnbBBKetThucNKHdr.get().getLoaiVthh())
                 .tenNganKho(dcnbBBKetThucNKHdr.get().getTenNganKho())
                 .tenLoKho(dcnbBBKetThucNKHdr.get().getTenLoKho())
                 .tenNhaKho(dcnbBBKetThucNKHdr.get().getTenNhaKho())

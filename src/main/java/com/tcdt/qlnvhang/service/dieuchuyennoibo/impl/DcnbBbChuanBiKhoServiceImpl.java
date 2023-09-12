@@ -34,6 +34,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -283,9 +284,10 @@ public class DcnbBbChuanBiKhoServiceImpl extends BaseServiceImpl implements Dcnb
     public ReportTemplateResponse preview(DcnbBbChuanBiKhoHdrReq objReq) throws Exception {
         Optional<DcnbBbChuanBiKhoHdr> dcnbBbChuanBiKhoHdr = hdrRepository.findById(objReq.getId());
         if (!dcnbBbChuanBiKhoHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
-        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+//        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        FileInputStream inputStream = new FileInputStream("/Users/lethanhdat/tecapro/qlnv-hang/src/main/resources/reports/dieuchuyennoibo/Nhập_VT_Biên bản chuẩn bị kho.docx");
+//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
         DcnbBbChuanBiKhoHdrPreview dcnbBbChuanBiKhoHdrPreview = setDataToPreview(dcnbBbChuanBiKhoHdr);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBbChuanBiKhoHdrPreview);
     }
@@ -297,12 +299,12 @@ public class DcnbBbChuanBiKhoServiceImpl extends BaseServiceImpl implements Dcnb
                 .maQhns(dcnbBbChuanBiKhoHdr.get().getMaQhns())
                 .soBban(dcnbBbChuanBiKhoHdr.get().getSoBban())
                 .ngayLap(dcnbBbChuanBiKhoHdr.get().getNgayLap().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
-                .tenChiCuc("Tên chi cục")
+                .tenChiCuc(dcnbBbChuanBiKhoHdr.get().getTenDvi())
                 .tenLanhDao(dcnbBbChuanBiKhoHdr.get().getTenLanhDao())
                 .tenKeToan(dcnbBbChuanBiKhoHdr.get().getTenKeToan())
-                .ktvBaoQuan("KTV bảo quản")
+                .ktvBaoQuan(dcnbBbChuanBiKhoHdr.get().getTenKyThuatVien())
                 .tenThuKho(dcnbBbChuanBiKhoHdr.get().getTenThuKho())
-                .chungLoaiHangHoa("Chủng loại hàng DTQG")
+                .chungLoaiHangHoa(dcnbBbChuanBiKhoHdr.get().getCloaiVthh())
                 .tenNganKho(dcnbBbChuanBiKhoHdr.get().getTenNganKho())
                 .tenLoKho(dcnbBbChuanBiKhoHdr.get().getTenLoKho())
                 .loaiHinhKho(dcnbBbChuanBiKhoHdr.get().getLoaiHinhKho())

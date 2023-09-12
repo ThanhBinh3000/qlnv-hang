@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -317,9 +318,10 @@ public class DcnbPhieuNhapKhoServiceImpl extends BaseServiceImpl implements Dcnb
     public ReportTemplateResponse preview(DcnbPhieuNhapKhoHdrReq objReq) throws Exception {
         Optional<DcnbPhieuNhapKhoHdr> dcnbPhieuNhapKhoHdr = hdrRepository.findById(objReq.getId());
         if (!dcnbPhieuNhapKhoHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
-        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+//        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        FileInputStream inputStream = new FileInputStream("/Users/lethanhdat/tecapro/qlnv-hang/src/main/resources/reports/dieuchuyennoibo/Nhập_VT_Phiếu nhập kho.docx");
+//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
 
         DcnbPhieuNhapKhoPreview dcnbPhieuNhapKhoPreview = setDataToPreview(dcnbPhieuNhapKhoHdr);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbPhieuNhapKhoPreview);
@@ -339,11 +341,9 @@ public class DcnbPhieuNhapKhoServiceImpl extends BaseServiceImpl implements Dcnb
                 .cmndNguoiGiao(dcnbPhieuNhapKhoHdr.get().getCmndNguoiGiao())
                 .donViNguoiGiao(dcnbPhieuNhapKhoHdr.get().getDonViNguoiGiao())
                 .diaChi(dcnbPhieuNhapKhoHdr.get().getDiaChi())
-                .theoHopDongSo("Theo hợp đồng số")
-                .ngayKyHopDong("Ngày ký hợp đồng")
-                .donViCungCapHang("Đơn vị cung cấp hàng")
-                .soQdGiaoVnNhapHang("Số QĐ giao NV nhập hàng")
-                .ngayKyQdGiaoNvNhapHang("Ngày ký QĐ giao NV nhập hàng")
+                .donViCungCapHang(dcnbPhieuNhapKhoHdr.get().getDonViNguoiGiao())
+                .soQdGiaoVnNhapHang(dcnbPhieuNhapKhoHdr.get().getSoQdDcCuc())
+                .ngayKyQdGiaoNvNhapHang(dcnbPhieuNhapKhoHdr.get().getNgayQdDcCuc().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .donViCapChaCuaTruongDonVi("Đơn vị cấp cha của trường Đơn vị")
                 .tenNganKho(dcnbPhieuNhapKhoHdr.get().getTenNganKho())
                 .tenLoKho(dcnbPhieuNhapKhoHdr.get().getTenLoKho())

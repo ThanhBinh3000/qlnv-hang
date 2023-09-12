@@ -38,6 +38,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -277,9 +278,12 @@ public class DcnbBangKeNhapVTServiceImpl extends BaseServiceImpl implements Dcnb
         if (!dcnbBangKeNhapVTHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
         Optional<DcnbBangKeCanHangHdr> dcnbBangKeCanHangHdr = dcnbBangKeCanHangHdrRepository.findById(Long.parseLong(dcnbBangKeNhapVTHdr.get().getMaDvi()));
         List<DcnbBangKeCanHangDtl> dcnbBangKeCanHangDtlList = dcnbBangKeCanHangDtlRepository.findByHdrId(Long.parseLong(dcnbBangKeNhapVTHdr.get().getMaDvi()));
-        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+
+//        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        FileInputStream inputStream = new FileInputStream("/Users/lethanhdat/tecapro/qlnv-hang/src/main/resources/reports/dieuchuyennoibo/Nhập_VT_Bảng kê nhập Vật tư.docx");
+//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+
         DcnbBangKeNhapVTHdrPreview dcnbPhieuNhapKhoPreview = setDataToPreview(dcnbBangKeNhapVTHdr, dcnbBangKeCanHangDtlList, dcnbBangKeCanHangHdr);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbPhieuNhapKhoPreview);
     }
@@ -297,11 +301,9 @@ public class DcnbBangKeNhapVTServiceImpl extends BaseServiceImpl implements Dcnb
                 .tenLoKho(dcnbBangKeNhapVTHdr.get().getTenLoKho())
                 .tenDiemKho(dcnbBangKeNhapVTHdr.get().getTenDiemKho())
                 .tenDvi(dcnbBangKeNhapVTHdr.get().getTenDvi())
-                .chungLoaiHangHoa("Chủng loại hàng DTQG")
+                .chungLoaiHangHoa(dcnbBangKeNhapVTHdr.get().getCloaiVthh())
                 .tenDonViTinh(dcnbBangKeNhapVTHdr.get().getDonViTinh())
                 .tenNguoiGiaoHang(dcnbBangKeNhapVTHdr.get().getTenNguoiGiaoHang())
-                .soHd("Số hợp đồng")
-                .ngayHluc("Ngày ký hợp đồng")
                 .thoiGianGiaoNhan(dcnbBangKeNhapVTHdr.get().getThoiHanGiaoNhan().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .nguoiGiamSat("Người giám sát")
                 .tongTrongLuongCabaoBi(dcnbBangKeCanHangHdr.get().getTongTrongLuongCabaoBi())

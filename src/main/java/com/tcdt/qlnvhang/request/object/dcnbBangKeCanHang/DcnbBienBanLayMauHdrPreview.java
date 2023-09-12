@@ -11,8 +11,6 @@ import java.util.List;
 public class DcnbBienBanLayMauHdrPreview {
 
     private String chungLoaiHangHoa; //Chủng loại hàng DTQG
-    private String soHdong;//Số hợp đồng
-    private String ngayHluc; //Ngày ký hợp đồng
     private String donViCungCapHang; //Đơn vị cung cấp hàng
     private String quyChuanTieuChuan;//Quy chuẩn, tiêu chuẩn
     private String ngayLayMau;

@@ -1,9 +1,11 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
+import com.netflix.discovery.converters.Auto;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -16,6 +18,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
+import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
@@ -32,6 +35,7 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -57,6 +61,9 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
 
     @Autowired
     private DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
+
+    @Autowired
+    private UserInfoRepository userInfoRepository;
 
 
     public Page<DcnbBienBanLayMauHdrDTO> searchPage(CustomUserDetails currentUser, SearchDcnbBienBanLayMau req) throws Exception {
@@ -306,20 +313,21 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
     public ReportTemplateResponse preview(DcnbBienBanLayMauHdrReq objReq) throws Exception {
         Optional<DcnbBienBanLayMauHdr> dcnbBienBanLayMauHdr = dcnbBienBanLayMauHdrRepository.findById(objReq.getId());
         if (!dcnbBienBanLayMauHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
-        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        DcnbBienBanLayMauHdrPreview dcnbBangKeCanHangPreview = setDataToPreview(dcnbBienBanLayMauHdr);
+        Optional<UserInfo> userInfo = userInfoRepository.findById(dcnbBienBanLayMauHdr.get().getNguoiPDuyet());
+//        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        FileInputStream inputStream = new FileInputStream("/Users/lethanhdat/tecapro/qlnv-hang/src/main/resources/reports/dieuchuyennoibo/Nhập_VT_Biên bản lấy mẫu bàn giao mẫu_VT.docx");
+//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        DcnbBienBanLayMauHdrPreview dcnbBangKeCanHangPreview = setDataToPreview(dcnbBienBanLayMauHdr, userInfo);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBangKeCanHangPreview);
     }
 
-    private DcnbBienBanLayMauHdrPreview setDataToPreview(Optional<DcnbBienBanLayMauHdr> dcnbBienBanLayMauHdr) {
+    private DcnbBienBanLayMauHdrPreview setDataToPreview(Optional<DcnbBienBanLayMauHdr> dcnbBienBanLayMauHdr,
+                                                         Optional<UserInfo> userInfo) {
         return DcnbBienBanLayMauHdrPreview.builder()
-                .soHdong("Số hợp đồng")
-                .ngayHluc("Ngày ký hợp đồng")
-                .donViCungCapHang("Đơn vị cung cấp hàng")
+                .donViCungCapHang(dcnbBienBanLayMauHdr.get().getTenDvi())
                 .quyChuanTieuChuan("Quy chuẩn, tiêu chuẩn")
-                .chungLoaiHangHoa("Chủng loại hàng DTQG")
+                .chungLoaiHangHoa(dcnbBienBanLayMauHdr.get().getTenCloaiVthh())
                 .ngayLayMau(dcnbBienBanLayMauHdr.get().getNgayLayMau().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .tenDvi(dcnbBienBanLayMauHdr.get().getTenDvi())
                 .tenDviCha("tên đơn vị cha")
@@ -328,8 +336,8 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
                 .pPLayMau(dcnbBienBanLayMauHdr.get().getPPLayMau())
                 .chiTieuKiemTra(dcnbBienBanLayMauHdr.get().getChiTieuKiemTra())
                 .ktvBaoQuan(dcnbBienBanLayMauHdr.get().getKtvBaoQuan())
-                .truongBpKtbq("Trưởng BP KTBQ")
-                .lanhDaoChiCuc("Lãnh đạo chi cục")
+                .truongBpKtbq(dcnbBienBanLayMauHdr.get().getKtvBaoQuan())
+                .lanhDaoChiCuc(userInfo.get().getFullName())
                 .dcnbBienBanLayMauDtl(dcnbBienBanLayMauHdr.get().getDcnbBienBanLayMauDtl())
                 .build();
     }

@@ -24,8 +24,6 @@ public class DcnbBangKeCanHangPreview {
     private String chungLoaiHangHoa; //Chủng loại hàng DTQG
     private String tenDonViTinh;
     private String tenNguoiGiaoHang;
-    private String soHd; //Số hợp đồng
-    private String ngayHluc; //Ngày ký hợp đồng
     private String thoiGianGiaoNhan;
     private String nguoiGiamSat; //Người giám sát
     private List<DcnbBangKeCanHangDtlDto> dcnbBangKeCanHangDtl;

@@ -3,6 +3,8 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
+import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKtChatLuongDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKtChatLuongHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -16,6 +18,8 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
+import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
@@ -33,6 +37,7 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -53,6 +58,12 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
 
     @Autowired
     private FileDinhKemRepository fileDinhKemRepository;
+
+    @Autowired
+    private QlnvDmDonviRepository qlnvDmDonviRepository;
+
+    @Autowired
+    private UserInfoRepository userInfoRepository;
 
     public Page<DcnbPhieuKtChatLuongHdrDTO> searchPage(CustomUserDetails currentUser, SearchPhieuKtChatLuong req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -278,26 +289,29 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
     public ReportTemplateResponse preview(DcnbPhieuKtChatLuongHdrReq objReq) throws Exception {
         Optional<DcnbPhieuKtChatLuongHdr> dcnbPhieuKtChatLuongHdr = dcnbPhieuKtChatLuongHdrRepository.findById(objReq.getId());
         if (!dcnbPhieuKtChatLuongHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
-        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        DcnbPhieuKtChatLuongHdrPreview dcnbPhieuKtChatLuongHdrPreview = setDataToPreview(dcnbPhieuKtChatLuongHdr);
+        QlnvDmDonvi qlnvDmDonvi = qlnvDmDonviRepository.findByMaDvi(dcnbPhieuKtChatLuongHdr.get().getMaDvi());
+        Optional<UserInfo> userInfo = userInfoRepository.findById(dcnbPhieuKtChatLuongHdr.get().getNguoiPDuyet());
+//        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        FileInputStream inputStream = new FileInputStream("/Users/lethanhdat/tecapro/qlnv-hang/src/main/resources/reports/dieuchuyennoibo/Nhập_LT_Phiếu kiểm tra chất lượng_LT.docx");
+//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        DcnbPhieuKtChatLuongHdrPreview dcnbPhieuKtChatLuongHdrPreview = setDataToPreview(dcnbPhieuKtChatLuongHdr,
+                qlnvDmDonvi, userInfo);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbPhieuKtChatLuongHdrPreview);
     }
 
-    private DcnbPhieuKtChatLuongHdrPreview setDataToPreview(Optional<DcnbPhieuKtChatLuongHdr> dcnbPhieuKtChatLuongHdr) {
+    private DcnbPhieuKtChatLuongHdrPreview setDataToPreview(Optional<DcnbPhieuKtChatLuongHdr> dcnbPhieuKtChatLuongHdr,
+                                                            QlnvDmDonvi qlnvDmDonvi, Optional<UserInfo> userInfo) {
         return DcnbPhieuKtChatLuongHdrPreview.builder()
-                .tenDvi("Tên đơn vị")
+                .tenDvi(qlnvDmDonvi.getTenDvi())
                 .maDvi(dcnbPhieuKtChatLuongHdr.get().getMaDvi())
                 .maQhns(dcnbPhieuKtChatLuongHdr.get().getMaQhns())
-                .loaiHangHoa("Loại hàng DTQG")
+                .loaiHangHoa(dcnbPhieuKtChatLuongHdr.get().getTenLoaiVthh())
                 .soPhieu(dcnbPhieuKtChatLuongHdr.get().getSoPhieu())
                 .nguoiGiaoHang(dcnbPhieuKtChatLuongHdr.get().getNguoiGiaoHang())
                 .dVGiaoHang(dcnbPhieuKtChatLuongHdr.get().getDVGiaoHang())
                 .diaChiDonViGiaoHang(dcnbPhieuKtChatLuongHdr.get().getDiaChiDonViGiaoHang())
-                .theoHopDongSo("Theo hợp đồng số")
-                .ngayKyHopDong("Ngày ký hợp đồng")
-                .chungLoaiHangHoa("Chủng loại hàng DTQG")
+                .chungLoaiHangHoa(dcnbPhieuKtChatLuongHdr.get().getCloaiVthh())
                 .soChungThuGiamDinh(dcnbPhieuKtChatLuongHdr.get().getSoChungThuGiamDinh())
                 .ngayGiamDinh(dcnbPhieuKtChatLuongHdr.get().getNgayGiamDinh().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .toChucGiamDinh(dcnbPhieuKtChatLuongHdr.get().getToChucGiamDinh())
@@ -313,9 +327,9 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
                 .ngayNhap(dcnbPhieuKtChatLuongHdr.get().getNgayLapPhieu().getDayOfMonth())
                 .thangNhap(dcnbPhieuKtChatLuongHdr.get().getNgayLapPhieu().getMonth().getValue())
                 .namNhap(dcnbPhieuKtChatLuongHdr.get().getNgayLapPhieu().getYear())
-                .ktvBaoQuan("KTV bảo quản")
+                .ktvBaoQuan(dcnbPhieuKtChatLuongHdr.get().getNguoiKt())
                 .tenThuKho(dcnbPhieuKtChatLuongHdr.get().getTenThuKho())
-                .tenLanhDaoChiCuc("Lãnh đạo Chi cục")
+                .tenLanhDaoChiCuc(userInfo.get().getFullName())
                 .dcnbPhieuKtChatLuongDtl(dcnbPhieuKtChatLuongHdr.get().getDcnbPhieuKtChatLuongDtl())
                 .build();
     }
