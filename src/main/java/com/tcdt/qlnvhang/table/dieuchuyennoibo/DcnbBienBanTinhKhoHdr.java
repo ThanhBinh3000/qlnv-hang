@@ -86,6 +86,12 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
     @Column(name = "CLOAI_VTHH")
     private String cloaiVthh;
 
+    @Column(name = "TEN_LOAI_VTHH")
+    private String tenLoaiVthh;
+
+    @Column(name = "TEN_CLOAI_VTHH")
+    private String tenCloaiVthh;
+
     @Column(name = "DON_VI_TINH")
     private String donViTinh;
 

@@ -63,7 +63,10 @@ public class DcnbBienBanTinhKhoHdrReq {
     private String maNganKho;
     @NotNull
     private String tenNganKho;
-
+    @NotNull
+    private String tenLoaiVthh;
+    @NotNull
+    private String tenCloaiVthh;
     private String maLoKho;
 
     private String tenLoKho;
