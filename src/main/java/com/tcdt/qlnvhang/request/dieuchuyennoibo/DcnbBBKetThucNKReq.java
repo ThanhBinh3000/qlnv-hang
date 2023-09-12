@@ -1,10 +1,12 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBKetThucNKDtl;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -26,6 +28,10 @@ public class DcnbBBKetThucNKReq extends BaseRequest {
     @NotNull
     private String cloaiVthh;
     @NotNull
+    private String tenLoaiVthh;
+    @NotNull
+    private String tenCloaiVthh;
+    @NotNull
     private Integer nam;
     private String soBb;
     @NotNull
@@ -38,6 +44,8 @@ public class DcnbBBKetThucNKReq extends BaseRequest {
     private Long qDinhDccId;
     @NotNull
     private String soQdinhDcc;
+    @NotNull
+    private String ngayQdinhDcc;
     @NotNull
     private String maDiemKho;
     @NotNull
@@ -85,6 +93,8 @@ public class DcnbBBKetThucNKReq extends BaseRequest {
 
     private LocalDate ngayPDuyet;
     private String type;
+    private String ghiChu;
+    private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
     @Valid
     private List<DcnbBBKetThucNKDtl> dcnbBBKetThucNKDtl = new ArrayList<>();
     private LocalDate tuNgayKtnk;

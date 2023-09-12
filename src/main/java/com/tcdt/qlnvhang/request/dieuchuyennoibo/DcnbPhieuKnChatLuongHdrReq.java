@@ -108,6 +108,12 @@ public class DcnbPhieuKnChatLuongHdrReq {
 
     private LocalDate ngayXuatDocKho;
 
+    private Long bbNhapDayKhoId;
+
+    private String soNhapDayKho;
+
+    private LocalDate ngayNhapDayKho;
+
     private Long bbHaoDoiId;
 
     private String soBbHaoDoi;

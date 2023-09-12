@@ -179,6 +179,15 @@ public class DcnbPhieuKnChatLuongHdr extends BaseEntity implements Serializable,
     @Column(name = "SO_BB_HAO_DOI")
     private String soBbHaoDoi;
 
+    @Column(name = "BB_NHAP_DAY_KHO_ID")
+    private Long bbNhapDayKhoId;
+
+    @Column(name = "SO_BB_NHAP_DAY_KHO")
+    private String soNhapDayKho;
+
+    @Column(name = "NGAY_BB_NHAP_DAY_KHO")
+    private LocalDate ngayNhapDayKho;
+
     @Column(name = "TYPE")
     private String type;
 
