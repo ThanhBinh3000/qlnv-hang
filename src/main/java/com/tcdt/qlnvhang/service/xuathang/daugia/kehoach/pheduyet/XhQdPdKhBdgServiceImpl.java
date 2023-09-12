@@ -527,6 +527,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
             });
             List<XhTcTtinBdgHdr> xhTcTtinBdgHdrs = xhTcTtinBdgHdrRepository.findByIdQdPdDtlOrderByLanDauGia(dataDtl.getId());
             dataDtl.setListTtinDg(xhTcTtinBdgHdrs);
+            dataDtl.setChildren(phanLo);
             XhQdPdKhBdg hdr = xhQdPdKhBdgRepository.findById(dataDtl.getIdQdHdr()).orElse(null);
             if (hdr != null) {
                 hdr.setMapVthh(mapVthh);
@@ -545,13 +546,12 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
         Long dtlId = Long.valueOf(statusReq.getId());
         Optional<XhQdPdKhBdgDtl> optional = xhQdPdKhBdgDtlRepository.findById(dtlId);
         XhQdPdKhBdgDtl dataDtl = optional.orElseThrow(() -> new Exception("Không tìm thấy dữ liệu"));
-        String combinedStatus = statusReq.getTrangThai() + dataDtl.getTrangThai();
-        if (!Contains.HOANTHANHCAPNHAT.equals(combinedStatus)) {
+        String status = statusReq.getTrangThai() + dataDtl.getTrangThai();
+        if (!status.equals(Contains.HOANTHANHCAPNHAT + Contains.DANGCAPNHAT)) {
             throw new Exception("Phê duyệt không thành công");
         }
         dataDtl.setTrangThai(statusReq.getTrangThai());
-        XhQdPdKhBdgDtl created = xhQdPdKhBdgDtlRepository.save(dataDtl);
-        return created;
+        return xhQdPdKhBdgDtlRepository.save(dataDtl);
     }
 
     public void exportDtl(CustomUserDetails currentUser, XhQdPdKhBdgDtlReq req, HttpServletResponse response) throws Exception {
