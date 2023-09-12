@@ -34,7 +34,6 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
     private String soQdDcCuc;
     @NotNull
     private Long qdDcCucId;
-    @NotNull
     private LocalDate ngayQdDcCuc;
     @NotNull
     private BigDecimal soLuongQdDcCuc;
@@ -57,7 +56,6 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
     private String tenNhaKho;
     @NotNull
     private String tenNganKho;
-    @NotNull
     private String tenLoKho;
     private String loaiHinhKho;
     @NotNull
@@ -70,13 +68,9 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
     private String tenCloaiVthh;
     @NotNull
     private String donViTinh;
-    @NotNull
     private BigDecimal tichLuong;
-    @NotNull
     private Long idPhieuNhapKho;
-    @NotNull
     private String soPhieuNhapKho;
-    @NotNull
     private BigDecimal soLuongPhieuNhapKho;
     private String hthucKlot;
     private String pthucBquan;
@@ -85,7 +79,6 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
     private String nhanXet;
     private String trangThai;
     private String lyDoTuChoi;
-    @NotNull
     private Boolean thayDoiThuKho;
     private String loaiQdinh;
     @Valid

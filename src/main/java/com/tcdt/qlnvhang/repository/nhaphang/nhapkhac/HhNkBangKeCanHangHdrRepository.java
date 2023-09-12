@@ -18,7 +18,7 @@ public interface HhNkBangKeCanHangHdrRepository extends JpaRepository<HhNkBangKe
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.nhaphang.nhapkhac.HhNkBangKeCanHangHdrDTO(" +
             "bkch.id,qdgnv.id,pnk.id,qdgnv.soQd,qdgnv.nam,qdgnv.tgianNkMnhat, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho," +
             "dmdvlokho.tenDvi,bkch.soBangKe,pnk.soPhieuNhapKho, pnk.ngayLap ,bkch.trangThai,bkch.trangThai,hdr.loaiVthh," +
-            "dmvt.ten,dtl.cloaiVthh,dmvt.loaiHang,dtl.maNhaKho,dmdvnhakho.tenDvi,hdr.dvt,hdr.dvt," +
+            "dmvt.ten,dtl.cloaiVthh,dmvt.loaiHang,dtl.maNhaKho,dmdvnhakho.tenDvi,hdr.dvt," +
             "dtl.maNganKho,dmdvngankho.tenDvi) " +
             "FROM HhQdGiaoNvuNhapHangKhacHdr qdgnv " +
             "LEFT JOIN HhQdPdNhapKhacHdr hdr ON hdr.id = qdgnv.idQdPdNk " +

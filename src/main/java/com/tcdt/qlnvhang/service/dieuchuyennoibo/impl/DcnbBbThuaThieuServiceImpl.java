@@ -170,6 +170,11 @@ public class DcnbBbThuaThieuServiceImpl implements DcnbBbThuaThieuService {
     }
 
     @Override
+    public DcnbBbThuaThieuHdr approve(StatusReq req) throws Exception {
+        return null;
+    }
+
+    @Override
     public void delete(Long id) throws Exception {
         Optional<DcnbBbThuaThieuHdr> optional = hdrRepository.findById(id);
         if (!optional.isPresent()) {

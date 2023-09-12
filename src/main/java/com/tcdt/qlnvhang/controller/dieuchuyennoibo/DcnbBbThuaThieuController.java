@@ -110,7 +110,7 @@ public class DcnbBbThuaThieuController {
 
     @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin", response = List.class)
     @PostMapping(value =  PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody DcnbBbThuaThieuHdrReq objReq) {
+    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             service.approve(objReq);

@@ -56,8 +56,6 @@ public class DcnbBangKeCanHangHdrReq {
     @NotNull
     private String donViTinh;
     @NotNull
-    private String tenDonViTinh;
-    @NotNull
     private String maDiemKho;
     @NotNull
     private String tenDiemKho;
@@ -75,7 +73,6 @@ public class DcnbBangKeCanHangHdrReq {
     private String maLoKho;
 
     private String tenLoKho;
-    @NotNull
     private Boolean thayDoiThuKho;
 
     private String trangThai;

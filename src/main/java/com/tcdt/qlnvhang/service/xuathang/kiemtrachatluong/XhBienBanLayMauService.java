@@ -84,7 +84,7 @@ public class XhBienBanLayMauService extends BaseServiceImpl {
             throw new Exception("Bad request.");
         }
         if (!DataUtils.isNullObject(objReq.getSoBbQd())) {
-            Optional<XhBienBanLayMauHdr> optional = xhBienBanLayMauRepository.findBySoBbQd(objReq.getSoBbQd());
+            Optional<XhBienBanLayMauHdr> optional = xhBienBanLayMauRepository.findFirstBySoBbQd(objReq.getSoBbQd());
             if (optional.isPresent()) {
                 throw new Exception("số quyết định đã tồn tại");
             }
@@ -106,7 +106,7 @@ public class XhBienBanLayMauService extends BaseServiceImpl {
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-        Optional<XhBienBanLayMauHdr> soQd = xhBienBanLayMauRepository.findBySoBbQd(objReq.getSoBbQd());
+        Optional<XhBienBanLayMauHdr> soQd = xhBienBanLayMauRepository.findFirstBySoBbQd(objReq.getSoBbQd());
         if (soQd.isPresent()) {
             if (!soQd.get().getId().equals(objReq.getId())) {
                 throw new Exception("số quyết định đã tồn tại");
