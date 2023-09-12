@@ -160,29 +160,35 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
             case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_KTVBQ:
                 hdr.setNguoiPDuyetTvqt(userInfo.getId());
                 hdr.setNgayPDuyetTvqt(LocalDate.now());
+                hdr.setTenKtvBQuan(userInfo.getFullName());
                 break;
             case Contains.CHODUYET_KTVBQ + Contains.CHODUYET_KT:
                 hdr.setNguoiPDuyetTvqt(userInfo.getId());
                 hdr.setNgayPDuyetTvqt(LocalDate.now());
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                hdr.setTenKtvBQuan(userInfo.getFullName());
                 break;
             case Contains.CHODUYET_KT + Contains.TUCHOI_KT:
                 hdr.setNguoiPDuyetKt(userInfo.getId());
                 hdr.setNgayPDuyetKt(LocalDate.now());
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                hdr.setTenKeToanTruong(userInfo.getFullName());
                 break;
             case Contains.CHODUYET_KT + Contains.CHODUYET_LDCC:
                 hdr.setNguoiPDuyetKt(userInfo.getId());
                 hdr.setNgayPDuyetKt(LocalDate.now());
+                hdr.setTenKeToanTruong(userInfo.getFullName());
                 break;
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
                 hdr.setNguoiPDuyet(userInfo.getId());
                 hdr.setNgayPDuyet(LocalDate.now());
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                hdr.setTenLanhDaoChiCuc(userInfo.getFullName());
                 break;
             case Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC:
                 hdr.setNguoiPDuyet(userInfo.getId());
                 hdr.setNgayPDuyet(LocalDate.now());
+                hdr.setTenLanhDaoChiCuc(userInfo.getFullName());
                 List<DcnbBBKetThucNKDtl> bbKetThucNKDtl = dtlRepository.findByHdrId(hdr.getId());
                 for (DcnbBBKetThucNKDtl kt : bbKetThucNKDtl) {
                     Optional<DcnbPhieuNhapKhoHdr> dcnbPhieuNhapKhoHdr = dcnbPhieuNhapKhoHdrRepository.findById(kt.getPhieuNhapKhoId());
