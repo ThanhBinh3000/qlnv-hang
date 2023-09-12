@@ -207,9 +207,9 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     @Transient
     private String tenTrangThai;
     @Transient
-    private String donViCha;
+    private String maDviCha;
     @Transient
-    private String tenDonViCha;
+    private String tenDviCha;
 
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
@@ -218,6 +218,7 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
 
     public void setMaDvi(String maDvi) {
         this.maDvi = maDvi;
-
+        // get đơn vị cấp cha
+        this.maDviCha = this.maDvi.substring(0, this.maDvi.length() - 2);
     }
 }
