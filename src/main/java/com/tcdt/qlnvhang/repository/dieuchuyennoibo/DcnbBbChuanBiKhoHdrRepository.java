@@ -80,9 +80,12 @@ public interface DcnbBbChuanBiKhoHdrRepository extends JpaRepository<DcnbBbChuan
             "WHERE 1 =1 " +
             "AND ((:#{#param.maDvi} IS NULL OR LOWER(bbcb.maDvi) LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%'))) " +
             "AND (:#{#param.soQdDcCuc} IS NULL OR LOWER(bbcb.soQdDcCuc) LIKE CONCAT('%',LOWER(:#{#param.soQdDcCuc}),'%')) " +
+            "AND (:#{#param.qdDcCucId} IS NULL OR LOWER(bbcb.qdDcCucId) LIKE CONCAT('%',LOWER(:#{#param.qdDcCucId}),'%')) " +
             "AND (:#{#param.soBban} IS NULL OR LOWER(bbcb.soBban) LIKE CONCAT('%',LOWER(:#{#param.soBban}),'%')) " +
             "AND (:#{#param.nam} IS NULL OR bbcb.nam = :#{#param.nam}) " +
             "AND (:#{#param.loaiDc} IS NULL OR bbcb.loaiDc = :#{#param.loaiDc}) " +
+            "AND (:#{#param.maNganKho} IS NULL OR bbcb.maNganKho = :#{#param.maNganKho}) " +
+            "AND (:#{#param.maLoKho} IS NULL OR bbcb.maLoKho = :#{#param.maLoKho}) " +
             "AND (:#{#param.trangThai} IS NULL OR bbcb.trangThai = :#{#param.trangThai}) " +
             "AND ((:#{#param.tuNgayLapBb}  IS NULL OR bbcb.ngayLap >= :#{#param.tuNgayLapBb})" +
             "AND (:#{#param.denNgayLapBb}  IS NULL OR bbcb.ngayLap <= :#{#param.denNgayLapBb}) ) " +

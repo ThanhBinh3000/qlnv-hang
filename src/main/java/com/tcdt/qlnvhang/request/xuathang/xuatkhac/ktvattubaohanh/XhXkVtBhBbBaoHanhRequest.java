@@ -27,7 +27,7 @@ public class XhXkVtBhBbBaoHanhRequest extends BaseRequest {
   private String loaiVthh;
   private String cloaiVthh;
   private BigDecimal slTonKho;
-  private Integer capLaiCaLo;
+  private Integer Boolean;
   private BigDecimal slBaoHanh;
   private LocalDate thoiGianBh;
   private String canBoLapBb;

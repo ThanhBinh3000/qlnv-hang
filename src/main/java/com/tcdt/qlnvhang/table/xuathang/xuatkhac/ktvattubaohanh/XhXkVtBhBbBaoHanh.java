@@ -40,7 +40,7 @@ public class XhXkVtBhBbBaoHanh extends BaseEntity implements Serializable {
   private String loaiVthh;
   private String cloaiVthh;
   private BigDecimal slTonKho;
-  private Integer capLaiCaLo;
+  private Boolean capLaiCaLo;
   private BigDecimal slBaoHanh;
   private LocalDate thoiGianBh;
   private String canBoLapBb;
