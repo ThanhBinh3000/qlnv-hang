@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.nvnhap.HhQdGiaoNvuNhapHangKh
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhBbNghiemThuNhapKhacReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhBbNghiemThuNhapKhacSearch;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletResponse;
@@ -20,4 +21,5 @@ public interface HhBbNghiemThuNhapKhacService {
     void exportBbNtBq (HhBbNghiemThuNhapKhacSearch req, HttpServletResponse response) throws Exception;
     List<HhBbNghiemThuNhapKhac> timKiemBbtheoMaNganLo (HhBbNghiemThuNhapKhacSearch objReq) throws Exception;
     List<HhQdGiaoNvuNhapHangKhacHdr> dsQdNvuDuocLapBbNtBqLd (HhBbNghiemThuNhapKhacSearch objReq) throws Exception;
+    ReportTemplateResponse preview(HhBbNghiemThuNhapKhacReq objReq) throws Exception;
 }
