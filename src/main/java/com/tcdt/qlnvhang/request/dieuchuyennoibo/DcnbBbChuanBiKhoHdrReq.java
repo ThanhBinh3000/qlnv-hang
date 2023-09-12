@@ -6,10 +6,7 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbChuanBiKhoDtl;
 import lombok.Data;
 
-import javax.persistence.CascadeType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -71,6 +68,8 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
     @NotNull
     private BigDecimal duToanKphi;
     private BigDecimal tichLuong;
+    private BigDecimal tongKinhPhiDaTh;
+    private BigDecimal tongKinhPhiDaThBc;
     private Long idPhieuNhapKho;
     private String soPhieuNhapKho;
     private BigDecimal soLuongPhieuNhapKho;
