@@ -37,13 +37,13 @@ public class DcnbBBKetThucNKDtl {
     private String soPhieuNhapKho;
     @NotNull
     @Column(name = "BANG_KE_NHAP_ID")
-    private Long bangKeNhapKhoId;
+    private Long bangKeNhapVtId;
     @NotNull
     @Column(name = "SO_BANG_KE_NHAP")
-    private String soBangKeNhap;
+    private String soBangKeNhapVt;
     @NotNull
     @Column(name = "NGAY_NHAP")
-    private LocalDate ngayNhap;
+    private LocalDate ngayNhapKho;
     @NotNull
     @Column(name = "SO_LUONG")
     private BigDecimal soLuong;
