@@ -68,6 +68,8 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
     private String tenCloaiVthh;
     @NotNull
     private String donViTinh;
+    @NotNull
+    private BigDecimal duToanKphi;
     private BigDecimal tichLuong;
     private Long idPhieuNhapKho;
     private String soPhieuNhapKho;
