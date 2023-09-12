@@ -300,13 +300,15 @@ public class HhBbNghiemThuNhapKhacServiceImpl extends BaseServiceImpl implements
     @Override
     public ReportTemplateResponse preview(HhBbNghiemThuNhapKhacReq objReq) throws Exception {
         HhBbNghiemThuNhapKhac optional = chiTiet(objReq.getId());
-        String filePath = "/Users/vunt/Downloads/Print/"+objReq.getReportTemplateRequest().getFileName();
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+//        String filePath = "/Users/vunt/Downloads/Print/"+objReq.getReportTemplateRequest().getFileName();
+//        byte[] byteArray = Files.readAllBytes(Paths.get(filePath));
         if(optional.getLoaiVthh().startsWith("02")){
             optional.setTenBaoCao("BIÊN BẢN CHUẨN BỊ KHO");
         }else{
             optional.setTenBaoCao("BIÊN BẢN NGHIỆM THU BẢO QUẢN LẦN ĐẦU NHẬP HÀNG DỰ TRỮ QUỐC GIA");
         }
-        byte[] byteArray = Files.readAllBytes(Paths.get(filePath));
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
         return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
     }
