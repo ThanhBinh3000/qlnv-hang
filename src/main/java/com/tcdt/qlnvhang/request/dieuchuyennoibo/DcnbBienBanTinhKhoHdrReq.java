@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanTinhKhoDtl;
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -117,6 +118,8 @@ public class DcnbBienBanTinhKhoHdrReq {
     private BigDecimal chenhLechSlConLai;
 
     private String type;
+    private String soPhieuKnChatLuong;
+    private Long phieuKnChatLuongHdrId;
 
     private List<FileDinhKemReq> fileBbTinhKhoDaKy = new ArrayList<>();
     @Valid
