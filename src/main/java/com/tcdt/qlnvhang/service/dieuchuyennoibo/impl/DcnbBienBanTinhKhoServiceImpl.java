@@ -274,7 +274,7 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
             objs[7] = dx.getNgayBatDauXuat();
             objs[8] = dx.getNgayKetThucXuat();
             objs[9] = dx.getSoPhieuXuatKho();
-            objs[10] = dx.getSoBangKeXuatDcLt();
+            objs[10] = dx.getSoBangKe();
             objs[11] = dx.getNgayXuatKho();
             objs[12] = dx.getTrangThai();
             dataList.add(objs);
