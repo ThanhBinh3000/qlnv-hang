@@ -197,8 +197,6 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
         PhieuKnghiemCluongHang optional = detail(objReq.getId());
         ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-//        String filePath = "/Users/vunt/Downloads/Print/"+objReq.getReportTemplateRequest().getFileName();
-//        byte[] byteArray = Files.readAllBytes(Paths.get(filePath));
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
         return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
     }
