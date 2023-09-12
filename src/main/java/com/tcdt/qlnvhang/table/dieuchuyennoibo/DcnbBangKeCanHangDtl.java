@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Data
@@ -26,12 +27,15 @@ public class DcnbBangKeCanHangDtl {
     @Column(name = "HDR_ID")
     private Long hdrId;
 
+    @NotNull
     @Column(name = "MA_CAN")
     private String maCan;
 
+    @NotNull
     @Column(name = "SO_BAO_BI")
     private String soBaoBi;
 
+    @NotNull
     @Column(name = "TRONG_LUONG_CA_BAO_BI")
     private BigDecimal trongLuongCaBaoBi;
 

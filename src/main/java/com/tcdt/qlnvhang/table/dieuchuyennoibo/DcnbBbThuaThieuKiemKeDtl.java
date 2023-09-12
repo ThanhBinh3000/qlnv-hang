@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = DcnbBbThuaThieuKiemKeDtl.TABLE_NAME)
@@ -24,8 +25,11 @@ public class DcnbBbThuaThieuKiemKeDtl {
     private Long id;
     @Column(name = "HDR_ID", insertable = true, updatable = true)
     private Long hdrId;
+    @NotNull
     private String hoVaTen;
+    @NotNull
     private String chucVu;
+    @NotNull
     private String daiDien;
 
     @ManyToOne(fetch = FetchType.LAZY)

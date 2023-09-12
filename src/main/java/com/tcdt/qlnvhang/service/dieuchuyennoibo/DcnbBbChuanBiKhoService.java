@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
+import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbChuanBiKhoHdrReq;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbChuanBiKhoHdrDTO;
 import com.tcdt.qlnvhang.service.BaseService;
@@ -11,4 +12,5 @@ public interface DcnbBbChuanBiKhoService extends BaseService<DcnbBbChuanBiKhoHdr
     public Page<DcnbBbChuanBiKhoHdrDTO> search(DcnbBbChuanBiKhoHdrReq req) throws Exception;
 
     ReportTemplateResponse preview(DcnbBbChuanBiKhoHdrReq objReq) throws Exception;
+    public DcnbBbChuanBiKhoHdr approve(StatusReq req) throws Exception;
 }

@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -80,6 +81,8 @@ public class DcnbBbNhapDayKhoHdr extends BaseEntity implements Serializable, Clo
     private LocalDate ngayPDuyet;
     @Column(name = "NGUOI_PDUYET")
     private Long nguoiPDuyet;
+    @Column(name = "TONG_SL_NHAP")
+    private BigDecimal tongSlNhap;
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)

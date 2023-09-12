@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBBNTBQHdrReq;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBNTBQHdrDTO;
 import com.tcdt.qlnvhang.service.BaseService;
@@ -18,4 +19,5 @@ public interface DcnbBBNTBQHdrService extends BaseService<DcnbBBNTBQHdr, DcnbBBN
     List<DcnbBBNTBQHdr> searchList(CustomUserDetails currentUser, DcnbBBNTBQHdrReq objReq);
 
     ReportTemplateResponse preview(DcnbBBNTBQHdrReq objReq) throws Exception;
+    public DcnbBBNTBQHdr approve(StatusReq req) throws Exception;
 }

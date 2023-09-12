@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbGiaoNhanDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbGiaoNhanHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbGiaoNhanHdrReq;
 import com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang.DcnbBbGiaoNhanHdrPreview;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbGiaoNhanHdrDTO;
@@ -166,6 +167,11 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
 
     @Override
     public DcnbBbGiaoNhanHdr approve(DcnbBbGiaoNhanHdrReq req) throws Exception {
+        return null;
+    }
+
+    @Override
+    public DcnbBbGiaoNhanHdr approve(StatusReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null) {
             throw new Exception("Access denied.");
@@ -232,15 +238,25 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
         Page<DcnbBbGiaoNhanHdrDTO> page = searchPage(currentUser, objReq);
         List<DcnbBbGiaoNhanHdrDTO> data = page.getContent();
 
-        String title = "Danh sách bảng kê cân hàng ";
-        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số công văn/đề xuất", "Ngày lập KH", "Ngày duyệt LĐ Chi cục", "Loại điều chuyển", "Đơn vị đề xuất", "Trạng thái"};
-        String fileName = "danh-sach-ke-hoach-dieu-chuyen-noi-bo-hang-dtqg.xlsx";
+        String title = "Danh sách biên bản giao nhận";
+        String[] rowsName = new String[]{"STT", "Số QĐ điều chuyển", "Năm KH", "Thời hạn điều chuyển", "Điểm kho", "Lô kho", "Số HSKT", "Số BB giao nhận", "Số BB kết thúc NK", "Ngày kết thúc NK", "Số BBLM/BGM", "Trạng thái"};
+        String fileName = "danh-sach-bien-ban-giao-nhan.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
             DcnbBbGiaoNhanHdrDTO dx = data.get(i);
             objs = new Object[rowsName.length];
             objs[0] = i + 1;
+            objs[1] = dx.getSoQdinh();
+            objs[2] = dx.getNamKh();
+            objs[3] = dx.getThoiHanDieuChuyen();
+            objs[4] = dx.getTenDiemKho();
+            objs[5] = dx.getTenLoKho();
+            objs[6] = dx.getSoHoSoKt();
+            objs[7] = dx.getSoBienBanGiaoNhan();
+            objs[8] = dx.getSoBienBanKetThucNk();
+            objs[9] = dx.getNgayKetThucNk();
+            objs[10] = dx.getSoBienBanLayMau();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

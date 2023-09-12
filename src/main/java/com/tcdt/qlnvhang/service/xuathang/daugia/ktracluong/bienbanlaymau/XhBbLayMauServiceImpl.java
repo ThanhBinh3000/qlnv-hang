@@ -1,5 +1,8 @@
 package com.tcdt.qlnvhang.service.xuathang.daugia.ktracluong.bienbanlaymau;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxKhlcntDsgthau;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxKhlcntDsgthauCtiet;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMau;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMauCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
@@ -9,11 +12,13 @@ import com.tcdt.qlnvhang.repository.xuathang.daugia.ktracluong.bienbanlaymau.XhB
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.bandaugia.bienbanlaymau.XhBbLayMauCtRequest;
 import com.tcdt.qlnvhang.request.bandaugia.bienbanlaymau.XhBbLayMauRequest;
+import com.tcdt.qlnvhang.request.object.DsChiCucPreview;
+import com.tcdt.qlnvhang.request.object.HhDxuatKhLcntThopPreview;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.*;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -31,7 +36,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -196,6 +207,8 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl implements XhBbLayMau
 
 		data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
 		data.setTenDvi(hashMapDvi.get(data.getMaDvi()));
+		data.setMaDviCha(data.getMaDvi().substring(0,data.getMaDvi().length()-2));
+		data.setTenDviCha(hashMapDvi.get(data.getMaDviCha()));
 		data.setTenDiemKho(hashMapDvi.get(data.getMaDiemKho()));
 		data.setTenNhaKho(hashMapDvi.get(data.getMaNhaKho()));
 		data.setTenNganKho(hashMapDvi.get(data.getMaNganKho()));
@@ -205,6 +218,12 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl implements XhBbLayMau
 		if(!Objects.isNull(data.getIdKtv())){
 			data.setTenKtv(userInfoRepository.findById(data.getIdKtv()).get().getFullName());
 		}
+		if(!Objects.isNull(data.getNguoiPduyetId())){
+			data.setTenNguoiPduyet(userInfoRepository.findById(data.getNguoiPduyetId()).get().getFullName());
+		}
+		Map<String,String> hashMapPpLayMau = getListDanhMucChung("PP_LAY_MAU");
+		data.setTenPpLayMau(hashMapPpLayMau.getOrDefault(data.getPpLayMau(),null));
+
 		data.setChildren(xhBbLayMauCtRepository.findAllByIdHdr(id));
 		return data;
 	}
@@ -320,4 +339,12 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl implements XhBbLayMau
 		ex.export();
 	}
 
+	@Override
+	public ReportTemplateResponse preview(XhBbLayMauRequest objReq) throws Exception {
+		XhBbLayMau optional = detail(objReq.getId());
+		ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+		byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+		return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
+	}
 }

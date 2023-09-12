@@ -1,11 +1,9 @@
 package com.tcdt.qlnvhang.service.xuathang.daugia.hopdong;
 
 import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttDtl;
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongDdiemNhapKho;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongDtl;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongHdr;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.hopdong.XhHopDongDdiemNhapKhoRepository;
@@ -13,17 +11,18 @@ import com.tcdt.qlnvhang.repository.xuathang.daugia.hopdong.XhHopDongDtlReposito
 import com.tcdt.qlnvhang.repository.xuathang.daugia.hopdong.XhHopDongHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
-import com.tcdt.qlnvhang.request.xuathang.bantructiep.hopdong.XhHopDongBttDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.hopdong.XhDdiemNhapKhoReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.hopdong.XhHopDongDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.hopdong.XhHopDongHdrReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.*;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongHdr;
+import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
+import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,6 +33,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -276,7 +277,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
     optional.get().setTrangThai(req.getTrangThai());
     XhHopDongHdr data = xhHopDongHdrRepository.save(optional.get());
     Optional<XhKqBdgHdr> xhKqBdgHdr = xhKqBdgHdrRepository.findBySoQdKq(data.getSoQdKq());
-    if (xhKqBdgHdr.isPresent()){
+    if (xhKqBdgHdr.isPresent()) {
 //      Đếm số bản ghi hợp đồng có trạng thái là 30 và update lại vào XhKqBdgHdr;
       Long slHdongDaKy = xhHopDongHdrRepository.countSlHopDongDaKy(data.getSoQdKq());
       xhKqBdgHdr.get().setSlHdDaKy(slHdongDaKy);
@@ -358,7 +359,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
     ex.export();
   }
 
-//
+  //
 //    public XhHopDongHdr findBySoHd(StrSearchReq strSearchReq) throws Exception {
 //        if (StringUtils.isEmpty(strSearchReq.getStr()))
 //            throw new UnsupportedOperationException("Không tồn tại bản ghi");
@@ -446,6 +447,18 @@ public class XhHopDongServiceImpl extends BaseServiceImpl implements XhHopDongSe
 //        return dataPage;
 //    }
 //
-
+  public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
+    try {
+      FileInputStream inputStream = new FileInputStream(baseReportFolder + "bandaugia/Thông tin hợp đồng bán.docx");
+      XhHopDongHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
+      System.out.println(objectMapper.writeValueAsString(detail));
+      return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (XDocReportException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
 
 }

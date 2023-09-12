@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Data
@@ -28,16 +29,25 @@ public class DcnbPhieuXuatKhoDtl {
 
     @Column(name = "HDR_ID",insertable = true, updatable = true)
     private Long hdrId;
-
+    @NotNull
     private String loaiVthh;
+    @NotNull
     private String tenLoaiVthh;
+    @NotNull
     private String cloaiVthh;
+    @NotNull
     private String tenCloaiVthh;
+    @NotNull
     private String maSo;
-    private String donViTinh;;
+    @NotNull
+    private String donViTinh;
+    @NotNull
     private BigDecimal slDcThucTe;
+    @NotNull
     private BigDecimal kinhPhiDc;
+    @NotNull
     private BigDecimal duToanKinhPhiDc;
+    @NotNull
     private BigDecimal kinhPhiDcTt;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -30,11 +30,10 @@ public class HhNkBangKeCanHangHdrDTO {
     private String maNhaKho;
     private String tenNhaKho;
     private String donViTinh;
-    private String tenDonViTinh;
     private String maNganKho;
     private String tenNganKho;
 
-    public HhNkBangKeCanHangHdrDTO(Long id, Long idQdPdNk, Long phieuNhapKhoId, String soQdPdNk, Integer nam,Date thoiHanDieuChuyen, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String soBangKe, String soPhieuNhapKho, LocalDate ngayNhapKho, String trangThai, String tenTrangThai, String loaiVthh, String tenLoaiVthh, String cloaiVthh, String tenCloaiVthh, String maNhaKho, String tenNhaKho, String donViTinh, String tenDonViTinh, String maNganKho, String tenNganKho) {
+    public HhNkBangKeCanHangHdrDTO(Long id, Long idQdPdNk, Long phieuNhapKhoId, String soQdPdNk, Integer nam,Date thoiHanDieuChuyen, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String soBangKe, String soPhieuNhapKho, LocalDate ngayNhapKho, String trangThai, String tenTrangThai, String loaiVthh, String tenLoaiVthh, String cloaiVthh, String tenCloaiVthh, String maNhaKho, String tenNhaKho, String donViTinh, String maNganKho, String tenNganKho) {
         this.id = id;
         this.idQdPdNk = idQdPdNk;
         this.phieuNhapKhoId = phieuNhapKhoId;
@@ -57,7 +56,6 @@ public class HhNkBangKeCanHangHdrDTO {
         this.maNhaKho = maNhaKho;
         this.tenNhaKho = tenNhaKho;
         this.donViTinh = donViTinh;
-        this.tenDonViTinh = tenDonViTinh;
         this.maNganKho = maNganKho;
         this.tenNganKho = tenNganKho;
     }

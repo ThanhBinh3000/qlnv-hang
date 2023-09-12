@@ -20,6 +20,8 @@ public interface XhXkVtPhieuXuatNhapKhoRepository extends JpaRepository<XhXkVtPh
             "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
             "AND (:#{#param.loai} IS NULL OR c.loai = :#{#param.loai}) " +
             "AND (:#{#param.loaiPhieu} IS NULL OR c.loaiPhieu = :#{#param.loaiPhieu}) " +
+            "AND (:#{#param.maDiaDiem} IS NULL OR c.maDiaDiem = :#{#param.maDiaDiem}) " +
+            "AND (:#{#param.idCanCu} IS NULL OR c.idCanCu = :#{#param.idCanCu}) " +
             "AND (:#{#param.namKeHoach} IS NULL OR c.namKeHoach = :#{#param.namKeHoach}) " +
             "AND (:#{#param.soBcKqkdMau} IS NULL OR c.soBcKqkdMau = :#{#param.soBcKqkdMau}) " +
             "AND (:#{#param.idBcKqkdMau} IS NULL OR c.idBcKqkdMau = :#{#param.idBcKqkdMau}) " +

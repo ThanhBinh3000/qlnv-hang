@@ -16,20 +16,20 @@ import java.util.Optional;
 public interface XhKqBttHdrRepository extends JpaRepository<XhKqBttHdr, Long> {
 
     @Query("SELECT QD FROM XhKqBttHdr QD " +
-            " LEFT JOIN XhQdPdKhBttDtl DTL on QD.id = DTL.idQdKq " +
-            " WHERE 1=1 " +
-            "AND (:#{#param.dvql} IS NULL OR QD.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
+            "WHERE (:#{#param.dvql} IS NULL OR QD.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
             "AND (:#{#param.namKh} IS NULL OR QD.namKh = :#{#param.namKh}) " +
-            "AND (:#{#param.soQdKq} IS NULL OR LOWER(QD.soQdKq) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdKq}),'%' ) ) )" +
-            "AND (:#{#param.ngayCgiaTu} IS NULL OR DTL.ngayNhanCgia >= :#{#param.ngayCgiaTu}) " +
-            "AND (:#{#param.ngayCgiaDen} IS NULL OR DTL.ngayNhanCgia <= :#{#param.ngayCgiaDen}) " +
-            "AND (:#{#param.loaiVthh} IS NULL OR QD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
-            "AND (:#{#param.trichYeu} IS NULL OR LOWER(QD.trichYeu) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.trichYeu}),'%'))) " +
+            "AND (:#{#param.soQdKq} IS NULL OR LOWER(QD.soQdKq) LIKE LOWER(CONCAT('%', :#{#param.soQdKq}, '%'))) " +
+            "AND (:#{#param.ngayCgiaTu} IS NULL OR EXISTS (SELECT 1 FROM XhQdPdKhBttDtl DTL WHERE DTL.idQdKq = QD.id AND DTL.ngayNhanCgia >= :#{#param.ngayCgiaTu})) " +
+            "AND (:#{#param.ngayCgiaDen} IS NULL OR EXISTS (SELECT 1 FROM XhQdPdKhBttDtl DTL WHERE DTL.idQdKq = QD.id AND DTL.ngayNhanCgia <= :#{#param.ngayCgiaDen})) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR QD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
+            "AND (:#{#param.trichYeu} IS NULL OR LOWER(QD.trichYeu) LIKE LOWER(CONCAT('%', :#{#param.trichYeu}, '%'))) " +
             "AND (:#{#param.trangThai} IS NULL OR QD.trangThai = :#{#param.trangThai}) " +
-            "ORDER BY QD.ngaySua desc , QD.ngayTao desc, QD.id desc")
+            "ORDER BY QD.ngaySua DESC, QD.ngayTao DESC, QD.id DESC")
     Page<XhKqBttHdr> searchPage(@Param("param") XhKqBttHdrReq param, Pageable pageable);
 
-    Optional<XhKqBttHdr> findBySoQdKq(String soQdKq);
+    boolean existsBySoQdKq(String soQdKq);
+
+    boolean existsBySoQdKqAndIdNot(String soQdKq, Long id);
 
     List<XhKqBttHdr> findByIdIn(List<Long> idQdList);
 

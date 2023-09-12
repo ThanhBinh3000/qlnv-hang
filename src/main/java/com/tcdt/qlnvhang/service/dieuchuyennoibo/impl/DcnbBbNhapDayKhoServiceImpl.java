@@ -9,6 +9,8 @@ import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbNhapDayKhoDtlRepositor
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbNhapDayKhoHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtDiemKhoRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbNhapDayKhoHdrReq;
 import com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang.DcnbBbNhapDayKhoHdrPreview;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbNhapDayKhoDtlDto;
@@ -20,10 +22,13 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.table.khotang.KtDiemKho;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbNhapDayKhoDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbNhapDayKhoHdr;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.var;
 import org.springframework.beans.BeanUtils;
@@ -109,6 +114,8 @@ public class DcnbBbNhapDayKhoServiceImpl extends BaseServiceImpl implements Dcnb
         req.getChildren().forEach(e -> {
             e.setParent(data);
         });
+        double sum = req.getChildren().stream().map(DcnbBbNhapDayKhoDtl::getSoLuong).mapToDouble(BigDecimal::doubleValue).sum();
+        data.setTongSlNhap(new BigDecimal(sum));
         DcnbBbNhapDayKhoHdr created = hdrRepository.save(data);
         String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BBNDK-" + userInfo.getDvqlTenVietTat();
         created.setSoBb(so);
@@ -143,6 +150,8 @@ public class DcnbBbNhapDayKhoServiceImpl extends BaseServiceImpl implements Dcnb
         DcnbBbNhapDayKhoHdr update = hdrRepository.save(data);
         String so = update.getId() + "/" + (new Date().getYear() + 1900) + "/BBNDK-" + userInfo.getDvqlTenVietTat();
         update.setSoBb(so);
+        double sum = req.getChildren().stream().map(DcnbBbNhapDayKhoDtl::getSoLuong).mapToDouble(BigDecimal::doubleValue).sum();
+        data.setTongSlNhap(new BigDecimal(sum));
         hdrRepository.save(update);
         fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBbNhapDayKhoHdr.TABLE_NAME));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), DcnbBbNhapDayKhoHdr.TABLE_NAME);
@@ -170,6 +179,11 @@ public class DcnbBbNhapDayKhoServiceImpl extends BaseServiceImpl implements Dcnb
 
     @Override
     public DcnbBbNhapDayKhoHdr approve(DcnbBbNhapDayKhoHdrReq req) throws Exception {
+        return null;
+    }
+
+    @Override
+    public DcnbBbNhapDayKhoHdr approve(StatusReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null) {
             throw new Exception("Access denied.");
@@ -268,8 +282,40 @@ public class DcnbBbNhapDayKhoServiceImpl extends BaseServiceImpl implements Dcnb
     }
 
     @Override
-    public void export(DcnbBbNhapDayKhoHdrReq req, HttpServletResponse response) throws Exception {
+    public void export(DcnbBbNhapDayKhoHdrReq objReq, HttpServletResponse response) throws Exception {
+        CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        objReq.setPaggingReq(paggingReq);
+        objReq.setMaDvi(currentUser.getDvql());
+        Page<DcnbBbNhapDayKhoHdrDTO> page = search(objReq);
+        List<DcnbBbNhapDayKhoHdrDTO> data = page.getContent();
 
+        String title = "Danh sách biên bản nhập đầy kho";
+        String[] rowsName = new String[]{"STT", "Số QĐ điều chuyển", "Năm KH", "Thời hạn ĐC", "Điểm kho", "Lô kho", "Số BB kết thúc NH", "Ngày kết thúc NK", "Số HSKT", "Số phiếu nhập kho", "Ngày nhập kho", "Số BB lấy mẫu/BG mẫu", "Trạng thái"};
+        String fileName = "danh-sach-bien-ban-nhap-day-kho.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        for (int i = 0; i < data.size(); i++) {
+            DcnbBbNhapDayKhoHdrDTO dx = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i + 1;
+            objs[1] = dx.getSoQdinh();
+            objs[2] = dx.getNamKh();
+            objs[3] = dx.getThoiHanDieuChuyen();
+            objs[4] = dx.getTenDiemKho();
+            objs[5] = dx.getTenLoKho();
+            objs[6] = dx.getSoBBKetThucNK(); // Số BB kết thúc NH
+            objs[7] = dx.getNgayKetThucNhap(); // Ngày kết thúc NK
+            objs[8] = dx.getSoHskt();                // Số HSKT
+            objs[9] = dx.getSoPhieuNhapKho();
+            objs[10] = dx.getNgayNhapKho();
+            objs[11] = dx.getSoBbLayMau();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+        ex.export();
     }
 
     @Override

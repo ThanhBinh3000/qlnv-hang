@@ -39,7 +39,7 @@ public interface HhNkBbNhapDayKhoHdrRepository extends JpaRepository<HhNkBbNhapD
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.nhaphang.nhapkhac.HhNkBbNhapDayKhoHdrDTO(" +
             "bbndk.id,qdgnv.id,qdgnv.soQd,qdgnv.ngayQd,qdgnv.nam,qdgnv.tgianNkMnhat,dtl.maNhaKho,dmdvnhakho.tenDvi, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho," +
-            "dmdvlokho.tenDvi,dtl.maNganKho,dmdvngankho.tenDvi,hdr.loaiVthh,dmvt.ten, dtl.cloaiVthh, dmvt.ten,hdr.dvt, hdr.dvt ,dtl.tongSlNhap," +
+            "dmdvlokho.tenDvi,dtl.maNganKho,dmdvngankho.tenDvi,hdr.loaiVthh,dmvt.ten, dtl.cloaiVthh, dmvt.ten,hdr.dvt,dtl.tongSlNhap," +
             "bbndk.soBb, bbndk.ngayBdNhap, bbndk.ngayKtNhap,bbndkd.soPhieuKiemTraCl,bbndkd.phieuKiemTraClId, bbndkd.phieuNhapKho, bbndkd.idPhieuNhapKho," +
             "bbndkd.soBangKeCh,bbndkd.idBangKeCh," +
             "bbndk.ngayLap, bbndk.trangThai, bbndk.trangThai) " +

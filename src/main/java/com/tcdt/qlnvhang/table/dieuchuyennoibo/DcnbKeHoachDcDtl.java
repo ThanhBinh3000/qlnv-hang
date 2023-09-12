@@ -41,8 +41,6 @@ public class DcnbKeHoachDcDtl implements Cloneable,Serializable {
     private String tenCloaiVthh;
     @Column(name = "DON_VI_TINH")
     private String donViTinh;
-    @Column(name = "TEN_DON_VI_TINH")
-    private String tenDonViTinh;
     @Column(name = "TON_KHO")
     private BigDecimal tonKho;
     @Column(name = "SO_LUONG_DC")

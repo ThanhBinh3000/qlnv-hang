@@ -20,6 +20,7 @@ public class XhHopDongBttDviReq {
     private String donViTinh;
     private BigDecimal donGiaDeXuat;
     private BigDecimal donGiaDuocDuyet;
+    private BigDecimal thanhTien;
     private BigDecimal soLuongKyHd;
     private BigDecimal donGiaKyHd;
 }

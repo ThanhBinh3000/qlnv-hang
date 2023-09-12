@@ -7,10 +7,9 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbChuanBiKhoDtl;
 import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 
-import javax.persistence.CascadeType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Transient;
+import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,35 +19,58 @@ import java.util.List;
 public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
 
     private Long id;
+    @NotNull
     private String loaiDc;
     private String typeQd;
+    @NotNull
     private Integer nam;
     private String maDvi;
     private String tenDvi;
+    @NotNull
     private String maQhns;
+    @NotNull
     private String soQdDcCuc;
+    @NotNull
     private Long qdDcCucId;
     private LocalDate ngayQdDcCuc;
+    @NotNull
     private BigDecimal soLuongQdDcCuc;
     private String soBban;
+    @NotNull
     private LocalDate ngayLap;
+    @NotNull
     private LocalDate ngayKetThucNt;
     private Long idKeHoachDtl;
+    @NotNull
     private String maDiemKho;
+    @NotNull
     private String maNhaKho;
+    @NotNull
     private String maNganKho;
     private String maLoKho;
+    @NotNull
     private String tenDiemKho;
+    @NotNull
     private String tenNhaKho;
+    @NotNull
     private String tenNganKho;
     private String tenLoKho;
     private String loaiHinhKho;
+    @NotNull
     private String loaiVthh;
+    @NotNull
     private String cloaiVthh;
+    @NotNull
     private String tenLoaiVthh;
+    @NotNull
     private String tenCloaiVthh;
+    @NotNull
     private String donViTinh;
+    @NotNull
+    private BigDecimal duToanKphi;
     private BigDecimal tichLuong;
+    private BigDecimal tongKinhPhiDaTh;
+    private BigDecimal tongKinhPhiDaThBc;
     private Long idPhieuNhapKho;
     private String soPhieuNhapKho;
     private BigDecimal soLuongPhieuNhapKho;
@@ -61,6 +83,7 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
     private String lyDoTuChoi;
     private Boolean thayDoiThuKho;
     private String loaiQdinh;
+    @Valid
     private List<DcnbBbChuanBiKhoDtl> children = new ArrayList<>();
     private LocalDate tuNgayLapBb;
     private LocalDate denNgayLapBb;

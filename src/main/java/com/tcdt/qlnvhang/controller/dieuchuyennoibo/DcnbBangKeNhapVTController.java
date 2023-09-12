@@ -165,7 +165,7 @@ public class DcnbBangKeNhapVTController {
     @ApiOperation(value = "Kết xuất", response = List.class)
     @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportList(@Valid @RequestBody  DcnbBangKeNhapVTReq objReq, HttpServletResponse response) throws Exception {
+    public void exportList(@RequestBody  DcnbBangKeNhapVTReq objReq, HttpServletResponse response) throws Exception {
         try {
             service.export(objReq, response);
         } catch (Exception e) {

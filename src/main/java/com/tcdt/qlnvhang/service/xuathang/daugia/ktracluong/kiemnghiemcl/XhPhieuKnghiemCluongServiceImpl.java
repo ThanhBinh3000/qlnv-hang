@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.xuathang.daugia.ktracluong.kiemnghiemcl;
 
+import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMau;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.phieukiemnghiemcl.XhPhieuKnghiemCluong;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.phieukiemnghiemcl.XhPhieuKnghiemCluongCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
@@ -13,7 +14,9 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -30,6 +33,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -168,6 +174,11 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl implements 
         if(!Objects.isNull(data.getIdNguoiKiemNghiem())){
             data.setTenNguoiKiemNghiem(userInfoRepository.findById(data.getIdNguoiKiemNghiem()).get().getFullName());
         }
+        if(!Objects.isNull(data.getNguoiPduyetId())){
+            data.setTenNguoiPduyet(userInfoRepository.findById(data.getNguoiPduyetId()).get().getFullName());
+        }
+        Map<String,String> hashMapHthucBquan = getListDanhMucChung("HINH_THUC_BAO_QUAN");
+        data.setTenHthucBquan(hashMapHthucBquan.getOrDefault(data.getHthucBquan(),null));
         data.setTenDiemKho(mapDmucDvi.get(data.getMaDiemKho()));
         data.setTenNhaKho(mapDmucDvi.get(data.getMaNhaKho()));
         data.setTenNganKho(mapDmucDvi.get(data.getMaNganKho()));
@@ -285,6 +296,15 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl implements 
         }
         ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
         ex.export();
+    }
+
+    @Override
+    public ReportTemplateResponse preview(XhPhieuKnghiemCluongReq objReq) throws Exception {
+        XhPhieuKnghiemCluong optional = detail(objReq.getId());
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
     }
 }
 

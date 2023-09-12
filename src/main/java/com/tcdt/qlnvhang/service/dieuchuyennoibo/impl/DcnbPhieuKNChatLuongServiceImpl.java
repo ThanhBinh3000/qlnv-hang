@@ -284,9 +284,9 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         Page<DcnbPhieuKnChatLuongHdrDTO> page = dcnbPhieuKnChatLuongHdrRepository.searchPageXuat(objReq, pageable);
         List<DcnbPhieuKnChatLuongHdrDTO> data = page.getContent();
 
-        String title = "Danh sách phương án xuất cứu trợ, viện trợ ";
-        String[] rowsName = new String[]{"STT", "Số QĐ ĐC của Cục", "Năm KH", "Thời hạn điều chuyển", "Điểm kho", "Lô kho", "Thay đổi thủ kho", "Số phiếu KNCL", "Ngày kiểm nghiệm", "Số BBLM/BGM", "Ngày lấy mẫu", "Số BB tịnh kho", "Trạng thái",};
-        String fileName = "danh-sach-ke-hoach-dieu-chuyen-noi-bo-hang-dtqg.xlsx";
+        String title = "Danh sách phiếu kiểm nghiệm chất lượng ";
+        String[] rowsName = new String[]{"STT", "Số QĐ ĐC của Cục", "Năm KH", "Thời hạn điều chuyển", "Điểm kho", "Lô kho", "Số phiếu KNCL", "Ngày kiểm nghiệm", "Số BB LM/BGM", "Ngày lấy mẫu", "Số BB tịnh kho", "Ngày xuất dốc kho", "Trạng thái"};
+        String fileName = "danh-sach-phieu-kiem-nghiem-chat-luong.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
@@ -298,14 +298,13 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
             objs[3] = dx.getThoiHanDieuChuyen();
             objs[4] = dx.getTenDiemKho();
             objs[5] = dx.getTenLoKho();
-            objs[6] = dx.getThayDoiThuKho();
-            objs[7] = dx.getSoPhieuKnChatLuong();
-            objs[8] = dx.getNgayKiemNghiem();
-            objs[9] = dx.getSoBBLayMau();
-            objs[10] = dx.getNgaylayMau();
-            objs[11] = dx.getSoBBTinhKho();
-            objs[12] = dx.getNgayXuatDocKho();
-            objs[13] = dx.getTrangThai();
+            objs[6] = dx.getSoPhieuKnChatLuong();
+            objs[7] = dx.getNgayKiemNghiem();
+            objs[8] = dx.getSoBBLayMau();
+            objs[9] = dx.getNgaylayMau();
+            objs[10] = dx.getSoBBTinhKho();
+            objs[11] = dx.getNgayXuatDocKho();
+            objs[12] = dx.getTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

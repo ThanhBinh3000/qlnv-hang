@@ -148,7 +148,7 @@ public class DcnbBienBanHaoDoiController {
     @ApiOperation(value = "Kết xuất danh sách", response = List.class)
     @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody  SearchDcnbBienBanHaoDoi objReq, HttpServletResponse response) throws Exception {
+    public void exportList(@CurrentUser CustomUserDetails currentUser ,@RequestBody  SearchDcnbBienBanHaoDoi objReq, HttpServletResponse response) throws Exception {
         try {
             dcnbBienBanHaoDoiServiceImpl.export( currentUser,objReq, response);
 

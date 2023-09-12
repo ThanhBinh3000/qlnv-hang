@@ -13,12 +13,12 @@ import java.util.List;
 public interface XhTcTtinBdgHdrRepository extends JpaRepository<XhTcTtinBdgHdr, Long> {
 
     @Query("SELECT TT FROM XhTcTtinBdgHdr TT " +
-            " WHERE 1=1 " +
-            "AND (:#{#param.dvql} IS NULL OR TT.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
+            "WHERE (:#{#param.dvql} IS NULL OR TT.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
             "AND (:#{#param.nam} IS NULL OR TT.nam = :#{#param.nam}) " +
-            "AND (:#{#param.loaiVthh} IS NULL OR TT.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR TT.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
             "AND (:#{#param.trangThai} IS NULL OR TT.trangThai = :#{#param.trangThai}) " +
-            "ORDER BY TT.ngaySua desc , TT.ngayTao desc, TT.id desc")
+            "ORDER BY TT.ngaySua DESC, TT.ngayTao DESC, TT.id DESC"
+    )
     Page<XhTcTtinBdgHdr> searchPage(@Param("param") ThongTinDauGiaReq param, Pageable pageable);
 
     List<XhTcTtinBdgHdr> findByIdQdPdDtlOrderByLanDauGia(Long idQdPdDtl);

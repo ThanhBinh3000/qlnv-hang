@@ -259,15 +259,25 @@ public class DcnbBangKeNhapVTServiceImpl extends BaseServiceImpl implements Dcnb
         Page<DcnbBangKeNhapVTHdrDTO> page = searchPage(currentUser, objReq);
         List<DcnbBangKeNhapVTHdrDTO> data = page.getContent();
 
-        String title = "Danh sách bảng kê cân hàng ";
-        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số công văn/đề xuất", "Ngày lập KH", "Ngày duyệt LĐ Chi cục", "Loại điều chuyển", "Đơn vị đề xuất", "Trạng thái"};
-        String fileName = "danh-sach-ke-hoach-dieu-chuyen-noi-bo-hang-dtqg.xlsx";
+        String title = "Danh sách bảng kê nhập vật tư";
+        String[] rowsName = new String[]{"STT", "Số QĐ ĐC cục", "Năm KH", "Thời hạn ĐC", "Điểm kho", "Lô kho", "Số BB lấy mẫu/BG mẫu", "Số bảng kê NVT", "Số BB gửi hàng", "Số phiếu nhập kho", "Ngày nhập kho", "Trạng thái"};
+        String fileName = "danh-sach-bang-ke-nhap-vat-tu.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
             DcnbBangKeNhapVTHdrDTO dx = data.get(i);
             objs = new Object[rowsName.length];
             objs[0] = i + 1;
+            objs[1] = dx.getSoQdinh();
+            objs[2] = dx.getNam();
+            objs[3] = dx.getThoiHanNhapDc();
+            objs[4] = dx.getTenDiemKho();
+            objs[5] = dx.getTenLoKho();
+            objs[6] = dx.getSoBBLayMau();
+            objs[7] = dx.getSoBangKe();
+            objs[8] = dx.getSoBBGuiHang();
+            objs[9] = dx.getSoPhieuNhapKho();
+            objs[10] = dx.getNgayNhapKho();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

@@ -41,7 +41,7 @@ public class XhCtvtTongHopHdrController extends BaseController {
 
     @ApiOperation(value = "Tổng hợp tổng hợp kế hoạch bán đấu giá  ", response = List.class)
     @PostMapping()
-    public ResponseEntity<BaseResponse> sumarryData(@CurrentUser CustomUserDetails currentUser,
+    public ResponseEntity<BaseResponse> summaryData(@CurrentUser CustomUserDetails currentUser,
             @Valid @RequestBody SearchXhCtvtDeXuatHdrReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
@@ -201,5 +201,19 @@ public class XhCtvtTongHopHdrController extends BaseController {
 
         }
     }
-
+    @ApiOperation(value = "Xem truoc", response = List.class)
+    @PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> preview(@RequestBody HashMap<String, Object> body) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(xhCtvtTongHopHdrService.preview(body));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+        }
+        return ResponseEntity.ok(resp);
+    }
 }

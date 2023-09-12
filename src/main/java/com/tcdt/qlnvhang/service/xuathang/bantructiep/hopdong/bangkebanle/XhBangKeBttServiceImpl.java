@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,9 +33,7 @@ public class XhBangKeBttServiceImpl extends BaseServiceImpl {
 
     public Page<XhBangKeBtt> searchPage(CustomUserDetails currentUser, XhBangKeBttReq req) throws Exception {
         String dvql = currentUser.getDvql();
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
-            req.setDvql(dvql.substring(0, 4));
-        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC) || currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             req.setDvql(dvql);
         }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
@@ -50,40 +49,54 @@ public class XhBangKeBttServiceImpl extends BaseServiceImpl {
 
     @Transactional
     public XhBangKeBtt create(CustomUserDetails currentUser, XhBangKeBttReq req) throws Exception {
-        if (currentUser == null) throw new Exception("Bad request.");
+        if (currentUser == null) {
+            throw new Exception("Bad request.");
+        }
         XhBangKeBtt data = new XhBangKeBtt();
         BeanUtils.copyProperties(req, data);
-        data.setMaDvi(currentUser.getUser().getDepartment());
+        data.setMaDvi(currentUser.getDvql());
+        data.setNgayTao(LocalDate.now());
+        data.setNguoiTaoId(currentUser.getUser().getId());
         XhBangKeBtt created = xhBangKeBttRepository.save(data);
         return created;
     }
 
     public List<XhBangKeBtt> detail(List<Long> ids) throws Exception {
-        if (DataUtils.isNullOrEmpty(ids)) throw new Exception("Tham số không hợp lệ.");
+        if (ids == null || ids.isEmpty()) {
+            throw new IllegalArgumentException("Tham số không hợp lệ.");
+        }
         List<XhBangKeBtt> list = xhBangKeBttRepository.findByIdIn(ids);
-        if (DataUtils.isNullOrEmpty(list)) throw new Exception("Không tìm thấy dữ liệu");
+        if (list.isEmpty()) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
-        List<XhBangKeBtt> allById = xhBangKeBttRepository.findAllById(ids);
-        allById.forEach(data -> {
+        list.forEach(data -> {
             data.setMapDmucDvi(mapDmucDvi);
             data.setMapVthh(mapVthh);
         });
-        return allById;
+        return list;
     }
 
     @Transactional
     public void delete(IdSearchReq idSearchReq) throws Exception {
         Optional<XhBangKeBtt> optional = xhBangKeBttRepository.findById(idSearchReq.getId());
-        if (!optional.isPresent()) throw new Exception("Bản ghi không tồn tại");
-        XhBangKeBtt data = optional.get();
-        xhBangKeBttRepository.delete(data);
+        if (!optional.isPresent()) {
+            throw new Exception("Bản ghi không tồn tại");
+        }
+        xhBangKeBttRepository.delete(optional.get());
     }
 
     @Transactional
     public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
-        List<XhBangKeBtt> list = xhBangKeBttRepository.findAllByIdIn(idSearchReq.getIdList());
-        if (list.isEmpty()) throw new Exception("Bản ghi không tồn tại");
+        List<Long> idList = idSearchReq.getIdList();
+        if (idList == null || idList.isEmpty()) {
+            throw new Exception("Danh sách ID trống hoặc không hợp lệ.");
+        }
+        List<XhBangKeBtt> list = xhBangKeBttRepository.findAllByIdIn(idList);
+        if (list.isEmpty()) {
+            throw new Exception("Không tìm thấy bản ghi nào để xóa.");
+        }
         xhBangKeBttRepository.deleteAll(list);
     }
 
@@ -100,12 +113,10 @@ public class XhBangKeBttServiceImpl extends BaseServiceImpl {
                 "Loại hàng hóa", "Chủng loại hàng hóa", "Số lượng",
                 "Đơn giá", "Thanh tiền"};
         String filename = "danh-sach-dx-kh-ban-truc-tiep.xlsx";
-        List<Object[]> dataList = new ArrayList<Object[]>();
-        Object[] objs = null;
-        for (int i = 0; i < data.size(); i++) {
-            XhBangKeBtt hdr = data.get(i);
-            objs = new Object[rowsName.length];
-            objs[0] = i;
+        List<Object[]> dataList = new ArrayList<>();
+        data.stream().forEach(hdr -> {
+            Object[] objs = new Object[rowsName.length];
+            objs[0] = data.indexOf(hdr) + 1;
             objs[1] = hdr.getNamKh();
             objs[2] = hdr.getSoBangKe();
             objs[3] = hdr.getSoQdNv();
@@ -118,7 +129,7 @@ public class XhBangKeBttServiceImpl extends BaseServiceImpl {
             objs[10] = hdr.getDonGia();
             objs[11] = hdr.getThanhTien();
             dataList.add(objs);
-        }
+        });
         ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
         ex.export();
     }

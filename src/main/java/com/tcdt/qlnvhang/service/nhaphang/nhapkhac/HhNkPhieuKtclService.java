@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhNkPhieuKtclReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhNkPhieuKtclSearch;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletResponse;
@@ -21,4 +22,5 @@ public interface HhNkPhieuKtclService {
     HhNkPhieuKtcl pheDuyet (StatusReq stReq) throws Exception;
     void xoa (IdSearchReq idSearchReq) throws Exception;
     void export(HhNkPhieuKtclSearch searchReq, HttpServletResponse response) throws Exception;
+    ReportTemplateResponse preview(HhNkPhieuKtclSearch objReq) throws Exception;
 }

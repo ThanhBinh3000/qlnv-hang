@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.controller.dieuchuyennoibo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
+import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuNhapKhoHdrReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.impl.DcnbPhieuNhapKhoServiceImpl;
@@ -145,7 +146,7 @@ public class DcnbPhieuNhapKhoController {
 
     @ApiOperation(value = "Trình duyệt-01/Duyệt-02/Từ chối-03 thông tin", response = List.class)
     @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody DcnbPhieuNhapKhoHdrReq objReq) {
+    public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             service.approve(objReq);
@@ -200,7 +201,7 @@ public class DcnbPhieuNhapKhoController {
     @ApiOperation(value = "Kết xuất danh sách mua", response = List.class)
     @PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportList(@Valid @RequestBody DcnbPhieuNhapKhoHdrReq objReq, HttpServletResponse response) throws Exception {
+    public void exportList(@RequestBody DcnbPhieuNhapKhoHdrReq objReq, HttpServletResponse response) throws Exception {
         try {
             service.export(objReq, response);
         } catch (Exception e) {

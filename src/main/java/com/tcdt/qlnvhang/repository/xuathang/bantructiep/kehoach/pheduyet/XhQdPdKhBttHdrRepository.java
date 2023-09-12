@@ -10,26 +10,29 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface XhQdPdKhBttHdrRepository extends JpaRepository<XhQdPdKhBttHdr, Long> {
 
-    @Query("SELECT QD FROM XhQdPdKhBttHdr QD WHERE 1=1 " +
-            "AND (:#{#param.dvql} IS NULL OR QD.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
+    @Query("SELECT QD FROM XhQdPdKhBttHdr QD " +
+            "LEFT JOIN XhQdPdKhBttDtl DTL ON QD.id = DTL.idHdr " +
+            "WHERE (:#{#param.dvql} IS NULL OR QD.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
             "AND (:#{#param.namKh} IS NULL OR QD.namKh = :#{#param.namKh}) " +
-            "AND (:#{#param.soQdPd} IS NULL OR LOWER(QD.soQdPd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdPd}),'%' ) ) )" +
-            "AND (:#{#param.trichYeu} IS NULL OR LOWER(QD.trichYeu) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.trichYeu}),'%'))) " +
+            "AND (:#{#param.soQdPd} IS NULL OR LOWER(QD.soQdPd) LIKE LOWER(CONCAT('%', :#{#param.soQdPd}, '%'))) " +
+            "AND (:#{#param.trichYeu} IS NULL OR LOWER(QD.trichYeu) LIKE LOWER(CONCAT('%', :#{#param.trichYeu}, '%'))) " +
             "AND (:#{#param.ngayKyQdTu} IS NULL OR QD.ngayKyQd >= :#{#param.ngayKyQdTu}) " +
             "AND (:#{#param.ngayKyQdDen} IS NULL OR QD.ngayKyQd <= :#{#param.ngayKyQdDen}) " +
-            "AND (:#{#param.soTrHdr} IS NULL OR LOWER(QD.soTrHdr) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soTrHdr}),'%'))) " +
-            "AND (:#{#param.loaiVthh} IS NULL OR QD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
-            "AND (:#{#param.lastest} IS NULL OR LOWER(QD.lastest) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.lastest}),'%'))) " +
+            "AND (:#{#param.soTrHdr} IS NULL OR LOWER(QD.soTrHdr) LIKE LOWER(CONCAT('%', :#{#param.soTrHdr}, '%'))) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR QD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
+            "AND (:#{#param.lastest} IS NULL OR LOWER(QD.lastest) LIKE LOWER(CONCAT('%', :#{#param.lastest}, '%'))) " +
             "AND (:#{#param.trangThai} IS NULL OR QD.trangThai = :#{#param.trangThai}) " +
-            "ORDER BY QD.ngaySua desc , QD.ngayTao desc, QD.id desc")
+            "AND (:#{#param.maCuc} IS NULL OR DTL.maDvi LIKE CONCAT(:#{#param.maCuc}, '%')) " +
+            "ORDER BY QD.ngaySua DESC, QD.ngayTao DESC, QD.id DESC")
     Page<XhQdPdKhBttHdr> searchPage(@Param("param") XhQdPdKhBttHdrReq param, Pageable pageable);
 
-    Optional<XhQdPdKhBttHdr> findBySoQdPd(String soQdPd);
+    boolean existsBySoQdPd(String soQdPd);
+
+    boolean existsBySoQdPdAndIdNot(String soQdPd, Long id);
 
     List<XhQdPdKhBttHdr> findByIdIn(List<Long> idQdList);
 

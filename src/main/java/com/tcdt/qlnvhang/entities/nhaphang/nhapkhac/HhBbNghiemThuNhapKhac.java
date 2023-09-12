@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = HhBbNghiemThuNhapKhac.TABLE_NAME)
@@ -82,10 +83,23 @@ public class HhBbNghiemThuNhapKhac {
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     @Transient
     private List<HhBbNghiemThuNhapKhacDtl> dviChuDongThucHien =new ArrayList<>();
-
     @Transient
     private List<HhBbNghiemThuNhapKhacDtl> dmTongCucPdTruocThucHien =new ArrayList<>();
     @Transient
     private HhNkPhieuKtcl phieuKtcl;
+
+    // Print preview
+    @Transient
+    private String ngay;
+    @Transient
+    private String tenBaoCao;
+    @Transient
+    private String thang;
+    public String getNgay() {
+        return Objects.isNull(this.getNgayTao()) ? null : String.valueOf(this.getNgayTao().getDate());
+    }
+    public String getThang() {
+        return Objects.isNull(this.getNgayTao()) ? null : String.valueOf(this.getNgayTao().getMonth()+1);
+    }
 
 }

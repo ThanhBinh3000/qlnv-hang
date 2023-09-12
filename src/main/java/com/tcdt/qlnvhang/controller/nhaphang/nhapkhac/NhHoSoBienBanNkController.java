@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.kiemtrachatluong.NhHoSoBienBanReq;
 import com.tcdt.qlnvhang.request.kiemtrachatluong.SearchNhHoSoBienBan;
+import com.tcdt.qlnvhang.request.object.vattu.hosokythuat.NhHoSoKyThuatReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.kiemtrachatluong.NhHoSoBienBanService;
 import com.tcdt.qlnvhang.service.nhaphang.nhapkhac.NhHoSoBienBanNkService;
@@ -142,6 +143,22 @@ public class NhHoSoBienBanNkController extends BaseController {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
             log.error(e.getMessage());
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Xem truoc", response = List.class)
+    @PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> preview(@RequestBody NhHoSoKyThuatReq req) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(nhHoSoBienBanService.preview(req));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
         }
         return ResponseEntity.ok(resp);
     }

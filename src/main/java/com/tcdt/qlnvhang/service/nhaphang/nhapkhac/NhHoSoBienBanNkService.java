@@ -16,11 +16,15 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.kiemtrachatluong.NhHoSoBienBanCtReq;
 import com.tcdt.qlnvhang.request.kiemtrachatluong.NhHoSoBienBanReq;
+import com.tcdt.qlnvhang.request.object.vattu.hosokythuat.NhHoSoKyThuatReq;
+import com.tcdt.qlnvhang.request.xuathang.phieukiemnghiemchatluong.XhPhieuKnghiemCluongReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
@@ -30,6 +34,9 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.Transient;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -192,6 +199,14 @@ public class NhHoSoBienBanNkService extends BaseServiceImpl {
         optional.get().setTrangThai(statusReq.getTrangThai());
         NhHoSoBienBanNk created = nhHoSoBienBanRepository.save(optional.get());
         return created;
+    }
+
+    public ReportTemplateResponse preview(NhHoSoKyThuatReq objReq) throws Exception {
+        NhHoSoBienBanNk optional = detail(String.valueOf(objReq.getId()));
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
     }
 
 }

@@ -145,6 +145,8 @@ public class DcnbBBNTBQHdr extends BaseEntity implements Serializable, Cloneable
     private LocalDate ngayPDuyetKt;
     @Column(name = "NGUOI_P_DUYET_KT")
     private Long nguoiPDuyeKt;
+    @Column(name = "LAN")
+    private Long lan;
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();

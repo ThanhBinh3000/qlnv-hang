@@ -6,6 +6,8 @@ import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 
 import javax.persistence.Column;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,19 +16,19 @@ import java.util.List;
 @Data
 public class DcnbPhieuKtChatLuongHdrReq {
     private Long id;
-
+    @NotNull
     private Integer nam;
 
     private String maDvi;
-
+    @NotNull
     private String maQhns;
-
+    @NotNull
     private Long qdDcId;
-
+    @NotNull
     private String soQdinhDc;
 
     private String soPhieu;
-
+    @NotNull
     private LocalDate ngayLapPhieu;
 
     private String nguoiKt;
@@ -36,17 +38,17 @@ public class DcnbPhieuKtChatLuongHdrReq {
     private Long tpNguoiKtId;
 
     private String tpNguoiKt;
-
+    @NotNull
     private String maDiemKho;
-
+    @NotNull
     private String tenDiemKho;
-
+    @NotNull
     private String maNhaKho;
-
+    @NotNull
     private String tenNhaKho;
-
+    @NotNull
     private String maNganKho;
-
+    @NotNull
     private String tenNganKho;
 
     private String maLoKho;
@@ -56,16 +58,17 @@ public class DcnbPhieuKtChatLuongHdrReq {
     private String tenThuKho;
 
     private Long thuKhoId;
+    @NotNull
     private String maDiemKhoXuat;
-
+    @NotNull
     private String tenDiemKhoXuat;
-
+    @NotNull
     private String maNhaKhoXuat;
-
+    @NotNull
     private String tenNhaKhoXuat;
-
+    @NotNull
     private String maNganKhoXuat;
-
+    @NotNull
     private String tenNganKhoXuat;
 
     private String maLoKhoXuat;
@@ -79,13 +82,13 @@ public class DcnbPhieuKtChatLuongHdrReq {
     private LocalDate ngayLayMau;
 
     private LocalDate ngayKiem;
-
+    @NotNull
     private String loaiVthh;
-
+    @NotNull
     private String tenLoaiVthh;
-
+    @NotNull
     private String cloaiVthh;
-
+    @NotNull
     private String tenCloaiVthh;
 
     private String hinhThucBq;
@@ -134,7 +137,7 @@ public class DcnbPhieuKtChatLuongHdrReq {
     private String toChucGiamDinh;
 
     private List<FileDinhKemReq> bienBanLayMauDinhKem = new ArrayList<>();
-
+    @Valid
     private List<DcnbPhieuKtChatLuongDtl> dcnbPhieuKtChatLuongDtl = new ArrayList<>();
     private ReportTemplateRequest reportTemplateRequest;
 }

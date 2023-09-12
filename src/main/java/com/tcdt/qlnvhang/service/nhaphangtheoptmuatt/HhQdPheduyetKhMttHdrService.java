@@ -124,7 +124,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         BeanUtils.copyProperties(req, dataMap, "id");
         dataMap.setNgayTao(getDateTimeNow());
         dataMap.setNguoiTaoId(getUser().getId());
-        dataMap.setTrangThai(Contains.DUTHAO);
+        dataMap.setTrangThai(Contains.DANG_NHAP_DU_LIEU);
 //        dataMap.setLastest(false);
         dataMap.setMaDvi(getUser().getDvql());
         HhQdPheduyetKhMttHdr created=hhQdPheduyetKhMttHdrRepository.save(dataMap);
@@ -334,7 +334,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         if (!optional.isPresent())
             throw new Exception("Không tìm thấy dữ liệu cần xóa");
 
-        if (!optional.get().getTrangThai().equals(Contains.DUTHAO)){
+        if (!optional.get().getTrangThai().equals(Contains.DANG_NHAP_DU_LIEU)){
             throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
         }
 
@@ -372,7 +372,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         }
 
         for (HhQdPheduyetKhMttHdr hdr : list){
-            if (!hdr.getTrangThai().equals(Contains.DUTHAO)) {
+            if (!hdr.getTrangThai().equals(Contains.DANG_NHAP_DU_LIEU)) {
                 throw new Exception("Chỉ thực hiện xóa bản ghi ở trạng thái dự thảo");
             }else {
                 this.delete(hdr.getId());
@@ -389,7 +389,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         HhQdPheduyetKhMttHdr dataDB = detail(req.getId());
         String status = req.getTrangThai() + dataDB.getTrangThai();
         switch (status) {
-            case Contains.BAN_HANH + Contains.DUTHAO:
+            case Contains.BAN_HANH + Contains.DANG_NHAP_DU_LIEU:
                 dataDB.setNgayPduyet(getDateTimeNow());
                 dataDB.setNguoiPduyetId(getUser().getId());
                 break;

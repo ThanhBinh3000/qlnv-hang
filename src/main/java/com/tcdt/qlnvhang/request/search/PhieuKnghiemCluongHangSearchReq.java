@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 @Data
 public class PhieuKnghiemCluongHangSearchReq extends BaseRequest {
+	private Long id;
 	private String soPhieu;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate ngayBanGiaoMauTu;
