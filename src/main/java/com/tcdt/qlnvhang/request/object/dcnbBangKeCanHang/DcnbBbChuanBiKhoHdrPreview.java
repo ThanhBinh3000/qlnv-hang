@@ -1,10 +1,12 @@
 package com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang;
 
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbChuanBiKhoDtlPheDuyetDto;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbChuanBiKhoDtlThucHienDto;
 import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
@@ -35,4 +37,6 @@ public class DcnbBbChuanBiKhoHdrPreview {
     private int ngayNhap;
     private int thangNhap;
     private int namNhap;
+    private List<DcnbBbChuanBiKhoDtlPheDuyetDto> dcnbBbChuanBiKhoDtlPheDuyetDto;
+    private List<DcnbBbChuanBiKhoDtlThucHienDto> dcnbBbChuanBiKhoDtlThucHienDto;
 }

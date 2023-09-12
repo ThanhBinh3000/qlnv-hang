@@ -1,12 +1,10 @@
 package com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang;
 
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeCanHangDtlDto;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeCanHangDtl;
 import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 @Data

@@ -11,6 +11,7 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBangKeNhapVTReq;
 import com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang.DcnbBangKeNhapVTHdrPreview;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeCanHangDtlDto;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeNhapVTHdrDTO;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBangKeNhapVTService;
 import com.tcdt.qlnvhang.service.feign.CategoryServiceProxy;
@@ -25,6 +26,7 @@ import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.Request;
 import com.tcdt.qlnvhang.util.UserUtils;
+import lombok.var;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -274,17 +276,14 @@ public class DcnbBangKeNhapVTServiceImpl extends BaseServiceImpl implements Dcnb
 
     @Override
     public ReportTemplateResponse preview(DcnbBangKeNhapVTReq objReq) throws Exception {
-        Optional<DcnbBangKeNhapVTHdr> dcnbBangKeNhapVTHdr = hdrRepository.findById(objReq.getId());
+        var dcnbBangKeNhapVTHdr = hdrRepository.findById(objReq.getId());
         if (!dcnbBangKeNhapVTHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
-        Optional<DcnbBangKeCanHangHdr> dcnbBangKeCanHangHdr = dcnbBangKeCanHangHdrRepository.findById(Long.parseLong(dcnbBangKeNhapVTHdr.get().getMaDvi()));
-        List<DcnbBangKeCanHangDtl> dcnbBangKeCanHangDtlList = dcnbBangKeCanHangDtlRepository.findByHdrId(Long.parseLong(dcnbBangKeNhapVTHdr.get().getMaDvi()));
-
-//        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-        FileInputStream inputStream = new FileInputStream("/Users/lethanhdat/tecapro/qlnv-hang/src/main/resources/reports/dieuchuyennoibo/Nhập_VT_Bảng kê nhập Vật tư.docx");
-//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-
-        DcnbBangKeNhapVTHdrPreview dcnbPhieuNhapKhoPreview = setDataToPreview(dcnbBangKeNhapVTHdr, dcnbBangKeCanHangDtlList, dcnbBangKeCanHangHdr);
+        var dcnbBangKeCanHangHdr = dcnbBangKeCanHangHdrRepository.findById(Long.parseLong(dcnbBangKeNhapVTHdr.get().getMaDvi()));
+        var dcnbBangKeCanHangDtlList = dcnbBangKeCanHangDtlRepository.findByHdrId(Long.parseLong(dcnbBangKeNhapVTHdr.get().getMaDvi()));
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        var dcnbPhieuNhapKhoPreview = setDataToPreview(dcnbBangKeNhapVTHdr, dcnbBangKeCanHangDtlList, dcnbBangKeCanHangHdr);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbPhieuNhapKhoPreview);
     }
 
@@ -313,8 +312,23 @@ public class DcnbBangKeNhapVTServiceImpl extends BaseServiceImpl implements Dcnb
                 .ngayNhap(dcnbBangKeNhapVTHdr.get().getNgayNhap().getDayOfMonth())
                 .thangNhap(dcnbBangKeNhapVTHdr.get().getNgayNhap().getMonth().getValue())
                 .namNhap(dcnbBangKeNhapVTHdr.get().getNgayNhap().getYear())
-                .dcnbBangKeCanHangDtl(dcnbBangKeCanHangDtlList)
+                .dcnbBangKeCanHangDtl(dcnbBangKeCanHangDtlToDto(dcnbBangKeCanHangDtlList))
                 .build();
+    }
+
+    private List<DcnbBangKeCanHangDtlDto> dcnbBangKeCanHangDtlToDto(List<DcnbBangKeCanHangDtl> dcnbBangKeCanHangDtlList) {
+        List<DcnbBangKeCanHangDtlDto> dcnbBangKeCanHangDtlDtoList = new ArrayList<>();
+        int stt = 1;
+        for (var res : dcnbBangKeCanHangDtlList) {
+            var dcnbBangKeCanHangDtlDto = DcnbBangKeCanHangDtlDto.builder()
+                    .stt(stt++)
+                    .maCan(res.getMaCan())
+                    .soBaoBi(res.getMaCan())
+                    .trongLuongCaBaoBi(res.getTrongLuongCaBaoBi())
+                    .build();
+            dcnbBangKeCanHangDtlDtoList.add(dcnbBangKeCanHangDtlDto);
+        }
+        return dcnbBangKeCanHangDtlDtoList;
     }
 
     public String getDataKho(String maDvi) {

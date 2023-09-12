@@ -1,5 +1,7 @@
 package com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang;
 
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBNTBQDtlPheDuyetDto;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBNTBQDtlThucHienDto;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQDtl;
 import lombok.Builder;
 import lombok.Data;
@@ -34,5 +36,6 @@ public class DcnbBBNTBQHdrPreview {
     private BigDecimal tongKinhPhiDaTh;
     private String tongKinhPhiDaThBc;
     private String nhanXet;
-    private List<DcnbBBNTBQDtl> dcnbBBNTBQDtl;
+    private List<DcnbBBNTBQDtlPheDuyetDto> dcnbBBNTBQDtlPheDuyetDto;
+    private List<DcnbBBNTBQDtlThucHienDto> dcnbBBNTBQDtlThucHienDto;
 }

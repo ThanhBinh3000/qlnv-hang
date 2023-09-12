@@ -21,6 +21,7 @@ import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
+import lombok.var;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -256,15 +257,14 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
 
     @Override
     public ReportTemplateResponse preview(DcnbBBKetThucNKReq objReq) throws Exception {
-        Optional<DcnbBBKetThucNKHdr> dcnbBBKetThucNKHdr = hdrRepository.findById(objReq.getId());
+        var dcnbBBKetThucNKHdr = hdrRepository.findById(objReq.getId());
         if (!dcnbBBKetThucNKHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
-        List<DcnbBBKetThucNKDtl> dcnbBBKetThucNKDtlList = dtlRepository.findByHdrId(dcnbBBKetThucNKHdr.get().getId());
-        List<DcnbBBKetThucNKDtlDto> dcnbBBKetThucNKDtlDtos = dcnbBBKetThucNKDtlToDto(dcnbBBKetThucNKDtlList);
-//        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-        FileInputStream inputStream = new FileInputStream("/Users/lethanhdat/tecapro/qlnv-hang/src/main/resources/reports/dieuchuyennoibo/Nhập_VT_Biên bản kết thúc nhập kho.docx");
-//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        DcnbBBKetThucNKHdrPreview dcnbBangKeCanHangPreview = setDataToPreview(dcnbBBKetThucNKHdr, dcnbBBKetThucNKDtlDtos);
+        var dcnbBBKetThucNKDtlList = dtlRepository.findByHdrId(dcnbBBKetThucNKHdr.get().getId());
+        var dcnbBBKetThucNKDtlDtos = dcnbBBKetThucNKDtlToDto(dcnbBBKetThucNKDtlList);
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        var dcnbBangKeCanHangPreview = setDataToPreview(dcnbBBKetThucNKHdr, dcnbBBKetThucNKDtlDtos);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBangKeCanHangPreview);
     }
 

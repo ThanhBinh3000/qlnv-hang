@@ -21,6 +21,7 @@ import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import lombok.var;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -257,15 +258,14 @@ public class DcnbHoSoKyThuatHdrServiceImpl extends BaseServiceImpl {
     }
 
     public ReportTemplateResponse preview(DcnbHoSoKyThuatHdrReq objReq) throws Exception {
-        Optional<DcnbHoSoKyThuatHdr> dcnbHoSoKyThuatHdr = dcnbHoSoKyThuatHdrRepository.findById(objReq.getId());
+        var dcnbHoSoKyThuatHdr = dcnbHoSoKyThuatHdrRepository.findById(objReq.getId());
         if (!dcnbHoSoKyThuatHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
-        List<DcnbHoSoTaiLieuDtl> dcnbHoSoTaiLieuDtlList = dcnbHoSoKyThuatDtlRepository.findByHoSoKyThuatHdrId(dcnbHoSoKyThuatHdr.get().getId());
-        List<DcnbHoSoBienBanDtl> dcnbHoSoBienBanDtlList = dcnbHoSoBienBanDtlRepository.findByHoSoKyThuatHdrId(dcnbHoSoKyThuatHdr.get().getId());
-//        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-        FileInputStream inputStream = new FileInputStream("/Users/lethanhdat/tecapro/qlnv-hang/src/main/resources/reports/dieuchuyennoibo/Nhập_VT_Hồ sơ kỹ thuật.docx");
-//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        DcnbHoSoKyThuatHdrPreview dcnbBangKeCanHangPreview = setDataToPreview(dcnbHoSoKyThuatHdr, dcnbHoSoTaiLieuDtlList, dcnbHoSoBienBanDtlList);
+        var dcnbHoSoTaiLieuDtlList = dcnbHoSoKyThuatDtlRepository.findByHoSoKyThuatHdrId(dcnbHoSoKyThuatHdr.get().getId());
+        var dcnbHoSoBienBanDtlList = dcnbHoSoBienBanDtlRepository.findByHoSoKyThuatHdrId(dcnbHoSoKyThuatHdr.get().getId());
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        var dcnbBangKeCanHangPreview = setDataToPreview(dcnbHoSoKyThuatHdr, dcnbHoSoTaiLieuDtlList, dcnbHoSoBienBanDtlList);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBangKeCanHangPreview);
     }
 

@@ -9,7 +9,7 @@ import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBBNTBQHdrReq;
 import com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang.DcnbBBNTBQHdrPreview;
-import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBNTBQHdrDTO;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.*;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBBNTBQHdrService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -17,9 +17,12 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbChuanBiKhoDtl;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
+import lombok.var;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,6 +32,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -248,16 +252,18 @@ public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBN
     }
     @Override
     public ReportTemplateResponse preview(DcnbBBNTBQHdrReq objReq) throws Exception {
-        Optional<DcnbBBNTBQHdr> dcnbBBNTBQHdr = hdrRepository.findById(objReq.getId());
+        var dcnbBBNTBQHdr = hdrRepository.findById(objReq.getId());
         if (!dcnbBBNTBQHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
         ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        DcnbBBNTBQHdrPreview dcnbBBNTBQHdrPreview = setDataToPreview(dcnbBBNTBQHdr);
+        var dcnbBBNTBQHdrPreview = setDataToPreview(dcnbBBNTBQHdr);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBBNTBQHdrPreview);
     }
 
     private DcnbBBNTBQHdrPreview setDataToPreview(Optional<DcnbBBNTBQHdr> dcnbBBNTBQHdr) {
+        var dcnbBBNTBQDtlPheDuyetDtos = dcnbBBNTBQDtlPheDuyetDto(dcnbBBNTBQHdr.get().getDcnbBBNTBQDtl());
+        var dcnbBBNTBQDtlThucHienDtos = dcnbBBNTBQDtlThucHienDto(dcnbBBNTBQHdr.get().getDcnbBBNTBQDtl());
         return DcnbBBNTBQHdrPreview.builder()
                 .maDvi(dcnbBBNTBQHdr.get().getMaDvi())
                 .tenDvi(dcnbBBNTBQHdr.get().getTenDvi())
@@ -283,7 +289,53 @@ public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBN
                 .tongKinhPhiDaTh(dcnbBBNTBQHdr.get().getTongKinhPhiDaTh())
                 .tongKinhPhiDaThBc(dcnbBBNTBQHdr.get().getTongKinhPhiDaThBc())
                 .nhanXet(dcnbBBNTBQHdr.get().getNhanXet())
-                .dcnbBBNTBQDtl(dcnbBBNTBQHdr.get().getDcnbBBNTBQDtl())
+                .dcnbBBNTBQDtlPheDuyetDto(dcnbBBNTBQDtlPheDuyetDtos)
+                .dcnbBBNTBQDtlThucHienDto(dcnbBBNTBQDtlThucHienDtos)
                 .build();
     }
+
+    private List<DcnbBBNTBQDtlPheDuyetDto> dcnbBBNTBQDtlPheDuyetDto(List<DcnbBBNTBQDtl> dcnbBBNTBQDtl) {
+        List<DcnbBBNTBQDtlPheDuyetDto> dcnbBBNTBQDtlPheDuyetDtos = new ArrayList<>();
+        int stt = 1;
+        for (var res : dcnbBBNTBQDtl) {
+            if (res.getType().equals("PD")) {
+                var dcnbBBNTBQDtlPheDuyetDto = DcnbBBNTBQDtlPheDuyetDto.builder()
+                        .stt(stt++)
+                        .noiDung(res.getDanhMuc())
+                        .dviTinh(res.getDonViTinh())
+                        .soLuongTrongNam(BigDecimal.valueOf(res.getSoLuongTrongNam()))
+                        .donGiaTrongNam(BigDecimal.valueOf(res.getDonGia()))
+                        .thanhTienTrongNam(BigDecimal.valueOf(res.getThanhTienTrongNam()))
+                        .soLuongNamTruoc(res.getSoLuongNamTruoc())
+                        .thanhTienNamTruoc(BigDecimal.valueOf(res.getThanhTienNamTruoc()))
+                        .tongGiaTri(BigDecimal.valueOf(res.getTongGiaTri()))
+                        .build();
+                dcnbBBNTBQDtlPheDuyetDtos.add(dcnbBBNTBQDtlPheDuyetDto);
+            }
+        }
+        return dcnbBBNTBQDtlPheDuyetDtos;
+    }
+
+    private List<DcnbBBNTBQDtlThucHienDto> dcnbBBNTBQDtlThucHienDto(List<DcnbBBNTBQDtl> dcnbBBNTBQDtl) {
+        List<DcnbBBNTBQDtlThucHienDto> DcnbBBNTBQDtlThucHienDtos = new ArrayList<>();
+        int stt = 1;
+        for (var res : dcnbBBNTBQDtl) {
+            if (res.getType().equals("TH")) {
+                var dcnbBBNTBQDtlThucHienDto = DcnbBBNTBQDtlThucHienDto.builder()
+                        .stt(stt++)
+                        .noiDung(res.getDanhMuc())
+                        .dviTinh(res.getDonViTinh())
+                        .soLuongTrongNam(BigDecimal.valueOf(res.getSoLuongTrongNam()))
+                        .donGiaTrongNam(BigDecimal.valueOf(res.getDonGia()))
+                        .thanhTienTrongNam(BigDecimal.valueOf(res.getThanhTienTrongNam()))
+                        .soLuongNamTruoc(res.getSoLuongNamTruoc())
+                        .thanhTienNamTruoc(BigDecimal.valueOf(res.getThanhTienNamTruoc()))
+                        .tongGiaTri(BigDecimal.valueOf(res.getTongGiaTri()))
+                        .build();
+                DcnbBBNTBQDtlThucHienDtos.add(dcnbBBNTBQDtlThucHienDto);
+            }
+        }
+        return DcnbBBNTBQDtlThucHienDtos;
+    }
+
 }

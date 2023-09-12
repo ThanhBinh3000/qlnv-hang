@@ -1,11 +1,10 @@
 package com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang;
 
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeCanHangDtl;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeCanHangDtlDto;
 import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -25,7 +24,7 @@ public class DcnbBangKeNhapVTHdrPreview {
     private String tenNguoiGiaoHang;
     private String thoiGianGiaoNhan;
     private String nguoiGiamSat; //Người giám sát
-    private List<DcnbBangKeCanHangDtl> dcnbBangKeCanHangDtl;
+    private List<DcnbBangKeCanHangDtlDto> dcnbBangKeCanHangDtl;
     private BigDecimal tongTrongLuongCabaoBi;
     private BigDecimal tongTrongLuongBaoBi;
     private BigDecimal tongTrongLuongTruBi;

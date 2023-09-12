@@ -248,14 +248,13 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
     }
     @Override
     public ReportTemplateResponse preview(DcnbBbGiaoNhanHdrReq objReq) throws Exception {
-        Optional<DcnbBbGiaoNhanHdr> dcnbBbGiaoNhanHdr = hdrRepository.findById(objReq.getId());
+        var dcnbBbGiaoNhanHdr = hdrRepository.findById(objReq.getId());
         if (!dcnbBbGiaoNhanHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
-        List<DcnbBbGiaoNhanDtl> dcnbBbGiaoNhanDtl = dtlRepository.findByHdrId(dcnbBbGiaoNhanHdr.get().getId());
-//        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-        FileInputStream inputStream = new FileInputStream("/Users/lethanhdat/tecapro/qlnv-hang/src/main/resources/reports/dieuchuyennoibo/Nhập_VT_Biên bản giao nhận.docx");
-//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        DcnbBbGiaoNhanHdrPreview dcnbBbGiaoNhanHdrPreview = setDataToPreview(dcnbBbGiaoNhanHdr, dcnbBbGiaoNhanDtl);
+        var dcnbBbGiaoNhanDtl = dtlRepository.findByHdrId(dcnbBbGiaoNhanHdr.get().getId());
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        var dcnbBbGiaoNhanHdrPreview = setDataToPreview(dcnbBbGiaoNhanHdr, dcnbBbGiaoNhanDtl);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBbGiaoNhanHdrPreview);
     }
 

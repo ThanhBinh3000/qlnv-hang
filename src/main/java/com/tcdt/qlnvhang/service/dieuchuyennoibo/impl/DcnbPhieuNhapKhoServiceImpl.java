@@ -21,6 +21,7 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
+import lombok.var;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -316,14 +317,12 @@ public class DcnbPhieuNhapKhoServiceImpl extends BaseServiceImpl implements Dcnb
 
     @Override
     public ReportTemplateResponse preview(DcnbPhieuNhapKhoHdrReq objReq) throws Exception {
-        Optional<DcnbPhieuNhapKhoHdr> dcnbPhieuNhapKhoHdr = hdrRepository.findById(objReq.getId());
+        var dcnbPhieuNhapKhoHdr = hdrRepository.findById(objReq.getId());
         if (!dcnbPhieuNhapKhoHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
-//        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-        FileInputStream inputStream = new FileInputStream("/Users/lethanhdat/tecapro/qlnv-hang/src/main/resources/reports/dieuchuyennoibo/Nhập_VT_Phiếu nhập kho.docx");
-//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-
-        DcnbPhieuNhapKhoPreview dcnbPhieuNhapKhoPreview = setDataToPreview(dcnbPhieuNhapKhoHdr);
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        var dcnbPhieuNhapKhoPreview = setDataToPreview(dcnbPhieuNhapKhoHdr);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbPhieuNhapKhoPreview);
     }
 
@@ -368,7 +367,7 @@ public class DcnbPhieuNhapKhoServiceImpl extends BaseServiceImpl implements Dcnb
         List<DcnbPhieuNhapKhoDtlDto> dcnbPhieuNhapKhoDtl = new ArrayList<>();
         int stt = 1;
         for (DcnbPhieuNhapKhoDtl res : children) {
-            DcnbPhieuNhapKhoDtlDto dcnbPhieuNhapKhoDtlDto = new DcnbPhieuNhapKhoDtlDto();
+            var dcnbPhieuNhapKhoDtlDto = new DcnbPhieuNhapKhoDtlDto();
             dcnbPhieuNhapKhoDtlDto.setStt(stt++);
             dcnbPhieuNhapKhoDtlDto.setNoiDung(res.getNoiDung());
             dcnbPhieuNhapKhoDtlDto.setMaSo(res.getMaSo());

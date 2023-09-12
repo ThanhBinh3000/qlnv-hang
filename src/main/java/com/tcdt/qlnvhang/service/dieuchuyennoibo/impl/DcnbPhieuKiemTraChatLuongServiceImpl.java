@@ -12,6 +12,8 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang.DcnbPhieuKtChatLuongHdrPreview;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKnChatLuongDtlDto;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKtChatLuongDtlDto;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKtChatLuongHdrDTO;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKtChatLuongHdrLsDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -25,6 +27,7 @@ import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import lombok.var;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -287,16 +290,14 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
     }
 
     public ReportTemplateResponse preview(DcnbPhieuKtChatLuongHdrReq objReq) throws Exception {
-        Optional<DcnbPhieuKtChatLuongHdr> dcnbPhieuKtChatLuongHdr = dcnbPhieuKtChatLuongHdrRepository.findById(objReq.getId());
+        var dcnbPhieuKtChatLuongHdr = dcnbPhieuKtChatLuongHdrRepository.findById(objReq.getId());
         if (!dcnbPhieuKtChatLuongHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
-        QlnvDmDonvi qlnvDmDonvi = qlnvDmDonviRepository.findByMaDvi(dcnbPhieuKtChatLuongHdr.get().getMaDvi());
-        Optional<UserInfo> userInfo = userInfoRepository.findById(dcnbPhieuKtChatLuongHdr.get().getNguoiPDuyet());
-//        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-        FileInputStream inputStream = new FileInputStream("/Users/lethanhdat/tecapro/qlnv-hang/src/main/resources/reports/dieuchuyennoibo/Nhập_LT_Phiếu kiểm tra chất lượng_LT.docx");
-//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        DcnbPhieuKtChatLuongHdrPreview dcnbPhieuKtChatLuongHdrPreview = setDataToPreview(dcnbPhieuKtChatLuongHdr,
-                qlnvDmDonvi, userInfo);
+        var qlnvDmDonvi = qlnvDmDonviRepository.findByMaDvi(dcnbPhieuKtChatLuongHdr.get().getMaDvi());
+        var userInfo = userInfoRepository.findById(dcnbPhieuKtChatLuongHdr.get().getNguoiPDuyet());
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        var dcnbPhieuKtChatLuongHdrPreview = setDataToPreview(dcnbPhieuKtChatLuongHdr, qlnvDmDonvi, userInfo);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbPhieuKtChatLuongHdrPreview);
     }
 
@@ -330,7 +331,24 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
                 .ktvBaoQuan(dcnbPhieuKtChatLuongHdr.get().getNguoiKt())
                 .tenThuKho(dcnbPhieuKtChatLuongHdr.get().getTenThuKho())
                 .tenLanhDaoChiCuc(userInfo.get().getFullName())
-                .dcnbPhieuKtChatLuongDtl(dcnbPhieuKtChatLuongHdr.get().getDcnbPhieuKtChatLuongDtl())
+                .dcnbPhieuKtChatLuongDtl(dcnbPhieuKtChatLuongDtlToDto(dcnbPhieuKtChatLuongHdr.get().getDcnbPhieuKtChatLuongDtl()))
                 .build();
+    }
+
+    private List<DcnbPhieuKtChatLuongDtlDto> dcnbPhieuKtChatLuongDtlToDto(List<DcnbPhieuKtChatLuongDtl> dcnbPhieuKtChatLuongDtl) {
+        List<DcnbPhieuKtChatLuongDtlDto> dcnbPhieuKtChatLuongDtlDtos = new ArrayList<>();
+        int stt = 1;
+        for (var res : dcnbPhieuKtChatLuongDtl) {
+            var  dcnbPhieuKtChatLuongDtlDto = DcnbPhieuKtChatLuongDtlDto.builder()
+                    .stt(stt++)
+                    .chiTieuCl(res.getChiTieuCl())
+                    .chiSoCl(res.getChiSoCl())
+                    .ketQuaPt(res.getKetQuaPt())
+                    .phuongPhap(res.getPhuongPhap())
+                    .danhGia(res.getDanhGia())
+                    .build();
+            dcnbPhieuKtChatLuongDtlDtos.add(dcnbPhieuKtChatLuongDtlDto);
+        }
+        return dcnbPhieuKtChatLuongDtlDtos;
     }
 }

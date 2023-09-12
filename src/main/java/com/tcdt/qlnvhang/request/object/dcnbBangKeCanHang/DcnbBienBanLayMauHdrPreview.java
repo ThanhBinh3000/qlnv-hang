@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang;
 
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanLayMauDtl;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanLayMauDtlDto;
 import lombok.Builder;
 import lombok.Data;
 
@@ -23,6 +23,6 @@ public class DcnbBienBanLayMauHdrPreview {
     private String ktvBaoQuan;
     private String truongBpKtbq;//Trưởng BP KTBQ
     private String lanhDaoChiCuc;//Lãnh đạo Chi cục
-    private List<DcnbBienBanLayMauDtl> dcnbBienBanLayMauDtl;
+    private List<DcnbBienBanLayMauDtlDto> dcnbBienBanLayMauDtl;
 
 }

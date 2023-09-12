@@ -12,6 +12,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanLayMauHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanLayMau;
 import com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang.DcnbBienBanLayMauHdrPreview;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanLayMauDtlDto;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanLayMauHdrDTO;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbLoKhoDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -23,6 +24,7 @@ import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
+import lombok.var;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -311,14 +313,13 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
     }
 
     public ReportTemplateResponse preview(DcnbBienBanLayMauHdrReq objReq) throws Exception {
-        Optional<DcnbBienBanLayMauHdr> dcnbBienBanLayMauHdr = dcnbBienBanLayMauHdrRepository.findById(objReq.getId());
+        var dcnbBienBanLayMauHdr = dcnbBienBanLayMauHdrRepository.findById(objReq.getId());
         if (!dcnbBienBanLayMauHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
-        Optional<UserInfo> userInfo = userInfoRepository.findById(dcnbBienBanLayMauHdr.get().getNguoiPDuyet());
-//        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-        FileInputStream inputStream = new FileInputStream("/Users/lethanhdat/tecapro/qlnv-hang/src/main/resources/reports/dieuchuyennoibo/Nhập_VT_Biên bản lấy mẫu bàn giao mẫu_VT.docx");
-//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        DcnbBienBanLayMauHdrPreview dcnbBangKeCanHangPreview = setDataToPreview(dcnbBienBanLayMauHdr, userInfo);
+        var userInfo = userInfoRepository.findById(dcnbBienBanLayMauHdr.get().getNguoiPDuyet());
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        var dcnbBangKeCanHangPreview = setDataToPreview(dcnbBienBanLayMauHdr, userInfo);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBangKeCanHangPreview);
     }
 
@@ -338,7 +339,21 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
                 .ktvBaoQuan(dcnbBienBanLayMauHdr.get().getKtvBaoQuan())
                 .truongBpKtbq(dcnbBienBanLayMauHdr.get().getKtvBaoQuan())
                 .lanhDaoChiCuc(userInfo.get().getFullName())
-                .dcnbBienBanLayMauDtl(dcnbBienBanLayMauHdr.get().getDcnbBienBanLayMauDtl())
+                .dcnbBienBanLayMauDtl(dcnbBienBanLayMauDtlToDto(dcnbBienBanLayMauHdr.get().getDcnbBienBanLayMauDtl()))
                 .build();
+    }
+
+    private List<DcnbBienBanLayMauDtlDto> dcnbBienBanLayMauDtlToDto(List<DcnbBienBanLayMauDtl> dcnbBienBanLayMauDtl) {
+        List<DcnbBienBanLayMauDtlDto> dcnbBienBanLayMauDtlDtos = new ArrayList<>();
+        int stt = 1;
+        for (var res : dcnbBienBanLayMauDtl) {
+            var dcnbBienBanLayMauDtlDto = DcnbBienBanLayMauDtlDto.builder()
+                    .stt(stt)
+                    .loaiDaiDien(res.getLoaiDaiDien())
+                    .tenDaiDien(res.getTenDaiDien())
+                    .build();
+            dcnbBienBanLayMauDtlDtos.add(dcnbBienBanLayMauDtlDto);
+        }
+        return dcnbBienBanLayMauDtlDtos;
     }
 }

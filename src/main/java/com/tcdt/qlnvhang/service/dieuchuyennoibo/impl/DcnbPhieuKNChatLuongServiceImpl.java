@@ -12,6 +12,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuKnChatLuongHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuKnChatLuong;
 import com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang.DcnbPhieuKnChatLuongHdrPreview;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKnChatLuongDtlDto;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKnChatLuongHdrDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -23,6 +24,7 @@ import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import lombok.var;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -333,14 +335,13 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
     }
 
     public ReportTemplateResponse preview(DcnbPhieuKnChatLuongHdrReq objReq) throws Exception {
-        Optional<DcnbPhieuKnChatLuongHdr> dcnbPhieuKnChatLuongHdr = dcnbPhieuKnChatLuongHdrRepository.findById(objReq.getId());
+        var dcnbPhieuKnChatLuongHdr = dcnbPhieuKnChatLuongHdrRepository.findById(objReq.getId());
         if (!dcnbPhieuKnChatLuongHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
-//        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-        Optional<UserInfo> userInfo = userInfoRepository.findById(dcnbPhieuKnChatLuongHdr.get().getNguoiPDuyet());
-        FileInputStream inputStream = new FileInputStream("/Users/lethanhdat/tecapro/qlnv-hang/src/main/resources/reports/dieuchuyennoibo/Nhập_LT_Phiếu kiểm nghiệm chất lượng_LT.docx");
-//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        DcnbPhieuKnChatLuongHdrPreview dcnbPhieuKnChatLuongHdrPreview = setDataToPreview(dcnbPhieuKnChatLuongHdr, userInfo);
+        var userInfo = userInfoRepository.findById(dcnbPhieuKnChatLuongHdr.get().getNguoiPDuyet());
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        var dcnbPhieuKnChatLuongHdrPreview = setDataToPreview(dcnbPhieuKnChatLuongHdr, userInfo);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbPhieuKnChatLuongHdrPreview);
     }
 
@@ -371,7 +372,24 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
                 .maQhns(dcnbPhieuKnChatLuongHdr.get().getMaQhns())
                 .loaiHangHoa(dcnbPhieuKnChatLuongHdr.get().getTenCloaiVthh())
                 .hinhThucKeLot(dcnbPhieuKnChatLuongHdr.get().getHinhThucBq())
-                .dcnbPhieuKnChatLuongDtls(dcnbPhieuKnChatLuongHdr.get().getDcnbPhieuKnChatLuongDtl())
+                .dcnbPhieuKnChatLuongDtls(DcnbPhieuKnChatLuongDtlToDto(dcnbPhieuKnChatLuongHdr.get().getDcnbPhieuKnChatLuongDtl()))
                 .build();
+    }
+
+    private List<DcnbPhieuKnChatLuongDtlDto> DcnbPhieuKnChatLuongDtlToDto(List<DcnbPhieuKnChatLuongDtl> dcnbPhieuKnChatLuongDtl) {
+        List<DcnbPhieuKnChatLuongDtlDto> dcnbPhieuKnChatLuongDtlDtos = new ArrayList<>();
+        int stt = 1;
+        for (var res : dcnbPhieuKnChatLuongDtl) {
+            var  dcnbPhieuKnChatLuongDtlDto = DcnbPhieuKnChatLuongDtlDto.builder()
+                    .stt(stt++)
+                    .chiTieuCl(res.getChiTieuCl())
+                    .chiSoCl(res.getChiSoCl())
+                    .ketQuaPt(res.getKetQuaPt())
+                    .phuongPhap(res.getPhuongPhap())
+                    .danhGia(res.getDanhGia())
+                    .build();
+            dcnbPhieuKnChatLuongDtlDtos.add(dcnbPhieuKnChatLuongDtlDto);
+        }
+        return dcnbPhieuKnChatLuongDtlDtos;
     }
 }

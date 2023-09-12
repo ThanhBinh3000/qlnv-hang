@@ -24,6 +24,7 @@ import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import lombok.var;
 import org.hibernate.Hibernate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -349,13 +350,12 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
         return searchDto;
     }
     public ReportTemplateResponse preview(DcnbBangKeCanHangHdrReq objReq) throws Exception {
-        Optional<DcnbBangKeCanHangHdr> dcnbBangKeCanHangHdr = dcnbBangKeCanHangHdrRepository.findById(objReq.getId());
+        var dcnbBangKeCanHangHdr = dcnbBangKeCanHangHdrRepository.findById(objReq.getId());
         if (!dcnbBangKeCanHangHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
-//        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-        FileInputStream inputStream = new FileInputStream("/Users/lethanhdat/tecapro/qlnv-hang/src/main/resources/reports/dieuchuyennoibo/Nhập_LT_Bảng kê cân hàng_nhập_LT.docx");
-//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        DcnbBangKeCanHangPreview dcnbBangKeCanHangPreview = setDataToPreview(dcnbBangKeCanHangHdr);
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        var dcnbBangKeCanHangPreview = setDataToPreview(dcnbBangKeCanHangHdr);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBangKeCanHangPreview);
     }
 
@@ -390,11 +390,12 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
         List<DcnbBangKeCanHangDtlDto> dcnbBangKeCanHangDtlDtoList = new ArrayList<>();
         int stt = 1;
         for (DcnbBangKeCanHangDtl res : dcnbBangKeCanHangDtl) {
-            DcnbBangKeCanHangDtlDto dcnbBangKeCanHangDtlDto = new DcnbBangKeCanHangDtlDto();
-            dcnbBangKeCanHangDtlDto.setStt(stt++);
-            dcnbBangKeCanHangDtlDto.setMaCan(res.getMaCan());
-            dcnbBangKeCanHangDtlDto.setSoBaoBi(res.getMaCan());
-            dcnbBangKeCanHangDtlDto.setTrongLuongCaBaoBi(res.getTrongLuongCaBaoBi());
+            DcnbBangKeCanHangDtlDto dcnbBangKeCanHangDtlDto = DcnbBangKeCanHangDtlDto.builder()
+                    .stt(stt++)
+                    .maCan(res.getMaCan())
+                    .soBaoBi(res.getMaCan())
+                    .trongLuongCaBaoBi(res.getTrongLuongCaBaoBi())
+                    .build();
             dcnbBangKeCanHangDtlDtoList.add(dcnbBangKeCanHangDtlDto);
         }
         return dcnbBangKeCanHangDtlDtoList;
