@@ -83,6 +83,8 @@ public interface DcnbBbChuanBiKhoHdrRepository extends JpaRepository<DcnbBbChuan
             "AND (:#{#param.soBban} IS NULL OR LOWER(bbcb.soBban) LIKE CONCAT('%',LOWER(:#{#param.soBban}),'%')) " +
             "AND (:#{#param.nam} IS NULL OR bbcb.nam = :#{#param.nam}) " +
             "AND (:#{#param.loaiDc} IS NULL OR bbcb.loaiDc = :#{#param.loaiDc}) " +
+            "AND (:#{#param.maNganKho} IS NULL OR bbcb.maNganKho = :#{#param.maNganKho}) " +
+            "AND (:#{#param.maLoKho} IS NULL OR bbcb.maLoKho = :#{#param.maLoKho}) " +
             "AND (:#{#param.trangThai} IS NULL OR bbcb.trangThai = :#{#param.trangThai}) " +
             "AND ((:#{#param.tuNgayLapBb}  IS NULL OR bbcb.ngayLap >= :#{#param.tuNgayLapBb})" +
             "AND (:#{#param.denNgayLapBb}  IS NULL OR bbcb.ngayLap <= :#{#param.denNgayLapBb}) ) " +
