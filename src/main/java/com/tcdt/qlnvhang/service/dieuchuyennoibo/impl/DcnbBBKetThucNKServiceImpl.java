@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
+import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBKetThucNKDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBKetThucNKHdrRepository;
@@ -11,9 +12,12 @@ import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBKetThucNKHdrDTO;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBKetThucNKHdrListDTO;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBBKetThucNKService;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBKetThucNKDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBKetThucNKHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbGiaoNhanHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -37,7 +41,8 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
     private DcnbBBKetThucNKDtlRepository dtlRepository;
     @Autowired
     private DcnbPhieuNhapKhoHdrRepository dcnbPhieuNhapKhoHdrRepository;
-
+    @Autowired
+    private FileDinhKemService fileDinhKemService;
     @Override
     public Page<DcnbBBKetThucNKHdr> searchPage(DcnbBBKetThucNKReq req) throws Exception {
         return null;
@@ -94,6 +99,8 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
         String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BBKT-" + userInfo.getDvqlTenVietTat();
         created.setSoBb(so);
         hdrRepository.save(created);
+        List<FileDinhKem> dinhkem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBBKetThucNKHdr.TABLE_NAME);
+        created.setFileDinhKems(dinhkem);
         return created;
     }
 
@@ -117,6 +124,9 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
         String so = update.getId() + "/" + (new Date().getYear() + 1900) + "/BBKT-" + userInfo.getDvqlTenVietTat();
         update.setSoBb(so);
         hdrRepository.save(update);
+        fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbBBKetThucNKHdr.TABLE_NAME));
+        List<FileDinhKem> dinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), DcnbBBKetThucNKHdr.TABLE_NAME);
+        update.setFileDinhKems(dinhKem);
         return update;
     }
 
@@ -134,6 +144,7 @@ public class DcnbBBKetThucNKServiceImpl implements DcnbBBKetThucNKService {
             throw new Exception("Số biên bản không tồn tại");
         }
         DcnbBBKetThucNKHdr data = optional.get();
+        data.setFileDinhKems(fileDinhKemService.search(id, Collections.singleton(DcnbBBKetThucNKHdr.TABLE_NAME)));
         return data;
     }
 
