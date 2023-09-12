@@ -51,7 +51,7 @@ public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Clon
     @Column(name = "SO_QDINH_DCC")
     private String soQdinhDcc;
     @Column(name = "NGAY_QDINH_DCC")
-    private String ngayQdinhDcc;
+    private LocalDate ngayQdinhDcc;
     @Column(name = "MA_DIEM_KHO")
     private String maDiemKho;
     @Column(name = "TEN_DIEM_KHO")
