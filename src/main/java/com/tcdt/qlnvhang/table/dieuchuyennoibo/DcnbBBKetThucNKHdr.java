@@ -30,6 +30,10 @@ public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Clon
     private String loaiVthh;
     @Column(name = "CLOAI_VTHH")
     private String cloaiVthh;
+    @Column(name = "TEN_LOAI_VTHH")
+    private String tenLoaiVthh;
+    @Column(name = "TEN_CLOAI_VTHH")
+    private String tenCloaiVthh;
     @Column(name = "NAM")
     private Integer nam;
     @Column(name = "SO_BB")
@@ -46,6 +50,8 @@ public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Clon
     private Long qDinhDccId;
     @Column(name = "SO_QDINH_DCC")
     private String soQdinhDcc;
+    @Column(name = "NGAY_QDINH_DCC")
+    private String ngayQdinhDcc;
     @Column(name = "MA_DIEM_KHO")
     private String maDiemKho;
     @Column(name = "TEN_DIEM_KHO")
@@ -124,6 +130,8 @@ public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Clon
     private LocalDate ngayPDuyet;
     @Column(name = "TYPE")
     private String type;
+    @Column(name = "GHI_CHU")
+    private String ghiChu;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
     private List<DcnbBBKetThucNKDtl> dcnbBBKetThucNKDtl = new ArrayList<>();
