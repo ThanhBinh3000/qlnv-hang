@@ -40,6 +40,8 @@ public class DcnbPhieuKtChatLuongHdr extends BaseEntity implements Serializable,
 
     @Column(name = "SO_QDINH_DC")
     private String soQdinhDc;
+    @Column(name = "NGAY_QDINH_DCC")
+    private LocalDate ngayQdinhDcc;
 
     @Column(name = "SO_PHIEU")
     private String soPhieu;
@@ -213,11 +215,13 @@ public class DcnbPhieuKtChatLuongHdr extends BaseEntity implements Serializable,
     private String toChucGiamDinh;
     @Column(name = "DON_VI_TINH")
     private String donViTinh;
-
+    @Column(name = "TICH_LUONG_KHA_DUNG")
+    private BigDecimal tichLuongKhaDung;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
     private List<DcnbPhieuKtChatLuongDtl> dcnbPhieuKtChatLuongDtl = new ArrayList<>();
-
+    @Transient
+    private List<FileDinhKem> phieuKTCLDinhKem = new ArrayList<>();
     @Transient
     private List<FileDinhKem> bienBanLayMauDinhKem = new ArrayList<>();
     @Transient
