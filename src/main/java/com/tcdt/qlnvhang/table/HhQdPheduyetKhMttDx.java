@@ -136,5 +136,6 @@ public class HhQdPheduyetKhMttDx implements Serializable {
     @Transient
     private HhQdPheduyetKhMttHdr hhQdPheduyetKhMttHdr;
 
-
+    @Transient
+    private String tongThanhTien;
 }

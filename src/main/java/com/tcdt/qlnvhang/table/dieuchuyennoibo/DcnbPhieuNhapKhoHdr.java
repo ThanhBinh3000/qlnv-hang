@@ -117,7 +117,12 @@ public class DcnbPhieuNhapKhoHdr extends BaseEntity implements Serializable, Clo
     private String tenNhaKho;
     private String tenNganKho;
     private String tenLoKho;
-
+    @Column(name = "DON_VI_TINH")
+    private String donViTinh;
+    @Transient
+    private String maDviCha;
+    @Transient
+    private String tenDviCha;
     @Transient
     private List<FileDinhKem> chungTuDinhKem = new ArrayList<>();
     @Transient
@@ -130,5 +135,10 @@ public class DcnbPhieuNhapKhoHdr extends BaseEntity implements Serializable, Clo
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
         this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+    }
+    public void setMaDvi(String maDvi) {
+        this.maDvi = maDvi;
+        // get đơn vị cấp cha
+        this.maDviCha = this.maDvi.substring(0, this.maDvi.length() - 2);
     }
 }

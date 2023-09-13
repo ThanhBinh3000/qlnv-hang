@@ -27,7 +27,7 @@ public class XhXkVtBhBbBaoHanhRequest extends BaseRequest {
   private String loaiVthh;
   private String cloaiVthh;
   private BigDecimal slTonKho;
-  private Integer Boolean;
+  private Boolean capLaiCaLo;
   private BigDecimal slBaoHanh;
   private LocalDate thoiGianBh;
   private String canBoLapBb;
@@ -55,7 +55,7 @@ public class XhXkVtBhBbBaoHanhRequest extends BaseRequest {
   private Long idBbLayMauL2;
   private LocalDate ngayLayMauL2;
   private String soBbLayMauL2;
-  private Integer ketQuaKdclL2;
+  private Boolean ketQuaKdclL2;
   //search params
   private LocalDate ngayKdclTu;
   private LocalDate ngayKdclDen;

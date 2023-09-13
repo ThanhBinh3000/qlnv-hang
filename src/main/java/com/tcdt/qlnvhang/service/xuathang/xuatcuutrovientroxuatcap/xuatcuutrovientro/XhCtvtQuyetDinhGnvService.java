@@ -103,7 +103,7 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
     }
 
     XhCtvtQuyetDinhGnvHdr data = optional.get();
-    BeanUtils.copyProperties(objReq, data, "id");
+    BeanUtils.copyProperties(objReq, data, "id","maDvi");
     XhCtvtQuyetDinhGnvHdr created = xhCtvtQuyetDinhGnvHdrRepository.save(data);
     return created;
   }

@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DcnbPhieuKtChatLuongHdr extends BaseEntity implements Serializable, Cloneable{
+public class DcnbPhieuKtChatLuongHdr extends BaseEntity implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_PHIEU_KT_CHAT_LUONG_HDR";
 
@@ -40,6 +40,8 @@ public class DcnbPhieuKtChatLuongHdr extends BaseEntity implements Serializable,
 
     @Column(name = "SO_QDINH_DC")
     private String soQdinhDc;
+    @Column(name = "NGAY_QDINH_DCC")
+    private LocalDate ngayQdinhDcc;
 
     @Column(name = "SO_PHIEU")
     private String soPhieu;
@@ -153,7 +155,7 @@ public class DcnbPhieuKtChatLuongHdr extends BaseEntity implements Serializable,
     private LocalDate ngayPDuyet;
 
     @Column(name = "TRANG_THAI")
-    @Access(value=AccessType.PROPERTY)
+    @Access(value = AccessType.PROPERTY)
     private String trangThai;
 
     @Column(name = "NGUOI_GDUYET")
@@ -211,15 +213,24 @@ public class DcnbPhieuKtChatLuongHdr extends BaseEntity implements Serializable,
     private LocalDate ngayGiamDinh;
     @Column(name = "TO_CHUC_GIAM_DINH")
     private String toChucGiamDinh;
-
+    @Column(name = "DON_VI_TINH")
+    private String donViTinh;
+    @Column(name = "TICH_LUONG_KHA_DUNG")
+    private BigDecimal tichLuongKhaDung;
+    @Column(name = "BB_NT_BQ_LD_ID")
+    private String bBNtLdId;
+    @Column(name = "SO_BB_NT_BQ_LD")
+    private String soBBNtLd;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
     private List<DcnbPhieuKtChatLuongDtl> dcnbPhieuKtChatLuongDtl = new ArrayList<>();
-
+    @Transient
+    private List<FileDinhKem> phieuKTCLDinhKem = new ArrayList<>();
     @Transient
     private List<FileDinhKem> bienBanLayMauDinhKem = new ArrayList<>();
     @Transient
     private String tenTrangThai;
+
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
         this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);

@@ -40,6 +40,7 @@ public class XhBienBanLayMauReq {
   private Long idBangKe;
   private String soBangKe;
   private LocalDate ngayKy;
+  private LocalDate ngayKyQdGnv;
   private String ktvBaoQuan;
   private String dviKiemNghiem;
   private String diaDiemLayMau;

@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import org.springframework.data.domain.Page;
 
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -41,4 +42,6 @@ public interface HhHopDongService {
 	void exportList(HhHopDongSearchReq objReq, HttpServletResponse response) throws Exception;
 
 	Page<HhHopDongHdr> lookupData(HhHopDongSearchReq req) throws Exception;
+
+	ReportTemplateResponse preview (HhHopDongHdrReq req) throws Exception;
 }

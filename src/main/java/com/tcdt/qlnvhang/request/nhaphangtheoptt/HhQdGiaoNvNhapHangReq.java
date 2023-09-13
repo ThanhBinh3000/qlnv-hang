@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.nhaphangtheoptt;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
@@ -11,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class HhQdGiaoNvNhapHangReq {
+public class HhQdGiaoNvNhapHangReq extends BaseRequest {
     private Long id;
     private Integer namNhap;
     private String soQd;

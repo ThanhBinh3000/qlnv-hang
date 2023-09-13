@@ -25,23 +25,25 @@ public class DcnbBbNhapDayKhoDtl implements Serializable, Cloneable{
     private Long id;
     @Column(name = "HDR_ID", insertable = true, updatable = true)
     private Long hdrId;
-    @NotNull
     @Column(name = "PHIEU_KT_CLUONG")
     private String soPhieuKiemTraCl;
-    @NotNull
     @Column(name = "ID_PHIEU_KT_CLUONG")
     private Long phieuKiemTraClId;
     @NotNull
-    private String phieuNhapKho;
+    @Column(name = "PHIEU_NHAP_KHO")
+    private String soPhieuNhapKho;
     @NotNull
-    private Long idPhieuNhapKho;
+    @Column(name = "ID_PHIEU_NHAP_KHO")
+    private Long phieuNhapKhoId;
+    @Column(name = "SO_BANG_KE_CH")
+    private String soBangKeCanHang;
+    @Column(name = "ID_BANG_KE_CH")
+    private Long bangKeCanHangId;
     @NotNull
-    private String soBangKeCh;
+    @Column(name = "NGAY_NHAP")
+    private LocalDate ngayNhapKho;
     @NotNull
-    private Long idBangKeCh;
-    @NotNull
-    private LocalDate ngayNhap;
-    @NotNull
+    @Column(name = "SO_LUONG")
     private BigDecimal soLuong;
 
     @ManyToOne(fetch = FetchType.LAZY)

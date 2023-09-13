@@ -9,10 +9,10 @@ import java.time.LocalDate;
 @Data
 public class DcnbPhieuKtChatLuongHdrDTO {
     private Long id;
-    private Long bBNtLdId;
     private Long qDinhDccId;
     private String soQdinh;
     private LocalDate ngayHieuLucQd;
+    private Long bBNtLdId;
     private String soBBNtLd;
     private LocalDate thoiGianDieuChuyen;
     private Integer nam;

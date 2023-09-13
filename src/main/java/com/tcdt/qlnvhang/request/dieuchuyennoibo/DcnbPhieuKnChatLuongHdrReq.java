@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuKnChatLuongDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -108,6 +109,12 @@ public class DcnbPhieuKnChatLuongHdrReq {
 
     private LocalDate ngayXuatDocKho;
 
+    private Long bbNhapDayKhoId;
+
+    private String soNhapDayKho;
+
+    private LocalDate ngayNhapDayKho;
+
     private Long bbHaoDoiId;
 
     private String soBbHaoDoi;
@@ -123,4 +130,5 @@ public class DcnbPhieuKnChatLuongHdrReq {
     private List<FileDinhKemReq> bienBanLayMauDinhKem = new ArrayList<>();
     @Valid
     private List<DcnbPhieuKnChatLuongDtl> dcnbPhieuKnChatLuongDtl = new ArrayList<>();
+    private ReportTemplateRequest reportTemplateRequest;
 }

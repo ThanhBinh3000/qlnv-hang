@@ -206,9 +206,19 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     private List<DcnbBienBanLayMauDtl> dcnbBienBanLayMauDtl = new ArrayList<>();
     @Transient
     private String tenTrangThai;
+    @Transient
+    private String maDviCha;
+    @Transient
+    private String tenDviCha;
 
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
         this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+    }
+
+    public void setMaDvi(String maDvi) {
+        this.maDvi = maDvi;
+        // get đơn vị cấp cha
+        this.maDviCha = this.maDvi.substring(0, this.maDvi.length() - 2);
     }
 }

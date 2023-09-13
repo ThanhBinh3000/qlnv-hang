@@ -6,13 +6,14 @@ import java.util.List;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.util.Contains;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class HhQdGiaoNvuNhapxuatHdrReq {
+public class HhQdGiaoNvuNhapxuatHdrReq extends BaseRequest {
 	@ApiModelProperty(notes = "Bắt buộc set đối với update")
 	private Long id;
 

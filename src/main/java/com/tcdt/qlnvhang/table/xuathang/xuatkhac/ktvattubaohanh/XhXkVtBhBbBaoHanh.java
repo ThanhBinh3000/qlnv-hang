@@ -69,7 +69,7 @@ public class XhXkVtBhBbBaoHanh extends BaseEntity implements Serializable {
   private Long idBbLayMauL2;
   private LocalDate ngayLayMauL2;
   private String soBbLayMauL2;
-  private Integer ketQuaKdclL2;
+  private Boolean ketQuaKdclL2;
   private BigDecimal slLayMauL1;
   private BigDecimal slLayMauL2;
 

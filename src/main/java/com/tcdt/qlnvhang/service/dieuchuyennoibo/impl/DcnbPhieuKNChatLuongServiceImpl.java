@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKnChatLuongDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKnChatLuongHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -10,14 +11,20 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbPhieuKnChatLuongHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuKnChatLuong;
+import com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang.DcnbPhieuKnChatLuongHdrPreview;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKnChatLuongDtlDto;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKnChatLuongHdrDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
+import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import lombok.var;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,8 +36,11 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -47,6 +57,9 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
 
     @Autowired
     private FileDinhKemRepository fileDinhKemRepository;
+
+    @Autowired
+    private UserInfoRepository userInfoRepository;
 
     public Page<DcnbPhieuKnChatLuongHdrDTO> searchPage(CustomUserDetails currentUser, SearchPhieuKnChatLuong req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -318,5 +331,64 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         searchDto = dcnbPhieuKnChatLuongHdrRepository.searchList(req);
 
         return searchDto;
+    }
+
+    public ReportTemplateResponse preview(DcnbPhieuKnChatLuongHdrReq objReq) throws Exception {
+        var dcnbPhieuKnChatLuongHdr = dcnbPhieuKnChatLuongHdrRepository.findById(objReq.getId());
+        if (!dcnbPhieuKnChatLuongHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
+        var userInfo = userInfoRepository.findById(dcnbPhieuKnChatLuongHdr.get().getNguoiPDuyet());
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        var dcnbPhieuKnChatLuongHdrPreview = setDataToPreview(dcnbPhieuKnChatLuongHdr, userInfo);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbPhieuKnChatLuongHdrPreview);
+    }
+
+    private DcnbPhieuKnChatLuongHdrPreview setDataToPreview(Optional<DcnbPhieuKnChatLuongHdr> dcnbPhieuKnChatLuongHdr,
+                                                            Optional<UserInfo> userInfo) {
+        return DcnbPhieuKnChatLuongHdrPreview.builder()
+                .maDvi(dcnbPhieuKnChatLuongHdr.get().getMaDvi())
+                .tenDvi(dcnbPhieuKnChatLuongHdr.get().getTenDvi())
+                .soPhieu(dcnbPhieuKnChatLuongHdr.get().getSoPhieu())
+                .tenNganKho(dcnbPhieuKnChatLuongHdr.get().getTenNganKho())
+                .tenLoKho(dcnbPhieuKnChatLuongHdr.get().getTenLoKho())
+                .tenNhaKho(dcnbPhieuKnChatLuongHdr.get().getTenNhaKho())
+                .tenDiemKho(dcnbPhieuKnChatLuongHdr.get().getTenDiemKho())
+                .soLuongHangBaoQuan("")
+                .hinhThucBq(dcnbPhieuKnChatLuongHdr.get().getHinhThucBq())
+                .tenThuKho(dcnbPhieuKnChatLuongHdr.get().getTenThuKho())
+                .ngayNhapDayKho(dcnbPhieuKnChatLuongHdr.get().getSoNhapDayKho())
+                .ngayLayMau(dcnbPhieuKnChatLuongHdr.get().getNgayLayMau().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .ngayKiem(dcnbPhieuKnChatLuongHdr.get().getNgayKiem().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .danhGiaCamQuan(dcnbPhieuKnChatLuongHdr.get().getDanhGiaCamQuan())
+                .nhanXetKetLuan(dcnbPhieuKnChatLuongHdr.get().getNhanXetKetLuan())
+                .ngayNhap(dcnbPhieuKnChatLuongHdr.get().getNgayLapPhieu().getDayOfMonth())
+                .thangNhap(dcnbPhieuKnChatLuongHdr.get().getNgayLapPhieu().getMonth().getValue())
+                .namNhap(dcnbPhieuKnChatLuongHdr.get().getNgayLapPhieu().getYear())
+                .nguoiKt(dcnbPhieuKnChatLuongHdr.get().getNguoiKt())
+                .truongBpKtbq(dcnbPhieuKnChatLuongHdr.get().getTpNguoiKt())
+                .lanhDaoCuc(userInfo.get().getFullName())
+                .maQhns(dcnbPhieuKnChatLuongHdr.get().getMaQhns())
+                .loaiHangHoa(dcnbPhieuKnChatLuongHdr.get().getTenCloaiVthh())
+                .hinhThucKeLot(dcnbPhieuKnChatLuongHdr.get().getHinhThucBq())
+                .dcnbPhieuKnChatLuongDtls(DcnbPhieuKnChatLuongDtlToDto(dcnbPhieuKnChatLuongHdr.get().getDcnbPhieuKnChatLuongDtl()))
+                .build();
+    }
+
+    private List<DcnbPhieuKnChatLuongDtlDto> DcnbPhieuKnChatLuongDtlToDto(List<DcnbPhieuKnChatLuongDtl> dcnbPhieuKnChatLuongDtl) {
+        List<DcnbPhieuKnChatLuongDtlDto> dcnbPhieuKnChatLuongDtlDtos = new ArrayList<>();
+        int stt = 1;
+        for (var res : dcnbPhieuKnChatLuongDtl) {
+            var  dcnbPhieuKnChatLuongDtlDto = DcnbPhieuKnChatLuongDtlDto.builder()
+                    .stt(stt++)
+                    .chiTieuCl(res.getChiTieuCl())
+                    .chiSoCl(res.getChiSoCl())
+                    .ketQuaPt(res.getKetQuaPt())
+                    .phuongPhap(res.getPhuongPhap())
+                    .danhGia(res.getDanhGia())
+                    .build();
+            dcnbPhieuKnChatLuongDtlDtos.add(dcnbPhieuKnChatLuongDtlDto);
+        }
+        return dcnbPhieuKnChatLuongDtlDtos;
     }
 }

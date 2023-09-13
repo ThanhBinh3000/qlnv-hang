@@ -97,8 +97,7 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
             "WHERE 1 =1 " +
             "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
             "AND (:#{#param.trangThai} IS NULL OR pnk.trangThai = :#{#param.trangThai}) " +
-            "AND ((:#{#param.qdDcCucId} IS NULL OR pnk.qdDcCucId = :#{#param.qdDcCucId}))" +
-            "AND ((:#{#param.qdinhDccId} IS NULL OR pnk.qdDcCucId = :#{#param.qdinhDccId}))" +
+            "AND ((:#{#param.soQdDcCuc} IS NULL OR LOWER(pnk.soQdDcCuc) LIKE CONCAT('%',LOWER(:#{#param.soQdDcCuc}),'%')))" +
             "AND ((:#{#param.maLoKho} IS NULL OR pnk.maLoKho = :#{#param.maLoKho}))" +
             "AND ((:#{#param.maNganKho} IS NULL OR pnk.maNganKho = :#{#param.maNganKho})) " +
             "GROUP BY pnk.id,pnk.soPhieuNhapKho, pnk.id ,pnk.ngayLap,pnk.tongSoLuong, pktcl.id, pktcl.soPhieu,bkchh.id, bkchh.soBangKe,bknvt.id, bknvt.soBangKe, bbcbkh.id, bbcbkh.soBban "+
