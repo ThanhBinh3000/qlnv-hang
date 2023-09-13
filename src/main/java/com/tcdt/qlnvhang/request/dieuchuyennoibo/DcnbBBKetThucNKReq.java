@@ -80,6 +80,8 @@ public class DcnbBBKetThucNKReq extends BaseRequest {
     private String trangThai;
     private String lyDoTuChoi;
     private Long nguoiGDuyet;
+    private String soBbLmBg;
+    private Long bbLmBgId;
 
     private LocalDate ngayGDuyet;
 
