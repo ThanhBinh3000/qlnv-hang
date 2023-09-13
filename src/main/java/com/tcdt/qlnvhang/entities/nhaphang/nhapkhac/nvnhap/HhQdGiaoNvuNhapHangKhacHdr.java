@@ -168,14 +168,4 @@ public class HhQdGiaoNvuNhapHangKhacHdr implements Serializable {
 		return canCuPhapLy;
 	}
 
-	public String getTenCloaiVthh() {
-		if(dtlList.isEmpty()){
-			return null;
-		}else{
-			List<String> collect = dtlList.stream().map(HhQdPdNhapKhacDtl::getTenCloaiVthh).collect(Collectors.toList());
-			List<String> newList = new ArrayList<String>(new HashSet<String>(collect));
-			tenCloaiVthh = String.join(",",newList);
-		}
-		return tenCloaiVthh;
-	}
 }

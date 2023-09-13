@@ -12,7 +12,9 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.suachuahang.ScKiemTraChatLuongService;
 import com.tcdt.qlnvhang.service.suachuahang.ScPhieuXuatKhoService;
 import com.tcdt.qlnvhang.service.suachuahang.ScQuyetDinhScService;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -24,6 +26,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -276,6 +279,17 @@ public class ScKiemTraChatLuongImpl extends BaseServiceImpl implements ScKiemTra
             }
         });
         return collect;
+    }
+
+    @Override
+    public ReportTemplateResponse preview(ScKiemTraChatLuongReq objReq) throws Exception {
+        ScKiemTraChatLuongHdr optional = detail(objReq.getId());
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+//        String filePath = "/Users/vunt/Downloads/Print/"+objReq.getReportTemplateRequest().getFileName();
+//        byte[] byteArray = Files.readAllBytes(Paths.get(filePath));
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
     }
 
 }

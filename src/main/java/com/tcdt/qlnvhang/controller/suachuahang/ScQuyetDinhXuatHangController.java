@@ -31,7 +31,7 @@ import java.util.List;
 @Api(tags = "Sửa chữa hàng DTQG - Quyết định xuất hàng DTQG")
 public class ScQuyetDinhXuatHangController {
     @Autowired
-    ScQuyetDinhXuatHangServiceImpl scQuyetDinhXuatHangService;
+    ScQuyetDinhXuatHangServiceImpl service;
 
     @ApiOperation(value = "Tra cứu", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -39,7 +39,7 @@ public class ScQuyetDinhXuatHangController {
     public ResponseEntity<BaseResponse> colection(@RequestBody ScQuyetDinhXuatHangReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(scQuyetDinhXuatHangService.searchPage(objReq));
+            resp.setData(service.searchPage(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -57,7 +57,7 @@ public class ScQuyetDinhXuatHangController {
     public ResponseEntity<BaseResponse> lístTaoPhieuXuatKho(@RequestBody ScQuyetDinhXuatHangReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(scQuyetDinhXuatHangService.dsTaoPhieuXuatKho(objReq));
+            resp.setData(service.dsTaoPhieuXuatKho(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -74,7 +74,7 @@ public class ScQuyetDinhXuatHangController {
     public ResponseEntity<BaseResponse> lístTaoQuyetDinhNh(@RequestBody ScQuyetDinhXuatHangReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(scQuyetDinhXuatHangService.dsTaoPhieuXuatKho(objReq));
+            resp.setData(service.dsTaoPhieuXuatKho(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -91,7 +91,7 @@ public class ScQuyetDinhXuatHangController {
     public ResponseEntity<BaseResponse> getDsTaoBaoCao(@RequestBody ScQuyetDinhXuatHangReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(scQuyetDinhXuatHangService.searchDanhSachTaoBaoCao(objReq));
+            resp.setData(service.searchDanhSachTaoBaoCao(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch ( Exception e) {
@@ -110,7 +110,7 @@ public class ScQuyetDinhXuatHangController {
     public ResponseEntity<BaseResponse> getDsTaoBaoCao(@PathVariable("id") Long id) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(scQuyetDinhXuatHangService.getDetailBaoCao(id));
+            resp.setData(service.getDetailBaoCao(id));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch ( Exception e) {
@@ -129,7 +129,7 @@ public class ScQuyetDinhXuatHangController {
     public ResponseEntity<BaseResponse> insert(@Valid @RequestBody ScQuyetDinhXuatHangReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(scQuyetDinhXuatHangService.create(objReq));
+            resp.setData(service.create(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -146,7 +146,7 @@ public class ScQuyetDinhXuatHangController {
     public ResponseEntity<BaseResponse> update(@Valid @RequestBody ScQuyetDinhXuatHangReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(scQuyetDinhXuatHangService.update(objReq));
+            resp.setData(service.update(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -163,7 +163,7 @@ public class ScQuyetDinhXuatHangController {
     public ResponseEntity<BaseResponse> detail(@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("id") Long id) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(scQuyetDinhXuatHangService.detail(id));
+            resp.setData(service.detail(id));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -179,7 +179,7 @@ public class ScQuyetDinhXuatHangController {
     public ResponseEntity<BaseResponse> updateStatus(@NonNull @RequestBody ScQuyetDinhXuatHangReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            scQuyetDinhXuatHangService.approve(req);
+            service.approve(req);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -197,7 +197,7 @@ public class ScQuyetDinhXuatHangController {
     public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            scQuyetDinhXuatHangService.delete(idSearchReq.getId());
+            service.delete(idSearchReq.getId());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -215,13 +215,29 @@ public class ScQuyetDinhXuatHangController {
     public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody DeleteReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            scQuyetDinhXuatHangService.deleteMulti(req.getIds());
+            service.deleteMulti(req.getIds());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
             log.error("Xoá thông tin : {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Xem truoc", response = List.class)
+    @PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> preview(@RequestBody ScQuyetDinhXuatHangReq req) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.preview(req));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
         }
         return ResponseEntity.ok(resp);
     }

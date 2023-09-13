@@ -183,23 +183,19 @@ public class ScPhieuXuatKhoController {
         return ResponseEntity.ok(resp);
     }
 
-//    @ApiOperation(value = "Kết xuất danh sách biên bản lấy mẫu", response = List.class)
-//    @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
-//    @ResponseStatus(HttpStatus.OK)
-//    public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody SearchPhieuXuatKho objReq, HttpServletResponse response) throws Exception {
-//        try {
-//            service.export( currentUser,objReq, response);
-//
-//        } catch (Exception e) {
-//            log.error("Kết xuất danh sách dánh sách mua : {}", e);
-//            final Map<String, Object> body = new HashMap<>();
-//            body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//            body.put("msg", e.getMessage());
-//            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-//            response.setCharacterEncoding("UTF-8");
-//            final ObjectMapper mapper = new ObjectMapper();
-//            mapper.writeValue(response.getOutputStream(), body);
-//
-//        }
-//    }
+    @ApiOperation(value = "Xem truoc", response = List.class)
+    @PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> preview(@RequestBody ScPhieuXuatKhoReq req) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.preview(req));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+        }
+        return ResponseEntity.ok(resp);
+    }
 }
