@@ -131,7 +131,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
     if (!qOptional.isPresent()) throw new Exception("Không tìm thấy dữ liệu cần sửa");
 
     XhCtvtTongHopHdr data = qOptional.get();
-    BeanUtils.copyProperties(objReq, data);
+    BeanUtils.copyProperties(objReq, data,"maDvi");
     XhCtvtTongHopHdr created = xhCtvtTongHopHdrRepository.save(data);
 
     //update dx

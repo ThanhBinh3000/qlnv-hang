@@ -43,7 +43,7 @@ public class XhXkVtBhQdXuatGiamVt extends BaseEntity implements Serializable {
     private String listIdQdGiaoNvXh;
 
     @Transient
-    private List<FileDinhKem> fileDinhKems;
+    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     @Transient
     private String tenTrangThai;
     @Transient

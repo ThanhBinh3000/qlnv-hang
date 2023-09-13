@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattu;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatNhapKho;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtQdGiaonvXhDtl;
@@ -29,6 +30,7 @@ public class XhXkVtQdXuatGiamVattuRequest extends BaseRequest {
     private Long nguoiDuyetId;
     private LocalDate ngayDuyet;
     private List<XhXkVtPhieuXuatNhapKho> xhXkVtPhieuXuatNhapKho = new ArrayList<>();
+    private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
     //search params
     LocalDate ngayQuyetDinhTu;
     LocalDate ngayQuyetDinhDen;
