@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeCanHangDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 
 import javax.validation.Valid;
@@ -116,4 +117,6 @@ public class DcnbBangKeCanHangHdrReq {
     private String tongTrongLuongTruBiText;
     @Valid
     private List<DcnbBangKeCanHangDtl> dcnbBangKeCanHangDtl = new ArrayList<>();
+
+    private ReportTemplateRequest reportTemplateRequest;
 }

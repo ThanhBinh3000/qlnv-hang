@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbChuanBiKhoDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -91,4 +92,5 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
 
     private Boolean isVatTu = false;
     private List<String> dsLoaiHang = new ArrayList<>();
+    private ReportTemplateRequest reportTemplateRequest;
 }
