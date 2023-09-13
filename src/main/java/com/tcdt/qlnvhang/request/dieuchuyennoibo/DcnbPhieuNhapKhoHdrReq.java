@@ -81,7 +81,7 @@ public class DcnbPhieuNhapKhoHdrReq extends BaseRequest {
     private String tenKyThuatVien;
     private Long idKeToanTruong;
     private String keToanTruong;
-
+    private String donViTinh;
     private String hoVaTenNguoiGiao;
     private String cmndNguoiGiao;
     private String donViNguoiGiao;
