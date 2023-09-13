@@ -185,6 +185,8 @@ public class DcnbBienBanHaoDoiHdr extends BaseEntity implements Serializable {
     private Long phieuKtChatLuongHdrId;
     @Column(name = "SO_PHIEU_KT_CHAT_LUONG")
     private String soPhieuKtChatLuong;
+    @Column(name = "DON_VI_TINH")
+    private String donViTinh;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
