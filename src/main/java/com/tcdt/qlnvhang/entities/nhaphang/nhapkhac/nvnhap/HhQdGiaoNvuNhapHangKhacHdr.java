@@ -157,16 +157,6 @@ public class HhQdGiaoNvuNhapHangKhacHdr implements Serializable {
 		return Objects.isNull(this.getNgayQd()) ? null : String.valueOf(this.getNgayQd().getMonth()+1);
 	}
 
-	public String getCanCuPhapLy() {
-		if(fileCanCu.isEmpty()){
-			return null;
-		}else{
-			List<String> collect = fileCanCu.stream().map(FileDinhKem::getFileName).collect(Collectors.toList());
-			List<String> newList = new ArrayList<String>(new HashSet<String>(collect));
-			canCuPhapLy = String.join("-",newList);
-		}
-		return canCuPhapLy;
-	}
 
 	public String getTenCloaiVthh() {
 		if(dtlList.isEmpty()){
