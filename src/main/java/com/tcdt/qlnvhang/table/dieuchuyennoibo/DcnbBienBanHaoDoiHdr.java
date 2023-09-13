@@ -187,6 +187,8 @@ public class DcnbBienBanHaoDoiHdr extends BaseEntity implements Serializable {
     private String soPhieuKtChatLuong;
     @Column(name = "DON_VI_TINH")
     private String donViTinh;
+    @Column(name = "SL_HAO_THEO_DINH_MUC")
+    private String slHaoTheoDinhMuc; // Số lượng hao theo định mức
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
