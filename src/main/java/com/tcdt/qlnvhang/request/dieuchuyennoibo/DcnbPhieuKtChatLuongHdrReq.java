@@ -26,6 +26,8 @@ public class DcnbPhieuKtChatLuongHdrReq {
     private Long qdDcId;
     @NotNull
     private String soQdinhDc;
+    @NotNull
+    private LocalDate ngayQdinhDcc;
 
     private String soPhieu;
     @NotNull
@@ -90,7 +92,7 @@ public class DcnbPhieuKtChatLuongHdrReq {
     private String cloaiVthh;
     @NotNull
     private String tenCloaiVthh;
-
+    private BigDecimal tichLuongKhaDung;
     private String hinhThucBq;
 
     private String danhGiaCamQuan;
@@ -136,7 +138,7 @@ public class DcnbPhieuKtChatLuongHdrReq {
     private LocalDate ngayGiamDinh;
     private String toChucGiamDinh;
     private String donViTinh;
-
+    private List<FileDinhKemReq> phieuKTCLDinhKem = new ArrayList<>();
     private List<FileDinhKemReq> bienBanLayMauDinhKem = new ArrayList<>();
     @Valid
     private List<DcnbPhieuKtChatLuongDtl> dcnbPhieuKtChatLuongDtl = new ArrayList<>();

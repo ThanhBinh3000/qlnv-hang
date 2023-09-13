@@ -113,7 +113,9 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         created.setSoPhieu(so);
         dcnbPhieuKtChatLuongHdrRepository.save(created);
         List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbPhieuKtChatLuongHdr.TABLE_NAME + "_CAN_CU");
+        List<FileDinhKem> phieuKiemTra = fileDinhKemService.saveListFileDinhKem(objReq.getPhieuKTCLDinhKem(), created.getId(), DcnbPhieuKtChatLuongHdr.TABLE_NAME + "_PKT");
         data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
+        data.setPhieuKTCLDinhKem(phieuKiemTra);
         return created;
     }
 
@@ -148,8 +150,11 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         created.setSoPhieu(so);
         dcnbPhieuKtChatLuongHdrRepository.save(created);
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbPhieuKtChatLuongHdr.TABLE_NAME + "_CAN_CU"));
+        fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbPhieuKtChatLuongHdr.TABLE_NAME + "_PKT"));
         List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbPhieuKtChatLuongHdr.TABLE_NAME + "_CAN_CU");
+        List<FileDinhKem> phieuKiemTra = fileDinhKemService.saveListFileDinhKem(objReq.getPhieuKTCLDinhKem(), created.getId(), DcnbPhieuKtChatLuongHdr.TABLE_NAME + "_PKT");
         data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
+        data.setPhieuKTCLDinhKem(phieuKiemTra);
         return created;
     }
 
@@ -163,7 +168,9 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         List<DcnbPhieuKtChatLuongHdr> allById = dcnbPhieuKtChatLuongHdrRepository.findAllById(ids);
         allById.forEach(data -> {
             List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemRepository.findByDataIdAndDataTypeIn(data.getId(), Collections.singleton(DcnbPhieuKtChatLuongHdr.TABLE_NAME + "_CAN_CU"));
+            List<FileDinhKem> phieuKiemTra = fileDinhKemRepository.findByDataIdAndDataTypeIn(data.getId(), Collections.singleton(DcnbPhieuKtChatLuongHdr.TABLE_NAME + "_PKT"));
             data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
+            data.setPhieuKTCLDinhKem(phieuKiemTra);
             List<DcnbPhieuKtChatLuongDtl> khs = dcnbPhieuKtChatLuongDtlRepository.findByHdrId(data.getId());
             data.setDcnbPhieuKtChatLuongDtl(khs);
         });
