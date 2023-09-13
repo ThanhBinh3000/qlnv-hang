@@ -46,7 +46,7 @@ public interface DcnbPhieuKtChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "khdcd.thayDoiThuKho,pktcl.soPhieu,pktcl.ngayGiamDinh,pktcl.nhanXetKetLuan,pnk.soPhieuNhapKho, pnk.ngayLap, " +
             "khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan,khdcd.maDiemKhoNhan,khdcd.tenDiemKhoNhan,khdcd.maLoKhoNhan," +
             "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan," +
-            "pktcl.trangThai,pktcl.trangThai) " +
+            "pktcl.trangThai,pktcl.trangThai,khdcd.tichLuongKd) " +
             "FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
@@ -75,7 +75,7 @@ public interface DcnbPhieuKtChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "khdcd.thayDoiThuKho,pktcl.soPhieu,pktcl.ngayGiamDinh,pktcl.nhanXetKetLuan,pnk.soPhieuNhapKho, pnk.ngayLap, " +
             "khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan,khdcd.maDiemKhoNhan,khdcd.tenDiemKhoNhan,khdcd.maLoKhoNhan," +
             "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan," +
-            "pktcl.trangThai,pktcl.trangThai "+
+            "pktcl.trangThai,pktcl.trangThai,khdcd.tichLuongKd "+
             "ORDER BY qdc.soQdinh DESC")
     Page<DcnbPhieuKtChatLuongHdrDTO> searchPage(@Param("param")SearchPhieuKtChatLuong req, Pageable pageable);
 }
