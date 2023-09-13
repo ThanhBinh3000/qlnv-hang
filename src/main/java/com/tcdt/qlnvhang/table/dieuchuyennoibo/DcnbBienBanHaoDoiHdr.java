@@ -113,7 +113,10 @@ public class DcnbBienBanHaoDoiHdr extends BaseEntity implements Serializable {
 
     @Column(name = "NGAY_KET_THUC_XUAT_TT")
     private LocalDate ngayKetThucXuatTt;
-
+    @Column(name = "NGAY_BAT_DAU_XUAT")
+    private LocalDate ngayBatDauXuat;
+    @Column(name = "NGAY_KET_THUC_XUAT")
+    private LocalDate ngayKetThucXuat;
     @Column(name = "SL_HAO_TT")
     private Double slHaoTt;
 
