@@ -211,6 +211,8 @@ public class DcnbPhieuKtChatLuongHdr extends BaseEntity implements Serializable,
     private LocalDate ngayGiamDinh;
     @Column(name = "TO_CHUC_GIAM_DINH")
     private String toChucGiamDinh;
+    @Column(name = "DON_VI_TINH")
+    private String donViTinh;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
