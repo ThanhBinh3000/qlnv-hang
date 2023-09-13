@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
 import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttSLDDReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.nhaphang.nhaptructiep.HhChiTietTTinChaoGiaPreview;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.*;
 
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -14,6 +15,7 @@ import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhChiTietTTinChaoGia;
 
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDcQdPdKhmttSlddDtl;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdPdKhMttSlddDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -28,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
 import java.util.*;
 
 @Service
@@ -51,6 +54,9 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
 
     @Autowired
     private HhDcQdPdKhmttSlddDtlRepository hhDcQdPdKhmttSlddDtlRepository;
+
+    @Autowired
+    private HhQdPheduyetKhMttHdrService hhQdPheduyetKhMttHdrService;
 
 
     public Page<HhQdPheduyetKhMttDx> selectPage(SearchHhPthucTkhaiReq req) throws Exception {
@@ -237,5 +243,13 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
         ex.export();
     }
 
+    public ReportTemplateResponse preview(HhCgiaReq hhCgiaReq) throws Exception {
+        HhQdPheduyetKhMttDx hhQdPheduyetKhMttDx = hhQdPheduyetKhMttHdrService.detailDtl(hhCgiaReq.getIdQdDtl());
+        ReportTemplate model = findByTenFile(hhCgiaReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        HhChiTietTTinChaoGiaPreview object = new HhChiTietTTinChaoGiaPreview();
+        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+    }
 }
 

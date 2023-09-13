@@ -155,4 +155,6 @@ public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<NhQdGiaoNv
 					"  GROUP BY NX.ID,NX.SO_QD,NX.MA_DVI,NX.LOAI_QD,NX.TRANG_THAI,NX.NGAY_TAO,NX.NGUOI_TAO,NX.NGAY_SUA,NX.NGUOI_SUA,NX.NGAY_GUI_DUYET,NX.NGUOI_GUI_DUYET,NX.LDO_TUCHOI,NX.NGAY_PDUYET,NX.NGUOI_PDUYET,NX.GHI_CHU,NX.CAP_DVI,NX.NAM_NHAP,NX.NGAY_QDINH,NX.LOAI_VTHH,NX.TRICH_YEU,NX.ID_HD,NX.SO_HD,NX.CLOAI_VTHH,NX.DON_VI_TINH,NX.SO_LUONG, NX.TGIAN_NKHO, NX.TEN_GOI_THAU, NX.MO_TA_HANG_HOA "
 			, nativeQuery = true)
 	Page<NhQdGiaoNvuNhapxuatHdr> selectPageChiCuc(Long namNhap, String soQd, String loaiVthh, String trichYeu, String tuNgayLP, String denNgayLP, String tuNgayKT, String denNgayKT, String maDvi, String soBbNtBq, String trangThai, String tuNgayGD, String denNgayGD, String kqDanhGia, Pageable pageable);
+
+	List<NhQdGiaoNvuNhapxuatHdr> findAllByLoaiVthhStartsWithAndTrangThaiAndMaDviStartsWith (String loaiVthh, String trangThai, String maDvi);
 }

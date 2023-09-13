@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.impl;
 
+import java.io.ByteArrayInputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -17,6 +18,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhB
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bienbanchuanbikho.NhBienBanChuanBiKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatDtl;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatPreview;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNxDdiem;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatDtlLoaiNx;
@@ -46,6 +48,7 @@ import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKe
 import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.phieukiemtracl.NhPhieuKtChatLuongService;
 import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoService;
 import com.tcdt.qlnvhang.table.*;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -712,7 +715,6 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		}
 		Map<String, String> mapDmucHh = getListDanhMucHangHoa();
 		Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
-		Map<String, String> tenCloaiVthh = getListDanhMucHangHoa();
 		data.getContent().forEach(f -> {
 			f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
 			f.setTenLoaiVthh(mapDmucHh.get(f.getLoaiVthh()));
@@ -764,8 +766,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 //					dtl.setListBienBanChuanBiKho(bbChuanBiKho);
 //				}
 
-				dtl.setTenLoaiVthh(tenCloaiVthh.get(dtl.getLoaiVthh()));
-				dtl.setTenCloaiVthh(tenCloaiVthh.get(dtl.getCloaiVthh()));
+				dtl.setTenLoaiVthh(mapDmucHh.get(dtl.getLoaiVthh()));
+				dtl.setTenCloaiVthh(mapDmucHh.get(dtl.getCloaiVthh()));
 				dtl.setTenDvi(mapDmucDvi.get(dtl.getMaDvi()));
 				dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
 
@@ -806,6 +808,39 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			f.setListPhieuKiemNghiemCl(phieuKnghiemCl);
 			f.setDtlList(nhQdGiaoNvuNhapxuatDtl);
 		});
+		return data;
+	}
+
+	@Override
+	public List<NhQdGiaoNvuNhapxuatHdr> layTatCaQdGiaoNvNh(HhQdNhapxuatSearchReq req) throws Exception {
+		UserInfo userInfo = SecurityContextService.getUser();
+		if (userInfo == null) throw new Exception("Bad request.");
+		List<NhQdGiaoNvuNhapxuatHdr> data = null;
+		if (userInfo.getCapDvi().equalsIgnoreCase(Contains.CAP_CHI_CUC)) {
+
+		} else {
+			data = hhQdGiaoNvuNhapxuatRepository.findAllByLoaiVthhStartsWithAndTrangThaiAndMaDviStartsWith(req.getLoaiVthh(), req.getTrangThai(), userInfo.getDvql());
+		}
+		if (data != null) {
+			Map<String, String> mapDmucHh = getListDanhMucHangHoa();
+			for (NhQdGiaoNvuNhapxuatHdr qdGiaoNvuNhapxuatHdr : data) {
+				qdGiaoNvuNhapxuatHdr.setTenLoaiVthh(mapDmucHh.get(qdGiaoNvuNhapxuatHdr.getLoaiVthh()));
+				qdGiaoNvuNhapxuatHdr.setTenCloaiVthh(mapDmucHh.get(qdGiaoNvuNhapxuatHdr.getCloaiVthh()));
+				Optional<HhHopDongHdr> hhHopDongHdr = hhHopDongRepository.findById(qdGiaoNvuNhapxuatHdr.getIdHd());
+				hhHopDongHdr.ifPresent(qdGiaoNvuNhapxuatHdr::setHopDong);
+				List<BienBanLayMau> bienBanLayMauList = bienBanLayMauRepository.findByIdQdGiaoNvNh(qdGiaoNvuNhapxuatHdr.getId());
+				if (!bienBanLayMauList.isEmpty()) {
+					Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
+					for (BienBanLayMau bienBanLayMau : bienBanLayMauList) {
+						bienBanLayMau.setTenDvi(mapDmucDvi.get(bienBanLayMau.getMaDvi()));
+						bienBanLayMau.setTenDiemKho(mapDmucDvi.get(bienBanLayMau.getMaDiemKho()));
+						bienBanLayMau.setTenNhaKho(mapDmucDvi.get(bienBanLayMau.getMaNhaKho()));
+						bienBanLayMau.setTenNganLoKho(bienBanLayMau.getMaLoKho() != null ? mapDmucDvi.get(bienBanLayMau.getMaLoKho()) + " - " + mapDmucDvi.get(bienBanLayMau.getMaNganKho()): mapDmucDvi.get(bienBanLayMau.getMaNganKho()));
+					}
+				}
+				qdGiaoNvuNhapxuatHdr.setListBienBanLayMau(bienBanLayMauList);
+			}
+		}
 		return data;
 	}
 
@@ -860,5 +895,15 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			dtlRepository.updateTrangThai(dtl.getId(),dtl.getTrangThai());
 			ddiemNhapRepository.saveAll(dtls);
 		}
+	}
+
+	@Override
+	public ReportTemplateResponse preview(HhQdGiaoNvuNhapxuatHdrReq hhQdGiaoNvuNhapxuatHdrReq) throws Exception {
+		NhQdGiaoNvuNhapxuatHdr qdGiaoNvuNhapxuatHdr = detail(hhQdGiaoNvuNhapxuatHdrReq.getId().toString());
+		ReportTemplate model = findByTenFile(hhQdGiaoNvuNhapxuatHdrReq.getReportTemplateRequest());
+		byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+		NhQdGiaoNvuNhapxuatPreview object = new NhQdGiaoNvuNhapxuatPreview();
+		return docxToPdfConverter.convertDocxToPdf(inputStream, object);
 	}
 }
