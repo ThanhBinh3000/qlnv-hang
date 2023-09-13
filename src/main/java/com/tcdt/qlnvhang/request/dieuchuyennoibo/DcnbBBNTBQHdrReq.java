@@ -110,4 +110,5 @@ public class DcnbBBNTBQHdrReq extends BaseRequest {
     private LocalDate tuNgayKtnt;
     private LocalDate denNgayKtnt;
     private ReportTemplateRequest reportTemplateRequest;
+    private String loaiHinhBaoQuan;
 }
