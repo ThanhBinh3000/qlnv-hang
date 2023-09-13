@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.common.DocxToPdfConverter;
-import com.tcdt.qlnvhang.entities.KtTrangThaiHienThoi;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.KtTrangThaiHienThoiRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbChuanBiKhoDtlRepository;
@@ -26,7 +25,6 @@ import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbChuanBiKhoDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbChuanBiKhoHdr;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
-import com.tcdt.qlnvhang.util.AmountToWord;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -40,7 +38,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -348,7 +345,7 @@ public class DcnbBbChuanBiKhoServiceImpl extends BaseServiceImpl implements Dcnb
                 .dcnbBbChuanBiKhoDtlPheDuyetDto(dcnbBbChuanBiKhoDtlPheDuyetDtos)
                 .dcnbBbChuanBiKhoDtlThucHienDto(dcnbBbChuanBiKhoDtlThucHienDtos)
                 .tongSoKinhPhiThucTeDaThucHien(tongTien)
-                .tongSoKinhPhiThucTeDaThucHienText(AmountToWord.convert(tongTien.longValue()))
+                .tongSoKinhPhiThucTeDaThucHienText(dcnbBbChuanBiKhoHdr.get().getTongKinhPhiDaThBc())
                 .build();
     }
 

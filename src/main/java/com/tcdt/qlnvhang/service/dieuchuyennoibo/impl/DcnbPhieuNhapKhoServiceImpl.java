@@ -387,7 +387,7 @@ public class DcnbPhieuNhapKhoServiceImpl extends BaseServiceImpl implements Dcnb
                 .donViCungCapHang(dcnbPhieuNhapKhoHdr.get().getDonViNguoiGiao())
                 .soQdGiaoVnNhapHang(dcnbPhieuNhapKhoHdr.get().getSoQdDcCuc())
                 .ngayKyQdGiaoNvNhapHang(dcnbPhieuNhapKhoHdr.get().getNgayQdDcCuc().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
-                .donViCapChaCuaTruongDonVi("Đơn vị cấp cha của trường Đơn vị")
+                .donViCapChaCuaTruongDonVi(dcnbPhieuNhapKhoHdr.get().getMaDviCha())
                 .tenNganKho(dcnbPhieuNhapKhoHdr.get().getTenNganKho())
                 .tenLoKho(dcnbPhieuNhapKhoHdr.get().getTenLoKho())
                 .tenNhaKho(dcnbPhieuNhapKhoHdr.get().getTenNhaKho())

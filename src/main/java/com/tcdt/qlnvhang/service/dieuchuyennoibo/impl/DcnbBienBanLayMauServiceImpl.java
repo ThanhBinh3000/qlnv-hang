@@ -332,11 +332,11 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
                                                          Optional<UserInfo> userInfo) {
         return DcnbBienBanLayMauHdrPreview.builder()
                 .donViCungCapHang(dcnbBienBanLayMauHdr.get().getTenDvi())
-                .quyChuanTieuChuan("Quy chuẩn, tiêu chuẩn")
+                .quyChuanTieuChuan("")
                 .chungLoaiHangHoa(dcnbBienBanLayMauHdr.get().getTenCloaiVthh())
                 .ngayLayMau(dcnbBienBanLayMauHdr.get().getNgayLayMau().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .tenDvi(dcnbBienBanLayMauHdr.get().getTenDvi())
-                .tenDviCha("tên đơn vị cha")
+                .tenDviCha("")
                 .soLuongMau(dcnbBienBanLayMauHdr.get().getSoLuongMau())
                 .donViTinh(dcnbBienBanLayMauHdr.get().getDonViTinh())
                 .pPLayMau(dcnbBienBanLayMauHdr.get().getPPLayMau())

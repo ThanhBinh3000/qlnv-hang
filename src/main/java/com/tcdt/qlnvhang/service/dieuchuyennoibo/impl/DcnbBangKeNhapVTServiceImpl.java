@@ -314,7 +314,7 @@ public class DcnbBangKeNhapVTServiceImpl extends BaseServiceImpl implements Dcnb
                 .tenDonViTinh(dcnbBangKeNhapVTHdr.get().getDonViTinh())
                 .tenNguoiGiaoHang(dcnbBangKeNhapVTHdr.get().getTenNguoiGiaoHang())
                 .thoiGianGiaoNhan(dcnbBangKeNhapVTHdr.get().getThoiHanGiaoNhan().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
-                .nguoiGiamSat("Người giám sát")
+                .nguoiGiamSat("")
                 .tongTrongLuongCabaoBi(dcnbBangKeCanHangHdr.get().getTongTrongLuongCabaoBi())
                 .tongTrongLuongBaoBi(dcnbBangKeCanHangHdr.get().getTongTrongLuongBaoBi())
                 .tongTrongLuongTruBi(dcnbBangKeCanHangHdr.get().getTongTrongLuongTruBi())
