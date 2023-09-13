@@ -65,8 +65,11 @@ public interface DcnbBBNTBQHdrRepository extends JpaRepository<DcnbBBNTBQHdr, Lo
     @Query(value = "SELECT distinct c FROM DcnbBBNTBQHdr c " +
             " WHERE 1=1 " +
             "AND ((:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
+            "AND ((:#{#param.soQdDcCuc} IS NULL OR c.soQdDcCuc LIKE CONCAT('%',LOWER(:#{#param.soQdDcCuc}),'%')))" +
             "AND (:#{#param.maLoKho} IS NULL OR LOWER(c.maLoKho) = :#{#param.maLoKho}) " +
             "AND (:#{#param.maNganKho} IS NULL OR LOWER(c.maNganKho) = :#{#param.maNganKho}) " +
+            "AND (:#{#param.maLoKhoXuat} IS NULL OR LOWER(c.maLoKhoXuat) = :#{#param.maLoKhoXuat}) " +
+            "AND (:#{#param.maNganKhoXuat} IS NULL OR LOWER(c.maNganKhoXuat) = :#{#param.maNganKhoXuat}) " +
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
             "ORDER BY c.nam desc, c.id desc")
     List<DcnbBBNTBQHdr> list(@Param("param") DcnbBBNTBQHdrReq req);
