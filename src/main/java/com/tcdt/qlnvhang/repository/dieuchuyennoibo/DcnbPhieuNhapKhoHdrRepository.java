@@ -43,7 +43,7 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
             "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, khdcd.thayDoiThuKho,pnk.soPhieuNhapKho, pnk.ngayLap,  pnk.bangKeVtId, pnk.soBangKeVt," +
             "khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh, khdcd.tenCloaiVthh,khdcd.donViTinh,khdcd.soLuongDc,khdcd.duToanKphi," +
             "pnk.idPhieuKtraCluong, pnk.soPhieuKtraCluong, pktcl.ngayGiamDinh, " +
-            "bkch.id, bkch.soBangKe, bbntbq.id,bbntbq.soBban, " +
+            "bkch.id, bkch.soBangKe, pnk.bbNghiemThuBqld, " +
             "pnk.trangThai, pnk.trangThai) " +
             "FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
@@ -69,7 +69,7 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
             "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, khdcd.thayDoiThuKho,pnk.soPhieuNhapKho, pnk.ngayLap,  pnk.bangKeVtId, pnk.soBangKeVt," +
             "khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh, khdcd.tenCloaiVthh,khdcd.donViTinh,khdcd.soLuongDc,khdcd.duToanKphi," +
             "pnk.idPhieuKtraCluong, pnk.soPhieuKtraCluong, pktcl.ngayGiamDinh, " +
-            "bkch.id, bkch.soBangKe, bbntbq.id,bbntbq.soBban, " +
+            "bkch.id, bkch.soBangKe, pnk.bbNghiemThuBqld, " +
             "pnk.trangThai, pnk.trangThai " +
             "ORDER BY qdc.soQdinh DESC")
     Page<DcnbPhieuNhapKhoHdrDTO> searchPage(@Param("param")DcnbPhieuNhapKhoHdrReq req, Pageable pageable);

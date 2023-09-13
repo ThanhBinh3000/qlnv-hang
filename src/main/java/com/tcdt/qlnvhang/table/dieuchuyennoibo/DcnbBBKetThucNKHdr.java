@@ -133,6 +133,11 @@ public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Clon
     private String type;
     @Column(name = "GHI_CHU")
     private String ghiChu;
+    @Column(name = "SO_BB_LM_BG")
+    private String soBbLmBg;
+    @Column(name = "BB_LM_BG_ID")
+    private Long bbLmBgId;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
     private List<DcnbBBKetThucNKDtl> dcnbBBKetThucNKDtl = new ArrayList<>();
