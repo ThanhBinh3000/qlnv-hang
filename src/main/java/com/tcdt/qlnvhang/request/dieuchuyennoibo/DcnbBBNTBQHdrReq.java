@@ -103,6 +103,8 @@ public class DcnbBBNTBQHdrReq extends BaseRequest {
     private String lyDoTuChoi;
     private Boolean isVatTu = false;
     private List<String> dsLoaiHang = new ArrayList<>();
+    @NotNull
+    private String donViTinh;
     @Valid
     private List<DcnbBBNTBQDtl> dcnbBBNTBQDtl = new ArrayList<>();
     private LocalDate tuNgayLap;
