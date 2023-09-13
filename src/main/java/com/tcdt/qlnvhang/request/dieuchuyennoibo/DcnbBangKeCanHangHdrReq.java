@@ -34,9 +34,7 @@ public class DcnbBangKeCanHangHdrReq {
     private String soQdinhDcc;
 //    @NotNull
 //    private LocalDate ngayKyQdinh;
-    @NotNull
     private LocalDate thoiHanDieuChuyen;
-    @NotNull
     private LocalDate thoiGianGiaoNhan;
     @NotNull
     private LocalDate ngayKyQdDcc;
@@ -54,7 +52,6 @@ public class DcnbBangKeCanHangHdrReq {
     private String loaiVthh;
     @NotNull
     private String cloaiVthh;
-    @NotNull
     private String donViTinh;
     @NotNull
     private String maDiemKho;
