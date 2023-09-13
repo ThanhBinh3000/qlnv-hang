@@ -137,7 +137,12 @@ public class DcnbPhieuKtChatLuongHdrReq {
     private String soChungThuGiamDinh;
     private LocalDate ngayGiamDinh;
     private String toChucGiamDinh;
+    @NotNull
     private String donViTinh;
+    @NotNull
+    private Long bBNtLdId;
+    @NotNull
+    private String soBBNtLd;
     private List<FileDinhKemReq> phieuKTCLDinhKem = new ArrayList<>();
     private List<FileDinhKemReq> bienBanLayMauDinhKem = new ArrayList<>();
     @Valid
