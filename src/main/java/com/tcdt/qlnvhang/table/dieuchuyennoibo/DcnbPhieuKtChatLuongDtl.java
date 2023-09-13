@@ -20,19 +20,14 @@ public class DcnbPhieuKtChatLuongDtl implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DCNB_PHIEU_KT_CHLUONG_DTL_SEQ")
     @SequenceGenerator(sequenceName ="DCNB_PHIEU_KT_CHLUONG_DTL_SEQ", allocationSize = 1, name = "DCNB_PHIEU_KT_CHLUONG_DTL_SEQ")
     private Long id;
-    @NotNull
     @Column(name = "CHI_TIEU_CL")
     private String chiTieuCl;
-    @NotNull
     @Column(name = "CHI_SO_CL")
     private String chiSoCl;
-    @NotNull
     @Column(name = "KET_QUA_PT")
     private String ketQuaPt;
-    @NotNull
     @Column(name = "PHUONG_PHAP")
     private String phuongPhap;
-    @NotNull
     @Column(name = "DANH_GIA")
     private Long danhGia;
 
