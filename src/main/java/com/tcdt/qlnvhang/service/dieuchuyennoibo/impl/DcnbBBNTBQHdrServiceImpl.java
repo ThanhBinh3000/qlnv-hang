@@ -60,6 +60,7 @@ public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBN
     private DcnbQuyetDinhDcCHdrServiceImpl dcnbQuyetDinhDcCHdrServiceImpl;
     @Autowired
     public DocxToPdfConverter docxToPdfConverter;
+    @Autowired
     private DcnbBbNhapDayKhoHdrRepository dcnbBbNhapDayKhoHdrRepository;
 
     @Override
