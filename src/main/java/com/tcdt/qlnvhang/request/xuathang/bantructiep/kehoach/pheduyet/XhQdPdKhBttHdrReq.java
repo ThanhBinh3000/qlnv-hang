@@ -39,4 +39,5 @@ public class XhQdPdKhBttHdrReq extends BaseRequest {
     private LocalDate ngayKyQdTu;
     private LocalDate ngayKyQdDen;
     private String dvql;
+    private String maCuc;
 }

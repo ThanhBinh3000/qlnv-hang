@@ -57,7 +57,6 @@ public class HhNkBbGiaoNhanHdr extends BaseEntity implements Serializable, Clone
     @Column(name = "TEN_CLOAI_VTHH")
     private String tenCloaiVthh;
     private String donViTinh;
-    private String tenDonViTinh;
     private LocalDate ngayBdNhap;
     private LocalDate ngayKtNhap;
     private BigDecimal soLuongQd;

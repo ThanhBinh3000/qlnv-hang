@@ -10,12 +10,15 @@ import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
 import com.tcdt.qlnvhang.request.search.xuathang.XhQdGiaoNvuXuatSearchReq;
 import com.tcdt.qlnvhang.request.xuathang.quyetdinhgiaonhiemvuxuat.XhQdGiaoNvuXuatReq;
 import com.tcdt.qlnvhang.service.BaseService;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.util.HashMap;
 import java.util.List;
 
 public interface XhQdGiaoNvXhService extends BaseService<XhQdGiaoNvXh,XhQdGiaoNvuXuatReq,Long> {
 
+  ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception;
 }

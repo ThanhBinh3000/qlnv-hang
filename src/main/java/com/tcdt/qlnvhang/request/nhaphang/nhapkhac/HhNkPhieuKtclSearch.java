@@ -8,6 +8,7 @@ import lombok.Data;
 import java.util.Date;
 @Data
 public class HhNkPhieuKtclSearch extends BaseRequest {
+    private Long id;
     private Integer namKhoach;
     private String soQd;
     private String soPhieu;

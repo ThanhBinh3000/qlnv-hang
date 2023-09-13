@@ -1,18 +1,29 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.common.DocxToPdfConverter;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBBNTBQHdrReq;
-import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBNTBQHdrDTO;
+import com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang.DcnbBBNTBQHdrPreview;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.*;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBBNTBQHdrService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
+import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbNhapDayKhoHdr;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
+import lombok.var;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbNhapDayKhoHdr;
+import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,11 +32,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
-public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
+public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBNTBQHdrService {
 
     @Autowired
     private DcnbBBNTBQHdrRepository hdrRepository;
@@ -45,6 +59,7 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
     @Autowired
     private DcnbQuyetDinhDcCHdrServiceImpl dcnbQuyetDinhDcCHdrServiceImpl;
     @Autowired
+    public DocxToPdfConverter docxToPdfConverter;
     private DcnbBbNhapDayKhoHdrRepository dcnbBbNhapDayKhoHdrRepository;
 
     @Override
@@ -103,35 +118,42 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
         });
         // check biên bản bảo quản lần mấy (nếu đã bảo biên bản nhập đầy kho thì lần 2, nếu không thì lần 1)
         Long lan = 1l;
-        DcnbBbNhapDayKhoHdr dcnbBbNhapDayKhoHdr = dcnbBbNhapDayKhoHdrRepository.findByMaDviAndQdDcCucIdAndMaNganKhoAndMaLoKhoAndTrangThai(userInfo.getDvql(),
-                req.getQdDcCucId(), req.getMaNganKho(), req.getMaLoKho(), Contains.DADUYET_LDCC);
+        DcnbBbNhapDayKhoHdr dcnbBbNhapDayKhoHdr = null;
+        if (req.getMaLoKho() != null) {
+            dcnbBbNhapDayKhoHdr = dcnbBbNhapDayKhoHdrRepository.findByMaDviAndQdDcCucIdAndMaNganKhoAndMaLoKhoAndTrangThai(userInfo.getDvql(),
+                    req.getQdDcCucId(), req.getMaNganKho(), req.getMaLoKho(), Contains.DADUYET_LDCC);
+        } else {
+            dcnbBbNhapDayKhoHdr = dcnbBbNhapDayKhoHdrRepository.findByMaDviAndQdDcCucIdAndMaNganKhoAndTrangThai(userInfo.getDvql(),
+                    req.getQdDcCucId(), req.getMaNganKho(), Contains.DADUYET_LDCC);
+        }
+
         if (dcnbBbNhapDayKhoHdr == null) {
             lan = 1l;
-            if(req.getMaLoKho() !=null){
+            if (req.getMaLoKho() != null) {
                 DcnbBBNTBQHdr bbntbqHdr = hdrRepository.findByMaDviAndQdDcCucIdAndMaNganKhoAndMaLoKhoAndLan(userInfo.getDvql(),
                         req.getQdDcCucId(), req.getMaNganKho(), req.getMaLoKho(), lan);
-                if(bbntbqHdr !=null){
+                if (bbntbqHdr != null) {
                     throw new Exception("Đã tạo biên bản nghiệm thu bảo quản lần 1.");
                 }
-            }else {
+            } else {
                 DcnbBBNTBQHdr bbntbqHdr = hdrRepository.findByMaDviAndQdDcCucIdAndMaNganKhoAndLan(userInfo.getDvql(),
                         req.getQdDcCucId(), req.getMaNganKho(), lan);
-                if(bbntbqHdr !=null){
+                if (bbntbqHdr != null) {
                     throw new Exception("Đã tạo biên bản nghiệm thu bảo quản lần 1.");
                 }
             }
-        }else {
+        } else {
             lan = 2l;
-            if(req.getMaLoKho() !=null){
+            if (req.getMaLoKho() != null) {
                 DcnbBBNTBQHdr bbntbqHdr = hdrRepository.findByMaDviAndQdDcCucIdAndMaNganKhoAndMaLoKhoAndLan(userInfo.getDvql(),
                         req.getQdDcCucId(), req.getMaNganKho(), req.getMaLoKho(), lan);
-                if(bbntbqHdr !=null){
+                if (bbntbqHdr != null) {
                     throw new Exception("Đã tạo biên bản nghiệm thu bảo quản lần 2.");
                 }
-            }else {
+            } else {
                 DcnbBBNTBQHdr bbntbqHdr = hdrRepository.findByMaDviAndQdDcCucIdAndMaNganKhoAndLan(userInfo.getDvql(),
                         req.getQdDcCucId(), req.getMaNganKho(), lan);
-                if(bbntbqHdr !=null){
+                if (bbntbqHdr != null) {
                     throw new Exception("Đã tạo biên bản nghiệm thu bảo quản lần 2.");
                 }
             }
@@ -171,31 +193,31 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
                 req.getQdDcCucId(), req.getMaNganKho(), req.getMaLoKho(), Contains.DADUYET_LDCC);
         if (dcnbBbNhapDayKhoHdr == null) {
             lan = 1l;
-            if(req.getMaLoKho() !=null){
+            if (req.getMaLoKho() != null) {
                 DcnbBBNTBQHdr bbntbqHdr = hdrRepository.findByMaDviAndQdDcCucIdAndMaNganKhoAndMaLoKhoAndLan(userInfo.getDvql(),
                         req.getQdDcCucId(), req.getMaNganKho(), req.getMaLoKho(), lan);
-                if(bbntbqHdr !=null && !Objects.equals(bbntbqHdr.getId(), req.getId())){
+                if (bbntbqHdr != null && !Objects.equals(bbntbqHdr.getId(), req.getId())) {
                     throw new Exception("Đã tạo biên bản nghiệm thu bảo quản lần 1.");
                 }
-            }else {
+            } else {
                 DcnbBBNTBQHdr bbntbqHdr = hdrRepository.findByMaDviAndQdDcCucIdAndMaNganKhoAndLan(userInfo.getDvql(),
                         req.getQdDcCucId(), req.getMaNganKho(), lan);
-                if(bbntbqHdr !=null && !Objects.equals(bbntbqHdr.getId(), req.getId())){
+                if (bbntbqHdr != null && !Objects.equals(bbntbqHdr.getId(), req.getId())) {
                     throw new Exception("Đã tạo biên bản nghiệm thu bảo quản lần 1.");
                 }
             }
-        }else {
+        } else {
             lan = 2l;
-            if(req.getMaLoKho() !=null){
+            if (req.getMaLoKho() != null) {
                 DcnbBBNTBQHdr bbntbqHdr = hdrRepository.findByMaDviAndQdDcCucIdAndMaNganKhoAndMaLoKhoAndLan(userInfo.getDvql(),
                         req.getQdDcCucId(), req.getMaNganKho(), req.getMaLoKho(), lan);
-                if(bbntbqHdr !=null && !Objects.equals(bbntbqHdr.getId(), req.getId())){
+                if (bbntbqHdr != null && !Objects.equals(bbntbqHdr.getId(), req.getId())) {
                     throw new Exception("Đã tạo biên bản nghiệm thu bảo quản lần 2.");
                 }
-            }else {
+            } else {
                 DcnbBBNTBQHdr bbntbqHdr = hdrRepository.findByMaDviAndQdDcCucIdAndMaNganKhoAndLan(userInfo.getDvql(),
                         req.getQdDcCucId(), req.getMaNganKho(), lan);
-                if(bbntbqHdr !=null && !Objects.equals(bbntbqHdr.getId(), req.getId())){
+                if (bbntbqHdr != null && !Objects.equals(bbntbqHdr.getId(), req.getId())) {
                     throw new Exception("Đã tạo biên bản nghiệm thu bảo quản lần 2.");
                 }
             }
@@ -229,6 +251,11 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
 
     @Override
     public DcnbBBNTBQHdr approve(DcnbBBNTBQHdrReq req) throws Exception {
+        return null;
+    }
+
+    @Override
+    public DcnbBBNTBQHdr approve(StatusReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null) {
             throw new Exception("Access denied.");
@@ -308,7 +335,130 @@ public class DcnbBBNTBQHdrServiceImpl implements DcnbBBNTBQHdrService {
     }
 
     @Override
-    public void export(DcnbBBNTBQHdrReq req, HttpServletResponse response) throws Exception {
+    public void export(DcnbBBNTBQHdrReq objReq, HttpServletResponse response) throws Exception {
+        CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        objReq.setPaggingReq(paggingReq);
+        objReq.setMaDvi(currentUser.getDvql());
+        Page<DcnbBBNTBQHdrDTO> page = searchPage(currentUser, objReq);
+        List<DcnbBBNTBQHdrDTO> data = page.getContent();
 
+        String title = "Danh sách biên bản nghiệm thu bảo quản lần đầu";
+        String[] rowsName = new String[]{"STT", "Số QĐ điều chuyển", "Năm KH", "Thời hạn ĐC", "Lô kho xuất ĐC", "Trạng thái xuất ĐC", "Điểm kho nhập ĐC", "Lô kho nhập ĐC", "Trạng thái nhập ĐC", "Số BB NT kê lót BQLĐ", "Ngày lập biên bản", "Ngày kết thúc NT kê lót BQLĐ", "Tổng kinh phí thực tế (đ)", "Tổng kinh phí TC PD (đ)", "Trạng thái"};
+        String fileName = "danh-sach-bien-ban-nghiem-thu-bao-quan-lan-dau.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        for (int i = 0; i < data.size(); i++) {
+            DcnbBBNTBQHdrDTO dx = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i + 1;
+            objs[1] = dx.getSoQdinh();
+            objs[2] = dx.getNamKh();
+            objs[3] = dx.getThoiHanDieuChuyen();
+            objs[4] = dx.getTenLoKhoXuat();
+            objs[5] = dx.getTrangThaiXuat();
+            objs[6] = dx.getTenDiemKhoNhan();
+            objs[7] = dx.getTenLoKhoNhan();
+            objs[8] = dx.getTenTrangThaiNhan();
+            objs[9] = dx.getSoBBKLot();
+            objs[10] = dx.getNgayLapBBKLot();
+            objs[11] = dx.getNgayKetThucNtKeLot();
+            objs[12] = dx.getTongKinhPhiTT();
+            objs[13] = dx.getTongKinhPhiPd();
+            objs[14] = dx.getTenTrangThai();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+        ex.export();
     }
+    @Override
+    public ReportTemplateResponse preview(DcnbBBNTBQHdrReq objReq) throws Exception {
+        var dcnbBBNTBQHdr = hdrRepository.findById(objReq.getId());
+        if (!dcnbBBNTBQHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        var dcnbBBNTBQHdrPreview = setDataToPreview(dcnbBBNTBQHdr);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBBNTBQHdrPreview);
+    }
+
+    private DcnbBBNTBQHdrPreview setDataToPreview(Optional<DcnbBBNTBQHdr> dcnbBBNTBQHdr) {
+        var dcnbBBNTBQDtlPheDuyetDtos = dcnbBBNTBQDtlPheDuyetDto(dcnbBBNTBQHdr.get().getDcnbBBNTBQDtl());
+        var dcnbBBNTBQDtlThucHienDtos = dcnbBBNTBQDtlThucHienDto(dcnbBBNTBQHdr.get().getDcnbBBNTBQDtl());
+        return DcnbBBNTBQHdrPreview.builder()
+                .maDvi(dcnbBBNTBQHdr.get().getMaDvi())
+                .tenDvi(dcnbBBNTBQHdr.get().getTenDvi())
+                .maQhns(dcnbBBNTBQHdr.get().getMaQhns())
+                .soBban(dcnbBBNTBQHdr.get().getSoBban())
+                .ngayLap(dcnbBBNTBQHdr.get().getNgayLap().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .tenChiCuc(dcnbBBNTBQHdr.get().getTenDvi())
+                .ldChiCuc(dcnbBBNTBQHdr.get().getLdChiCuc())
+                .keToan(dcnbBBNTBQHdr.get().getKeToan())
+                .ktvBaoQuan(dcnbBBNTBQHdr.get().getKthuatVien())
+                .thuKho(dcnbBBNTBQHdr.get().getThuKho())
+                .chungLoaiHangHoa(dcnbBBNTBQHdr.get().getTenCloaiVthh())
+                .tenNganKho(dcnbBBNTBQHdr.get().getTenNganKho())
+                .tenLoKho(dcnbBBNTBQHdr.get().getTenLoKho())
+                .loaiHinhKho(dcnbBBNTBQHdr.get().getLoaiHinhKho())
+                .tichLuongKhaDung(dcnbBBNTBQHdr.get().getTichLuongKhaDung())
+                .slThucNhapDc(dcnbBBNTBQHdr.get().getSlThucNhapDc())
+                .phuongThucBaoQuan(dcnbBBNTBQHdr.get().getPhuongThucBaoQuan())
+                .hinhThucKeLot(dcnbBBNTBQHdr.get().getHinhThucBaoQuan())
+                .hinhThucBaoQuan(dcnbBBNTBQHdr.get().getHinhThucBaoQuan())
+                .dinhMucDuocGiao(dcnbBBNTBQHdr.get().getDinhMucDuocGiao())
+                .dinhMucTT(dcnbBBNTBQHdr.get().getDinhMucTT())
+                .tongKinhPhiDaTh(dcnbBBNTBQHdr.get().getTongKinhPhiDaTh())
+                .tongKinhPhiDaThBc(dcnbBBNTBQHdr.get().getTongKinhPhiDaThBc())
+                .nhanXet(dcnbBBNTBQHdr.get().getNhanXet())
+                .dcnbBBNTBQDtlPheDuyetDto(dcnbBBNTBQDtlPheDuyetDtos)
+                .dcnbBBNTBQDtlThucHienDto(dcnbBBNTBQDtlThucHienDtos)
+                .build();
+    }
+
+    private List<DcnbBBNTBQDtlPheDuyetDto> dcnbBBNTBQDtlPheDuyetDto(List<DcnbBBNTBQDtl> dcnbBBNTBQDtl) {
+        List<DcnbBBNTBQDtlPheDuyetDto> dcnbBBNTBQDtlPheDuyetDtos = new ArrayList<>();
+        int stt = 1;
+        for (var res : dcnbBBNTBQDtl) {
+            if (res.getType().equals("PD")) {
+                var dcnbBBNTBQDtlPheDuyetDto = DcnbBBNTBQDtlPheDuyetDto.builder()
+                        .stt(stt++)
+                        .noiDung(res.getDanhMuc())
+                        .dviTinh(res.getDonViTinh())
+                        .soLuongTrongNam(BigDecimal.valueOf(res.getSoLuongTrongNam()))
+                        .donGiaTrongNam(BigDecimal.valueOf(res.getDonGia()))
+                        .thanhTienTrongNam(BigDecimal.valueOf(res.getThanhTienTrongNam()))
+                        .soLuongNamTruoc(res.getSoLuongNamTruoc())
+                        .thanhTienNamTruoc(BigDecimal.valueOf(res.getThanhTienNamTruoc()))
+                        .tongGiaTri(BigDecimal.valueOf(res.getTongGiaTri()))
+                        .build();
+                dcnbBBNTBQDtlPheDuyetDtos.add(dcnbBBNTBQDtlPheDuyetDto);
+            }
+        }
+        return dcnbBBNTBQDtlPheDuyetDtos;
+    }
+
+    private List<DcnbBBNTBQDtlThucHienDto> dcnbBBNTBQDtlThucHienDto(List<DcnbBBNTBQDtl> dcnbBBNTBQDtl) {
+        List<DcnbBBNTBQDtlThucHienDto> DcnbBBNTBQDtlThucHienDtos = new ArrayList<>();
+        int stt = 1;
+        for (var res : dcnbBBNTBQDtl) {
+            if (res.getType().equals("TH")) {
+                var dcnbBBNTBQDtlThucHienDto = DcnbBBNTBQDtlThucHienDto.builder()
+                        .stt(stt++)
+                        .noiDung(res.getDanhMuc())
+                        .dviTinh(res.getDonViTinh())
+                        .soLuongTrongNam(BigDecimal.valueOf(res.getSoLuongTrongNam()))
+                        .donGiaTrongNam(BigDecimal.valueOf(res.getDonGia()))
+                        .thanhTienTrongNam(BigDecimal.valueOf(res.getThanhTienTrongNam()))
+                        .soLuongNamTruoc(res.getSoLuongNamTruoc())
+                        .thanhTienNamTruoc(BigDecimal.valueOf(res.getThanhTienNamTruoc()))
+                        .tongGiaTri(BigDecimal.valueOf(res.getTongGiaTri()))
+                        .build();
+                DcnbBBNTBQDtlThucHienDtos.add(dcnbBBNTBQDtlThucHienDto);
+            }
+        }
+        return DcnbBBNTBQDtlThucHienDtos;
+    }
+
 }

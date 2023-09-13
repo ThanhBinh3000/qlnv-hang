@@ -16,7 +16,7 @@ public interface DcnbBcKqDcDtlRepository extends JpaRepository<DcnbBcKqDcDtl, Lo
 //    String loaiVthh, String cloaiVthh, String tenLoaiVthh, String tenCloaiVthh,
 //    String maDiemKho, String tenDiemKho, String maNhaKho, String tenNhaKho, String maNganKho, String tenNganKho, String maLoKho, String tenLoKho,
 //    String maDviNhan, String tenDviNhan, String maDiemKhoNhan, String tenDiemKhoNhan, String maNhaKhoNhan, String tenNhaKhoNhan, String maNganKhoNhan, String tenNganKhoNhan, String maLoKhoNhan, String tenLoKhoNhan,
-//    String donViTinh, String tenDonViTinh,
+//    String donViTinh,
 //    java.math.BigDecimal slTon, BigDecimal slDieuChuyenQd, BigDecimal slXuatTt, BigDecimal slNhapTt, BigDecimal kinhPhiTheoQd, BigDecimal kinhPhiXuatTt, BigDecimal kinhPhiNhapTt, Boolean ketQua, Boolean tinhTrang, String type
 //    slNhapTt = bbtk.tongSlXuatTheoTt sai
 //    kinhPhiXuatTt =   khdcd.duToanKphi sai
@@ -25,7 +25,7 @@ public interface DcnbBcKqDcDtlRepository extends JpaRepository<DcnbBcKqDcDtl, Lo
             "khdcd.loaiVthh, khdcd.cloaiVthh,khdcd.tenLoaiVthh, khdcd.tenCloaiVthh," +
             "khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.maLoKho,khdcd.tenLoKho," +
             "khdcd.maChiCucNhan,khdcd.tenChiCucNhan, khdcd.maDiemKhoNhan,khdcd.tenDiemKhoNhan,khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, khdcd.maLoKhoNhan,khdcd.tenLoKhoNhan," +
-            "khdcd.donViTinh, khdcd.tenDonViTinh ," +
+            "khdcd.donViTinh, " +
             "khdcd.tonKho, khdcd.soLuongDc, bbtk.tongSlXuatTheoTt,pnkh.tongSoLuong,khdcd.duToanKphi, pxkh.thanhTien, pnkh.tongKinhPhi,false, false, 'CHI_CUC') " +
             "FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
@@ -40,7 +40,7 @@ public interface DcnbBcKqDcDtlRepository extends JpaRepository<DcnbBcKqDcDtl, Lo
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.trangThai = '29'" +
-            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))" +
+            "AND ((:#{#param.maDvi} IS NULL OR LOWER(qdc.maDvi) = :#{#param.maDvi}))" +
             "AND (:#{#param.soQdinhCuc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinhCuc}),'%')) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR khdcd.thoiGianDkDc >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR khdcd.thoiGianDkDc <= :#{#param.denNgay}) ) " +
@@ -51,7 +51,7 @@ public interface DcnbBcKqDcDtlRepository extends JpaRepository<DcnbBcKqDcDtl, Lo
             "khdcd.loaiVthh, khdcd.cloaiVthh,khdcd.tenLoaiVthh, khdcd.tenCloaiVthh," +
             "khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.maLoKho,khdcd.tenLoKho," +
             "khdcd.maChiCucNhan,khdcd.tenChiCucNhan, khdcd.maDiemKhoNhan,khdcd.tenDiemKhoNhan,khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, khdcd.maLoKhoNhan,khdcd.tenLoKhoNhan," +
-            "khdcd.donViTinh, khdcd.tenDonViTinh ," +
+            "khdcd.donViTinh, " +
             "khdcd.tonKho, khdcd.soLuongDc, bbtk.tongSlXuatTheoTt,bbtk.tongSlXuatTheoTt,khdcd.duToanKphi, khdcd.duToanKphi, khdcd.duToanKphi,false, false, 'CUC') " +
             "FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
@@ -61,7 +61,7 @@ public interface DcnbBcKqDcDtlRepository extends JpaRepository<DcnbBcKqDcDtl, Lo
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.trangThai = '29'" +
-            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi = :#{#param.maDvi}))" +
+            "AND ((:#{#param.maDvi} IS NULL OR LOWER(qdc.maDvi) = :#{#param.maDvi}))" +
             "AND (:#{#param.soQdinhCuc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinhCuc}),'%')) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR khdcd.thoiGianDkDc >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR khdcd.thoiGianDkDc <= :#{#param.denNgay}) ) " +

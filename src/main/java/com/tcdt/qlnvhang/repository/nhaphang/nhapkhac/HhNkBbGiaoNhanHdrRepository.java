@@ -35,7 +35,7 @@ public interface HhNkBbGiaoNhanHdrRepository extends JpaRepository<HhNkBbGiaoNha
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.nhaphang.nhapkhac.HhNkBbGiaoNhanHdrDTO(" +
             "bbgn.id,bbgn.ngayLap, qdgnv.id,qdgnv.soQd,qdgnv.nam,qdgnv.tgianNkMnhat,dtl.maNhaKho,dmdvnhakho.tenDvi, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho," +
-            "dmdvlokho.tenDvi,dtl.maNganKho,dmdvngankho.tenDvi,hdr.loaiVthh,dmvt.ten, dtl.cloaiVthh, dmvt.loaiHang,hdr.tongSlNhap, hdr.dvt, qdgnv.dvt ," +
+            "dmdvlokho.tenDvi,dtl.maNganKho,dmdvngankho.tenDvi,hdr.loaiVthh,dmvt.ten, dtl.cloaiVthh, dmvt.loaiHang,hdr.tongSlNhap, hdr.dvt, " +
             "bbgn.soBb,bbktnk.soBb,bbktnk.id, bbktnk.ngayKetThucNhap,pnkh.id,pnkh.soPhieuNhapKho, pnkh.ngayLap, bbktnk.ngayKetThucNhap,bblm.soBienBan,bblm.id, bbgn.trangThai, bbgn.trangThai) " +
             "FROM HhQdGiaoNvuNhapHangKhacHdr qdgnv " +
             "LEFT JOIN HhQdPdNhapKhacHdr hdr ON hdr.id = qdgnv.idQdPdNk " +

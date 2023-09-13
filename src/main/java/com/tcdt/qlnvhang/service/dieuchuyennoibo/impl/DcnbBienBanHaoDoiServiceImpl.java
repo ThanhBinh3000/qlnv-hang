@@ -19,6 +19,7 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanHaoDoiTtDtl;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.UserUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -283,13 +284,12 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
-        Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
-        Page<DcnbBienBanHaoDoiHdrDTO> page = dcnbBienBanHaoDoiHdrRepository.searchPage(objReq, pageable);
+        Page<DcnbBienBanHaoDoiHdrDTO> page = searchPage(currentUser, objReq);
         List<DcnbBienBanHaoDoiHdrDTO> data = page.getContent();
 
-        String title = "Danh sách bảng kê cân hàng ";
-        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số công văn/đề xuất", "Ngày lập KH", "Ngày duyệt LĐ Chi cục", "Loại điều chuyển", "Đơn vị đề xuất", "Trạng thái"};
-        String fileName = "danh-sach-ke-hoach-dieu-chuyen-noi-bo-hang-dtqg.xlsx";
+        String title = "Danh sách biên bản hao dôi";
+        String[] rowsName = new String[]{"STT", "Số QĐ ĐC của Cục", "Năm KH", "Ngày hiệu lực", "Điểm Kho", "Lô kho", "Số BB hao dôi", "Số BB tịnh kho", "Ngày bắt đầu xuất", "Ngày kết thúc xuất", "Số phiếu XK", "Số bảng kê", "Ngày xuất kho", "Trạng thái"};
+        String fileName = "danh-sach-bien-ban-hao-doi.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
@@ -301,10 +301,14 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
             objs[3] = dx.getNgayHieuLuc();
             objs[4] = dx.getTenDiemKho();
             objs[5] = dx.getTenLoKho();
-            objs[6] = dx.getSoPhieuXuatKho();
-            objs[7] = dx.getSoBangKeXuatDcLt();
-            objs[8] = dx.getNgayXuatKho();
-            objs[9] = dx.getTrangThai();
+            objs[6] = dx.getSoBienBanHaoDoi();
+            objs[7] = dx.getSoBbTinhKho();
+            objs[8] = dx.getNgayBatDauXuat(); //"Ngày bắt đầu xuất", "Ngày kết thúc xuất", "Số phiếu XK", "Số bảng kê", "Ngày xuất kho"
+            objs[9] = dx.getNgayKetThucXuat();
+            objs[10] = dx.getSoPhieuXuatKho();
+            objs[11] = dx.getSoBangKeXuatDcLt();
+            objs[12] = dx.getNgayXuatKho();
+            objs[13] = dx.getTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

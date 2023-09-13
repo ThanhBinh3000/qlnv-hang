@@ -79,6 +79,7 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO(c.id,c.soQdinh, c.ngayKyQdinh) FROM DcnbQuyetDinhDcCHdr c " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl dtl on c.id = dtl.hdrId " +
             "LEFT JOIN DcnbKeHoachDcHdr kh on dtl.keHoachDcHdrId = kh.id " +
+            "LEFT JOIN DcnbKeHoachDcDtl khd on kh.id = khd.hdrId " +
             "WHERE 1=1 " +
             "AND (:#{#param.soQdinh} IS NULL OR LOWER(c.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinh}),'%')) " +
             "AND ((:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDvi},'')))" +
@@ -88,6 +89,7 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
             "AND (:#{#param.ngayDuyetTcDen}  IS NULL OR c.ngayDuyetTc <= :#{#param.ngayDuyetTcDen}) ) " +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(c.trichYeu) LIKE CONCAT('%',LOWER(:#{#param.trichYeu}),'%')) " +
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
+            "AND (:#{#param.thayDoiThuKho} IS NULL OR khd.thayDoiThuKho = :#{#param.thayDoiThuKho}) " +
             "AND (:#{#param.types.isEmpty() } = true OR c.type IN :#{#param.types}) " +
             "AND (c.type IS NULL OR (:#{#param.type} IS NULL OR c.type = :#{#param.type}))" +
             "AND (:#{#param.loaiDc} IS NULL OR c.loaiDc = :#{#param.loaiDc}) " +

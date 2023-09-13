@@ -28,7 +28,6 @@ public class DcnbBbGiaoNhanHdrDTO {
     private String tenChLoaiHangHoa;
     private BigDecimal soLuongDc;
     private String donViTinh;
-    private String tenDonViTinh;
 
     private String soHoSoKt;
     private Long hoSoKtId;
@@ -41,7 +40,7 @@ public class DcnbBbGiaoNhanHdrDTO {
     private String trangThai;
     private String tenTrangThai;
 
-    public DcnbBbGiaoNhanHdrDTO(Long id, Long qdDcCucId, String soQdinh,LocalDate ngayKyQd, Integer namKh, LocalDate thoiHanDieuChuyen, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa,BigDecimal soLuongDc, String donViTinh, String tenDonViTinh, String soHoSoKt, Long hoSoKtId, String soBienBanGiaoNhan, String soBienBanKetThucNk, Long bienBanKetThucNkId, LocalDate ngayKetThucNk, String soBienBanLayMau, Long bienBanLayMauId, String trangThai, String tenTrangThai) {
+    public DcnbBbGiaoNhanHdrDTO(Long id, Long qdDcCucId, String soQdinh,LocalDate ngayKyQd, Integer namKh, LocalDate thoiHanDieuChuyen, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa,BigDecimal soLuongDc, String donViTinh, String soHoSoKt, Long hoSoKtId, String soBienBanGiaoNhan, String soBienBanKetThucNk, Long bienBanKetThucNkId, LocalDate ngayKetThucNk, String soBienBanLayMau, Long bienBanLayMauId, String trangThai, String tenTrangThai) {
         this.id = id;
         this.qdDcCucId = qdDcCucId;
         this.soQdinh = soQdinh;
@@ -62,7 +61,6 @@ public class DcnbBbGiaoNhanHdrDTO {
         this.tenChLoaiHangHoa = tenChLoaiHangHoa;
         this.soLuongDc = soLuongDc;
         this.donViTinh = donViTinh;
-        this.tenDonViTinh = tenDonViTinh;
         this.soHoSoKt = soHoSoKt;
         this.hoSoKtId = hoSoKtId;
         this.soBienBanGiaoNhan = soBienBanGiaoNhan;

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
@@ -22,28 +23,20 @@ public class DcnbBienBanTinhKhoDtl {
 
     @Column(name = "HDR_ID", insertable = true, updatable = true)
     private Long hdrId;
-
-    @Column(name = "PHIEU_KT_CHAT_LUONG_HDR_ID")
-    private Long phieuKtChatLuongHdrId;
-
+    @NotNull
     @Column(name = "PHIEU_XUAT_KHO_HDR_ID")
     private Long phieuXuatKhoHdrId;
-
     @Column(name = "BANG_KE_CAN_HANG_HDR_ID")
     private Long bangKeCanHangHdrId;
-
+    @NotNull
     @Column(name = "NGAY_XUAT_KHO")
     private LocalDate ngayXuatKho;
-
+    @NotNull
     @Column(name = "SO_LUONG_XUAT")
     private Long soLuongXuat;
-
-    @Column(name = "SO_PHIEU_KT_CHAT_LUONG")
-    private String soPhieuKtChatLuong;
-
+    @NotNull
     @Column(name = "SO_PHIEU_XUAT_KHO")
     private String soPhieuXuatKho;
-
     @Column(name = "SO_BANG_KE_CAN_HANG")
     private String soBangKeCanHang;
 

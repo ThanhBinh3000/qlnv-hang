@@ -1,23 +1,32 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
+import com.netflix.discovery.converters.Auto;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
-import com.tcdt.qlnvhang.repository.HhBbNghiemthuKlstRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanLayMauHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanLayMau;
+import com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang.DcnbBienBanLayMauHdrPreview;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanLayMauDtlDto;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanLayMauHdrDTO;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbLoKhoDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
+import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
+import lombok.var;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,8 +38,11 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -53,6 +65,9 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
 
     @Autowired
     private DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
+
+    @Autowired
+    private UserInfoRepository userInfoRepository;
 
 
     public Page<DcnbBienBanLayMauHdrDTO> searchPage(CustomUserDetails currentUser, SearchDcnbBienBanLayMau req) throws Exception {
@@ -257,34 +272,37 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
     }
 
     public void export(CustomUserDetails currentUser, SearchDcnbBienBanLayMau objReq, HttpServletResponse response) throws Exception {
-//        PaggingReq paggingReq = new PaggingReq();
-//        paggingReq.setPage(0);
-//        paggingReq.setLimit(Integer.MAX_VALUE);
-//        objReq.setPaggingReq(paggingReq);
-//        Page<DcnbBienBanLayMauHdr> page = this.searchPage(currentUser, objReq);
-//        List<DcnbBienBanLayMauHdr> data = page.getContent();
-//
-//        String title = "Danh sách phương án xuất cứu trợ, viện trợ ";
-//        String[] rowsName = new String[]{"STT", "Năm kH", "Số công văn/đề xuất", "Ngày duyệt LĐ Cục", "Loại điều chuyển", "Đơn vị đề xuất", "Trạng thái",};
-//        String fileName = "danh-sach-ke-hoach-dieu-chuyen-noi-bo-hang-dtqg.xlsx";
-//        List<Object[]> dataList = new ArrayList<Object[]>();
-//        Object[] objs = null;
-//        for (int i = 0; i < data.size(); i++) {
-//            DcnbBienBanLayMauHdr dx = data.get(i);
-//            objs = new Object[rowsName.length];
-//            objs[0] = i;
-//            objs[1] = dx.getSoQdinhDcc();
-//            objs[2] = dx.getNam();
-//            objs[3] = dx.getNgayTao();
-//            objs[4] = dx.getTenDiemKho();
-//            objs[5] = dx.getTenLoKho();
-//            objs[6] = dx.getThayDoiThuKho();
-//            objs[7] = dx.getSoBbLayMau();
-//            objs[8] = dx.getNgayLayMau();
-//            dataList.add(objs);
-//        }
-//        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
-//        ex.export();
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        objReq.setPaggingReq(paggingReq);
+        Page<DcnbBienBanLayMauHdrDTO> page = this.searchPage(currentUser, objReq);
+        List<DcnbBienBanLayMauHdrDTO> data = page.getContent();
+
+        String title = "Danh sách Biên bản lấy mẫu ";
+        String[] rowsName = new String[]{"STT", "Số QĐ điều chuyển của Cục", "Năm KH", "Thời hạn điều chuyển", "Điểm kho", "Lô kho", "Số BB LM/BGM", "Ngày lấy mẫu", "Số BB tịnh kho", "Ngày xuất dốc kho", "Số BB hao dôi", "Trạng thái"};
+        String fileName = "danh-sach-bien-ban-lay-mau.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        for (int i = 0; i < data.size(); i++) {
+            DcnbBienBanLayMauHdrDTO dx = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = dx.getSoQdinh();
+            objs[2] = dx.getNamKh();
+            objs[3] = dx.getThoiHanDieuChuyen();
+            objs[4] = dx.getTenDiemKho();
+            objs[5] = dx.getTenLoKho();
+            objs[6] = dx.getSoBBLayMau();
+            objs[7] = dx.getNgaylayMau();
+            objs[8] = dx.getSoBBTinhKho();
+            objs[9] = dx.getNgayXuatDocKho();
+            objs[10] = dx.getBbHaoDoi();
+            objs[11] = dx.getTenTrangThai();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+        ex.export();
     }
 
     public List<DcnbBienBanLayMauHdrDTO> danhSachBienBan(CustomUserDetails currentUser, SearchDcnbBienBanLayMau objReq) {
@@ -297,5 +315,50 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
 
     public List<DcnbLoKhoDTO> danhSachMaLokho(SearchDcnbBienBanLayMau objReq) {
         return dcnbBienBanLayMauHdrRepository.danhSachMaLokho(objReq);
+    }
+
+    public ReportTemplateResponse preview(DcnbBienBanLayMauHdrReq objReq) throws Exception {
+        var dcnbBienBanLayMauHdr = dcnbBienBanLayMauHdrRepository.findById(objReq.getId());
+        if (!dcnbBienBanLayMauHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
+        var userInfo = userInfoRepository.findById(dcnbBienBanLayMauHdr.get().getNguoiPDuyet());
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        var dcnbBangKeCanHangPreview = setDataToPreview(dcnbBienBanLayMauHdr, userInfo);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBangKeCanHangPreview);
+    }
+
+    private DcnbBienBanLayMauHdrPreview setDataToPreview(Optional<DcnbBienBanLayMauHdr> dcnbBienBanLayMauHdr,
+                                                         Optional<UserInfo> userInfo) {
+        return DcnbBienBanLayMauHdrPreview.builder()
+                .donViCungCapHang(dcnbBienBanLayMauHdr.get().getTenDvi())
+                .quyChuanTieuChuan("")
+                .chungLoaiHangHoa(dcnbBienBanLayMauHdr.get().getTenCloaiVthh())
+                .ngayLayMau(dcnbBienBanLayMauHdr.get().getNgayLayMau().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .tenDvi(dcnbBienBanLayMauHdr.get().getTenDvi())
+                .tenDviCha("")
+                .soLuongMau(dcnbBienBanLayMauHdr.get().getSoLuongMau())
+                .donViTinh(dcnbBienBanLayMauHdr.get().getDonViTinh())
+                .pPLayMau(dcnbBienBanLayMauHdr.get().getPPLayMau())
+                .chiTieuKiemTra(dcnbBienBanLayMauHdr.get().getChiTieuKiemTra())
+                .ktvBaoQuan(dcnbBienBanLayMauHdr.get().getKtvBaoQuan())
+                .truongBpKtbq(dcnbBienBanLayMauHdr.get().getKtvBaoQuan())
+                .lanhDaoChiCuc(userInfo.get().getFullName())
+                .dcnbBienBanLayMauDtl(dcnbBienBanLayMauDtlToDto(dcnbBienBanLayMauHdr.get().getDcnbBienBanLayMauDtl()))
+                .build();
+    }
+
+    private List<DcnbBienBanLayMauDtlDto> dcnbBienBanLayMauDtlToDto(List<DcnbBienBanLayMauDtl> dcnbBienBanLayMauDtl) {
+        List<DcnbBienBanLayMauDtlDto> dcnbBienBanLayMauDtlDtos = new ArrayList<>();
+        int stt = 1;
+        for (var res : dcnbBienBanLayMauDtl) {
+            var dcnbBienBanLayMauDtlDto = DcnbBienBanLayMauDtlDto.builder()
+                    .stt(stt)
+                    .loaiDaiDien(res.getLoaiDaiDien())
+                    .tenDaiDien(res.getTenDaiDien())
+                    .build();
+            dcnbBienBanLayMauDtlDtos.add(dcnbBienBanLayMauDtlDto);
+        }
+        return dcnbBienBanLayMauDtlDtos;
     }
 }

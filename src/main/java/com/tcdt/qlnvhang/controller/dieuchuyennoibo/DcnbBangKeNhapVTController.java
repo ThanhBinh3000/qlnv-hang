@@ -15,7 +15,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -166,7 +165,7 @@ public class DcnbBangKeNhapVTController {
     @ApiOperation(value = "Kết xuất", response = List.class)
     @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportList(@Valid @RequestBody  DcnbBangKeNhapVTReq objReq, HttpServletResponse response) throws Exception {
+    public void exportList(@RequestBody  DcnbBangKeNhapVTReq objReq, HttpServletResponse response) throws Exception {
         try {
             service.export(objReq, response);
         } catch (Exception e) {
@@ -180,5 +179,22 @@ public class DcnbBangKeNhapVTController {
             mapper.writeValue(response.getOutputStream(), body);
 
         }
+    }
+
+    @ApiOperation(value = "Xem trước", response = List.class)
+    @PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> preview(@RequestBody DcnbBangKeNhapVTReq objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.preview(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Xem trước: {?}", e);
+        }
+        return ResponseEntity.ok(resp);
     }
 }

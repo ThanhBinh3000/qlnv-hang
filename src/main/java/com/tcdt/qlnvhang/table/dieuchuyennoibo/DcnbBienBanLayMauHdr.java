@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cloneable{
+public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_BIEN_BAN_LAY_MAU_HDR";
 
@@ -68,14 +68,26 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     @Column(name = "DON_VI_TINH")
     private String donViTinh;
 
-    @Column(name = "TEN_DON_VI_TINH")
-    private String tenDonViTinh;
-
     @Column(name = "SO_BB_LAY_MAU")
     private String soBbLayMau;
 
     @Column(name = "NGAY_LAY_MAU")
     private LocalDate ngayLayMau;
+
+    @Column(name = "SO_BB_NHAP_DAY_KHO")
+    private String soBbNhapDayKho;
+
+    @Column(name = "BB_NHAP_DAY_KHO_ID")
+    private Long bBNhapDayKhoId;
+
+    @Column(name = "NGAY_NHAP_DAY_KHO")
+    private LocalDate ngayNhapDayKho;
+
+    @Column(name = "SO_BB_NTBQLD")
+    private String soBbNtBqLd;
+
+    @Column(name = "BB_NTBQLD_ID")
+    private Long bbNtBqLdId;
 
     @Column(name = "DV_KIEM_NGHIEM")
     private String dViKiemNghiem;
@@ -132,7 +144,7 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     private String chiTieuKiemTra;
 
     @Column(name = "TRANG_THAI")
-    @Access(value=AccessType.PROPERTY)
+    @Access(value = AccessType.PROPERTY)
     private String trangThai;
 
     @Column(name = "LY_DO_TU_CHOI")
@@ -177,6 +189,9 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     @Column(name = "BB_HAO_DOI_ID")
     private Long bbHaoDoiId;
 
+    @Column(name = "GHI_CHU")
+    private String ghiChu;
+
     @Transient
     private List<FileDinhKem> canCu = new ArrayList<>();
 
@@ -191,8 +206,19 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     private List<DcnbBienBanLayMauDtl> dcnbBienBanLayMauDtl = new ArrayList<>();
     @Transient
     private String tenTrangThai;
+    @Transient
+    private String maDviCha;
+    @Transient
+    private String tenDviCha;
+
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
         this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+    }
+
+    public void setMaDvi(String maDvi) {
+        this.maDvi = maDvi;
+        // get đơn vị cấp cha
+        this.maDviCha = this.maDvi.substring(0, this.maDvi.length() - 2);
     }
 }

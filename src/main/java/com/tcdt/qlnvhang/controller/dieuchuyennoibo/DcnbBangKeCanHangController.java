@@ -168,7 +168,7 @@ public class DcnbBangKeCanHangController {
     @ApiOperation(value = "Kết xuất danh sách ", response = List.class)
     @PostMapping(value =  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportList(@CurrentUser CustomUserDetails currentUser ,@Valid @RequestBody  SearchBangKeCanHang objReq, HttpServletResponse response) throws Exception {
+    public void exportList(@CurrentUser CustomUserDetails currentUser ,@RequestBody  SearchBangKeCanHang objReq, HttpServletResponse response) throws Exception {
         try {
             dcnbBangKeCanHangServiceImpl.export( currentUser,objReq, response);
 
@@ -183,5 +183,22 @@ public class DcnbBangKeCanHangController {
             mapper.writeValue(response.getOutputStream(), body);
 
         }
+    }
+
+    @ApiOperation(value = "Xem trước", response = List.class)
+    @PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> preview(@RequestBody DcnbBangKeCanHangHdrReq objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(dcnbBangKeCanHangServiceImpl.preview(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Xem trước: {?}", e);
+        }
+        return ResponseEntity.ok(resp);
     }
 }

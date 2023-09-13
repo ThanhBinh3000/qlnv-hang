@@ -4,6 +4,9 @@ import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanTinhKhoDtl;
 import lombok.Data;
 
+import javax.persistence.Column;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -12,59 +15,58 @@ import java.util.List;
 @Data
 public class DcnbBienBanTinhKhoHdrReq {
     private Long id;
+    @NotNull
     private Integer nam;
     private String soBbTinhKho;
-
     private Long bangKeCanHangId;
-
     private String soBangKe;
-
-    private LocalDate ngayNhap;
+    @NotNull
+    private LocalDate ngayLap;
 
     private String maDvi;
 
     private String tenDvi;
 
     private Long qhnsId;
-
+    @NotNull
     private String maQhns;
-
+    @NotNull
     private LocalDate ngayBatDauXuat;
-
-    private LocalDate ngayKeThucXuat;
-
+    @NotNull
+    private LocalDate ngayKetThucXuat;
     private LocalDate thoiHanXuatHang;
-
+    @NotNull
     private Long qDinhDccId;
-
+    @NotNull
     private String soQdinhDcc;
-
     private LocalDate ngayXuatKho;
-
     private LocalDate thoiHanDieuChuyen;
-
+    @NotNull
     private LocalDate ngayKyQdDcc;
-
+    @NotNull
     private String loaiVthh;
-
+    @NotNull
     private String cloaiVthh;
-
+    @NotNull
     private String donViTinh;
-
+    @NotNull
     private String maDiemKho;
-
+    @NotNull
     private String tenDiemKho;
 
     private String diaDaDiemKho;
-
+    @NotNull
     private String maNhaKho;
-
+    @NotNull
     private String tenNhaKho;
-
+    @NotNull
     private String maNganKho;
-
+    @NotNull
     private String tenNganKho;
-
+    @NotNull
+    private String tenLoaiVthh;
+    @NotNull
+    private String tenCloaiVthh;
     private String maLoKho;
 
     private String tenLoKho;
@@ -119,8 +121,10 @@ public class DcnbBienBanTinhKhoHdrReq {
     private BigDecimal chenhLechSlConLai;
 
     private String type;
+    private String soPhieuKnChatLuong;
+    private Long phieuKnChatLuongHdrId;
 
     private List<FileDinhKemReq> fileBbTinhKhoDaKy = new ArrayList<>();
-
+    @Valid
     private List<DcnbBienBanTinhKhoDtl> dcnbBienBanTinhKhoDtl = new ArrayList<>();
 }

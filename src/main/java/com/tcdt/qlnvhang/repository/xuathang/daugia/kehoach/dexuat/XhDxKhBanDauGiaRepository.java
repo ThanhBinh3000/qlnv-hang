@@ -1,10 +1,8 @@
 package com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.dexuat;
 
-import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttHdrSearchReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.XhThopChiTieuReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.dexuat.XhDxKhBanDauGiaReq;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia;
-import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,27 +20,26 @@ import java.util.Optional;
 @Repository
 public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia, Long> {
 
-    @Query("SELECT DX FROM XhDxKhBanDauGia DX " +
-            " WHERE 1=1 " +
-            "AND (:#{#param.dvql} IS NULL OR DX.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
+    @Query("SELECT DISTINCT DX FROM XhDxKhBanDauGia DX " +
+            "WHERE (:#{#param.dvql} IS NULL OR DX.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
             "AND (:#{#param.namKh} IS NULL OR DX.namKh = :#{#param.namKh}) " +
-            "AND (:#{#param.soDxuat} IS NULL OR LOWER(DX.soDxuat) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soDxuat}),'%' ) ) )" +
+            "AND (:#{#param.soDxuat} IS NULL OR DX.soDxuat = :#{#param.soDxuat}) " +
             "AND (:#{#param.ngayTaoTu} IS NULL OR DX.ngayTao >= :#{#param.ngayTaoTu}) " +
             "AND (:#{#param.ngayTaoDen} IS NULL OR DX.ngayTao <= :#{#param.ngayTaoDen}) " +
             "AND (:#{#param.ngayDuyetTu} IS NULL OR DX.ngayPduyet >= :#{#param.ngayDuyetTu}) " +
             "AND (:#{#param.ngayDuyetDen} IS NULL OR DX.ngayPduyet <= :#{#param.ngayDuyetDen}) " +
-            "AND (:#{#param.trichYeu} IS NULL OR LOWER(DX.trichYeu) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.trichYeu}),'%'))) " +
-            "AND (:#{#param.loaiVthh} IS NULL OR DX.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+            "AND (:#{#param.trichYeu} IS NULL OR LOWER(DX.trichYeu) LIKE LOWER(CONCAT('%', :#{#param.trichYeu}, '%'))) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR DX.loaiVthh = :#{#param.loaiVthh}) " +
             "AND (:#{#param.trangThai} IS NULL OR DX.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.trangThaiTh} IS NULL OR DX.trangThaiTh = :#{#param.trangThaiTh}) " +
-            "AND (:#{#param.trangThaiList == null || #param.trangThaiList.isEmpty() } = true OR DX.trangThai IN :#{#param.trangThaiList}) " +
-            "ORDER BY DX.ngaySua desc , DX.ngayTao desc, DX.id desc")
+            "AND (:#{#param.trangThaiList == null || #param.trangThaiList.isEmpty()} = true OR DX.trangThai IN :#{#param.trangThaiList}) " +
+            "ORDER BY DX.ngaySua DESC, DX.ngayTao DESC, DX.id DESC")
     Page<XhDxKhBanDauGia> searchPage(@Param("param") XhDxKhBanDauGiaReq param, Pageable pageable);
 
-    @Query("SELECT TH from XhDxKhBanDauGia TH WHERE 1 = 1 " +
-            "AND (:#{#param.namKh} IS NULL OR TH.namKh = :#{#param.namKh}) " +
-            "AND (:#{#param.loaiVthh} IS NULL OR TH.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
-            "AND (:#{#param.cloaiVthh} IS NULL OR TH.cloaiVthh LIKE CONCAT(:#{#param.cloaiVthh},'%'))  " +
+    @Query("SELECT TH FROM XhDxKhBanDauGia TH " +
+            "WHERE (:#{#param.namKh} IS NULL OR TH.namKh = :#{#param.namKh}) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR TH.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
+            "AND (:#{#param.cloaiVthh} IS NULL OR TH.cloaiVthh LIKE CONCAT(:#{#param.cloaiVthh}, '%')) " +
             "AND (:#{#param.ngayDuyetTu} IS NULL OR TH.ngayPduyet >= :#{#param.ngayDuyetTu}) " +
             "AND (:#{#param.ngayDuyetDen} IS NULL OR TH.ngayPduyet <= :#{#param.ngayDuyetDen}) " +
             "AND TH.idThop IS NULL " +
@@ -51,20 +48,34 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
             "AND TH.trangThaiTh ='" + Contains.CHUATONGHOP + "'")
     List<XhDxKhBanDauGia> listTongHop(@Param("param") XhThopChiTieuReq param);
 
-    @Query(value = " SELECT NVL(SUM(DSG.TONG_SL_XUAT_BAN_DX),0) FROM XH_QD_PD_KH_BDG HDR " +
-            " INNER JOIN XH_QD_PD_KH_BDG_DTL DTL on HDR.ID = DTL.ID_QD_HDR " +
-            " LEFT JOIN XH_QD_PD_KH_BDG_PL DSG ON DSG.ID_QD_DTL = DTL.ID " +
-            "WHERE HDR.NAM = :namKh AND HDR.LOAI_VTHH = :loaiVthh AND DSG.MA_DVI = :maDvi AND HDR.LASTEST = :lastest",
+    @Query(value = "SELECT COALESCE(SUM(DSG.TONG_SL_XUAT_BAN_DX), 0) " +
+                    "FROM XH_QD_PD_KH_BDG HDR " +
+                    "INNER JOIN XH_QD_PD_KH_BDG_DTL DTL ON HDR.ID = DTL.ID_QD_HDR " +
+                    "LEFT JOIN XH_QD_PD_KH_BDG_PL DSG ON DSG.ID_QD_DTL = DTL.ID " +
+                    "WHERE HDR.NAM = :namKh " +
+                    "  AND HDR.LOAI_VTHH = :loaiVthh " +
+                    "  AND DSG.MA_DVI = :maDvi " +
+                    "  AND HDR.LASTEST = :lastest",
             nativeQuery = true)
-    BigDecimal countSLDalenKh(Integer namKh, String loaiVthh, String maDvi, Integer lastest);
+    BigDecimal countSLDalenKh(@Param("namKh") Integer namKh,
+                              @Param("loaiVthh") String loaiVthh,
+                              @Param("maDvi") String maDvi,
+                              @Param("lastest") Integer lastest);
 
-
-    @Transactional()
+    @Transactional
     @Modifying
-    @Query(value = "UPDATE XH_DX_KH_BAN_DAU_GIA SET TRANG_THAI_TH = :trangThaiTh , ID_THOP = :idTh WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
-    void updateStatusInList(List<String> soDxuatList, String trangThaiTh, Long idTh);
+    @Query(value = "UPDATE XH_DX_KH_BAN_DAU_GIA " +
+            "SET TRANG_THAI_TH = :trangThaiTh, ID_THOP = :idTh " +
+            "WHERE SO_DXUAT IN :soDxuatList", nativeQuery = true)
+    void updateStatusInList(
+            @Param("soDxuatList") List<String> soDxuatList,
+            @Param("trangThaiTh") String trangThaiTh,
+            @Param("idTh") Long idTh
+    );
 
-    Optional<XhDxKhBanDauGia> findBySoDxuat(String soDxuat);
+    boolean existsBySoDxuat(String soDxuat);
+
+    boolean existsBySoDxuatAndIdNot(String soDxuat, Long id);
 
     List<XhDxKhBanDauGia> findAllByIdIn(List<Long> listId);
 

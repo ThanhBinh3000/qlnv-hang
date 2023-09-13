@@ -39,6 +39,8 @@ public class DcnbPhieuNhapKhoHdr extends BaseEntity implements Serializable, Clo
     private String soBbCbKho;
     @Column(name = "BB_CB_KHO_ID")
     private Long bBCbKhoId;
+    @Column(name = "NGAY_BB_CB_KHO")
+    private LocalDate ngayBbCbKho;
     private String soQdDcCuc;
     private Long qdDcCucId;
     private LocalDate ngayQdDcCuc;
@@ -83,6 +85,7 @@ public class DcnbPhieuNhapKhoHdr extends BaseEntity implements Serializable, Clo
     private String loaiHinhNx;
     private String kieuNx;
     private String bbNghiemThuBqld;
+    private Long bbNghiemThuBqldId;
     private String soBangKeCh;
     private Long bangKeChId;
     private String soBangKeVt;
@@ -116,6 +119,10 @@ public class DcnbPhieuNhapKhoHdr extends BaseEntity implements Serializable, Clo
     private String tenLoKho;
 
     @Transient
+    private String maDviCha;
+    @Transient
+    private String tenDviCha;
+    @Transient
     private List<FileDinhKem> chungTuDinhKem = new ArrayList<>();
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
@@ -127,5 +134,10 @@ public class DcnbPhieuNhapKhoHdr extends BaseEntity implements Serializable, Clo
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
         this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+    }
+    public void setMaDvi(String maDvi) {
+        this.maDvi = maDvi;
+        // get đơn vị cấp cha
+        this.maDviCha = this.maDvi.substring(0, this.maDvi.length() - 2);
     }
 }

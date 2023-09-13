@@ -8,15 +8,18 @@ import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbThuaThieuDtlRepository
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbThuaThieuHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbThuaThieuKiemKeDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBcKqDcHdrRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbKqDcSearch;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbThuaThieuHdrReq;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBNTBQHdrDTO;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBbThuaThieuService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +31,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class DcnbBbThuaThieuServiceImpl implements DcnbBbThuaThieuService {
@@ -49,6 +49,7 @@ public class DcnbBbThuaThieuServiceImpl implements DcnbBbThuaThieuService {
     private FileDinhKemRepository fileDinhKemRepository;
     @Autowired
     private DcnbBcKqDcHdrRepository hdrBcRepository;
+
     @Override
     public Page<DcnbBbThuaThieuHdr> searchPage(DcnbBbThuaThieuHdrReq req) throws Exception {
         CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
@@ -92,9 +93,9 @@ public class DcnbBbThuaThieuServiceImpl implements DcnbBbThuaThieuService {
         created.setFileDinhKems(canCu);
         List<FileDinhKem> bbHaoDoi = fileDinhKemService.saveListFileDinhKem(objReq.getFileBienBanHaoDois(), created.getId(), DcnbBbThuaThieuHdr.TABLE_NAME + "_HAO_DOI");
         created.setFileBienBanHaoDois(bbHaoDoi);
-        if(objReq.getBcKetQuaDcId()!=null){
+        if (objReq.getBcKetQuaDcId() != null) {
             Optional<DcnbBcKqDcHdr> dcnbBcKqDcHdr = hdrBcRepository.findById(objReq.getBcKetQuaDcId());
-            if(dcnbBcKqDcHdr.isPresent()){
+            if (dcnbBcKqDcHdr.isPresent()) {
                 dcnbBcKqDcHdr.get().setBbThuaThieuId(created.getId());
                 dcnbBcKqDcHdr.get().setSoBbThuaThieu(created.getSoBb());
             }
@@ -139,9 +140,9 @@ public class DcnbBbThuaThieuServiceImpl implements DcnbBbThuaThieuService {
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbBbThuaThieuHdr.TABLE_NAME + "_HAO_DOI"));
         List<FileDinhKem> bbHaoDoi = fileDinhKemService.saveListFileDinhKem(objReq.getFileBienBanHaoDois(), created.getId(), DcnbBbThuaThieuHdr.TABLE_NAME + "_HAO_DOI");
         created.setFileBienBanHaoDois(bbHaoDoi);
-        if(objReq.getBcKetQuaDcId()!=null){
+        if (objReq.getBcKetQuaDcId() != null) {
             Optional<DcnbBcKqDcHdr> dcnbBcKqDcHdr = hdrBcRepository.findById(objReq.getBcKetQuaDcId());
-            if(dcnbBcKqDcHdr.isPresent()){
+            if (dcnbBcKqDcHdr.isPresent()) {
                 dcnbBcKqDcHdr.get().setBbThuaThieuId(created.getId());
                 dcnbBcKqDcHdr.get().setSoBbThuaThieu(created.getSoBb());
             }
@@ -169,6 +170,11 @@ public class DcnbBbThuaThieuServiceImpl implements DcnbBbThuaThieuService {
     }
 
     @Override
+    public DcnbBbThuaThieuHdr approve(StatusReq req) throws Exception {
+        return null;
+    }
+
+    @Override
     public void delete(Long id) throws Exception {
         Optional<DcnbBbThuaThieuHdr> optional = hdrRepository.findById(id);
         if (!optional.isPresent()) {
@@ -191,8 +197,38 @@ public class DcnbBbThuaThieuServiceImpl implements DcnbBbThuaThieuService {
     }
 
     @Override
-    public void export(DcnbBbThuaThieuHdrReq req, HttpServletResponse response) throws Exception {
+    public void export(DcnbBbThuaThieuHdrReq objReq, HttpServletResponse response) throws Exception {
+        CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        objReq.setPaggingReq(paggingReq);
+        objReq.setMaDvi(currentUser.getDvql());
+        Page<DcnbBbThuaThieuHdr> page = searchPage(objReq);
+        List<DcnbBbThuaThieuHdr> data = page.getContent();
 
+        String title = "Danh sách biên bản thừa thiếu";
+        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số QĐ xuất/nhập ĐC của Cục", "Ngày QĐ của Cục", "Số báo cáo", "Ngày báo cáo", "Tên báo cáo", "Số BB ghi nhận thừa/thiếu", "Ngày lập biên bản", "Trạng thái"};
+        String fileName = "danh-sach-bien-ban-thua-thieu.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        for (int i = 0; i < data.size(); i++) {
+            DcnbBbThuaThieuHdr dx = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i + 1;
+            objs[1] = dx.getNam();
+            objs[2] = dx.getSoQdDcCuc();
+            objs[3] = dx.getNgayKyQdCuc();
+            objs[4] = dx.getSoBcKetQuaDc();
+            objs[5] = dx.getNgayLapBcKetQuaDc();
+            objs[6] = dx.getTenBaoCao();
+            objs[7] = dx.getSoBb();
+            objs[8] = dx.getNgayLap();
+            objs[9] = dx.getTenTrangThai();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+        ex.export();
     }
 
     public void finish(StatusReq statusReq) throws Exception {

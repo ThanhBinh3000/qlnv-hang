@@ -30,15 +30,11 @@ public class XhQdPdKhBttDvi implements Serializable {
     private Boolean typeQdKq;
     @Transient
     private String tenDvi;
-    @Transient
-    private BigDecimal donGiaDuocDuyet;
+
     @Transient
     List<XhQdPdKhBttDviDtl> children = new ArrayList<>();
 
-    public void setChildren(List<XhQdPdKhBttDviDtl> children) {
-        this.children = children;
-        if (!DataUtils.isNullOrEmpty(children)) {
-            this.donGiaDuocDuyet = children.get(0).getDonGiaDuocDuyet();
-        }
-    }
+    //Print preview
+    @Transient
+    private BigDecimal donGiaDuocDuyet;
 }

@@ -43,6 +43,9 @@ public class DcnbPhieuKnChatLuongHdr extends BaseEntity implements Serializable,
     @Column(name = "SO_QDINH_DC")
     private String soQdinhDc;
 
+    @Column(name = "NGAY_QDINH_DC")
+    private LocalDate ngayQdinhDc;
+
     @Column(name = "SO_PHIEU")
     private String soPhieu;
 
@@ -87,9 +90,6 @@ public class DcnbPhieuKnChatLuongHdr extends BaseEntity implements Serializable,
 
     @Column(name = "DON_VI_TINH")
     private String donViTinh;
-
-    @Column(name = "TEN_DON_VI_TINH")
-    private String tenDonViTinh;
 
     @Column(name = "TEN_THU_KHO")
     private String tenThuKho;
@@ -178,6 +178,15 @@ public class DcnbPhieuKnChatLuongHdr extends BaseEntity implements Serializable,
 
     @Column(name = "SO_BB_HAO_DOI")
     private String soBbHaoDoi;
+
+    @Column(name = "BB_NHAP_DAY_KHO_ID")
+    private Long bbNhapDayKhoId;
+
+    @Column(name = "SO_BB_NHAP_DAY_KHO")
+    private String soNhapDayKho;
+
+    @Column(name = "NGAY_BB_NHAP_DAY_KHO")
+    private LocalDate ngayNhapDayKho;
 
     @Column(name = "TYPE")
     private String type;

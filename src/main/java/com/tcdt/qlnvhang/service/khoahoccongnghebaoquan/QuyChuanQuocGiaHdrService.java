@@ -58,7 +58,8 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
 
     public Page<QuyChuanQuocGiaHdr> searchPage(SearchQuyChuanQgReq objReq) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-//        objReq.setMaDvi(userInfo.getDvql());
+        objReq.setMaDvi(userInfo.getDvql());
+        System.out.println(userInfo.getUserType() + "2322222222222222222");
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<QuyChuanQuocGiaHdr> data = quyChuanQuocGiaHdrRepository.search(objReq, pageable);
@@ -100,9 +101,9 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                     .map(Long::valueOf)
                     .toArray(Long[]::new));
         }
-        if (!ObjectUtils.isEmpty(objReq.getIdVanBanSuaDoi())) {
-            listIdThayThe.add(objReq.getIdVanBanSuaDoi());
-        }
+//        if (!ObjectUtils.isEmpty(objReq.getIdVanBanSuaDoi())) {
+//            listIdThayThe.add(objReq.getIdVanBanSuaDoi());
+//        }
         List<Long> finalListIdThayThe = listIdThayThe;
         List<Long> listHdrCoHieuLuc = allHdrCoHieuLuc.stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList()).stream()
                 .filter(item -> !finalListIdThayThe.contains(item))
@@ -158,9 +159,9 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                     .map(Long::valueOf)
                     .toArray(Long[]::new));
         }
-        if (!ObjectUtils.isEmpty(objReq.getIdVanBanSuaDoi())) {
-            listIdThayThe.add(objReq.getIdVanBanSuaDoi());
-        }
+//        if (!ObjectUtils.isEmpty(objReq.getIdVanBanSuaDoi())) {
+//            listIdThayThe.add(objReq.getIdVanBanSuaDoi());
+//        }
         List<Long> finalListIdThayThe = listIdThayThe;
         List<Long> listHdrCoHieuLuc = allHdrCoHieuLuc.stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList()).stream()
                 .filter(item -> !finalListIdThayThe.contains(item))
@@ -220,9 +221,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                 for (QuyChuanQuocGiaDtl dtl : dtlList) {
                     dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh()) ? null : hashMapDmHh.get(dtl.getLoaiVthh()));
                     dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh()) ? null : hashMapDmHh.get(dtl.getCloaiVthh()));
-                    if (!ObjectUtils.isEmpty(dtl.getMaChiTieu())) {
-                        dtl.setTenChiTieu(mapTenChiTieu.get(dtl.getMaChiTieu()));
-                    }
+                    dtl.setTenChiTieu(!ObjectUtils.isEmpty(dtl.getMaChiTieu()) ? mapTenChiTieu.get(dtl.getMaChiTieu()) : null);
                 }
                 data.setTieuChuanKyThuat(dtlList);
             } else {
@@ -342,9 +341,9 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                     .map(Long::valueOf)
                     .toArray(Long[]::new));
         }
-        if (!ObjectUtils.isEmpty(created.getIdVanBanSuaDoi())) {
-            listIdThayThe.add(created.getIdVanBanSuaDoi());
-        }
+//        if (!ObjectUtils.isEmpty(created.getIdVanBanSuaDoi())) {
+//            listIdThayThe.add(created.getIdVanBanSuaDoi());
+//        }
         if (listIdThayThe.size() > 0 && created.getTrangThaiHl().equals("01")) {
             List<QuyChuanQuocGiaHdr> allByIdIn = quyChuanQuocGiaHdrRepository.findAllByIdIn(listIdThayThe);
             allByIdIn.forEach(item -> {
@@ -384,7 +383,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         String tenVthh = "";
         if (!listVthh.isEmpty()) {
             for (int i = 0; i < listVthh.size(); i++) {
-                tenVthh = tenVthh + hashMapDmHh.get(listVthh.get(i)).toUpperCase() + (listVthh.size() > i + 1 ? ", " : "");
+                tenVthh = tenVthh + (!ObjectUtils.isEmpty(hashMapDmHh.get(listVthh.get(i))) ? hashMapDmHh.get(listVthh.get(i)).toUpperCase() : "") + (listVthh.size() > (i + 1) ? ", " : "");
             }
         }
         previewRes.setTenLoaiVthh(tenVthh);

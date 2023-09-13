@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Table(name = "KH_CN_CONG_TRINH_NGHIEN_CUU")
 @Data
-public class KhCnCongTrinhNghienCuu extends BaseEntity implements Serializable  {
+public class KhCnCongTrinhNghienCuu extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "KH_CN_CONG_TRINH_NGHIEN_CUU";
     @Id
@@ -65,6 +65,8 @@ public class KhCnCongTrinhNghienCuu extends BaseEntity implements Serializable  
     private String xepLoai;
     private String ldoTuChoi;
     @Transient
+    private String tenXepLoai;
+    @Transient
     private List<FileDinhKem> fileDinhKem = new ArrayList<>();
     @Transient
     private List<FileDinhKem> fileTienDoTh = new ArrayList<>();
@@ -75,4 +77,26 @@ public class KhCnCongTrinhNghienCuu extends BaseEntity implements Serializable  
     @Transient
     private List<KhCnNghiemThuThanhLy> children = new ArrayList<>();
 
+    public String getTenXepLoai() {
+        if (tongDiem < 60) {
+            tenXepLoai = "Không nghiệm thu";
+        } else if (tongDiem >= 60 && tongDiem <= 69) {
+            tenXepLoai = "Đạt yêu cầu";
+        } else if (tongDiem >= 70 && tongDiem <= 79) {
+            tenXepLoai = "Khá";
+        } else if (tongDiem >= 80 && tongDiem <= 89) {
+            tenXepLoai = "Giỏi";
+        } else if (tongDiem >= 90 && tongDiem <= 100) {
+            tenXepLoai = "Xuất sắc";
+        }
+        return tenXepLoai;
+    }
+
+    //dùng cho preview
+    @Transient
+    private String tenCapDeTai;
+    @Transient
+    private String tenNguonVon;
+    @Transient
+    private String tongChiPhiStr;
 }

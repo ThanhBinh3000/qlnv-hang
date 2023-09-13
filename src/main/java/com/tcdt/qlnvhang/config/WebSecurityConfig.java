@@ -62,14 +62,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 		http.cors();
-//		http.cors().configurationSource(request -> {
-//			CorsConfiguration config = new CorsConfiguration();
-//			config.setAllowedHeaders(Collections.singletonList("*"));
-//			config.setAllowedMethods(Collections.singletonList("*"));
-//			config.addAllowedOrigin("*");
-//			config.setAllowCredentials(true);
-//			return config;
-//		});
+		/*http.cors().configurationSource(request -> {
+			CorsConfiguration config = new CorsConfiguration();
+			config.setAllowedHeaders(Collections.singletonList("*"));
+			config.setAllowedMethods(Collections.singletonList("*"));
+			config.addAllowedOrigin("*");
+			config.setAllowCredentials(true);
+			return config;
+		});*/
 	}
 
 }

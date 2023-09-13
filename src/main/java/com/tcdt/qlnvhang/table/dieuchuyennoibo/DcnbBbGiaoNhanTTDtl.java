@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -26,20 +27,28 @@ public class DcnbBbGiaoNhanTTDtl implements Serializable, Cloneable{
     private Long id;
     @Column(name = "HDR_ID", insertable = true, updatable = true)
     private Long hdrId;
+    @NotNull
     @Column(name = "BB_CBI_KHO_ID")
     private Long bbCbiKhoId;
+    @NotNull
     @Column(name = "SO_BB_CBI_KHO")
     private String soBbCbiKho;
+    @NotNull
     @Column(name = "PHIEU_NHAP_KHO_ID")
     private Long phieuNhapKhoId;
+    @NotNull
     @Column(name = "SO_PHIEU_NHAP_KHO")
     private String soPhieuNhapKho;
+    @NotNull
     @Column(name = "BANG_KE_NHAP_ID")
     private Long bangKeNhapVtId;
+    @NotNull
     @Column(name = "SO_BANG_KE_NHAP")
     private String soBangKeNhapVt;
+    @NotNull
     @Column(name = "NGAY_NHAP")
     private LocalDate ngayNhapKho;
+    @NotNull
     @Column(name = "SO_LUONG")
     private BigDecimal soLuong;
 
