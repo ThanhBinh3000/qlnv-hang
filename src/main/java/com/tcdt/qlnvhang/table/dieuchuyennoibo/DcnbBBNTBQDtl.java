@@ -24,20 +24,14 @@ public class DcnbBBNTBQDtl implements Serializable, Cloneable{
     private Long id;
     @Column(name = "HDR_ID")
     private Long hdrId;
-    @NotNull
     private String danhMuc;
     private String nhomHang;
-    @NotNull
     private String donViTinh;
     private String matHang;
     private String tenMatHang;
-    @NotNull
     private Double tongGiaTri;
-    @NotNull
     private Double soLuongTrongNam;
-    @NotNull
     private Double donGia;
-    @NotNull
     private Double thanhTienTrongNam;
     private Double soLuongNamTruoc;
     private Double thanhTienNamTruoc;
