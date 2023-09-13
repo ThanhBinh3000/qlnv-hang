@@ -17,6 +17,7 @@ public interface HhBbNghiemthuKlstRepository extends BaseRepository<HhBbNghiemth
 	Optional<HhBbNghiemthuKlstHdr> findFirstByNamAndMaDvi(Integer nam, String maDvi);
 
 	List<HhBbNghiemthuKlstHdr> findByIdQdGiaoNvNhAndMaDviStartsWith(Long idQdGiaoNvNh, String maDvi);
+	List<HhBbNghiemthuKlstHdr> findByIdDdiemGiaoNvNh(Long idQdGiaoNvNh);
 
 	@Transactional
 	@Modifying

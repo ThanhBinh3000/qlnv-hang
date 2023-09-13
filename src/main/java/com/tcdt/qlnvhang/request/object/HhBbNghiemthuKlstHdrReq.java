@@ -90,6 +90,7 @@ public class HhBbNghiemthuKlstHdrReq extends BaseRequest {
 	String soQdGiaoNvNh;
 
 	String soPhieuNhapKho;
+	String lhinhBquan;
 
 
 	private List<HhBbNghiemthuKlstDtlReq> detail;
