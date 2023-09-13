@@ -52,6 +52,10 @@ public class DcnbBangKeCanHangHdrReq {
     private String loaiVthh;
     @NotNull
     private String cloaiVthh;
+    @NotNull
+    private String tenLoaiVthh;
+    @NotNull
+    private String tenCloaiVthh;
     private String donViTinh;
     @NotNull
     private String maDiemKho;
