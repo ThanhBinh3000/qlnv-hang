@@ -306,4 +306,40 @@ public class HhQdGiaoNvuNhapxuatController {
 		}
 		return ResponseEntity.ok(resp);
 	}
+
+	@ApiOperation(value = "Xem truoc", response = List.class)
+	@PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> preview(@RequestBody HhQdGiaoNvuNhapxuatHdrReq req) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.preview(req));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+		}
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Lấy danh sách quyết định giao nhiệm vụ nhập hàng dạng list", response = List.class)
+	@PostMapping(value = "ds-qd-giao-nv-nh", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> layTatCaQdGiaoNvNh(HttpServletRequest request,
+												  @Valid @RequestBody HhQdNhapxuatSearchReq objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.layTatCaQdGiaoNvNh(objReq));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (
+
+				Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Lấy danh sách quyết định giao nhiệm vụ nhập hàng dạng list trace: {}", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
 }

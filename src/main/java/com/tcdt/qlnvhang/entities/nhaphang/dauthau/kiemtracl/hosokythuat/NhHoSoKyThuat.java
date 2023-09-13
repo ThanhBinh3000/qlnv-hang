@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat;
 
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -66,4 +67,13 @@ public class NhHoSoKyThuat extends TrangThaiBaseEntity implements Serializable {
     @Transient
     private List<NhHoSoBienBan> listHoSoBienBan = new ArrayList<>();
 
+    @Transient
+    private BienBanLayMau bienBanLayMau;
+
+    @Transient
+    private String soBbKtnq;
+    @Transient
+    private String soBbKtvh;
+    @Transient
+    private String soBbKthskt;
 }

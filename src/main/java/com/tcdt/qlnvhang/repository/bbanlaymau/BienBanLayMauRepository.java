@@ -22,7 +22,7 @@ public interface BienBanLayMauRepository extends BaseRepository<BienBanLayMau, L
 
     Optional<BienBanLayMau> findFirstBySoBienBan(String soBienBan);
 
-    List<BienBanLayMau> findByIdQdGiaoNvNhAndMaDvi(Long idQdGiaoNvNh, String maDvi);
+    List<BienBanLayMau> findByIdQdGiaoNvNh(Long idQdGiaoNvNh);
 
     BienBanLayMau findByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh);
     @Query(

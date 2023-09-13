@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.nhaphangtheoptt;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttSLDDReq;
 import com.tcdt.qlnvhang.request.HhQdPheduyetKqMttSLDDReq;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
@@ -16,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class HhQdPduyetKqcgHdrReq  {
+public class HhQdPduyetKqcgHdrReq extends BaseRequest {
     private Long id;
 
     private Long idPdKhDtl;

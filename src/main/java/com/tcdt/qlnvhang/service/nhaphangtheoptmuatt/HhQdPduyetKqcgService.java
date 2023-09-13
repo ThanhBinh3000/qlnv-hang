@@ -3,10 +3,9 @@ package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.hopdong.hopdongphuluc.HopDongMttHdrRepository;
-import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttSLDDReq;
-import com.tcdt.qlnvhang.request.HhQdPheduyetKqMttSLDDReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.nhaphang.nhaptructiep.HhQdPduyetKqcgPreview;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -15,6 +14,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdr;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -29,6 +29,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
@@ -400,5 +401,12 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
         ex.export();
     }
 
-
+    public ReportTemplateResponse preview(HhQdPduyetKqcgHdrReq hhQdPduyetKqcgHdrReq) throws Exception {
+        HhQdPduyetKqcgHdr hhQdPduyetKqcgHdr = detail(hhQdPduyetKqcgHdrReq.getId().toString());
+        ReportTemplate model = findByTenFile(hhQdPduyetKqcgHdrReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        HhQdPduyetKqcgPreview object = new HhQdPduyetKqcgPreview();
+        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+    }
 }
