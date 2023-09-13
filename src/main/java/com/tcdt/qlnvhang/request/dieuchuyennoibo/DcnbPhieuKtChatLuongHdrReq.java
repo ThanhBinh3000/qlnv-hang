@@ -140,7 +140,7 @@ public class DcnbPhieuKtChatLuongHdrReq {
     @NotNull
     private String donViTinh;
     @NotNull
-    private Long bBNtLdId;
+    private String bBNtLdId;
     @NotNull
     private String soBBNtLd;
     private List<FileDinhKemReq> phieuKTCLDinhKem = new ArrayList<>();

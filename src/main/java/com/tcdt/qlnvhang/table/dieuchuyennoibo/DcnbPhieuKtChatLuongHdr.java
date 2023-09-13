@@ -218,7 +218,7 @@ public class DcnbPhieuKtChatLuongHdr extends BaseEntity implements Serializable,
     @Column(name = "TICH_LUONG_KHA_DUNG")
     private BigDecimal tichLuongKhaDung;
     @Column(name = "BB_NT_BQ_LD_ID")
-    private Long bBNtLdId;
+    private String bBNtLdId;
     @Column(name = "SO_BB_NT_BQ_LD")
     private String soBBNtLd;
     @OneToMany(cascade = CascadeType.ALL)
