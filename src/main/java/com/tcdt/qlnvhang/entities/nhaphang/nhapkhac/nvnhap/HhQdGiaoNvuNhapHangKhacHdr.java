@@ -18,9 +18,8 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = HhQdGiaoNvuNhapHangKhacHdr.TABLE_NAME)
@@ -141,4 +140,32 @@ public class HhQdGiaoNvuNhapHangKhacHdr implements Serializable {
 	private List<FileDinhKem> fileDinhKems;
 	@Transient
 	private List<FileDinhKem> fileCanCu;
+	// Print preview
+	@Transient
+	private String ngay;
+	@Transient
+	private String tenBaoCao;
+	@Transient
+	private String thang;
+	@Transient
+	private String canCuPhapLy;
+
+	public String getNgay() {
+		return Objects.isNull(this.getNgayQd()) ? null : String.valueOf(this.getNgayQd().getDate());
+	}
+	public String getThang() {
+		return Objects.isNull(this.getNgayQd()) ? null : String.valueOf(this.getNgayQd().getMonth()+1);
+	}
+
+
+	public String getTenCloaiVthh() {
+		if(dtlList.isEmpty()){
+			return null;
+		}else{
+			List<String> collect = dtlList.stream().map(HhQdPdNhapKhacDtl::getTenCloaiVthh).collect(Collectors.toList());
+			List<String> newList = new ArrayList<String>(new HashSet<String>(collect));
+			tenCloaiVthh = String.join(",",newList);
+		}
+		return tenCloaiVthh;
+	}
 }
