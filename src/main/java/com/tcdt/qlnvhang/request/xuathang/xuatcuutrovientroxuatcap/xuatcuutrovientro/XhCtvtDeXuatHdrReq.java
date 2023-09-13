@@ -26,7 +26,7 @@ public class XhCtvtDeXuatHdrReq {
     private BigDecimal tonKho;
     private LocalDate ngayDx;
     private LocalDate ngayKetThuc;
-    private String noiDungDx;
+    private String noiDung;
     private String trangThai;
     private Long idThop;
     private String maTongHop;

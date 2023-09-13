@@ -26,7 +26,7 @@ public class XhPhieuKnclDtl extends BaseEntity implements Serializable {
   private Long soLuong;
   private String ghiChu;
   private String trangThai;
-  //gia tri HTBQ hinh thuc bao quan, KQPT ket qua phan tich
+  //gia tri NLQ, PPLM phuong phap lay mau, CTCL chi tieu chat luong
   private String type;
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "idHdr")
