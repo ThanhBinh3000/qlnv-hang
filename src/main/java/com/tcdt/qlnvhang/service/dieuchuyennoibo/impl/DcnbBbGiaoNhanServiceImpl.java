@@ -65,7 +65,12 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
     @Override
     public Page<DcnbBbGiaoNhanHdrDTO> searchPage(CustomUserDetails currentUser, DcnbBbGiaoNhanHdrReq req) throws Exception {
         String dvql = currentUser.getDvql();
-        req.setMaDvi(dvql);
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            req.setMaDvi(dvql.substring(0,6));
+            req.setTrangThai(Contains.DADUYET_LDC);
+        } else {
+            req.setMaDvi(dvql);
+        }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbBbGiaoNhanHdrDTO> searchDto = null;
         if (req.getIsVatTu() == null) {
