@@ -3,9 +3,7 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.common.DocxToPdfConverter;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbGiaoNhanDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbGiaoNhanHdrRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbGiaoNhanHdrReq;
@@ -18,8 +16,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbGiaoNhanDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbGiaoNhanHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -37,6 +34,7 @@ import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBbGiaoNhanService {
@@ -46,7 +44,12 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
 
     @Autowired
     private DcnbBbGiaoNhanDtlRepository dtlRepository;
-
+    @Autowired
+    private DcnbBbChuanBiKhoHdrRepository dcnbBbChuanBiKhoHdrRepository;
+    @Autowired
+    private DcnbBBKetThucNKHdrRepository dcnbBBKetThucNKHdrRepository;
+    @Autowired
+    private DcnbBienBanLayMauHdrRepository dcnbBienBanLayMauHdrRepository;
     @Autowired
     private FileDinhKemService fileDinhKemService;
 
@@ -64,7 +67,12 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
     @Override
     public Page<DcnbBbGiaoNhanHdrDTO> searchPage(CustomUserDetails currentUser, DcnbBbGiaoNhanHdrReq req) throws Exception {
         String dvql = currentUser.getDvql();
-        req.setMaDvi(dvql);
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            req.setMaDvi(dvql.substring(0,6));
+            req.setTrangThai(Contains.DADUYET_LDC);
+        } else {
+            req.setMaDvi(dvql);
+        }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<DcnbBbGiaoNhanHdrDTO> searchDto = null;
         if (req.getIsVatTu() == null) {
@@ -112,6 +120,27 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
         List<FileDinhKem> dinhkem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME + "_DK");
         created.setFileCanCu(canCu);
         created.setFileDinhKems(dinhkem);
+        // sửa luu them (Số BB kết thúc NK,	Ngày kết thúc NK, Số BBLM/BGM)
+        List<DcnbBBKetThucNKHdr> bbKetThucNkHdrList = new ArrayList<>();
+        if (created.getMaLoKho() == null) {
+            bbKetThucNkHdrList = dcnbBBKetThucNKHdrRepository.findByMaDviAndQdinhDccIdAndMaNganKho(created.getMaDvi(), created.getQdDcCucId(), created.getMaNganKho());
+        } else {
+            bbKetThucNkHdrList = dcnbBBKetThucNKHdrRepository.findByMaDviAndQdinhDccIdAndMaNganKhoAndMaLoKho(created.getMaDvi(), created.getQdDcCucId(), created.getMaNganKho(), created.getMaLoKho());
+        }
+        if(!bbKetThucNkHdrList.isEmpty()){
+            created.setSoBbKtNhapKho(bbKetThucNkHdrList.get(0).getSoBb());
+        }
+        List<DcnbBienBanLayMauHdr> bienBanLayMauHdrList = new ArrayList<>();
+        if (created.getMaLoKho() == null) {
+            bienBanLayMauHdrList = dcnbBienBanLayMauHdrRepository.findByMaDviAndQdccIdAndMaNganKho(created.getMaDvi(), created.getQdDcCucId(), created.getMaNganKho());
+        } else {
+            bienBanLayMauHdrList = dcnbBienBanLayMauHdrRepository.findByMaDviAndQdccIdAndMaNganKhoAndMaLoKho(created.getMaDvi(), created.getQdDcCucId(), created.getMaNganKho(), created.getMaLoKho());
+        }
+        if(!bienBanLayMauHdrList.isEmpty()){
+            created.setSoBienBanLayMau(bienBanLayMauHdrList.stream().map(DcnbBienBanLayMauHdr::getSoBbLayMau).collect(Collectors.joining()));
+        }
+
+        hdrRepository.save(created);
         return created;
     }
 
@@ -142,6 +171,28 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
         List<FileDinhKem> dinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), DcnbBbGiaoNhanHdr.TABLE_NAME + "_DK");
         update.setFileCanCu(canCu);
         update.setFileDinhKems(dinhKem);
+
+        // sửa luu them (Số BB kết thúc NK,	Ngày kết thúc NK, Số BBLM/BGM)
+        List<DcnbBBKetThucNKHdr> bbKetThucNkHdrList = new ArrayList<>();
+        if (update.getMaLoKho() == null) {
+            bbKetThucNkHdrList = dcnbBBKetThucNKHdrRepository.findByMaDviAndQdinhDccIdAndMaNganKho(update.getMaDvi(), update.getQdDcCucId(), update.getMaNganKho());
+        } else {
+            bbKetThucNkHdrList = dcnbBBKetThucNKHdrRepository.findByMaDviAndQdinhDccIdAndMaNganKhoAndMaLoKho(update.getMaDvi(), update.getQdDcCucId(), update.getMaNganKho(), update.getMaLoKho());
+        }
+        if(!bbKetThucNkHdrList.isEmpty()){
+            update.setSoBbKtNhapKho(bbKetThucNkHdrList.get(0).getSoBb());
+        }
+        List<DcnbBienBanLayMauHdr> bienBanLayMauHdrList = new ArrayList<>();
+        if (update.getMaLoKho() == null) {
+            bienBanLayMauHdrList = dcnbBienBanLayMauHdrRepository.findByMaDviAndQdccIdAndMaNganKho(update.getMaDvi(), update.getQdDcCucId(), update.getMaNganKho());
+        } else {
+            bienBanLayMauHdrList = dcnbBienBanLayMauHdrRepository.findByMaDviAndQdccIdAndMaNganKhoAndMaLoKho(update.getMaDvi(), update.getQdDcCucId(), update.getMaNganKho(), update.getMaLoKho());
+        }
+        if(!bienBanLayMauHdrList.isEmpty()){
+            update.setSoBienBanLayMau(bienBanLayMauHdrList.stream().map(DcnbBienBanLayMauHdr::getSoBbLayMau).collect(Collectors.joining()));
+        }
+
+        hdrRepository.save(update);
         return update;
     }
 
@@ -188,6 +239,19 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
                 hdr.setTenLanhDao(userInfo.getFullName());
                 hdr.setNguoiPDuyet(userInfo.getId());
                 hdr.setNgayPDuyet(LocalDate.now());
+//                biên bản chuẩn bị kho
+                List<DcnbBbChuanBiKhoHdr> bbChuanBiKhoHdrList = new ArrayList<>();
+                if (hdr.getMaLoKho() == null) {
+                    bbChuanBiKhoHdrList = dcnbBbChuanBiKhoHdrRepository.findByMaDviAndQdDcCucIdAndMaNganKho(hdr.getMaDvi(), hdr.getQdDcCucId(), hdr.getMaNganKho());
+                } else {
+                    bbChuanBiKhoHdrList = dcnbBbChuanBiKhoHdrRepository.findByMaDviAndQdDcCucIdAndMaNganKhoAndMaLoKho(hdr.getMaDvi(), hdr.getQdDcCucId(), hdr.getMaNganKho(), hdr.getMaLoKho());
+                }
+                for (DcnbBbChuanBiKhoHdr hdrbq : bbChuanBiKhoHdrList) {
+                    hdrbq.setBbGiaoNhanId(hdrbq.getBbGiaoNhanId());
+                    hdrbq.setSoBbGiaoNhan(hdrbq.getSoBbGiaoNhan());
+                    dcnbBbChuanBiKhoHdrRepository.save(hdrbq);
+                }
+
                 break;
             case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());

@@ -144,7 +144,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     }
 
     XhCtvtQuyetDinhPdHdr data = optional.get();
-    BeanUtils.copyProperties(objReq, data, "id");
+    BeanUtils.copyProperties(objReq, data, "id","maDvi");
     XhCtvtQuyetDinhPdHdr created = xhCtvtQdPdHdrRepository.save(data);
     return created;
   }

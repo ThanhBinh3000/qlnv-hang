@@ -19,6 +19,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbChuanBiKhoHdr;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoDtl;
@@ -56,7 +57,8 @@ public class DcnbPhieuNhapKhoServiceImpl extends BaseServiceImpl implements Dcnb
 
     @Autowired
     private DcnbBBNTBQHdrRepository dcnbBBNTBQHdrRepository;
-
+    @Autowired
+    private DcnbBbChuanBiKhoHdrRepository dcnbBbChuanBiKhoHdrRepository;
     @Autowired
     public DocxToPdfConverter docxToPdfConverter;
 
@@ -116,14 +118,16 @@ public class DcnbPhieuNhapKhoServiceImpl extends BaseServiceImpl implements Dcnb
         double sum = req.getChildren().stream().map(DcnbPhieuNhapKhoDtl::getSoLuongNhapDc).mapToDouble(BigDecimal::doubleValue).sum();
         data.setTongSoLuong(new BigDecimal(sum));
         hdrRepository.save(created);
-        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbPhieuNhapKhoHdr.TABLE_NAME);
+        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbPhieuNhapKhoHdr.TABLE_NAME + "_DK");
         created.setFileDinhKems(canCu);
+        List<FileDinhKem> chungTu = fileDinhKemService.saveListFileDinhKem(req.getChungTuDinhKem(), created.getId(), DcnbPhieuNhapKhoHdr.TABLE_NAME + "_CT");
+        created.setChungTuDinhKem(chungTu);
         // lưu biên bản nghiệp thu bảo quản lần đầu
         List<DcnbBBNTBQHdr> bbntbqHdrList = new ArrayList<>();
         if (created.getMaLoKho() == null) {
-            bbntbqHdrList = dcnbBBNTBQHdrRepository.findByQdDcCucIdAndMaNganKho(created.getQdDcCucId(), created.getMaNganKho());
+            bbntbqHdrList = dcnbBBNTBQHdrRepository.findByMaDviAndQdDcCucIdAndMaNganKho(created.getMaDvi(), created.getQdDcCucId(), created.getMaNganKho());
         } else {
-            bbntbqHdrList = dcnbBBNTBQHdrRepository.findByQdDcCucIdAndMaNganKhoAndMaLoKho(created.getQdDcCucId(), created.getMaNganKho(), created.getMaLoKho());
+            bbntbqHdrList = dcnbBBNTBQHdrRepository.findByMaDviAndQdDcCucIdAndMaNganKhoAndMaLoKho(created.getMaDvi(), created.getQdDcCucId(), created.getMaNganKho(), created.getMaLoKho());
         }
         String bbntbqld = bbntbqHdrList.stream().map(DcnbBBNTBQHdr::getSoBban).collect(Collectors.joining(","));
         created.setBbNghiemThuBqld(bbntbqld);
@@ -155,15 +159,18 @@ public class DcnbPhieuNhapKhoServiceImpl extends BaseServiceImpl implements Dcnb
         double sum = req.getChildren().stream().map(DcnbPhieuNhapKhoDtl::getSoLuongNhapDc).mapToDouble(BigDecimal::doubleValue).sum();
         data.setTongSoLuong(new BigDecimal(sum));
         hdrRepository.save(update);
-        fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbPhieuNhapKhoHdr.TABLE_NAME));
-        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), DcnbPhieuNhapKhoHdr.TABLE_NAME);
+        fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbPhieuNhapKhoHdr.TABLE_NAME + "_DK"));
+        fileDinhKemService.delete(update.getId(), Lists.newArrayList(DcnbPhieuNhapKhoHdr.TABLE_NAME + "_CT"));
+        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), update.getId(), DcnbPhieuNhapKhoHdr.TABLE_NAME + "_DK");
         update.setFileDinhKems(canCu);
+        List<FileDinhKem> chungTu = fileDinhKemService.saveListFileDinhKem(req.getChungTuDinhKem(), update.getId(), DcnbPhieuNhapKhoHdr.TABLE_NAME + "_CT");
+        update.setChungTuDinhKem(chungTu);
         // lưu biên bản nghiệp thu bảo quản lần đầu
         List<DcnbBBNTBQHdr> bbntbqHdrList = new ArrayList<>();
         if (update.getMaLoKho() == null) {
-            bbntbqHdrList = dcnbBBNTBQHdrRepository.findByQdDcCucIdAndMaNganKho(update.getQdDcCucId(), update.getMaNganKho());
+            bbntbqHdrList = dcnbBBNTBQHdrRepository.findByMaDviAndQdDcCucIdAndMaNganKho(update.getMaDvi(), update.getQdDcCucId(), update.getMaNganKho());
         } else {
-            bbntbqHdrList = dcnbBBNTBQHdrRepository.findByQdDcCucIdAndMaNganKhoAndMaLoKho(update.getQdDcCucId(), update.getMaNganKho(), update.getMaLoKho());
+            bbntbqHdrList = dcnbBBNTBQHdrRepository.findByMaDviAndQdDcCucIdAndMaNganKhoAndMaLoKho(update.getMaDvi(), update.getQdDcCucId(), update.getMaNganKho(), update.getMaLoKho());
         }
         String bbntbqld = bbntbqHdrList.stream().map(DcnbBBNTBQHdr::getSoBban).collect(Collectors.joining(","));
         update.setBbNghiemThuBqld(bbntbqld);
@@ -185,7 +192,8 @@ public class DcnbPhieuNhapKhoServiceImpl extends BaseServiceImpl implements Dcnb
             throw new Exception("Số biên bản không tồn tại");
         }
         DcnbPhieuNhapKhoHdr data = optional.get();
-        data.setFileDinhKems(fileDinhKemService.search(id, Collections.singleton(DcnbPhieuNhapKhoHdr.TABLE_NAME)));
+        data.setFileDinhKems(fileDinhKemService.search(id, Collections.singleton(DcnbPhieuNhapKhoHdr.TABLE_NAME + "_DK")));
+        data.setChungTuDinhKem(fileDinhKemService.search(id, Collections.singleton(DcnbPhieuNhapKhoHdr.TABLE_NAME + "_CT")));
         return data;
     }
 
@@ -236,9 +244,9 @@ public class DcnbPhieuNhapKhoServiceImpl extends BaseServiceImpl implements Dcnb
 
                 List<DcnbBBNTBQHdr> bbntbqHdrList = new ArrayList<>();
                 if (hdr.getMaLoKho() == null) {
-                    bbntbqHdrList = dcnbBBNTBQHdrRepository.findByQdDcCucIdAndMaNganKho(hdr.getQdDcCucId(), hdr.getMaNganKho());
+                    bbntbqHdrList = dcnbBBNTBQHdrRepository.findByMaDviAndQdDcCucIdAndMaNganKho(hdr.getMaDvi(), hdr.getQdDcCucId(), hdr.getMaNganKho());
                 } else {
-                    bbntbqHdrList = dcnbBBNTBQHdrRepository.findByQdDcCucIdAndMaNganKhoAndMaLoKho(hdr.getQdDcCucId(), hdr.getMaNganKho(), hdr.getMaLoKho());
+                    bbntbqHdrList = dcnbBBNTBQHdrRepository.findByMaDviAndQdDcCucIdAndMaNganKhoAndMaLoKho(hdr.getMaDvi(), hdr.getQdDcCucId(), hdr.getMaNganKho(), hdr.getMaLoKho());
                 }
 
                 // lưu biên bản nghiệp thu bảo quản lần đầu
@@ -251,6 +259,23 @@ public class DcnbPhieuNhapKhoServiceImpl extends BaseServiceImpl implements Dcnb
                         hdrbq.setSlThucNhapDc(hdrbq.getSlThucNhapDc().add(hdr.getTongSoLuong()));
                     }
                     dcnbBBNTBQHdrRepository.save(hdrbq);
+                }
+//                biên bản chuẩn bị kho
+                List<DcnbBbChuanBiKhoHdr> bbChuanBiKhoHdrList = new ArrayList<>();
+                if (hdr.getMaLoKho() == null) {
+                    bbChuanBiKhoHdrList = dcnbBbChuanBiKhoHdrRepository.findByMaDviAndQdDcCucIdAndMaNganKho(hdr.getMaDvi(), hdr.getQdDcCucId(), hdr.getMaNganKho());
+                } else {
+                    bbChuanBiKhoHdrList = dcnbBbChuanBiKhoHdrRepository.findByMaDviAndQdDcCucIdAndMaNganKhoAndMaLoKho(hdr.getMaDvi(), hdr.getQdDcCucId(), hdr.getMaNganKho(), hdr.getMaLoKho());
+                }
+                for (DcnbBbChuanBiKhoHdr hdrbq : bbChuanBiKhoHdrList) {
+                    if (hdrbq.getSoPhieuNhapKho() == null) {
+                        hdrbq.setSoPhieuNhapKho(hdr.getSoPhieuNhapKho());
+                        hdrbq.setSoLuongPhieuNhapKho(hdr.getTongSoLuong());
+                    } else {
+                        hdrbq.setSoPhieuNhapKho(hdrbq.getSoPhieuNhapKho() + "," + hdr.getSoPhieuNhapKho());
+                        hdrbq.setSoLuongPhieuNhapKho(hdrbq.getSoLuongPhieuNhapKho().add(hdr.getTongSoLuong()));
+                    }
+                    dcnbBbChuanBiKhoHdrRepository.save(hdrbq);
                 }
                 break;
             default:
@@ -430,6 +455,7 @@ public class DcnbPhieuNhapKhoServiceImpl extends BaseServiceImpl implements Dcnb
         }
         return tongSoTien;
     }
+
     private BigDecimal tongSoLuongThucNhap(List<DcnbPhieuNhapKhoDtl> children) {
         BigDecimal tongSoLuongThucNhap = new BigDecimal("0.0");
         for (DcnbPhieuNhapKhoDtl res : children) {

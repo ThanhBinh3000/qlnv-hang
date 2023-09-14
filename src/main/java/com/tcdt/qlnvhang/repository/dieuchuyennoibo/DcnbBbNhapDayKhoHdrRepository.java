@@ -56,7 +56,7 @@ public interface DcnbBbNhapDayKhoHdrRepository extends JpaRepository<DcnbBbNhapD
             "LEFT JOIN DcnbBbNhapDayKhoDtl bbndkd On bbndkd.hdrId = bbndk.id " +
             "LEFT JOIN DcnbPhieuNhapKhoHdr pnk On pnk.id = bbndkd.phieuNhapKhoId " +
             "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.bBNhapDayKhoId = bbndk.id " +
-            "LEFT JOIN DcnbBBKetThucNKHdr bbktnk On bbktnk.qDinhDccId = qdc.id " +
+            "LEFT JOIN DcnbBBKetThucNKHdr bbktnk On bbktnk.qdinhDccId = qdc.id " +
             "and ((khdcd.maLoKhoNhan is not null and khdcd.maNganKhoNhan = bbktnk.maNganKho and khdcd.maLoKhoNhan = bbktnk.maLoKho ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = bbktnk.maNganKho ))" +
             "LEFT JOIN XhHoSoKyThuatHdr hskt On 1 = 1  " +
             "and ((khdcd.maLoKhoNhan is not null and  khdcd.maLoKhoNhan = SUBSTRING(hskt.maDiaDiem, 1, 17) and khdcd.maNganKhoNhan = SUBSTRING(hskt.maDiaDiem, 1, 15) ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = SUBSTRING(hskt.maDiaDiem, 1, 15) ))" +

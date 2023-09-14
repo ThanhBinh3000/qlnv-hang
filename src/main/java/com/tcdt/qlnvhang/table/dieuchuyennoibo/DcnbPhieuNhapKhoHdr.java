@@ -85,7 +85,7 @@ public class DcnbPhieuNhapKhoHdr extends BaseEntity implements Serializable, Clo
     private String loaiHinhNx;
     private String kieuNx;
     private String bbNghiemThuBqld;
-    private Long bbNghiemThuBqldId;
+    private String bbNghiemThuBqldId;
     private String soBangKeCh;
     private Long bangKeChId;
     private String soBangKeVt;
@@ -117,7 +117,8 @@ public class DcnbPhieuNhapKhoHdr extends BaseEntity implements Serializable, Clo
     private String tenNhaKho;
     private String tenNganKho;
     private String tenLoKho;
-
+    @Column(name = "DON_VI_TINH")
+    private String donViTinh;
     @Transient
     private String maDviCha;
     @Transient

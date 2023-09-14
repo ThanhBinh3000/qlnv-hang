@@ -144,7 +144,7 @@ public class XhCtvtBangKeService extends BaseServiceImpl {
       }
     }
     XhCtvtBangKeHdr data = optional.get();
-    BeanUtils.copyProperties(objReq, data);
+    BeanUtils.copyProperties(objReq, data,"maDvi");
     XhCtvtBangKeHdr created = xhCtvtBangKeHdrRepository.save(data);
 
     xhCtvtBangKeDtlRepository.deleteAllByIdHdr(created.getId());

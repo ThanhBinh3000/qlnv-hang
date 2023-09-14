@@ -71,6 +71,7 @@ public class DcnbBbGiaoNhanHdrReq extends BaseRequest {
     @NotNull
     private String dviTinh;
     private LocalDate ngayBdNhap;
+    @NotNull
     private LocalDate ngayKtNhap;
     private BigDecimal soLuongQdDcCuc;
     private String ghiChu;

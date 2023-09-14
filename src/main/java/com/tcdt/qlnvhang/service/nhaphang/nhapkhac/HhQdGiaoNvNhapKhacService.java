@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhQdGiaoNvuNhapKhacHdrReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhQdGiaoNvuNhapKhacSearch;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletResponse;
@@ -22,4 +23,6 @@ public interface HhQdGiaoNvNhapKhacService {
     void xuatFile(HhQdGiaoNvuNhapKhacSearch req , HttpServletResponse response) throws Exception;
     void xuatFileBbLm(HhQdGiaoNvuNhapKhacSearch req , HttpServletResponse response) throws Exception;
     void xuatFilePkncl(HhQdGiaoNvuNhapKhacSearch req , HttpServletResponse response) throws Exception;
+
+    ReportTemplateResponse preview(HhQdGiaoNvuNhapKhacSearch objReq) throws Exception;
 }

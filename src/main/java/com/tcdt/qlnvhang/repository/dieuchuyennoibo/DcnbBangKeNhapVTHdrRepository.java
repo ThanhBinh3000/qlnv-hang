@@ -32,8 +32,6 @@ public interface DcnbBangKeNhapVTHdrRepository extends JpaRepository<DcnbBangKeN
             "LEFT JOIN DcnbBienBanLayMauHdr bblm ON bblm.qdccId = qdc.id " +
             "and ((bblm.maLoKho is not null and  bblm.maNganKho = bknvt.maNganKho and bblm.maLoKho = bknvt.maLoKho ) or (bblm.maLoKho is null and bblm.maNganKho = bknvt.maNganKho))" +
             "LEFT JOIN DcnbPhieuNhapKhoHdr pnk ON pnk.id = bknvt.phieuNhapKhoId " +
-            "and pnk.maNganKho = bknvt.maNganKho and pnk.maLoKho = bknvt.maLoKho " +
-            "and ((pnk.maLoKho is not null and  pnk.maNganKho = bknvt.maNganKho and pnk.maLoKho = bknvt.maLoKho ) or (pnk.maLoKho is null and pnk.maNganKho = bknvt.maNganKho))" +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.parentId is not null and qdc.trangThai = '29' " +

@@ -83,7 +83,7 @@ public class XhXkVtQdXuatGiamVattuService extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data);
         XhXkVtQdXuatGiamVattu created = xhXkVtQdXuatGiamVattuRepository.save(data);
         //save file đính kèm
-        fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtQdXuatGiamVattu.TABLE_NAME);
+        fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtQdXuatGiamVattu.TABLE_NAME);
         //cập nhật số qd vào phiếu xuất kho có trạng thái bị huy
         List<XhXkVtPhieuXuatNhapKho> xhXkVtPhieuXuatNhapKho = objReq.getXhXkVtPhieuXuatNhapKho();
         if (!xhXkVtPhieuXuatNhapKho.isEmpty()) {
@@ -119,7 +119,7 @@ public class XhXkVtQdXuatGiamVattuService extends BaseServiceImpl {
         XhXkVtQdXuatGiamVattu created = xhXkVtQdXuatGiamVattuRepository.save(dx);
         fileDinhKemService.delete(dx.getId(), Collections.singleton(XhXkVtQdXuatGiamVattu.TABLE_NAME));
         //save file đính kèm
-        fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtQdXuatGiamVattu.TABLE_NAME);
+        fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtQdXuatGiamVattu.TABLE_NAME);
         return detail(created.getId());
     }
 

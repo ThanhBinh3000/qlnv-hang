@@ -62,7 +62,12 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
 
     public Page<DcnbPhieuKnChatLuongHdrDTO> searchPage(CustomUserDetails currentUser, SearchPhieuKnChatLuong req) throws Exception {
         String dvql = currentUser.getDvql();
-        req.setMaDvi(dvql);
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            req.setMaDvi(dvql.substring(0,6));
+            req.setTrangThai(Contains.DADUYET_LDC);
+        } else {
+            req.setMaDvi(dvql);
+        }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
 
         Page<DcnbPhieuKnChatLuongHdrDTO> searchDto = null;

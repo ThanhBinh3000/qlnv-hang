@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.common.DocxToPdfConverter;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -20,6 +21,7 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
+import lombok.RequiredArgsConstructor;
 import lombok.var;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbNhapDayKhoHdr;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -60,6 +62,7 @@ public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBN
     private DcnbQuyetDinhDcCHdrServiceImpl dcnbQuyetDinhDcCHdrServiceImpl;
     @Autowired
     public DocxToPdfConverter docxToPdfConverter;
+    @Autowired
     private DcnbBbNhapDayKhoHdrRepository dcnbBbNhapDayKhoHdrRepository;
 
     @Override
@@ -308,6 +311,7 @@ public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBN
                 throw new Exception("Phê duyệt không thành công");
         }
         hdr.setTrangThai(req.getTrangThai());
+        hdr.setTenTrangThai(TrangThaiAllEnum.getLabelById(req.getTrangThai()));
         DcnbBBNTBQHdr created = hdrRepository.save(hdr);
         return created;
     }

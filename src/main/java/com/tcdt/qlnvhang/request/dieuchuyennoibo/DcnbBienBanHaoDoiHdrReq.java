@@ -63,11 +63,14 @@ public class DcnbBienBanHaoDoiHdrReq {
     private String maLoKho;
 
     private String tenLoKho;
-
+    @NotNull
     private String soBbTinhKho;
-
+    @NotNull
     private Long bBTinhKhoId;
-
+    @NotNull
+    private LocalDate ngayBatDauXuat;
+    @NotNull
+    private LocalDate ngayKetThucXuat;
     private Double tongSlXuatTheoQd;
 
     private LocalDate ngayKetThucXuatQd;
@@ -119,6 +122,8 @@ public class DcnbBienBanHaoDoiHdrReq {
     private String lyDoTuChoi;
     private Long phieuKtChatLuongHdrId;
     private String soPhieuKtChatLuong;
+    private String donViTinh;
+    private String slHaoTheoDinhMuc;
     @Valid
     private List<DcnbBienBanHaoDoiTtDtl> danhSachBangKe = new ArrayList<>();
     @Valid
