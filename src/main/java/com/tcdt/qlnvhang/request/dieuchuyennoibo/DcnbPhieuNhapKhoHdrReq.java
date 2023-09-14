@@ -90,7 +90,7 @@ public class DcnbPhieuNhapKhoHdrReq extends BaseRequest {
     private String loaiHinhNx;
     private String kieuNx;
     private String bbNghiemThuBqld;
-    private Long bbNghiemThuBqldId;
+    private String bbNghiemThuBqldId;
     private BigDecimal soLuongQdDcCuc;
     private BigDecimal tongSoLuong;
     private String tongSoLuongBc;

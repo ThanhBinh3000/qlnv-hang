@@ -16,6 +16,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanHaoDoiDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanHaoDoiHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanHaoDoiTtDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanLayMauHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -41,6 +42,8 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
 
     @Autowired
     private DcnbBienBanHaoDoiHdrRepository dcnbBienBanHaoDoiHdrRepository;
+    @Autowired
+    private DcnbBienBanLayMauHdrRepository dcnbBienBanLayMauHdrRepository;
 
     @Autowired
     private DcnbBienBanHaoDoiDtlRepository dcnbBienBanHaoDoiDtlRepository;
@@ -269,6 +272,18 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
 //                dataLinkDtl.setHdrId(dataLink.getId());
 //                dataLinkDtl.setType(DcnbBienBanHaoDoiHdr.TABLE_NAME);
 //                dcnbDataLinkDtlRepository.save(dataLinkDtl);
+                // update biên bản lấy mẫu
+                List<DcnbBienBanLayMauHdr> bienBanLayMauHdrList = new ArrayList<>();
+                if (optional.get().getMaLoKho() == null) {
+                    bienBanLayMauHdrList = dcnbBienBanLayMauHdrRepository.findByMaDviAndQdccIdAndMaNganKho(optional.get().getMaDvi(), optional.get().getQDinhDccId(), optional.get().getMaNganKho());
+                } else {
+                    bienBanLayMauHdrList = dcnbBienBanLayMauHdrRepository.findByMaDviAndQdccIdAndMaNganKhoAndMaLoKho(optional.get().getMaDvi(), optional.get().getQDinhDccId(), optional.get().getMaNganKho(), optional.get().getMaLoKho());
+                }
+                for (DcnbBienBanLayMauHdr hdrbq : bienBanLayMauHdrList) {
+                    hdrbq.setBbHaoDoiId(optional.get().getId());
+                    hdrbq.setSoBbHaoDoi(optional.get().getSoBienBan());
+                    dcnbBienBanLayMauHdrRepository.save(hdrbq);
+                }
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");

@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBKetThucNKDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBKetThucNKHdrRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanLayMauHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuNhapKhoHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -54,6 +55,8 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
     private DcnbBBKetThucNKDtlRepository dtlRepository;
     @Autowired
     private DcnbPhieuNhapKhoHdrRepository dcnbPhieuNhapKhoHdrRepository;
+    @Autowired
+    private DcnbBienBanLayMauHdrRepository dcnbBienBanLayMauHdrRepository;
     @Autowired
     public DocxToPdfConverter docxToPdfConverter;
 
@@ -107,6 +110,7 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(userInfo.getDvql());
         data.setId(null);
+        data.setQdinhDccId(req.getqDinhDccId());
         req.getDcnbBBKetThucNKDtl().forEach(e -> {
             e.setDcnbBBKetThucNKHdr(data);
         });
@@ -134,6 +138,7 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
         }
         DcnbBBKetThucNKHdr data = optional.get();
         BeanUtils.copyProperties(req, data);
+        data.setQdinhDccId(req.getqDinhDccId());
         data.setDcnbBBKetThucNKDtl(req.getDcnbBBKetThucNKDtl());
         DcnbBBKetThucNKHdr update = hdrRepository.save(data);
         String so = update.getId() + "/" + (new Date().getYear() + 1900) + "/BBKT-" + userInfo.getDvqlTenVietTat();
@@ -215,6 +220,7 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
                 hdr.setNguoiPDuyet(userInfo.getId());
                 hdr.setNgayPDuyet(LocalDate.now());
                 hdr.setTenLanhDaoChiCuc(userInfo.getFullName());
+                // update phiếu nhập kho
                 List<DcnbBBKetThucNKDtl> bbKetThucNKDtl = dtlRepository.findByHdrId(hdr.getId());
                 for (DcnbBBKetThucNKDtl kt : bbKetThucNKDtl) {
                     Optional<DcnbPhieuNhapKhoHdr> dcnbPhieuNhapKhoHdr = dcnbPhieuNhapKhoHdrRepository.findById(kt.getPhieuNhapKhoId());
@@ -223,6 +229,20 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
                         dcnbPhieuNhapKhoHdr.get().setBbKetThucNkId(hdr.getId());
                         dcnbPhieuNhapKhoHdrRepository.save(dcnbPhieuNhapKhoHdr.get());
                     }
+                }
+
+                // update biên bản lấy mẫu
+                List<DcnbBienBanLayMauHdr> bienBanLayMauHdrList = new ArrayList<>();
+                if (hdr.getMaLoKho() == null) {
+                    bienBanLayMauHdrList = dcnbBienBanLayMauHdrRepository.findByMaDviAndQdccIdAndMaNganKho(hdr.getMaDvi(), hdr.getQdinhDccId(), hdr.getMaNganKho());
+                } else {
+                    bienBanLayMauHdrList = dcnbBienBanLayMauHdrRepository.findByMaDviAndQdccIdAndMaNganKhoAndMaLoKho(hdr.getMaDvi(), hdr.getQdinhDccId(), hdr.getMaNganKho(), hdr.getMaLoKho());
+                }
+                for (DcnbBienBanLayMauHdr hdrbq : bienBanLayMauHdrList) {
+                    hdrbq.setBbKetThucNkId(hdr.getId());
+                    hdrbq.setSoBbKetThucNk(hdr.getSoBb());
+                    hdrbq.setNgayKetThucNk(hdr.getNgayKetThucNhap());
+                    dcnbBienBanLayMauHdrRepository.save(hdrbq);
                 }
                 break;
             default:

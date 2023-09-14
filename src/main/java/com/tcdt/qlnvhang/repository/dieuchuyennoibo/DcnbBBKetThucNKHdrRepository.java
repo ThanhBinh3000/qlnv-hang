@@ -27,7 +27,7 @@ public interface DcnbBBKetThucNKHdrRepository extends JpaRepository<DcnbBBKetThu
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbBBKetThucNKHdr bbkt On bbkt.qDinhDccId = qdc.id " +
+            "LEFT JOIN DcnbBBKetThucNKHdr bbkt On bbkt.qdinhDccId = qdc.id " +
             "and ((khdcd.maLoKhoNhan is not null and  bbkt.maLoKho = khdcd.maLoKhoNhan and bbkt.maNganKho = khdcd.maNganKhoNhan ) or (khdcd.maLoKhoNhan is null and bbkt.maNganKho = khdcd.maNganKhoNhan ))" +
             "LEFT JOIN DcnbBBKetThucNKDtl bbktd On bbktd.hdrId = bbkt.id " +
             "LEFT JOIN XhHoSoKyThuatHdr hskt On 1 = 1  " +
@@ -61,7 +61,7 @@ public interface DcnbBBKetThucNKHdrRepository extends JpaRepository<DcnbBBKetThu
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBKetThucNKHdrListDTO(" +
             "bbkt.id,qdc.id,bbkt.soBb) " +
             "FROM DcnbBBKetThucNKHdr bbkt " +
-            "LEFT JOIN DcnbQuyetDinhDcCHdr qdc On bbkt.qDinhDccId = qdc.id " +
+            "LEFT JOIN DcnbQuyetDinhDcCHdr qdc On bbkt.qdinhDccId = qdc.id " +
             "WHERE 1 =1 " +
             "AND qdc.trangThai = '29'" +
             "AND ((:#{#param.qDinhDccId} IS NULL OR qdc.id = :#{#param.qDinhDccId})) " +
@@ -72,4 +72,8 @@ public interface DcnbBBKetThucNKHdrRepository extends JpaRepository<DcnbBBKetThu
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
             "ORDER BY bbkt.soBb desc, bbkt.nam desc")
     List<DcnbBBKetThucNKHdrListDTO> searchList(@Param("param") DcnbBBKetThucNKReq req);
+
+    List<DcnbBBKetThucNKHdr> findByMaDviAndQdinhDccIdAndMaNganKho(String maDvi, Long qdDcCucId, String maNganKho);
+
+    List<DcnbBBKetThucNKHdr> findByMaDviAndQdinhDccIdAndMaNganKhoAndMaLoKho(String maDvi, Long qdDcCucId, String maNganKho, String maLoKho);
 }
