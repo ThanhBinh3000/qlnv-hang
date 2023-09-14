@@ -40,7 +40,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -289,7 +288,9 @@ public class DcnbBangKeNhapVTServiceImpl extends BaseServiceImpl implements Dcnb
         var dcnbBangKeNhapVTHdr = hdrRepository.findById(objReq.getId());
         if (!dcnbBangKeNhapVTHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
         var dcnbBangKeCanHangHdr = dcnbBangKeCanHangHdrRepository.findById(Long.parseLong(dcnbBangKeNhapVTHdr.get().getMaDvi()));
+        if (!dcnbBangKeCanHangHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
         var dcnbBangKeCanHangDtlList = dcnbBangKeCanHangDtlRepository.findByHdrId(Long.parseLong(dcnbBangKeNhapVTHdr.get().getMaDvi()));
+        if (dcnbBangKeCanHangDtlList.size() == 0) throw new Exception("Không tồn tại bản ghi");
         ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
@@ -305,7 +306,7 @@ public class DcnbBangKeNhapVTServiceImpl extends BaseServiceImpl implements Dcnb
                 .maQhns(dcnbBangKeNhapVTHdr.get().getMaQhns())
                 .soBangKe(dcnbBangKeNhapVTHdr.get().getSoBangKe())
                 .tenThuKho(dcnbBangKeNhapVTHdr.get().getTenThuKho())
-                .lhKho(getDataKho(dcnbBangKeNhapVTHdr.get().getMaDvi())) // Loai hình kho
+                .lhKho(getDataKho(dcnbBangKeNhapVTHdr.get().getMaDvi()))
                 .tenNganKho(dcnbBangKeNhapVTHdr.get().getTenNganKho())
                 .tenLoKho(dcnbBangKeNhapVTHdr.get().getTenLoKho())
                 .tenDiemKho(dcnbBangKeNhapVTHdr.get().getTenDiemKho())

@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang;
 
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBNTBQDtlPheDuyetDto;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBNTBQDtlThucHienDto;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQDtl;
 import lombok.Builder;
 import lombok.Data;
 
@@ -17,19 +16,19 @@ public class DcnbBBNTBQHdrPreview {
     private String maQhns;
     private String soBban;
     private String ngayLap;
-    private String tenChiCuc; //Tên chi cục
+    private String tenChiCuc;
     private String ldChiCuc;
     private String keToan;
-    private String ktvBaoQuan;//KTV bảo quản
+    private String ktvBaoQuan;
     private String thuKho;
-    private String chungLoaiHangHoa; //Chủng loại hàng DTQG
+    private String chungLoaiHangHoa;
     private String tenNganKho;
     private String tenLoKho;
     private String loaiHinhKho;
     private Double tichLuongKhaDung;
     private BigDecimal slThucNhapDc;
     private String phuongThucBaoQuan;
-    private String hinhThucKeLot; //Hình thức kê lót
+    private String hinhThucKeLot;
     private String hinhThucBaoQuan;
     private Double dinhMucDuocGiao;
     private Double dinhMucTT;

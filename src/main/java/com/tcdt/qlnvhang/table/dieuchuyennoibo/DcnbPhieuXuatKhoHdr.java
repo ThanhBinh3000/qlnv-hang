@@ -66,6 +66,7 @@ public class DcnbPhieuXuatKhoHdr extends BaseEntity implements Serializable, Clo
     private String diaChi;
     private LocalDate thoiGianGiaoNhan;
     private BigDecimal soLuongCanDc;
+    private BigDecimal duToanKpDc;
     private String soBangKeCh;
     private Long bangKeChId;
     private String soBangKeVt;
@@ -85,6 +86,8 @@ public class DcnbPhieuXuatKhoHdr extends BaseEntity implements Serializable, Clo
     private Long nguoiPduyetId;
     private String lyDoTuChoi;
     private String type;
+    @Transient
+    private String maDviCha;
 
     @Transient
     List<FileDinhKem> fileDinhKems = new ArrayList<>();
@@ -97,5 +100,10 @@ public class DcnbPhieuXuatKhoHdr extends BaseEntity implements Serializable, Clo
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
         this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+    }
+    public void setMaDvi(String maDvi) {
+        this.maDvi = maDvi;
+        // get đơn vị cấp cha
+        this.maDviCha = this.maDvi.substring(0, this.maDvi.length() - 2);
     }
 }

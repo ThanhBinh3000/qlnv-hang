@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBKetThucNKDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBKetThucNKHdrRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBienBanLayMauHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuNhapKhoHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -23,10 +24,6 @@ import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBKetThucNKDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBKetThucNKHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbGiaoNhanHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -40,7 +37,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -54,6 +50,8 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
     private DcnbBBKetThucNKDtlRepository dtlRepository;
     @Autowired
     private DcnbPhieuNhapKhoHdrRepository dcnbPhieuNhapKhoHdrRepository;
+    @Autowired
+    private DcnbBienBanLayMauHdrRepository dcnbBienBanLayMauHdrRepository;
     @Autowired
     public DocxToPdfConverter docxToPdfConverter;
 
@@ -107,6 +105,7 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(userInfo.getDvql());
         data.setId(null);
+        data.setQdinhDccId(req.getqDinhDccId());
         req.getDcnbBBKetThucNKDtl().forEach(e -> {
             e.setDcnbBBKetThucNKHdr(data);
         });
@@ -134,6 +133,7 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
         }
         DcnbBBKetThucNKHdr data = optional.get();
         BeanUtils.copyProperties(req, data);
+        data.setQdinhDccId(req.getqDinhDccId());
         data.setDcnbBBKetThucNKDtl(req.getDcnbBBKetThucNKDtl());
         DcnbBBKetThucNKHdr update = hdrRepository.save(data);
         String so = update.getId() + "/" + (new Date().getYear() + 1900) + "/BBKT-" + userInfo.getDvqlTenVietTat();
@@ -215,6 +215,7 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
                 hdr.setNguoiPDuyet(userInfo.getId());
                 hdr.setNgayPDuyet(LocalDate.now());
                 hdr.setTenLanhDaoChiCuc(userInfo.getFullName());
+                // update phiếu nhập kho
                 List<DcnbBBKetThucNKDtl> bbKetThucNKDtl = dtlRepository.findByHdrId(hdr.getId());
                 for (DcnbBBKetThucNKDtl kt : bbKetThucNKDtl) {
                     Optional<DcnbPhieuNhapKhoHdr> dcnbPhieuNhapKhoHdr = dcnbPhieuNhapKhoHdrRepository.findById(kt.getPhieuNhapKhoId());
@@ -223,6 +224,20 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
                         dcnbPhieuNhapKhoHdr.get().setBbKetThucNkId(hdr.getId());
                         dcnbPhieuNhapKhoHdrRepository.save(dcnbPhieuNhapKhoHdr.get());
                     }
+                }
+
+                // update biên bản lấy mẫu
+                List<DcnbBienBanLayMauHdr> bienBanLayMauHdrList = new ArrayList<>();
+                if (hdr.getMaLoKho() == null) {
+                    bienBanLayMauHdrList = dcnbBienBanLayMauHdrRepository.findByMaDviAndQdccIdAndMaNganKho(hdr.getMaDvi(), hdr.getQdinhDccId(), hdr.getMaNganKho());
+                } else {
+                    bienBanLayMauHdrList = dcnbBienBanLayMauHdrRepository.findByMaDviAndQdccIdAndMaNganKhoAndMaLoKho(hdr.getMaDvi(), hdr.getQdinhDccId(), hdr.getMaNganKho(), hdr.getMaLoKho());
+                }
+                for (DcnbBienBanLayMauHdr hdrbq : bienBanLayMauHdrList) {
+                    hdrbq.setBbKetThucNkId(hdr.getId());
+                    hdrbq.setSoBbKetThucNk(hdr.getSoBb());
+                    hdrbq.setNgayKetThucNk(hdr.getNgayKetThucNhap());
+                    dcnbBienBanLayMauHdrRepository.save(hdrbq);
                 }
                 break;
             default:
@@ -297,6 +312,7 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
         var dcnbBBKetThucNKHdr = hdrRepository.findById(objReq.getId());
         if (!dcnbBBKetThucNKHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
         var dcnbBBKetThucNKDtlList = dtlRepository.findByHdrId(dcnbBBKetThucNKHdr.get().getId());
+        if (dcnbBBKetThucNKDtlList.size() == 0) throw new Exception("Không tồn tại bản ghi");
         var dcnbBBKetThucNKDtlDtos = dcnbBBKetThucNKDtlToDto(dcnbBBKetThucNKDtlList);
         ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
@@ -308,10 +324,11 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
     private List<DcnbBBKetThucNKDtlDto> dcnbBBKetThucNKDtlToDto(List<DcnbBBKetThucNKDtl> dcnbBBKetThucNKDtlList) {
         List<DcnbBBKetThucNKDtlDto> dcnbBBKetThucNKDtlDtos = new ArrayList<>();
         for (DcnbBBKetThucNKDtl dcnbBBKetThucNKDtl : dcnbBBKetThucNKDtlList) {
-            DcnbBBKetThucNKDtlDto dcnbBBKetThucNKDtlDto = new DcnbBBKetThucNKDtlDto();
-            dcnbBBKetThucNKDtlDto.setDonGia(BigDecimal.ZERO);
-            dcnbBBKetThucNKDtlDto.setSoLuong(dcnbBBKetThucNKDtl.getSoLuong());
-            dcnbBBKetThucNKDtlDto.setThanhTien(dcnbBBKetThucNKDtl.getSoLuong().multiply(BigDecimal.ZERO));
+            var dcnbBBKetThucNKDtlDto = DcnbBBKetThucNKDtlDto.builder()
+                    .donGia(BigDecimal.ZERO)
+                    .soLuong(dcnbBBKetThucNKDtl.getSoLuong())
+                    .thanhTien(dcnbBBKetThucNKDtl.getSoLuong().multiply(BigDecimal.ZERO))
+                    .build();
             dcnbBBKetThucNKDtlDtos.add(dcnbBBKetThucNKDtlDto);
         }
         return dcnbBBKetThucNKDtlDtos;

@@ -37,7 +37,6 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -342,6 +341,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         var dcnbPhieuKnChatLuongHdr = dcnbPhieuKnChatLuongHdrRepository.findById(objReq.getId());
         if (!dcnbPhieuKnChatLuongHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
         var userInfo = userInfoRepository.findById(dcnbPhieuKnChatLuongHdr.get().getNguoiPDuyet());
+        if (!userInfo.isPresent()) throw new Exception("Không tồn tại bản ghi");
         ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
@@ -362,7 +362,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
                 .soLuongHangBaoQuan("")
                 .hinhThucBq(dcnbPhieuKnChatLuongHdr.get().getHinhThucBq())
                 .tenThuKho(dcnbPhieuKnChatLuongHdr.get().getTenThuKho())
-                .ngayNhapDayKho(dcnbPhieuKnChatLuongHdr.get().getSoNhapDayKho())
+                .ngayNhapDayKho(dcnbPhieuKnChatLuongHdr.get().getNgayNhapDayKho().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .ngayLayMau(dcnbPhieuKnChatLuongHdr.get().getNgayLayMau().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .ngayKiem(dcnbPhieuKnChatLuongHdr.get().getNgayKiem().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .danhGiaCamQuan(dcnbPhieuKnChatLuongHdr.get().getDanhGiaCamQuan())

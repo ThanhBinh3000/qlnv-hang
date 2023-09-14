@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Cloneable{
+public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_BB_KET_THUC_NK_HDR";
 
@@ -48,7 +48,7 @@ public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Clon
     @Column(name = "MA_QHNS")
     private String maQhns;
     @Column(name = "QDINH_DCC_ID")
-    private Long qDinhDccId;
+    private Long qdinhDccId;
     @Column(name = "SO_QDINH_DCC")
     private String soQdinhDcc;
     @Column(name = "NGAY_QDINH_DCC")
@@ -96,7 +96,7 @@ public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Clon
     @Column(name = "DON_VI_TINH")
     private String donViTinh;
     @Column(name = "TRANG_THAI")
-    @Access(value=AccessType.PROPERTY)
+    @Access(value = AccessType.PROPERTY)
     private String trangThai;
     @Column(name = "LY_DO_TU_CHOI")
     private String lyDoTuChoi;
@@ -145,6 +145,7 @@ public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Clon
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     @Transient
     private String tenTrangThai;
+
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
         this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);

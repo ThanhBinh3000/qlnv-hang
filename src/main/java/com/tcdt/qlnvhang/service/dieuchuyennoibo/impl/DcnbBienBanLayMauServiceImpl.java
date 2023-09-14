@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
-import com.netflix.discovery.converters.Auto;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
@@ -39,7 +38,6 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -68,6 +66,9 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
 
     @Autowired
     private UserInfoRepository userInfoRepository;
+
+    @Autowired
+    private DcnbQuyetDinhDcCHdrRepository dcnbQuyetDinhDcCHdrRepository;
 
 
     public Page<DcnbBienBanLayMauHdrDTO> searchPage(CustomUserDetails currentUser, SearchDcnbBienBanLayMau req) throws Exception {
@@ -321,22 +322,26 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
         var dcnbBienBanLayMauHdr = dcnbBienBanLayMauHdrRepository.findById(objReq.getId());
         if (!dcnbBienBanLayMauHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
         var userInfo = userInfoRepository.findById(dcnbBienBanLayMauHdr.get().getNguoiPDuyet());
+        if (!userInfo.isPresent()) throw new Exception("Không tồn tại bản ghi");
+        Optional<DcnbQuyetDinhDcCHdr> dcnbQuyetDinhDcCHdr = dcnbQuyetDinhDcCHdrRepository.findById(dcnbBienBanLayMauHdr.get().getQdccId());
+        if (!dcnbQuyetDinhDcCHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
         ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        var dcnbBangKeCanHangPreview = setDataToPreview(dcnbBienBanLayMauHdr, userInfo);
+        var dcnbBangKeCanHangPreview = setDataToPreview(dcnbBienBanLayMauHdr, userInfo, dcnbQuyetDinhDcCHdr);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBangKeCanHangPreview);
     }
 
     private DcnbBienBanLayMauHdrPreview setDataToPreview(Optional<DcnbBienBanLayMauHdr> dcnbBienBanLayMauHdr,
-                                                         Optional<UserInfo> userInfo) {
+                                                         Optional<UserInfo> userInfo,
+                                                         Optional<DcnbQuyetDinhDcCHdr> dcnbQuyetDinhDcCHdr) {
         return DcnbBienBanLayMauHdrPreview.builder()
                 .donViCungCapHang(dcnbBienBanLayMauHdr.get().getTenDvi())
                 .quyChuanTieuChuan("")
                 .chungLoaiHangHoa(dcnbBienBanLayMauHdr.get().getTenCloaiVthh())
                 .ngayLayMau(dcnbBienBanLayMauHdr.get().getNgayLayMau().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .tenDvi(dcnbBienBanLayMauHdr.get().getTenDvi())
-                .tenDviCha("")
+                .tenDviCha(dcnbBienBanLayMauHdr.get().getTenDviCha())
                 .soLuongMau(dcnbBienBanLayMauHdr.get().getSoLuongMau())
                 .donViTinh(dcnbBienBanLayMauHdr.get().getDonViTinh())
                 .pPLayMau(dcnbBienBanLayMauHdr.get().getPPLayMau())
@@ -345,6 +350,10 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
                 .truongBpKtbq(dcnbBienBanLayMauHdr.get().getKtvBaoQuan())
                 .lanhDaoChiCuc(userInfo.get().getFullName())
                 .dcnbBienBanLayMauDtl(dcnbBienBanLayMauDtlToDto(dcnbBienBanLayMauHdr.get().getDcnbBienBanLayMauDtl()))
+                .soQdinhDcc(dcnbBienBanLayMauHdr.get().getSoQdinhDcc())
+                .ngayKyQDCC(dcnbQuyetDinhDcCHdr.get().getNgayKyQdinh().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .soBbLayMau(dcnbBienBanLayMauHdr.get().getSoBbLayMau())
+                .tenThuKho(dcnbBienBanLayMauHdr.get().getTenThuKho())
                 .build();
     }
 
@@ -353,7 +362,7 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
         int stt = 1;
         for (var res : dcnbBienBanLayMauDtl) {
             var dcnbBienBanLayMauDtlDto = DcnbBienBanLayMauDtlDto.builder()
-                    .stt(stt)
+                    .stt(stt++)
                     .loaiDaiDien(res.getLoaiDaiDien())
                     .tenDaiDien(res.getTenDaiDien())
                     .build();

@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuXuatKhoDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 
 import javax.validation.Valid;
@@ -90,8 +91,10 @@ public class DcnbPhieuXuatKhoHdrReq {
     private Long nguoiPduyetId;
     private String lyDoTuChoi;
     private String type;
+    private BigDecimal duToanKpDc;
 
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
     @Valid
     private List<DcnbPhieuXuatKhoDtl> dcnbPhieuXuatKhoDtl = new ArrayList<>();
+    private ReportTemplateRequest reportTemplateRequest;
 }
