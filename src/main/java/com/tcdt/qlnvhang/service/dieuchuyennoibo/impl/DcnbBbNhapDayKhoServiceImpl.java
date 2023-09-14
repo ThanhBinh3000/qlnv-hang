@@ -40,7 +40,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -329,9 +328,12 @@ public class DcnbBbNhapDayKhoServiceImpl extends BaseServiceImpl implements Dcnb
         var dcnbBbNhapDayKhoHdr = hdrRepository.findById(objReq.getId());
         if (!dcnbBbNhapDayKhoHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
         var dcnbBbNhapDayKhoDtls = dtlRepository.findByHdrId(dcnbBbNhapDayKhoHdr.get().getId());
+        if (dcnbBbNhapDayKhoDtls.size() == 0) throw new Exception("Không tồn tại bản ghi");
         var dcnbBbNhapDayKhoDtlDtos = convertDcnbBbNhapDayKhoDtlToDto(dcnbBbNhapDayKhoDtls);
         var userInfo = userInfoRepository.findById(dcnbBbNhapDayKhoHdr.get().getNguoiPDuyet());
+        if (!userInfo.isPresent()) throw new Exception("Không tồn tại bản ghi");
         var ktDiemKho = ktDiemKhoRepository.findByMaDiemkho(dcnbBbNhapDayKhoHdr.get().getMaDiemKho());
+        if (ktDiemKho == null) throw new Exception("Không tồn tại bản ghi");
         ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
@@ -342,10 +344,11 @@ public class DcnbBbNhapDayKhoServiceImpl extends BaseServiceImpl implements Dcnb
     private List<DcnbBbNhapDayKhoDtlDto> convertDcnbBbNhapDayKhoDtlToDto(List<DcnbBbNhapDayKhoDtl> dcnbBbNhapDayKhoDtls) {
         List<DcnbBbNhapDayKhoDtlDto> dcnbBbNhapDayKhoDtlDtos = new ArrayList<>();
         for (DcnbBbNhapDayKhoDtl dcnbBbNhapDayKhoDtl : dcnbBbNhapDayKhoDtls) {
-            var dcnbBbNhapDayKhoDtlDto = new DcnbBbNhapDayKhoDtlDto();
-            dcnbBbNhapDayKhoDtlDto.setDonGia(BigDecimal.ZERO);
-            dcnbBbNhapDayKhoDtlDto.setSoLuong(dcnbBbNhapDayKhoDtl.getSoLuong());
-            dcnbBbNhapDayKhoDtlDto.setThanhTien(dcnbBbNhapDayKhoDtl.getSoLuong().multiply(BigDecimal.ZERO));
+            var dcnbBbNhapDayKhoDtlDto = DcnbBbNhapDayKhoDtlDto.builder()
+                    .donGia(BigDecimal.ZERO)
+                    .soLuong(dcnbBbNhapDayKhoDtl.getSoLuong())
+                    .thanhTien(dcnbBbNhapDayKhoDtl.getSoLuong().multiply(BigDecimal.ZERO))
+                    .build();
             dcnbBbNhapDayKhoDtlDtos.add(dcnbBbNhapDayKhoDtlDto);
         }
         return dcnbBbNhapDayKhoDtlDtos;

@@ -9,17 +9,22 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanHaoDoiHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanHaoDoi;
+import com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang.DcnbBienBanHaoDoiHdrPreview;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanHaoDoiDtlDto;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanHaoDoiHdrDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanHaoDoiDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanHaoDoiHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanHaoDoiTtDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanTinhKhoHdr;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
-import com.tcdt.qlnvhang.util.UserUtils;
+import lombok.var;
 import org.hibernate.Hibernate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +37,10 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -65,6 +73,8 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
     private FileDinhKemService fileDinhKemService;
     @Autowired
     private FileDinhKemRepository fileDinhKemRepository;
+    @Autowired
+    private DcnbBienBanTinhKhoHdrRepository dcnbBienBanTinhKhoHdrRepository;
 
 
     public Page<DcnbBienBanHaoDoiHdrDTO> searchPage(CustomUserDetails currentUser, SearchDcnbBienBanHaoDoi req) throws Exception {
@@ -323,5 +333,84 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
             throw new Exception("Không tìm thấy dữ liệu");
         }
         return optional;
+    }
+
+    public ReportTemplateResponse preview(DcnbBienBanHaoDoiHdrReq objReq) throws Exception {
+        var dcnbBienBanHaoDoiHdr = dcnbBienBanHaoDoiHdrRepository.findById(objReq.getId());
+        if (!dcnbBienBanHaoDoiHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
+        var dcnbBienBanTinhKhoHdr = dcnbBienBanTinhKhoHdrRepository.findFirstBySoBbTinhKho(dcnbBienBanHaoDoiHdr.get().getSoBbTinhKho());
+        if (!dcnbBienBanTinhKhoHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        var dcnbBienBanHaoDoiHdrPreview = setDataToPreview(dcnbBienBanHaoDoiHdr, dcnbBienBanTinhKhoHdr);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBienBanHaoDoiHdrPreview);
+    }
+
+    private DcnbBienBanHaoDoiHdrPreview setDataToPreview(Optional<DcnbBienBanHaoDoiHdr> dcnbBienBanHaoDoiHdr,
+                                                         Optional<DcnbBienBanTinhKhoHdr> dcnbBienBanTinhKhoHdr) {
+        return DcnbBienBanHaoDoiHdrPreview.builder()
+                .tenDvi(dcnbBienBanHaoDoiHdr.get().getTenDvi())
+                .maQhns(dcnbBienBanHaoDoiHdr.get().getMaQhns())
+                .soBienBan(dcnbBienBanHaoDoiHdr.get().getSoBienBan())
+                .tenCloaiVthh(dcnbBienBanHaoDoiHdr.get().getTenCloaiVthh())
+                .tenLoaiVthh(dcnbBienBanHaoDoiHdr.get().getTenLoaiVthh())
+                .tenNganKho(dcnbBienBanHaoDoiHdr.get().getTenNganKho())
+                .tenLoKho(dcnbBienBanHaoDoiHdr.get().getTenLoKho())
+                .soBbTinhKho(dcnbBienBanHaoDoiHdr.get().getSoBbTinhKho())
+                .ngayLap(dcnbBienBanHaoDoiHdr.get().getNgayLap().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .ngayLapBienBanTinhKho(dcnbBienBanTinhKhoHdr.get().getNgayLap().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .chiCuc(dcnbBienBanHaoDoiHdr.get().getTenDvi())
+                .lanhDaoChiCuc(dcnbBienBanHaoDoiHdr.get().getLanhDaoChiCuc())
+                .keToan(dcnbBienBanHaoDoiHdr.get().getKeToan())
+                .ktvBaoQuan(dcnbBienBanHaoDoiHdr.get().getKtvBaoQuan())
+                .thuKho(dcnbBienBanHaoDoiHdr.get().getThuKho())
+                .tongSlXuatTheoQd(dcnbBienBanHaoDoiHdr.get().getTongSlXuatTheoQd())
+                .donViTinh(dcnbBienBanHaoDoiHdr.get().getDonViTinh())
+                .tongSlXuatTheoTt(dcnbBienBanHaoDoiHdr.get().getTongSlXuatTheoTt())
+                .ngayKetThucXuatQd(dcnbBienBanHaoDoiHdr.get().getNgayKetThucXuatQd().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .slHaoTt(dcnbBienBanHaoDoiHdr.get().getSlHaoTt())
+                .slHaoDuocThanhLy(dcnbBienBanHaoDoiHdr.get().getSlHaoTheoDinhMuc())
+                .slHaoVuotDm(dcnbBienBanHaoDoiHdr.get().getSlHaoVuotDm())
+                .tiLeHaoVuotDm(dcnbBienBanHaoDoiHdr.get().getTiLeHaoVuotDm())
+                .slHaoDuoiDm(dcnbBienBanHaoDoiHdr.get().getSlHaoTheoDinhMuc()
+                        .subtract(BigDecimal.valueOf(dcnbBienBanHaoDoiHdr.get().getSlHaoTt())))
+                .tiLeHaoDuoiDm((dcnbBienBanHaoDoiHdr.get().getSlHaoTheoDinhMuc()
+                        .divide(BigDecimal.valueOf(dcnbBienBanHaoDoiHdr.get().getTongSlXuatTheoQd())))
+                        .multiply(new BigDecimal(100)))
+                .nguyenNhan(dcnbBienBanHaoDoiHdr.get().getNguyenNhan())
+                .kienNghi(dcnbBienBanHaoDoiHdr.get().getKienNghi())
+                .dcnbBienBanHaoDoiDtlDto(dcnbBienBanHaoDoiDtlToDto(dcnbBienBanHaoDoiHdr))
+                .build();
+    }
+
+    private List<DcnbBienBanHaoDoiDtlDto> dcnbBienBanHaoDoiDtlToDto(Optional<DcnbBienBanHaoDoiHdr> dcnbBienBanHaoDoiHdr) {
+        List<DcnbBienBanHaoDoiDtlDto> dcnbBienBanHaoDoiDtlDtos = new ArrayList<>();
+        int stt = 1;
+        for (var resHaoHut : dcnbBienBanHaoDoiHdr.get().getThongTinHaoHut()) {
+            for (var resBangKe : dcnbBienBanHaoDoiHdr.get().getDanhSachBangKe()) {
+                var dcnbBienBanHaoDoiDtlDto = DcnbBienBanHaoDoiDtlDto.builder()
+                        .stt(stt++)
+                        .thoiGianBaoQuan(thoiGianBaoQuan(resHaoHut, resBangKe))
+                        .slBaoQuan(resHaoHut.getSlBaoQuan())
+                        .dinhMucHaoHut(resHaoHut.getDinhMucHaoHut())
+                        .slHao(resHaoHut.getSlHao())
+                        .soLuongHaoTheoDinhMuc(BigDecimal.valueOf(resHaoHut.getSlBaoQuan()).multiply(BigDecimal.valueOf(resHaoHut.getDinhMucHaoHut())))
+                        .build();
+                dcnbBienBanHaoDoiDtlDtos.add(dcnbBienBanHaoDoiDtlDto);
+            }
+        }
+        return dcnbBienBanHaoDoiDtlDtos;
+    }
+
+    private String thoiGianBaoQuan(DcnbBienBanHaoDoiDtl thongTinHaoHut, DcnbBienBanHaoDoiTtDtl danhSachBangKe) {
+        StringBuilder thoiGianBaoQuan = new StringBuilder();
+        int thangKetThucNhap = thongTinHaoHut.getNgayKetThuc().getMonth().getValue();
+        int namKetThucNhap = thongTinHaoHut.getNgayKetThuc().getYear();
+        int thangKetThucXuat = danhSachBangKe.getNgayXuatKho().getMonth().getValue();
+        int namKetThucXuat = danhSachBangKe.getNgayXuatKho().getYear();
+        thoiGianBaoQuan.append(thangKetThucNhap).append("/").append(namKetThucNhap).append("-")
+                .append(thangKetThucXuat).append("/").append(namKetThucXuat);
+        return thoiGianBaoQuan.toString();
     }
 }

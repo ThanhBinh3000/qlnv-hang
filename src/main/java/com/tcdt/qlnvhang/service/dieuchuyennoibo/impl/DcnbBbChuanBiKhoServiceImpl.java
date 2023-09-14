@@ -308,6 +308,7 @@ public class DcnbBbChuanBiKhoServiceImpl extends BaseServiceImpl implements Dcnb
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
         var dcnbBbChuanBiKhoDtl = dtlRepository.findByHdrId(dcnbBbChuanBiKhoHdr.get().getId());
+        if (dcnbBbChuanBiKhoDtl.size() == 0) throw new Exception("Không tồn tại bản ghi");
         var dcnbBbChuanBiKhoHdrPreview = setDataToPreview(dcnbBbChuanBiKhoHdr, dcnbBbChuanBiKhoDtl);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBbChuanBiKhoHdrPreview);
     }

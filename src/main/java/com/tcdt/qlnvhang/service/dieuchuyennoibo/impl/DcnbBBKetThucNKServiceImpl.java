@@ -18,7 +18,6 @@ import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBBKetThucNKService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -40,7 +39,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -297,6 +295,7 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
         var dcnbBBKetThucNKHdr = hdrRepository.findById(objReq.getId());
         if (!dcnbBBKetThucNKHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
         var dcnbBBKetThucNKDtlList = dtlRepository.findByHdrId(dcnbBBKetThucNKHdr.get().getId());
+        if (dcnbBBKetThucNKDtlList.size() == 0) throw new Exception("Không tồn tại bản ghi");
         var dcnbBBKetThucNKDtlDtos = dcnbBBKetThucNKDtlToDto(dcnbBBKetThucNKDtlList);
         ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
@@ -308,10 +307,11 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
     private List<DcnbBBKetThucNKDtlDto> dcnbBBKetThucNKDtlToDto(List<DcnbBBKetThucNKDtl> dcnbBBKetThucNKDtlList) {
         List<DcnbBBKetThucNKDtlDto> dcnbBBKetThucNKDtlDtos = new ArrayList<>();
         for (DcnbBBKetThucNKDtl dcnbBBKetThucNKDtl : dcnbBBKetThucNKDtlList) {
-            DcnbBBKetThucNKDtlDto dcnbBBKetThucNKDtlDto = new DcnbBBKetThucNKDtlDto();
-            dcnbBBKetThucNKDtlDto.setDonGia(BigDecimal.ZERO);
-            dcnbBBKetThucNKDtlDto.setSoLuong(dcnbBBKetThucNKDtl.getSoLuong());
-            dcnbBBKetThucNKDtlDto.setThanhTien(dcnbBBKetThucNKDtl.getSoLuong().multiply(BigDecimal.ZERO));
+            var dcnbBBKetThucNKDtlDto = DcnbBBKetThucNKDtlDto.builder()
+                    .donGia(BigDecimal.ZERO)
+                    .soLuong(dcnbBBKetThucNKDtl.getSoLuong())
+                    .thanhTien(dcnbBBKetThucNKDtl.getSoLuong().multiply(BigDecimal.ZERO))
+                    .build();
             dcnbBBKetThucNKDtlDtos.add(dcnbBBKetThucNKDtlDto);
         }
         return dcnbBBKetThucNKDtlDtos;

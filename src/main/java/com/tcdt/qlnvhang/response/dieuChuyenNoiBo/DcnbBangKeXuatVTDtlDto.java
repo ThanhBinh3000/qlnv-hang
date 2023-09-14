@@ -5,11 +5,10 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 
-
 @Data
 @Builder
-public class DcnbBBKetThucNKDtlDto {
-    private BigDecimal donGia;
-    private BigDecimal thanhTien;
+public class DcnbBangKeXuatVTDtlDto {
+    private int stt;
+    private String soSerial;
     private BigDecimal soLuong;
 }

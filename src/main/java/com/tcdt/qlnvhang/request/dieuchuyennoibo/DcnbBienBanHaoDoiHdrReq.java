@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanHaoDoiDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanHaoDoiTtDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -124,4 +125,5 @@ public class DcnbBienBanHaoDoiHdrReq {
     private List<DcnbBienBanHaoDoiDtl> thongTinHaoHut = new ArrayList<>();
 
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
+    private ReportTemplateRequest reportTemplateRequest;
 }

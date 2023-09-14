@@ -460,5 +460,4 @@ public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBN
         }
         return DcnbBBNTBQDtlThucHienDtos;
     }
-
 }

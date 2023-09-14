@@ -9,15 +9,19 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBienBanTinhKhoHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanTinhKho;
+import com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang.DcnbBienBanTinhKhoHdrPreview;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanTinhKhoHdrDTO;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanTinhKhoDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanTinhKhoHdr;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import lombok.var;
 import org.hibernate.Hibernate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +34,10 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -299,5 +306,53 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
         req.setTypeQd(Contains.DIEU_CHUYEN);
         List<DcnbBienBanTinhKhoHdrDTO> searchDto = dcnbBienBanTinhKhoHdrRepository.searchList(req);
         return searchDto;
+    }
+
+    public ReportTemplateResponse preview(DcnbBienBanTinhKhoHdrReq objReq) throws Exception {
+        var DcnbBienBanTinhKhoHdr = dcnbBienBanTinhKhoHdrRepository.findById(objReq.getId());
+        if (!DcnbBienBanTinhKhoHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        var dcnbBienBanTinhKhoHdrPreview = setDataToPreview(DcnbBienBanTinhKhoHdr);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBienBanTinhKhoHdrPreview);
+    }
+
+    private DcnbBienBanTinhKhoHdrPreview setDataToPreview(Optional<DcnbBienBanTinhKhoHdr> dcnbBienBanTinhKhoHdr) {
+        BigDecimal thua = BigDecimal.ZERO;
+        BigDecimal thieu = BigDecimal.ZERO;
+        if (dcnbBienBanTinhKhoHdr.get().getChenhLechSlConLai() != null) {
+            if (dcnbBienBanTinhKhoHdr.get().getChenhLechSlConLai().compareTo(BigDecimal.ZERO) < 0) {
+                thieu = thieu.add(dcnbBienBanTinhKhoHdr.get().getChenhLechSlConLai());
+            } else if (dcnbBienBanTinhKhoHdr.get().getChenhLechSlConLai().compareTo(BigDecimal.ZERO) == 0) {
+                thieu = thieu.add(dcnbBienBanTinhKhoHdr.get().getChenhLechSlConLai());
+                thua = thua.add(dcnbBienBanTinhKhoHdr.get().getChenhLechSlConLai());
+            } else {
+                thua = thua.add(dcnbBienBanTinhKhoHdr.get().getChenhLechSlConLai());
+            }
+        }
+        return DcnbBienBanTinhKhoHdrPreview.builder()
+                .tenDvi(dcnbBienBanTinhKhoHdr.get().getTenDvi())
+                .soBbTinhKho(dcnbBienBanTinhKhoHdr.get().getSoBbTinhKho())
+                .tenCloaiVthh(dcnbBienBanTinhKhoHdr.get().getTenCloaiVthh())
+                .tenLoaiVthh(dcnbBienBanTinhKhoHdr.get().getTenLoaiVthh())
+                .tenNganKho(dcnbBienBanTinhKhoHdr.get().getTenNganKho())
+                .tenLoKho(dcnbBienBanTinhKhoHdr.get().getTenLoKho())
+                .maQhns(dcnbBienBanTinhKhoHdr.get().getMaQhns())
+                .ngayLap(dcnbBienBanTinhKhoHdr.get().getNgayLap().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .chiCuc(dcnbBienBanTinhKhoHdr.get().getTenDvi())
+                .lanhDaoChiCuc(dcnbBienBanTinhKhoHdr.get().getLanhDaoChiCuc())
+                .keToan(dcnbBienBanTinhKhoHdr.get().getKeToan())
+                .ktvBaoQuan(dcnbBienBanTinhKhoHdr.get().getKtvBaoQuan())
+                .thuKho(dcnbBienBanTinhKhoHdr.get().getThuKho())
+                .tongSlXuatTheoQd(dcnbBienBanTinhKhoHdr.get().getTongSlXuatTheoQd())
+                .tongSlXuatTheoTt(dcnbBienBanTinhKhoHdr.get().getTongSlXuatTheoTt())
+                .slConLaiTheoSs(dcnbBienBanTinhKhoHdr.get().getSlConLaiTheoSs())
+                .slConLaiTheoTt(dcnbBienBanTinhKhoHdr.get().getSlConLaiTheoTt())
+                .thua(thua)
+                .thieu(thieu)
+                .nguyeNhan(dcnbBienBanTinhKhoHdr.get().getNguyeNhan())
+                .kienNghi(dcnbBienBanTinhKhoHdr.get().getKienNghi())
+                .build();
     }
 }
