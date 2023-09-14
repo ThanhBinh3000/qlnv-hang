@@ -231,6 +231,9 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
             case Contains.CHODUYET_TP + Contains.TU_CHOI_TP:
                 optional.get().setNguoiDuyetTp(currentUser.getUser().getId());
                 optional.get().setNgayDuyetTp(LocalDate.now());
+                optional.get().setTpNguoiKt(currentUser.getUser().getFullName());
+                optional.get().setTpNguoiKtId(currentUser.getUser().getId());
+                optional.get().setNgayDuyetTp(LocalDate.now());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_LDC + Contains.TU_CHOI_LDC:
@@ -239,6 +242,8 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_TP + Contains.CHODUYET_LDC:
+                optional.get().setTpNguoiKt(currentUser.getUser().getFullName());
+                optional.get().setTpNguoiKtId(currentUser.getUser().getId());
                 optional.get().setNguoiDuyetTp(currentUser.getUser().getId());
                 optional.get().setNgayDuyetTp(LocalDate.now());
                 break;
