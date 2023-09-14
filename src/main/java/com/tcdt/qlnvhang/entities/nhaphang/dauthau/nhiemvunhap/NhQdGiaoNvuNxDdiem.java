@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoKyThuat;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangke.NhBangKeVt;
@@ -103,4 +104,6 @@ public class NhQdGiaoNvuNxDdiem implements Serializable {
 
 	@Transient
 	List<NhBangKeVt> listBangKeVt;
+	@Transient
+	List<HhBbNghiemthuKlstHdr> listBbNtbqld;
 }

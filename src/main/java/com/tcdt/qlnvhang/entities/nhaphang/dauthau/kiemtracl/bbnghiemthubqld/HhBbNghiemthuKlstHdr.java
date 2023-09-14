@@ -64,6 +64,7 @@ public class HhBbNghiemthuKlstHdr extends TrangThaiBaseEntity implements Seriali
 	Double tichLuong;
 	String pthucBquan;
 	String hthucBquan;
+	String lhinhBquan;
 	Double dinhMuc;
 	String ketLuan;
 	String trangThai;
