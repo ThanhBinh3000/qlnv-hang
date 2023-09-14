@@ -196,6 +196,8 @@ public class DcnbPhieuKnChatLuongHdr extends BaseEntity implements Serializable,
 
     @Column(name = "LOAI_DC")
     private String loaiDc;
+    @Column(name = "KE_HOACH_DC_DTL_ID")
+    private Long keHoachDcDtlId;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")

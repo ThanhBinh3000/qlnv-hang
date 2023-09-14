@@ -64,8 +64,8 @@ public class DcnbBBNTBQHdr extends BaseEntity implements Serializable, Cloneable
     private String keToan;
     @Column(name = "LD_CHI_CUC")
     private String ldChiCuc;
-    @Column(name = "ID_KE_HOACH_DTL")
-    private Long idKeHoachDtl;
+    @Column(name = "KE_HOACH_DC_DTL_ID")
+    private Long keHoachDcDtlId;
     @Column(name = "MA_DIEM_KHO")
     private String maDiemKho;
     @Column(name = "TEN_DIEM_KHO")

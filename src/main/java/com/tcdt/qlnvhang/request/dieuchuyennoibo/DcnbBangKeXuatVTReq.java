@@ -92,4 +92,6 @@ public class DcnbBangKeXuatVTReq extends BaseRequest {
 
     private LocalDate tuNgayXuatKho;
     private LocalDate denNgayXuatKho;
+    @NotNull
+    private Long keHoachDcDtlId;
 }

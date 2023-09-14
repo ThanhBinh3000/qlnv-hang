@@ -98,4 +98,6 @@ public class DcnbBangKeNhapVTReq extends BaseRequest {
     private Boolean isVatTu = false;
     private List<String> dsLoaiHang = new ArrayList<>();
     private ReportTemplateRequest reportTemplateRequest;
+    @NotNull
+    private Long keHoachDcDtlId;
 }

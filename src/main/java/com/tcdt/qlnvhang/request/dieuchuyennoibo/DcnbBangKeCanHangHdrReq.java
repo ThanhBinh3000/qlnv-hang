@@ -120,4 +120,6 @@ public class DcnbBangKeCanHangHdrReq {
     private List<DcnbBangKeCanHangDtl> dcnbBangKeCanHangDtl = new ArrayList<>();
 
     private ReportTemplateRequest reportTemplateRequest;
+    @NotNull
+    private Long keHoachDcDtlId;
 }

@@ -137,6 +137,8 @@ public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Clon
     private String soBbLmBg;
     @Column(name = "BB_LM_BG_ID")
     private Long bbLmBgId;
+    @Column(name = "KE_HOACH_DC_DTL_ID")
+    private Long keHoachDcDtlId;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
