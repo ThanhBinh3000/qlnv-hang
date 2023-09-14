@@ -45,7 +45,8 @@ public class DcnbPhieuKnChatLuongHdrDTO {
     private Long bbNhapDayKhoId;
     private String soNhapDayKho;
     private LocalDate ngayNhapDayKho;
-    public DcnbPhieuKnChatLuongHdrDTO(Long id, Long bBLayMauId, Long qDinhDccId, String soQdinh, LocalDate ngayHieuLucQd, Integer nam, LocalDate thoiHanDieuChuyen, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, Boolean thayDoiThuKho, String soPhieuKnChatLuong, LocalDate ngayKiemNghiem, String soBBLayMau, LocalDate ngaylayMau, String soBBTinhKho, LocalDate ngayXuatDocKho, String bbHaoDoi, String trangThai, String tenTrangThai, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String maNhaKho, String tenNhaKho, String thuKho, String maNganKho, String tenNganKho, LocalDate ngayHieuLuc, String donViTinh, Long thuKhoId, Long thuKhoNhanId, String thuKhoNhan,Long bbNhapDayKhoId,String soNhapDayKho,LocalDate ngayNhapDayKho) {
+    private LocalDate ngayLapBbTinhKho;
+    public DcnbPhieuKnChatLuongHdrDTO(Long id, Long bBLayMauId, Long qDinhDccId, String soQdinh, LocalDate ngayHieuLucQd, Integer nam, LocalDate thoiHanDieuChuyen, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, Boolean thayDoiThuKho, String soPhieuKnChatLuong, LocalDate ngayKiemNghiem, String soBBLayMau, LocalDate ngaylayMau, String soBBTinhKho, LocalDate ngayXuatDocKho, String bbHaoDoi, String trangThai, String tenTrangThai, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String maNhaKho, String tenNhaKho, String thuKho, String maNganKho, String tenNganKho, LocalDate ngayHieuLuc, String donViTinh, Long thuKhoId, Long thuKhoNhanId, String thuKhoNhan,Long bbNhapDayKhoId,String soNhapDayKho,LocalDate ngayNhapDayKho,LocalDate ngayLapBbTinhKho) {
         this.id = id;
         this.bBLayMauId = bBLayMauId;
         this.qDinhDccId = qDinhDccId;
@@ -84,9 +85,10 @@ public class DcnbPhieuKnChatLuongHdrDTO {
         this.bbNhapDayKhoId = bbNhapDayKhoId;
         this.soNhapDayKho = soNhapDayKho;
         this.ngayNhapDayKho = ngayNhapDayKho;
+        this.ngayLapBbTinhKho = ngayLapBbTinhKho;
     }
 
-    public DcnbPhieuKnChatLuongHdrDTO(Long id, Long bBLayMauId, Long qDinhDccId, String soQdinh, LocalDate ngayHieuLucQd, Integer nam, LocalDate thoiHanDieuChuyen, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, Boolean thayDoiThuKho, String soPhieuKnChatLuong, LocalDate ngayKiemNghiem, String soBBLayMau, LocalDate ngaylayMau, String soBBTinhKho, LocalDate ngayXuatDocKho, String bbHaoDoi, String trangThai, String tenTrangThai, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String maNhaKho, String tenNhaKho, String thuKho, String maNganKho, String tenNganKho, LocalDate ngayHieuLuc, String donViTinh, Long thuKhoId,Long bbNhapDayKhoId,String soNhapDayKho,LocalDate ngayNhapDayKho) {
+    public DcnbPhieuKnChatLuongHdrDTO(Long id, Long bBLayMauId, Long qDinhDccId, String soQdinh, LocalDate ngayHieuLucQd, Integer nam, LocalDate thoiHanDieuChuyen, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, Boolean thayDoiThuKho, String soPhieuKnChatLuong, LocalDate ngayKiemNghiem, String soBBLayMau, LocalDate ngaylayMau, String soBBTinhKho, LocalDate ngayXuatDocKho, String bbHaoDoi, String trangThai, String tenTrangThai, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String maNhaKho, String tenNhaKho, String thuKho, String maNganKho, String tenNganKho, LocalDate ngayHieuLuc, String donViTinh, Long thuKhoId,Long bbNhapDayKhoId,String soNhapDayKho,LocalDate ngayNhapDayKho,LocalDate ngayLapBbTinhKho) {
         this.id = id;
         this.bBLayMauId = bBLayMauId;
         this.qDinhDccId = qDinhDccId;
@@ -123,5 +125,6 @@ public class DcnbPhieuKnChatLuongHdrDTO {
         this.bbNhapDayKhoId = bbNhapDayKhoId;
         this.soNhapDayKho = soNhapDayKho;
         this.ngayNhapDayKho = ngayNhapDayKho;
+        this.ngayLapBbTinhKho = ngayLapBbTinhKho;
     }
 }

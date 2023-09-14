@@ -170,6 +170,9 @@ public class DcnbPhieuKnChatLuongHdr extends BaseEntity implements Serializable,
     @Column(name = "SO_BB_TINH_KHO")
     private String soBbTinhKho;
 
+    @Column(name = "NGAY_LAP_BB_TINH_KHO")
+    private LocalDate ngayLapBbTinhKho;
+
     @Column(name = "NGAY_XUAT_DOC_KHO")
     private LocalDate ngayXuatDocKho;
 
