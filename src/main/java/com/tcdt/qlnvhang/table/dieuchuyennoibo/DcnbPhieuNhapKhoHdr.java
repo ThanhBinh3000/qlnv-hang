@@ -44,7 +44,8 @@ public class DcnbPhieuNhapKhoHdr extends BaseEntity implements Serializable, Clo
     private String soQdDcCuc;
     private Long qdDcCucId;
     private LocalDate ngayQdDcCuc;
-    private Long idKeHoachDtl;
+    @Column(name = "KE_HOACH_DC_DTL_ID")
+    private Long keHoachDcDtlId;
     private String maDiemKho;
     private String maNhaKho;
     private String maNganKho;

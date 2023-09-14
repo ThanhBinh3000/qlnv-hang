@@ -131,4 +131,7 @@ public class DcnbBienBanHaoDoiHdrReq {
 
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
     private ReportTemplateRequest reportTemplateRequest;
+
+    @NotNull
+    private Long keHoachDcDtlId;
 }

@@ -40,12 +40,11 @@ public interface DcnbBbChuanBiKhoHdrRepository extends JpaRepository<DcnbBbChuan
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbChuanBiKhoHdrDTO(" +
             "bbcb.id, qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,qdc.nam,khdcd.thoiGianDkDc, bbcb.soBban, bbcb.ngayLap, pnk.id, pnk.soPhieuNhapKho, bbktnk.id," +
             "bbktnk.soBb,bbktnk.ngayKetThucNhap,bbcb.bbGiaoNhanId,bbcb.soBbGiaoNhan,khdcd.maNhaKhoNhan, khdcd.tenNhaKhoNhan, khdcd.maDiemKhoNhan, khdcd.tenDiemKhoNhan, khdcd.maLoKhoNhan, " +
-            "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.soLuongDc,bbcb.trangThai,khdcd.donViTinh,khdcd.soLuongDc) FROM DcnbQuyetDinhDcCHdr qdc " +
+            "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.soLuongDc,bbcb.trangThai,khdcd.donViTinh,khdcd.soLuongDc,khdcd.id) FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbBbChuanBiKhoHdr bbcb On bbcb.qdDcCucId = qdc.id " +
-            "and ((khdcd.maLoKhoNhan is not null and  khdcd.maLoKhoNhan = bbcb.maLoKho and khdcd.maNganKhoNhan = bbcb.maNganKho ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = bbcb.maNganKho ))" +
+            "LEFT JOIN DcnbBbChuanBiKhoHdr bbcb On bbcb.keHoachDcDtlId = khdcd.id " +
             "LEFT JOIN DcnbPhieuNhapKhoHdr pnk On pnk.id = bbcb.idPhieuNhapKho " +
             "and ((khdcd.maLoKhoNhan is not null and khdcd.maLoKhoNhan = pnk.maLoKho and khdcd.maNganKhoNhan = pnk.maNganKho ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = pnk.maNganKho ))" +
             "LEFT JOIN DcnbBBKetThucNKHdr bbktnk On bbktnk.qdinhDccId = qdc.id  " +
@@ -69,7 +68,7 @@ public interface DcnbBbChuanBiKhoHdrRepository extends JpaRepository<DcnbBbChuan
             "AND (:#{#param.denNgayKtnk}  IS NULL OR pnk.ngayLap <= :#{#param.denNgayKtnk})) " +
             "GROUP BY bbcb.id, qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,qdc.nam,khdcd.thoiGianDkDc, bbcb.soBban, bbcb.ngayLap, pnk.id, pnk.soPhieuNhapKho, bbktnk.id," +
             "bbktnk.soBb,bbktnk.ngayKetThucNhap,bbcb.bbGiaoNhanId,bbcb.soBbGiaoNhan,khdcd.maNhaKhoNhan, khdcd.tenNhaKhoNhan, khdcd.maDiemKhoNhan, khdcd.tenDiemKhoNhan, khdcd.maLoKhoNhan, " +
-            "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.soLuongDc,bbcb.trangThai,khdcd.donViTinh,khdcd.soLuongDc "+
+            "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.soLuongDc,bbcb.trangThai,khdcd.donViTinh,khdcd.soLuongDc,khdcd.id "+
             "ORDER BY qdc.soQdinh DESC")
     Page<DcnbBbChuanBiKhoHdrDTO> searchPage(@Param("param") DcnbBbChuanBiKhoHdrReq req, Pageable pageable);
 

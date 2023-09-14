@@ -202,7 +202,8 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
     private String soPhieuKnChatLuong;
     @Column(name = "PHIEU_KN_CHAT_LUONG_HDR_ID")
     private Long phieuKnChatLuongHdrId;
-
+    @Column(name = "KE_HOACH_DC_DTL_ID")
+    private Long keHoachDcDtlId;
     @Transient
     private List<FileDinhKem> fileBbTinhKhoDaKy = new ArrayList<>();
 

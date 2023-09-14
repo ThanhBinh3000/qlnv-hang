@@ -129,4 +129,7 @@ public class DcnbBienBanTinhKhoHdrReq {
     @Valid
     private List<DcnbBienBanTinhKhoDtl> dcnbBienBanTinhKhoDtl = new ArrayList<>();
     private ReportTemplateRequest reportTemplateRequest;
+
+    @NotNull
+    private Long keHoachDcDtlId;
 }

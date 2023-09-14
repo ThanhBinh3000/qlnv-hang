@@ -115,6 +115,8 @@ public class DcnbBangKeNhapVTHdr extends BaseEntity implements Serializable, Clo
     private LocalDate ngayPDuyet;
     @Column(name = "TYPE")
     private String type;
+    @Column(name = "KE_HOACH_DC_DTL_ID")
+    private Long keHoachDcDtlId;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
     private List<DcnbBangKeNhapVTDtl> dcnbBangKeNhapVTDtl = new ArrayList<>();

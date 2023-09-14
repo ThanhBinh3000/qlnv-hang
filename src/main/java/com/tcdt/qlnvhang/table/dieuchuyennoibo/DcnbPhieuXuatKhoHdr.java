@@ -78,7 +78,7 @@ public class DcnbPhieuXuatKhoHdr extends BaseEntity implements Serializable, Clo
     private BigDecimal thanhTien; // tổng kinh phí
     private String thanhTienBc;
     private String ghiChu;
-    @Access(value=AccessType.PROPERTY)
+    @Access(value = AccessType.PROPERTY)
     private String trangThai;
     private LocalDate ngayGduyet;
     private Long nguoiGduyetId;
@@ -86,6 +86,8 @@ public class DcnbPhieuXuatKhoHdr extends BaseEntity implements Serializable, Clo
     private Long nguoiPduyetId;
     private String lyDoTuChoi;
     private String type;
+    @Column(name = "KE_HOACH_DC_DTL_ID")
+    private Long keHoachDcDtlId;
     @Transient
     private String maDviCha;
 
@@ -97,10 +99,12 @@ public class DcnbPhieuXuatKhoHdr extends BaseEntity implements Serializable, Clo
     private List<DcnbPhieuXuatKhoDtl> dcnbPhieuXuatKhoDtl = new ArrayList<>();
     @Transient
     private String tenTrangThai;
+
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
         this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
     }
+
     public void setMaDvi(String maDvi) {
         this.maDvi = maDvi;
         // get đơn vị cấp cha

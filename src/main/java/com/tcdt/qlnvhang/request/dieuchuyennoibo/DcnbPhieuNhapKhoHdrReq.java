@@ -46,7 +46,8 @@ public class DcnbPhieuNhapKhoHdrReq extends BaseRequest {
     private Long qdDcCucId;
     @NotNull
     private LocalDate ngayQdDcCuc;
-    private Long idKeHoachDtl;
+    @NotNull
+    private Long keHoachDcDtlId;
     @NotNull
     private String maDiemKho;
     @NotNull

@@ -200,7 +200,8 @@ public class DcnbBienBanLayMauHdr extends BaseEntity implements Serializable, Cl
     private String soBbKetThucNk;
     @Column(name = "NGAY_BB_KET_THUC_NK")
     private LocalDate ngayKetThucNk;
-
+    @Column(name = "KE_HOACH_DC_DTL_ID")
+    private Long keHoachDcDtlId;
     @Transient
     private List<FileDinhKem> canCu = new ArrayList<>();
 

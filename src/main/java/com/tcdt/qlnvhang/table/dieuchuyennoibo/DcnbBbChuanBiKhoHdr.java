@@ -93,6 +93,8 @@ public class DcnbBbChuanBiKhoHdr extends BaseEntity implements Serializable, Clo
     private Long nguoiPDuyet;
     @Column(name = "NGAY_PDUYET")
     private LocalDate ngayPDuyet;
+    @Column(name = "KE_HOACH_DC_DTL_ID")
+    private Long keHoachDcDtlId;
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 

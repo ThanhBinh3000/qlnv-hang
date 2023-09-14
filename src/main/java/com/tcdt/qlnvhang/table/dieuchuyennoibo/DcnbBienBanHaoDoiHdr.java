@@ -193,6 +193,8 @@ public class DcnbBienBanHaoDoiHdr extends BaseEntity implements Serializable {
 
     @Column(name = "SL_HAO_THEO_DINH_MUC")
     private BigDecimal slHaoTheoDinhMuc;
+    @Column(name = "KE_HOACH_DC_DTL_ID")
+    private Long keHoachDcDtlId;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
