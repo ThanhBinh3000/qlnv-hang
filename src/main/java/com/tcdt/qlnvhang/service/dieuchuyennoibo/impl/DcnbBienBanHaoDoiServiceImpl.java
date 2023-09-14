@@ -255,25 +255,7 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
                 optional.get().setNgayPduyetLdcc(LocalDate.now());
                 optional.get().setLanhDaoChiCucId(currentUser.getUser().getId());
                 optional.get().setLanhDaoChiCuc(currentUser.getUser().getUsername());
-                break;
-            case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_KTVBQ:
-                optional.get().setNgayPduyetKtvBQ(LocalDate.now());
-                optional.get().setKtvBaoQuanId(currentUser.getUser().getId());
-                optional.get().setKtvBaoQuan(currentUser.getUser().getUsername());
-                optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
-                break;
-            case Contains.CHODUYET_KT + Contains.TUCHOI_KT:
-                optional.get().setNgayPduyetKt(LocalDate.now());
-                optional.get().setKeToanId(currentUser.getUser().getId());
-                optional.get().setKeToan(currentUser.getUser().getUsername());
-                optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
-                break;
-            case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
-                optional.get().setNgayPduyetLdcc(LocalDate.now());
-                optional.get().setLanhDaoChiCucId(currentUser.getUser().getId());
-                optional.get().setLanhDaoChiCuc(currentUser.getUser().getUsername());
-                optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
-//                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
+                //                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
 //                        optional.get().getQDinhDccId(),
 //                        optional.get().getMaNganKho(),
 //                        optional.get().getMaLoKho());
@@ -294,6 +276,24 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
                     hdrbq.setSoBbHaoDoi(optional.get().getSoBienBan());
                     dcnbBienBanLayMauHdrRepository.save(hdrbq);
                 }
+                break;
+            case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_KTVBQ:
+                optional.get().setNgayPduyetKtvBQ(LocalDate.now());
+                optional.get().setKtvBaoQuanId(currentUser.getUser().getId());
+                optional.get().setKtvBaoQuan(currentUser.getUser().getUsername());
+                optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
+                break;
+            case Contains.CHODUYET_KT + Contains.TUCHOI_KT:
+                optional.get().setNgayPduyetKt(LocalDate.now());
+                optional.get().setKeToanId(currentUser.getUser().getId());
+                optional.get().setKeToan(currentUser.getUser().getUsername());
+                optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
+                break;
+            case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
+                optional.get().setNgayPduyetLdcc(LocalDate.now());
+                optional.get().setLanhDaoChiCucId(currentUser.getUser().getId());
+                optional.get().setLanhDaoChiCuc(currentUser.getUser().getUsername());
+                optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
