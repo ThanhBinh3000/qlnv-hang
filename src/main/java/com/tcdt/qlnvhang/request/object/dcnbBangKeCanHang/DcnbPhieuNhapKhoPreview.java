@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang;
 
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuNhapKhoDtlDto;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoDtl;
 import lombok.Builder;
 import lombok.Data;
 
@@ -26,10 +25,10 @@ public class DcnbPhieuNhapKhoPreview {
     private String diaChi;
     private String theoHopDongSo; // Theo hợp đồng số
     private String ngayKyHopDong; //Ngày ký hợp đồng
-    private String donViCungCapHang; //Đơn vị cung cấp hàng
-    private String soQdGiaoVnNhapHang;//Số QĐ giao NV nhập hàng
-    private String ngayKyQdGiaoNvNhapHang;//Ngày ký QĐ giao NV nhập hàng
-    private String donViCapChaCuaTruongDonVi;//Đơn vị cấp cha của trường Đơn vị
+    private String donViCungCapHang;
+    private String soQdGiaoVnNhapHang;
+    private String ngayKyQdGiaoNvNhapHang;
+    private String donViCapChaCuaTruongDonVi;
     private String tenNganKho;
     private String tenLoKho;
     private String tenNhaKho;

@@ -10,16 +10,17 @@ import java.util.List;
 @Data
 @Builder
 public class DcnbBangKeCanHangPreview {
+    private String tenBang; // Nhập or xuất
     private String maDvi;
     private String maQhns;
     private String soBangKe;
     private String tenThuKho;
-    private String lhKho; // Loai hình kho
+    private String lhKho;
     private String tenNganKho;
     private String tenLoKho;
     private String tenDiemKho;
     private String tenDvi;
-    private String chungLoaiHangHoa; //Chủng loại hàng DTQG
+    private String chungLoaiHangHoa;
     private String tenDonViTinh;
     private String tenNguoiGiaoHang;
     private String thoiGianGiaoNhan;
