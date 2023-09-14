@@ -224,6 +224,42 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
                 optional.get().setNgayPduyetLdcc(LocalDate.now());
                 optional.get().setLanhDaoChiCucId(currentUser.getUser().getId());
                 optional.get().setLanhDaoChiCuc(currentUser.getUser().getFullName());
+                //                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
+//                        optional.get().getQDinhDccId(),
+//                        optional.get().getMaNganKho(),
+//                        optional.get().getMaLoKho());
+//                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
+//                dataLinkDtl.setLinkId(optional.get().getId());
+//                dataLinkDtl.setHdrId(dataLink.getId());
+//                dataLinkDtl.setType(DcnbBienBanTinhKhoHdr.TABLE_NAME);
+//                dcnbDataLinkDtlRepository.save(dataLinkDtl);
+                // biên bản lấy mẫu bàn giao
+                // update biên bản lấy mẫu
+                List<DcnbBienBanLayMauHdr> bienBanLayMauHdrList = new ArrayList<>();
+                if (optional.get().getMaLoKho() == null) {
+                    bienBanLayMauHdrList = dcnbBienBanLayMauHdrRepository.findByMaDviAndQdccIdAndMaNganKho(optional.get().getMaDvi(), optional.get().getQDinhDccId(), optional.get().getMaNganKho());
+                } else {
+                    bienBanLayMauHdrList = dcnbBienBanLayMauHdrRepository.findByMaDviAndQdccIdAndMaNganKhoAndMaLoKho(optional.get().getMaDvi(), optional.get().getQDinhDccId(), optional.get().getMaNganKho(), optional.get().getMaLoKho());
+                }
+                for (DcnbBienBanLayMauHdr hdrbq : bienBanLayMauHdrList) {
+                    hdrbq.setBbTinhKhoId(optional.get().getId());
+                    hdrbq.setSoBbTinhKho(optional.get().getSoBbTinhKho());
+                    hdrbq.setNgayXuatDocKho(optional.get().getNgayKetThucXuat());
+                    hdrbq.setNgayLapBbTinhKho(optional.get().getNgayLap());
+                    dcnbBienBanLayMauHdrRepository.save(hdrbq);
+                }
+                // hiếu kiểm nghiệm chất lượng
+                if (optional.get().getPhieuKnChatLuongHdrId() != null) {
+                    Optional<DcnbPhieuKnChatLuongHdr> knChatLuongHdrOptional = dcnbPhieuKnChatLuongHdrRepository.findById(optional.get().getPhieuKnChatLuongHdrId());
+                    if (knChatLuongHdrOptional.isPresent()) {
+                        knChatLuongHdrOptional.get().setBbTinhKhoId(optional.get().getId());
+                        knChatLuongHdrOptional.get().setSoBbTinhKho(optional.get().getSoBbTinhKho());
+                        knChatLuongHdrOptional.get().setNgayXuatDocKho(optional.get().getNgayKetThucXuat());
+                        knChatLuongHdrOptional.get().setNgayLapBbTinhKho(optional.get().getNgayLap());
+                        dcnbPhieuKnChatLuongHdrRepository.save(knChatLuongHdrOptional.get());
+                    }
+                }
+
                 break;
             case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_KTVBQ:
                 optional.get().setNgayPduyetKtvBQ(LocalDate.now());
@@ -242,43 +278,6 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
                 optional.get().setLanhDaoChiCucId(currentUser.getUser().getId());
                 optional.get().setLanhDaoChiCuc(currentUser.getUser().getFullName());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
-//                DcnbDataLinkHdr dataLink = dcnbDataLinkHdrRepository.findDataLinkChiCuc(optional.get().getMaDvi(),
-//                        optional.get().getQDinhDccId(),
-//                        optional.get().getMaNganKho(),
-//                        optional.get().getMaLoKho());
-//                DcnbDataLinkDtl dataLinkDtl = new DcnbDataLinkDtl();
-//                dataLinkDtl.setLinkId(optional.get().getId());
-//                dataLinkDtl.setHdrId(dataLink.getId());
-//                dataLinkDtl.setType(DcnbBienBanTinhKhoHdr.TABLE_NAME);
-//                dcnbDataLinkDtlRepository.save(dataLinkDtl);
-
-                // biên bản lấy mẫu bàn giao
-                // update biên bản lấy mẫu
-                List<DcnbBienBanLayMauHdr> bienBanLayMauHdrList = new ArrayList<>();
-                if (optional.get().getMaLoKho() == null) {
-                    bienBanLayMauHdrList = dcnbBienBanLayMauHdrRepository.findByMaDviAndQdccIdAndMaNganKho(optional.get().getMaDvi(), optional.get().getQDinhDccId(), optional.get().getMaNganKho());
-                } else {
-                    bienBanLayMauHdrList = dcnbBienBanLayMauHdrRepository.findByMaDviAndQdccIdAndMaNganKhoAndMaLoKho(optional.get().getMaDvi(), optional.get().getQDinhDccId(), optional.get().getMaNganKho(), optional.get().getMaLoKho());
-                }
-                for (DcnbBienBanLayMauHdr hdrbq : bienBanLayMauHdrList) {
-                    hdrbq.setBbTinhKhoId(optional.get().getId());
-                    hdrbq.setSoBbTinhKho(optional.get().getSoBbTinhKho());
-                    hdrbq.setNgayXuatDocKho(optional.get().getNgayXuatKho());
-                    hdrbq.setNgayLapBbTinhKho(optional.get().getNgayLap());
-                    dcnbBienBanLayMauHdrRepository.save(hdrbq);
-                }
-                // hiếu kiểm nghiệm chất lượng
-                if (optional.get().getPhieuKnChatLuongHdrId() != null) {
-                    Optional<DcnbPhieuKnChatLuongHdr> knChatLuongHdrOptional = dcnbPhieuKnChatLuongHdrRepository.findById(optional.get().getPhieuKnChatLuongHdrId());
-                    if (knChatLuongHdrOptional.isPresent()) {
-                        knChatLuongHdrOptional.get().setBbTinhKhoId(optional.get().getId());
-                        knChatLuongHdrOptional.get().setSoBbTinhKho(optional.get().getSoBbTinhKho());
-                        knChatLuongHdrOptional.get().setNgayXuatDocKho(optional.get().getNgayXuatKho());
-                        knChatLuongHdrOptional.get().setNgayLapBbTinhKho(optional.get().getNgayLap());
-                        dcnbPhieuKnChatLuongHdrRepository.save(knChatLuongHdrOptional.get());
-                    }
-                }
-
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
