@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -90,5 +91,7 @@ public class QlpktclhPhieuKtChatLuongRequestDto extends BaseRequest {
 
 
 	private ReportTemplateRequest reportTemplateRequest;
-
+	private BigDecimal slKhKb;
+	private BigDecimal slTtKtra;
+	private Boolean ketLuanCuoi;
 }
