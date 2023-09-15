@@ -35,6 +35,8 @@ import org.springframework.util.ObjectUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -141,6 +143,8 @@ public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements S
         List<FileDinhKem> fileDinhKemList = fileDinhKemService.search(data.getId(), Collections.singleton(ScQuyetDinhXuatHang.TABLE_NAME + "_DINH_KEM"));
         data.setFileDinhKem(fileDinhKemList);
         data.setScQuyetDinhSc(scQuyetDinhScImpl.detail(data.getIdQdSc()));
+        Map<String, String> mapDmucDvi = getMapTenDvi();
+        data.setTenDvi(mapDmucDvi.getOrDefault(data.getMaDvi(),null));
         List<ScKiemTraChatLuongHdr> allByIdQdXh = scKiemTraChatLuongHdrRepository.findAllByIdQdXh(id);
         if(!allByIdQdXh.isEmpty()){
             allByIdQdXh.forEach(item ->{
@@ -181,6 +185,8 @@ public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements S
                 if(!userInfo.getCapDvi().equals(Contains.CAP_CUC)){
                     throw new Exception("Đơn vị gửi duyệt phải là cấp cục");
                 }
+                hdr.setIdLdc(userInfo.getId());
+                hdr.setTenLdc(userInfo.getFullName());
                 hdr.setNgayKy(LocalDate.now());
                 break;
             // Arena từ chối
@@ -300,8 +306,6 @@ public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements S
         ScQuyetDinhXuatHang optional = detail(objReq.getId());
         ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-//        String filePath = "/Users/vunt/Downloads/Print/"+objReq.getReportTemplateRequest().getFileName();
-//        byte[] byteArray = Files.readAllBytes(Paths.get(filePath));
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
         return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
     }

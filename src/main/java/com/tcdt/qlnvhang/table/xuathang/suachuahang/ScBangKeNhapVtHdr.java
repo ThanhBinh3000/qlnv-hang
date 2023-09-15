@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = ScBangKeNhapVtHdr.TABLE_NAME)
@@ -37,7 +38,6 @@ public class ScBangKeNhapVtHdr extends BaseEntity implements Serializable {
     private Long idQdNh;
     private String soPhieuNhapKho;
     private LocalDate ngayNhapKho;
-
     private Long idPhieuNhapKho;
     private Long idThuKho;
     private Long idLanhDaoCc;
@@ -56,5 +56,21 @@ public class ScBangKeNhapVtHdr extends BaseEntity implements Serializable {
 
     public String getTenTrangThai(){
         return TrangThaiAllEnum.getLabelById(getTrangThai());
+    }
+
+    @Transient
+    private ScPhieuNhapKhoHdr scPhieuNhapKhoHdr;
+
+    // Print preview
+    @Transient
+    private String ngay;
+    @Transient
+    private String thang;
+
+    public String getNgay() {
+        return Objects.isNull(this.getNgayTao()) ? null : String.valueOf(this.getNgayTao().getDayOfMonth());
+    }
+    public String getThang() {
+        return Objects.isNull(this.getNgayTao()) ? null : String.valueOf(this.getNgayTao().getMonthValue());
     }
 }

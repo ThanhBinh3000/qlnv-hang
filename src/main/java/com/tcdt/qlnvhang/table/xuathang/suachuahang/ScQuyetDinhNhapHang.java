@@ -9,9 +9,13 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = ScQuyetDinhNhapHang.TABLE_NAME)
@@ -43,8 +47,12 @@ public class ScQuyetDinhNhapHang extends BaseEntity implements Serializable {
     private String trichYeu;
     private String trangThai;
     private String lyDoTuChoi;
+    private Long idLdc;
+    private String tenLdc;
     @Transient
     private String tenTrangThai;
+    @Transient
+    private String tenDvi;
     @Transient
     private List<FileDinhKem> fileCanCu = new ArrayList<>();
     @Transient
@@ -57,6 +65,69 @@ public class ScQuyetDinhNhapHang extends BaseEntity implements Serializable {
 
     public String getTenTrangThai(){
         return TrangThaiAllEnum.getLabelById(getTrangThai());
+    }
+
+    // Print preview
+    @Transient
+    private String ngay;
+    @Transient
+    private String thang;
+    @Transient
+    private String tenLoaiVthh;
+    @Transient
+    private String soLuong;
+    @Transient
+    private String donViTinh;
+    @Transient
+    private String thoiHanXuatFormat;
+    @Transient
+    private String canCuPhapLy;
+
+    public String getNgay() {
+        return Objects.isNull(this.getNgayKy()) ? null : String.valueOf(this.getNgayKy().getDayOfMonth());
+    }
+    public String getThang() {
+        return Objects.isNull(this.getNgayKy()) ? null : String.valueOf(this.getNgayKy().getMonthValue());
+    }
+
+    public String getTenLoaiVthh() {
+        if(this.children != null){
+            ScQuyetDinhNhapHangDtl scQuyetDinhNhapHangDtl = this.children.get(0);
+            if(scQuyetDinhNhapHangDtl.getScDanhSachHdr() != null){
+                this.donViTinh = scQuyetDinhNhapHangDtl.getScDanhSachHdr().getDonViTinh();
+                return scQuyetDinhNhapHangDtl.getScDanhSachHdr().getTenLoaiVthh();
+            }
+        }
+        return tenLoaiVthh;
+    }
+
+    public String getSoLuong() {
+        BigDecimal soLuong = BigDecimal.ZERO;
+        if(this.children != null){
+            for (ScQuyetDinhNhapHangDtl e : children) {
+                if(e.getScDanhSachHdr() != null){
+                    soLuong = soLuong.add(e.getSoLuongNhap());
+                }
+            }
+            return String.valueOf(soLuong);
+        }
+        return String.valueOf(soLuong);
+    }
+
+    public String getDonViTinh() {
+        return donViTinh;
+    }
+
+    public String getThoiHanNhapFormat() {
+        return Objects.isNull(this.thoiHanNhap) ? null : thoiHanNhap.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
+    public String getCanCuPhapLy() {
+        if(!Objects.isNull(fileCanCu)){
+            List<String> collect = fileCanCu.stream().map(FileDinhKem::getFileName).collect(Collectors.toList());
+            canCuPhapLy = "- "+String.join(" - ",collect);
+        }
+        return canCuPhapLy;
     }
 
 }
