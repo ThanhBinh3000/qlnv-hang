@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKnChatLuongDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKnChatLuongHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -60,6 +61,9 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
     @Autowired
     private UserInfoRepository userInfoRepository;
 
+    @Autowired
+    private DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
+
     public Page<DcnbPhieuKnChatLuongHdrDTO> searchPage(CustomUserDetails currentUser, SearchPhieuKnChatLuong req) throws Exception {
         String dvql = currentUser.getDvql();
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
@@ -105,6 +109,14 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
 //        }
         DcnbPhieuKnChatLuongHdr data = new DcnbPhieuKnChatLuongHdr();
         BeanUtils.copyProperties(objReq, data);
+        Optional<DcnbKeHoachDcDtl> keHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(objReq.getKeHoachDcDtlId());
+        if(keHoachDcDtl.isPresent()){
+            if(keHoachDcDtl.get().getParentId() != null){
+                data.setKeHoachDcDtlId(keHoachDcDtl.get().getParentId());
+            }else {
+                data.setKeHoachDcDtlId(objReq.getKeHoachDcDtlId());
+            }
+        }
         data.setNguoiTaoId(currentUser.getUser().getId());
         data.setNgayTao(LocalDateTime.now());
         data.setMaDvi(currentUser.getDvql());
@@ -145,6 +157,14 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
 
         DcnbPhieuKnChatLuongHdr data = optional.get();
         BeanUtils.copyProperties(objReq, data);
+        Optional<DcnbKeHoachDcDtl> keHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(objReq.getKeHoachDcDtlId());
+        if(keHoachDcDtl.isPresent()){
+            if(keHoachDcDtl.get().getParentId() != null){
+                data.setKeHoachDcDtlId(keHoachDcDtl.get().getParentId());
+            }else {
+                data.setKeHoachDcDtlId(objReq.getKeHoachDcDtlId());
+            }
+        }
         data.setNguoiSuaId(currentUser.getUser().getId());
         data.setNgaySua(LocalDateTime.now());
         data.setDcnbPhieuKnChatLuongDtl(objReq.getDcnbPhieuKnChatLuongDtl());
