@@ -61,6 +61,7 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuXuatKhoHdrListDTO(" +
             "pxk.id,pxk.soPhieuXuatKho,pxk.ngayTaoPhieu) " +
             "FROM DcnbPhieuXuatKhoHdr pxk " +
+            "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.id = pxk.keHoachDcDtlId " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = pxk.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
@@ -68,6 +69,7 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
             "AND ((:#{#param.qdinhDccId} IS NULL OR pxk.qddcId = :#{#param.qdinhDccId}))" +
             "AND ((:#{#param.maLoKho} IS NULL OR pxk.maLoKho = :#{#param.maLoKho}))" +
             "AND ((:#{#param.maNganKho} IS NULL OR pxk.maNganKho = :#{#param.maNganKho}))" +
+            "AND (:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho}) " +
             "ORDER BY pxk.soPhieuXuatKho desc, pxk.nam desc")
     List<DcnbPhieuXuatKhoHdrListDTO> searchList(@Param("param") SearchPhieuXuatKho req);
 
