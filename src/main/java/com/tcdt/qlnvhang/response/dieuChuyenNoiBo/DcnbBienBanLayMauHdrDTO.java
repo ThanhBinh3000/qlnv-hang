@@ -44,8 +44,8 @@ public class DcnbBienBanLayMauHdrDTO {
     private String soBbKetThucNk;
     private LocalDate ngayKetThucNk;
     private LocalDate ngayLapBbTinhKho;
-
-    public DcnbBienBanLayMauHdrDTO(Long id, Long qDDccId, String soQdinh, Integer namKh, LocalDate thoiHanDieuChuyen, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, Boolean thayDoiThuKho, String soBBLayMau, LocalDate ngaylayMau, String soBBTinhKho, LocalDate ngayXuatDocKho, String bbHaoDoi, String trangThai, String tenTrangThai, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String maNhaKho, String tenNhaKho, Long thuKhoId, String thuKho, Long thuKhoNhanId, String thuKhoNhan, String donViTinh, String soBbNhapDayKho, Long bBNhapDayKhoId, LocalDate ngayNhapDayKho, Long bbKetThucNkId, String soBbKetThucNk, LocalDate ngayKetThucNk,LocalDate ngayLapBbTinhKho) {
+    private Long keHoachDcDtlId;
+    public DcnbBienBanLayMauHdrDTO(Long id, Long qDDccId, String soQdinh, Integer namKh, LocalDate thoiHanDieuChuyen, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, Boolean thayDoiThuKho, String soBBLayMau, LocalDate ngaylayMau, String soBBTinhKho, LocalDate ngayXuatDocKho, String bbHaoDoi, String trangThai, String tenTrangThai, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String maNhaKho, String tenNhaKho, Long thuKhoId, String thuKho, Long thuKhoNhanId, String thuKhoNhan, String donViTinh, String soBbNhapDayKho, Long bBNhapDayKhoId, LocalDate ngayNhapDayKho, Long bbKetThucNkId, String soBbKetThucNk, LocalDate ngayKetThucNk,LocalDate ngayLapBbTinhKho,Long keHoachDcDtlId) {
         this.id = id;
         this.qDDccId = qDDccId;
         this.soQdinh = soQdinh;
@@ -84,5 +84,6 @@ public class DcnbBienBanLayMauHdrDTO {
         this.soBbKetThucNk = soBbKetThucNk;
         this.ngayKetThucNk = ngayKetThucNk;
         this.ngayLapBbTinhKho = ngayLapBbTinhKho;
+        this.keHoachDcDtlId= keHoachDcDtlId;
     }
 }

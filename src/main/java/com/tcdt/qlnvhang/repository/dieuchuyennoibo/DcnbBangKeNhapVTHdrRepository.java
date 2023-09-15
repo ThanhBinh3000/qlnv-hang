@@ -22,13 +22,12 @@ public interface DcnbBangKeNhapVTHdrRepository extends JpaRepository<DcnbBangKeN
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeNhapVTHdrDTO(" +
             "bknvt.id,qdc.id,qdc.soQdinh,khdcd.thoiGianDkDc,qdc.nam,khdcd.maDiemKhoNhan,khdcd.tenDiemKhoNhan,khdcd.maNhaKhoNhan, khdcd.tenNhaKhoNhan," +
             "khdcd.maNganKhoNhan, khdcd.tenNganKhoNhan, khdcd.maLoKhoNhan,khdcd.tenLoKhoNhan,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.donViTinh, " +
-            "bblm.id,bblm.soBbLayMau, bknvt.soBangKe, bknvt.soBangKe,pnk.soPhieuNhapKho, pnk.id, pnk.ngayLap,bknvt.trangThai ,bknvt.trangThai) " +
+            "bblm.id,bblm.soBbLayMau, bknvt.soBangKe, bknvt.soBangKe,pnk.soPhieuNhapKho, pnk.id, pnk.ngayLap,bknvt.trangThai ,bknvt.trangThai,khdcd.id) " +
             "FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbBangKeNhapVTHdr bknvt ON bknvt.qDinhDccId = qdc.id " +
-            "and ((khdcd.maLoKhoNhan is not null and  bknvt.maNganKho = khdcd.maNganKhoNhan and bknvt.maLoKho = khdcd.maLoKhoNhan ) or (khdcd.maLoKhoNhan is null and bknvt.maNganKho = khdcd.maNganKhoNhan))" +
+            "LEFT JOIN DcnbBangKeNhapVTHdr bknvt ON bknvt.keHoachDcDtlId = khdcd.id " +
             "LEFT JOIN DcnbBienBanLayMauHdr bblm ON bblm.qdccId = qdc.id " +
             "and ((bblm.maLoKho is not null and  bblm.maNganKho = bknvt.maNganKho and bblm.maLoKho = bknvt.maLoKho ) or (bblm.maLoKho is null and bblm.maNganKho = bknvt.maNganKho))" +
             "LEFT JOIN DcnbPhieuNhapKhoHdr pnk ON pnk.id = bknvt.phieuNhapKhoId " +
@@ -51,8 +50,8 @@ public interface DcnbBangKeNhapVTHdrRepository extends JpaRepository<DcnbBangKeN
             "AND ((:#{#param.tuNgayNhapKho}  IS NULL OR pnk.ngayLap >= :#{#param.tuNgayNhapKho})" +
             "AND (:#{#param.denNgayNhapKho}  IS NULL OR pnk.ngayLap <= :#{#param.denNgayNhapKho}) ) " +
             "GROUP BY bknvt.id,qdc.id,qdc.soQdinh,khdcd.thoiGianDkDc,qdc.nam,khdcd.maDiemKhoNhan,khdcd.tenDiemKhoNhan,khdcd.maNhaKhoNhan, khdcd.tenNhaKhoNhan," +
-            "khdcd.maNganKhoNhan, khdcd.tenNganKhoNhan, khdcd.maLoKhoNhan,khdcd.tenLoKhoNhan,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.donViTinh," +
-            "bblm.id,bblm.soBbLayMau, bknvt.soBangKe, bknvt.soBangKe,pnk.soPhieuNhapKho, pnk.id, pnk.ngayLap,bknvt.trangThai ,bknvt.trangThai "+
+            "khdcd.maNganKhoNhan, khdcd.tenNganKhoNhan, khdcd.maLoKhoNhan,khdcd.tenLoKhoNhan,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.donViTinh, " +
+            "bblm.id,bblm.soBbLayMau, bknvt.soBangKe, bknvt.soBangKe,pnk.soPhieuNhapKho, pnk.id, pnk.ngayLap,bknvt.trangThai ,bknvt.trangThai,khdcd.id "+
             "ORDER BY qdc.soQdinh DESC")
     Page<DcnbBangKeNhapVTHdrDTO> searchPage(@Param("param") DcnbBangKeNhapVTReq req, Pageable pageable);
 }

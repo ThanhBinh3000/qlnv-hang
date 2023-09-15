@@ -201,7 +201,7 @@ public class XhCtvtQdPdHdrController {
   public ResponseEntity<BaseResponse> preview(@RequestBody HashMap<String, Object> body) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhCtvtQdPdHdrService  .preview(body));
+      resp.setData(xhCtvtQdPdHdrService.preview(body));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {

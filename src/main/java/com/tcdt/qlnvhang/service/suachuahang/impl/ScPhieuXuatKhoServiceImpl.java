@@ -25,6 +25,8 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -285,8 +287,6 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
         ScPhieuXuatKhoHdr optional = detail(objReq.getId());
         ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-//        String filePath = "/Users/vunt/Downloads/Print/"+objReq.getReportTemplateRequest().getFileName();
-//        byte[] byteArray = Files.readAllBytes(Paths.get(filePath));
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
         return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
     }

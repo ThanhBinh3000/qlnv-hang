@@ -148,4 +148,6 @@ public class DcnbPhieuKtChatLuongHdrReq {
     @Valid
     private List<DcnbPhieuKtChatLuongDtl> dcnbPhieuKtChatLuongDtl = new ArrayList<>();
     private ReportTemplateRequest reportTemplateRequest;
+    @NotNull
+    private Long keHoachDcDtlId;
 }

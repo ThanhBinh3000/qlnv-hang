@@ -65,6 +65,29 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
     @Autowired
     private KtNganLoRepository ktNganLoRepository;
 
+    @Transactional
+    public DcnbBangKeCanHangHdr save(CustomUserDetails currentUser, DcnbBangKeCanHangHdrReq objReq) throws Exception {
+        if (currentUser == null) {
+            throw new Exception("Bad request.");
+        }
+//        Optional<DcnbBangKeCanHangHdr> optional = dcnbBangKeCanHangHdrRepository.findFirstBySoBangKe(objReq.getSoBangKe());
+//        if (optional.isPresent() && objReq.getSoBangKe().split("/").length == 1) {
+//            throw new Exception("Số bảng kê đã tồn tại");
+//        }
+        DcnbBangKeCanHangHdr data = new DcnbBangKeCanHangHdr();
+        BeanUtils.copyProperties(objReq, data);
+        data.setMaDvi(currentUser.getDvql());
+        data.setTenDvi(currentUser.getUser().getTenDvi());
+        if (objReq.getDcnbBangKeCanHangDtl() != null) {
+            objReq.getDcnbBangKeCanHangDtl().forEach(e -> e.setDcnbBangKeCanHangHdr(data));
+        }
+        DcnbBangKeCanHangHdr created = dcnbBangKeCanHangHdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BKCH-" + currentUser.getUser().getDvqlTenVietTat();
+        created.setSoBangKe(so);
+        dcnbBangKeCanHangHdrRepository.save(created);
+        return created;
+    }
+
     public Page<DcnbBangKeCanHangHdrDTO> searchPage(CustomUserDetails currentUser, SearchBangKeCanHang req) throws Exception {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
@@ -87,29 +110,6 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
             searchDto = dcnbBangKeCanHangHdrRepository.searchPageNhan(req, pageable);
         }
         return searchDto;
-    }
-
-    @Transactional
-    public DcnbBangKeCanHangHdr save(CustomUserDetails currentUser, DcnbBangKeCanHangHdrReq objReq) throws Exception {
-        if (currentUser == null) {
-            throw new Exception("Bad request.");
-        }
-//        Optional<DcnbBangKeCanHangHdr> optional = dcnbBangKeCanHangHdrRepository.findFirstBySoBangKe(objReq.getSoBangKe());
-//        if (optional.isPresent() && objReq.getSoBangKe().split("/").length == 1) {
-//            throw new Exception("Số bảng kê đã tồn tại");
-//        }
-        DcnbBangKeCanHangHdr data = new DcnbBangKeCanHangHdr();
-        BeanUtils.copyProperties(objReq, data);
-        data.setMaDvi(currentUser.getDvql());
-        data.setTenDvi(currentUser.getUser().getTenDvi());
-        if (objReq.getDcnbBangKeCanHangDtl() != null) {
-            objReq.getDcnbBangKeCanHangDtl().forEach(e -> e.setDcnbBangKeCanHangHdr(data));
-        }
-        DcnbBangKeCanHangHdr created = dcnbBangKeCanHangHdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BKCH-" + currentUser.getUser().getDvqlTenVietTat();
-        created.setSoBangKe(so);
-        dcnbBangKeCanHangHdrRepository.save(created);
-        return created;
     }
 
     @Transactional

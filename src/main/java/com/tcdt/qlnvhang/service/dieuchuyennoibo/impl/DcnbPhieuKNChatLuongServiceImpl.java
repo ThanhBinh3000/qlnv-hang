@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKnChatLuongDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKnChatLuongHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -60,10 +61,13 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
     @Autowired
     private UserInfoRepository userInfoRepository;
 
+    @Autowired
+    private DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
+
     public Page<DcnbPhieuKnChatLuongHdrDTO> searchPage(CustomUserDetails currentUser, SearchPhieuKnChatLuong req) throws Exception {
         String dvql = currentUser.getDvql();
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            req.setMaDvi(dvql.substring(0,6));
+            req.setMaDvi(dvql.substring(0, 6));
             req.setTrangThai(Contains.DADUYET_LDC);
         } else {
             req.setMaDvi(dvql);
@@ -105,6 +109,14 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
 //        }
         DcnbPhieuKnChatLuongHdr data = new DcnbPhieuKnChatLuongHdr();
         BeanUtils.copyProperties(objReq, data);
+        Optional<DcnbKeHoachDcDtl> keHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(objReq.getKeHoachDcDtlId());
+        if (keHoachDcDtl.isPresent()) {
+            if (keHoachDcDtl.get().getParentId() != null) {
+                data.setKeHoachDcDtlId(keHoachDcDtl.get().getParentId());
+            } else {
+                data.setKeHoachDcDtlId(objReq.getKeHoachDcDtlId());
+            }
+        }
         data.setNguoiTaoId(currentUser.getUser().getId());
         data.setNgayTao(LocalDateTime.now());
         data.setMaDvi(currentUser.getDvql());
@@ -145,6 +157,14 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
 
         DcnbPhieuKnChatLuongHdr data = optional.get();
         BeanUtils.copyProperties(objReq, data);
+        Optional<DcnbKeHoachDcDtl> keHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(objReq.getKeHoachDcDtlId());
+        if (keHoachDcDtl.isPresent()) {
+            if (keHoachDcDtl.get().getParentId() != null) {
+                data.setKeHoachDcDtlId(keHoachDcDtl.get().getParentId());
+            } else {
+                data.setKeHoachDcDtlId(objReq.getKeHoachDcDtlId());
+            }
+        }
         data.setNguoiSuaId(currentUser.getUser().getId());
         data.setNgaySua(LocalDateTime.now());
         data.setDcnbPhieuKnChatLuongDtl(objReq.getDcnbPhieuKnChatLuongDtl());
@@ -231,6 +251,9 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
             case Contains.CHODUYET_TP + Contains.TU_CHOI_TP:
                 optional.get().setNguoiDuyetTp(currentUser.getUser().getId());
                 optional.get().setNgayDuyetTp(LocalDate.now());
+                optional.get().setTpNguoiKt(currentUser.getUser().getFullName());
+                optional.get().setTpNguoiKtId(currentUser.getUser().getId());
+                optional.get().setNgayDuyetTp(LocalDate.now());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_LDC + Contains.TU_CHOI_LDC:
@@ -239,6 +262,8 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_TP + Contains.CHODUYET_LDC:
+                optional.get().setTpNguoiKt(currentUser.getUser().getFullName());
+                optional.get().setTpNguoiKtId(currentUser.getUser().getId());
                 optional.get().setNguoiDuyetTp(currentUser.getUser().getId());
                 optional.get().setNgayDuyetTp(LocalDate.now());
                 break;
@@ -386,7 +411,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         List<DcnbPhieuKnChatLuongDtlDto> dcnbPhieuKnChatLuongDtlDtos = new ArrayList<>();
         int stt = 1;
         for (var res : dcnbPhieuKnChatLuongDtl) {
-            var  dcnbPhieuKnChatLuongDtlDto = DcnbPhieuKnChatLuongDtlDto.builder()
+            var dcnbPhieuKnChatLuongDtlDto = DcnbPhieuKnChatLuongDtlDto.builder()
                     .stt(stt++)
                     .chiTieuCl(res.getChiTieuCl())
                     .chiSoCl(res.getChiSoCl())

@@ -14,6 +14,7 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.suachuahang.ScBangKeXuatVatTuService;
+import com.tcdt.qlnvhang.service.suachuahang.ScPhieuXuatKhoService;
 import com.tcdt.qlnvhang.service.suachuahang.ScQuyetDinhScService;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
@@ -34,6 +35,8 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -56,6 +59,9 @@ public class ScBangKeXuatVatTuServiceImpl extends BaseServiceImpl implements ScB
 
     @Autowired
     private ScPhieuXuatKhoHdrRepository scPhieuXuatKhoHdrRepository;
+
+    @Autowired
+    private ScPhieuXuatKhoService scPhieuXuatKhoService;
 
     @Autowired
     private UserInfoRepository userInfoRepository;
@@ -141,6 +147,9 @@ public class ScBangKeXuatVatTuServiceImpl extends BaseServiceImpl implements ScB
             throw new Exception("Bản ghi không tồn tại");
         }
         ScBangKeXuatVatTuHdr data = optional.get();
+        if(!Objects.isNull(data.getIdPhieuXuatKho())){
+            data.setScPhieuXuatKho(scPhieuXuatKhoService.detail(data.getIdPhieuXuatKho()));
+        }
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         data.setChildren(dtlRepository.findByIdHdr(id));
         data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
@@ -267,8 +276,6 @@ public class ScBangKeXuatVatTuServiceImpl extends BaseServiceImpl implements ScB
         ScBangKeXuatVatTuHdr optional = detail(objReq.getId());
         ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-//        String filePath = "/Users/vunt/Downloads/Print/"+objReq.getReportTemplateRequest().getFileName();
-//        byte[] byteArray = Files.readAllBytes(Paths.get(filePath));
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
         return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
     }

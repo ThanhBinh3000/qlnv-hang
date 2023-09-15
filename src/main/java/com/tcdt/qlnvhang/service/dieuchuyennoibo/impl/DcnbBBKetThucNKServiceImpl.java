@@ -61,6 +61,14 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
         return null;
     }
 
+    @Override
+    public List<DcnbBBKetThucNKHdrListDTO> searchList(CustomUserDetails currentUser, DcnbBBKetThucNKReq req) {
+        String dvql = currentUser.getDvql();
+        req.setMaDvi(dvql);
+        req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
+        return hdrRepository.searchList(req);
+    }
+
     public Page<DcnbBBKetThucNKHdrDTO> search(CustomUserDetails currentUser, DcnbBBKetThucNKReq req) throws Exception {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
@@ -77,14 +85,6 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
         req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         searchDto = hdrRepository.searchPage(req, pageable);
         return searchDto;
-    }
-
-    @Override
-    public List<DcnbBBKetThucNKHdrListDTO> searchList(CustomUserDetails currentUser, DcnbBBKetThucNKReq req) {
-        String dvql = currentUser.getDvql();
-        req.setMaDvi(dvql);
-        req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
-        return hdrRepository.searchList(req);
     }
 
     @Override

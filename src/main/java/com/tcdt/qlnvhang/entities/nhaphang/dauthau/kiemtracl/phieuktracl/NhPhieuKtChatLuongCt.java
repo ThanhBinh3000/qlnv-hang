@@ -41,4 +41,6 @@ public class NhPhieuKtChatLuongCt {
 	@Column(name = "KIEU")
 	private String kieu;
 
+	private String danhGia;
+
 }

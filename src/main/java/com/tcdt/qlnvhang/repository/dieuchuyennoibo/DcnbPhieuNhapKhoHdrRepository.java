@@ -44,16 +44,14 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
             "khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh, khdcd.tenCloaiVthh,khdcd.donViTinh,khdcd.soLuongDc,khdcd.duToanKphi," +
             "pnk.idPhieuKtraCluong, pnk.soPhieuKtraCluong, pktcl.ngayGiamDinh, " +
             "bkch.id, bkch.soBangKe, pnk.bbNghiemThuBqld, " +
-            "pnk.trangThai, pnk.trangThai) " +
+            "pnk.trangThai, pnk.trangThai,khdcd.id) " +
             "FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbPhieuNhapKhoHdr pnk On pnk.qdDcCucId = qdc.id " +
-            "and ((khdcd.maLoKhoNhan is not null and khdcd.maLoKhoNhan = pnk.maLoKho and khdcd.maNganKhoNhan = pnk.maNganKho ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = pnk.maNganKho))" +
+            "LEFT JOIN DcnbPhieuNhapKhoHdr pnk On pnk.keHoachDcDtlId = khdcd.id " +
             "LEFT JOIN DcnbPhieuKtChatLuongHdr pktcl On pktcl.id = pnk.idPhieuKtraCluong " +
             "LEFT JOIN DcnbBangKeCanHangHdr bkch On bkch.phieuNhapKhoId = pnk.id " +
-            "LEFT JOIN DcnbBBNTBQHdr bbntbq On bbntbq.id = pnk.bbNghiemThuBqldId " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
             "AND qdc.parentId is not null and qdc.trangThai = '29'" +
@@ -70,7 +68,7 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
             "khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh, khdcd.tenCloaiVthh,khdcd.donViTinh,khdcd.soLuongDc,khdcd.duToanKphi," +
             "pnk.idPhieuKtraCluong, pnk.soPhieuKtraCluong, pktcl.ngayGiamDinh, " +
             "bkch.id, bkch.soBangKe, pnk.bbNghiemThuBqld, " +
-            "pnk.trangThai, pnk.trangThai " +
+            "pnk.trangThai, pnk.trangThai,khdcd.id " +
             "ORDER BY qdc.soQdinh DESC")
     Page<DcnbPhieuNhapKhoHdrDTO> searchPage(@Param("param")DcnbPhieuNhapKhoHdrReq req, Pageable pageable);
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuNhapKhoHdrListDTO(" +

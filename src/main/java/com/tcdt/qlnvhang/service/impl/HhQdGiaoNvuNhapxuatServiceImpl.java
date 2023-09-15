@@ -26,6 +26,7 @@ import com.tcdt.qlnvhang.enums.HhQdGiaoNvuNhapxuatHdrLoaiQd;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.HhBbNghiemthuKlstRepository;
 import com.tcdt.qlnvhang.repository.HhDviThuchienQdinhRepository;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.bienbanchuanbikho.NhBienBanChuanBiKhoRepository;
@@ -124,7 +125,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 	private NhHoSoKyThuatRepository nhHoSoKyThuatRepository;
 	@Autowired
 	private FileDinhKemService fileDinhKemService;
-
+	@Autowired
+	private UserInfoRepository userInfoRepository;
 	@Override
 	@Transactional
 	public NhQdGiaoNvuNhapxuatHdr create(HhQdGiaoNvuNhapxuatHdrReq objReq) throws Exception {
@@ -759,11 +761,11 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 				// Set biên bản chuẩn bị kho
 //				if(req.getBienBan().contains("bienBanChuanBiKho")){
-//					List<NhBienBanChuanBiKho> bbChuanBiKho = nhBienBanChuanBiKhoRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
-//					bbChuanBiKho.forEach( item -> {
-//						item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
-//					});
-//					dtl.setListBienBanChuanBiKho(bbChuanBiKho);
+					List<NhBienBanChuanBiKho> bbChuanBiKho = nhBienBanChuanBiKhoRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
+					bbChuanBiKho.forEach( item -> {
+						item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+					});
+					dtl.setListBienBanChuanBiKho(bbChuanBiKho);
 //				}
 
 				dtl.setTenLoaiVthh(mapDmucHh.get(dtl.getLoaiVthh()));
@@ -873,6 +875,11 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			ddNhap.setBienBanGuiHang(nhBienBanGuiHangRepository.findByIdDdiemGiaoNvNh(ddNhap.getId()));
 			ddNhap.setListPhieuNhapKho(nhPhieuNhapKhoService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
 			ddNhap.setListBangKeVt(nhBangKeVtRepository.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
+			List<HhBbNghiemthuKlstHdr> hhBbNghiemthuKlstHdrList = hhBbNghiemthuKlstRepository.findByIdDdiemGiaoNvNh(ddNhap.getId());
+			hhBbNghiemthuKlstHdrList.forEach(item -> {
+				item.setTenThuKho(ObjectUtils.isEmpty(item.getIdThuKho()) ? null : userInfoRepository.findById(item.getIdThuKho()).get().getFullName());
+			});
+			ddNhap.setListBbNtbqld(hhBbNghiemthuKlstHdrList);
 			if(!ObjectUtils.isEmpty(ddNhap.getBienBanLayMau())){
 				ddNhap.setHoSoKyThuat(nhHoSoKyThuatRepository.findBySoBbLayMau(ddNhap.getBienBanLayMau().getSoBienBan()));
 			}

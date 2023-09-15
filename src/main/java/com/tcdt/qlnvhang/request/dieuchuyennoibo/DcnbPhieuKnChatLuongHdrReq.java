@@ -131,4 +131,7 @@ public class DcnbPhieuKnChatLuongHdrReq {
     @Valid
     private List<DcnbPhieuKnChatLuongDtl> dcnbPhieuKnChatLuongDtl = new ArrayList<>();
     private ReportTemplateRequest reportTemplateRequest;
+
+    @NotNull
+    private Long keHoachDcDtlId;
 }
