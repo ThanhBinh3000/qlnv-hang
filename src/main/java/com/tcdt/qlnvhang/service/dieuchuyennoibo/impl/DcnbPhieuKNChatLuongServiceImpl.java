@@ -67,7 +67,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
     public Page<DcnbPhieuKnChatLuongHdrDTO> searchPage(CustomUserDetails currentUser, SearchPhieuKnChatLuong req) throws Exception {
         String dvql = currentUser.getDvql();
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            req.setMaDvi(dvql.substring(0,6));
+            req.setMaDvi(dvql.substring(0, 6));
             req.setTrangThai(Contains.DADUYET_LDC);
         } else {
             req.setMaDvi(dvql);
@@ -110,10 +110,10 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         DcnbPhieuKnChatLuongHdr data = new DcnbPhieuKnChatLuongHdr();
         BeanUtils.copyProperties(objReq, data);
         Optional<DcnbKeHoachDcDtl> keHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(objReq.getKeHoachDcDtlId());
-        if(keHoachDcDtl.isPresent()){
-            if(keHoachDcDtl.get().getParentId() != null){
+        if (keHoachDcDtl.isPresent()) {
+            if (keHoachDcDtl.get().getParentId() != null) {
                 data.setKeHoachDcDtlId(keHoachDcDtl.get().getParentId());
-            }else {
+            } else {
                 data.setKeHoachDcDtlId(objReq.getKeHoachDcDtlId());
             }
         }
@@ -158,10 +158,10 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         DcnbPhieuKnChatLuongHdr data = optional.get();
         BeanUtils.copyProperties(objReq, data);
         Optional<DcnbKeHoachDcDtl> keHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(objReq.getKeHoachDcDtlId());
-        if(keHoachDcDtl.isPresent()){
-            if(keHoachDcDtl.get().getParentId() != null){
+        if (keHoachDcDtl.isPresent()) {
+            if (keHoachDcDtl.get().getParentId() != null) {
                 data.setKeHoachDcDtlId(keHoachDcDtl.get().getParentId());
-            }else {
+            } else {
                 data.setKeHoachDcDtlId(objReq.getKeHoachDcDtlId());
             }
         }
@@ -365,7 +365,11 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
     public ReportTemplateResponse preview(DcnbPhieuKnChatLuongHdrReq objReq) throws Exception {
         var dcnbPhieuKnChatLuongHdr = dcnbPhieuKnChatLuongHdrRepository.findById(objReq.getId());
         if (!dcnbPhieuKnChatLuongHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
-        var userInfo = userInfoRepository.findById(dcnbPhieuKnChatLuongHdr.get().getNguoiDuyetLdCuc());
+        Optional<UserInfo> userInfo = null;
+        if (dcnbPhieuKnChatLuongHdr.get().getNguoiDuyetLdCuc() != null) {
+            userInfo = userInfoRepository.findById(dcnbPhieuKnChatLuongHdr.get().getNguoiDuyetLdCuc());
+        }
+
         ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
@@ -408,7 +412,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         List<DcnbPhieuKnChatLuongDtlDto> dcnbPhieuKnChatLuongDtlDtos = new ArrayList<>();
         int stt = 1;
         for (var res : dcnbPhieuKnChatLuongDtl) {
-            var  dcnbPhieuKnChatLuongDtlDto = DcnbPhieuKnChatLuongDtlDto.builder()
+            var dcnbPhieuKnChatLuongDtlDto = DcnbPhieuKnChatLuongDtlDto.builder()
                     .stt(stt++)
                     .chiTieuCl(res.getChiTieuCl())
                     .chiSoCl(res.getChiSoCl())
