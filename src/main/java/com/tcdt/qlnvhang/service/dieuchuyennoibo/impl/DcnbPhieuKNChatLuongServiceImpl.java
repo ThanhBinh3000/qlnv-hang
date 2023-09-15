@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbKeHoachDcDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKnChatLuongDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKnChatLuongHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -37,7 +38,6 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -60,6 +60,9 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
 
     @Autowired
     private UserInfoRepository userInfoRepository;
+
+    @Autowired
+    private DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
 
     public Page<DcnbPhieuKnChatLuongHdrDTO> searchPage(CustomUserDetails currentUser, SearchPhieuKnChatLuong req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -106,6 +109,14 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
 //        }
         DcnbPhieuKnChatLuongHdr data = new DcnbPhieuKnChatLuongHdr();
         BeanUtils.copyProperties(objReq, data);
+        Optional<DcnbKeHoachDcDtl> keHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(objReq.getKeHoachDcDtlId());
+        if(keHoachDcDtl.isPresent()){
+            if(keHoachDcDtl.get().getParentId() != null){
+                data.setKeHoachDcDtlId(keHoachDcDtl.get().getParentId());
+            }else {
+                data.setKeHoachDcDtlId(objReq.getKeHoachDcDtlId());
+            }
+        }
         data.setNguoiTaoId(currentUser.getUser().getId());
         data.setNgayTao(LocalDateTime.now());
         data.setMaDvi(currentUser.getDvql());
@@ -146,6 +157,14 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
 
         DcnbPhieuKnChatLuongHdr data = optional.get();
         BeanUtils.copyProperties(objReq, data);
+        Optional<DcnbKeHoachDcDtl> keHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(objReq.getKeHoachDcDtlId());
+        if(keHoachDcDtl.isPresent()){
+            if(keHoachDcDtl.get().getParentId() != null){
+                data.setKeHoachDcDtlId(keHoachDcDtl.get().getParentId());
+            }else {
+                data.setKeHoachDcDtlId(objReq.getKeHoachDcDtlId());
+            }
+        }
         data.setNguoiSuaId(currentUser.getUser().getId());
         data.setNgaySua(LocalDateTime.now());
         data.setDcnbPhieuKnChatLuongDtl(objReq.getDcnbPhieuKnChatLuongDtl());
@@ -232,6 +251,9 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
             case Contains.CHODUYET_TP + Contains.TU_CHOI_TP:
                 optional.get().setNguoiDuyetTp(currentUser.getUser().getId());
                 optional.get().setNgayDuyetTp(LocalDate.now());
+                optional.get().setTpNguoiKt(currentUser.getUser().getFullName());
+                optional.get().setTpNguoiKtId(currentUser.getUser().getId());
+                optional.get().setNgayDuyetTp(LocalDate.now());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_LDC + Contains.TU_CHOI_LDC:
@@ -240,6 +262,8 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_TP + Contains.CHODUYET_LDC:
+                optional.get().setTpNguoiKt(currentUser.getUser().getFullName());
+                optional.get().setTpNguoiKtId(currentUser.getUser().getId());
                 optional.get().setNguoiDuyetTp(currentUser.getUser().getId());
                 optional.get().setNgayDuyetTp(LocalDate.now());
                 break;
@@ -342,6 +366,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         var dcnbPhieuKnChatLuongHdr = dcnbPhieuKnChatLuongHdrRepository.findById(objReq.getId());
         if (!dcnbPhieuKnChatLuongHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
         var userInfo = userInfoRepository.findById(dcnbPhieuKnChatLuongHdr.get().getNguoiPDuyet());
+        if (!userInfo.isPresent()) throw new Exception("Không tồn tại bản ghi");
         ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
@@ -362,7 +387,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
                 .soLuongHangBaoQuan("")
                 .hinhThucBq(dcnbPhieuKnChatLuongHdr.get().getHinhThucBq())
                 .tenThuKho(dcnbPhieuKnChatLuongHdr.get().getTenThuKho())
-                .ngayNhapDayKho(dcnbPhieuKnChatLuongHdr.get().getSoNhapDayKho())
+                .ngayNhapDayKho(dcnbPhieuKnChatLuongHdr.get().getNgayNhapDayKho().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .ngayLayMau(dcnbPhieuKnChatLuongHdr.get().getNgayLayMau().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .ngayKiem(dcnbPhieuKnChatLuongHdr.get().getNgayKiem().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .danhGiaCamQuan(dcnbPhieuKnChatLuongHdr.get().getDanhGiaCamQuan())

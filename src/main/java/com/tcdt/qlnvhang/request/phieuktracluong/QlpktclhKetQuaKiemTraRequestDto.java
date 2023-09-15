@@ -24,6 +24,7 @@ public class QlpktclhKetQuaKiemTraRequestDto {
 	private String kieu;
 
 	private String trangThai;
+	private String danhGia;
 
 	private Long phieuKtChatLuongId;
 }

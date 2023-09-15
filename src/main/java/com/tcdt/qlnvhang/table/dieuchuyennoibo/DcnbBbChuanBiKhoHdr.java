@@ -69,6 +69,10 @@ public class DcnbBbChuanBiKhoHdr extends BaseEntity implements Serializable, Clo
     private Long idPhieuNhapKho;
     private String soPhieuNhapKho;
     private BigDecimal soLuongPhieuNhapKho;
+    @Column(name = "BB_GIAO_NHAN_ID")
+    private Long bbGiaoNhanId;
+    @Column(name = "SO_BB_GIAO_NHAN")
+    private String soBbGiaoNhan;
     private String hthucKlot;
     private String pthucBquan;
     private BigDecimal dinhMucGiao;
@@ -89,6 +93,8 @@ public class DcnbBbChuanBiKhoHdr extends BaseEntity implements Serializable, Clo
     private Long nguoiPDuyet;
     @Column(name = "NGAY_PDUYET")
     private LocalDate ngayPDuyet;
+    @Column(name = "KE_HOACH_DC_DTL_ID")
+    private Long keHoachDcDtlId;
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 

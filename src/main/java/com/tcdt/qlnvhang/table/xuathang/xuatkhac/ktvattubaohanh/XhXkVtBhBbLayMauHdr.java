@@ -63,6 +63,8 @@ public class XhXkVtBhBbLayMauHdr extends BaseEntity implements Serializable {
   @Transient
   private String tenDvi;
   @Transient
+  private String tenDviCha;
+  @Transient
   private String diaChiDvi;
   @Transient
   private String tenLoaiVthh;
@@ -115,6 +117,11 @@ public class XhXkVtBhBbLayMauHdr extends BaseEntity implements Serializable {
       setTenNhaKho(tenNhaKho);
       setTenNganKho(tenNganKho);
       setTenLoKho(tenLoKho);
+    }
+    if (!DataUtils.isNullObject(getMaDvi())) {
+      String maDviCha = getMaDvi().length() >= 0 ? getMaDvi().substring(0, getMaDvi().length() - 2) : "";
+      String tenDviCha = mapDmucDvi.containsKey(maDviCha) ? mapDmucDvi.get(maDviCha) : null;
+      setTenDviCha(tenDviCha);
     }
   }
 

@@ -46,13 +46,12 @@ public interface DcnbPhieuKtChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "khdcd.thayDoiThuKho,pktcl.soPhieu,pktcl.ngayGiamDinh,pktcl.nhanXetKetLuan,pnk.soPhieuNhapKho, pnk.ngayLap, " +
             "khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan,khdcd.maDiemKhoNhan,khdcd.tenDiemKhoNhan,khdcd.maLoKhoNhan," +
             "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan," +
-            "pktcl.trangThai,pktcl.trangThai) " +
+            "pktcl.trangThai,pktcl.trangThai,khdcd.tichLuongKd,khdcd.id) " +
             "FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbPhieuKtChatLuongHdr pktcl On pktcl.qdDcId = qdc.id " +
-            "and ((khdcd.maLoKhoNhan is not null and khdcd.maLoKhoNhan = pktcl.maLoKho and khdcd.maNganKhoNhan = pktcl.maNganKho and khdcd.maLoKho = pktcl.maLoKhoXuat and khdcd.maNganKho = pktcl.maNganKhoXuat ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = pktcl.maNganKho and khdcd.maNganKho = pktcl.maNganKhoXuat))" +
+            "LEFT JOIN DcnbPhieuKtChatLuongHdr pktcl On pktcl.keHoachDcDtlId = khdcd.id " +
             "LEFT JOIN DcnbPhieuNhapKhoHdr pnk On pnk.qdDcCucId = qdc.id and pnk.idPhieuKtraCluong = pktcl.id and pnk.trangThai = '17' " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
@@ -75,7 +74,7 @@ public interface DcnbPhieuKtChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "khdcd.thayDoiThuKho,pktcl.soPhieu,pktcl.ngayGiamDinh,pktcl.nhanXetKetLuan,pnk.soPhieuNhapKho, pnk.ngayLap, " +
             "khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan,khdcd.maDiemKhoNhan,khdcd.tenDiemKhoNhan,khdcd.maLoKhoNhan," +
             "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan," +
-            "pktcl.trangThai,pktcl.trangThai "+
+            "pktcl.trangThai,pktcl.trangThai,khdcd.tichLuongKd,khdcd.id "+
             "ORDER BY qdc.soQdinh DESC")
     Page<DcnbPhieuKtChatLuongHdrDTO> searchPage(@Param("param")SearchPhieuKtChatLuong req, Pageable pageable);
 }

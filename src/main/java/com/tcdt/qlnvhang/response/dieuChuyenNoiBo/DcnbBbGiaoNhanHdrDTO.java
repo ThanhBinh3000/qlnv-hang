@@ -36,11 +36,10 @@ public class DcnbBbGiaoNhanHdrDTO {
     private Long bienBanKetThucNkId;
     private LocalDate ngayKetThucNk;
     private String soBienBanLayMau;
-    private Long bienBanLayMauId;
     private String trangThai;
     private String tenTrangThai;
-
-    public DcnbBbGiaoNhanHdrDTO(Long id, Long qdDcCucId, String soQdinh,LocalDate ngayKyQd, Integer namKh, LocalDate thoiHanDieuChuyen, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa,BigDecimal soLuongDc, String donViTinh, String soHoSoKt, Long hoSoKtId, String soBienBanGiaoNhan, String soBienBanKetThucNk, Long bienBanKetThucNkId, LocalDate ngayKetThucNk, String soBienBanLayMau, Long bienBanLayMauId, String trangThai, String tenTrangThai) {
+    private Long keHoachDcDtlId;
+    public DcnbBbGiaoNhanHdrDTO(Long id, Long qdDcCucId, String soQdinh,LocalDate ngayKyQd, Integer namKh, LocalDate thoiHanDieuChuyen, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa,BigDecimal soLuongDc, String donViTinh, String soHoSoKt, Long hoSoKtId, String soBienBanGiaoNhan, String soBienBanKetThucNk, Long bienBanKetThucNkId, LocalDate ngayKetThucNk, String soBienBanLayMau,String trangThai, String tenTrangThai,Long keHoachDcDtlId) {
         this.id = id;
         this.qdDcCucId = qdDcCucId;
         this.soQdinh = soQdinh;
@@ -68,8 +67,8 @@ public class DcnbBbGiaoNhanHdrDTO {
         this.bienBanKetThucNkId = bienBanKetThucNkId;
         this.ngayKetThucNk = ngayKetThucNk;
         this.soBienBanLayMau = soBienBanLayMau;
-        this.bienBanLayMauId = bienBanLayMauId;
         this.trangThai = trangThai;
         this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+        this.keHoachDcDtlId =keHoachDcDtlId;
     }
 }

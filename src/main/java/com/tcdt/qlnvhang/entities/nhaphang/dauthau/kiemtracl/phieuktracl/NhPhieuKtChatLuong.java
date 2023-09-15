@@ -115,6 +115,9 @@ public class NhPhieuKtChatLuong extends TrangThaiBaseEntity implements Serializa
 
 	@Column(name = "SO_LUONG_NHAP_KHO")
 	private BigDecimal soLuongNhapKho;
+	private BigDecimal slKhKb;
+	private BigDecimal slTtKtra;
+	private Boolean ketLuanCuoi;
 
 	@Column(name = "SO_CHUNG_THU_GIAM_DINH")
 	private String soChungThuGiamDinh;

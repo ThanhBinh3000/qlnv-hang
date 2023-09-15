@@ -17,8 +17,8 @@ public class DcnbBBKetThucNKHdrPreview {
     private String tenKeToanTruong;
     private Long ktvBQuan;
     private String tenThuKho;
-    private String chungLoaiHangHoa; //Chủng loại hàng DTQG
-    private String tenHangDtqg; //Tên hàng DTQG
+    private String chungLoaiHangHoa;
+    private String tenHangDtqg;
     private String tenNganKho;
     private String tenLoKho;
     private String tenNhaKho;

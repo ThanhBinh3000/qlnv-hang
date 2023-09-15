@@ -15,15 +15,15 @@ public class DcnbBbNhapDayKhoHdrPreview {
     private String ngayLap;
     private String tenLanhDao;
     private String tenKeToan;
-    private String ktvBaoQuan;//KTV bảo quản
+    private String ktvBaoQuan;
     private String tenThuKho;
-    private String chungLoaiHangHoa; //Chủng loại hàng DTQG
-    private String tenHangDtqg; //Tên hàng DTQG
+    private String chungLoaiHangHoa;
+    private String tenHangDtqg;
     private String tenNganKho;
     private String tenLoKho;
     private String tenNhaKho;
     private String tenDiemKho;
-    private String tenDiaDiemKho;//Địa điểm kho
+    private String tenDiaDiemKho;
     private String ngayBdNhap;
     private String ngayKtNhap;
     List<DcnbBbNhapDayKhoDtlDto> dcnbBbNhapDayKhoDtls;

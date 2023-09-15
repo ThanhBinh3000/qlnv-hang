@@ -759,11 +759,11 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 				// Set biên bản chuẩn bị kho
 //				if(req.getBienBan().contains("bienBanChuanBiKho")){
-//					List<NhBienBanChuanBiKho> bbChuanBiKho = nhBienBanChuanBiKhoRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
-//					bbChuanBiKho.forEach( item -> {
-//						item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
-//					});
-//					dtl.setListBienBanChuanBiKho(bbChuanBiKho);
+					List<NhBienBanChuanBiKho> bbChuanBiKho = nhBienBanChuanBiKhoRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(), dtl.getMaDvi());
+					bbChuanBiKho.forEach( item -> {
+						item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
+					});
+					dtl.setListBienBanChuanBiKho(bbChuanBiKho);
 //				}
 
 				dtl.setTenLoaiVthh(mapDmucHh.get(dtl.getLoaiVthh()));
@@ -873,6 +873,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			ddNhap.setBienBanGuiHang(nhBienBanGuiHangRepository.findByIdDdiemGiaoNvNh(ddNhap.getId()));
 			ddNhap.setListPhieuNhapKho(nhPhieuNhapKhoService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
 			ddNhap.setListBangKeVt(nhBangKeVtRepository.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
+			ddNhap.setListBbNtbqld(hhBbNghiemthuKlstRepository.findByIdDdiemGiaoNvNh(ddNhap.getId()));
 			if(!ObjectUtils.isEmpty(ddNhap.getBienBanLayMau())){
 				ddNhap.setHoSoKyThuat(nhHoSoKyThuatRepository.findBySoBbLayMau(ddNhap.getBienBanLayMau().getSoBienBan()));
 			}

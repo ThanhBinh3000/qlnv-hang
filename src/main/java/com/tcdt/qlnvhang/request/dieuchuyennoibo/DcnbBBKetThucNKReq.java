@@ -80,6 +80,8 @@ public class DcnbBBKetThucNKReq extends BaseRequest {
     private String trangThai;
     private String lyDoTuChoi;
     private Long nguoiGDuyet;
+    private String soBbLmBg;
+    private Long bbLmBgId;
 
     private LocalDate ngayGDuyet;
 
@@ -106,4 +108,9 @@ public class DcnbBBKetThucNKReq extends BaseRequest {
     private Boolean isVatTu = false;
     private List<String> dsLoaiHang = new ArrayList<>();
     private ReportTemplateRequest reportTemplateRequest;
+    @NotNull
+    private Long keHoachDcDtlId;
+    public Long getqDinhDccId() {
+        return qDinhDccId;
+    }
 }

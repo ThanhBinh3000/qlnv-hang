@@ -40,9 +40,12 @@ public class DcnbBbGiaoNhanHdrReq extends BaseRequest {
     private Long qdDcCucId;
     @NotNull
     private LocalDate ngayQdDcCuc;
+    @NotNull
     private String soBbKtNhapKho;
+    @NotNull
     private Long idBbKtNhapKho;
-    private Long idKeHoachDtl;
+    @NotNull
+    private Long keHoachDcDtlId;
     @NotNull
     private String maDiemKho;
     @NotNull
@@ -69,6 +72,7 @@ public class DcnbBbGiaoNhanHdrReq extends BaseRequest {
     @NotNull
     private String dviTinh;
     private LocalDate ngayBdNhap;
+    @NotNull
     private LocalDate ngayKtNhap;
     private BigDecimal soLuongQdDcCuc;
     private String ghiChu;

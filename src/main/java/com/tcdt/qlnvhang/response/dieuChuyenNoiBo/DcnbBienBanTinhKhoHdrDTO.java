@@ -36,8 +36,8 @@ public class DcnbBienBanTinhKhoHdrDTO {
     private String tenNganKho;
     private LocalDate ngayHieuLuc;
     private LocalDate ngayKyQdinh;
-//    thời hạn điều chuyển, ngày bắt đầu xuất, ngày kết thúc xuất và ngày xuất kho
-    public DcnbBienBanTinhKhoHdrDTO(Long id, Long qDinhDcId, Long phieuXuatKhoId, Long bangKeId, String soQdinh, Integer nam, LocalDate thoiHanDieuChuyen, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String soBbTinhKho, LocalDate ngayBatDauXuat, LocalDate ngayKetThucXuat, String soPhieuXuatKho, String soBangKe, LocalDate ngayXuatKho, String trangThai, String tenTrangThai, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String maNhaKho, String tenNhaKho, String maNganKho, String tenNganKho, LocalDate ngayHieuLuc, LocalDate ngayKyQdinh) {
+    private Long keHoachDcDtlId;
+    public DcnbBienBanTinhKhoHdrDTO(Long id, Long qDinhDcId, Long phieuXuatKhoId, Long bangKeId, String soQdinh, Integer nam, LocalDate thoiHanDieuChuyen, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String soBbTinhKho, LocalDate ngayBatDauXuat, LocalDate ngayKetThucXuat, String soPhieuXuatKho, String soBangKe, LocalDate ngayXuatKho, String trangThai, String tenTrangThai, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String maNhaKho, String tenNhaKho, String maNganKho, String tenNganKho, LocalDate ngayHieuLuc, LocalDate ngayKyQdinh,Long keHoachDcDtlId) {
         this.id = id;
         this.qDinhDcId = qDinhDcId;
         this.phieuXuatKhoId = phieuXuatKhoId;
@@ -67,5 +67,6 @@ public class DcnbBienBanTinhKhoHdrDTO {
         this.tenNganKho = tenNganKho;
         this.ngayHieuLuc = ngayHieuLuc;
         this.ngayKyQdinh = ngayKyQdinh;
+        this.keHoachDcDtlId=keHoachDcDtlId;
     }
 }

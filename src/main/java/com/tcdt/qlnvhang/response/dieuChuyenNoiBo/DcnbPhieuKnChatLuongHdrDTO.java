@@ -42,8 +42,12 @@ public class DcnbPhieuKnChatLuongHdrDTO {
     private Long thuKhoId;
     private Long thuKhoNhanId;
     private String thuKhoNhan;
-
-    public DcnbPhieuKnChatLuongHdrDTO(Long id, Long bBLayMauId, Long qDinhDccId, String soQdinh, LocalDate ngayHieuLucQd, Integer nam, LocalDate thoiHanDieuChuyen, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, Boolean thayDoiThuKho, String soPhieuKnChatLuong, LocalDate ngayKiemNghiem, String soBBLayMau, LocalDate ngaylayMau, String soBBTinhKho, LocalDate ngayXuatDocKho, String bbHaoDoi, String trangThai, String tenTrangThai, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String maNhaKho, String tenNhaKho, String thuKho, String maNganKho, String tenNganKho, LocalDate ngayHieuLuc, String donViTinh, Long thuKhoId, Long thuKhoNhanId, String thuKhoNhan) {
+    private Long bbNhapDayKhoId;
+    private String soNhapDayKho;
+    private LocalDate ngayNhapDayKho;
+    private LocalDate ngayLapBbTinhKho;
+    private Long keHoachDcDtlId;
+    public DcnbPhieuKnChatLuongHdrDTO(Long id, Long bBLayMauId, Long qDinhDccId, String soQdinh, LocalDate ngayHieuLucQd, Integer nam, LocalDate thoiHanDieuChuyen, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, Boolean thayDoiThuKho, String soPhieuKnChatLuong, LocalDate ngayKiemNghiem, String soBBLayMau, LocalDate ngaylayMau, String soBBTinhKho, LocalDate ngayXuatDocKho, String bbHaoDoi, String trangThai, String tenTrangThai, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String maNhaKho, String tenNhaKho, String thuKho, String maNganKho, String tenNganKho, LocalDate ngayHieuLuc, String donViTinh, Long thuKhoId, Long thuKhoNhanId, String thuKhoNhan,Long bbNhapDayKhoId,String soNhapDayKho,LocalDate ngayNhapDayKho,LocalDate ngayLapBbTinhKho,Long keHoachDcDtlId) {
         this.id = id;
         this.bBLayMauId = bBLayMauId;
         this.qDinhDccId = qDinhDccId;
@@ -79,9 +83,14 @@ public class DcnbPhieuKnChatLuongHdrDTO {
         this.thuKhoId = thuKhoId;
         this.thuKhoNhanId = thuKhoNhanId;
         this.thuKhoNhan = thuKhoNhan;
+        this.bbNhapDayKhoId = bbNhapDayKhoId;
+        this.soNhapDayKho = soNhapDayKho;
+        this.ngayNhapDayKho = ngayNhapDayKho;
+        this.ngayLapBbTinhKho = ngayLapBbTinhKho;
+        this.keHoachDcDtlId=keHoachDcDtlId;
     }
 
-    public DcnbPhieuKnChatLuongHdrDTO(Long id, Long bBLayMauId, Long qDinhDccId, String soQdinh, LocalDate ngayHieuLucQd, Integer nam, LocalDate thoiHanDieuChuyen, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, Boolean thayDoiThuKho, String soPhieuKnChatLuong, LocalDate ngayKiemNghiem, String soBBLayMau, LocalDate ngaylayMau, String soBBTinhKho, LocalDate ngayXuatDocKho, String bbHaoDoi, String trangThai, String tenTrangThai, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String maNhaKho, String tenNhaKho, String thuKho, String maNganKho, String tenNganKho, LocalDate ngayHieuLuc, String donViTinh, Long thuKhoId) {
+    public DcnbPhieuKnChatLuongHdrDTO(Long id, Long bBLayMauId, Long qDinhDccId, String soQdinh, LocalDate ngayHieuLucQd, Integer nam, LocalDate thoiHanDieuChuyen, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, Boolean thayDoiThuKho, String soPhieuKnChatLuong, LocalDate ngayKiemNghiem, String soBBLayMau, LocalDate ngaylayMau, String soBBTinhKho, LocalDate ngayXuatDocKho, String bbHaoDoi, String trangThai, String tenTrangThai, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String maNhaKho, String tenNhaKho, String thuKho, String maNganKho, String tenNganKho, LocalDate ngayHieuLuc, String donViTinh, Long thuKhoId,Long bbNhapDayKhoId,String soNhapDayKho,LocalDate ngayNhapDayKho,LocalDate ngayLapBbTinhKho,Long keHoachDcDtlId) {
         this.id = id;
         this.bBLayMauId = bBLayMauId;
         this.qDinhDccId = qDinhDccId;
@@ -115,5 +124,10 @@ public class DcnbPhieuKnChatLuongHdrDTO {
         this.ngayHieuLuc = ngayHieuLuc;
         this.donViTinh = donViTinh;
         this.thuKhoId = thuKhoId;
+        this.bbNhapDayKhoId = bbNhapDayKhoId;
+        this.soNhapDayKho = soNhapDayKho;
+        this.ngayNhapDayKho = ngayNhapDayKho;
+        this.ngayLapBbTinhKho = ngayLapBbTinhKho;
+        this.keHoachDcDtlId=keHoachDcDtlId;
     }
 }

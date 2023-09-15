@@ -21,9 +21,7 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuXuatKhoHdr;
 import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
-import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.DataUtils;
-import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.*;
 import lombok.var;
 import org.hibernate.Hibernate;
 import org.springframework.beans.BeanUtils;
@@ -38,7 +36,6 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -68,6 +65,29 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
     @Autowired
     private KtNganLoRepository ktNganLoRepository;
 
+    @Transactional
+    public DcnbBangKeCanHangHdr save(CustomUserDetails currentUser, DcnbBangKeCanHangHdrReq objReq) throws Exception {
+        if (currentUser == null) {
+            throw new Exception("Bad request.");
+        }
+//        Optional<DcnbBangKeCanHangHdr> optional = dcnbBangKeCanHangHdrRepository.findFirstBySoBangKe(objReq.getSoBangKe());
+//        if (optional.isPresent() && objReq.getSoBangKe().split("/").length == 1) {
+//            throw new Exception("Số bảng kê đã tồn tại");
+//        }
+        DcnbBangKeCanHangHdr data = new DcnbBangKeCanHangHdr();
+        BeanUtils.copyProperties(objReq, data);
+        data.setMaDvi(currentUser.getDvql());
+        data.setTenDvi(currentUser.getUser().getTenDvi());
+        if (objReq.getDcnbBangKeCanHangDtl() != null) {
+            objReq.getDcnbBangKeCanHangDtl().forEach(e -> e.setDcnbBangKeCanHangHdr(data));
+        }
+        DcnbBangKeCanHangHdr created = dcnbBangKeCanHangHdrRepository.save(data);
+        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BKCH-" + currentUser.getUser().getDvqlTenVietTat();
+        created.setSoBangKe(so);
+        dcnbBangKeCanHangHdrRepository.save(created);
+        return created;
+    }
+
     public Page<DcnbBangKeCanHangHdrDTO> searchPage(CustomUserDetails currentUser, SearchBangKeCanHang req) throws Exception {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
@@ -90,29 +110,6 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
             searchDto = dcnbBangKeCanHangHdrRepository.searchPageNhan(req, pageable);
         }
         return searchDto;
-    }
-
-    @Transactional
-    public DcnbBangKeCanHangHdr save(CustomUserDetails currentUser, DcnbBangKeCanHangHdrReq objReq) throws Exception {
-        if (currentUser == null) {
-            throw new Exception("Bad request.");
-        }
-//        Optional<DcnbBangKeCanHangHdr> optional = dcnbBangKeCanHangHdrRepository.findFirstBySoBangKe(objReq.getSoBangKe());
-//        if (optional.isPresent() && objReq.getSoBangKe().split("/").length == 1) {
-//            throw new Exception("Số bảng kê đã tồn tại");
-//        }
-        DcnbBangKeCanHangHdr data = new DcnbBangKeCanHangHdr();
-        BeanUtils.copyProperties(objReq, data);
-        data.setMaDvi(currentUser.getDvql());
-        data.setTenDvi(currentUser.getUser().getTenDvi());
-        if (objReq.getDcnbBangKeCanHangDtl() != null) {
-            objReq.getDcnbBangKeCanHangDtl().forEach(e -> e.setDcnbBangKeCanHangHdr(data));
-        }
-        DcnbBangKeCanHangHdr created = dcnbBangKeCanHangHdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BKCH-" + currentUser.getUser().getDvqlTenVietTat();
-        created.setSoBangKe(so);
-        dcnbBangKeCanHangHdrRepository.save(created);
-        return created;
     }
 
     @Transactional
@@ -366,11 +363,12 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
 
     private DcnbBangKeCanHangPreview setDataToPreview(Optional<DcnbBangKeCanHangHdr> dcnbBangKeCanHangHdr) {
         return DcnbBangKeCanHangPreview.builder()
+                .tenBang(CheckTypeDieuChuyenNoiBo.checkType(dcnbBangKeCanHangHdr.get().getType()))
                 .maDvi(dcnbBangKeCanHangHdr.get().getMaDvi())
                 .maQhns(dcnbBangKeCanHangHdr.get().getMaQhns())
                 .soBangKe(dcnbBangKeCanHangHdr.get().getSoBangKe())
                 .tenThuKho(dcnbBangKeCanHangHdr.get().getTenThuKho())
-                .lhKho(getDataKho(dcnbBangKeCanHangHdr.get().getMaDvi())) // Loai hình kho
+                .lhKho(getDataKho(dcnbBangKeCanHangHdr.get().getMaDvi()))
                 .tenNganKho(dcnbBangKeCanHangHdr.get().getTenNganKho())
                 .tenLoKho(dcnbBangKeCanHangHdr.get().getTenLoKho())
                 .tenDiemKho(dcnbBangKeCanHangHdr.get().getTenDiemKho())
@@ -395,7 +393,7 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
         List<DcnbBangKeCanHangDtlDto> dcnbBangKeCanHangDtlDtoList = new ArrayList<>();
         int stt = 1;
         for (DcnbBangKeCanHangDtl res : dcnbBangKeCanHangDtl) {
-            DcnbBangKeCanHangDtlDto dcnbBangKeCanHangDtlDto = DcnbBangKeCanHangDtlDto.builder()
+            var dcnbBangKeCanHangDtlDto = DcnbBangKeCanHangDtlDto.builder()
                     .stt(stt++)
                     .maCan(res.getMaCan())
                     .soBaoBi(res.getMaCan())

@@ -1,20 +1,26 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
+import com.tcdt.qlnvhang.common.DocxToPdfConverter;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho.XhDgPhieuXuatKho;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.xuatkho.XhDgPhieuXuatKhoRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBangKeXuatVTReq;
-import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeNhapVTHdrDTO;
+import com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang.DcnbBangKeXuatVTPreview;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeXuatVTDtlDto;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeXuatVTHdrDTO;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBangKeXuatVTService;
+import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeXuatVTDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeXuatVTHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuXuatKhoHdr;
-import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.ExportExcel;
-import com.tcdt.qlnvhang.util.UserUtils;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
+import com.tcdt.qlnvhang.util.*;
+import lombok.var;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,12 +31,14 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class DcnbBangKeXuatVTServiceImpl implements DcnbBangKeXuatVTService {
+public class DcnbBangKeXuatVTServiceImpl extends BaseServiceImpl implements DcnbBangKeXuatVTService {
     @Autowired
     private DcnbBangKeXuatVTHdrRepository hdrRepository;
     @Autowired
@@ -41,6 +49,10 @@ public class DcnbBangKeXuatVTServiceImpl implements DcnbBangKeXuatVTService {
     private DcnbDataLinkDtlRepository dcnbDataLinkDtlRepository;
     @Autowired
     private DcnbPhieuXuatKhoHdrRepository dcnbPhieuXuatKhoHdrRepository;
+    @Autowired
+    public DocxToPdfConverter docxToPdfConverter;
+    @Autowired
+    public XhDgPhieuXuatKhoRepository xhDgPhieuXuatKhoRepository;
 
     @Override
     public Page<DcnbBangKeXuatVTHdr> searchPage(DcnbBangKeXuatVTReq req) throws Exception {
@@ -239,5 +251,67 @@ public class DcnbBangKeXuatVTServiceImpl implements DcnbBangKeXuatVTService {
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
+    }
+
+    @Override
+    public ReportTemplateResponse preview(DcnbBangKeXuatVTReq objReq) throws Exception {
+        var dcnbBangKeXuatVT = hdrRepository.findById(objReq.getId());
+        if (!dcnbBangKeXuatVT.isPresent()) throw new Exception("Không tồn tại bản ghi");
+        var soDxuat = xhDgPhieuXuatKhoRepository.findBySoPhieuXuatKho(dcnbBangKeXuatVT.get().getSoPhieuXuatKho());
+        if (!soDxuat.isPresent()) throw new Exception("Không tồn tại bản ghi");
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        var dcnbBangKeXuatVTPreview = setDataToPreview(dcnbBangKeXuatVT, soDxuat);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBangKeXuatVTPreview);
+    }
+
+    private DcnbBangKeXuatVTPreview setDataToPreview(Optional<DcnbBangKeXuatVTHdr> dcnbBangKeXuatVT,
+                                                     Optional<XhDgPhieuXuatKho> soDxuat) {
+        Long tongSlHang = tongSlHang(dcnbBangKeXuatVT.get().getDcnbBangKeXuatVTDtl());
+        return DcnbBangKeXuatVTPreview.builder()
+                .tenDvi(dcnbBangKeXuatVT.get().getTenDvi())
+                .maQhns(dcnbBangKeXuatVT.get().getMaQhns())
+                .soBangKe(dcnbBangKeXuatVT.get().getSoBangKe())
+                .tenThuKho(dcnbBangKeXuatVT.get().getTenThuKho())
+                .tenNganKho(dcnbBangKeXuatVT.get().getTenNganKho())
+                .tenLoKho(dcnbBangKeXuatVT.get().getTenLoKho())
+                .tenDiemKho(dcnbBangKeXuatVT.get().getTenDiemKho())
+                .cloaiVthh(dcnbBangKeXuatVT.get().getCloaiVthh())
+                .donViTinh(dcnbBangKeXuatVT.get().getDonViTinh())
+                .hoVaTenNguoiNhanHang("")
+                .thoiHanGiaoNhan(dcnbBangKeXuatVT.get().getThoiHanGiaoNhan().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .nguoiGiamSat("")
+                .tongSlHang(tongSlHang)
+                .tongSlHangBc(NumberToWord.convert(tongSlHang))
+                .ngayNhap(dcnbBangKeXuatVT.get().getNgayNhap().getDayOfMonth())
+                .thangNhap(dcnbBangKeXuatVT.get().getNgayNhap().getMonth().getValue())
+                .namNhap(dcnbBangKeXuatVT.get().getNgayNhap().getYear())
+                .ngayThangXuat(soDxuat.get().getNgayXuatKho().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .dcnbBangKeXuatVTDtlDto(dcnbBangKeXuatVTDtlToDto(dcnbBangKeXuatVT.get().getDcnbBangKeXuatVTDtl()))
+                .build();
+    }
+
+    private Long tongSlHang(List<DcnbBangKeXuatVTDtl> dcnbBangKeXuatVTDtl){
+        var tongSlHang = 0l;
+        for (var res : dcnbBangKeXuatVTDtl) {
+            tongSlHang += Long.parseLong(String.valueOf(res.getSoLuong()));
+        }
+        return tongSlHang;
+    }
+
+
+    private List<DcnbBangKeXuatVTDtlDto> dcnbBangKeXuatVTDtlToDto(List<DcnbBangKeXuatVTDtl> dcnbBangKeXuatVTDtl) {
+        List<DcnbBangKeXuatVTDtlDto> dcnbBangKeXuatVTDtlDtos = new ArrayList<>();
+        int stt = 1;
+        for (var res : dcnbBangKeXuatVTDtl) {
+            var dcnbBangKeXuatVTDtlDto = DcnbBangKeXuatVTDtlDto.builder()
+                    .stt(stt++)
+                    .soSerial(res.getSoSerial())
+                    .soLuong(res.getSoLuong())
+                    .build();
+            dcnbBangKeXuatVTDtlDtos.add(dcnbBangKeXuatVTDtlDto);
+        }
+        return dcnbBangKeXuatVTDtlDtos;
     }
 }
