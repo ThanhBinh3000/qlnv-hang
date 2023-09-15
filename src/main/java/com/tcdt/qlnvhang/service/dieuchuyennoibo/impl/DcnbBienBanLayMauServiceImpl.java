@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
@@ -24,6 +25,7 @@ import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DieuChuyenNoiBo;
 import lombok.var;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
@@ -321,8 +323,10 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
     public ReportTemplateResponse preview(DcnbBienBanLayMauHdrReq objReq) throws Exception {
         var dcnbBienBanLayMauHdr = dcnbBienBanLayMauHdrRepository.findById(objReq.getId());
         if (!dcnbBienBanLayMauHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
-        var userInfo = userInfoRepository.findById(dcnbBienBanLayMauHdr.get().getNguoiPDuyet());
-        if (!userInfo.isPresent()) throw new Exception("Không tồn tại bản ghi");
+        Optional<UserInfo> userInfo = null;
+        if (dcnbBienBanLayMauHdr.get().getNguoiPDuyet() != null) {
+            userInfo = userInfoRepository.findById(dcnbBienBanLayMauHdr.get().getNguoiPDuyet());
+        }
         Optional<DcnbQuyetDinhDcCHdr> dcnbQuyetDinhDcCHdr = dcnbQuyetDinhDcCHdrRepository.findById(dcnbBienBanLayMauHdr.get().getQdccId());
         if (!dcnbQuyetDinhDcCHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
         ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
@@ -345,10 +349,10 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
                 .soLuongMau(dcnbBienBanLayMauHdr.get().getSoLuongMau())
                 .donViTinh(dcnbBienBanLayMauHdr.get().getDonViTinh())
                 .pPLayMau(dcnbBienBanLayMauHdr.get().getPPLayMau())
-                .chiTieuKiemTra(dcnbBienBanLayMauHdr.get().getChiTieuKiemTra())
+                .chiTieuKiemTra(DieuChuyenNoiBo.getChiTieuKiemTra(dcnbBienBanLayMauHdr.get().getChiTieuKiemTra()))
                 .ktvBaoQuan(dcnbBienBanLayMauHdr.get().getKtvBaoQuan())
                 .truongBpKtbq(dcnbBienBanLayMauHdr.get().getKtvBaoQuan())
-                .lanhDaoChiCuc(userInfo.get().getFullName())
+                .lanhDaoChiCuc(userInfo.isPresent() ? userInfo.get().getFullName() : "")
                 .dcnbBienBanLayMauDtl(dcnbBienBanLayMauDtlToDto(dcnbBienBanLayMauHdr.get().getDcnbBienBanLayMauDtl()))
                 .soQdinhDcc(dcnbBienBanLayMauHdr.get().getSoQdinhDcc())
                 .ngayKyQDCC(dcnbQuyetDinhDcCHdr.get().getNgayKyQdinh().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))

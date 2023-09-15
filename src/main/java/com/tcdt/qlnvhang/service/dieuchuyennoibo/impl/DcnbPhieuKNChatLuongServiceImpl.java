@@ -369,7 +369,6 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         if (dcnbPhieuKnChatLuongHdr.get().getNguoiDuyetLdCuc() != null) {
             userInfo = userInfoRepository.findById(dcnbPhieuKnChatLuongHdr.get().getNguoiDuyetLdCuc());
         }
-
         ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
