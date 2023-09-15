@@ -157,6 +157,14 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
 
         DcnbPhieuKnChatLuongHdr data = optional.get();
         BeanUtils.copyProperties(objReq, data);
+        Optional<DcnbKeHoachDcDtl> keHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(objReq.getKeHoachDcDtlId());
+        if(keHoachDcDtl.isPresent()){
+            if(keHoachDcDtl.get().getParentId() != null){
+                data.setKeHoachDcDtlId(keHoachDcDtl.get().getParentId());
+            }else {
+                data.setKeHoachDcDtlId(objReq.getKeHoachDcDtlId());
+            }
+        }
         data.setNguoiSuaId(currentUser.getUser().getId());
         data.setNgaySua(LocalDateTime.now());
         data.setDcnbPhieuKnChatLuongDtl(objReq.getDcnbPhieuKnChatLuongDtl());
