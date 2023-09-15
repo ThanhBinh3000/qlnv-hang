@@ -23,6 +23,7 @@ public class XhXkVtBhPhieuXuatNhapKhoRequest extends BaseRequest {
     private BigDecimal duCo;
     private String soCanCu;
     private Long idCanCu;
+    private LocalDate ngayKyCanCu;
     private Integer soLanLm;
     private String maDiaDiem; // mã địa điểm (mã lô/ngăn kho)
     private String soPhieuKdcl;
