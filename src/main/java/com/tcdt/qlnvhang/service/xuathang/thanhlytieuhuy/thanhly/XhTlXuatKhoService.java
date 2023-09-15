@@ -91,8 +91,8 @@ public class XhTlXuatKhoService extends BaseServiceImpl {
             data.setMapLoaiHinhNx(mapLoaiHinhNx);
             data.setMapKieuNx(mapKieuNx);
             data.setTrangThai(data.getTrangThai());
-            data.setTenNguoiPduyet(ObjectUtils.isEmpty(data.getNguoiPduyetId()) ? null : userInfoRepository.findById(data.getNguoiPduyetId()).get().getFullName());
-            data.setTenNguoiLapPhieu(ObjectUtils.isEmpty(data.getIdNguoiLapPhieu()) ? null : userInfoRepository.findById(data.getIdNguoiLapPhieu()).get().getFullName());
+//            data.setTenNguoiPduyet(ObjectUtils.isEmpty(data.getNguoiPduyetId()) ? null : userInfoRepository.findById(data.getNguoiPduyetId()).get().getFullName());
+//            data.setTenNguoiLapPhieu(ObjectUtils.isEmpty(data.getIdNguoiLapPhieu()) ? null : userInfoRepository.findById(data.getIdNguoiLapPhieu()).get().getFullName());
         });
         return allById;
     }
