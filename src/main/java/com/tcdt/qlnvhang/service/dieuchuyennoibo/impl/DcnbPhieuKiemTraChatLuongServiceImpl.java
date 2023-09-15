@@ -310,7 +310,10 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         if (!dcnbPhieuKtChatLuongHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
         var qlnvDmDonvi = qlnvDmDonviRepository.findByMaDvi(dcnbPhieuKtChatLuongHdr.get().getMaDvi());
         if (qlnvDmDonvi == null) throw new Exception("Không tồn tại bản ghi");
-        var userInfo = userInfoRepository.findById(dcnbPhieuKtChatLuongHdr.get().getNguoiPDuyet());
+        Optional<UserInfo> userInfo = null;
+        if (dcnbPhieuKtChatLuongHdr.get().getNguoiPDuyet() != null) {
+            userInfo = userInfoRepository.findById(dcnbPhieuKtChatLuongHdr.get().getNguoiPDuyet());
+        }
         if (!userInfo.isPresent()) throw new Exception("Không tồn tại bản ghi");
         ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
@@ -348,7 +351,7 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
                 .namNhap(dcnbPhieuKtChatLuongHdr.get().getNgayLapPhieu().getYear())
                 .ktvBaoQuan(dcnbPhieuKtChatLuongHdr.get().getNguoiKt())
                 .tenThuKho(dcnbPhieuKtChatLuongHdr.get().getTenThuKho())
-                .tenLanhDaoChiCuc(userInfo.get().getFullName())
+                .tenLanhDaoChiCuc(userInfo.isPresent() ? userInfo.get().getFullName() : "")
                 .dcnbPhieuKtChatLuongDtl(dcnbPhieuKtChatLuongDtlToDto(dcnbPhieuKtChatLuongHdr.get().getDcnbPhieuKtChatLuongDtl()))
                 .build();
     }
