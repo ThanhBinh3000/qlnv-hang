@@ -342,8 +342,8 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
         List<HhQdKhlcntHdr> data = page.getContent();
 
         String title = "Danh sách các gói thầu";
-        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số KH/đề xuất", "Số QĐ PD KHLCNT", "Số QĐ PD KQLCNT", "Ngày QĐ PD KQLCNT", "Tổng số gói thầu", "Số gói thầu đã trúng", "Số gói thầu đã trượt",
-                "Thời gian thực hiện dự án", "Phương thức LCNT", "Chủng loại hàng hóa", "Trạng thái"};
+        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số công văn/tờ trình", "Số QĐ PD KHLCNT", "Số QĐ PD KQLCNT", "Ngày QĐ PD KQLCNT", "Tổng số gói thầu", "Số gói thầu đã trúng", "Số gói thầu đã trượt",
+                "Thời gian thực hiện dự án", "Phương thức LCNT", "Chủng loại hàng DTQG", "Trạng thái"};
         String filename = "Danh_sach_cac_goi_thau.xlsx";
 
         List<Object[]> dataList = new ArrayList<Object[]>();
