@@ -353,8 +353,10 @@ public class DcnbBbNhapDayKhoServiceImpl extends BaseServiceImpl implements Dcnb
         var dcnbBbNhapDayKhoDtls = dtlRepository.findByHdrId(dcnbBbNhapDayKhoHdr.get().getId());
         if (dcnbBbNhapDayKhoDtls.size() == 0) throw new Exception("Không tồn tại bản ghi");
         var dcnbBbNhapDayKhoDtlDtos = convertDcnbBbNhapDayKhoDtlToDto(dcnbBbNhapDayKhoDtls);
-        var userInfo = userInfoRepository.findById(dcnbBbNhapDayKhoHdr.get().getNguoiPDuyet());
-        if (!userInfo.isPresent()) throw new Exception("Không tồn tại bản ghi");
+        Optional<UserInfo> userInfo = null;
+        if (dcnbBbNhapDayKhoHdr.get().getNguoiPDuyeKtvbq() != null) {
+            userInfo = userInfoRepository.findById(dcnbBbNhapDayKhoHdr.get().getNguoiPDuyeKtvbq());
+        }
         var ktDiemKho = ktDiemKhoRepository.findByMaDiemkho(dcnbBbNhapDayKhoHdr.get().getMaDiemKho());
         if (ktDiemKho == null) throw new Exception("Không tồn tại bản ghi");
         ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
@@ -387,7 +389,7 @@ public class DcnbBbNhapDayKhoServiceImpl extends BaseServiceImpl implements Dcnb
                 .ngayLap(dcnbBbNhapDayKhoHdr.get().getNgayLap().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .tenLanhDao(dcnbBbNhapDayKhoHdr.get().getTenLanhDao())
                 .tenKeToan(dcnbBbNhapDayKhoHdr.get().getTenKeToan())
-                .ktvBaoQuan(userInfo.get().getFullName())
+                .ktvBaoQuan(userInfo.isPresent() ? userInfo.get().getFullName() : "")
                 .tenThuKho(dcnbBbNhapDayKhoHdr.get().getTenThuKho())
                 .chungLoaiHangHoa(dcnbBbNhapDayKhoHdr.get().getTenCloaiVthh())
                 .tenHangDtqg(dcnbBbNhapDayKhoHdr.get().getTenCloaiVthh())

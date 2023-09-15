@@ -363,7 +363,7 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
 
     private DcnbBangKeCanHangPreview setDataToPreview(Optional<DcnbBangKeCanHangHdr> dcnbBangKeCanHangHdr) {
         return DcnbBangKeCanHangPreview.builder()
-                .tenBang(CheckTypeDieuChuyenNoiBo.checkType(dcnbBangKeCanHangHdr.get().getType()))
+                .tenBang(DieuChuyenNoiBo.checkType(dcnbBangKeCanHangHdr.get().getType()))
                 .maDvi(dcnbBangKeCanHangHdr.get().getMaDvi())
                 .maQhns(dcnbBangKeCanHangHdr.get().getMaQhns())
                 .soBangKe(dcnbBangKeCanHangHdr.get().getSoBangKe())
