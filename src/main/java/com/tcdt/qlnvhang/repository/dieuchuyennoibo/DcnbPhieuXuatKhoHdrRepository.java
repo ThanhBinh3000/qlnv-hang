@@ -76,6 +76,7 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuXuatKhoHdrListDTO(" +
             "pxk.id,pxk.soPhieuXuatKho,pxk.ngayTaoPhieu, pxk.tongSoLuong, pkncl.id, pkncl.soPhieu,pxk.bangKeChId, pxk.soBangKeCh,bkxvth.id, bkxvth.soBangKe ) " +
             "FROM DcnbPhieuXuatKhoHdr pxk " +
+            "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.id = pxk.keHoachDcDtlId " +
             "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On pkncl.id = pxk.phieuKnChatLuongHdrId " +
             "LEFT JOIN DcnbBangKeXuatVTHdr bkxvth On bkxvth.phieuXuatKhoId = pxk.id " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = pxk.cloaiVthh " +
@@ -85,6 +86,7 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
             "AND ((:#{#param.qdinhDccId} IS NULL OR pxk.qddcId = :#{#param.qdinhDccId}))" +
             "AND ((:#{#param.maLoKho} IS NULL OR pxk.maLoKho = :#{#param.maLoKho}))" +
             "AND ((:#{#param.maNganKho} IS NULL OR pxk.maNganKho = :#{#param.maNganKho}))" +
+            "AND (:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho}) " +
             "GROUP BY pxk.id,pxk.soPhieuXuatKho,pxk.ngayTaoPhieu, pxk.tongSoLuong, pkncl.id, pkncl.soPhieu,pxk.bangKeChId, pxk.soBangKeCh,bkxvth.id, bkxvth.soBangKe "+
             "ORDER BY pxk.soPhieuXuatKho desc")
     List<DcnbPhieuXuatKhoHdrListDTO> searchListChung(@Param("param") SearchPhieuXuatKho req);
