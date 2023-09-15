@@ -2,7 +2,9 @@ package com.tcdt.qlnvhang.service.suachuahang;
 
 import com.tcdt.qlnvhang.request.suachua.ScBangKeNhapVtReq;
 import com.tcdt.qlnvhang.request.suachua.ScBangKeXuatVatTuReq;
+import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhXuatHangReq;
 import com.tcdt.qlnvhang.service.BaseService;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScBangKeNhapVtHdr;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhNhapHang;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhXuatHang;
@@ -12,4 +14,5 @@ public interface ScBangKeNhapVtService extends BaseService<ScBangKeNhapVtHdr, Sc
 
     Page<ScQuyetDinhNhapHang> searchBangKeNhapVt(ScBangKeNhapVtReq req) throws Exception;
 
+    ReportTemplateResponse preview(ScBangKeNhapVtReq objReq) throws Exception;
 }

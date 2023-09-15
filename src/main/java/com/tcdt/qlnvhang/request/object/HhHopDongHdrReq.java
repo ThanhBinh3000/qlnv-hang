@@ -10,13 +10,14 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.util.Contains;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class HhHopDongHdrReq {
+public class HhHopDongHdrReq extends BaseRequest {
 
 	private Long id;
 
@@ -58,7 +59,7 @@ public class HhHopDongHdrReq {
 	String diaChi;
 	String mst;
 	String tenNguoiDdien;
-	String idNguoiDdien;
+	Long idNguoiDdien;
 	String chucVu;
 	String sdt;
 	String stk;

@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeNhapVTDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -96,4 +97,7 @@ public class DcnbBangKeNhapVTReq extends BaseRequest {
 
     private Boolean isVatTu = false;
     private List<String> dsLoaiHang = new ArrayList<>();
+    private ReportTemplateRequest reportTemplateRequest;
+    @NotNull
+    private Long keHoachDcDtlId;
 }

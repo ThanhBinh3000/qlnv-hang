@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.impl;
 
+import java.io.ByteArrayInputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,12 +17,14 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongDtl;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.*;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.hopdong.HhHopDongPreview;
 import com.tcdt.qlnvhang.request.object.HhDdiemNhapKhoVtReq;
 import com.tcdt.qlnvhang.request.object.HhHopDongDtlReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -279,7 +282,9 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
           s.setChildren(allByIdHdongDdiemNkho);
       });
       item.setChildren(allByIdHdongDtl);
-      item.setTenDvi(qlnvDmDonviRepository.findByMaDvi(item.getMaDvi()).getTenDvi());
+      if (item.getMaDvi() != null) {
+        item.setTenDvi(qlnvDmDonviRepository.findByMaDvi(item.getMaDvi()).getTenDvi());
+      }
     });
 
 
@@ -486,5 +491,15 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
       f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
     });
     return page;
+  }
+
+  @Override
+  public ReportTemplateResponse preview(HhHopDongHdrReq req) throws Exception {
+    HhHopDongHdr hhHopDongHdr = detail(req.getId().toString());
+    ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
+    byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+    ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+    HhHopDongPreview object = new HhHopDongPreview();
+    return docxToPdfConverter.convertDocxToPdf(inputStream, object);
   }
 }

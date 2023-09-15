@@ -132,6 +132,21 @@ public ResponseEntity<BaseResponse> colection(HttpServletRequest request,
 
     }
 
+    @ApiOperation(value = "Xem truoc", response = List.class)
+    @PostMapping(value = PathContains.TKHAI_MTT + PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> preview(@RequestBody HhCgiaReq req) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(hhPthucTkhaiMuaTtService.preview(req));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+        }
+        return ResponseEntity.ok(resp);
+    }
 
 
 }

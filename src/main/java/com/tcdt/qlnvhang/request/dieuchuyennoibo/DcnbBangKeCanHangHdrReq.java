@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeCanHangDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 
 import javax.validation.Valid;
@@ -33,9 +34,7 @@ public class DcnbBangKeCanHangHdrReq {
     private String soQdinhDcc;
 //    @NotNull
 //    private LocalDate ngayKyQdinh;
-    @NotNull
     private LocalDate thoiHanDieuChuyen;
-    @NotNull
     private LocalDate thoiGianGiaoNhan;
     @NotNull
     private LocalDate ngayKyQdDcc;
@@ -54,6 +53,9 @@ public class DcnbBangKeCanHangHdrReq {
     @NotNull
     private String cloaiVthh;
     @NotNull
+    private String tenLoaiVthh;
+    @NotNull
+    private String tenCloaiVthh;
     private String donViTinh;
     @NotNull
     private String maDiemKho;
@@ -116,4 +118,8 @@ public class DcnbBangKeCanHangHdrReq {
     private String tongTrongLuongTruBiText;
     @Valid
     private List<DcnbBangKeCanHangDtl> dcnbBangKeCanHangDtl = new ArrayList<>();
+
+    private ReportTemplateRequest reportTemplateRequest;
+    @NotNull
+    private Long keHoachDcDtlId;
 }

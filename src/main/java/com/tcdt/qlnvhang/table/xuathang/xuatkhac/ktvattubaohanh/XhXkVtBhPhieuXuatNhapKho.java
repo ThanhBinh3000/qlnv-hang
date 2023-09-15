@@ -37,6 +37,7 @@ public class XhXkVtBhPhieuXuatNhapKho extends BaseEntity implements Serializable
   private BigDecimal duCo;
   private String soCanCu;
   private Long idCanCu;
+  private LocalDate ngayKyCanCu;
   private Integer soLanLm;
   private String maDiaDiem; // mã địa điểm (mã lô/ngăn kho)
   private String soPhieuKdcl;
@@ -80,6 +81,8 @@ public class XhXkVtBhPhieuXuatNhapKho extends BaseEntity implements Serializable
   private String tenTrangThai;
   @Transient
   private String tenDvi;
+  @Transient
+  private String tenDviCha;
   @Transient
   private String tenLoai;
   @Transient
@@ -127,7 +130,14 @@ public class XhXkVtBhPhieuXuatNhapKho extends BaseEntity implements Serializable
       setTenNganKho(tenNganKho);
       setTenLoKho(tenLoKho);
     }
+    if (!DataUtils.isNullObject(getMaDvi())) {
+      String maDviCha = getMaDvi().length() >= 0 ? getMaDvi().substring(0, getMaDvi().length() - 2) : "";
+      String tenDviCha = mapDmucDvi.containsKey(maDviCha) ? mapDmucDvi.get(maDviCha) : null;
+      setTenDviCha(tenDviCha);
+    }
   }
+
+
 
   public void setMapVthh(Map<String, String> mapVthh) {
     this.mapVthh = mapVthh;

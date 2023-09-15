@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoK
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoKyThuatCt;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
 import com.tcdt.qlnvhang.repository.kiemtrachatluong.NhHoSoBienBanRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
@@ -33,6 +34,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -59,31 +61,31 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
     private final NhHoSoBienBanRepository nhHoSoBienBanRepository;
 
     @Autowired
-    private final HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
-
-    @Autowired
-    private final HhHopDongRepository hhHopDongRepository;
-
-    @Autowired
-    private final QlnvDmVattuRepository qlnvDmVattuRepository;
-
-    @Autowired
-    private final HttpServletRequest req;
-
-    private static final String SHEET_HO_SO_KY_THUAT = "Hồ Sơ Kỹ Thuật";
-    private static final String STT = "STT";
-    private static final String SO_BIEN_BAN = "Số Biên Bản";
-    private static final String SO_QUYET_DINH_NHAP = "Số Quyết Định Nhập";
-    private static final String NGAY = "Ngày";
-    private static final String LOAI_HANG_HOA = "Loại Hàng Hóa";
-    private static final String CHUNG_LOAI_HANG_HO = "Chủng Loại Hàng Hóa";
-    private static final String KET_LUAT = "Kết Luận";
-    private static final String TRANG_THAI = "Trạng Thái";
+    private BienBanLayMauRepository bienBanLayMauRepository;
 
     @Override
     public Page<NhHoSoKyThuat> searchPage(NhHoSoKyThuatReq objReq) {
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<NhHoSoKyThuat> nhHoSoKyThuatPage = nhHoSoKyThuatRepository.selectPage(pageable);
+        Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
+        nhHoSoKyThuatPage.getContent().forEach(i -> {
+            Optional<BienBanLayMau> firstBySoBienBan = bienBanLayMauRepository.findFirstBySoBienBan(i.getSoBbLayMau());
+            if (firstBySoBienBan.isPresent()) {
+                firstBySoBienBan.get().setTenDiemKho(StringUtils.isEmpty(firstBySoBienBan.get().getMaDiemKho()) ? null : listDanhMucDvi.get(firstBySoBienBan.get().getMaDiemKho()));
+                if(StringUtils.isEmpty(firstBySoBienBan.get().getMaLoKho())) {
+                    firstBySoBienBan.get().setTenNganLoKho(StringUtils.isEmpty(firstBySoBienBan.get().getMaNganKho()) ? null : listDanhMucDvi.get(firstBySoBienBan.get().getMaNganKho()));
+                } else {
+                    firstBySoBienBan.get().setTenNganLoKho(StringUtils.isEmpty(firstBySoBienBan.get().getMaNganKho()) ? null : listDanhMucDvi.get(firstBySoBienBan.get().getMaLoKho()) + " - " + listDanhMucDvi.get(firstBySoBienBan.get().getMaNganKho()));
+                }
+                i.setBienBanLayMau(firstBySoBienBan.get());
+            }
+            List<NhHoSoBienBan> nhHoSoBienBanList = nhHoSoBienBanRepository.findAllBySoHoSoKyThuat(i.getSoHoSoKyThuat());
+            if (!nhHoSoBienBanList.isEmpty()) {
+                i.setSoBbKtnq(nhHoSoBienBanList.stream().filter(item -> item.getLoaiBb().equals("BBKTNQ")).findFirst().get().getSoBienBan());
+                i.setSoBbKtvh(nhHoSoBienBanList.stream().filter(item -> item.getLoaiBb().equals("BBKTVH")).findFirst().get().getSoBienBan());
+                i.setSoBbKthskt(nhHoSoBienBanList.stream().filter(item -> item.getLoaiBb().equals("BBKTHSKT")).findFirst().get().getSoBienBan());
+            }
+        });
         return nhHoSoKyThuatPage;
     }
 

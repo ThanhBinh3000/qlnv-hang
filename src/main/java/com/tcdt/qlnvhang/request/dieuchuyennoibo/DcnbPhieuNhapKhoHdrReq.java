@@ -1,8 +1,10 @@
 package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -44,7 +46,8 @@ public class DcnbPhieuNhapKhoHdrReq extends BaseRequest {
     private Long qdDcCucId;
     @NotNull
     private LocalDate ngayQdDcCuc;
-    private Long idKeHoachDtl;
+    @NotNull
+    private Long keHoachDcDtlId;
     @NotNull
     private String maDiemKho;
     @NotNull
@@ -79,7 +82,7 @@ public class DcnbPhieuNhapKhoHdrReq extends BaseRequest {
     private String tenKyThuatVien;
     private Long idKeToanTruong;
     private String keToanTruong;
-
+    private String donViTinh;
     private String hoVaTenNguoiGiao;
     private String cmndNguoiGiao;
     private String donViNguoiGiao;
@@ -88,7 +91,7 @@ public class DcnbPhieuNhapKhoHdrReq extends BaseRequest {
     private String loaiHinhNx;
     private String kieuNx;
     private String bbNghiemThuBqld;
-    private Long bbNghiemThuBqldId;
+    private String bbNghiemThuBqldId;
     private BigDecimal soLuongQdDcCuc;
     private BigDecimal tongSoLuong;
     private String tongSoLuongBc;
@@ -97,9 +100,10 @@ public class DcnbPhieuNhapKhoHdrReq extends BaseRequest {
     private String ghiChu;
     private String trangThai;
     private String lyDoTuChoi;
-    private List<FileDinhKem> chungTuDinhKem = new ArrayList<>();
+    private List<FileDinhKemReq> chungTuDinhKem = new ArrayList<>();
     @Valid
     private List<DcnbPhieuNhapKhoDtl> children = new ArrayList<>();
     private Boolean isVatTu = false;
     private List<String> dsLoaiHang = new ArrayList<>();
+    private ReportTemplateRequest reportTemplateRequest;
 }

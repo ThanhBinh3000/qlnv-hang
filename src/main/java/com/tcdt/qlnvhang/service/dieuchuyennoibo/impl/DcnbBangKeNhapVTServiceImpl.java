@@ -1,35 +1,52 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.tcdt.qlnvhang.common.DocxToPdfConverter;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.repository.khotang.KtNganKhoRepository;
+import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBangKeNhapVTReq;
+import com.tcdt.qlnvhang.request.object.dcnbBangKeCanHang.DcnbBangKeNhapVTHdrPreview;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeCanHangDtlDto;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeNhapVTHdrDTO;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBangKeNhapVTService;
+import com.tcdt.qlnvhang.service.feign.CategoryServiceProxy;
+import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeNhapVTDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeNhapVTHdr;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
+import com.tcdt.qlnvhang.table.khotang.KtNganKho;
+import com.tcdt.qlnvhang.table.khotang.KtNganLo;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.Request;
 import com.tcdt.qlnvhang.util.UserUtils;
+import lombok.var;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService {
+public class DcnbBangKeNhapVTServiceImpl extends BaseServiceImpl implements DcnbBangKeNhapVTService {
     @Autowired
     private DcnbBangKeNhapVTHdrRepository hdrRepository;
     @Autowired
@@ -40,6 +57,20 @@ public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService {
     private DcnbDataLinkDtlRepository dcnbDataLinkDtlRepository;
     @Autowired
     private DcnbPhieuNhapKhoHdrRepository dcnbPhieuNhapKhoHdrRepository;
+    @Autowired
+    private DcnbBangKeCanHangDtlRepository dcnbBangKeCanHangDtlRepository;
+    @Autowired
+    public DocxToPdfConverter docxToPdfConverter;
+    @Autowired
+    private KtNganKhoRepository ktNganKhoRepository;
+    @Autowired
+    private KtNganLoRepository ktNganLoRepository;
+    @Autowired
+    private CategoryServiceProxy categoryServiceProxy;
+    @Autowired
+    private HttpServletRequest request;
+    @Autowired
+    private DcnbBangKeCanHangHdrRepository dcnbBangKeCanHangHdrRepository;
 
     @Override
     public Page<DcnbBangKeNhapVTHdr> searchPage(DcnbBangKeNhapVTReq req) throws Exception {
@@ -251,4 +282,101 @@ public class DcnbBangKeNhapVTServiceImpl implements DcnbBangKeNhapVTService {
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
     }
+
+    @Override
+    public ReportTemplateResponse preview(DcnbBangKeNhapVTReq objReq) throws Exception {
+        var dcnbBangKeNhapVTHdr = hdrRepository.findById(objReq.getId());
+        if (!dcnbBangKeNhapVTHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
+        var dcnbBangKeCanHangHdr = dcnbBangKeCanHangHdrRepository.findById(Long.parseLong(dcnbBangKeNhapVTHdr.get().getMaDvi()));
+        if (!dcnbBangKeCanHangHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
+        var dcnbBangKeCanHangDtlList = dcnbBangKeCanHangDtlRepository.findByHdrId(Long.parseLong(dcnbBangKeNhapVTHdr.get().getMaDvi()));
+        if (dcnbBangKeCanHangDtlList.size() == 0) throw new Exception("Không tồn tại bản ghi");
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        var dcnbPhieuNhapKhoPreview = setDataToPreview(dcnbBangKeNhapVTHdr, dcnbBangKeCanHangDtlList, dcnbBangKeCanHangHdr);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbPhieuNhapKhoPreview);
+    }
+
+    private DcnbBangKeNhapVTHdrPreview setDataToPreview(Optional<DcnbBangKeNhapVTHdr> dcnbBangKeNhapVTHdr,
+                                                        List<DcnbBangKeCanHangDtl> dcnbBangKeCanHangDtlList,
+                                                        Optional<DcnbBangKeCanHangHdr> dcnbBangKeCanHangHdr) {
+        return DcnbBangKeNhapVTHdrPreview.builder()
+                .maDvi(dcnbBangKeNhapVTHdr.get().getMaDvi())
+                .maQhns(dcnbBangKeNhapVTHdr.get().getMaQhns())
+                .soBangKe(dcnbBangKeNhapVTHdr.get().getSoBangKe())
+                .tenThuKho(dcnbBangKeNhapVTHdr.get().getTenThuKho())
+                .lhKho(getDataKho(dcnbBangKeNhapVTHdr.get().getMaDvi()))
+                .tenNganKho(dcnbBangKeNhapVTHdr.get().getTenNganKho())
+                .tenLoKho(dcnbBangKeNhapVTHdr.get().getTenLoKho())
+                .tenDiemKho(dcnbBangKeNhapVTHdr.get().getTenDiemKho())
+                .tenDvi(dcnbBangKeNhapVTHdr.get().getTenDvi())
+                .chungLoaiHangHoa(dcnbBangKeNhapVTHdr.get().getCloaiVthh())
+                .tenDonViTinh(dcnbBangKeNhapVTHdr.get().getDonViTinh())
+                .tenNguoiGiaoHang(dcnbBangKeNhapVTHdr.get().getTenNguoiGiaoHang())
+                .thoiGianGiaoNhan(dcnbBangKeNhapVTHdr.get().getThoiHanGiaoNhan().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .nguoiGiamSat("")
+                .tongTrongLuongCabaoBi(dcnbBangKeCanHangHdr.get().getTongTrongLuongCabaoBi())
+                .tongTrongLuongBaoBi(dcnbBangKeCanHangHdr.get().getTongTrongLuongBaoBi())
+                .tongTrongLuongTruBi(dcnbBangKeCanHangHdr.get().getTongTrongLuongTruBi())
+                .tongTrongLuongTruBiText(dcnbBangKeCanHangHdr.get().getTongTrongLuongTruBiText())
+                .ngayNhap(dcnbBangKeNhapVTHdr.get().getNgayNhap().getDayOfMonth())
+                .thangNhap(dcnbBangKeNhapVTHdr.get().getNgayNhap().getMonth().getValue())
+                .namNhap(dcnbBangKeNhapVTHdr.get().getNgayNhap().getYear())
+                .dcnbBangKeCanHangDtl(dcnbBangKeCanHangDtlToDto(dcnbBangKeCanHangDtlList))
+                .build();
+    }
+
+    private List<DcnbBangKeCanHangDtlDto> dcnbBangKeCanHangDtlToDto(List<DcnbBangKeCanHangDtl> dcnbBangKeCanHangDtlList) {
+        List<DcnbBangKeCanHangDtlDto> dcnbBangKeCanHangDtlDtoList = new ArrayList<>();
+        int stt = 1;
+        for (var res : dcnbBangKeCanHangDtlList) {
+            var dcnbBangKeCanHangDtlDto = DcnbBangKeCanHangDtlDto.builder()
+                    .stt(stt++)
+                    .maCan(res.getMaCan())
+                    .soBaoBi(res.getMaCan())
+                    .trongLuongCaBaoBi(res.getTrongLuongCaBaoBi())
+                    .build();
+            dcnbBangKeCanHangDtlDtoList.add(dcnbBangKeCanHangDtlDto);
+        }
+        return dcnbBangKeCanHangDtlDtoList;
+    }
+
+    public String getDataKho(String maDvi) {
+        try {
+            if (!StringUtils.isEmpty(maDvi)) {
+                Map<String, String> listLoaiKho = getListDanhMucChung("LOAI_KHO");
+                if (maDvi.length() == 14) { //ma kho
+                    KtNganKho ktNganKho = ktNganKhoRepository.findByMaNgankho(maDvi);
+                    ktNganKho.setLhKho(listLoaiKho.get(ktNganKho.getLoaikhoId()));
+                    return ktNganKho.getLhKho();
+                } else {
+                    KtNganLo nganLo = ktNganLoRepository.findFirstByMaNganlo(maDvi);
+                    nganLo.setLhKho(listLoaiKho.get(nganLo.getLoaikhoId()));
+                    return nganLo.getLhKho();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Map<String, String> getListDanhMucChung(String loai) {
+        ResponseEntity<String> response = categoryServiceProxy.getDanhMucChung(getAuthorizationToken(request),
+                loai);
+        String str = Request.getAttrFromJson(response.getBody(), "data");
+        HashMap<String, String> data = new HashMap<String, String>();
+        List<Map<String, Object>> retMap = new Gson().fromJson(str, new TypeToken<List<HashMap<String, Object>>>() {
+        }.getType());
+        for (Map<String, Object> map : retMap) {
+            data.put(String.valueOf(map.get("ma")), String.valueOf(map.get("giaTri")));
+        }
+        return data;
+    }
+
+    public String getAuthorizationToken(HttpServletRequest request) {
+        return (String) request.getHeader("Authorization");
+    }
+
 }

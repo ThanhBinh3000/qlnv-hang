@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -184,6 +185,14 @@ public class DcnbBangKeCanHangHdr extends BaseEntity implements Serializable, Cl
 
     @Column(name = "TONG_TRONG_LUONG_TRU_BI_TEXT")
     private String tongTrongLuongTruBiText;
+
+    @Column(name = "TEN_LOAI_VTHH")
+    private String tenLoaiVthh;
+
+    @Column(name = "TEN_CLOAI_VTHH")
+    private String tenCloaiVthh;
+    @Column(name = "KE_HOACH_DC_DTL_ID")
+    private Long keHoachDcDtlId;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")

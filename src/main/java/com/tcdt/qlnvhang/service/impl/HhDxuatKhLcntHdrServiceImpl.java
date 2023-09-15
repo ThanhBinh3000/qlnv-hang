@@ -189,8 +189,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             hhDxKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(gthau.getId());
             AtomicReference<Long> soLuong = new AtomicReference<>(0L);
             listData.forEach(cuc -> {
-                soLuong.updateAndGet(v -> v + cuc.getSoLuong().longValue());
                 for (HhDxuatKhLcntDsgthauDtlCtietReq child : cuc.getChildren()) {
+                    soLuong.updateAndGet(v -> v + child.getSoLuong().longValue());
                     HhDxKhlcntDsgthauCtiet dsgthauCtiet = setDsgthauCtiet(child, gthau.getId());
                     hhDxKhlcntDsgthauCtietRepository.save(dsgthauCtiet);
                     hhDxKhlcntDsgthauCtietVtRepository.deleteAllByIdGoiThauCtiet(dsgthauCtiet.getId());

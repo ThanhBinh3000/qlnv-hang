@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.nhaphangtheoptt;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttSLDDReq;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.util.Contains;
@@ -12,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class HhCgiaReq {
+public class HhCgiaReq extends BaseRequest {
     @ApiModelProperty(notes = "Bắt buộc set đối với update")
     private Long id;
 

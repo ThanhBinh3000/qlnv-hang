@@ -12,7 +12,9 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.suachuahang.ScKiemTraChatLuongService;
 import com.tcdt.qlnvhang.service.suachuahang.ScPhieuXuatKhoService;
 import com.tcdt.qlnvhang.service.suachuahang.ScQuyetDinhScService;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -24,6 +26,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -118,6 +123,9 @@ public class ScKiemTraChatLuongImpl extends BaseServiceImpl implements ScKiemTra
         ScKiemTraChatLuongHdr data = optional.get();
         data.setFileDinhKem(fileDinhKemService.search(id, Collections.singleton(ScPhieuXuatKhoHdr.TABLE_NAME)));
         data.setChildren(dtlRepository.findAllByIdHdrOrderByThuTuHt(id));
+        if(!Objects.isNull(data.getIdPhieuXuatKho())){
+            data.setScPhieuXuatKhoHdr(scPhieuXuatKhoService.detail(data.getIdPhieuXuatKho()));
+        }
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
         if(!Objects.isNull(data.getNguoiTaoId())){
@@ -276,6 +284,15 @@ public class ScKiemTraChatLuongImpl extends BaseServiceImpl implements ScKiemTra
             }
         });
         return collect;
+    }
+
+    @Override
+    public ReportTemplateResponse preview(ScKiemTraChatLuongReq objReq) throws Exception {
+        ScKiemTraChatLuongHdr optional = detail(objReq.getId());
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
     }
 
 }

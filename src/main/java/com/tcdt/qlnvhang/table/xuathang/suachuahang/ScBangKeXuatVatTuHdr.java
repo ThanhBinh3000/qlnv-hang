@@ -11,8 +11,10 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = ScBangKeXuatVatTuHdr.TABLE_NAME)
@@ -49,11 +51,29 @@ public class ScBangKeXuatVatTuHdr extends BaseEntity implements Serializable {
     private String tenThuKho;
     @Transient
     private String tenLanhDaoCc;
+
+    @Transient
+    private ScPhieuXuatKhoHdr scPhieuXuatKho;
+
     @Transient
     private List<ScBangKeXuatVatTuDtl> children = new ArrayList<>();
 
     public String getTenTrangThai(){
         return TrangThaiAllEnum.getLabelById(getTrangThai());
     }
+
+    // Print preview
+    @Transient
+    private String ngay;
+    @Transient
+    private String thang;
+
+    public String getNgay() {
+        return Objects.isNull(this.getNgayTao()) ? null : String.valueOf(this.getNgayTao().getDayOfMonth());
+    }
+    public String getThang() {
+        return Objects.isNull(this.getNgayTao()) ? null : String.valueOf(this.getNgayTao().getMonthValue());
+    }
+
 
 }

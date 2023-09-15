@@ -9,6 +9,7 @@ import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
 import com.tcdt.qlnvhang.response.BaseNhapHangCount;
 import com.tcdt.qlnvhang.table.HhDviThuchienQdinh;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,6 +54,9 @@ public interface HhQdGiaoNvuNhapxuatService {
 	boolean deleteMultiple(DeleteReq req) throws Exception;
 
 	Page<NhQdGiaoNvuNhapxuatHdr> searchPage(HhQdNhapxuatSearchReq req) throws Exception;
+	List<NhQdGiaoNvuNhapxuatHdr> layTatCaQdGiaoNvNh(HhQdNhapxuatSearchReq req) throws Exception;
 
 	void updateDdiemNhap(HhQdGiaoNvuNhapxuatHdrReq req) throws Exception;
+
+	ReportTemplateResponse preview(HhQdGiaoNvuNhapxuatHdrReq hhQdGiaoNvuNhapxuatHdrReq) throws Exception;
 }

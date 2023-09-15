@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeCanHangDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -54,7 +55,7 @@ public class DcnbBBNTBQHdrReq extends BaseRequest {
     private String kthuatVien;
     private String keToan;
     private String ldChiCuc;
-    private Long idKeHoachDtl;
+    private Long keHoachDcDtlId;
     @NotNull
     private String maDiemKho;
     @NotNull
@@ -102,10 +103,14 @@ public class DcnbBBNTBQHdrReq extends BaseRequest {
     private String lyDoTuChoi;
     private Boolean isVatTu = false;
     private List<String> dsLoaiHang = new ArrayList<>();
+    @NotNull
+    private String donViTinh;
     @Valid
     private List<DcnbBBNTBQDtl> dcnbBBNTBQDtl = new ArrayList<>();
     private LocalDate tuNgayLap;
     private LocalDate denNgayLap;
     private LocalDate tuNgayKtnt;
     private LocalDate denNgayKtnt;
+    private ReportTemplateRequest reportTemplateRequest;
+    private String loaiHinhBaoQuan;
 }

@@ -9,6 +9,7 @@ import org.apache.tomcat.jni.Local;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -113,7 +114,10 @@ public class DcnbBienBanHaoDoiHdr extends BaseEntity implements Serializable {
 
     @Column(name = "NGAY_KET_THUC_XUAT_TT")
     private LocalDate ngayKetThucXuatTt;
-
+    @Column(name = "NGAY_BAT_DAU_XUAT")
+    private LocalDate ngayBatDauXuat;
+    @Column(name = "NGAY_KET_THUC_XUAT")
+    private LocalDate ngayKetThucXuat;
     @Column(name = "SL_HAO_TT")
     private Double slHaoTt;
 
@@ -180,8 +184,17 @@ public class DcnbBienBanHaoDoiHdr extends BaseEntity implements Serializable {
 
     @Column(name = "PHIEU_KT_CHAT_LUONG_HDR_ID")
     private Long phieuKtChatLuongHdrId;
+
     @Column(name = "SO_PHIEU_KT_CHAT_LUONG")
     private String soPhieuKtChatLuong;
+
+    @Column(name = "DON_VI_TINH")
+    private String donViTinh;
+
+    @Column(name = "SL_HAO_THEO_DINH_MUC")
+    private BigDecimal slHaoTheoDinhMuc;
+    @Column(name = "KE_HOACH_DC_DTL_ID")
+    private Long keHoachDcDtlId;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
