@@ -15,31 +15,19 @@ public class XhHopDongDdiemNhapKho {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_HD_DDIEM_NHAP_KHO_SEQ")
     @SequenceGenerator(sequenceName = "XH_HD_DDIEM_NHAP_KHO_SEQ", allocationSize = 1, name = "XH_HD_DDIEM_NHAP_KHO_SEQ")
     private Long id;
-
     private Long idDtl;
-
     private String maDiemKho;
-
-    private String diaChi;
-
     private String maNhaKho;
-
     private String maNganKho;
-
     private String maLoKho;
-
     private String maDviTsan;
-
-    private BigDecimal duDau;
-
+    private BigDecimal tonKho;
     private BigDecimal soLuong;
-
-    private BigDecimal donGiaDeXuat;
-
-    private BigDecimal donGiaVat;
-
-    private String dviTinh;
-
+    private BigDecimal donGia;
+    private BigDecimal donGiaTraGia;
+    private BigDecimal thanhTien;
+    private String donViTinh;
+    private String diaDiemKho;
     @Transient
     private String tenDiemKho;
     @Transient
