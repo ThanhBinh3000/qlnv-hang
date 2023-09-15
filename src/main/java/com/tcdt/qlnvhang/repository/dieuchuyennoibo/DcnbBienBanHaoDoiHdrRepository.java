@@ -19,7 +19,7 @@ public interface DcnbBienBanHaoDoiHdrRepository extends JpaRepository<DcnbBienBa
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanHaoDoiHdrDTO(" +
             "bbhd.id,pxk.bangKeChId,bbtk.soBbTinhKho,bbtk.id,qdc.id,pxk.id,qdc.soQdinh,qdc.nam,qdc.ngayHieuLuc,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho,khdcd.tenLoKho," +
             "bbhd.soBienBan,pxk.soPhieuXuatKho,pxk.soBangKeCh,pxk.ngayXuatKho,bbhd.trangThai,bbhd.trangThai,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.donViTinh," +
-            "khdcd.maNganKho,khdcd.tenNganKho,qdc.ngayKyQdinh,khdcd.id) FROM DcnbQuyetDinhDcCHdr qdc " +
+            "khdcd.maNganKho,khdcd.tenNganKho,qdc.ngayKyQdinh,khdcd.id,bbhd.ngayBatDauXuat, bbhd.ngayKetThucXuat) FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
@@ -51,7 +51,7 @@ public interface DcnbBienBanHaoDoiHdrRepository extends JpaRepository<DcnbBienBa
             "AND (:#{#param.denNgayXhXuat}  IS NULL OR bbtk.thoiHanXuatHang <= :#{#param.denNgayXhXuat}) ) " +
             "GROUP BY bbhd.id,pxk.bangKeChId,bbtk.soBbTinhKho,bbtk.id,qdc.id,pxk.id,qdc.soQdinh,qdc.nam,qdc.ngayHieuLuc,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho,khdcd.tenLoKho," +
             "bbhd.soBienBan,pxk.soPhieuXuatKho,pxk.soBangKeCh,pxk.ngayXuatKho,bbhd.trangThai,bbhd.trangThai,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.donViTinh," +
-            "khdcd.maNganKho,khdcd.tenNganKho,qdc.ngayKyQdinh,khdcd.id " +
+            "khdcd.maNganKho,khdcd.tenNganKho,qdc.ngayKyQdinh,khdcd.id,bbhd.ngayBatDauXuat, bbhd.ngayKetThucXuat " +
             "ORDER BY qdc.soQdinh DESC")
     Page<DcnbBienBanHaoDoiHdrDTO> searchPage(@Param("param") SearchDcnbBienBanHaoDoi req, Pageable pageable);
 

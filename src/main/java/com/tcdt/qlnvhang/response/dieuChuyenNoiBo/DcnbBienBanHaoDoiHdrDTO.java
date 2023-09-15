@@ -8,6 +8,7 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import java.time.LocalDate;
 
+
 @Data
 public class DcnbBienBanHaoDoiHdrDTO {
     private Long id;
@@ -42,7 +43,7 @@ public class DcnbBienBanHaoDoiHdrDTO {
     private LocalDate ngayBatDauXuat;
     private LocalDate ngayKetThucXuat;
     private Long keHoachDcDtlId;
-    public DcnbBienBanHaoDoiHdrDTO(Long id, Long bangKeCanHangId,String soBbTinhKho, Long bbTinhKhoId, Long qDinhDcId, Long phieuXuatKhoId, String soQdinh, Integer nam, LocalDate ngayHieuLuc, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String soBienBanHaoDoi, String soPhieuXuatKho, String soBangKeXuatDcLt, LocalDate ngayXuatKho, String trangThai, String tenTrangThai, String loaiVthh, String tenLoaiVthh, String cloaiVthh, String tenCloaiVthh, String maNhaKho, String tenNhaKho, String donViTinh, String maNganKho, String tenNganKho, LocalDate ngayKyQDinh,Long keHoachDcDtlId) {
+    public DcnbBienBanHaoDoiHdrDTO(Long id, Long bangKeCanHangId,String soBbTinhKho, Long bbTinhKhoId, Long qDinhDcId, Long phieuXuatKhoId, String soQdinh, Integer nam, LocalDate ngayHieuLuc, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String soBienBanHaoDoi, String soPhieuXuatKho, String soBangKeXuatDcLt, LocalDate ngayXuatKho, String trangThai, String tenTrangThai, String loaiVthh, String tenLoaiVthh, String cloaiVthh, String tenCloaiVthh, String maNhaKho, String tenNhaKho, String donViTinh, String maNganKho, String tenNganKho, LocalDate ngayKyQDinh,Long keHoachDcDtlId, LocalDate ngayBatDauXuat,LocalDate ngayKetThucXuat) {
         this.id = id;
         this.bangKeCanHangId = bangKeCanHangId;
         this.soBbTinhKho= soBbTinhKho;
@@ -74,5 +75,7 @@ public class DcnbBienBanHaoDoiHdrDTO {
         this.tenNganKho = tenNganKho;
         this.ngayKyQDinh = ngayKyQDinh;
         this.keHoachDcDtlId = keHoachDcDtlId;
+        this.ngayBatDauXuat =ngayBatDauXuat ;
+        this.ngayKetThucXuat = ngayKetThucXuat;
     }
 }
