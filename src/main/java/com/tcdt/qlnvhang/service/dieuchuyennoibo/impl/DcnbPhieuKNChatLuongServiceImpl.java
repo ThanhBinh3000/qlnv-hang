@@ -365,8 +365,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
     public ReportTemplateResponse preview(DcnbPhieuKnChatLuongHdrReq objReq) throws Exception {
         var dcnbPhieuKnChatLuongHdr = dcnbPhieuKnChatLuongHdrRepository.findById(objReq.getId());
         if (!dcnbPhieuKnChatLuongHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
-        var userInfo = userInfoRepository.findById(dcnbPhieuKnChatLuongHdr.get().getNguoiPDuyet());
-        if (!userInfo.isPresent()) throw new Exception("Không tồn tại bản ghi");
+        var userInfo = userInfoRepository.findById(dcnbPhieuKnChatLuongHdr.get().getNguoiDuyetLdCuc());
         ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
@@ -397,7 +396,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
                 .namNhap(dcnbPhieuKnChatLuongHdr.get().getNgayLapPhieu().getYear())
                 .nguoiKt(dcnbPhieuKnChatLuongHdr.get().getNguoiKt())
                 .truongBpKtbq(dcnbPhieuKnChatLuongHdr.get().getTpNguoiKt())
-                .lanhDaoCuc(userInfo.get().getFullName())
+                .lanhDaoCuc(userInfo.isPresent() ? userInfo.get().getFullName() : "")
                 .maQhns(dcnbPhieuKnChatLuongHdr.get().getMaQhns())
                 .loaiHangHoa(dcnbPhieuKnChatLuongHdr.get().getTenCloaiVthh())
                 .hinhThucKeLot(dcnbPhieuKnChatLuongHdr.get().getHinhThucBq())
