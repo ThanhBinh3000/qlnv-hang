@@ -63,7 +63,6 @@ public class XhCtvtTongHopHdrController extends BaseController {
                                                   @RequestBody SearchXhCtvtTongHopHdr objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            System.out.println("12345");
             resp.setData(xhCtvtTongHopHdrService.searchPage(currentUser,objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());

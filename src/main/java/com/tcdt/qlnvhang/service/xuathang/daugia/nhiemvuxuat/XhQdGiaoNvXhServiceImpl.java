@@ -250,7 +250,7 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl implements XhQdGiao
     if (req.getTrangThai().equals(Contains.BAN_HANH)) {
       Optional<XhHopDongHdr> hopDongHdr = xhHopDongHdrRepository.findById(data.getIdHd());
       if (hopDongHdr.isPresent()) {
-        hopDongHdr.get().setSoQdGnv(data.getSoQd());
+//        hopDongHdr.get().setSoQdGnv(data.getSoQd());
         xhHopDongHdrRepository.save(hopDongHdr.get());
       }
     }
