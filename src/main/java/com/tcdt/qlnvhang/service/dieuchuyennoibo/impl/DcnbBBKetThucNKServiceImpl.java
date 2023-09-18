@@ -54,7 +54,7 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
     private DcnbBienBanLayMauHdrRepository dcnbBienBanLayMauHdrRepository;
     @Autowired
     public DocxToPdfConverter docxToPdfConverter;
-
+    @Autowired
     private FileDinhKemService fileDinhKemService;
     @Override
     public Page<DcnbBBKetThucNKHdr> searchPage(DcnbBBKetThucNKReq req) throws Exception {
