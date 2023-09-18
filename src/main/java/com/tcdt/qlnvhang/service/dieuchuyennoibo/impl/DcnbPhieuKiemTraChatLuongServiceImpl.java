@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBBNTBQHdrRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKtChatLuongDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuKtChatLuongHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -25,6 +26,7 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.DieuChuyenNoiBo;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import lombok.var;
 import org.springframework.beans.BeanUtils;
@@ -65,6 +67,9 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
 
     @Autowired
     private UserInfoRepository userInfoRepository;
+
+    @Autowired
+    private DcnbBBNTBQHdrRepository dcnbBBNTBQHdrRepository;
 
     public Page<DcnbPhieuKtChatLuongHdrDTO> searchPage(CustomUserDetails currentUser, SearchPhieuKtChatLuong req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -114,6 +119,11 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         List<FileDinhKem> phieuKiemTra = fileDinhKemService.saveListFileDinhKem(objReq.getPhieuKTCLDinhKem(), created.getId(), DcnbPhieuKtChatLuongHdr.TABLE_NAME + "_PKT");
         data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
         data.setPhieuKTCLDinhKem(phieuKiemTra);
+        // bien bản nghiệm thu bbld
+        List<DcnbBBNTBQHdr> dcnbBBNTBQHdrList = dcnbBBNTBQHdrRepository.findByMaDviAndKeHoachDcDtlId(currentUser.getDvql(), data.getKeHoachDcDtlId());
+        String bbntbqld = dcnbBBNTBQHdrList.stream().map(DcnbBBNTBQHdr::getSoBban).collect(Collectors.joining());
+        created.setSoBBNtLd(bbntbqld);
+        dcnbPhieuKtChatLuongHdrRepository.save(created);
         return created;
     }
 
@@ -153,6 +163,11 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
         List<FileDinhKem> phieuKiemTra = fileDinhKemService.saveListFileDinhKem(objReq.getPhieuKTCLDinhKem(), created.getId(), DcnbPhieuKtChatLuongHdr.TABLE_NAME + "_PKT");
         data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
         data.setPhieuKTCLDinhKem(phieuKiemTra);
+        // bien bản nghiệm thu bbld
+        List<DcnbBBNTBQHdr> dcnbBBNTBQHdrList = dcnbBBNTBQHdrRepository.findByMaDviAndKeHoachDcDtlId(currentUser.getDvql(), data.getKeHoachDcDtlId());
+        String bbntbqld = dcnbBBNTBQHdrList.stream().map(DcnbBBNTBQHdr::getSoBban).collect(Collectors.joining());
+        created.setSoBBNtLd(bbntbqld);
+        dcnbPhieuKtChatLuongHdrRepository.save(created);
         return created;
     }
 
@@ -366,7 +381,7 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
                     .chiSoCl(res.getChiSoCl())
                     .ketQuaPt(res.getKetQuaPt())
                     .phuongPhap(res.getPhuongPhap())
-                    .danhGia(res.getDanhGia())
+                    .danhGia(DieuChuyenNoiBo.checkDanhGia(res.getDanhGia()))
                     .build();
             dcnbPhieuKtChatLuongDtlDtos.add(dcnbPhieuKtChatLuongDtlDto);
         }

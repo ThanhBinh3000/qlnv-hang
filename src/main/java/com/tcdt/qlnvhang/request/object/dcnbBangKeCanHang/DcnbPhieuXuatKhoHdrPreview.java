@@ -35,7 +35,6 @@ public class DcnbPhieuXuatKhoHdrPreview {
     private String thanhTienBc;
     private String keToanTruong;
     private String ldChiCuc;
-    private BigDecimal tongDuToanKinhPhiDc;
     private BigDecimal tongKinhPhiDcTt;
     private List<DcnbPhieuXuatKhoDtlDto> dcnbPhieuXuatKhoDtlDto;
 }
