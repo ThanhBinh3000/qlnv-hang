@@ -218,6 +218,11 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				gt.setTrangThai(Contains.CHUACAPNHAT);
 				gt.setSoLuongTheoChiTieu(gtList.getSoLuongTheoChiTieu());
 				gt.setSoLuongDaMua(gtList.getSoLuongDaMua());
+				if (hhDxuatKhLcntHdr.isPresent()) {
+					gt.setCloaiVthh(hhDxuatKhLcntHdr.get().getCloaiVthh());
+					gt.setLoaiVthh(hhDxuatKhLcntHdr.get().getLoaiVthh());
+					gt.setMaDvi(hhDxuatKhLcntHdr.get().getMaDvi());
+				}
 				hhQdKhlcntDsgthauRepository.save(gt);
 				for (HhDxuatKhLcntDsgthauDtlCtietReq ddNhap : gtList.getChildren()){
 					HhQdKhlcntDsgthauCtiet dataDdNhap = new ModelMapper().map(ddNhap, HhQdKhlcntDsgthauCtiet.class);

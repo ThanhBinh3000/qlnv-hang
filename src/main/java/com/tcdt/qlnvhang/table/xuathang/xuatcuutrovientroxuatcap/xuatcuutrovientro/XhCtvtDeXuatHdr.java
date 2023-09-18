@@ -33,8 +33,7 @@ public class XhCtvtDeXuatHdr extends BaseEntity implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhCtvtDeXuatHdr.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhCtvtDeXuatHdr.TABLE_NAME
-      + "_SEQ", allocationSize = 1, name = XhCtvtDeXuatHdr.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = XhCtvtDeXuatHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhCtvtDeXuatHdr.TABLE_NAME + "_SEQ")
   private Long id;
   private Integer nam;
   private String maDvi;
@@ -70,6 +69,8 @@ public class XhCtvtDeXuatHdr extends BaseEntity implements Serializable {
   @Transient
   private String tenDvi;
   @Transient
+  private String tenDviDx;
+  @Transient
   private String tenLoaiVthh;
   @Transient
   private String tenCloaiVthh;
@@ -84,6 +85,9 @@ public class XhCtvtDeXuatHdr extends BaseEntity implements Serializable {
     this.mapDmucDvi = mapDmucDvi;
     String tenDvi = mapDmucDvi.containsKey(maDvi) ? mapDmucDvi.get(maDvi) : null;
     setTenDvi(tenDvi);
+    String maDviDx = maDvi.substring(0, maDvi.length() - 2);
+    String tenDviDx = mapDmucDvi.containsKey(maDviDx) ? mapDmucDvi.get(maDviDx) : null;
+    setTenDviDx(tenDviDx);
   }
 
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -91,6 +95,7 @@ public class XhCtvtDeXuatHdr extends BaseEntity implements Serializable {
   @JoinColumn(name = "dataId")
   @Where(clause = "data_type='" + XhCtvtDeXuatHdr.TABLE_NAME + "_CAN_CU'")
   private List<FileDinhKemJoinTable> canCu = new ArrayList<>();
+
   public void setCanCu(List<FileDinhKemJoinTable> fileDinhKem) {
     this.canCu.clear();
     if (!DataUtils.isNullObject(fileDinhKem)) {

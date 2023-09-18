@@ -7,15 +7,10 @@ import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
 
-public interface XhHopDongDtlRepository extends BaseRepository<XhHopDongDtl,Long> {
-    @Transactional
+public interface XhHopDongDtlRepository extends BaseRepository<XhHopDongDtl, Long> {
+
     void deleteAllByIdHdr(Long idHdr);
 
-    @Transactional
-    void deleteAllByIdHdrIn(List<Long> idHdr);
-
-    List<XhHopDongDtl> findAllByIdHdrIn(Collection<Long> idHdr);
-
-    @Transactional
     List<XhHopDongDtl> findAllByIdHdr(Long idHdr);
+
 }

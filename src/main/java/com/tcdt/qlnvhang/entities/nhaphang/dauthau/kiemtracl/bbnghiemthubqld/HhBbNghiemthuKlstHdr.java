@@ -18,6 +18,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
@@ -148,24 +149,6 @@ public class HhBbNghiemthuKlstHdr extends TrangThaiBaseEntity implements Seriali
 
 	@Transient
 	private List<HhBbNghiemthuKlstDtl> children = new ArrayList<>();
-
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(value = FetchMode.SUBSELECT)
-	@JoinColumn(name = "dataId")
-	@JsonManagedReference
-	@Where(clause = "data_type='" + HhBbNghiemthuKlstHdr.TABLE_NAME + "'")
-	private List<FileDKemJoinKeLot> children1 = new ArrayList<>();
-
-	public void setChildren1(List<FileDKemJoinKeLot> children1) {
-		this.children1.clear();
-		for (FileDKemJoinKeLot child1 : children1) {
-			child1.setParent(this);
-		}
-		this.children1.addAll(children1);
-	}
-
-	public void addChild1(FileDKemJoinKeLot child1) {
-		child1.setParent(this);
-		this.children1.add(child1);
-	}
+	@Transient
+	private List<FileDinhKem> listFileDinhKem;
 }
