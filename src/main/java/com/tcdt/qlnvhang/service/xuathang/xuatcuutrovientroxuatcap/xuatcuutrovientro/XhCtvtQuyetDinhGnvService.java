@@ -2,7 +2,7 @@ package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovi
 
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQdPdDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQdPdHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -13,6 +13,7 @@ import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovie
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdHdr;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -46,7 +47,7 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
   private XhCtvtQdPdHdrRepository xhCtvtQdPdHdrRepository;
 
   @Autowired
-  private XhCtvtDeXuatHdrRepository xhCtvtDeXuatHdrRepository;
+  private XhCtvtQdPdDtlRepository xhCtvtQdPdDtlRepository;
 
 
   public Page<XhCtvtQuyetDinhGnvHdr> searchPage(CustomUserDetails currentUser, SearchXhCtvtQuyetDinhGnv objReq) throws Exception {
@@ -134,14 +135,13 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
   @Transactional
   public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
     if (StringUtils.isEmpty(idSearchReq.getIdList())) throw new Exception("Xóa thất bại, không tìm thấy dữ liệu");
-    List<XhCtvtQuyetDinhGnvHdr> listDataHdr = xhCtvtQuyetDinhGnvHdrRepository.findAllByIdIn(idSearchReq.getIdList());
-    List<Long> listQdPdId = listDataHdr.stream().map(XhCtvtQuyetDinhGnvHdr::getIdQdPd).collect(Collectors.toList());
-    List<XhCtvtQuyetDinhPdHdr> listQdPd = xhCtvtQdPdHdrRepository.findAllByIdIn(listQdPdId);
-    listQdPd.forEach(s -> {
-      s.setIdQdGiaoNv(null);
-      s.setSoQdGiaoNv(null);
+    List<XhCtvtQuyetDinhPdDtl> listQdPdDtl = xhCtvtQdPdDtlRepository.findByIdQdGnvIn(idSearchReq.getIdList());
+    listQdPdDtl.forEach(s -> {
+      s.setIdQdGnv(null);
+      s.setSoQdGnv(null);
     });
-    xhCtvtQdPdHdrRepository.saveAll(listQdPd);
+
+    xhCtvtQdPdDtlRepository.saveAll(listQdPdDtl);
     xhCtvtQuyetDinhGnvHdrRepository.deleteAllByIdIn(idSearchReq.getIdList());
   }
 
