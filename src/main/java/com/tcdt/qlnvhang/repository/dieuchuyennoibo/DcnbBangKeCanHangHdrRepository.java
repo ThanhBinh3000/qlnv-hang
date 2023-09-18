@@ -25,7 +25,7 @@ public interface DcnbBangKeCanHangHdrRepository extends JpaRepository<DcnbBangKe
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbBangKeCanHangHdr bkch ON bkch.keHoachDcDtlId = khdcd.id AND (bkch.type IS NULL OR (:#{#param.type} IS NULL OR bkch.type = :#{#param.type})) " +
+            "LEFT JOIN DcnbBangKeCanHangHdr bkch ON bkch.keHoachDcDtlId = khdcd.id AND (bkch.type IS NULL OR (:#{#param.type} IS NULL OR bkch.type = :#{#param.type})) and (:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho}) " +
             "LEFT JOIN DcnbPhieuXuatKhoHdr pxk ON pxk.id = bkch.phieuXuatKhoId " +
             "LEFT JOIN DcnbPhieuNhapKhoHdr pnk ON pnk.id = bkch.phieuNhapKhoId " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
