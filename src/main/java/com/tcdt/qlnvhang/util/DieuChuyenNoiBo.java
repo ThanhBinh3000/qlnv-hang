@@ -14,7 +14,7 @@ public class DieuChuyenNoiBo {
         return PathContains.BANG_KE_CAN_HANG_NHAP;
     }
     public static String getChiTieuKiemTra(String chiTieuKiemTra){
-        var list = Lists.newArrayList(Splitter.on("-*").split(chiTieuKiemTra));
+        var list = Lists.newArrayList(Splitter.on("+*").split(chiTieuKiemTra));
         List<String> nds = new ArrayList<>();
         for (String res : list) {
             String[] nd = res.split("-");
