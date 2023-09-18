@@ -1,59 +1,47 @@
 package com.tcdt.qlnvhang.request.xuathang.quyetdinhgiaonhiemvuxuat;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.request.BaseRequest;
-import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
 public class XhQdGiaoNvuXuatReq extends BaseRequest {
     private Long id;
     private Integer nam;
-
     private String maDvi;
-    private String soQd;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKy;
-    private Long idHd;
-    private String soHd;
-    private LocalDate ngayKyHd;
-    private String maDviTsan;
-    private String tenTtcn;
+    private String soQdNv;
+    private LocalDate ngayKy;
+    private Long idHopDong;
+    private String soHopDong;
+    private LocalDate ngayKyHopDong;
+    private String toChucCaNhan;
+    private String loaiHinhNx;
+    private String kieuNhapXuat;
     private String loaiVthh;
     private String cloaiVthh;
-    private String moTaHangHoa;
-    private String donViTinh;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date tgianGnhan;
-    private String trichYeu;
+    private String tenHangHoa;
     private BigDecimal soLuong;
-
-    private String bbTinhKho;
-
-    private String bbHaoDoi;
-
-    private String loaiHinhNx;
-
-    private String kieuNx;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayTaoTu;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayTaoDen;
-    
+    private String donViTinh;
+    private LocalDate tgianGiaoHang;
+    private Long idCanBoPhong;
+    private Long idTruongPhong;
+    private Long idLanhDaoCuc;
+    private String trichYeu;
+    private Long idTinhKho;
+    private String BienBanTinhKho;
+    private Long idHaoDoi;
+    private String BienBanHaoDoi;
+    private String trangThai;
+    private String trangThaiXh;
+    private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
+    private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
     private List<XhQdGiaoNvuXuatCtReq> children = new ArrayList<>();
-
-//    private List<Long> hopDongIds = new ArrayList<>();
-
-    private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
-    private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();
-
-    private String maChiCuc;
+    private String dvql;
+    private LocalDate ngayKyTu;
+    private LocalDate ngayKyDen;
 }
