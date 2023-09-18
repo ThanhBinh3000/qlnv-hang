@@ -13,17 +13,21 @@ public class XhQdGiaoNvXhDdiem {
     public static final String TABLE_NAME = "XH_QD_GIAO_NV_XH_DDIEM";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_QD_GIAO_NV_XH_DDIEM_SEQ")
-    @SequenceGenerator(sequenceName = "XH_QD_GIAO_NV_XH_DDIEM_SEQ", allocationSize = 1, name = "XH_QD_GIAO_NV_XH_DDIEM_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhQdGiaoNvXhDdiem.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = XhQdGiaoNvXhDdiem.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhQdGiaoNvXhDdiem.TABLE_NAME + "_SEQ")
     private Long id;
     private Long idDtl;
     private String maDiemKho;
+    private String diaDiemKho;
     private String maNhaKho;
     private String maNganKho;
     private String maLoKho;
-    private BigDecimal soLuong;
-    private BigDecimal donGiaVat;
     private String maDviTsan;
+    private BigDecimal tonKho;
+    private BigDecimal soLuong;
+    private BigDecimal donGia;
+    private BigDecimal thanhTien;
+    private String donViTinh;
     @Transient
     private String tenDiemKho;
     @Transient
@@ -32,18 +36,5 @@ public class XhQdGiaoNvXhDdiem {
     private String tenNganKho;
     @Transient
     private String tenLoKho;
-
-//    @Transient
-//    List<HhPhieuKiemTraChatLuong> listPhieuKtraCl;
-//
-//    @Transient
-//   List<HhPhieuNhapKhoHdr>  hhPhieuNhapKhoHdr;
-//
-//    @Transient
-//    List<HhBcanKeHangHdr> bcanKeHangHdr;
-//
-//    @Transient
-//    List<HhBienBanDayKhoHdr> bienBanNhapDayKho;
-
 }
 
