@@ -35,7 +35,6 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -52,11 +51,6 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
-
-    @Autowired
-    private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
-    @Autowired
-    private DcnbDataLinkDtlRepository dcnbDataLinkDtlRepository;
 
     public Page<DcnbPhieuXuatKhoHdrDTO> searchPage(CustomUserDetails currentUser, SearchPhieuXuatKho req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -283,9 +277,8 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
             var dcnbPhieuXuatKhoHdr = hdrRepository.findById(objReq.getId());
             if (!dcnbPhieuXuatKhoHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
             ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-//            byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-//            ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-            FileInputStream inputStream = new FileInputStream("/Users/lethanhdat/tecapro/qlnv-hang/src/main/resources/reports/dieuchuyennoibo/xuat/11.12.C31-HD_Phiếu xuất kho_LT VT-xuất điều chuyển.docx");
+            byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
             var dcnbPhieuXuatKhoHdrPreview = setDataToPreview(dcnbPhieuXuatKhoHdr);
             return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbPhieuXuatKhoHdrPreview);
         }

@@ -39,7 +39,6 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -371,10 +370,9 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         if (dcnbPhieuKnChatLuongHdr.get().getNguoiDuyetLdCuc() != null) {
             userInfo = userInfoRepository.findById(dcnbPhieuKnChatLuongHdr.get().getNguoiDuyetLdCuc());
         }
-//        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        FileInputStream inputStream = new FileInputStream("/Users/lethanhdat/tecapro/qlnv-hang/src/main/resources/reports/dieuchuyennoibo/Nhập_xuất_LT_Phiếu kiểm nghiệm chất lượng_LT.docx");
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
         var dcnbPhieuKnChatLuongHdrPreview = setDataToPreview(dcnbPhieuKnChatLuongHdr, userInfo);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbPhieuKnChatLuongHdrPreview);
     }

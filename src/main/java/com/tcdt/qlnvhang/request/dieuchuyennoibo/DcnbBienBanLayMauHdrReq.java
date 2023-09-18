@@ -125,7 +125,7 @@ public class DcnbBienBanLayMauHdrReq implements Serializable {
     private List<FileDinhKemReq> bienBanLayMauDinhKem = new ArrayList<>();
     private List<FileDinhKemReq> fileDinhKemChupMauNiemPhong = new ArrayList<>();
     private List<DcnbBienBanLayMauDtl> dcnbBienBanLayMauDtl = new ArrayList<>();
-//    private ReportTemplateRequest reportTemplateRequest;
+    private ReportTemplateRequest reportTemplateRequest;
 
     @NotNull
     private Long keHoachDcDtlId;
