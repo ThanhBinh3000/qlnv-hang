@@ -63,7 +63,7 @@ public class XhBienBanLayMauService extends BaseServiceImpl {
     String dvql = currentUser.getDvql();
     if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
       req.setDvql(dvql.substring(0, 6));
-      req.setTrangThai(Contains.BAN_HANH);
+//      req.setTrangThai(Contains.BAN_HANH);
     } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
       req.setDvql(dvql);
     }
@@ -91,7 +91,7 @@ public class XhBienBanLayMauService extends BaseServiceImpl {
       }
     }
     XhBienBanLayMauHdr data = new XhBienBanLayMauHdr();
-    BeanUtils.copyProperties(objReq, data);
+    BeanUtils.copyProperties(objReq, data,"maDvi");
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
     XhBienBanLayMauHdr created = xhBienBanLayMauRepository.save(data);
