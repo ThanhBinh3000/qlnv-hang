@@ -289,10 +289,8 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
         }
 
     private DcnbPhieuXuatKhoHdrPreview setDataToPreview(Optional<DcnbPhieuXuatKhoHdr> dcnbPhieuXuatKhoHdr) {
-        var tongDuToanKinhPhiDc = BigDecimal.ZERO;
         var tongKinhPhiDcTt = BigDecimal.ZERO;
         for (var res : dcnbPhieuXuatKhoHdr.get().getDcnbPhieuXuatKhoDtl()) {
-            tongDuToanKinhPhiDc = tongDuToanKinhPhiDc.add(res.getDuToanKinhPhiDc());
             tongKinhPhiDcTt = tongKinhPhiDcTt.add(res.getKinhPhiDcTt());
         }
         return DcnbPhieuXuatKhoHdrPreview.builder()
@@ -321,7 +319,6 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
                 .thanhTienBc(dcnbPhieuXuatKhoHdr.get().getThanhTienBc())
                 .keToanTruong(dcnbPhieuXuatKhoHdr.get().getKeToanTruong())
                 .ldChiCuc(dcnbPhieuXuatKhoHdr.get().getLdChiCuc())
-                .tongDuToanKinhPhiDc(tongDuToanKinhPhiDc)
                 .tongKinhPhiDcTt(tongKinhPhiDcTt)
                 .dcnbPhieuXuatKhoDtlDto(dcnbPhieuXuatKhoDtlToDto(dcnbPhieuXuatKhoHdr.get().getDcnbPhieuXuatKhoDtl()))
                 .build();

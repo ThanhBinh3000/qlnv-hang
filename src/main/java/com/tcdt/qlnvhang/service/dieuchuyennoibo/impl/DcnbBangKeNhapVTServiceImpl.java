@@ -324,6 +324,7 @@ public class DcnbBangKeNhapVTServiceImpl extends BaseServiceImpl implements Dcnb
                 .thangNhap(dcnbBangKeNhapVTHdr.get().getNgayNhap().getMonth().getValue())
                 .namNhap(dcnbBangKeNhapVTHdr.get().getNgayNhap().getYear())
                 .dcnbBangKeCanHangDtl(dcnbBangKeCanHangDtlToDto(dcnbBangKeCanHangDtlList))
+                .phuTrachBoPhanTVQT("")
                 .build();
     }
 
