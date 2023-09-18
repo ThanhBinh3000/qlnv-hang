@@ -26,6 +26,7 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.DieuChuyenNoiBo;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import lombok.var;
 import org.springframework.beans.BeanUtils;
@@ -380,7 +381,7 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
                     .chiSoCl(res.getChiSoCl())
                     .ketQuaPt(res.getKetQuaPt())
                     .phuongPhap(res.getPhuongPhap())
-                    .danhGia(res.getDanhGia())
+                    .danhGia(DieuChuyenNoiBo.checkDanhGia(res.getDanhGia()))
                     .build();
             dcnbPhieuKtChatLuongDtlDtos.add(dcnbPhieuKtChatLuongDtlDto);
         }

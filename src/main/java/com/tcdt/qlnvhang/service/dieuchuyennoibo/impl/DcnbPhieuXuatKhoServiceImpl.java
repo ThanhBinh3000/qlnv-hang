@@ -52,11 +52,6 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
     @Autowired
     private FileDinhKemService fileDinhKemService;
 
-    @Autowired
-    private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
-    @Autowired
-    private DcnbDataLinkDtlRepository dcnbDataLinkDtlRepository;
-
     public Page<DcnbPhieuXuatKhoHdrDTO> searchPage(CustomUserDetails currentUser, SearchPhieuXuatKho req) throws Exception {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
