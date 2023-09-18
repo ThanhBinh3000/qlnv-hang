@@ -105,15 +105,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		if (objReq.getLoaiVthh().startsWith("02")) {
 			return createVatTu(objReq);
 		} else {
-			// Add danh sach file dinh kem o Master
-			List<FileDKemJoinKquaLcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinKquaLcntHdr>();
-			if (objReq.getFileDinhKems() != null) {
-				fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinKquaLcntHdr.class);
-				fileDinhKemList.forEach(f -> {
-					f.setDataType(HhQdPduyetKqlcntHdr.TABLE_NAME);
-					f.setCreateDate(new Date());
-				});
-			}
+
 			HhQdPduyetKqlcntHdr dataMap = new HhQdPduyetKqlcntHdr();
 			BeanUtils.copyProperties(objReq,dataMap);
 
@@ -122,8 +114,13 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			dataMap.setTrangThai(Contains.DANG_NHAP_DU_LIEU);
 			dataMap.setTrangThaiHd(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
 			dataMap.setMaDvi(getUser().getDvql());
-			dataMap.setChildren(fileDinhKemList);
 			hhQdPduyetKqlcntHdrRepository.save(dataMap);
+			if (!DataUtils.isNullOrEmpty(objReq.getListCcPhapLy())) {
+				fileDinhKemService.saveListFileDinhKem(objReq.getListCcPhapLy(), dataMap.getId(), HhQdPduyetKqlcntHdr.TABLE_NAME + "_CAN_CU");
+			}
+			if (!DataUtils.isNullObject(objReq.getFileDinhKems())) {
+				fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), dataMap.getId(), HhQdPduyetKqlcntHdr.TABLE_NAME);
+			}
 			for (HhQdPduyetKqlcntDtlReq qdPdKq : objReq.getDetailList()){
 				HhQdPduyetKqlcntDtl qdPdKqDtl = ObjectMapperUtils.map(qdPdKq, HhQdPduyetKqlcntDtl.class);
 				qdPdKqDtl.setId(null);
@@ -182,16 +179,14 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 				hhQdPduyetKqlcntDtlRepository.save(qdPdKqDtl);
 			}
 		} else{
-			// Add danh sach file dinh kem o Master
-			List<FileDKemJoinKquaLcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinKquaLcntHdr>();
-			if (objReq.getFileDinhKems() != null) {
-				fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinKquaLcntHdr.class);
-				fileDinhKemList.forEach(f -> {
-					f.setDataType(HhQdPduyetKqlcntHdr.TABLE_NAME);
-					f.setCreateDate(new Date());
-				});
+			fileDinhKemService.delete(dataDB.getId(), Lists.newArrayList(HhQdPduyetKqlcntHdr.TABLE_NAME + "_CAN_CU"));
+			if (!DataUtils.isNullOrEmpty(objReq.getListCcPhapLy())) {
+				fileDinhKemService.saveListFileDinhKem(objReq.getListCcPhapLy(), dataDB.getId(), HhQdPduyetKqlcntHdr.TABLE_NAME + "_CAN_CU");
 			}
-			dataDB.setChildren(fileDinhKemList);
+			fileDinhKemService.delete(dataDB.getId(), Lists.newArrayList(HhQdPduyetKqlcntHdr.TABLE_NAME));
+			if (!DataUtils.isNullObject(objReq.getFileDinhKems())) {
+				fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), dataDB.getId(), HhQdPduyetKqlcntHdr.TABLE_NAME);
+			}
 			hhQdPduyetKqlcntDtlRepository.deleteAllByIdQdPdHdr(dataDB.getId());
 			for (HhQdPduyetKqlcntDtlReq qdPdKq : objReq.getDetailList()){
 				HhQdPduyetKqlcntDtl qdPdKqDtl = ObjectMapperUtils.map(qdPdKq, HhQdPduyetKqlcntDtl.class);
@@ -224,6 +219,8 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			qOptional.get().setFileDinhKems(fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhQdPduyetKqlcntHdr.TABLE_NAME)));
 		}else{
 			qOptional.get().setQdKhlcntDtl(Objects.isNull(qOptional.get().getIdQdPdKhlcntDtl()) ? null : qdKhLcntService.detailDtl(qOptional.get().getIdQdPdKhlcntDtl()));
+			qOptional.get().setCanCuPhapLy(fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhQdPduyetKqlcntHdr.TABLE_NAME + "_CAN_CU")));
+			qOptional.get().setFileDinhKems(fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhQdPduyetKqlcntHdr.TABLE_NAME)));
 		}
 		qOptional.get().setTenDvi(listDanhMucDvi.get(qOptional.get().getMaDvi()));
 		List<HhHopDongHdr> allByIdQdKqLcnt = hhHopDongRepository.findAllByIdQdKqLcnt(qOptional.get().getId());
@@ -390,6 +387,8 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 	@Override
 	public void delete(IdSearchReq idSearchReq) throws Exception {
 		if(!StringUtils.isEmpty(idSearchReq.getId())){
+			fileDinhKemService.delete(idSearchReq.getId(), Lists.newArrayList(HhQdPduyetKqlcntHdr.TABLE_NAME + "_CAN_CU"));
+			fileDinhKemService.delete(idSearchReq.getId(), Lists.newArrayList(HhQdPduyetKqlcntHdr.TABLE_NAME));
 			hhQdPduyetKqlcntHdrRepository.deleteById(idSearchReq.getId());
 		}else{
 			throw new Exception(
