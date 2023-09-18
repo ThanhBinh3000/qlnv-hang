@@ -70,7 +70,8 @@ public class XhCtvtQuyetDinhGnvDtl implements Serializable {
   private String tenLoKho;
   @Transient
   private String tenTrangThai;
-
+  @Transient
+  private Long idQdPdDtl;
 
   public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
     this.mapDmucDvi = mapDmucDvi;
