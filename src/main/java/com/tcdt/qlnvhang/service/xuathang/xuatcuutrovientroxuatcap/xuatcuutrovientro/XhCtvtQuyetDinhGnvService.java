@@ -82,8 +82,8 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
       Optional<XhCtvtQuyetDinhPdHdr> quyetDinhPd = xhCtvtQdPdHdrRepository.findById(created.getIdQdPd());
       quyetDinhPd.get().getQuyetDinhPdDtl().forEach(s -> {
         if (listIdQdPdDtl.contains(s.getId())) {
-          s.setIdQdGiaoNv(created.getId());
-          s.setSoQdGiaoNv(created.getSoBbQd());
+          s.setIdQdGnv(created.getId());
+          s.setSoQdGnv(created.getSoBbQd());
         }
       });
       xhCtvtQdPdHdrRepository.save(quyetDinhPd.get());
