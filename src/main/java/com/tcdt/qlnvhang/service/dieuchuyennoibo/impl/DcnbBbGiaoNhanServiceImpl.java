@@ -129,6 +129,7 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
         }
         if(!bbKetThucNkHdrList.isEmpty()){
             created.setSoBbKtNhapKho(bbKetThucNkHdrList.get(0).getSoBb());
+            created.setIdBbKtNhapKho(bbKetThucNkHdrList.get(0).getId());
         }
         List<DcnbBienBanLayMauHdr> bienBanLayMauHdrList = new ArrayList<>();
         if (created.getMaLoKho() == null) {
@@ -181,6 +182,7 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
         }
         if(!bbKetThucNkHdrList.isEmpty()){
             update.setSoBbKtNhapKho(bbKetThucNkHdrList.get(0).getSoBb());
+            update.setIdBbKtNhapKho(bbKetThucNkHdrList.get(0).getId());
         }
         List<DcnbBienBanLayMauHdr> bienBanLayMauHdrList = new ArrayList<>();
         if (update.getMaLoKho() == null) {
