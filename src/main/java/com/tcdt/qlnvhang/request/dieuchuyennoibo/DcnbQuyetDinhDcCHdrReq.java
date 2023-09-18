@@ -39,6 +39,7 @@ public class DcnbQuyetDinhDcCHdrReq implements Serializable {
   private Long nguoiPduyetId;
   private String tenTrangThai;
   private String type;
+  private LocalDate ngayHieuLuc;
   private List<FileDinhKemReq> canCu = new ArrayList<>();
   private List<FileDinhKemReq> quyetDinh = new ArrayList<>();
   private List<DcnbQuyetDinhDcCDtl> danhSachQuyetDinh = new ArrayList<>();
