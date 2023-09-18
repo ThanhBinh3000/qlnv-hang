@@ -14,11 +14,14 @@ import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovie
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBangKeHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBbTinhKhoHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBbTinhKhoDtl;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,6 +34,8 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -154,6 +159,7 @@ public class XhCtvtBbTinhKhoService extends BaseServiceImpl {
     allById.forEach(data -> {
       if (mapDmucDvi.containsKey(data.getMaDvi())) {
         data.setTenDvi(mapDmucDvi.get(data.getMaDvi()).get("tenDvi").toString());
+        data.setTenDviCha(mapDmucDvi.get(data.getMaDvi().substring(0,data.getMaDvi().length()-2)).get("tenDvi").toString());
         data.setDiaChiDvi(mapDmucDvi.get(data.getMaDvi()).get("diaChi").toString());
       }
       if (mapDmucDvi.containsKey(data.getMaDiemKho())) {
@@ -170,6 +176,12 @@ public class XhCtvtBbTinhKhoService extends BaseServiceImpl {
       }
       if (data.getNguoiPduyetId() != null) {
         data.setLdChiCuc(ObjectUtils.isEmpty(data.getNguoiPduyetId()) ? null : userInfoRepository.findById(data.getNguoiPduyetId()).get().getFullName());
+      }
+      if (mapVthh.get((data.getLoaiVthh())) != null) {
+        data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
+      }
+      if (mapVthh.get((data.getCloaiVthh())) != null) {
+        data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
       }
       data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
       List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhCtvtBbTinhKhoHdr.TABLE_NAME));
@@ -287,5 +299,20 @@ public class XhCtvtBbTinhKhoService extends BaseServiceImpl {
     }
     ExportExcel ex =new ExportExcel(title,fileName,rowsName,dataList,response);
     ex.export();
+  }
+
+  public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
+    try {
+      String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
+      String fileTemplate = "xuatcuutrovientro/" + fileName;
+      FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
+      List<XhCtvtBbTinhKhoHdr> detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
+      return docxToPdfConverter.convertDocxToPdf(inputStream, detail.get(0));
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (XDocReportException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }
