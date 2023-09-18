@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.table.khoahoccongnghebaoquan;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -78,18 +79,21 @@ public class KhCnCongTrinhNghienCuu extends BaseEntity implements Serializable {
     private List<KhCnNghiemThuThanhLy> children = new ArrayList<>();
 
     public String getTenXepLoai() {
-        if (tongDiem < 60) {
-            tenXepLoai = "Không nghiệm thu";
-        } else if (tongDiem >= 60 && tongDiem <= 69) {
-            tenXepLoai = "Đạt yêu cầu";
-        } else if (tongDiem >= 70 && tongDiem <= 79) {
-            tenXepLoai = "Khá";
-        } else if (tongDiem >= 80 && tongDiem <= 89) {
-            tenXepLoai = "Giỏi";
-        } else if (tongDiem >= 90 && tongDiem <= 100) {
-            tenXepLoai = "Xuất sắc";
-        }
-        return tenXepLoai;
+        if (!ObjectUtils.isEmpty(tongDiem)) {
+            if (tongDiem < 60) {
+                tenXepLoai = "Không nghiệm thu";
+            } else if (tongDiem >= 60 && tongDiem <= 69) {
+                tenXepLoai = "Đạt yêu cầu";
+            } else if (tongDiem >= 70 && tongDiem <= 79) {
+                tenXepLoai = "Khá";
+            } else if (tongDiem >= 80 && tongDiem <= 89) {
+                tenXepLoai = "Giỏi";
+            } else if (tongDiem >= 90 && tongDiem <= 100) {
+                tenXepLoai = "Xuất sắc";
+            }
+            return tenXepLoai;
+        } else
+            return "";
     }
 
     //dùng cho preview

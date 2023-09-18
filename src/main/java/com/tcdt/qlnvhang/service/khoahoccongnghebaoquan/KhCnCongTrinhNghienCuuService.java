@@ -61,7 +61,7 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
     private FileDinhKemService fileDinhKemService;
 
     public Page<KhCnCongTrinhNghienCuu> searchPage(SearchKhCnCtrinhNcReq objReq) throws Exception {
-        UserInfo userInfo = SecurityContextService.getUser();
+//        UserInfo userInfo = SecurityContextService.getUser();
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<KhCnCongTrinhNghienCuu> data = khCnCongTrinhNghienCuuRepository.searchPage(objReq, pageable);
