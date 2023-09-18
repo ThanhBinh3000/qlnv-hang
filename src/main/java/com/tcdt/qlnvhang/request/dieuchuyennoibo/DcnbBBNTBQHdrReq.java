@@ -43,7 +43,6 @@ public class DcnbBBNTBQHdrReq extends BaseRequest {
     private String soBban;
     @NotNull
     private LocalDate ngayLap;
-    @NotNull
     private LocalDate ngayKetThucNt;
     @NotNull
     private String soQdDcCuc;

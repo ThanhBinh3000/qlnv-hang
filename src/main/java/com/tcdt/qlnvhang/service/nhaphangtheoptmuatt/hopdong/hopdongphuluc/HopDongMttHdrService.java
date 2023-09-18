@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.hopdong.hopdongphuluc;
 
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhNkPhieuKtcl;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.hopdong.hopdongphuluc.DiaDiemGiaoNhanMttCtRepository;
@@ -7,6 +8,7 @@ import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.hopdong.hopdongphuluc.DiaD
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.hopdong.hopdongphuluc.HopDongMttHdrRepository;
 import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttHdrSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhNkPhieuKtclSearch;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhQdGiaoNvNhReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhQdPduyetKqcg;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.hopdong.hopdongphuluc.DiaDiemGiaoNhanMttCtReq;
@@ -19,17 +21,17 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.HhQdGiaoNvNhapHangService;
 import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.HhQdPduyetKqcgService;
 import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.HhQdPheduyetKhMttHdrService;
-import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttHdr;
-import com.tcdt.qlnvhang.table.HhQdPheduyetKqMttSLDD;
-import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.*;
+import com.tcdt.qlnvhang.table.catalog.DmVattuDTO;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.DiaDiemGiaoNhanMtt;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.DiaDiemGiaoNhanMttCt;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdr;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -39,6 +41,8 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -655,5 +659,61 @@ public class HopDongMttHdrService extends BaseServiceImpl {
     }
     ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
     ex.export();
+  }
+
+  public ReportTemplateResponse preview(HopDongMttHdrReq objReq) throws Exception {
+    if(getUser().getCapDvi().equals(Contains.CAP_CUC)){
+      HhQdPduyetKqcgHdr optional = this.hhQdPduyetKqcgService.detail(objReq.getIdQdKq().toString());
+      Map<String, DmVattuDTO> mapVthh = getListObjectDanhMucHangHoa(optional.getMaDvi().substring(0, 4));
+      optional.setDvt(mapVthh.get(optional.getLoaiVthh()).getMaDviTinh());
+      BigDecimal soLuongChild = new BigDecimal(0);
+      BigDecimal tongThanhTienChild = new BigDecimal(0);
+      BigDecimal tongThanhTien = new BigDecimal(0);
+      for (HhQdPheduyetKqMttSLDD sldd : optional.getDanhSachCtiet()) {
+        soLuongChild = soLuongChild.add(sldd.getSoLuong());
+        tongThanhTien = tongThanhTien.add(sldd.getTongThanhTien());
+        for (HhQdPdKQMttSlddDtl child : sldd.getChildren()) {
+          tongThanhTienChild = child.getSoLuong().multiply(child.getDonGia());
+          child.setTongThanhTien(tongThanhTienChild);
+        }
+      }
+      optional.setSoLuong(soLuongChild);
+      optional.setTongThanhTien(tongThanhTien);
+      ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+      byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+      ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+      return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
+    }
+    if(getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)){
+      HhQdGiaoNvNhapHang optional = hhQdGiaoNvNhapHangService.detail(objReq.getIdQdGiaoNvNh().toString());
+      optional.setNgayMkho(optional.getHopDongMttHdrs().get(0).getNgayMkho());
+      optional.setDonViTinh(optional.getHopDongMttHdrs().get(0).getDviTinh());
+
+      BigDecimal soLuongChild = new BigDecimal(0);
+      BigDecimal tongThanhTienChild = new BigDecimal(0);
+      BigDecimal tongThanhTien = new BigDecimal(0);
+      List<HhQdGiaoNvNhDdiem> listChild = new ArrayList<>();
+      for (HhQdGiaoNvNhangDtl dtl : optional.getHhQdGiaoNvNhangDtlList()) {
+        if(dtl.getMaDvi().equals(this.getUser().getDvql())){
+          soLuongChild = soLuongChild.add(dtl.getSoLuong());
+          tongThanhTien = tongThanhTien.add(dtl.getSoLuong().multiply(dtl.getDonGiaVat()));
+          for (HhQdGiaoNvNhDdiem child : dtl.getChildren()) {
+            tongThanhTienChild = child.getSoLuong().multiply(dtl.getDonGiaVat());
+            child.setTongThanhTien(tongThanhTienChild);
+            child.setDonGia(dtl.getDonGiaVat());
+            listChild.add(child);
+          }
+        }
+      }
+
+      optional.setSoLuong(soLuongChild);
+      optional.setTongThanhTien(tongThanhTien);
+      optional.setChildren(listChild);
+      ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+      byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+      ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+      return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
+    }
+    return null;
   }
 }
