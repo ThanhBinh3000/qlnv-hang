@@ -29,7 +29,6 @@ public class DcnbPhieuKnChatLuongHdrReq {
     private String soQdinhDc;
     @NotNull
     private LocalDate ngayQdinhDc;
-    @NotNull
     private LocalDate ngayHieuLuc;
     private String soPhieu;
     @NotNull
