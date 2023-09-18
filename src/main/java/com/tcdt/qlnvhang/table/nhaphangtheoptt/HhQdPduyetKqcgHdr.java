@@ -15,6 +15,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -85,6 +86,14 @@ public class HhQdPduyetKqcgHdr extends TrangThaiBaseEntity implements Serializab
     private String trangThaiNh;
     @Transient
     private String tenTrangThaiNh;
+
+//    preview
+    @Transient
+    private String dvt;
+    @Transient
+    private BigDecimal soLuong;
+    @Transient
+    private BigDecimal tongThanhTien;
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
