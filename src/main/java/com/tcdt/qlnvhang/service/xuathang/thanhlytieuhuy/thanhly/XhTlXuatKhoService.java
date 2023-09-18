@@ -7,9 +7,12 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlXuatKhoHdrReq;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlXuatKhoHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBangKeHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,10 +23,10 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class XhTlXuatKhoService extends BaseServiceImpl {
@@ -137,5 +140,20 @@ public class XhTlXuatKhoService extends BaseServiceImpl {
         data.setTrangThai(statusReq.getTrangThai());
         XhTlXuatKhoHdr created = xhTlXuatKhoRepository.save(data);
         return created;
+    }
+
+    public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
+        try {
+            String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "xuatthanhly/" + fileName;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
+            List<XhTlXuatKhoHdr> detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
+            return docxToPdfConverter.convertDocxToPdf(inputStream, detail.get(0));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

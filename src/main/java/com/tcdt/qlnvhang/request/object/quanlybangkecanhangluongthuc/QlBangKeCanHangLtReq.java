@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.object.quanlybangkecanhangluongthuc;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,6 +38,9 @@ public class QlBangKeCanHangLtReq extends BaseRequest {
     private Integer nam;
 
     private String soPhieuNhapKho;
+    private String maQhns;
+    private String nguoiGiamSat;
+    private List<FileDinhKemReq> fileDinhKems;
 
     private List<QlBangKeChCtLtReq> chiTiets = new ArrayList<>();
 

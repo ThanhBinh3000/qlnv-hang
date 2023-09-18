@@ -274,7 +274,7 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
             List<XhDgPhieuXuatKho> listDetail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
             XhDgPhieuXuatKho detail = listDetail.get(0);
             XhQdGiaoNvXh xhQdGiaoNvXh = xhQdGiaoNvXhService.detail(detail.getIdQdGiaoNvXh());
-            detail.setTenTtcn(xhQdGiaoNvXh.getTenTtcn());
+            detail.setTenTtcn(xhQdGiaoNvXh.getToChucCaNhan());
             detail.setTenDviCha(xhQdGiaoNvXh.getTenDvi());
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
         } catch (IOException e) {

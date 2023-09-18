@@ -9,10 +9,14 @@ public class XhQdGiaoNvXhDdiemReq {
     private Long id;
     private Long idDtl;
     private String maDiemKho;
+    private String diaDiemKho;
     private String maNhaKho;
     private String maNganKho;
     private String maLoKho;
-    private BigDecimal soLuong;
-    private BigDecimal donGiaVat;
     private String maDviTsan;
+    private BigDecimal tonKho;
+    private BigDecimal soLuong;
+    private BigDecimal donGia;
+    private BigDecimal thanhTien;
+    private String donViTinh;
 }
