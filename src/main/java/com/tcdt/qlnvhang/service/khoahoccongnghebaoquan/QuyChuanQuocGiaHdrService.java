@@ -221,7 +221,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                 for (QuyChuanQuocGiaDtl dtl : dtlList) {
                     dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh()) ? null : hashMapDmHh.get(dtl.getLoaiVthh()));
                     dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh()) ? null : hashMapDmHh.get(dtl.getCloaiVthh()));
-                    dtl.setTenChiTieu(!ObjectUtils.isEmpty(dtl.getMaChiTieu()) ? mapTenChiTieu.get(dtl.getMaChiTieu()) : null);
+                    dtl.setTenChiTieu(mapTenChiTieu.get(dtl.getMaChiTieu()));
                 }
                 data.setTieuChuanKyThuat(dtlList);
             } else {
@@ -229,6 +229,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                 List<String> listTenChiTieu = dtlList.stream().map(QuyChuanQuocGiaDtl::getTenChiTieu).collect(Collectors.toList());
                 if (!listTenChiTieu.isEmpty()) {
                     dtlList.forEach(item -> {
+                        item.setTenChiTieu(mapTenChiTieu.get(item.getMaChiTieu()));
                         List<String> listStringCompare = listQuyChuan.stream().map(QuyChuanQuocGiaDtl::getTenChiTieu).collect(Collectors.toList());
                         if (!listStringCompare.contains(item.getTenChiTieu())) {
                             item.setLoaiVthh(null);
