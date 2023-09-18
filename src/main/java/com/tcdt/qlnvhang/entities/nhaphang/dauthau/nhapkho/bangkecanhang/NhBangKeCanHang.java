@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang;
 
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -46,13 +47,16 @@ public class NhBangKeCanHang extends TrangThaiBaseEntity implements Serializable
 
     @Column(name = "MA_DVI")
     private String maDvi;
+    private String maQhns;
+    private String nguoiGiamSat;
 
     @Transient
     private String tenDvi;
 
     @Column(name = "NAM")
     private Integer nam;
-
+    @Transient
+    private List<FileDinhKem> listFileDinhKem;
     @Transient
     private List<NhBangKeCanHangCt> chiTiets = new ArrayList<>();
 }

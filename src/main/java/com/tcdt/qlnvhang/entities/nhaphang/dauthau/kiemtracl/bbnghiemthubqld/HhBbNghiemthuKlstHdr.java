@@ -135,7 +135,6 @@ public class HhBbNghiemthuKlstHdr extends TrangThaiBaseEntity implements Seriali
 	@Transient
 	String tenVatTuCha;
 
-	@Transient
 	String maQhns;
 
 	Long idDdiemGiaoNvNh;
