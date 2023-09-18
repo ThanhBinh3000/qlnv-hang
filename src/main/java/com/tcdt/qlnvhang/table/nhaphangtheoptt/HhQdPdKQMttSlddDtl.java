@@ -32,4 +32,8 @@ public class HhQdPdKQMttSlddDtl implements Serializable {
     private BigDecimal donGia;
 
     private BigDecimal donGiaVat;
+
+    //privew
+    @Transient
+    private BigDecimal tongThanhTien;
 }
