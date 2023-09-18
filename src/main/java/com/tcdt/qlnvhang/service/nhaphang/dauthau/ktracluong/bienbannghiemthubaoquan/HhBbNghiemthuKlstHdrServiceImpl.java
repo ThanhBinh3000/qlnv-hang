@@ -10,8 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.FileDKemJoinKeLot;
 import com.tcdt.qlnvhang.entities.FileDKemJoinKquaLcntHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthau;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthauCtiet;
@@ -32,15 +34,13 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.*;
 import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
 import com.tcdt.qlnvhang.service.HhQdGiaoNvuNhapxuatService;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
-import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.ExportExcel;
-import com.tcdt.qlnvhang.util.ObjectMapperUtils;
-import com.tcdt.qlnvhang.util.UserUtils;
+import com.tcdt.qlnvhang.util.*;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +77,8 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
     @Autowired
     private HttpServletRequest req;
-
+    @Autowired
+    private FileDinhKemService fileDinhKemService;
     @Override
     public Page<HhBbNghiemthuKlstHdr> searchPage(HhBbNghiemthuKlstHdrReq req) {
         return null;
@@ -92,20 +93,11 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
             throw new Exception("Quyết định giao nhiệm vụ nhập xuất không tồn tại");
 //        Map<String, String> lishLoaiKho = getListDanhMucChung("LOAI_KHO");
         // Add danh sach file dinh kem o Master
-        List<FileDKemJoinKeLot> fileDinhKemList = new ArrayList<FileDKemJoinKeLot>();
-        if (req.getFileDinhKems() != null) {
-            fileDinhKemList = ObjectMapperUtils.mapAll(req.getFileDinhKems(), FileDKemJoinKeLot.class);
-            fileDinhKemList.forEach(f -> {
-                f.setDataType(HhBbNghiemthuKlstHdr.TABLE_NAME);
-                f.setCreateDate(new Date());
-            });
-        }
         HhBbNghiemthuKlstHdr dataMap = new HhBbNghiemthuKlstHdr();
         BeanUtils.copyProperties(req, dataMap);
         dataMap.setNgayTao(getDateTimeNow());
         dataMap.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         dataMap.setNguoiTaoId(getUser().getId());
-        dataMap.setChildren1(fileDinhKemList);
         dataMap.setNam(qdNxOptional.get().getNamNhap());
         dataMap.setMaDvi(userInfo.getDvql());
         dataMap.setCapDvi(userInfo.getCapDvi());
@@ -132,6 +124,9 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
 
         hhBbNghiemthuKlstRepository.save(dataMap);
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+            fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), dataMap.getId(), HhBbNghiemthuKlstHdr.TABLE_NAME);
+        }
         saveDetail(req, dataMap.getId());
         return dataMap;
     }
@@ -167,16 +162,6 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 		}
         Map<String, String> lishLoaiKho = getListDanhMucChung("LOAI_KHO");
 
-        // Add danh sach file dinh kem o Master
-        List<FileDKemJoinKeLot> fileDinhKemList = new ArrayList<FileDKemJoinKeLot>();
-        if (objReq.getFileDinhKems() != null) {
-            fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinKeLot.class);
-            fileDinhKemList.forEach(f -> {
-                f.setDataType(HhBbNghiemthuKlstHdr.TABLE_NAME);
-                f.setCreateDate(new Date());
-            });
-        }
-
         HhBbNghiemthuKlstHdr dataDTB = qOptional.get();
         BeanUtils.copyProperties(objReq,dataDTB,"id");
         if(!StringUtils.isEmpty(dataDTB.getMaLoKho())){
@@ -197,11 +182,14 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
         }
         dataDTB.setNgaySua(getDateTimeNow());
         dataDTB.setNguoiSuaId(getUser().getId());;
-        dataDTB.setChildren1(fileDinhKemList);
         dataDTB.setNam(qdNxOptional.get().getNamNhap());
         dataDTB.setMaDvi(userInfo.getDvql());
         dataDTB.setCapDvi(userInfo.getCapDvi());
         hhBbNghiemthuKlstRepository.save(dataDTB);
+        fileDinhKemService.delete(dataDTB.getId(), Lists.newArrayList(HhBbNghiemthuKlstHdr.TABLE_NAME));
+        if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKems())) {
+            fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), dataDTB.getId(), HhBbNghiemthuKlstHdr.TABLE_NAME);
+        }
         saveDetail(objReq, dataDTB.getId());
 		return dataDTB;
     }
@@ -250,6 +238,8 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 //            hhBbNghiemthuKlstHdr.setLhKho(lishLoaiKho.get(ktNganKho.getLoaikhoId()));
 //            hhBbNghiemthuKlstHdr.setTichLuong(tichLuong.doubleValue());
 //        }
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhHopDongHdr.TABLE_NAME));
+        hhBbNghiemthuKlstHdr.setListFileDinhKem(fileDinhKem);
         hhBbNghiemthuKlstHdr.setChildren(hhBbNghiemthuKlstDtlRepository.findAllByHdrId(hhBbNghiemthuKlstHdr.getId()));
         return hhBbNghiemthuKlstHdr;
     }

@@ -102,6 +102,7 @@ public class HhHopDongHdrReq extends BaseRequest {
 	String giayUyQuyenNhaThau;
 
 	String donViTinh;
+	Integer soNgayThienHd;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	private Date tgianGiaoThucTe;

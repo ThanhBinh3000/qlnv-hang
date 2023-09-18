@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.ketqua;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongHdr;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
@@ -21,7 +20,7 @@ import java.util.Map;
 @Entity
 @Table(name = XhKqBdgHdr.TABLE_NAME)
 @Data
-public class XhKqBdgHdr extends BaseEntity implements Serializable {
+public class XhKqBdgHdr implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_KQ_BDG_HDR";
     @Id
@@ -32,27 +31,32 @@ public class XhKqBdgHdr extends BaseEntity implements Serializable {
     private Integer nam;
     private String soQdKq;
     private String trichYeu;
-    private LocalDate ngayHluc;
+    private LocalDate ngayHieuLuc;
     private LocalDate ngayKy;
     private String loaiHinhNx;
-    private String kieuNx;
+    private String kieuNhapXuat;
     private Long idQdPd;
+    private Long idQdPdDtl;
     private String soQdPd;
-    private Long idThongTin;
-    private Long idPdKhDtl;
+    private Long idThongBao;
     private String maThongBao;
     private String soBienBan;
     private String loaiVthh;
     private String cloaiVthh;
-    private String pthucGnhan;
-    private Integer tgianGnhan;
+    private String moTaHangHoa;
+    private String phuongThucGiaoNhan;
+    private Integer tgianGiaoNhanNgay;
     private String tgianGnhanGhiChu;
     private String ghiChu;
     private String hinhThucDauGia;
-    private String pthucDauGia;
+    private String phuongThucDauGia;
     private String soTbKhongThanh;
     private String trangThai;
     private String lyDoTuChoi;
+    private LocalDate ngayTao;
+    private Long nguoiTaoId;
+    private LocalDate ngaySua;
+    private Long nguoiSuaId;
     private LocalDate ngayGuiDuyet;
     private Long nguoiGuiDuyetId;
     private LocalDate ngayPduyet;
@@ -62,7 +66,7 @@ public class XhKqBdgHdr extends BaseEntity implements Serializable {
     @Transient
     private String tenLoaiHinhNx;
     @Transient
-    private String tenKieuNx;
+    private String tenKieuNhapXuat;
     @Transient
     private String tenLoaiVthh;
     @Transient
@@ -70,7 +74,7 @@ public class XhKqBdgHdr extends BaseEntity implements Serializable {
     @Transient
     private String tenHinhThucDauGia;
     @Transient
-    private String tenPthucDauGia;
+    private String tenPhuongThucDauGia;
     @Transient
     private String tenTrangThai;
 
@@ -98,12 +102,12 @@ public class XhKqBdgHdr extends BaseEntity implements Serializable {
 
     @JsonIgnore
     @Transient
-    private Map<String, String> mapKieuNx;
+    private Map<String, String> mapKieuNhapXuat;
 
-    public void setMapKieuNx(Map<String, String> mapKieuNx) {
-        this.mapKieuNx = mapKieuNx;
-        if (!DataUtils.isNullObject(getKieuNx())) {
-            setTenKieuNx(mapKieuNx.containsKey(getKieuNx()) ? mapKieuNx.get(getKieuNx()) : null);
+    public void setMapKieuNhapXuat(Map<String, String> mapKieuNhapXuat) {
+        this.mapKieuNhapXuat = mapKieuNhapXuat;
+        if (!DataUtils.isNullObject(getKieuNhapXuat())) {
+            setTenKieuNhapXuat(mapKieuNhapXuat.containsKey(getKieuNhapXuat()) ? mapKieuNhapXuat.get(getKieuNhapXuat()) : null);
         }
     }
 
@@ -123,23 +127,23 @@ public class XhKqBdgHdr extends BaseEntity implements Serializable {
 
     @JsonIgnore
     @Transient
-    private Map<String, String> mapHinhThucDg;
+    private Map<String, String> mapHinhThucDauGia;
 
-    public void setMapHinhThucDg(Map<String, String> mapHinhThucDg) {
-        this.mapHinhThucDg = mapHinhThucDg;
+    public void setMapHinhThucDauGia(Map<String, String> mapHinhThucDauGia) {
+        this.mapHinhThucDauGia = mapHinhThucDauGia;
         if (!DataUtils.isNullObject(getHinhThucDauGia())) {
-            setTenHinhThucDauGia(mapHinhThucDg.containsKey(getHinhThucDauGia()) ? mapHinhThucDg.get(getHinhThucDauGia()) : null);
+            setTenHinhThucDauGia(mapHinhThucDauGia.containsKey(getHinhThucDauGia()) ? mapHinhThucDauGia.get(getHinhThucDauGia()) : null);
         }
     }
 
     @JsonIgnore
     @Transient
-    private Map<String, String> mapPthucDauGia;
+    private Map<String, String> mapPhuongThucDauGia;
 
-    public void setMapPthucDauGia(Map<String, String> mapPthucDauGia) {
-        this.mapPthucDauGia = mapPthucDauGia;
-        if (!DataUtils.isNullObject(getPthucDauGia())) {
-            setTenPthucDauGia(mapPthucDauGia.containsKey(getPthucDauGia()) ? mapPthucDauGia.get(getPthucDauGia()) : null);
+    public void setMapPhuongThucDauGia(Map<String, String> mapPhuongThucDauGia) {
+        this.mapPhuongThucDauGia = mapPhuongThucDauGia;
+        if (!DataUtils.isNullObject(getPhuongThucDauGia())) {
+            setTenPhuongThucDauGia(mapPhuongThucDauGia.containsKey(getPhuongThucDauGia()) ? mapPhuongThucDauGia.get(getPhuongThucDauGia()) : null);
         }
     }
 
@@ -183,10 +187,11 @@ public class XhKqBdgHdr extends BaseEntity implements Serializable {
     }
 
     //Hợp đồng
-    private Long tongDvts;
-    private Long soDvtsDgTc;
-    private Long slHdDaKy;
-    private LocalDate thoiHanTt;
+    private Integer tongDviTsan;
+    private Integer slDviTsanThanhCong;
+    private Integer slDviTsanKhongThanh;
+    private Integer slHopDongDaKy;
+    private LocalDate thoiHanThanhToan;
     private Long tongSlXuat;
     private Long thanhTien;
     private String trangThaiHd;
