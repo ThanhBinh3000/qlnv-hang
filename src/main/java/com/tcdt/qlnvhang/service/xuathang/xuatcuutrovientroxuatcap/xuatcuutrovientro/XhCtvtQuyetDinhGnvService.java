@@ -11,6 +11,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtQuyetDinhGnv;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvHdrReq;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdHdr;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -76,10 +77,15 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
     saveData.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
     XhCtvtQuyetDinhGnvHdr created = xhCtvtQuyetDinhGnvHdrRepository.save(saveData);
 
+    List<Long> listIdQdPdDtl = objReq.getDataDtl().stream().map(XhCtvtQuyetDinhGnvDtl::getIdQdPdDtl).collect(Collectors.toList());
     if (!DataUtils.isNullObject(created)) {
       Optional<XhCtvtQuyetDinhPdHdr> quyetDinhPd = xhCtvtQdPdHdrRepository.findById(created.getIdQdPd());
-      quyetDinhPd.get().setIdQdGiaoNv(created.getId());
-      quyetDinhPd.get().setSoQdGiaoNv(created.getSoBbQd());
+      quyetDinhPd.get().getQuyetDinhPdDtl().forEach(s -> {
+        if (listIdQdPdDtl.contains(s.getId())) {
+          s.setIdQdGiaoNv(created.getId());
+          s.setSoQdGiaoNv(created.getSoBbQd());
+        }
+      });
       xhCtvtQdPdHdrRepository.save(quyetDinhPd.get());
     }
     return created;
@@ -103,7 +109,7 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
     }
 
     XhCtvtQuyetDinhGnvHdr data = optional.get();
-    BeanUtils.copyProperties(objReq, data, "id","maDvi");
+    BeanUtils.copyProperties(objReq, data, "id", "maDvi");
     XhCtvtQuyetDinhGnvHdr created = xhCtvtQuyetDinhGnvHdrRepository.save(data);
     return created;
   }
