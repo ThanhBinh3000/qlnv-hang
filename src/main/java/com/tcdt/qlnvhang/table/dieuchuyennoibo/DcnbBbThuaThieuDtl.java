@@ -51,8 +51,6 @@ public class DcnbBbThuaThieuDtl {
     private String tenLoKho;
     @Column(name = "DON_VI_TINH")
     private String donViTinh;
-    @Column(name = "TEN_DON_VI_TINH")
-    private String tenDonViTinh;
 
     @Column(name = "MA_DVI_NHAN")
     private String maDviNhan;

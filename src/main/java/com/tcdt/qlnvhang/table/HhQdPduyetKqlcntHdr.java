@@ -101,26 +101,6 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 		return NhapXuatHangTrangThaiEnum.getTenById(trangThaiHd);
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@Fetch(value = FetchMode.SUBSELECT)
-	@JoinColumn(name = "dataId")
-	@JsonManagedReference
-	@Where(clause = "data_type='" + HhQdPduyetKqlcntHdr.TABLE_NAME + "'")
-	private List<FileDKemJoinKquaLcntHdr> children = new ArrayList<>();
-
-	public void setChildren(List<FileDKemJoinKquaLcntHdr> children) {
-		this.children.clear();
-		for (FileDKemJoinKquaLcntHdr child : children) {
-			child.setParent(this);
-		}
-		this.children.addAll(children);
-	}
-
-	public void addChild(FileDKemJoinKquaLcntHdr child) {
-		child.setParent(this);
-		this.children.add(child);
-	}
-
 	@Transient
 	private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 

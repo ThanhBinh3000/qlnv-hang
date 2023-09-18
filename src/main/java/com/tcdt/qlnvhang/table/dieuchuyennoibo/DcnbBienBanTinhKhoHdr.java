@@ -60,7 +60,7 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
     private LocalDate ngayBatDauXuat;
 
     @Column(name = "NGAY_KET_THUC_XUAT")
-    private LocalDate ngayKeThucXuat;
+    private LocalDate ngayKetThucXuat;
 
     @Column(name = "THOI_HAN_XUAT_HANG")
     private LocalDate thoiHanXuatHang;
@@ -85,6 +85,12 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
 
     @Column(name = "CLOAI_VTHH")
     private String cloaiVthh;
+
+    @Column(name = "TEN_LOAI_VTHH")
+    private String tenLoaiVthh;
+
+    @Column(name = "TEN_CLOAI_VTHH")
+    private String tenCloaiVthh;
 
     @Column(name = "DON_VI_TINH")
     private String donViTinh;
@@ -192,6 +198,12 @@ public class DcnbBienBanTinhKhoHdr extends BaseEntity implements Serializable, C
     @Column(name = "TYPE")
     private String type;
 
+    @Column(name = "SO_PHIEU_KN_CHAT_LUONG")
+    private String soPhieuKnChatLuong;
+    @Column(name = "PHIEU_KN_CHAT_LUONG_HDR_ID")
+    private Long phieuKnChatLuongHdrId;
+    @Column(name = "KE_HOACH_DC_DTL_ID")
+    private Long keHoachDcDtlId;
     @Transient
     private List<FileDinhKem> fileBbTinhKhoDaKy = new ArrayList<>();
 

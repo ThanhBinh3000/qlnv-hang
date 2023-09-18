@@ -19,5 +19,4 @@ public class TrangThaiHtResponce {
     private String tongXuat;
     private String nam;
     private int donViTinhId;
-    private String tenDonViTinh;
 }

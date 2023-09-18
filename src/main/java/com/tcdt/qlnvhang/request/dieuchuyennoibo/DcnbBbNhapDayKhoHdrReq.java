@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbNhapDayKhoDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 
 import javax.persistence.CascadeType;
@@ -20,10 +21,8 @@ import java.util.List;
 @Data
 public class DcnbBbNhapDayKhoHdrReq extends BaseRequest {
     private Long id;
-    @NotNull
     private String loaiQdinh;
     private Boolean thayDoiThuKho;
-    @NotNull
     private String typeQd;
     @NotNull
     private String loaiDc;
@@ -91,4 +90,7 @@ public class DcnbBbNhapDayKhoHdrReq extends BaseRequest {
 
     private Boolean isVatTu = false;
     private List<String> dsLoaiHang = new ArrayList<>();
+    private ReportTemplateRequest reportTemplateRequest;
+    @NotNull
+    private Long keHoachDcDtlId;
 }

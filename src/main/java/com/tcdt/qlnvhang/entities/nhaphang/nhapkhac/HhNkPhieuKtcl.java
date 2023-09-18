@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = HhNkPhieuKtcl.TABLE_NAME)
@@ -84,5 +85,16 @@ public class HhNkPhieuKtcl {
     private List<FileDinhKem> fileDinhKemCtgd;
     @Transient
     private List<FileDinhKem> fileDinhKemKtcl;
+
+    @Transient
+    private String ngay;
+    @Transient
+    private String thang;
+    public String getNgay() {
+        return Objects.isNull(this.getNgayTao()) ? null : String.valueOf(this.getNgayTao().getDate());
+    }
+    public String getThang() {
+        return Objects.isNull(this.getNgayTao()) ? null : String.valueOf(this.getNgayTao().getMonth()+1);
+    }
 
 }

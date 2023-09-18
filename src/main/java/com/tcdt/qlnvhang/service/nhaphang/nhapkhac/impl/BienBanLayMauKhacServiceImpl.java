@@ -26,7 +26,9 @@ import com.tcdt.qlnvhang.request.object.BienBanLayMauKhacReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.nhaphang.nhapkhac.BienBanLayMauKhacService;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
@@ -45,6 +47,9 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 @Service
@@ -234,6 +239,15 @@ public class BienBanLayMauKhacServiceImpl extends BaseServiceImpl implements Bie
 		phieu.setTrangThai(req.getTrangThai());
 		bienBanLayMauKhacRepository.save(phieu);
 		return phieu;
+	}
+
+	@Override
+	public ReportTemplateResponse preview(BienBanLayMauKhacReq objReq) throws Exception {
+		BienBanLayMauKhac optional = detail(objReq.getId());
+		ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+		byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+		return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
 	}
 
 	@Override

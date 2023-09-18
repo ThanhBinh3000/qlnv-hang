@@ -84,7 +84,7 @@ public class XhXkVtBhQdXuatGiamVtService extends BaseServiceImpl {
     });
     XhXkVtBhQdXuatGiamVt created = xhXkVtBhQdXuatGiamVattuRepository.save(data);
     //save file đính kèm
-    fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtBhQdXuatGiamVt.TABLE_NAME);
+    fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtBhQdXuatGiamVt.TABLE_NAME);
     //cập nhật số qd vào báo cáo kq kdm
     this.updatePhieuData(created, false);
     return detail(created.getId());
@@ -117,7 +117,7 @@ public class XhXkVtBhQdXuatGiamVtService extends BaseServiceImpl {
     XhXkVtBhQdXuatGiamVt created = xhXkVtBhQdXuatGiamVattuRepository.save(dx);
     fileDinhKemService.delete(dx.getId(), Collections.singleton(XhXkVtBhQdXuatGiamVt.TABLE_NAME));
     //save file đính kèm
-    fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtBhQdXuatGiamVt.TABLE_NAME);
+    fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtBhQdXuatGiamVt.TABLE_NAME);
     //cập nhật số qd vào báo cáo kq kdm
     this.updatePhieuData(created, false);
     return detail(created.getId());

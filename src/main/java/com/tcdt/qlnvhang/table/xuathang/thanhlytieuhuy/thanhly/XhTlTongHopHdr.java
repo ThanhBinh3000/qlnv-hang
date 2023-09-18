@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 import lombok.Getter;
@@ -63,4 +64,7 @@ public class XhTlTongHopHdr extends BaseEntity implements Serializable {
 
   @OneToMany(mappedBy = "tongHopHdr", cascade = CascadeType.ALL)
   private List<XhTlTongHopDtl> tongHopDtl = new ArrayList<>();
+
+  @Transient
+  private List<FileDinhKem> fileDinhKem = new ArrayList<>();
 }

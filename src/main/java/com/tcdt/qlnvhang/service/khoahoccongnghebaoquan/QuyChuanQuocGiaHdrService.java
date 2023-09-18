@@ -58,7 +58,8 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
 
     public Page<QuyChuanQuocGiaHdr> searchPage(SearchQuyChuanQgReq objReq) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-//        objReq.setMaDvi(userInfo.getDvql());
+        objReq.setMaDvi(userInfo.getDvql());
+        System.out.println(userInfo.getUserType() + "2322222222222222222");
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<QuyChuanQuocGiaHdr> data = quyChuanQuocGiaHdrRepository.search(objReq, pageable);
@@ -100,9 +101,9 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                     .map(Long::valueOf)
                     .toArray(Long[]::new));
         }
-        if (!ObjectUtils.isEmpty(objReq.getIdVanBanSuaDoi())) {
-            listIdThayThe.add(objReq.getIdVanBanSuaDoi());
-        }
+//        if (!ObjectUtils.isEmpty(objReq.getIdVanBanSuaDoi())) {
+//            listIdThayThe.add(objReq.getIdVanBanSuaDoi());
+//        }
         List<Long> finalListIdThayThe = listIdThayThe;
         List<Long> listHdrCoHieuLuc = allHdrCoHieuLuc.stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList()).stream()
                 .filter(item -> !finalListIdThayThe.contains(item))
@@ -158,9 +159,9 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                     .map(Long::valueOf)
                     .toArray(Long[]::new));
         }
-        if (!ObjectUtils.isEmpty(objReq.getIdVanBanSuaDoi())) {
-            listIdThayThe.add(objReq.getIdVanBanSuaDoi());
-        }
+//        if (!ObjectUtils.isEmpty(objReq.getIdVanBanSuaDoi())) {
+//            listIdThayThe.add(objReq.getIdVanBanSuaDoi());
+//        }
         List<Long> finalListIdThayThe = listIdThayThe;
         List<Long> listHdrCoHieuLuc = allHdrCoHieuLuc.stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList()).stream()
                 .filter(item -> !finalListIdThayThe.contains(item))
@@ -341,9 +342,9 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                     .map(Long::valueOf)
                     .toArray(Long[]::new));
         }
-        if (!ObjectUtils.isEmpty(created.getIdVanBanSuaDoi())) {
-            listIdThayThe.add(created.getIdVanBanSuaDoi());
-        }
+//        if (!ObjectUtils.isEmpty(created.getIdVanBanSuaDoi())) {
+//            listIdThayThe.add(created.getIdVanBanSuaDoi());
+//        }
         if (listIdThayThe.size() > 0 && created.getTrangThaiHl().equals("01")) {
             List<QuyChuanQuocGiaHdr> allByIdIn = quyChuanQuocGiaHdrRepository.findAllByIdIn(listIdThayThe);
             allByIdIn.forEach(item -> {

@@ -1,163 +1,92 @@
 package com.tcdt.qlnvhang.request.xuathang.daugia.hopdong;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttDtl;
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongDtl;
+import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.request.BaseRequest;
-import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
-import com.tcdt.qlnvhang.request.object.HhDviLquanReq;
-import com.tcdt.qlnvhang.request.xuathang.bantructiep.hopdong.XhHopDongBttDtlReq;
-import com.tcdt.qlnvhang.request.xuathang.bantructiep.hopdong.XhHopDongBttHdrReq;
-import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.util.Contains;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data
 public class XhHopDongHdrReq extends BaseRequest {
     private Long id;
-
-    private String soQdKq;
-
     private Integer nam;
-
-    private LocalDate ngayKyQdKq;
-
-    private String soQdPd;
-
-    private String maDviTsan;
-
-    private LocalDate tgianNkho;
-
-    private String soHd;
-
-    private String tenHd;
-
-    private LocalDate ngayHluc;
-
-    private String ghiChuNgayHluc;
-
-    private String loaiHdong;
-
-    private String ghiChuLoaiHdong;
-
-    private Integer tgianThienHd;
-
-    private Integer tgianBhanh;
-
-    private String maDvi;
-
-    private String diaChi;
-
-    private String mst;
-
-    private String tenNguoiDdien;
-
-    private String chucVu;
-
-    private String sdt;
-
-    private String stk;
-
-    private String fax;
-
-    private String moTai;
-
-    private String uyQuyen;
-
-    private String tenNhaThau;
-
-    private String diaChiNhaThau;
-
-    private String mstNhaThau;
-
-    private String tenNguoiDdienNhaThau;
-
-    private String chucVuNhaThau;
-
-    private String sdtNhaThau;
-
-    private String stkNhaThau;
-
-    private String faxNhaThau;
-
-    private String moTaiNhaThau;
-
-    private String loaiVthh;
-
-    private String cloaiVthh;
-
-    private String moTaHangHoa;
-
-    private String donViTinh;
-
-    private Double soLuong;
-
-    private Double tongTien;
-
-    private String ghiChu;
-
-    private String toChucTrungDg;
-
     private String loaiHinhNx;
-
     private String kieuNhapXuat;
-
-    // Transient
-    @Transient
-    private String tenLoaiVthh;
-    @Transient
-    private String tenCloaiVthh;
-    @Transient
-    private String tenDvi;
-    @Transient
-    private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
-    private List<FileDinhKemReq> canCu = new ArrayList<>();
-    @Transient
-    private List<XhHopDongDtlReq> children = new ArrayList<>();
-    @Transient
+    private Long idQdKq;
+    private String soQdKq;
+    private LocalDate ngayKyQdKq;
+    private Long idQdPd;
+    private String soQdPd;
+    private String toChucCaNhan;
+    private String maDviTsan;
+    private LocalDate tgianXuatKho;
+    private String soHopDong;
+    private String tenHopDong;
+    private LocalDate ngayKyHopDong;
+    private LocalDate ngayHieuLuc;
+    private String ghiChuNgayHluc;
+    private String loaiHopDong;
+    private String ghiChuLoaiHdong;
+    private Integer tgianThienHdongNgay;
+    private LocalDate tgianThienHdong;
+    private Integer tgianBaoHanh;
+    private LocalDate tgianGiaoHang;
+    private Integer tgianTinhPhat;
+    private BigDecimal soLuongHangCham;
+    private Integer soTienTinhPhat;
+    private BigDecimal giaTri;
+    private LocalDate tgianBaoDamHdong;
+    private String ghiChuBaoDam;
+    private String dieuKien;
+    private String maDvi;
+    private String diaChiBenBan;
+    private String mstBenBan;
+    private String tenNguoiDaiDien;
+    private String chucVuBenBan;
+    private String sdtBenBan;
+    private String faxBenBan;
+    private String stkBenBan;
+    private String moTaiBenBan;
+    private String giayUyQuyen;
+    private String tenDviBenMua;
+    private String diaChiBenMua;
+    private String mstBenMua;
+    private String tenNguoiDdienMua;
+    private String chucVuBenMua;
+    private String sdtBenMua;
+    private String faxBenMua;
+    private String stkBenMua;
+    private String moTaiBenMua;
+    private String loaiVthh;
+    private String cloaiVthh;
+    private String tenHangHoa;
+    private String moTaHangHoa;
+    private BigDecimal soLuong;
+    private String donViTinh;
+    private BigDecimal thanhTien;
+    private String ghiChu;
+    private String trangThai;
+    private String trangThaiXh;
     private List<String> listMaDviTsan = new ArrayList<>();
+    private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
+    private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
+    private List<XhHopDongDtlReq> children = new ArrayList<>();
 
-    //    Phụ lục
-
-    private Long idHd;
-
+    //Phụ lục
+    private Long idHopDong;
     private String soPhuLuc;
-
     private LocalDate ngayHlucPhuLuc;
-
-    private String noiDungPhuLuc;
-
+    private String veViecPhuLuc;
     private LocalDate ngayHlucSauDcTu;
-
     private LocalDate ngayHlucSauDcDen;
-
-    private Integer tgianThienHdSauDc;
-
-    private String noiDungDcKhac;
-
+    private Integer soNgayThienSauDc;
+    private String noiDungPhuLuc;
     private String ghiChuPhuLuc;
-
-    private String trangThaiPhuLuc;
-    @Transient
-    private String tenTrangThaiPhuLuc;
-
-    @Transient
+    private List<FileDinhKemJoinTable> filePhuLuc = new ArrayList<>();
     private List<XhHopDongHdrReq> phuLuc = new ArrayList<>();
-
-    @Transient
     private List<XhHopDongDtlReq> phuLucDtl = new ArrayList<>();
-
-    @Transient
-    private List<FileDinhKemReq> filePhuLuc = new ArrayList<>();
-
+    private String dvql;
 }

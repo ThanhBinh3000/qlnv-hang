@@ -41,7 +41,6 @@ public class HhNkBbGiaoNhanHdrReq extends BaseRequest {
     private String tenLoaiVthh;
     private String tenCloaiVthh;
     private String donViTinh;
-    private String tenDonViTinh;
     private LocalDate ngayBdNhap;
     private LocalDate ngayKtNhap;
     private BigDecimal soLuongQd;

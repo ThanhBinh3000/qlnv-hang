@@ -83,6 +83,8 @@ public class DcnbBbNhapDayKhoHdr extends BaseEntity implements Serializable, Clo
     private Long nguoiPDuyet;
     @Column(name = "TONG_SL_NHAP")
     private BigDecimal tongSlNhap;
+    @Column(name = "KE_HOACH_DC_DTL_ID")
+    private Long keHoachDcDtlId;
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)

@@ -64,8 +64,8 @@ public class DcnbBBNTBQHdr extends BaseEntity implements Serializable, Cloneable
     private String keToan;
     @Column(name = "LD_CHI_CUC")
     private String ldChiCuc;
-    @Column(name = "ID_KE_HOACH_DTL")
-    private Long idKeHoachDtl;
+    @Column(name = "KE_HOACH_DC_DTL_ID")
+    private Long keHoachDcDtlId;
     @Column(name = "MA_DIEM_KHO")
     private String maDiemKho;
     @Column(name = "TEN_DIEM_KHO")
@@ -147,7 +147,10 @@ public class DcnbBBNTBQHdr extends BaseEntity implements Serializable, Cloneable
     private Long nguoiPDuyeKt;
     @Column(name = "LAN")
     private Long lan;
-
+    @Column(name = "LOAI_HINH_BAO_QUAN")
+    private String loaiHinhBaoQuan;
+    @Column(name = "DON_VI_TINH")
+    private String donViTinh;
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     @Transient

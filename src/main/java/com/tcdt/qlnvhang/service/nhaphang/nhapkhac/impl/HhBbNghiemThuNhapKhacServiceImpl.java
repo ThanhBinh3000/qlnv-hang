@@ -17,9 +17,11 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.nhaphang.nhapkhac.HhBbNghiemThuNhapKhacService;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -34,7 +36,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -290,6 +295,20 @@ public class HhBbNghiemThuNhapKhacServiceImpl extends BaseServiceImpl implements
 //            f.setTenDvi(mapDmucDvi.get(f.getMaDviDxuat()));
         });
         return data;
+    }
+
+    @Override
+    public ReportTemplateResponse preview(HhBbNghiemThuNhapKhacReq objReq) throws Exception {
+        HhBbNghiemThuNhapKhac optional = chiTiet(objReq.getId());
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        if(optional.getLoaiVthh().startsWith("02")){
+            optional.setTenBaoCao("BIÊN BẢN CHUẨN BỊ KHO");
+        }else{
+            optional.setTenBaoCao("BIÊN BẢN NGHIỆM THU BẢO QUẢN LẦN ĐẦU NHẬP HÀNG DỰ TRỮ QUỐC GIA");
+        }
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
     }
 
     private void luuFile(HhBbNghiemThuNhapKhacReq objReq, HhBbNghiemThuNhapKhac created) {

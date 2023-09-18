@@ -17,11 +17,13 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.suachuahang.ScPhieuNhapKhoService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbDataLinkDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbDataLinkHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoHdr;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -34,6 +36,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -269,6 +274,15 @@ public class ScPhieuNhapKhoServiceImpl extends BaseServiceImpl implements ScPhie
         req.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
         List<ScPhieuNhapKhoHdr> scPhieuXuatKhoHdrs = hdrRepository.searchListTaoBangKe(req);
         return scPhieuXuatKhoHdrs;
+    }
+
+    @Override
+    public ReportTemplateResponse preview(ScPhieuNhapKhoReq objReq) throws Exception {
+        ScPhieuNhapKhoHdr optional = detail(objReq.getId());
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
     }
 
 //    public Page<ScPhieuNhapKhoDTO> searchPage(CustomUserDetails currentUser, ScPhieuNhapKhoReq req) throws Exception {

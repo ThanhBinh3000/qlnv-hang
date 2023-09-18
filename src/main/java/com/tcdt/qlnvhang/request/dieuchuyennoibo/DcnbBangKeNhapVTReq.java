@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeNhapVTDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -18,9 +19,7 @@ public class DcnbBangKeNhapVTReq extends BaseRequest {
     private Long id;
     @NotNull
     private String loaiDc;
-    @NotNull
     private String loaiQdinh;
-    @NotNull
     private String typeQd;
     @NotNull
     private String loaiVthh;
@@ -86,7 +85,6 @@ public class DcnbBangKeNhapVTReq extends BaseRequest {
     private LocalDate ngayPDuyet;
     private String type;
     private String typeDataLink;
-    @NotNull
     private  Boolean thayDoiThuKho;
     @Valid
     private List<DcnbBangKeNhapVTDtl> dcnbbangkenhapvtdtl = new ArrayList<>();
@@ -99,4 +97,7 @@ public class DcnbBangKeNhapVTReq extends BaseRequest {
 
     private Boolean isVatTu = false;
     private List<String> dsLoaiHang = new ArrayList<>();
+    private ReportTemplateRequest reportTemplateRequest;
+    @NotNull
+    private Long keHoachDcDtlId;
 }

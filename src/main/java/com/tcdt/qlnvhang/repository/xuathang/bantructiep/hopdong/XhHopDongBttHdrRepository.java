@@ -16,46 +16,44 @@ import java.util.Optional;
 @Repository
 public interface XhHopDongBttHdrRepository extends JpaRepository<XhHopDongBttHdr, Long> {
 
-    @Query("SELECT HD FROM XhHopDongBttHdr HD  WHERE 1=1 " +
-            "AND (:#{#param.dvql} IS NULL OR HD.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
+    @Query("SELECT HD FROM XhHopDongBttHdr HD " +
+            "WHERE (:#{#param.dvql} IS NULL OR HD.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
             "AND (:#{#param.namHd} IS NULL OR HD.namHd = :#{#param.namHd}) " +
-            "AND (:#{#param.soHd} IS NULL OR LOWER(HD.soHd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soHd}),'%' ) ) )" +
-            "AND (:#{#param.tenHd} IS NULL OR LOWER(HD.tenHd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.tenHd}),'%'))) " +
-            "AND (:#{#param.tenDviMua} IS NULL OR LOWER(HD.tenDviMua) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.tenDviMua}),'%'))) " +
-            "AND (:#{#param.loaiVthh} IS NULL OR HD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
-            "AND (:#{#param.soQdKq} IS NULL OR LOWER(HD.soQdKq) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdKq}),'%' ) ) )" +
-            "AND (:#{#param.soQdNv} IS NULL OR LOWER(HD.soQdNv) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdNv}),'%' ) ) )" +
+            "AND (:#{#param.soHd} IS NULL OR LOWER(HD.soHd) LIKE LOWER(CONCAT('%', :#{#param.soHd}, '%'))) " +
+            "AND (:#{#param.tenHd} IS NULL OR LOWER(HD.tenHd) LIKE LOWER(CONCAT('%', :#{#param.tenHd}, '%'))) " +
+            "AND (:#{#param.tenDviMua} IS NULL OR LOWER(HD.tenDviMua) LIKE LOWER(CONCAT('%', :#{#param.tenDviMua}, '%'))) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR HD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
+            "AND (:#{#param.soQdKq} IS NULL OR LOWER(HD.soQdKq) LIKE LOWER(CONCAT('%', :#{#param.soQdKq}, '%'))) " +
+            "AND (:#{#param.soQdNv} IS NULL OR LOWER(HD.soQdNv) LIKE LOWER(CONCAT('%', :#{#param.soQdNv}, '%'))) " +
             "AND (:#{#param.trangThai} IS NULL OR HD.trangThai = :#{#param.trangThai}) " +
-            "ORDER BY HD.ngaySua desc , HD.ngayTao desc, HD.id desc")
+            "ORDER BY HD.ngaySua DESC, HD.ngayTao DESC, HD.id DESC")
     Page<XhHopDongBttHdr> searchPage(@Param("param") XhHopDongBttHdrReq param, Pageable pageable);
 
-    @Query(value = "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '00' AND ID_QD_KQ =:idQdKq",
-            nativeQuery = true)
-    Integer countSlHopDongChuaKyCuc(Long idQdKq);
+    @Query(value = "SELECT COUNT(*) FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '00' AND ID_QD_KQ = :idQdKq", nativeQuery = true)
+    Integer countSlHopDongChuaKyCuc(@Param("idQdKq") Long idQdKq);
 
-    @Query(value = "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '00' AND ID_CHAO_GIA =:idChaoGia",
-            nativeQuery = true)
-    Integer countSlHopDongChuaKyChiCuc(Long idChaoGia);
+    @Query(value = "SELECT COUNT(*) FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '00' AND ID_CHAO_GIA = :idChaoGia", nativeQuery = true)
+    Integer countSlHopDongChuaKyChiCuc(@Param("idChaoGia") Long idChaoGia);
 
-    @Query(value = "SELECT SUM(SO_LUONG_BAN_TRUC_TIEP) AS total_amount FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '30' AND ID_QD_KQ =:idQdKq",
-            nativeQuery = true)
-    BigDecimal countSlXuatBanKyHdongCuc(Long idQdKq);
+    @Query(value = "SELECT SUM(SO_LUONG_BAN_TRUC_TIEP) FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '30' AND ID_QD_KQ = :idQdKq", nativeQuery = true)
+    BigDecimal countSlXuatBanKyHdongCuc(@Param("idQdKq") Long idQdKq);
 
-    @Query(value = "SELECT SUM(SO_LUONG_BAN_TRUC_TIEP) AS total_amount FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '30' AND ID_CHAO_GIA =:idChaoGia",
-            nativeQuery = true)
-    BigDecimal countSlXuatBanKyHdongChiCuc(Long idChaoGia);
+    @Query(value = "SELECT SUM(SO_LUONG_BAN_TRUC_TIEP) FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '30' AND ID_CHAO_GIA = :idChaoGia", nativeQuery = true)
+    BigDecimal countSlXuatBanKyHdongChiCuc(@Param("idChaoGia") Long idChaoGia);
 
-    @Query(value = "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '30' AND ID_QD_KQ =:idQdKq",
-            nativeQuery = true)
-    Integer countSlHopDongDaKyCuc(Long idQdKq);
+    @Query(value = "SELECT COUNT(*) FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '30' AND ID_QD_KQ = :idQdKq", nativeQuery = true)
+    Integer countSlHopDongDaKyCuc(@Param("idQdKq") Long idQdKq);
 
-    @Query(value = "SELECT COUNT(*) AS count FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '30' AND ID_CHAO_GIA =:idChaoGia",
-            nativeQuery = true)
-    Integer countSlHopDongDaKyChiCuc(Long idChaoGia);
+    @Query(value = "SELECT COUNT(*) FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '30' AND ID_CHAO_GIA = :idChaoGia", nativeQuery = true)
+    Integer countSlHopDongDaKyChiCuc(@Param("idChaoGia") Long idChaoGia);
 
-    Optional<XhHopDongBttHdr> findBySoHd(String soHd);
+    boolean existsBySoHd(String soHd);
 
-    Optional<XhHopDongBttHdr> findBySoPhuLuc(String soPhuLuc);
+    boolean existsBySoPhuLuc(String soPhuLuc);
+
+    boolean existsBySoHdAndIdNot(String soHd, Long id);
+
+    boolean existsBySoPhuLucAndIdNot(String soPhuLuc, Long id);
 
     List<XhHopDongBttHdr> findByIdIn(List<Long> idHdList);
 

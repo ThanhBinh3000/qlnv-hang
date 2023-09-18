@@ -35,7 +35,6 @@ public class DcnbBangKeCanHangHdrDTO {
     private String maNhaKho;
     private String tenNhaKho;
     private String donViTinh;
-    private String tenDonViTinh;
     private String maNganKho;
     private String tenNganKho;
     private String nguoiGiaoHang;
@@ -43,8 +42,9 @@ public class DcnbBangKeCanHangHdrDTO {
     private String ctyNguoiGh;
     private String diaChi;
     private LocalDate thoiGianGiaoNhan;
+    private Long keHoachDcDtlId;
 
-    public DcnbBangKeCanHangHdrDTO(Long id, Long qDinhDcId, Long phieuXuatKhoId, String soQdinh, LocalDate ngayKyQd, Integer nam, LocalDate thoiHanDieuChuyen, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String soPhieuXuatKho, String soBangKe, LocalDate ngayXuatKho, String soPhieuNhapKho, LocalDate ngayNhapKho, String trangThai, String tenTrangThai, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String maNhaKho, String tenNhaKho, String donViTinh, String tenDonViTinh, String maNganKho, String tenNganKho, String nguoiGiaoHang, String soCmt, String ctyNguoiGh, String diaChi, LocalDate thoiGianGiaoNhan) {
+    public DcnbBangKeCanHangHdrDTO(Long id, Long qDinhDcId, Long phieuXuatKhoId, String soQdinh, LocalDate ngayKyQd, Integer nam, LocalDate thoiHanDieuChuyen, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String soPhieuXuatKho, String soBangKe, LocalDate ngayXuatKho, String soPhieuNhapKho, LocalDate ngayNhapKho, String trangThai, String tenTrangThai, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String maNhaKho, String tenNhaKho, String donViTinh, String maNganKho, String tenNganKho, String nguoiGiaoHang, String soCmt, String ctyNguoiGh, String diaChi, LocalDate thoiGianGiaoNhan,Long keHoachDcDtlId) {
         this.id = id;
         this.qDinhDcId = qDinhDcId;
         this.phieuXuatKhoId = phieuXuatKhoId;
@@ -70,7 +70,6 @@ public class DcnbBangKeCanHangHdrDTO {
         this.maNhaKho = maNhaKho;
         this.tenNhaKho = tenNhaKho;
         this.donViTinh = donViTinh;
-        this.tenDonViTinh = tenDonViTinh;
         this.maNganKho = maNganKho;
         this.tenNganKho = tenNganKho;
         this.nguoiGiaoHang = nguoiGiaoHang;
@@ -78,5 +77,6 @@ public class DcnbBangKeCanHangHdrDTO {
         this.ctyNguoiGh = ctyNguoiGh;
         this.diaChi = diaChi;
         this.thoiGianGiaoNhan = thoiGianGiaoNhan;
+        this.keHoachDcDtlId = keHoachDcDtlId;
     }
 }

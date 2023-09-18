@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanHaoDoiDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanHaoDoiTtDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -62,11 +63,14 @@ public class DcnbBienBanHaoDoiHdrReq {
     private String maLoKho;
 
     private String tenLoKho;
-
+    @NotNull
     private String soBbTinhKho;
-
+    @NotNull
     private Long bBTinhKhoId;
-
+    @NotNull
+    private LocalDate ngayBatDauXuat;
+    @NotNull
+    private LocalDate ngayKetThucXuat;
     private Double tongSlXuatTheoQd;
 
     private LocalDate ngayKetThucXuatQd;
@@ -118,10 +122,16 @@ public class DcnbBienBanHaoDoiHdrReq {
     private String lyDoTuChoi;
     private Long phieuKtChatLuongHdrId;
     private String soPhieuKtChatLuong;
+    private String donViTinh;
+    private String slHaoTheoDinhMuc;
     @Valid
     private List<DcnbBienBanHaoDoiTtDtl> danhSachBangKe = new ArrayList<>();
     @Valid
     private List<DcnbBienBanHaoDoiDtl> thongTinHaoHut = new ArrayList<>();
 
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
+    private ReportTemplateRequest reportTemplateRequest;
+
+    @NotNull
+    private Long keHoachDcDtlId;
 }

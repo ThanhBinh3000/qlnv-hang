@@ -564,6 +564,8 @@ public abstract class BaseServiceImpl {
     public void saveFileDinhKem(List<FileDinhKemReq> fileDinhKems, Long idHdr, String tableName) {
         List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(fileDinhKems, idHdr, tableName);
     }
+
+
 }
 
 

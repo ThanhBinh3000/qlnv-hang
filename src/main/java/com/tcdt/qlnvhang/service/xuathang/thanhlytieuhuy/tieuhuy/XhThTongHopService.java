@@ -6,10 +6,12 @@ import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThDanhSach
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThTongHopRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoRequest;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.tieuhuy.XhThTongHopRequest;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThDanhSachHdr;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThTongHopDtl;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThTongHopHdr;
 import com.tcdt.qlnvhang.util.Contains;
@@ -59,6 +61,28 @@ public class XhThTongHopService extends BaseServiceImpl {
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     search.getContent().forEach(s -> {
+      s.getTongHopDtl().forEach(s1 -> {
+        s1.setMapDmucDvi(mapDmucDvi);
+        s1.setMapVthh(mapVthh);
+      });
+      s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
+      s.setTenDvi(mapDmucDvi.containsKey(s.getMaDvi()) ? mapDmucDvi.get(s.getMaDvi()) : null);
+      String maDvql = DataUtils.isNullOrEmpty(s.getMaDvi()) ? s.getMaDvi() : s.getMaDvi().substring(0, s.getMaDvi().length() - 2);
+      s.setMaDvql(maDvql);
+      s.setTenDvql(mapDmucDvi.containsKey(maDvql) ? mapDmucDvi.get(maDvql) : null);
+    });
+    return search;
+  }
+
+
+  public List<XhThTongHopHdr> searchListTaoHsTtd(CustomUserDetails currentUser, XhThTongHopRequest req) throws Exception {
+    req.setDvql(currentUser.getDvql());
+
+    List<XhThTongHopHdr> search = xhThTongHopRepository.listTongHongTaoHoSo(req);
+    //set label
+    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    Map<String, String> mapVthh = getListDanhMucHangHoa();
+    search.forEach(s -> {
       s.getTongHopDtl().forEach(s1 -> {
         s1.setMapDmucDvi(mapDmucDvi);
         s1.setMapVthh(mapVthh);

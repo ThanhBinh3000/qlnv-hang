@@ -9,6 +9,7 @@ import java.util.Date;
 
 @Data
 public class HhQdGiaoNvuNhapKhacSearch extends BaseRequest {
+    private Long id;
     private Integer nam;
     private Integer checkIdBbLayMau;
     private String soQd;

@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbGiaoNhanDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbGiaoNhanTTDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,11 +21,9 @@ import java.util.List;
 public class DcnbBbGiaoNhanHdrReq extends BaseRequest {
 
     private Long id;
-    @NotNull
     private String loaiQdinh;
     @NotNull
     private String loaiDc;
-    @NotNull
     private String typeQd;
     @NotNull
     private Integer nam;
@@ -41,11 +40,10 @@ public class DcnbBbGiaoNhanHdrReq extends BaseRequest {
     private Long qdDcCucId;
     @NotNull
     private LocalDate ngayQdDcCuc;
-    @NotNull
     private String soBbKtNhapKho;
-    @NotNull
     private Long idBbKtNhapKho;
-    private Long idKeHoachDtl;
+    @NotNull
+    private Long keHoachDcDtlId;
     @NotNull
     private String maDiemKho;
     @NotNull
@@ -72,6 +70,7 @@ public class DcnbBbGiaoNhanHdrReq extends BaseRequest {
     @NotNull
     private String dviTinh;
     private LocalDate ngayBdNhap;
+    @NotNull
     private LocalDate ngayKtNhap;
     private BigDecimal soLuongQdDcCuc;
     private String ghiChu;
@@ -93,4 +92,5 @@ public class DcnbBbGiaoNhanHdrReq extends BaseRequest {
     private LocalDate denNgayKtnk;
     private LocalDate tuNgayThoiHanNhap;
     private LocalDate denNgayThoiHanNhap;
+    private ReportTemplateRequest reportTemplateRequest;
 }

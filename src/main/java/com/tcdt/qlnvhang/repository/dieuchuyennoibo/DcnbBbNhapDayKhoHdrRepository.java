@@ -44,19 +44,18 @@ public interface DcnbBbNhapDayKhoHdrRepository extends JpaRepository<DcnbBbNhapD
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbNhapDayKhoHdrDTO(" +
             "bbndk.id,qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan, khdcd.maDiemKhoNhan,khdcd.tenDiemKhoNhan,khdcd.maLoKhoNhan," +
-            "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan,khdcd.loaiVthh,khdcd.tenLoaiVthh, khdcd.cloaiVthh, khdcd.tenCloaiVthh,khdcd.soLuongDc ,khdcd.donViTinh, khdcd.tenDonViTinh ," +
-            "bbndk.soBb, bbndk.ngayBdNhap, bbndk.ngayKtNhap,bbndkd.soPhieuKiemTraCl,bbndkd.phieuKiemTraClId, bbndkd.phieuNhapKho, bbndkd.idPhieuNhapKho,bbndkd.ngayNhap ,bbndkd.soBangKeCh,bbndkd.idBangKeCh," +
-            "bbndk.ngayLap,bblm.soBbLayMau,bblm.id,bbktnk.soBb,bbktnk.id,hskt.soHskt,hskt.id, bbndk.trangThai,  bbndk.trangThai) " +
+            "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan,khdcd.loaiVthh,khdcd.tenLoaiVthh, khdcd.cloaiVthh, khdcd.tenCloaiVthh,khdcd.soLuongDc ,khdcd.donViTinh, " +
+            "bbndk.soBb, bbndk.ngayBdNhap, bbndk.ngayKtNhap,bbndkd.soPhieuKiemTraCl,bbndkd.phieuKiemTraClId, bbndkd.soPhieuNhapKho, bbndkd.phieuNhapKhoId,bbndkd.ngayNhapKho ,bbndkd.soBangKeCanHang,bbndkd.bangKeCanHangId," +
+            "bbndk.ngayLap,bblm.soBbLayMau,bblm.id,bbktnk.soBb,bbktnk.id,hskt.soHskt,hskt.id, bbndk.trangThai,  bbndk.trangThai,khdcd.id) " +
             "FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbBbNhapDayKhoHdr bbndk On bbndk.qdDcCucId = qdc.id " +
-            "and ((khdcd.maLoKhoNhan is not null and khdcd.maNganKhoNhan = bbndk.maNganKho and khdcd.maLoKhoNhan = bbndk.maLoKho ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = bbndk.maNganKho ))" +
+            "LEFT JOIN DcnbBbNhapDayKhoHdr bbndk On bbndk.keHoachDcDtlId = khdcd.id " +
             "LEFT JOIN DcnbBbNhapDayKhoDtl bbndkd On bbndkd.hdrId = bbndk.id " +
-            "LEFT JOIN DcnbPhieuNhapKhoHdr pnk On pnk.id = bbndkd.idPhieuNhapKho " +
+            "LEFT JOIN DcnbPhieuNhapKhoHdr pnk On pnk.id = bbndkd.phieuNhapKhoId " +
             "LEFT JOIN DcnbBienBanLayMauHdr bblm On bblm.bBNhapDayKhoId = bbndk.id " +
-            "LEFT JOIN DcnbBBKetThucNKHdr bbktnk On bbktnk.qDinhDccId = qdc.id " +
+            "LEFT JOIN DcnbBBKetThucNKHdr bbktnk On bbktnk.qdinhDccId = qdc.id " +
             "and ((khdcd.maLoKhoNhan is not null and khdcd.maNganKhoNhan = bbktnk.maNganKho and khdcd.maLoKhoNhan = bbktnk.maLoKho ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = bbktnk.maNganKho ))" +
             "LEFT JOIN XhHoSoKyThuatHdr hskt On 1 = 1  " +
             "and ((khdcd.maLoKhoNhan is not null and  khdcd.maLoKhoNhan = SUBSTRING(hskt.maDiaDiem, 1, 17) and khdcd.maNganKhoNhan = SUBSTRING(hskt.maDiaDiem, 1, 15) ) or (khdcd.maLoKhoNhan is null and khdcd.maNganKhoNhan = SUBSTRING(hskt.maDiaDiem, 1, 15) ))" +
@@ -66,7 +65,7 @@ public interface DcnbBbNhapDayKhoHdrRepository extends JpaRepository<DcnbBbNhapD
             "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
             "AND ((:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho})) " +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
-            "AND ((:#{#param.maDvi} IS NULL OR qdc.maDvi LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
+            "AND ((:#{#param.maDvi} IS NULL OR LOWER(qdc.maDvi) LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND (:#{#param.soQdDcCuc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdDcCuc}),'%')) " +
             "AND ((:#{#param.loaiDc} IS NULL OR qdc.loaiDc = :#{#param.loaiDc}))" +
             "AND (qdc.loaiDc= 'DCNB' OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
@@ -80,9 +79,9 @@ public interface DcnbBbNhapDayKhoHdrRepository extends JpaRepository<DcnbBbNhapD
             "AND ((:#{#param.tuNgayThoiHanNh}  IS NULL OR khdcd.thoiGianDkDc >= :#{#param.tuNgayThoiHanNh})" +
             "AND (:#{#param.denNgayThoiHanNh}  IS NULL OR khdcd.thoiGianDkDc <= :#{#param.denNgayThoiHanNh}) ) " +
             "GROUP BY bbndk.id,qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan, khdcd.maDiemKhoNhan,khdcd.tenDiemKhoNhan,khdcd.maLoKhoNhan," +
-            "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan,khdcd.loaiVthh,khdcd.tenLoaiVthh, khdcd.cloaiVthh, khdcd.tenCloaiVthh,khdcd.soLuongDc ,khdcd.donViTinh, khdcd.tenDonViTinh ," +
-            "bbndk.soBb, bbndk.ngayBdNhap, bbndk.ngayKtNhap,bbndkd.soPhieuKiemTraCl,bbndkd.phieuKiemTraClId, bbndkd.phieuNhapKho, bbndkd.idPhieuNhapKho,bbndkd.ngayNhap ,bbndkd.soBangKeCh,bbndkd.idBangKeCh," +
-            "bbndk.ngayLap,bblm.soBbLayMau,bblm.id,bbktnk.soBb,bbktnk.id,hskt.soHskt,hskt.id, bbndk.trangThai,  bbndk.trangThai " +
+            "khdcd.tenLoKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan,khdcd.loaiVthh,khdcd.tenLoaiVthh, khdcd.cloaiVthh, khdcd.tenCloaiVthh,khdcd.soLuongDc ,khdcd.donViTinh, " +
+            "bbndk.soBb, bbndk.ngayBdNhap, bbndk.ngayKtNhap,bbndkd.soPhieuKiemTraCl,bbndkd.phieuKiemTraClId, bbndkd.soPhieuNhapKho, bbndkd.phieuNhapKhoId,bbndkd.ngayNhapKho ,bbndkd.soBangKeCanHang,bbndkd.bangKeCanHangId," +
+            "bbndk.ngayLap,bblm.soBbLayMau,bblm.id,bbktnk.soBb,bbktnk.id,hskt.soHskt,hskt.id, bbndk.trangThai,  bbndk.trangThai,khdcd.id " +
             "ORDER BY qdc.soQdinh DESC")
     Page<DcnbBbNhapDayKhoHdrDTO> searchPage(@Param("param") DcnbBbNhapDayKhoHdrReq req, Pageable pageable);
     @Query(value = "SELECT distinct c FROM DcnbBbNhapDayKhoHdr c " +
@@ -91,6 +90,13 @@ public interface DcnbBbNhapDayKhoHdrRepository extends JpaRepository<DcnbBbNhapD
             "AND c.maDvi = :dvql " +
             "AND c.qdDcCucId = :qdDcCucId " +
             "AND c.maNganKho = :maNganKho " +
-            "AND (:#{maLoKho}  IS NULL OR c.maLoKho = :maLoKho) ")
+            "AND (:maLoKho IS NULL OR c.maLoKho = :maLoKho) ")
     DcnbBbNhapDayKhoHdr findByMaDviAndQdDcCucIdAndMaNganKhoAndMaLoKhoAndTrangThai(String dvql, Long qdDcCucId, String maNganKho, String maLoKho, String trangThai);
+    @Query(value = "SELECT distinct c FROM DcnbBbNhapDayKhoHdr c " +
+            "WHERE 1=1 " +
+            "AND c.trangThai = :trangThai " +
+            "AND c.maDvi = :dvql " +
+            "AND c.qdDcCucId = :qdDcCucId " +
+            "AND c.maNganKho = :maNganKho ")
+    DcnbBbNhapDayKhoHdr findByMaDviAndQdDcCucIdAndMaNganKhoAndTrangThai(String dvql, Long qdDcCucId, String maNganKho, String trangThai);
 }

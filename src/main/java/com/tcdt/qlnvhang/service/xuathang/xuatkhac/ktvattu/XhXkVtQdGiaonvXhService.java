@@ -14,12 +14,17 @@ import com.tcdt.qlnvhang.response.xuathang.xuatkhac.ktvattu.XhXkTongHopKhXuatHan
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktluongthuc.XhXkLtPhieuKnClHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkKhXuatHang;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkKhXuatHangDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtQdGiaonvXhHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,6 +36,8 @@ import org.springframework.util.ObjectUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -166,13 +173,16 @@ public class XhXkVtQdGiaonvXhService extends BaseServiceImpl {
         XhXkVtQdGiaonvXhHdr xhXkVtQdGiaonvXhHdr = dx.get();
         String status = xhXkVtQdGiaonvXhHdr.getTrangThai() + req.getTrangThai();
         switch (status) {
-            case Contains.DU_THAO + Contains.CHO_DUYET_LDC:
+            case Contains.DU_THAO + Contains.CHODUYET_TP:
+            case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
             case Contains.TU_CHOI_LDC + Contains.CHO_DUYET_LDC:
                 break;
             case Contains.CHO_DUYET_LDC + Contains.TU_CHOI_LDC:
+            case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
                 xhXkVtQdGiaonvXhHdr.setLyDoTuChoi(req.getLyDoTuChoi());
                 break;
             case Contains.CHO_DUYET_LDC + Contains.DA_DUYET_LDC:
+            case Contains.CHODUYET_TP + Contains.CHO_DUYET_LDC:
                 xhXkVtQdGiaonvXhHdr.setNguoiDuyetId(currentUser.getUser().getId());
                 xhXkVtQdGiaonvXhHdr.setNgayDuyet(LocalDate.now());
                 break;
@@ -217,4 +227,21 @@ public class XhXkVtQdGiaonvXhService extends BaseServiceImpl {
         ex.export();
     }
 
+    public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
+        try {
+            ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
+            reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
+            ReportTemplate model = findByTenFile(reportTemplateRequest);
+            byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+//            FileInputStream inputStream = new FileInputStream("src/main/resources/reports/xuatcuutrovientro/Phiếu kiểm nghiệm chất lượng.docx");
+            XhXkVtQdGiaonvXhHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
+            return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

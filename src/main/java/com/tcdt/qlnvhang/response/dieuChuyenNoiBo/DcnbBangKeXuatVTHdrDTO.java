@@ -26,7 +26,6 @@ public class DcnbBangKeXuatVTHdrDTO {
     private String maChLoaiHangHoa;
     private String tenChLoaiHangHoa;
     private String donViTinh;
-    private String tenDonViTinh;
 
     private String soPhieuXuat;
     private Long phieuXuatKhoId;
@@ -34,8 +33,8 @@ public class DcnbBangKeXuatVTHdrDTO {
     private LocalDate ngayXuatKho;
     private String trangThai;
     private String tenTrangThai;
-
-    public DcnbBangKeXuatVTHdrDTO(Long id, Long qDinhDccId, String soQdinh, LocalDate ngayKyQd, Integer namKh, LocalDate thoiHanDieuChuyen, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String donViTinh, String tenDonViTinh, String soPhieuXuat, Long phieuXuatKhoId, String soBangKe, LocalDate ngayXuatKho, String trangThai, String tenTrangThai) {
+    private Long keHoachDcDtlId;
+    public DcnbBangKeXuatVTHdrDTO(Long id, Long qDinhDccId, String soQdinh, LocalDate ngayKyQd, Integer namKh, LocalDate thoiHanDieuChuyen, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, String maHangHoa, String tenHangHoa, String maChLoaiHangHoa, String tenChLoaiHangHoa, String donViTinh, String soPhieuXuat, Long phieuXuatKhoId, String soBangKe, LocalDate ngayXuatKho, String trangThai, String tenTrangThai,Long keHoachDcDtlId) {
         this.id = id;
         this.qDinhDccId = qDinhDccId;
         this.soQdinh = soQdinh;
@@ -55,12 +54,12 @@ public class DcnbBangKeXuatVTHdrDTO {
         this.maChLoaiHangHoa = maChLoaiHangHoa;
         this.tenChLoaiHangHoa = tenChLoaiHangHoa;
         this.donViTinh = donViTinh;
-        this.tenDonViTinh = tenDonViTinh;
         this.soPhieuXuat = soPhieuXuat;
         this.phieuXuatKhoId = phieuXuatKhoId;
         this.soBangKe = soBangKe;
         this.ngayXuatKho = ngayXuatKho;
         this.trangThai = trangThai;
         this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+        this.keHoachDcDtlId= keHoachDcDtlId;
     }
 }

@@ -14,9 +14,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = ScPhieuXuatKhoHdr.TABLE_NAME)
@@ -64,6 +67,8 @@ public class ScPhieuXuatKhoHdr extends BaseEntity implements Serializable {
     private String tenDvi;
     @Transient
     List<FileDinhKem> fileDinhKem = new ArrayList<>();
+    @Transient
+    List<FileDinhKem> fileCanCu = new ArrayList<>();
     @Transient
     private List<ScPhieuXuatKhoDtl> children = new ArrayList<>();
     @JsonIgnore
@@ -133,6 +138,45 @@ public class ScPhieuXuatKhoHdr extends BaseEntity implements Serializable {
 
     public String getTenTrangThai(){
         return TrangThaiAllEnum.getLabelById(getTrangThai());
+    }
+
+    // Print preview
+    @Transient
+    private String ngay;
+    @Transient
+    private String thang;
+    @Transient
+    private String thoiGianGiaoNhanFormat;
+    @Transient
+    private String ngayQdXhFormat;
+    @Transient
+    private String canCuPhapLy;
+
+    public String getNgay() {
+        return Objects.isNull(this.getNgayTao()) ? null : String.valueOf(this.getNgayTao().getDayOfMonth());
+    }
+    public String getThang() {
+        return Objects.isNull(this.getNgayTao()) ? null : String.valueOf(this.getNgayTao().getMonthValue());
+    }
+
+    public String getDonViTinh() {
+        return donViTinh;
+    }
+
+    public String getNgayQdXhFormat() {
+        return Objects.isNull(this.ngayQdXh) ? null : ngayQdXh.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
+    public String getThoiGianGiaoNhanFormat() {
+        return Objects.isNull(this.thoiGianGiaoNhan) ? null : thoiGianGiaoNhan.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
+    public String getCanCuPhapLy() {
+        if(!Objects.isNull(fileCanCu)){
+            List<String> collect = fileCanCu.stream().map(FileDinhKem::getFileName).collect(Collectors.toList());
+            canCuPhapLy = "- "+String.join(" - ",collect);
+        }
+        return canCuPhapLy;
     }
 
 }

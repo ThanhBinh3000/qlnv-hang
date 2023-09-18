@@ -218,6 +218,11 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				gt.setTrangThai(Contains.CHUACAPNHAT);
 				gt.setSoLuongTheoChiTieu(gtList.getSoLuongTheoChiTieu());
 				gt.setSoLuongDaMua(gtList.getSoLuongDaMua());
+				if (hhDxuatKhLcntHdr.isPresent()) {
+					gt.setCloaiVthh(hhDxuatKhLcntHdr.get().getCloaiVthh());
+					gt.setLoaiVthh(hhDxuatKhLcntHdr.get().getLoaiVthh());
+					gt.setMaDvi(hhDxuatKhLcntHdr.get().getMaDvi());
+				}
 				hhQdKhlcntDsgthauRepository.save(gt);
 				for (HhDxuatKhLcntDsgthauDtlCtietReq ddNhap : gtList.getChildren()){
 					HhQdKhlcntDsgthauCtiet dataDdNhap = new ModelMapper().map(ddNhap, HhQdKhlcntDsgthauCtiet.class);
@@ -580,7 +585,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
 		Map<String,String> hashMapNguonVon = getListDanhMucChung("NGUON_VON");
 		Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
-		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
+		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("HINH_THUC_HOP_DONG");
 		Map<String,String> hashMapLoaiNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
 		Map<String,String> hashMapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
@@ -755,6 +760,15 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 	@Transactional(rollbackFor = {Exception.class, Throwable.class})
 	HhQdKhlcntHdr approveLT(StatusReq stReq, HhQdKhlcntHdr dataDB) throws Exception{
+//		if (!dataDB.getChildren().isEmpty()) {
+//			for (HhQdKhlcntDtl child : dataDB.getChildren()) {
+//				if (child.getDonGiaVat() == null || child.getDonGiaVat().equals(BigDecimal.ZERO)) {
+//					throw new Exception("Danh sách gói thầu không được để trống");
+//				}
+//			}
+//		} else {
+//			throw new Exception("Danh sách gói thầu không được để trống");
+//		}
 		String status = stReq.getTrangThai() + dataDB.getTrangThai();
 		switch (status) {
 			case Contains.BAN_HANH + Contains.DANG_NHAP_DU_LIEU:
@@ -784,7 +798,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 						throw new Exception("Đề xuất này đã được quyết định");
 					}
 					// Update trạng thái tờ trình
-					hhDxuatKhLcntHdrRepository.updateStatusInList(Arrays.asList(dataDB.getSoTrHdr()), Contains.DABANHANH_QD);
+					qOptional.get().setTrangThai(Contains.DABANHANH_QD);
+					hhDxuatKhLcntHdrRepository.save(qOptional.get());
 				}else{
 					throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
 				}

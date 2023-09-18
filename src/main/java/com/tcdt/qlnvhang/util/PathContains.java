@@ -372,5 +372,7 @@ public class PathContains {
 
     //
     public static final String CHOT_GIA_NHAP_XUAT = "/chot-gia-nhap-xuat";
+    public static final String BANG_KE_CAN_HANG_XUAT = "BẢNG CÂN KÊ HÀNG XUẤT";
+    public static final String BANG_KE_CAN_HANG_NHAP = "BẢNG CÂN KÊ HÀNG NHẬP";
 
 }

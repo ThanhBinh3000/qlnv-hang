@@ -12,7 +12,10 @@ import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhXuatHangReq;
 import com.tcdt.qlnvhang.response.suachua.ScBangKeNhapVtDTO;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.suachuahang.ScBangKeNhapVtService;
+import com.tcdt.qlnvhang.service.suachuahang.ScPhieuNhapKhoService;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -26,6 +29,9 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -51,6 +57,9 @@ public class ScBangKeNhapVtServiceImpl extends BaseServiceImpl implements ScBang
 
     @Autowired
     private ScDanhSachServiceImpl scDanhSachServiceImpl;
+
+    @Autowired
+    private ScPhieuNhapKhoService scPhieuNhapKhoService;
 
     @Override
     public Page<ScBangKeNhapVtHdr> searchPage(ScBangKeNhapVtReq req) throws Exception {
@@ -134,6 +143,9 @@ public class ScBangKeNhapVtServiceImpl extends BaseServiceImpl implements ScBang
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         data.setChildren(dtlRepository.findByIdHdr(id));
         data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
+        if(!Objects.isNull(data.getIdPhieuNhapKho())){
+            data.setScPhieuNhapKhoHdr(scPhieuNhapKhoService.detail(data.getIdPhieuNhapKho()));
+        }
         if(!Objects.isNull(data.getIdThuKho())){
             data.setTenThuKho(userInfoRepository.findById(data.getIdThuKho()).get().getFullName());
         }
@@ -253,6 +265,15 @@ public class ScBangKeNhapVtServiceImpl extends BaseServiceImpl implements ScBang
             }
         });
         return search;
+    }
+
+    @Override
+    public ReportTemplateResponse preview(ScBangKeNhapVtReq objReq) throws Exception {
+        ScBangKeNhapVtHdr optional = detail(objReq.getId());
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
     }
 
 

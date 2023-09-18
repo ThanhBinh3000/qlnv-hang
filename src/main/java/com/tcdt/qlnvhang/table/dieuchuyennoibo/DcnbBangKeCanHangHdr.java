@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -52,8 +53,8 @@ public class DcnbBangKeCanHangHdr extends BaseEntity implements Serializable, Cl
     @Column(name = "SO_QDINH_DCC")
     private String soQdinhDcc;
 
-    @Column(name = "NGAY_KY_QDINH")
-    private LocalDate ngayKyQdinh;
+//    @Column(name = "NGAY_KY_QDINH")
+//    private LocalDate ngayKyQdinh;
 
     @Column(name = "THOI_HAN_DIEU_CHUYEN")
     private LocalDate thoiHanDieuChuyen;
@@ -93,9 +94,6 @@ public class DcnbBangKeCanHangHdr extends BaseEntity implements Serializable, Cl
 
     @Column(name = "DON_VI_TINH")
     private String donViTinh;
-
-    @Column(name = "TEN_DON_VI_TINH")
-    private String tenDonViTinh;
 
     @Column(name = "MA_DIEM_KHO")
     private String maDiemKho;
@@ -187,6 +185,14 @@ public class DcnbBangKeCanHangHdr extends BaseEntity implements Serializable, Cl
 
     @Column(name = "TONG_TRONG_LUONG_TRU_BI_TEXT")
     private String tongTrongLuongTruBiText;
+
+    @Column(name = "TEN_LOAI_VTHH")
+    private String tenLoaiVthh;
+
+    @Column(name = "TEN_CLOAI_VTHH")
+    private String tenCloaiVthh;
+    @Column(name = "KE_HOACH_DC_DTL_ID")
+    private Long keHoachDcDtlId;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")

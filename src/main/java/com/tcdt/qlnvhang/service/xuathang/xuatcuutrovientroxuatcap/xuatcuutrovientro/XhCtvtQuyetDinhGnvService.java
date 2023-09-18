@@ -66,7 +66,7 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
       throw new Exception("Bad request.");
     }
     Optional<XhCtvtQuyetDinhGnvHdr> optional = xhCtvtQuyetDinhGnvHdrRepository.findBySoBbQd(objReq.getSoBbQd());
-    if (optional.isPresent() && objReq.getSoBbQd().split("/").length == 1) {
+    if (optional.isPresent()) {
       throw new Exception("Số quyết định đã tồn tại");
     }
 
@@ -103,7 +103,7 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
     }
 
     XhCtvtQuyetDinhGnvHdr data = optional.get();
-    BeanUtils.copyProperties(objReq, data, "id");
+    BeanUtils.copyProperties(objReq, data, "id","maDvi");
     XhCtvtQuyetDinhGnvHdr created = xhCtvtQuyetDinhGnvHdrRepository.save(data);
     return created;
   }

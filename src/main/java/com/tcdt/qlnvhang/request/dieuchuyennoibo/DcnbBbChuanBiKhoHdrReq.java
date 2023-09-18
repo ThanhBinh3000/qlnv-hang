@@ -4,12 +4,10 @@ import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbChuanBiKhoDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 
-import javax.persistence.CascadeType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -23,7 +21,6 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
     private Long id;
     @NotNull
     private String loaiDc;
-    @NotNull
     private String typeQd;
     @NotNull
     private Integer nam;
@@ -35,7 +32,6 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
     private String soQdDcCuc;
     @NotNull
     private Long qdDcCucId;
-    @NotNull
     private LocalDate ngayQdDcCuc;
     @NotNull
     private BigDecimal soLuongQdDcCuc;
@@ -44,7 +40,8 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
     private LocalDate ngayLap;
     @NotNull
     private LocalDate ngayKetThucNt;
-    private Long idKeHoachDtl;
+    @NotNull
+    private Long keHoachDcDtlId;
     @NotNull
     private String maDiemKho;
     @NotNull
@@ -58,7 +55,6 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
     private String tenNhaKho;
     @NotNull
     private String tenNganKho;
-    @NotNull
     private String tenLoKho;
     private String loaiHinhKho;
     @NotNull
@@ -72,12 +68,12 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
     @NotNull
     private String donViTinh;
     @NotNull
+    private BigDecimal duToanKphi;
     private BigDecimal tichLuong;
-    @NotNull
+    private BigDecimal tongKinhPhiDaTh;
+    private BigDecimal tongKinhPhiDaThBc;
     private Long idPhieuNhapKho;
-    @NotNull
     private String soPhieuNhapKho;
-    @NotNull
     private BigDecimal soLuongPhieuNhapKho;
     private String hthucKlot;
     private String pthucBquan;
@@ -86,7 +82,6 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
     private String nhanXet;
     private String trangThai;
     private String lyDoTuChoi;
-    @NotNull
     private Boolean thayDoiThuKho;
     private String loaiQdinh;
     @Valid
@@ -98,4 +93,5 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
 
     private Boolean isVatTu = false;
     private List<String> dsLoaiHang = new ArrayList<>();
+    private ReportTemplateRequest reportTemplateRequest;
 }

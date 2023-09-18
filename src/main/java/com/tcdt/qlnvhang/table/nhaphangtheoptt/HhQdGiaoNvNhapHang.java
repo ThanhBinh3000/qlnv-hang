@@ -95,4 +95,12 @@ public class HhQdGiaoNvNhapHang implements Serializable {
     @Transient
     private FileDinhKem fileDinhKem;
 
+
+//    preview
+    @Transient
+    private Date ngayMkho;
+    @Transient
+    private BigDecimal tongThanhTien;
+    @Transient
+    private List<HhQdGiaoNvNhDdiem> children = new ArrayList<>();
 }

@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.table.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,7 +17,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Cloneable{
+public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "DCNB_BB_KET_THUC_NK_HDR";
 
@@ -30,6 +31,10 @@ public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Clon
     private String loaiVthh;
     @Column(name = "CLOAI_VTHH")
     private String cloaiVthh;
+    @Column(name = "TEN_LOAI_VTHH")
+    private String tenLoaiVthh;
+    @Column(name = "TEN_CLOAI_VTHH")
+    private String tenCloaiVthh;
     @Column(name = "NAM")
     private Integer nam;
     @Column(name = "SO_BB")
@@ -43,9 +48,11 @@ public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Clon
     @Column(name = "MA_QHNS")
     private String maQhns;
     @Column(name = "QDINH_DCC_ID")
-    private Long qDinhDccId;
+    private Long qdinhDccId;
     @Column(name = "SO_QDINH_DCC")
     private String soQdinhDcc;
+    @Column(name = "NGAY_QDINH_DCC")
+    private LocalDate ngayQdinhDcc;
     @Column(name = "MA_DIEM_KHO")
     private String maDiemKho;
     @Column(name = "TEN_DIEM_KHO")
@@ -89,7 +96,7 @@ public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Clon
     @Column(name = "DON_VI_TINH")
     private String donViTinh;
     @Column(name = "TRANG_THAI")
-    @Access(value=AccessType.PROPERTY)
+    @Access(value = AccessType.PROPERTY)
     private String trangThai;
     @Column(name = "LY_DO_TU_CHOI")
     private String lyDoTuChoi;
@@ -124,11 +131,23 @@ public class DcnbBBKetThucNKHdr extends BaseEntity implements Serializable, Clon
     private LocalDate ngayPDuyet;
     @Column(name = "TYPE")
     private String type;
+    @Column(name = "GHI_CHU")
+    private String ghiChu;
+    @Column(name = "SO_BB_LM_BG")
+    private String soBbLmBg;
+    @Column(name = "BB_LM_BG_ID")
+    private Long bbLmBgId;
+    @Column(name = "KE_HOACH_DC_DTL_ID")
+    private Long keHoachDcDtlId;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
     private List<DcnbBBKetThucNKDtl> dcnbBBKetThucNKDtl = new ArrayList<>();
     @Transient
+    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+    @Transient
     private String tenTrangThai;
+
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
         this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);

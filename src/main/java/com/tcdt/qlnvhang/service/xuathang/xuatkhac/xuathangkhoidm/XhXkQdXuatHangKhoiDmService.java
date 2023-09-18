@@ -149,17 +149,20 @@ public class XhXkQdXuatHangKhoiDmService extends BaseServiceImpl {
         }
         String status = statusReq.getTrangThai() + optional.get().getTrangThai();
         switch (status) {
-            case Contains.CHODUYET_LDC + Contains.DUTHAO:
-            case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
+            case Contains.CHODUYET_LDV + Contains.DUTHAO:
+            case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
+            case Contains.CHODUYET_LDV + Contains.TUCHOI_LDTC:
                 optional.get().setNguoiDuyetId(currentUser.getUser().getId());
                 optional.get().setNgayDuyet(LocalDate.now());
                 break;
-            case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
+            case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
+            case Contains.TUCHOI_LDTC + Contains.CHODUYET_LDTC:
                 optional.get().setNguoiDuyetId(currentUser.getUser().getId());
                 optional.get().setNgayDuyet(LocalDate.now());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
-            case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
+            case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
+            case Contains.DADUYET_LDTC + Contains.CHODUYET_LDTC:
                 optional.get().setNguoiDuyetId(currentUser.getUser().getId());
                 optional.get().setNgayDuyet(LocalDate.now());
                 break;
@@ -208,7 +211,7 @@ public class XhXkQdXuatHangKhoiDmService extends BaseServiceImpl {
         }
         List<XhXkDsHangDtqgDtl> treeNodes = new ArrayList<>();
         for (XhXkDsHangDtqgDtl node : flatNodes) {
-            node.setTenNhomHang(node.getLoaiHang().equals("VT") ? "Vật tư" : "Lương Thực");
+            node.setTenNhomHang(!ObjectUtils.isEmpty(node.getLoaiHang()) ? (node.getLoaiHang().equals("VT") ? "Vật tư" : "Lương Thực") : "");
             XhXkDsHangDtqgDtl parent = nodeMap.get(node.getMaCha());
             if (parent == null) {
                 treeNodes.add(node);

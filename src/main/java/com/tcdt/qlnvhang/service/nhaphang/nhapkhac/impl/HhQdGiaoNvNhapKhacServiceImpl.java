@@ -18,8 +18,10 @@ import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhQdGiaoNvuNhapKhacSearch;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.nhaphang.nhapkhac.HhQdGiaoNvNhapKhacService;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.DmVattuDTO;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,6 +32,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 @Service
@@ -114,7 +119,7 @@ public class HhQdGiaoNvNhapKhacServiceImpl extends BaseServiceImpl implements Hh
         HhQdGiaoNvuNhapHangKhacHdr dataMap = ObjectMapperUtils.map(req, HhQdGiaoNvuNhapHangKhacHdr.class);
 
         dataMap.setNgayTao(getDateTimeNow());
-        dataMap.setTrangThai(Contains.DUTHAO);
+        dataMap.setTrangThai(Contains.DANG_NHAP_DU_LIEU);
         dataMap.setNguoiTao(getUser().getUsername());
 //        dataMap.setLastest(req.getLastest());
         dataMap.setMaDvi(getUser().getDvql());
@@ -249,7 +254,7 @@ public class HhQdGiaoNvNhapKhacServiceImpl extends BaseServiceImpl implements Hh
         }
         String status = stReq.getTrangThai() + qOptional.get().getTrangThai();
         switch (status) {
-            case Contains.BAN_HANH + Contains.DUTHAO:
+            case Contains.BAN_HANH + Contains.DANG_NHAP_DU_LIEU:
                 qOptional.get().setNguoiPduyet(getUser().getUsername());
                 qOptional.get().setNgayPduyet(getDateTimeNow());
                 break;
@@ -270,7 +275,7 @@ public class HhQdGiaoNvNhapKhacServiceImpl extends BaseServiceImpl implements Hh
         if (!qOptional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
-        if (!qOptional.get().getTrangThai().equals(Contains.DUTHAO)
+        if (!qOptional.get().getTrangThai().equals(Contains.DANG_NHAP_DU_LIEU)
                 && !qOptional.get().getTrangThai().equals(Contains.TU_CHOI_CBV)
                 && !qOptional.get().getTrangThai().equals(Contains.TUCHOI_TP)
                 && !qOptional.get().getTrangThai().equals(Contains.TUCHOI_LDC)) {
@@ -300,7 +305,7 @@ public class HhQdGiaoNvNhapKhacServiceImpl extends BaseServiceImpl implements Hh
             throw new Exception("Không tìm thấy dữ liệu cần xoá");
         }
         for (HhQdGiaoNvuNhapHangKhacHdr hdr: listHdr) {
-            if (!hdr.getTrangThai().equals(Contains.DUTHAO)
+            if (!hdr.getTrangThai().equals(Contains.DANG_NHAP_DU_LIEU)
                     && !hdr.getTrangThai().equals(Contains.TU_CHOI_CBV)
                     && !hdr.getTrangThai().equals(Contains.TUCHOI_TP)
                     && !hdr.getTrangThai().equals(Contains.TUCHOI_LDC)) {
@@ -450,6 +455,17 @@ public class HhQdGiaoNvNhapKhacServiceImpl extends BaseServiceImpl implements Hh
         ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
         ex.export();
 
+    }
+
+    @Override
+    public ReportTemplateResponse preview(HhQdGiaoNvuNhapKhacSearch objReq) throws Exception {
+        HhQdGiaoNvuNhapHangKhacHdr optional = chiTiet(objReq.getId());
+//        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        String filePath = "/Users/vunt/Downloads/Print/"+objReq.getReportTemplateRequest().getFileName();
+        byte[] byteArray = Files.readAllBytes(Paths.get(filePath));
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
     }
 
 

@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.request.nhaphang.nhapkhac;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhBbanNghiemThuDtlReq;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 import java.math.BigDecimal;
@@ -38,4 +39,6 @@ public class HhBbNghiemThuNhapKhacReq {
     private List<FileDinhKemReq> fileDinhKems;
     private List<HhBbanNghiemThuDtlReq> dviChuDongThucHien;
     private List<HhBbanNghiemThuDtlReq> dmTongCucPdTruocThucHien;
+
+    private ReportTemplateRequest reportTemplateRequest;
 }

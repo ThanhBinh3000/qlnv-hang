@@ -338,35 +338,58 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
-        Page<HhQdKhlcntHdr> page = this.hhQdKhlcntHdrService.getAllPage(objReq);
-        List<HhQdKhlcntHdr> data = page.getContent();
-
         String title = "Danh sách các gói thầu";
-        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số KH/đề xuất", "Số QĐ PD KHLCNT", "Số QĐ PD KQLCNT", "Ngày QĐ PD KQLCNT", "Tổng số gói thầu", "Số gói thầu đã trúng", "Số gói thầu đã trượt",
-                "Thời gian thực hiện dự án", "Phương thức LCNT", "Chủng loại hàng hóa", "Trạng thái"};
+        String[] rowsName;
         String filename = "Danh_sach_cac_goi_thau.xlsx";
-
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
-        for (int i = 0; i < data.size(); i++) {
-            HhQdKhlcntHdr dx = data.get(i);
-            objs = new Object[rowsName.length];
-            objs[0] = i;
-            objs[1] = dx.getNamKhoach();
-            objs[2] = dx.getSoDxuatKhlcnt() != null ? dx.getSoDxuatKhlcnt() : dx.getSoTrHdr();
-            objs[3] = dx.getSoQd();
-            objs[4] = dx.getSoQdPdKqLcnt();
-            objs[5] = objReq.getLoaiVthh().equals("02") ? dx.getNgayPduyet() : convertDate(dx.getNgayPduyet());
-            objs[6] = dx.getSoGthau();
-            objs[7] = dx.getSoGthauTrung();
-            objs[8] = dx.getSoGthauTruot();
-            objs[9] = convertDate(dx.getTgianNhang());
-            objs[10] = dx.getTenPthucLcnt();
-            objs[11] = dx.getTenCloaiVthh();
-            objs[12] = objReq.getLoaiVthh().equals("02") ? dx.getTenTrangThaiDt() : dx.getTenTrangThai();
-            dataList.add(objs);
+        if (objReq.getLoaiVthh().startsWith("02")) {
+            rowsName = new String[]{"STT", "Năm kế hoạch", "Số công văn/tờ trình", "Số QĐ PD KHLCNT", "Số QĐ PD KQLCNT", "Ngày QĐ PD KQLCNT", "Tổng số gói thầu", "Số gói thầu đã trúng", "Số gói thầu đã trượt",
+                    "Thời gian thực hiện dự án", "Phương thức LCNT", "Chủng loại hàng DTQG", "Trạng thái"};
+            Page<HhQdKhlcntHdr> page = selectPageVt(objReq);
+            List<HhQdKhlcntHdr> data = page.getContent();
+            for (int i = 0; i < data.size(); i++) {
+                HhQdKhlcntHdr dx = data.get(i);
+                objs = new Object[rowsName.length];
+                objs[0] = i;
+                objs[1] = dx.getNamKhoach();
+                objs[2] = dx.getSoDxuatKhlcnt() != null ? dx.getSoDxuatKhlcnt() : dx.getSoTrHdr();
+                objs[3] = dx.getSoQd();
+                objs[4] = dx.getSoQdPdKqLcnt();
+                objs[5] = objReq.getLoaiVthh().equals("02") ? dx.getNgayPduyet() : convertDate(dx.getNgayPduyet());
+                objs[6] = dx.getSoGthau();
+                objs[7] = dx.getSoGthauTrung();
+                objs[8] = dx.getSoGthauTruot();
+                objs[9] = convertDate(dx.getTgianNhang());
+                objs[10] = dx.getTenPthucLcnt();
+                objs[11] = dx.getTenCloaiVthh();
+                objs[12] = objReq.getLoaiVthh().equals("02") ? dx.getTenTrangThaiDt() : dx.getTenTrangThai();
+                dataList.add(objs);
+            }
+        } else {
+            rowsName = new String[]{"STT", "Năm kế hoạch", "Số công văn/tờ trình", "Số QĐ PD KHLCNT", "Số QĐ PD KQLCNT", "Ngày QĐ PD KQLCNT", "Tổng số gói thầu", "Số gói thầu đã trúng", "Số gói thầu đã trượt",
+                    "Thời gian thực hiện dự án", "Phương thức LCNT", "Chủng loại hàng DTQG", "Trạng thái"};
+            Page<HhQdKhlcntDtl> page = selectPage(objReq);
+            List<HhQdKhlcntDtl> data = page.getContent();
+            for (int i = 0; i < data.size(); i++) {
+                HhQdKhlcntDtl dx = data.get(i);
+                objs = new Object[rowsName.length];
+                objs[0] = i;
+                objs[1] = dx.getNamKhoach();
+                objs[2] = dx.getSoDxuat();
+                objs[3] = dx.getHhQdKhlcntHdr().getSoQd();
+                objs[4] = dx.getSoQdPdKqLcnt();
+                objs[5] = convertDate(dx.getHhQdPduyetKqlcntHdr().getNgayKy());
+                objs[6] = dx.getSoGthau();
+                objs[7] = dx.getSoGthauTrung();
+                objs[8] = dx.getSoGthauTruot();
+                objs[9] = convertDate(dx.getDxuatKhLcntHdr().getTgianNhang());
+                objs[10] = dx.getDxuatKhLcntHdr().getTenPthucLcnt();
+                objs[11] = dx.getHhQdKhlcntHdr().getTenCloaiVthh();
+                objs[12] =  dx.getTenTrangThai();
+                dataList.add(objs);
+            }
         }
-
         ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
         ex.export();
     }

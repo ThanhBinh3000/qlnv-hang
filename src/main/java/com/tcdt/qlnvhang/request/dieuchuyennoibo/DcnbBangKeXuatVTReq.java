@@ -20,9 +20,7 @@ public class DcnbBangKeXuatVTReq extends BaseRequest {
     private String maDvi;
     @NotNull
     private String loaiDc;
-    @NotNull
     private String loaiQdinh;
-    @NotNull
     private String typeQd;
     private Boolean isVatTu = false;
     private List<String> dsLoaiHang = new ArrayList<>();
@@ -75,6 +73,7 @@ public class DcnbBangKeXuatVTReq extends BaseRequest {
     private String donViNguoiGiaoHang;
     private String diaChiDonViNguoiGiaoHang;
     private LocalDate thoiHanGiaoNhan;
+    @NotNull
     private String donViTinh;
     private String trangThai;
     private String lyDoTuChoi;
@@ -93,4 +92,6 @@ public class DcnbBangKeXuatVTReq extends BaseRequest {
 
     private LocalDate tuNgayXuatKho;
     private LocalDate denNgayXuatKho;
+    @NotNull
+    private Long keHoachDcDtlId;
 }

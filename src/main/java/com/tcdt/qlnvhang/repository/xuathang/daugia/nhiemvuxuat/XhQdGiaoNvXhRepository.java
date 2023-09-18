@@ -10,25 +10,27 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface XhQdGiaoNvXhRepository extends BaseRepository<XhQdGiaoNvXh, Long> {
 
-    @Query("SELECT DISTINCT QD from XhQdGiaoNvXh QD " +
-            "LEFT JOIN XhQdGiaoNvXhDtl DTL ON QD.id = DTL.idQdHdr WHERE 1=1 " +
+    @Query("SELECT DISTINCT QD FROM XhQdGiaoNvXh QD " +
+            "WHERE (:#{#param.dvql} IS NULL OR QD.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
             "AND (:#{#param.nam} IS NULL OR QD.nam = :#{#param.nam}) " +
-            "AND (:#{#param.soQd} IS NULL OR LOWER(QD.soQd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQd}),'%' ) ) )" +
-            "AND (:#{#param.ngayTaoTu} IS NULL OR QD.ngayTao >= :#{#param.ngayTaoTu}) " +
-            "AND (:#{#param.ngayTaoDen} IS NULL OR QD.ngayTao <= :#{#param.ngayTaoDen}) " +
-            "AND (:#{#param.trichYeu} IS NULL OR LOWER(QD.trichYeu) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.trichYeu}),'%'))) " +
-            "AND (:#{#param.loaiVthh} IS NULL OR QD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+            "AND (:#{#param.soQdNv} IS NULL OR QD.soQdNv = :#{#param.soQdNv}) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR QD.loaiVthh = :#{#param.loaiVthh}) " +
+            "AND (:#{#param.trichYeu} IS NULL OR LOWER(QD.trichYeu) LIKE LOWER(CONCAT('%', :#{#param.trichYeu}, '%'))) " +
+            "AND (:#{#param.ngayKyTu} IS NULL OR QD.ngayKy >= :#{#param.ngayKyTu}) " +
+            "AND (:#{#param.ngayKyDen} IS NULL OR QD.ngayKy <= :#{#param.ngayKyDen}) " +
             "AND (:#{#param.trangThai} IS NULL OR QD.trangThai = :#{#param.trangThai}) " +
-            "AND (:#{#param.maChiCuc} IS NULL OR DTL.maDvi = :#{#param.maChiCuc}) " +
-            "AND (:#{#param.maDvi} IS NULL OR QD.maDvi = :#{#param.maDvi})")
+            "ORDER BY QD.ngaySua DESC, QD.ngayTao DESC, QD.id DESC")
     Page<XhQdGiaoNvXh> searchPage(@Param("param") XhQdGiaoNvuXuatReq param, Pageable pageable);
 
-    Optional<XhQdGiaoNvXh> findAllBySoQd(String soQd);
+    boolean existsBySoQdNv(String soQdNv);
 
-    List<XhQdGiaoNvXh> findByIdIn(List<Long> idQdList);
+    boolean existsBySoQdNvAndIdNot(String soQdNv, Long id);
+
+    List<XhQdGiaoNvXh> findByIdIn(List<Long> idList);
+
+    List<XhQdGiaoNvXh> findAllByIdIn(List<Long> listId);
 }

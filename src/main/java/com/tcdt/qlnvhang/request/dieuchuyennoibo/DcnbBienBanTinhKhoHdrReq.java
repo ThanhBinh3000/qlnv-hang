@@ -2,8 +2,10 @@ package com.tcdt.qlnvhang.request.dieuchuyennoibo;
 
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanTinhKhoDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -17,9 +19,7 @@ public class DcnbBienBanTinhKhoHdrReq {
     @NotNull
     private Integer nam;
     private String soBbTinhKho;
-    @NotNull
     private Long bangKeCanHangId;
-    @NotNull
     private String soBangKe;
     @NotNull
     private LocalDate ngayLap;
@@ -34,16 +34,13 @@ public class DcnbBienBanTinhKhoHdrReq {
     @NotNull
     private LocalDate ngayBatDauXuat;
     @NotNull
-    private LocalDate ngayKeThucXuat;
-    @NotNull
+    private LocalDate ngayKetThucXuat;
     private LocalDate thoiHanXuatHang;
     @NotNull
     private Long qDinhDccId;
     @NotNull
     private String soQdinhDcc;
-    @NotNull
     private LocalDate ngayXuatKho;
-    @NotNull
     private LocalDate thoiHanDieuChuyen;
     @NotNull
     private LocalDate ngayKyQdDcc;
@@ -67,7 +64,10 @@ public class DcnbBienBanTinhKhoHdrReq {
     private String maNganKho;
     @NotNull
     private String tenNganKho;
-
+    @NotNull
+    private String tenLoaiVthh;
+    @NotNull
+    private String tenCloaiVthh;
     private String maLoKho;
 
     private String tenLoKho;
@@ -122,8 +122,14 @@ public class DcnbBienBanTinhKhoHdrReq {
     private BigDecimal chenhLechSlConLai;
 
     private String type;
+    private String soPhieuKnChatLuong;
+    private Long phieuKnChatLuongHdrId;
 
     private List<FileDinhKemReq> fileBbTinhKhoDaKy = new ArrayList<>();
     @Valid
     private List<DcnbBienBanTinhKhoDtl> dcnbBienBanTinhKhoDtl = new ArrayList<>();
+    private ReportTemplateRequest reportTemplateRequest;
+
+    @NotNull
+    private Long keHoachDcDtlId;
 }

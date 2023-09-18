@@ -10,11 +10,14 @@ import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.PhieuKnghiemCluongHangKhac
 import com.tcdt.qlnvhang.request.object.KquaKnghiemKhacReq;
 import com.tcdt.qlnvhang.request.object.PhieuKnghiemCluongHangKhacReq;
 import com.tcdt.qlnvhang.request.object.phieuknghiemcluonghang.KquaKnghiemReq;
+import com.tcdt.qlnvhang.request.search.PhieuKnghiemCluongHangSearchReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.phieukiemnghiemcl.PhieuKnghiemCluongHangService;
 import com.tcdt.qlnvhang.service.nhaphang.nhapkhac.PhieuKnghiemCluongHangKhacService;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
@@ -24,11 +27,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Log4j2
@@ -88,6 +89,15 @@ public class PhieuKnghiemCluongHangKhacServiceImpl extends BaseServiceImpl imple
         phieuKnghiemCluongHangKhacRepository.save(phieuKnclh);
         saveDetail(req, phieuKnclh.getId());
         return phieuKnclh;
+    }
+
+    @Override
+    public ReportTemplateResponse preview(PhieuKnghiemCluongHangSearchReq objReq) throws Exception {
+        PhieuKnghiemCluongHangKhac optional = detail(objReq.getId());
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
     }
 
     void saveDetail(PhieuKnghiemCluongHangKhacReq req, Long id) {

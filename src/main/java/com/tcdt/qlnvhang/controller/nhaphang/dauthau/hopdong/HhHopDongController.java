@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tcdt.qlnvhang.request.search.HhQdPduyetKqlcntSearchReq;
 import com.tcdt.qlnvhang.request.search.ListHdSearhReq;
 import com.tcdt.qlnvhang.service.impl.HhHopDongServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -255,4 +254,19 @@ public class HhHopDongController {
     return ResponseEntity.ok(resp);
   }
 
+  @ApiOperation(value = "Xem truoc", response = List.class)
+  @PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> preview(@RequestBody HhHopDongHdrReq req) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(service.preview(req));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+    }
+    return ResponseEntity.ok(resp);
+  }
 }

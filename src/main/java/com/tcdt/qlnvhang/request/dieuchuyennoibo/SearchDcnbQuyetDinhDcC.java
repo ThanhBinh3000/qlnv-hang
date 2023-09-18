@@ -28,5 +28,6 @@ public class SearchDcnbQuyetDinhDcC extends BaseRequest {
   private List<String> loaiVthh;
   private String loaiQdinh;
   private Boolean isVatTu;
+  private Boolean thayDoiThuKho;
   private List<String> dsLoaiHang = new ArrayList<>();
 }

@@ -59,5 +59,10 @@ public class HhQdGiaoNvNhDdiem {
     @Transient
     List<HhPhieuKngiemCluong> listPhieuKiemNghiemCl;
 
+//    preview
+    @Transient
+    private BigDecimal tongThanhTien;
+    @Transient
+    private BigDecimal donGia;
 }
 

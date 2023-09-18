@@ -149,7 +149,7 @@ public class XhCtvtQdGiaoNvXhHdrService extends BaseServiceImpl {
       }
     }
     XhCtvtQdGiaoNvXhHdr data = optional.get();
-    BeanUtils.copyProperties(objReq, data);
+    BeanUtils.copyProperties(objReq, data,"maDvi");
     data.setTongSoLuong(objReq.getTongSoLuong());
     data.setThanhTien(objReq.getThanhTien());
     XhCtvtQdGiaoNvXhHdr created = xhCtvtQdGiaoNvXhHdrRepository.save(data);

@@ -34,7 +34,8 @@ public class UserInfo {
 	String department;
 	long notifyViewId;
 	String groupsArr;
-
+	String userType;
+	
 	@Transient
 	String dvqlTenVietTat;
 	@Transient

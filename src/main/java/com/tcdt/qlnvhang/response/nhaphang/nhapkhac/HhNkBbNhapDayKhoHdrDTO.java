@@ -28,7 +28,6 @@ public class HhNkBbNhapDayKhoHdrDTO {
     private String cloaiVthh;
     private String tenCloaiVthh;
     private String donViTinh;
-    private String tenDonViTinh;
     private BigDecimal slDienChuyen;
 
     private String soBbNhapDayKho;
@@ -45,7 +44,7 @@ public class HhNkBbNhapDayKhoHdrDTO {
     private LocalDate ngayNhapDayKho;
     private String trangThai;
     private String tenTrangThai;
-    public HhNkBbNhapDayKhoHdrDTO(Long id, Long idQdPdNk, String soQdPdNk,Date ngayKyQdinh, Integer namKh, Date thoiHanDieuChuyen, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, String loaiVthh, String tenLoaiVthh, String cloaiVthh, String tenCloaiVthh, String donViTinh, String tenDonViTinh,BigDecimal slDienChuyen, String soBbNhapDayKho, LocalDate ngayBatDauNhap, LocalDate ngayBatKetNhap, String soPhieuKiemTraCl, Long phieuKiemTraClId, String soPhieuNhapKho, Long phieuNhapKhoId, String soBangKe, Long soBangKeId, LocalDate ngayNhapDayKho, String trangThai, String tenTrangThai) {
+    public HhNkBbNhapDayKhoHdrDTO(Long id, Long idQdPdNk, String soQdPdNk,Date ngayKyQdinh, Integer namKh, Date thoiHanDieuChuyen, String maNhaKho, String tenNhaKho, String maDiemKho, String tenDiemKho, String maLoKho, String tenLoKho, String maNganKho, String tenNganKho, String loaiVthh, String tenLoaiVthh, String cloaiVthh, String tenCloaiVthh, String donViTinh, BigDecimal slDienChuyen, String soBbNhapDayKho, LocalDate ngayBatDauNhap, LocalDate ngayBatKetNhap, String soPhieuKiemTraCl, Long phieuKiemTraClId, String soPhieuNhapKho, Long phieuNhapKhoId, String soBangKe, Long soBangKeId, LocalDate ngayNhapDayKho, String trangThai, String tenTrangThai) {
         this.id = id;
         this.idQdPdNk = idQdPdNk;
         this.soQdPdNk = soQdPdNk;
@@ -65,7 +64,6 @@ public class HhNkBbNhapDayKhoHdrDTO {
         this.cloaiVthh = cloaiVthh;
         this.tenCloaiVthh = tenCloaiVthh;
         this.donViTinh = donViTinh;
-        this.tenDonViTinh = tenDonViTinh;
         this.slDienChuyen = slDienChuyen;
         this.soBbNhapDayKho = soBbNhapDayKho;
         this.ngayBatDauNhap = ngayBatDauNhap;
