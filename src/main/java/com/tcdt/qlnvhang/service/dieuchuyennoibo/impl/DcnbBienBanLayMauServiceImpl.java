@@ -40,6 +40,7 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -329,9 +330,10 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
         }
         Optional<DcnbQuyetDinhDcCHdr> dcnbQuyetDinhDcCHdr = dcnbQuyetDinhDcCHdrRepository.findById(dcnbBienBanLayMauHdr.get().getQdccId());
         if (!dcnbQuyetDinhDcCHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
-        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+//        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        FileInputStream inputStream = new FileInputStream("/Users/lethanhdat/tecapro/qlnv-hang/src/main/resources/reports/dieuchuyennoibo/xuat/11.5. Biên bản lấy mẫu bàn giao mẫu_LT-Điều chuyển.docx");
+//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
         var dcnbBangKeCanHangPreview = setDataToPreview(dcnbBienBanLayMauHdr, userInfo, dcnbQuyetDinhDcCHdr);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBangKeCanHangPreview);
     }

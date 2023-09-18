@@ -25,6 +25,7 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.DieuChuyenNoiBo;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import lombok.var;
 import org.springframework.beans.BeanUtils;
@@ -33,12 +34,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -315,9 +318,10 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
             userInfo = userInfoRepository.findById(dcnbPhieuKtChatLuongHdr.get().getNguoiPDuyet());
         }
         if (!userInfo.isPresent()) throw new Exception("Không tồn tại bản ghi");
-        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+//        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        FileInputStream inputStream = new FileInputStream("Nhập_xuất_LT_Phiếu kiểm nghiệm chất lượng_LT.docx");
         var dcnbPhieuKtChatLuongHdrPreview = setDataToPreview(dcnbPhieuKtChatLuongHdr, qlnvDmDonvi, userInfo);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbPhieuKtChatLuongHdrPreview);
     }
@@ -366,7 +370,7 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
                     .chiSoCl(res.getChiSoCl())
                     .ketQuaPt(res.getKetQuaPt())
                     .phuongPhap(res.getPhuongPhap())
-                    .danhGia(res.getDanhGia())
+                    .danhGia(DieuChuyenNoiBo.checkDanhGia(res.getDanhGia()))
                     .build();
             dcnbPhieuKtChatLuongDtlDtos.add(dcnbPhieuKtChatLuongDtlDto);
         }

@@ -24,6 +24,7 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.DieuChuyenNoiBo;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import lombok.var;
 import org.springframework.beans.BeanUtils;
@@ -38,6 +39,7 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -369,9 +371,10 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         if (dcnbPhieuKnChatLuongHdr.get().getNguoiDuyetLdCuc() != null) {
             userInfo = userInfoRepository.findById(dcnbPhieuKnChatLuongHdr.get().getNguoiDuyetLdCuc());
         }
-        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+//        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        FileInputStream inputStream = new FileInputStream("/Users/lethanhdat/tecapro/qlnv-hang/src/main/resources/reports/dieuchuyennoibo/Nhập_xuất_LT_Phiếu kiểm nghiệm chất lượng_LT.docx");
         var dcnbPhieuKnChatLuongHdrPreview = setDataToPreview(dcnbPhieuKnChatLuongHdr, userInfo);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbPhieuKnChatLuongHdrPreview);
     }
@@ -417,7 +420,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
                     .chiSoCl(res.getChiSoCl())
                     .ketQuaPt(res.getKetQuaPt())
                     .phuongPhap(res.getPhuongPhap())
-                    .danhGia(res.getDanhGia())
+                    .danhGia(DieuChuyenNoiBo.checkDanhGia(res.getDanhGia()))
                     .build();
             dcnbPhieuKnChatLuongDtlDtos.add(dcnbPhieuKnChatLuongDtlDto);
         }

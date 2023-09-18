@@ -11,5 +11,5 @@ public class DcnbPhieuKtChatLuongDtlDto {
     private String chiSoCl;
     private String ketQuaPt;
     private String phuongPhap;
-    private Long danhGia;
+    private String danhGia;
 }

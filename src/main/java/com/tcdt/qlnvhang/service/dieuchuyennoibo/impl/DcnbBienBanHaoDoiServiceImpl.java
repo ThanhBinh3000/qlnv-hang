@@ -39,6 +39,7 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -355,9 +356,10 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         if (!dcnbBienBanHaoDoiHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
         var dcnbBienBanTinhKhoHdr = dcnbBienBanTinhKhoHdrRepository.findFirstBySoBbTinhKho(dcnbBienBanHaoDoiHdr.get().getSoBbTinhKho());
         if (!dcnbBienBanTinhKhoHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
-        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
-        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+//            ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+//            byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        FileInputStream inputStream = new FileInputStream("/Users/lethanhdat/tecapro/qlnv-hang/src/main/resources/reports/dieuchuyennoibo/xuat/11.15.C83-HD_Biên bản hao dôi_LT-xuất điều chuyển.docx");
+//            ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
         var dcnbBienBanHaoDoiHdrPreview = setDataToPreview(dcnbBienBanHaoDoiHdr, dcnbBienBanTinhKhoHdr);
         return docxToPdfConverter.convertDocxToPdf(inputStream, dcnbBienBanHaoDoiHdrPreview);
     }
