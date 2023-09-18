@@ -47,7 +47,6 @@ public class XhCtvtBbHaoDoiHdr extends BaseEntity implements Serializable {
   private BigDecimal tongSlNhap;
   private LocalDate ngayKtNhap;
   private BigDecimal tongSlXuat;
-  private LocalDate ngayKtXuat;
   private BigDecimal slHaoThucTe;
   private String tiLeHaoThucTe;
   private BigDecimal slHaoThanhLy;
@@ -56,7 +55,7 @@ public class XhCtvtBbHaoDoiHdr extends BaseEntity implements Serializable {
   private String tiLeHaoVuotDm;
   private BigDecimal slHaoDuoiDm;
   private String tiLeHaoDuoiDm;
-  private String dinhMucHaoHut;
+  private BigDecimal dinhMucHaoHut;
   private BigDecimal sLHaoHutTheoDm;
   private String nguyenNhan;
   private String kienNghi;
@@ -74,6 +73,8 @@ public class XhCtvtBbHaoDoiHdr extends BaseEntity implements Serializable {
   private String type;
   @Transient
   private String tenDvi;
+  @Transient
+  private String tenDviCha;
   @Transient
   private String diaChiDvi;
   @Transient

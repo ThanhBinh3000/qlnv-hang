@@ -31,7 +31,7 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbPhieuXuatKhoHdr pxk On khdcd.id = pxk.keHoachDcDtlId " +
+            "LEFT JOIN DcnbPhieuXuatKhoHdr pxk On khdcd.id = pxk.keHoachDcDtlId AND (:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho}) " +
             "LEFT JOIN DcnbPhieuKnChatLuongHdr pkncl On qdc.parentId = pkncl.qdDcId " +
             "and ((pkncl.maLoKho is not null and pkncl.maLoKho = khdcd.maLoKho and pkncl.trangThai = '05' ) or (pkncl.maLoKho is null and pkncl.maNganKho = khdcd.maNganKho and pkncl.trangThai = '05'))" +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +

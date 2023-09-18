@@ -25,7 +25,7 @@ public interface DcnbBienBanTinhKhoHdrRepository extends JpaRepository<DcnbBienB
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
-            "LEFT JOIN DcnbBienBanTinhKhoHdr bbtk ON bbtk.keHoachDcDtlId = khdcd.id " +
+            "LEFT JOIN DcnbBienBanTinhKhoHdr bbtk ON bbtk.keHoachDcDtlId = khdcd.id AND (:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho}) " +
             "LEFT JOIN DcnbBienBanTinhKhoDtl bbtkd ON bbtkd.hdrId = bbtk.id " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +

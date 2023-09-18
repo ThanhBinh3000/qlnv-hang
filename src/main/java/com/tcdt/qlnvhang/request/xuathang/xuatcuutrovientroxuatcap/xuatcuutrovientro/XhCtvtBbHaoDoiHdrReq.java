@@ -33,7 +33,6 @@ public class XhCtvtBbHaoDoiHdrReq {
   private BigDecimal tongSlNhap;
   private LocalDate ngayKtNhap;
   private BigDecimal tongSlXuat;
-  private LocalDate ngayKtXuat;
   private BigDecimal slHaoThucTe;
   private String tiLeHaoThucTe;
   private BigDecimal slHaoThanhLy;
@@ -42,7 +41,7 @@ public class XhCtvtBbHaoDoiHdrReq {
   private String tiLeHaoVuotDm;
   private BigDecimal slHaoDuoiDm;
   private String tiLeHaoDuoiDm;
-  private String dinhMucHaoHut;
+  private BigDecimal dinhMucHaoHut;
   private BigDecimal sLHaoHutTheoDm;
   private String nguyenNhan;
   private String kienNghi;
