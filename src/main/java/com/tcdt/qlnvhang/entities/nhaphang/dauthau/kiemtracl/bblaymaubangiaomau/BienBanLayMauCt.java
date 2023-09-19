@@ -20,5 +20,6 @@ public class BienBanLayMauCt implements Serializable {
     private Long id;
     private Long bbLayMauId;
     private String loaiDaiDien;
+    private String tenLoaiDaiDien;
     private String daiDien;
 }

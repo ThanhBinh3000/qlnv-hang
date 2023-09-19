@@ -8,4 +8,5 @@ import lombok.NoArgsConstructor;
 public class BienBanLayMauCtReq {
     private String loaiDaiDien;
     private String daiDien;
+    private String tenLoaiDaiDien;
 }
