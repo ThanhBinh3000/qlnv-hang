@@ -52,6 +52,8 @@ public class DcnbBBNTBQHdr extends BaseEntity implements Serializable, Cloneable
     private LocalDate ngayKetThucNt;
     @Column(name = "SO_QD_DC_CUC")
     private String soQdDcCuc;
+    @Column(name = "BB_NT_BQLD_KX")
+    private String bbNtBqLdKx;
     @Column(name = "QD_DC_CUC_ID")
     private Long qdDcCucId;
     @Column(name = "NGAY_QD_DC_CUC")

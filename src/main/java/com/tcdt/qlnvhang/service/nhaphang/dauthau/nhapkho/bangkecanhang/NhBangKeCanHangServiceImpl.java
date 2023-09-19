@@ -1,5 +1,8 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bangkecanhang;
 
+import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHangCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
@@ -12,9 +15,12 @@ import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhie
 import com.tcdt.qlnvhang.request.object.quanlybangkecanhangluongthuc.QlBangKeCanHangLtReq;
 import com.tcdt.qlnvhang.request.object.quanlybangkecanhangluongthuc.QlBangKeChCtLtReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
@@ -50,6 +56,8 @@ public class NhBangKeCanHangServiceImpl extends BaseServiceImpl implements NhBan
 
     @Autowired
     private UserInfoRepository userInfoRepository;
+    @Autowired
+    private FileDinhKemService fileDinhKemService;
 
     @Override
     public Page<NhBangKeCanHang> searchPage(QlBangKeCanHangLtReq req) {
@@ -78,7 +86,9 @@ public class NhBangKeCanHangServiceImpl extends BaseServiceImpl implements NhBan
         item.setNam(LocalDate.now().getYear());
         item.setId(Long.valueOf(item.getSoBangKe().split("/")[0]));
         nhBangKeCanHangRepository.save(item);
-
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+            fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), item.getId(), "NH_BANG_KE_CAN_HANG");
+        }
         this.saveCtiet(item.getId(),req);
 
         return item;
@@ -116,6 +126,10 @@ public class NhBangKeCanHangServiceImpl extends BaseServiceImpl implements NhBan
         item.setNgaySua(new Date());
         item.setNguoiSuaId(userInfo.getId());
         nhBangKeCanHangRepository.save(item);
+        fileDinhKemService.delete(item.getId(), Lists.newArrayList("NH_BANG_KE_CAN_HANG"));
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+            fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), item.getId(), "NH_BANG_KE_CAN_HANG");
+        }
         this.saveCtiet(item.getId(),req);
         return item;
     }
@@ -138,6 +152,8 @@ public class NhBangKeCanHangServiceImpl extends BaseServiceImpl implements NhBan
         item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
         item.setTenNguoiTao(ObjectUtils.isEmpty(item.getNguoiTaoId()) ? "" : userInfoRepository.findById(item.getNguoiTaoId()).get().getFullName());
         item.setTenNguoiPduyet(ObjectUtils.isEmpty(item.getNguoiPduyetId()) ? "" :userInfoRepository.findById(item.getNguoiPduyetId()).get().getFullName());
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(item.getId(), Collections.singletonList("NH_BANG_KE_CAN_HANG"));
+        item.setListFileDinhKem(fileDinhKem);
         return item;
     }
 

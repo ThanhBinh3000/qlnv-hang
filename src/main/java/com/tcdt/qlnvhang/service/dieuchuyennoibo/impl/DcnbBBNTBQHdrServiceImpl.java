@@ -39,6 +39,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBNTBQHdrService {
@@ -167,6 +168,14 @@ public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBN
         hdrRepository.save(created);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBBNTBQHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
+        List<DcnbBBNTBQHdr> lists = new ArrayList<>();
+        if (created.getMaLoKho() == null) {
+            lists = hdrRepository.findByMaDviAndMaNganKhoXuat(data.getMaDvi(), data.getMaNganKhoXuat());
+        } else {
+            lists = hdrRepository.findByMaDviAndMaNganKhoXuatAndMaLoKhoXuat(data.getMaDvi(), data.getMaNganKhoXuat(), data.getMaLoKhoXuat());
+        }
+        created.setBbNtBqLdKx(lists.stream().map(DcnbBBNTBQHdr::getSoBban).collect(Collectors.joining()));
+        hdrRepository.save(created);
         return created;
     }
 
@@ -231,6 +240,14 @@ public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBN
         fileDinhKemService.delete(created.getId(), Lists.newArrayList(DcnbBBNTBQHdr.TABLE_NAME));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), DcnbBBNTBQHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
+        List<DcnbBBNTBQHdr> lists = new ArrayList<>();
+        if (created.getMaLoKho() == null) {
+            lists = hdrRepository.findByMaDviAndMaNganKhoXuat(data.getMaDvi(), data.getMaNganKhoXuat());
+        } else {
+            lists = hdrRepository.findByMaDviAndMaNganKhoXuatAndMaLoKhoXuat(data.getMaDvi(), data.getMaNganKhoXuat(), data.getMaLoKhoXuat());
+        }
+        created.setBbNtBqLdKx(lists.stream().map(DcnbBBNTBQHdr::getSoBban).collect(Collectors.joining()));
+        hdrRepository.save(created);
         return created;
     }
 
@@ -377,6 +394,7 @@ public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBN
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
     }
+
     @Override
     public ReportTemplateResponse preview(DcnbBBNTBQHdrReq objReq) throws Exception {
         var dcnbBBNTBQHdr = hdrRepository.findById(objReq.getId());

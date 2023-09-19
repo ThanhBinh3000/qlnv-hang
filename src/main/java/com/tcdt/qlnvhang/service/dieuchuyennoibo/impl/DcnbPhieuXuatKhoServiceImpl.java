@@ -161,7 +161,7 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
 //    }
 
     @Transactional
-    public void approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
+    public DcnbPhieuXuatKhoHdr approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
         if (StringUtils.isEmpty(statusReq.getId())) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
@@ -170,7 +170,7 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
-        this.approve(currentUser, statusReq, optional); // Truyền giá trị của optional vào
+       return this.approve(currentUser, statusReq, optional); // Truyền giá trị của optional vào
     }
 
     public DcnbPhieuXuatKhoHdr approve(CustomUserDetails currentUser, StatusReq statusReq, Optional<DcnbPhieuXuatKhoHdr> optional) throws Exception {

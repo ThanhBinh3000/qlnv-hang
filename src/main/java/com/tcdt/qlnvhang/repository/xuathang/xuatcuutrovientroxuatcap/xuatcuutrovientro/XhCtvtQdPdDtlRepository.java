@@ -12,4 +12,6 @@ public interface XhCtvtQdPdDtlRepository extends JpaRepository<XhCtvtQuyetDinhPd
   List<XhCtvtQuyetDinhPdDtl> findByXhCtvtQuyetDinhPdHdrId(Long id);
 
   List<XhCtvtQuyetDinhPdDtl> findByXhCtvtQuyetDinhPdHdrIdIn(List<Long> listId);
+
+  List<XhCtvtQuyetDinhPdDtl> findByIdQdGnvIn(List<Long> listId);
 }
