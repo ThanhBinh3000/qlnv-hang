@@ -76,6 +76,7 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
     DataUtils.copyProperties(objReq, saveData, "id");
     saveData.setMaDvi(currentUser.getUser().getDepartment());
     saveData.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
+    saveData.setTrangThaiXh(TrangThaiAllEnum.CHUA_THUC_HIEN.getId());
     XhCtvtQuyetDinhGnvHdr created = xhCtvtQuyetDinhGnvHdrRepository.save(saveData);
 
     List<Long> listIdQdPdDtl = objReq.getDataDtl().stream().map(XhCtvtQuyetDinhGnvDtl::getIdQdPdDtl).collect(Collectors.toList());
@@ -111,6 +112,12 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
 
     XhCtvtQuyetDinhGnvHdr data = optional.get();
     BeanUtils.copyProperties(objReq, data, "id", "maDvi");
+    XhCtvtQuyetDinhGnvDtl checkTrangThai = data.getDataDtl().stream().filter(s -> DataUtils.safeToString(s.getTrangThai()).equals(TrangThaiAllEnum.DANG_THUC_HIEN.getId()) || DataUtils.safeToString(s.getTrangThai()).equals(TrangThaiAllEnum.CHUA_THUC_HIEN.getId()) || DataUtils.safeToString(s.getTrangThai()).equals("")).findFirst().orElse(null);
+    if (checkTrangThai == null) {
+      data.setTrangThaiXh(TrangThaiAllEnum.DA_HOAN_THANH.getId());
+    } else {
+      data.setTrangThaiXh(TrangThaiAllEnum.DANG_THUC_HIEN.getId());
+    }
     XhCtvtQuyetDinhGnvHdr created = xhCtvtQuyetDinhGnvHdrRepository.save(data);
     return created;
   }

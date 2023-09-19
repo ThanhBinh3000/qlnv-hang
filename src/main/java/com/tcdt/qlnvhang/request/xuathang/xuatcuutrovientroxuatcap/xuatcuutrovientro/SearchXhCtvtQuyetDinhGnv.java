@@ -15,6 +15,7 @@ public class SearchXhCtvtQuyetDinhGnv extends BaseRequest {
    String maDviGiao;
    String dvql;
    String soBbQd;
+   String tenVthh;
    String loaiVthh;
    String trichYeu;
    LocalDate ngayKyTu;
