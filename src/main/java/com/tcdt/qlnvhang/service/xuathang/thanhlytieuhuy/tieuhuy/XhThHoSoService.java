@@ -117,6 +117,9 @@ public class XhThHoSoService extends BaseServiceImpl {
     data.getHoSoDtl().forEach(s -> {
       s.setHoSoHdr(data);
     });
+    if(data.getTrangThai().equals(Contains.DA_DUYET_LDC)){
+      data.setTrangThai(Contains.DANG_DUYET_CB_VU);
+    }
     XhThHoSoHdr created = xhThHoSoRepository.save(data);
 
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhThHoSoHdr.TABLE_NAME + "_CAN_CU"));
@@ -199,62 +202,59 @@ public class XhThHoSoService extends BaseServiceImpl {
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
+    XhThHoSoHdr hdr = optional.get();
     if(currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)){
-      String status = statusReq.getTrangThai() + optional.get().getTrangThai();
+      String status = hdr.getTrangThai() + statusReq.getTrangThai();
       switch (status) {
-        case Contains.CHODUYET_TP + Contains.DUTHAO:
-        case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
-        case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
-        case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+        // Re approve : gửi lại duyệt
+        case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+        case Contains.TUCHOI_LDC + Contains.CHODUYET_TP:
+        case Contains.TUCHOI_LDV + Contains.CHODUYET_TP:
+        case Contains.TU_CHOI_CBV + Contains.CHODUYET_TP:
+        case Contains.TUCHOI_LDTC + Contains.CHODUYET_TP:
           optional.get().setNguoiGduyetId(currentUser.getUser().getId());
           optional.get().setNgayGduyet(LocalDate.now());
           break;
-        case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
-        case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
+        // Arena các cấp duuyệt
+        case Contains.DUTHAO + Contains.CHODUYET_TP:
+        case Contains.CHODUYET_TP + Contains.CHODUYET_LDC:
+        case Contains.CHODUYET_LDC + Contains.DADUYET_LDC:
           optional.get().setNguoiPduyetId(currentUser.getUser().getId());
           optional.get().setNgayPduyet(LocalDate.now());
-          optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
           break;
-        case Contains.DA_DUYET_LDC + Contains.CHODUYET_LDC:
-          optional.get().setNguoiPduyetId(currentUser.getUser().getId());
-          optional.get().setNgayPduyet(LocalDate.now());
+        // Arena từ chối
+        case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+        case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
+          hdr.setLyDoTuChoi(statusReq.getLyDoTuChoi());
           break;
         default:
           throw new Exception("Phê duyệt không thành công");
       }
       optional.get().setTrangThai(statusReq.getTrangThai());
-      if (statusReq.getTrangThai().equals(Contains.DADUYET_LDC)) {
-        optional.get().setTrangThaiTc(Contains.DUTHAO);
-      }
     }else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)){
-      String status = statusReq.getTrangThai() + optional.get().getTrangThaiTc();
+      String status = hdr.getTrangThai() + statusReq.getTrangThai();
       switch (status) {
-        case Contains.CHODUYET_LDV + Contains.DUTHAO:
-        case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
-        case Contains.CHODUYET_LDV + Contains.TUCHOI_LDTC:
-        case Contains.CHODUYET_LDTC + Contains.CHODUYET_LDV:
-          optional.get().setNguoiGduyetId(currentUser.getUser().getId());
-          optional.get().setNgayGduyet(LocalDate.now());
-          break;
-        case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
-        case Contains.TUCHOI_LDTC + Contains.CHODUYET_LDTC:
-        case Contains.TU_CHOI_BTC + Contains.CHO_DUYET_BTC:
-          optional.get().setNguoiPduyetId(currentUser.getUser().getId());
-          optional.get().setNgayPduyet(LocalDate.now());
-          optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
-          break;
-        case Contains.DADUYET_LDTC + Contains.CHODUYET_LDTC:
+        case Contains.DANG_DUYET_CB_VU + Contains.CHODUYET_LDV:
+        case Contains.DADUYET_LDC + Contains.CHODUYET_LDV:
           optional.get().setNguoiPduyetId(currentUser.getUser().getId());
           optional.get().setNgayDuyetLan2(LocalDate.now());
           break;
-        case Contains.DA_DUYET_BTC + Contains.CHO_DUYET_BTC:
+        case Contains.CHODUYET_LDV + Contains.CHODUYET_LDTC:
+        case Contains.CHODUYET_LDTC + Contains.DADUYET_LDTC:
+        case Contains.DADUYET_LDTC + Contains.CHO_DUYET_BTC:
+        case Contains.CHO_DUYET_BTC + Contains.DA_DUYET_BTC:
           optional.get().setNguoiPduyetId(currentUser.getUser().getId());
           optional.get().setNgayDuyetLan3(LocalDate.now());
+          break;
+        case Contains.DA_DUYET_LDC + Contains.TU_CHOI_CBV:
+        case Contains.DANG_DUYET_CB_VU + Contains.TU_CHOI_CBV:
+        case Contains.CHO_DUYET_BTC + Contains.TU_CHOI_BTC:
+          hdr.setLyDoTuChoi(statusReq.getLyDoTuChoi());
           break;
         default:
           throw new Exception("Phê duyệt không thành công");
       }
-      optional.get().setTrangThaiTc(statusReq.getTrangThai());
+      optional.get().setTrangThai(statusReq.getTrangThai());
     }
 
     XhThHoSoHdr created = xhThHoSoRepository.save(optional.get());
