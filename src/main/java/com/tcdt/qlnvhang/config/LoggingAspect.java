@@ -14,6 +14,8 @@ import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.UserActivityService;
 import com.tcdt.qlnvhang.service.feign.LuuKhoClient;
 import com.tcdt.qlnvhang.table.PhieuNhapXuatHistory;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuXuatKhoHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuXuatKho;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -63,7 +65,9 @@ public class LoggingAspect {
   }
 
   @Pointcut("execution(* com.tcdt.qlnvhang.controller.nhaphang.dauthau.nhapkho.NhPhieuNhapKhoController.updateStatus(..)) ||" +
-      "execution(* com.tcdt.qlnvhang.controller.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuXuatKhoController.updateStatus(..))")
+      "execution(* com.tcdt.qlnvhang.controller.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuXuatKhoController.updateStatus(..)) ||" +
+          "execution(* com.tcdt.qlnvhang.controller.dieuchuyennoibo.DcnbPhieuXuatKhoController.updateStatus(..)) || " +
+          "execution(* com.tcdt.qlnvhang.controller.dieuchuyennoibo.DcnbPhieuNhapKhoController.updateStatus(..))")
   public void phieuNhapXuatPointCut() {
   }
 
@@ -140,6 +144,41 @@ public class LoggingAspect {
             phieuNhapXuatHistory.setKieu("NHAP_XUAT");//nhap xuat hoac khoi tao so du dau ky
             luuKhoClient.synchronizeData(phieuNhapXuatHistory);
             logger.info("Cập nhật kho theo Phiếu nhập kho XhCtvtPhieuXuatKhoController {}", rowData);
+          }
+        }
+      }else if (joinPoint.getTarget().toString().contains("DcnbPhieuXuatKhoController")) {
+        if (result != null && result.getBody().getMsg().equals(EnumResponse.RESP_SUCC.getDescription())) {
+          DcnbPhieuXuatKhoHdr rowData = objectMapper.convertValue(result.getBody().getData(), DcnbPhieuXuatKhoHdr.class);
+          if (rowData.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
+            PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
+            phieuNhapXuatHistory.setSoLuong(rowData.getTongSoLuong()); //ThucXuat
+            phieuNhapXuatHistory.setSoPhieu(rowData.getSoPhieuXuatKho());
+            phieuNhapXuatHistory.setLoaiVthh(rowData.getLoaiVthh());
+            phieuNhapXuatHistory.setCloaiVthh(rowData.getCloaiVthh());
+            phieuNhapXuatHistory.setMaKho(rowData.getMaLoKho() == null ? rowData.getMaNganKho() : rowData.getMaLoKho());
+            phieuNhapXuatHistory.setNgayDuyet(rowData.getNgayPduyet());
+            phieuNhapXuatHistory.setLoaiNhapXuat(-1);//fix tam 1 la nhap -1 la xuat
+            phieuNhapXuatHistory.setKieu("NHAP_XUAT");//nhap xuat hoac khoi tao so du dau ky
+            luuKhoClient.synchronizeData(phieuNhapXuatHistory);
+            logger.info("Cập nhật kho theo Phiếu nhập kho DcnbPhieuXuatKhoController {}", rowData);
+          }
+        }
+        else if (joinPoint.getTarget().toString().contains("DcnbPhieuNhapKhoController")) {
+          if (result != null && result.getBody().getMsg().equals(EnumResponse.RESP_SUCC.getDescription())) {
+              DcnbPhieuNhapKhoHdr rowData = objectMapper.convertValue(result.getBody().getData(), DcnbPhieuNhapKhoHdr.class);
+            if (rowData.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
+              PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
+              phieuNhapXuatHistory.setSoLuong(rowData.getTongSoLuong()); //ThucXuat
+              phieuNhapXuatHistory.setSoPhieu(rowData.getSoPhieuNhapKho());
+              phieuNhapXuatHistory.setLoaiVthh(rowData.getLoaiVthh());
+              phieuNhapXuatHistory.setCloaiVthh(rowData.getCloaiVthh());
+              phieuNhapXuatHistory.setMaKho(rowData.getMaLoKho() == null ? rowData.getMaNganKho() : rowData.getMaLoKho());
+              phieuNhapXuatHistory.setNgayDuyet(rowData.getNgayPDuyet());
+              phieuNhapXuatHistory.setLoaiNhapXuat(1);//fix tam 1 la nhap -1 la xuat
+              phieuNhapXuatHistory.setKieu("NHAP_XUAT");//nhap xuat hoac khoi tao so du dau ky
+              luuKhoClient.synchronizeData(phieuNhapXuatHistory);
+              logger.info("Cập nhật kho theo Phiếu nhập kho DcnbPhieuXuatKhoController {}", rowData);
+            }
           }
         }
       }

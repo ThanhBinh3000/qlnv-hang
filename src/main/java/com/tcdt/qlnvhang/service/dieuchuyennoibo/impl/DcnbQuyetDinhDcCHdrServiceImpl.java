@@ -1,6 +1,9 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
@@ -9,8 +12,12 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbQuyetDinhDcCHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcC;
+import com.tcdt.qlnvhang.request.feign.TrangThaiHtReq;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO;
+import com.tcdt.qlnvhang.response.feign.TrangThaiHtResponce;
+import com.tcdt.qlnvhang.service.feign.LuuKhoClient;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -29,6 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -60,6 +68,8 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
     private DcnbPhuongAnDcRepository dcnbPhuongAnDcRepository;
     @Autowired
     private DcnbKeHoachDcHdrRepository dcnbKeHoachDcHdrRepository;
+    @Autowired
+    private LuuKhoClient luuKhoClient;
     @Autowired
     private DcnbKeHoachDcHdrServiceImpl dcnbKeHoachDcHdrServiceImpl;
     @Autowired
@@ -141,6 +151,34 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
                         e.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdrNew);
                         e.setKeHoachDcHdrId(dcnbKeHoachDcHdrNew.getId());
+
+                        // check hàng hóa trong kho xuất, kho nhận
+                        // Check số lượng hiện thời từng lo kho - (tổng đề kế hoạch xuất - tổng xuất trong thực tế)> 0 ;
+                        //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
+                        for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
+                            TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
+                            trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
+                            ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
+                            BaseResponse body = responseNhan.getBody();
+                            if (body != null && EnumResponse.RESP_SUCC.getDescription().equals(body.getMsg())) {
+                                logger.debug(body.toString());
+                                TypeToken<List<TrangThaiHtResponce>> token = new TypeToken<List<TrangThaiHtResponce>>() {
+                                };
+                                Gson gson = new Gson();
+                                List<TrangThaiHtResponce> res = gson.fromJson(gson.toJson(body.getData()), token.getType());
+                                if (res == null || res.isEmpty()) {
+                                    throw new Exception("Không lấy được trạng thái kho hiện thời!");
+                                }
+                                if (res.size() > 1) {
+                                    throw new Exception("Tìm thấy 2 trạng thái kho hiện thời!");
+                                }
+                                if (!hh.getCloaiVthh().equals(res.get(0).getCloaiVthh())) {
+                                    throw new Exception("Chủng loại hàng hóa không đúng trong kho hiện thời!");
+                                }
+                            } else {
+                                throw new Exception("Không lấy được trạng thái kho hiện thời!");
+                            }
+                        }
                     }
                 } else {
                     throw new Exception("dcnbKeHoachDcHdr.id phải là null!");
@@ -172,6 +210,34 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr.get());
                         e.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdrNew);
                         e.setKeHoachDcHdrId(dcnbKeHoachDcHdrNew.getId());
+
+                        // check hàng hóa trong kho xuất, kho nhận
+                        // Check số lượng hiện thời từng lo kho - (tổng đề kế hoạch xuất - tổng xuất trong thực tế)> 0 ;
+                        //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
+                        for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
+                            TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
+                            trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
+                            ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
+                            BaseResponse body = responseNhan.getBody();
+                            if (body != null && EnumResponse.RESP_SUCC.getDescription().equals(body.getMsg())) {
+                                logger.debug(body.toString());
+                                TypeToken<List<TrangThaiHtResponce>> token = new TypeToken<List<TrangThaiHtResponce>>() {
+                                };
+                                Gson gson = new Gson();
+                                List<TrangThaiHtResponce> res = gson.fromJson(gson.toJson(body.getData()), token.getType());
+                                if (res == null || res.isEmpty()) {
+                                    throw new Exception("Không lấy được trạng thái kho hiện thời!");
+                                }
+                                if (res.size() > 1) {
+                                    throw new Exception("Tìm thấy 2 trạng thái kho hiện thời!");
+                                }
+                                if (!hh.getCloaiVthh().equals(res.get(0).getCloaiVthh())) {
+                                    throw new Exception("Chủng loại hàng hóa không đúng trong kho hiện thời!");
+                                }
+                            } else {
+                                throw new Exception("Không lấy được trạng thái kho hiện thời!");
+                            }
+                        }
                     }
                 } else {
                     throw new Exception("dcnbKeHoachDcHdr.id phải là null!");
@@ -283,6 +349,33 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                 throw new Exception("Đơn vị tính không được để trống!");
                             }
                         }
+                        // check hàng hóa trong kho xuất, kho nhận
+                        // Check số lượng hiện thời từng lo kho - (tổng đề kế hoạch xuất - tổng xuất trong thực tế)> 0 ;
+                        //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
+                        for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
+                            TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
+                            trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
+                            ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
+                            BaseResponse body = responseNhan.getBody();
+                            if (body != null && EnumResponse.RESP_SUCC.getDescription().equals(body.getMsg())) {
+                                logger.debug(body.toString());
+                                TypeToken<List<TrangThaiHtResponce>> token = new TypeToken<List<TrangThaiHtResponce>>() {
+                                };
+                                Gson gson = new Gson();
+                                List<TrangThaiHtResponce> res = gson.fromJson(gson.toJson(body.getData()), token.getType());
+                                if (res == null || res.isEmpty()) {
+                                    throw new Exception("Không lấy được trạng thái kho hiện thời!");
+                                }
+                                if (res.size() > 1) {
+                                    throw new Exception("Tìm thấy 2 trạng thái kho hiện thời!");
+                                }
+                                if (!hh.getCloaiVthh().equals(res.get(0).getCloaiVthh())) {
+                                    throw new Exception("Chủng loại hàng hóa không đúng trong kho hiện thời!");
+                                }
+                            } else {
+                                throw new Exception("Không lấy được trạng thái kho hiện thời!");
+                            }
+                        }
                         dcnbKeHoachDcHdr.setDaXdinhDiemNhap(true);
                         dcnbKeHoachDcHdr.setDanhSachHangHoa(e.getDanhSachKeHoach());
                         dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
@@ -309,6 +402,33 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         }
                         dcnbKeHoachDcHdr.setDaXdinhDiemNhap(true);
                         dcnbKeHoachDcHdr.setDanhSachHangHoa(e.getDanhSachKeHoach());
+                        // check hàng hóa trong kho xuất, kho nhận
+                        // Check số lượng hiện thời từng lo kho - (tổng đề kế hoạch xuất - tổng xuất trong thực tế)> 0 ;
+                        //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
+                        for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
+                            TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
+                            trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
+                            ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
+                            BaseResponse body = responseNhan.getBody();
+                            if (body != null && EnumResponse.RESP_SUCC.getDescription().equals(body.getMsg())) {
+                                logger.debug(body.toString());
+                                TypeToken<List<TrangThaiHtResponce>> token = new TypeToken<List<TrangThaiHtResponce>>() {
+                                };
+                                Gson gson = new Gson();
+                                List<TrangThaiHtResponce> res = gson.fromJson(gson.toJson(body.getData()), token.getType());
+                                if (res == null || res.isEmpty()) {
+                                    throw new Exception("Không lấy được trạng thái kho hiện thời!");
+                                }
+                                if (res.size() > 1) {
+                                    throw new Exception("Tìm thấy 2 trạng thái kho hiện thời!");
+                                }
+                                if (!hh.getCloaiVthh().equals(res.get(0).getCloaiVthh())) {
+                                    throw new Exception("Chủng loại hàng hóa không đúng trong kho hiện thời!");
+                                }
+                            } else {
+                                throw new Exception("Không lấy được trạng thái kho hiện thời!");
+                            }
+                        }
                         DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
                         e.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdrNew);
                         e.setKeHoachDcHdrId(dcnbKeHoachDcHdrNew.getId());
@@ -340,6 +460,33 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                             total = total.add(totalDuT);
                         }
                     }
+                    // check hàng hóa trong kho xuất, kho nhận
+                    // Check số lượng hiện thời từng lo kho - (tổng đề kế hoạch xuất - tổng xuất trong thực tế)> 0 ;
+                    //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
+                    for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
+                        TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
+                        trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
+                        ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
+                        BaseResponse body = responseNhan.getBody();
+                        if (body != null && EnumResponse.RESP_SUCC.getDescription().equals(body.getMsg())) {
+                            logger.debug(body.toString());
+                            TypeToken<List<TrangThaiHtResponce>> token = new TypeToken<List<TrangThaiHtResponce>>() {
+                            };
+                            Gson gson = new Gson();
+                            List<TrangThaiHtResponce> res = gson.fromJson(gson.toJson(body.getData()), token.getType());
+                            if (res == null || res.isEmpty()) {
+                                throw new Exception("Không lấy được trạng thái kho hiện thời!");
+                            }
+                            if (res.size() > 1) {
+                                throw new Exception("Tìm thấy 2 trạng thái kho hiện thời!");
+                            }
+                            if (!hh.getCloaiVthh().equals(res.get(0).getCloaiVthh())) {
+                                throw new Exception("Chủng loại hàng hóa không đúng trong kho hiện thời!");
+                            }
+                        } else {
+                            throw new Exception("Không lấy được trạng thái kho hiện thời!");
+                        }
+                    }
                     dcnbKeHoachDcHdr.setDanhSachHangHoa(e.getDanhSachKeHoach());
                     dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
                 } else {
@@ -363,6 +510,33 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                             }
                         }
                         dcnbKeHoachDcHdr.get().setDanhSachHangHoa(e.getDanhSachKeHoach());
+                        // check hàng hóa trong kho xuất, kho nhận
+                        // Check số lượng hiện thời từng lo kho - (tổng đề kế hoạch xuất - tổng xuất trong thực tế)> 0 ;
+                        //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
+                        for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
+                            TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
+                            trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
+                            ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
+                            BaseResponse body = responseNhan.getBody();
+                            if (body != null && EnumResponse.RESP_SUCC.getDescription().equals(body.getMsg())) {
+                                logger.debug(body.toString());
+                                TypeToken<List<TrangThaiHtResponce>> token = new TypeToken<List<TrangThaiHtResponce>>() {
+                                };
+                                Gson gson = new Gson();
+                                List<TrangThaiHtResponce> res = gson.fromJson(gson.toJson(body.getData()), token.getType());
+                                if (res == null || res.isEmpty()) {
+                                    throw new Exception("Không lấy được trạng thái kho hiện thời!");
+                                }
+                                if (res.size() > 1) {
+                                    throw new Exception("Tìm thấy 2 trạng thái kho hiện thời!");
+                                }
+                                if (!hh.getCloaiVthh().equals(res.get(0).getCloaiVthh())) {
+                                    throw new Exception("Chủng loại hàng hóa không đúng trong kho hiện thời!");
+                                }
+                            } else {
+                                throw new Exception("Không lấy được trạng thái kho hiện thời!");
+                            }
+                        }
                         DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr.get());
                         e.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdrNew);
                         e.setKeHoachDcHdrId(dcnbKeHoachDcHdrNew.getId());

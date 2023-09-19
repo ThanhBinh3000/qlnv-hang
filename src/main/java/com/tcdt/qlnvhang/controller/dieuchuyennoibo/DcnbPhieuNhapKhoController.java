@@ -149,7 +149,7 @@ public class DcnbPhieuNhapKhoController {
     public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            service.approve(objReq);
+            resp.setData(service.approve(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
