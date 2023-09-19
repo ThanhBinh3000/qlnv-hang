@@ -1,29 +1,28 @@
 package com.tcdt.qlnvhang.service.nhaphang.bbanlaymau;
 
+import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMauCt;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
-import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauCtRepository;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
-import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKhoRepository;
-import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangRepository;
 import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.kiemtrachatluong.BienBanLayMauPreview;
-import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.nhapkho.NhBienBanGuiHangPreview;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauCtReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
@@ -34,7 +33,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.util.*;
@@ -53,22 +51,12 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 	private UserInfoRepository userInfoRepository;
 
 	@Autowired
-	private HttpServletRequest req;
-
-	@Autowired
-	private KtNganLoRepository ktNganLoRepository;
-
-	@Autowired
-	private HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
-
-	@Autowired
-	private HhHopDongRepository hhHopDongRepository;
-
-	@Autowired
 	private NhBbNhapDayKhoRepository nhBbNhapDayKhoRepository;
 
 	@Autowired
 	private NhBienBanGuiHangRepository nhBienBanGuiHangRepository;
+	@Autowired
+	private FileDinhKemService fileDinhKemService;
 
 	@Override
 	public Page<BienBanLayMau> searchPage(BienBanLayMauReq objReq) {
@@ -104,11 +92,26 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		bienBienLayMau.setMaDvi(userInfo.getDvql());
 		bienBienLayMau.setId(Long.valueOf(req.getSoBienBan().split("/")[0]));
 		bienBanLayMauRepository.save(bienBienLayMau);
-
+		setFileDinhKem(req, bienBienLayMau.getId());
 		List<BienBanLayMauCt> chiTiets = this.saveListChiTiet(bienBienLayMau.getId(), req.getChiTiets());
 		bienBienLayMau.setChiTiets(chiTiets);
 
 		return bienBienLayMau;
+	}
+
+	private void setFileDinhKem (BienBanLayMauReq req, Long id){
+		fileDinhKemService.delete(id, Lists.newArrayList("NH_BB_LAY_MAU"));
+		if (!DataUtils.isNullOrEmpty(req.getListFileDinhKemBb())) {
+			fileDinhKemService.saveListFileDinhKem(req.getListFileDinhKemBb(), id, "NH_BB_LAY_MAU");
+		}
+		fileDinhKemService.delete(id, Lists.newArrayList("NH_BB_LAY_MAU_ANH"));
+		if (!DataUtils.isNullOrEmpty(req.getListFileDinhKemAnh())) {
+			fileDinhKemService.saveListFileDinhKem(req.getListFileDinhKemAnh(), id, "NH_BB_LAY_MAU_ANH");
+		}
+		fileDinhKemService.delete(id, Lists.newArrayList("NH_BB_LAY_MAU_CAN_CU"));
+		if (!DataUtils.isNullOrEmpty(req.getListCcPhapLy())) {
+			fileDinhKemService.saveListFileDinhKem(req.getListCcPhapLy(), id, "NH_BB_LAY_MAU_CAN_CU");
+		}
 	}
 
 	@Override
@@ -127,7 +130,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		bienBienLayMau.setNguoiSuaId(userInfo.getId());
 		bienBienLayMau.setNgaySua(new Date());
 		bienBanLayMauRepository.save(bienBienLayMau);
-
+		setFileDinhKem(req, bienBienLayMau.getId());
 
 		bienBanLayMauCtRepository.deleteByBbLayMauId(bienBienLayMau.getId());
 		this.saveListChiTiet(bienBienLayMau.getId(), req.getChiTiets());
@@ -153,6 +156,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		item.setTenNganKho(listDanhMucDvi.get(item.getMaNganKho()));
 		item.setTenLoKho(listDanhMucDvi.get(item.getMaLoKho()));
 		item.setTenNguoiTao(ObjectUtils.isEmpty(item.getNguoiTaoId()) ? null : userInfoRepository.findById(item.getNguoiTaoId()).get().getFullName());
+		item.setTenNguoiPduyet(ObjectUtils.isEmpty(item.getNguoiPduyetId()) ? null : userInfoRepository.findById(item.getNguoiPduyetId()).get().getFullName());
 		item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
 		if(!ObjectUtils.isEmpty(item.getIdBbNhapDayKho())){
 			Optional<NhBbNhapDayKho> byId = nhBbNhapDayKhoRepository.findById(item.getIdBbNhapDayKho());
@@ -162,6 +166,12 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 			Optional<NhBienBanGuiHang> byId = nhBienBanGuiHangRepository.findById(item.getIdBbGuiHang());
 			byId.ifPresent(item::setBbGuiHang);
 		}
+		List<FileDinhKem> fileDinhKem = fileDinhKemService.search(item.getId(), Collections.singletonList("NH_BB_LAY_MAU"));
+		item.setListFileDinhKemBb(fileDinhKem);
+		List<FileDinhKem> fileDinhKemBb = fileDinhKemService.search(item.getId(), Collections.singletonList("NH_BB_LAY_MAU_ANH"));
+		item.setListFileDinhKemAnh(fileDinhKemBb);
+		List<FileDinhKem> fileDinhKemCc = fileDinhKemService.search(item.getId(), Collections.singletonList("NH_BB_LAY_MAU_CAN_CU"));
+		item.setListCcPhapLy(fileDinhKemCc);
 		return item;
 	}
 
