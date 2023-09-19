@@ -17,6 +17,7 @@ import com.tcdt.qlnvhang.table.DmDonViDTO;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.DmVattuDTO;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
@@ -206,11 +207,9 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         QuyChuanQuocGiaHdr data = optional.get();
-        Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
+        Map<String, DmVattuDTO> mapVthh = getListObjectDanhMucHangHoa(ObjectUtils.isEmpty(optional.get().getMaBn()) ? null : optional.get().getMaBn().startsWith("01") ? "0101" : optional.get().getMaBn());
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
         data.setTenDvi(StringUtils.isEmpty(data.getMaDvi()) ? null : hashMapDvi.get(data.getMaDvi()));
-        data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : hashMapDmHh.get(data.getLoaiVthh()));
-        data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh()) ? null : hashMapDmHh.get(data.getCloaiVthh()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Collections.singleton(QuyChuanQuocGiaHdr.TABLE_NAME));
         data.setFileDinhKems(fileDinhKems);
@@ -219,8 +218,8 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             Map<String, String> mapTenChiTieu = getListDanhMucChung("CHI_TIEU_CL");
             if (data.getApDungCloaiVthh() == false) {
                 for (QuyChuanQuocGiaDtl dtl : dtlList) {
-                    dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh()) ? null : hashMapDmHh.get(dtl.getLoaiVthh()));
-                    dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh()) ? null : hashMapDmHh.get(dtl.getCloaiVthh()));
+                    dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh()) ? null : mapVthh.get(dtl.getLoaiVthh()).getTen());
+                    dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh()) ? null : mapVthh.get(dtl.getCloaiVthh()).getTen());
                     dtl.setTenChiTieu(mapTenChiTieu.get(dtl.getMaChiTieu()));
                 }
                 data.setTieuChuanKyThuat(dtlList);
