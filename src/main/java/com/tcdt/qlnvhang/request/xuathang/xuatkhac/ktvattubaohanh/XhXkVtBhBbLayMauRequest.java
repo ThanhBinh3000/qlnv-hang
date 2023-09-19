@@ -32,6 +32,7 @@ public class XhXkVtBhBbLayMauRequest extends BaseRequest {
     private String donViTinh;
     private String maDiaDiem;
     private Integer soLuongMau;
+    private Integer slTonKho;
     private String ppLayMau;
     private String chiTieuKiemTra;
     private Boolean ketQuaNiemPhong;
