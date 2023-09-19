@@ -5,16 +5,17 @@ import lombok.Data;
 @Data
 public class KquaKnghiemKhacReq {
 
-	private String tenTchuan;
+	private String tenChiTieu;
 
-	private String chiSoNhap;
+	private String mucYeuCauNhap;
 
 	private String ketQuaKiemTra;
 
-	private String phuongPhap;
+	private String phuongPhapXd;
 
 	private String kieu;
 
 	private String trangThai;
 	private String danhGia;
+	private String maChiTieu;
 }
