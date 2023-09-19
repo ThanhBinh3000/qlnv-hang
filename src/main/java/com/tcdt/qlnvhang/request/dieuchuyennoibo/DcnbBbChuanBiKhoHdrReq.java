@@ -71,7 +71,7 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
     private BigDecimal duToanKphi;
     private BigDecimal tichLuong;
     private BigDecimal tongKinhPhiDaTh;
-    private BigDecimal tongKinhPhiDaThBc;
+    private String tongKinhPhiDaThBc;
     private Long idPhieuNhapKho;
     private String soPhieuNhapKho;
     private BigDecimal soLuongPhieuNhapKho;

@@ -53,7 +53,7 @@ public class LoggingAspect {
   @Autowired
   private UserActivityService userActivityService;
   @Autowired
-  ObjectMapper objectMapper;
+  private ObjectMapper objectMapper;
   @Autowired
   private LuuKhoClient luuKhoClient;
   @Autowired
