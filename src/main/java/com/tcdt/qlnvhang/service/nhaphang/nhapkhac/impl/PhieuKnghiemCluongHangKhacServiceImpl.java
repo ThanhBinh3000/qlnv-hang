@@ -105,7 +105,12 @@ public class PhieuKnghiemCluongHangKhacServiceImpl extends BaseServiceImpl imple
 
         for (KquaKnghiemKhacReq kquaReq : req.getKquaKnghiem()) {
             KquaKnghiemKhac kq = new KquaKnghiemKhac();
-            BeanUtils.copyProperties(kquaReq, kq, "id");
+//            BeanUtils.copyProperties(kquaReq, kq, "id");
+            kq.setChiSoNhap(kquaReq.getMucYeuCauNhap());
+            kq.setPhuongPhap(kquaReq.getPhuongPhapXd());
+            kq.setDanhGia(kquaReq.getDanhGia());
+            kq.setTenTchuan(kquaReq.getTenChiTieu());
+            kq.setMaTchuan(kquaReq.getMaChiTieu());
             kq.setPhieuKnghiemId(id);
             kquaKnghiemKhacRepository.save(kq);
         }
