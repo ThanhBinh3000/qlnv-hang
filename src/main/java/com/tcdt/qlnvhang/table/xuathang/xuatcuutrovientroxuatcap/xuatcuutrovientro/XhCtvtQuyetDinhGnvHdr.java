@@ -125,6 +125,10 @@ public class XhCtvtQuyetDinhGnvHdr extends BaseEntity implements Serializable {
     return trangThai;
   }
 
+  public String getTrangThaiXh() {
+    setTenTrangThaiXh(TrangThaiAllEnum.getLabelById(trangThaiXh));
+    return trangThaiXh;
+  }
   /*public XhCtvtQuyetDinhGnvHdr(LocalDateTime ngayTao, Long nguoiTaoId, LocalDateTime ngaySua, Long nguoiSuaId, Long id, String maDvi, Integer nam, String soBbQd, LocalDate ngayKy, Long idQdPd, String soQdPd, String loaiVthh, String cloaiVthh, String tenVthh, BigDecimal soLuong, LocalDate thoiGianGiaoNhan, String trichYeu, String trangThai, String lyDoTuChoi, String trangThaiXh, String soBbHaoDoi, String soBbTinhKho, BigDecimal tongSoLuong, BigDecimal thanhTien, String type, LocalDate ngayGduyet, Long nguoiGduyetId, LocalDate ngayPduyet, Long nguoiPduyetId, String loaiNhapXuat, String kieuNhapXuat, String mucDichXuat, String tenDvi, String tenLoaiVthh, String tenCloaiVthh, String tenTrangThai, String tenTrangThaiXh, List<XhCtvtQdGiaoNvXhDtl> noiDungCuuTro, List<XhCtvtQuyetDinhGnvDtl> children, List<FileDKemJoinHoSoKyThuatDtl> fileDinhKem, List<FileDKemJoinHoSoKyThuatDtl> canCu) {
     super(ngayTao, nguoiTaoId, ngaySua, nguoiSuaId);
     this.id = id;
