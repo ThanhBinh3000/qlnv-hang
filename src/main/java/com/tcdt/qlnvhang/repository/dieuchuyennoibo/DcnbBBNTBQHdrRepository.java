@@ -92,4 +92,8 @@ public interface DcnbBBNTBQHdrRepository extends JpaRepository<DcnbBBNTBQHdr, Lo
     DcnbBBNTBQHdr findByMaDviAndQdDcCucIdAndMaNganKhoAndLan(String dvql, Long qdDcCucId, String maNganKho, Long lan);
 
     List<DcnbBBNTBQHdr> findByMaDviAndKeHoachDcDtlId(String dvql, Long keHoachDcDtlId);
+
+    List<DcnbBBNTBQHdr> findByMaDviAndMaNganKhoXuat(String maDvi, String maNganKhoXuat);
+
+    List<DcnbBBNTBQHdr> findByMaDviAndMaNganKhoXuatAndMaLoKhoXuat(String maDvi, String maNganKhoXuat, String maLoKhoXuat);
 }

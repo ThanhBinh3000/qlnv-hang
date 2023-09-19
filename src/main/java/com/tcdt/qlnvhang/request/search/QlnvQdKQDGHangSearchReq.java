@@ -20,11 +20,9 @@ public class QlnvQdKQDGHangSearchReq extends BaseRequest {
 	String maDvi;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	@Past
 	Date tuNgay;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-	@Past
 	Date denNgay;
 
 	@ApiModelProperty(example = "MHH001")

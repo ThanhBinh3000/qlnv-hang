@@ -78,7 +78,9 @@ public class DcnbPhieuXuatKhoHdrReq {
     private String soBangKeVt;
     private Long bangKeVtId;
     private String donViTinh;
+    @NotNull
     private BigDecimal tongSoLuong;
+    @NotNull
     private String tongSoLuongBc;
     private BigDecimal donGia;
     private BigDecimal thanhTien;

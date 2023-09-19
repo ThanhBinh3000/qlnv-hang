@@ -42,6 +42,8 @@ public class XhCtvtQuyetDinhPdDtl implements Serializable {
   private BigDecimal tonKhoLoaiVthh;
   private BigDecimal tonKhoCloaiVthh;
   private String donViTinh;
+  private Long idQdGnv;
+  private String soQdGnv;
 
   @JsonIgnore
   @Transient

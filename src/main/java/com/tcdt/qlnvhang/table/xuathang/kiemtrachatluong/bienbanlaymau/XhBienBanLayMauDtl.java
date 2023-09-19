@@ -41,4 +41,11 @@ public class XhBienBanLayMauDtl extends BaseEntity implements Serializable {
   @JoinColumn(name = "idHdr")
   @JsonIgnore
   private XhBienBanLayMauHdr xhBienBanLayMauHdr;
+
+  //phan rieng
+  private String chiTieuCl;
+  private String chiSoCl;
+  private String ketQua;
+  private String phuongPhap;
+  private String danhGia;
 }

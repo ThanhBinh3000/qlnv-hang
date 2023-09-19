@@ -323,12 +323,22 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
     @Override
     public void delete(Long id) throws Exception {
-
+        Optional<HhBbNghiemthuKlstHdr> qOptional = hhBbNghiemthuKlstRepository.findById(id);
+        if (!qOptional.isPresent()) {
+            throw new UnsupportedOperationException("Không tồn tại bản ghi");
+        }
+        if (!qOptional.get().getTrangThai().equals(Contains.DUTHAO)) {
+            throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp");
+        }
+        fileDinhKemService.delete(qOptional.get().getId(), Lists.newArrayList(HhBbNghiemthuKlstHdr.TABLE_NAME));
+        hhBbNghiemthuKlstRepository.delete(qOptional.get());
     }
 
     @Override
-    public void deleteMulti(List<Long> listMulti) {
-
+    public void deleteMulti(List<Long> listMulti) throws Exception {
+        for (Long aLong : listMulti) {
+            delete(aLong);
+        }
     }
 
     @Override

@@ -13,26 +13,17 @@ import java.util.List;
 public class XhQdGiaoNvXhDtl {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_QD_GIAO_NV_XH_DTL";
-
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_QD_GIAO_NV_XH_DTL_SEQ")
-    @SequenceGenerator(sequenceName = "XH_QD_GIAO_NV_XH_DTL_SEQ", allocationSize = 1, name = "XH_QD_GIAO_NV_XH_DTL_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhQdGiaoNvXhDtl.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = XhQdGiaoNvXhDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhQdGiaoNvXhDtl.TABLE_NAME + "_SEQ")
     private Long id;
-    private Long idQdHdr;
+    private Long idHdr;
     private String maDvi;
-    private BigDecimal soLuong;
-    private String trangThai;
-    @Transient
-    private String tenTrangThai;
+    private String diaChi;
+    private BigDecimal tonKho;
+    private BigDecimal soLuongXuatBan;
     @Transient
     private String tenDvi;
     @Transient
     private List<XhQdGiaoNvXhDdiem> children = new ArrayList<>();
-//    @Transient
-//    List<HhBienBanNghiemThu> listBienBanNghiemThuBq;
-//    @Transient
-//    List<HhBienBanLayMau> listBienBanLayMau;
-//    @Transient
-//    List<HhPhieuKngiemCluong> listPhieuKiemNghiemCl;
-
 }
