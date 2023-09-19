@@ -253,6 +253,14 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     }
     optional.get().setTrangThai(statusReq.getTrangThai());
     XhCtvtQuyetDinhPdHdr created = xhCtvtQdPdHdrRepository.save(optional.get());
+    //xcap
+    if(created.isXuatCap()){
+      XhCtvtQuyetDinhPdHdr data = new XhCtvtQuyetDinhPdHdr();
+      BeanUtils.copyProperties(created, data,"id");
+      data.setType("XC");
+      data.setIdXc(created.getId());
+      data.setSoXc(created.getSoBbQd());
+    }
     return created;
   }
 
@@ -283,7 +291,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
       objs[7] = dx.getTenLoaiVthh();
       objs[8] = dx.getTongSoLuongDx();
       objs[9] = dx.getTongSoLuong();
-      objs[10] = dx.getSoLuongXuaCap();
+      objs[10] = dx.getSoLuongXuatCap();
       objs[11] = dx.getTrichYeu();
       objs[12] = dx.getTenTrangThai();
       dataList.add(objs);

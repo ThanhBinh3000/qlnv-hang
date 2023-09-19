@@ -38,6 +38,7 @@ public class XhCtvtQuyetDinhPdDtl implements Serializable {
   private String cloaiVthh;
   private String maDvi;
   private BigDecimal soLuong;
+  private BigDecimal soLuongXc;
   private BigDecimal tonKhoDvi;
   private BigDecimal tonKhoLoaiVthh;
   private BigDecimal tonKhoCloaiVthh;
