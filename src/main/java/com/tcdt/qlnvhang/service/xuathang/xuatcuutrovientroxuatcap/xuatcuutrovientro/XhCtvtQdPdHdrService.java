@@ -13,6 +13,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtTongHopHdr;
 import com.tcdt.qlnvhang.util.Contains;
@@ -268,6 +269,23 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
       data.setSoXc(created.getSoBbQd());
       data.setMucDichXuat(created.getMucDichXuat());
       data.setTenVthh(created.getTenVthh());
+      List<XhCtvtQuyetDinhPdDtl> listDtl = new ArrayList<>();
+      created.getQuyetDinhPdDtl().forEach(s->{
+        if(DataUtils.safeToLong(s.getSoLuongXc())!=0){
+          XhCtvtQuyetDinhPdDtl dtl = new XhCtvtQuyetDinhPdDtl();
+          dtl.setMaDvi(s.getMaDvi());
+          dtl.setSoLuongDx(s.getSoLuongDx());
+          dtl.setSoLuongXc(s.getSoLuongXc());
+          dtl.setDonViTinh(s.getDonViTinh());
+          dtl.setTonKhoLoaiVthh(s.getTonKhoLoaiVthh());
+          dtl.setLoaiVthh(s.getLoaiVthh());
+          dtl.setNoiDungDx(s.getNoiDungDx());
+          dtl.setKieuNhapXuat(s.getKieuNhapXuat());
+          dtl.setXhCtvtQuyetDinhPdHdr(data);
+          listDtl.add(dtl);
+        }
+      });
+      data.setQuyetDinhPdDtl(listDtl);
       xhCtvtQdPdHdrRepository.save(data);
     }
     return created;
