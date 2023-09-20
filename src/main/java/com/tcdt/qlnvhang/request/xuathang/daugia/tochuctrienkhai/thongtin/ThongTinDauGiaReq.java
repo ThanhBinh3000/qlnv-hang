@@ -66,6 +66,8 @@ public class ThongTinDauGiaReq extends BaseRequest {
     private String thongBaoKhongThanh;
     private Integer soDviTsan;
     private String trangThai;
+    private Long idQdDc;
+    private String soQdDc;
     private List<FileDinhKemJoinTable> canCu;
     private List<FileDinhKemJoinTable> fileDinhKem;
     private List<ThongTinDauGiaDtlReq> children = new ArrayList<>();

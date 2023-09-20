@@ -43,4 +43,7 @@ public class KquaKnghiemKhac {
 
 	@Column(name = "DANH_GIA")
 	private String danhGia;
+
+	@Column(name = "MA_TCHUAN")
+	private String maTchuan;
 }

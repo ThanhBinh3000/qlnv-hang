@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -142,6 +143,7 @@ public class BienBanLayMau extends TrangThaiBaseEntity implements Serializable  
 
 	@Column(name = "LOAI_BIEN_BAN")
 	private String loaiBienBan;
+	private String truongBpKtbq;
 
 	@Transient
 	private List<BienBanLayMauCt> chiTiets = new ArrayList<>();
@@ -151,4 +153,10 @@ public class BienBanLayMau extends TrangThaiBaseEntity implements Serializable  
 
 	@Transient
 	private NhBienBanGuiHang bbGuiHang;
+	@Transient
+	private List<FileDinhKem> listFileDinhKemBb;
+	@Transient
+	private List<FileDinhKem> listFileDinhKemAnh;
+	@Transient
+	private List<FileDinhKem> listCcPhapLy;
 }

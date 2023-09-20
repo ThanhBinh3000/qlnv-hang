@@ -5,4 +5,5 @@ import lombok.Data;
 @Data
 public class TrangThaiHtReq {
     private String  maDvi;
+    private String nam;
 }

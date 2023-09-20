@@ -1,8 +1,8 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.quyetdinhdieuchinhbdg;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgDtl;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
@@ -20,34 +20,42 @@ import java.util.Map;
 @Entity
 @Table(name = XhQdDchinhKhBdgHdr.TABLE_NAME)
 @Data
-public class XhQdDchinhKhBdgHdr extends BaseEntity implements Serializable {
+public class XhQdDchinhKhBdgHdr implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_QD_DC_KH_BDG_HDR";
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhQdDchinhKhBdgHdr.TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = XhQdDchinhKhBdgHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhQdDchinhKhBdgHdr.TABLE_NAME + "_SEQ")
     private Long id;
-    private Integer nam;
     private String maDvi;
+    private Integer nam;
+    private String soCongVan;
+    private LocalDate ngayTaoCongVan;
+    private String trichYeu;
+    private Long idQdPd;
+    private String soQdPd;
+    private Integer lanDieuChinh;
+    private LocalDate ngayKyQd;
+    private String soQdCc;
     private String soQdDc;
     private LocalDate ngayKyDc;
-    private LocalDate ngayHluc;
-    private Long idQdGoc;
-    private String soQdGoc;
-    private LocalDate ngayKyQdGoc;
-    private String trichYeu;
-    private String soQdCc;
+    private LocalDate ngayHlucDc;
+    private String noiDungDieuChinh;
+    private String loaiHinhNx;
+    private String kieuNx;
     private String loaiVthh;
     private String cloaiVthh;
     private String moTaHangHoa;
-    private String loaiHinhNx;
-    private String kieuNx;
     private String tchuanCluong;
     private Integer slDviTsan;
-    private Integer slHopDongDaKy;
-    private Integer thoiHanGiaoNhanHang;
+    private Integer slHdongDaKy;
+    private Integer thoiHanGiaoNhan;
     private String trangThai;
     private String lyDoTuChoi;
+    private LocalDate ngayTao;
+    private Long nguoiTaoId;
+    private LocalDate ngaySua;
+    private Long nguoiSuaId;
     private LocalDate ngayGuiDuyet;
     private Long nguoiGuiDuyetId;
     private LocalDate ngayPduyet;
@@ -120,15 +128,32 @@ public class XhQdDchinhKhBdgHdr extends BaseEntity implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "dataId")
+    @Where(clause = "data_type='" + XhQdDchinhKhBdgHdr.TABLE_NAME + "_TO_TRINH'")
+    private List<FileDinhKemJoinTable> fileToTrinh = new ArrayList<>();
+
+    public void setFileToTrinh(List<FileDinhKemJoinTable> fileToTrinh) {
+        this.fileToTrinh.clear();
+        if (!DataUtils.isNullObject(fileToTrinh)) {
+            fileToTrinh.forEach(s -> {
+                s.setDataType(XhQdDchinhKhBdgHdr.TABLE_NAME + "_TO_TRINH");
+                s.setXhQdDchinhKhBdgHdr(this);
+            });
+            this.fileToTrinh.addAll(fileToTrinh);
+        }
+    }
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(value = FetchMode.SUBSELECT)
+    @JoinColumn(name = "dataId")
     @Where(clause = "data_type='" + XhQdDchinhKhBdgHdr.TABLE_NAME + "_DINH_KEM'")
     private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
 
     public void setFileDinhKem(List<FileDinhKemJoinTable> fileDinhKem) {
         this.fileDinhKem.clear();
         if (!DataUtils.isNullObject(fileDinhKem)) {
-            fileDinhKem.forEach(f -> {
-                f.setDataType(XhQdDchinhKhBdgHdr.TABLE_NAME + "_DINH_KEM");
-                f.setXhQdDchinhKhBdgHdr(this);
+            fileDinhKem.forEach(s -> {
+                s.setDataType(XhQdDchinhKhBdgHdr.TABLE_NAME + "_DINH_KEM");
+                s.setXhQdDchinhKhBdgHdr(this);
             });
             this.fileDinhKem.addAll(fileDinhKem);
         }
@@ -143,14 +168,14 @@ public class XhQdDchinhKhBdgHdr extends BaseEntity implements Serializable {
     public void setFileCanCu(List<FileDinhKemJoinTable> fileCanCu) {
         this.fileCanCu.clear();
         if (!DataUtils.isNullObject(fileCanCu)) {
-            fileCanCu.forEach(f -> {
-                f.setDataType(XhQdDchinhKhBdgHdr.TABLE_NAME + "_CAN_CU");
-                f.setXhQdDchinhKhBdgHdr(this);
+            fileCanCu.forEach(s -> {
+                s.setDataType(XhQdDchinhKhBdgHdr.TABLE_NAME + "_CAN_CU");
+                s.setXhQdDchinhKhBdgHdr(this);
             });
             this.fileCanCu.addAll(fileCanCu);
         }
     }
 
     @Transient
-    private List<XhQdDchinhKhBdgDtl> children = new ArrayList<>();
+    List<XhQdPdKhBdgDtl> children = new ArrayList<>();
 }

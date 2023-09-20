@@ -144,7 +144,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     }
 
     XhCtvtQuyetDinhPdHdr data = optional.get();
-    BeanUtils.copyProperties(objReq, data, "id","maDvi");
+    BeanUtils.copyProperties(objReq, data, "id", "maDvi");
     XhCtvtQuyetDinhPdHdr created = xhCtvtQdPdHdrRepository.save(data);
     return created;
   }
@@ -253,6 +253,23 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     }
     optional.get().setTrangThai(statusReq.getTrangThai());
     XhCtvtQuyetDinhPdHdr created = xhCtvtQdPdHdrRepository.save(optional.get());
+    //xcap
+    if (created.isXuatCap()) {
+      XhCtvtQuyetDinhPdHdr data = new XhCtvtQuyetDinhPdHdr();
+      data.setMaDvi(created.getMaDvi());
+      data.setNam(created.getNam());
+      data.setIdDx(created.getIdDx());
+      data.setSoDx(created.getSoDx());
+      data.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
+      data.setType("XC");
+      data.setLoaiNhapXuat(created.getLoaiNhapXuat());
+      data.setKieuNhapXuat(created.getKieuNhapXuat());
+      data.setIdXc(created.getId());
+      data.setSoXc(created.getSoBbQd());
+      data.setMucDichXuat(created.getMucDichXuat());
+      data.setTenVthh(created.getTenVthh());
+      xhCtvtQdPdHdrRepository.save(data);
+    }
     return created;
   }
 
@@ -283,7 +300,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
       objs[7] = dx.getTenLoaiVthh();
       objs[8] = dx.getTongSoLuongDx();
       objs[9] = dx.getTongSoLuong();
-      objs[10] = dx.getSoLuongXuaCap();
+      objs[10] = dx.getSoLuongXuatCap();
       objs[11] = dx.getTrichYeu();
       objs[12] = dx.getTenTrangThai();
       dataList.add(objs);

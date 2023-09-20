@@ -17,7 +17,7 @@ public class XhQdPdKhBdgPl implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhQdPdKhBdgPl.TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = XhQdPdKhBdgPl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhQdPdKhBdgPl.TABLE_NAME + "_SEQ")
     private Long id;
-    private Long idQdDtl;
+    private Long idDtl;
     private String maDvi;
     private BigDecimal slChiTieu;
     private BigDecimal tongSlKeHoachDd;
