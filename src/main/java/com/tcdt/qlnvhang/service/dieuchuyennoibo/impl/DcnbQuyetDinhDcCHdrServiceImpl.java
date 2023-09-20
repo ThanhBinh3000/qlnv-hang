@@ -158,7 +158,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
                             if(!StringUtils.isEmpty(hh.getMaNganKhoNhan())){
                                 TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
-                                hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
+                                hh.setCoLoKhoNhan(!StringUtils.isEmpty(hh.getMaLoKhoNhan()));
                                 trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
                                 ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
                                 BaseResponse body = responseNhan.getBody();
@@ -220,7 +220,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
                             if(!StringUtils.isEmpty(hh.getMaNganKhoNhan())){
                                 TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
-                                hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
+                                hh.setCoLoKhoNhan(!StringUtils.isEmpty(hh.getMaLoKhoNhan()));
                                 trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
                                 ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
                                 BaseResponse body = responseNhan.getBody();
@@ -361,7 +361,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
                             if(!StringUtils.isEmpty(hh.getMaNganKhoNhan())){
                                 TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
-                                hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
+                                hh.setCoLoKhoNhan(!StringUtils.isEmpty(hh.getMaLoKhoNhan()));
                                 trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
                                 ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
                                 BaseResponse body = responseNhan.getBody();
@@ -417,7 +417,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
                             if(!StringUtils.isEmpty(hh.getMaNganKhoNhan())){
                                 TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
-                                hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
+                                hh.setCoLoKhoNhan(!StringUtils.isEmpty(hh.getMaLoKhoNhan()));
                                 trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
                                 ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
                                 BaseResponse body = responseNhan.getBody();
@@ -478,7 +478,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                     for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
                         if(!StringUtils.isEmpty(hh.getMaNganKhoNhan())){
                             TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
-                            hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
+                            hh.setCoLoKhoNhan(!StringUtils.isEmpty(hh.getMaLoKhoNhan()));
                             trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
                             ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
                             BaseResponse body = responseNhan.getBody();
@@ -531,7 +531,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
                             if(!StringUtils.isEmpty(hh.getMaNganKhoNhan())){
                                 TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
-                                hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
+                                hh.setCoLoKhoNhan(!StringUtils.isEmpty(hh.getMaLoKhoNhan()));
                                 trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
                                 ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
                                 BaseResponse body = responseNhan.getBody();

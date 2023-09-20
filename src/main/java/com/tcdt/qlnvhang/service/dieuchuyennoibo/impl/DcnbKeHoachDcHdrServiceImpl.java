@@ -117,7 +117,7 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
             for (DcnbKeHoachDcDtl hh : objReq.getDanhSachHangHoa()) {
                 if(!StringUtils.isEmpty(hh.getMaNganKhoNhan())){
                     TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
-                    hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
+                    hh.setCoLoKhoNhan(!StringUtils.isEmpty(hh.getMaLoKhoNhan()));
                     trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
                     ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
                     BaseResponse body = responseNhan.getBody();
@@ -197,7 +197,7 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
             for (DcnbKeHoachDcDtl hh : objReq.getDanhSachHangHoa()) {
                 if(!StringUtils.isEmpty(hh.getMaNganKhoNhan())){
                     TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
-                    hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
+                    hh.setCoLoKhoNhan(!StringUtils.isEmpty(hh.getMaLoKhoNhan()));
                     trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
                     ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
                     BaseResponse body = responseNhan.getBody();
@@ -317,7 +317,7 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
                 }
                 for (DcnbKeHoachDcDtl hh : danhSachHangHoa) {
                     TrangThaiHtReq objReq = new TrangThaiHtReq();
-                    hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
+                    hh.setCoLoKhoNhan(!StringUtils.isEmpty(hh.getMaLoKhoNhan()));
                     objReq.setMaDvi(hh.getCoLoKho() ? hh.getMaLoKho() : hh.getMaNganKho());
                     ResponseEntity<BaseResponse> response = luuKhoClient.trangThaiHt(objReq);
                     BaseResponse body = response.getBody();
