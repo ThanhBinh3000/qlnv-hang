@@ -61,6 +61,7 @@ public class QlBienBanNhapDayKhoLtReq extends BaseRequest {
     private Integer nam;
 
     private String ghiChu;
+    private String maQhns;
 
     private List<QlBienBanNdkCtLtReq> chiTiets = new ArrayList<>();
 
