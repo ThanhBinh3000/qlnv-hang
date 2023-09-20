@@ -58,6 +58,7 @@ public interface HhQdGiaoNvNhapKhacHdrRepository extends JpaRepository<HhQdGiaoN
                     " LEFT JOIN HhBbNghiemThuNhapKhac bbnt ON qdnk.id = bbnt.idQdGiaoNvNh" +
                     " WHERE (:#{#req.namKhoach} IS NULL OR qdnk.nam = :#{#req.namKhoach}) " +
                     "  AND (:#{#req.soQd} IS NULL OR LOWER(qdnk.soQd) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.soQd}),'%'))) " +
+                    "  AND (:#{#req.loaiVthh} IS NULL OR LOWER(qdnk.loaiVthh) LIKE LOWER(CONCAT(CONCAT( :#{#req.loaiVthh}),'%'))) " +
                     "  AND (:#{#req.maDvi} IS NULL OR LOWER(qdnk.maDvi) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.maDvi}),'%')))" +
                     "  AND (:#{#req.maDviChiCuc} IS NULL OR LOWER(pdtdl.maChiCuc) LIKE LOWER(CONCAT(:#{#req.maDviChiCuc},'%')))" +
                     "  AND (:#{#req.loaiVthh} IS NULL OR LOWER(qdnk.loaiVthh) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.loaiVthh}),'%')))" +

@@ -127,4 +127,8 @@ public class XhXkVtPhieuKdclHdr extends BaseEntity implements Serializable {
     public void setDat(Boolean dat) {
         isDat = ObjectUtils.isEmpty(dat) ? Boolean.FALSE : dat;
     }
+
+    public Boolean getDat() {
+        return ObjectUtils.isEmpty(isDat) ? Boolean.FALSE : isDat;
+    }
 }
