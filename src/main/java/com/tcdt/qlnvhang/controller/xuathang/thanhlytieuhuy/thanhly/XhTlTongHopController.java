@@ -51,10 +51,10 @@ public class XhTlTongHopController {
   @ApiOperation(value = "Tạo mới", response = List.class)
   @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhTlTongHopRequest objReq) {
+  public ResponseEntity<BaseResponse> insert(@Valid @RequestBody XhTlTongHopRequest objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhTlTongHopService.save(currentUser, objReq));
+      resp.setData(xhTlTongHopService.save(objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -65,30 +65,13 @@ public class XhTlTongHopController {
     return ResponseEntity.ok(resp);
   }
 
-
-  @ApiOperation(value = "Cập nhật", response = List.class)
-  @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhTlTongHopRequest objReq) {
-    BaseResponse resp = new BaseResponse();
-    try {
-      resp.setData(xhTlTongHopService.update(currentUser, objReq));
-      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-    } catch (Exception e) {
-      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-      resp.setMsg(e.getMessage());
-      log.error("Cập nhật thông tin : {}", e);
-    }
-    return ResponseEntity.ok(resp);
-  }
-
   @ApiOperation(value = "Lấy chi tiết", response = List.class)
-  @GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<BaseResponse> detail(@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids") List<Long> ids) {
+  public ResponseEntity<BaseResponse> detail(@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("id") Long id) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhTlTongHopService.detail(ids).get(0));
+      resp.setData(xhTlTongHopService.detail(id));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
