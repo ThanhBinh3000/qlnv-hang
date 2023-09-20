@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 public class XhQdPdKhBdgDtlReq extends BaseRequest {
     private Long id;
-    private Long idQdHdr;
+    private Long idHdr;
     private Long idDxHdr;
     private String maDvi;
     private String diaChi;
@@ -46,11 +46,12 @@ public class XhQdPdKhBdgDtlReq extends BaseRequest {
     private Integer soDviTsanThanhCong;
     private Integer soDviTsanKhongThanh;
     private String ketQuaDauGia;
-    private String soQdDcBdg;
+    private String soQdDc;
     private String dvql;
     private Integer nam;
     private String soQdPd;
     private LocalDate ngayKyQdPdKqBdgTu;
     private LocalDate ngayKyQdPdKqBdgDen;
     private Integer lastest;
+    private Integer isDieuChinh;
 }

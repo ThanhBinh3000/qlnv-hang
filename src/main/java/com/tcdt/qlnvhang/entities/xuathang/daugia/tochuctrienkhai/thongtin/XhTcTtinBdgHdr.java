@@ -88,6 +88,8 @@ public class XhTcTtinBdgHdr  implements Serializable {
     private Long nguoiSuaId;
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
+    private Long idQdDc;
+    private String soQdDc;
     @Transient
     private String tenDvi;
     @Transient

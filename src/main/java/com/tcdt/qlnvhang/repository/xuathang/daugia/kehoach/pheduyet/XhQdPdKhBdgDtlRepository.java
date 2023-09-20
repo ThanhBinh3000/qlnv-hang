@@ -16,30 +16,36 @@ import java.util.List;
 public interface XhQdPdKhBdgDtlRepository extends JpaRepository<XhQdPdKhBdgDtl, Long> {
 
     @Query("SELECT DISTINCT dtl FROM XhQdPdKhBdgDtl dtl " +
-            "LEFT JOIN XhQdPdKhBdg hdr ON hdr.id = dtl.idQdHdr " +
             "WHERE (:#{#param.dvql} IS NULL OR dtl.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
-            "AND (:#{#param.nam} IS NULL OR hdr.nam = :#{#param.nam}) " +
+            "AND (:#{#param.nam} IS NULL OR dtl.nam = :#{#param.nam}) " +
             "AND (:#{#param.soDxuat} IS NULL OR LOWER(dtl.soDxuat) LIKE LOWER(CONCAT(:#{#param.soDxuat},'%'))) " +
-            "AND (:#{#param.soQdPd} IS NULL OR LOWER(hdr.soQdPd) LIKE LOWER(CONCAT(:#{#param.soQdPd},'%'))) " +
+            "AND (:#{#param.soQdPd} IS NULL OR LOWER(dtl.soQdPd) LIKE LOWER(CONCAT(:#{#param.soQdPd},'%'))) " +
             "AND (:#{#param.soQdPdKqBdg} IS NULL OR LOWER(dtl.soQdPdKqBdg) LIKE LOWER(CONCAT(:#{#param.soQdPdKqBdg},'%'))) " +
             "AND (:#{#param.ngayKyQdPdKqBdgTu} IS NULL OR dtl.ngayKyQdPdKqBdg >= :#{#param.ngayKyQdPdKqBdgTu}) " +
             "AND (:#{#param.ngayKyQdPdKqBdgDen} IS NULL OR dtl.ngayKyQdPdKqBdg <= :#{#param.ngayKyQdPdKqBdgDen}) " +
             "AND (:#{#param.trangThai} IS NULL OR dtl.trangThai = :#{#param.trangThai}) " +
-            "AND (:#{#param.lastest} IS NULL OR LOWER(hdr.lastest) LIKE LOWER(CONCAT(:#{#param.lastest},'%'))) " +
-            "AND (:#{#param.loaiVthh} IS NULL OR LOWER(hdr.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%'))")
+            "AND (:#{#param.lastest} IS NULL OR LOWER(dtl.lastest) LIKE LOWER(CONCAT(:#{#param.lastest},'%'))) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR LOWER(dtl.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%'))")
     Page<XhQdPdKhBdgDtl> searchDtl(@Param("param") XhQdPdKhBdgDtlReq param, Pageable pageable);
 
-    @Query(value = "SELECT COALESCE(SUM(CASE WHEN TTHDR.KET_QUA = 1 AND DTL.ID = :idQdPdDtl AND DTL.MA_DVI = :maDvi AND TTHDR.TRANG_THAI = '45' THEN TTHDR.SO_DVI_TSAN ELSE 0 END), 0) " +
+    @Query(value = "SELECT COALESCE(SUM(TTHDR.SO_DVI_TSAN), 0) " +
             "FROM XH_QD_PD_KH_BDG_DTL DTL " +
-            "INNER JOIN XH_TC_TTIN_BDG_HDR TTHDR ON DTL.ID = TTHDR.ID_QD_PD_DTL",
+            "INNER JOIN XH_TC_TTIN_BDG_HDR TTHDR ON DTL.ID = TTHDR.ID_QD_PD_DTL" +
+            " WHERE TTHDR.KET_QUA = 1" +
+            " AND TTHDR.LOAI_VTHH = :loaiVthh " +
+            " AND TTHDR.MA_DVI = :maDvi " +
+            " AND TTHDR.ID_QD_PD_DTL = :idQdPdDtl " +
+            " AND TTHDR.TRANG_THAI = '45' ",
             nativeQuery = true)
-    BigDecimal countSlDviTsanThanhCong(Long idQdPdDtl, String maDvi);
+    BigDecimal countSlDviTsanThanhCong(@Param("idQdPdDtl") Long idQdPdDtl,
+                                       @Param("loaiVthh") String loaiVthh,
+                                       @Param("maDvi") String maDvi);
 
-    void deleteAllByIdQdHdr(Long idQdHdr);
+    void deleteAllByIdHdr(Long idHdr);
 
-    List<XhQdPdKhBdgDtl> findAllByIdQdHdr(Long idQdHdr);
+    List<XhQdPdKhBdgDtl> findAllByIdHdr(Long idHdr);
 
-    List<XhQdPdKhBdgDtl> findByIdQdHdrIn(List<Long> listId);
+    List<XhQdPdKhBdgDtl> findByIdHdrIn(List<Long> listId);
 
     List<XhQdPdKhBdgDtl> findByIdIn(List<Long> idDtlList);
 

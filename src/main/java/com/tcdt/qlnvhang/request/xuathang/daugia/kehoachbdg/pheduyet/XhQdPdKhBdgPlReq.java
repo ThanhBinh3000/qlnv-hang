@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 public class XhQdPdKhBdgPlReq {
     private Long id;
-    private Long idQdDtl;
+    private Long idDtl;
     private String maDvi;
     private BigDecimal slChiTieu;
     private BigDecimal tongSlKeHoachDd;
