@@ -116,6 +116,7 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
             //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
             for (DcnbKeHoachDcDtl hh : objReq.getDanhSachHangHoa()) {
                 TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
+                hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
                 trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
                 ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
                 BaseResponse body = responseNhan.getBody();
@@ -129,7 +130,7 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
                         throw new Exception("Không lấy được trạng thái kho hiện thời!");
                     }
                     if (res.size() > 1) {
-                        throw new Exception("Tìm thấy 2 trạng thái kho hiện thời!");
+                        throw new Exception("Tìm thấy 2 trạng thái kho hiện thời! Mã: " + (hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan()));
                     }
                     if (!hh.getCloaiVthh().equals(res.get(0).getCloaiVthh())) {
                         throw new Exception("Chủng loại hàng hóa không đúng trong kho hiện thời!");
@@ -193,6 +194,7 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
             //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
             for (DcnbKeHoachDcDtl hh : objReq.getDanhSachHangHoa()) {
                 TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
+                hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
                 trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
                 ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
                 BaseResponse body = responseNhan.getBody();
@@ -206,7 +208,7 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
                         throw new Exception("Không lấy được trạng thái kho hiện thời!");
                     }
                     if (res.size() > 1) {
-                        throw new Exception("Tìm thấy 2 trạng thái kho hiện thời!");
+                        throw new Exception("Tìm thấy 2 trạng thái kho hiện thời! Mã: " + (hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan()));
                     }
                     if (!hh.getCloaiVthh().equals(res.get(0).getCloaiVthh())) {
                         throw new Exception("Chủng loại hàng hóa không đúng trong kho hiện thời!");
@@ -311,6 +313,7 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
                 }
                 for (DcnbKeHoachDcDtl hh : danhSachHangHoa) {
                     TrangThaiHtReq objReq = new TrangThaiHtReq();
+                    hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
                     objReq.setMaDvi(hh.getCoLoKho() ? hh.getMaLoKho() : hh.getMaNganKho());
                     ResponseEntity<BaseResponse> response = luuKhoClient.trangThaiHt(objReq);
                     BaseResponse body = response.getBody();
@@ -324,7 +327,7 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
                             throw new Exception("Không lấy được trạng thái kho hiện thời!");
                         }
                         if (res.size() > 1) {
-                            throw new Exception("Tìm thấy 2 trạng thái kho hiện thời!");
+                            throw new Exception("Tìm thấy 2 trạng thái kho hiện thời! Mã: " + (hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan()));
                         }
                         if (!hh.getCloaiVthh().equals(res.get(0).getCloaiVthh())) {
                             throw new Exception("Chủng loại hàng hóa không đúng trong kho hiện thời!");

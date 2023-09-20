@@ -121,7 +121,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
         data.setTrangThai(Contains.DUTHAO);
         data.setType(null);
         BigDecimal total = new BigDecimal(0l);
-        for (DcnbQuyetDinhDcCDtl e : objReq.getDanhSachQuyetDinh()) {
+        for (DcnbQuyetDinhDcCDtl e : data.getDanhSachQuyetDinh()) {
             if (Contains.DCNB.equals(data.getLoaiDc()) && Contains.CAP_CUC.equals(currentUser.getUser().getCapDvi())) {
                 // được phép thêm mới kế hoạch và update kế hoạch (ngầm)
                 if (e.getKeHoachDcHdrId() == null) {
@@ -131,11 +131,11 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         dcnbKeHoachDcHdr.setLoaiDc(Contains.DCNB);
                         dcnbKeHoachDcHdr.setMaDviPq(e.getDanhSachKeHoach().get(0).getMaChiCucNhan());
                         dcnbKeHoachDcHdr.setPhuongAnDieuChuyen(new ArrayList<>());
-                        for(DcnbKeHoachDcDtl e1 : e.getDanhSachKeHoach()){
+                        for (DcnbKeHoachDcDtl e1 : e.getDanhSachKeHoach()) {
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
                             e1.setDaXdinhDiemNhap(true);
                             e1.setDuToanKphi(e1.getDuToanKphi() == null ? new BigDecimal(0) : e1.getDuToanKphi());
-                            if(e1.getDonViTinh() == null){
+                            if (e1.getDonViTinh() == null) {
                                 throw new Exception("Đơn vị tính không được để trống!");
                             }
                         }
@@ -157,6 +157,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
                         for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
                             TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
+                            hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
                             trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
                             ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
                             BaseResponse body = responseNhan.getBody();
@@ -170,7 +171,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                     throw new Exception("Không lấy được trạng thái kho hiện thời!");
                                 }
                                 if (res.size() > 1) {
-                                    throw new Exception("Tìm thấy 2 trạng thái kho hiện thời!");
+                                    throw new Exception("Tìm thấy 2 trạng thái kho hiện thời! Mã: " + (hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan()));
                                 }
                                 if (!hh.getCloaiVthh().equals(res.get(0).getCloaiVthh())) {
                                     throw new Exception("Chủng loại hàng hóa không đúng trong kho hiện thời!");
@@ -190,14 +191,14 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         if (!dcnbKeHoachDcHdr.isPresent()) {
                             throw new Exception("Không tìm thấy kế hoạch id = " + e.getDanhSachKeHoach().get(0).getHdrId());
                         }
-                        for(DcnbKeHoachDcDtl e1 : e.getDanhSachKeHoach()){
+                        for (DcnbKeHoachDcDtl e1 : e.getDanhSachKeHoach()) {
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr.get());
                             e1.setThayDoiThuKho(true);
                             Optional<DcnbKeHoachDcDtl> dcnbKeHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(e1.getHdrId());
                             if (dcnbKeHoachDcDtl.isPresent()) {
                                 e1.setParentId(dcnbKeHoachDcDtl.get().getParentId());
                             }
-                            if(e1.getDonViTinh() == null){
+                            if (e1.getDonViTinh() == null) {
                                 throw new Exception("Đơn vị tính không được để trống!");
                             }
                             BigDecimal totalDuT = e.getDanhSachKeHoach().stream()
@@ -216,6 +217,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
                         for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
                             TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
+                            hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
                             trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
                             ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
                             BaseResponse body = responseNhan.getBody();
@@ -229,7 +231,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                     throw new Exception("Không lấy được trạng thái kho hiện thời!");
                                 }
                                 if (res.size() > 1) {
-                                    throw new Exception("Tìm thấy 2 trạng thái kho hiện thời!");
+                                    throw new Exception("Tìm thấy 2 trạng thái kho hiện thời! Mã: " + (hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan()));
                                 }
                                 if (!hh.getCloaiVthh().equals(res.get(0).getCloaiVthh())) {
                                     throw new Exception("Chủng loại hàng hóa không đúng trong kho hiện thời!");
@@ -317,7 +319,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
         BeanUtils.copyProperties(objReq, data);
         data.setDanhSachQuyetDinh(objReq.getDanhSachQuyetDinh());
         BigDecimal total = new BigDecimal(0l);
-        for (DcnbQuyetDinhDcCDtl e : objReq.getDanhSachQuyetDinh()) {
+        for (DcnbQuyetDinhDcCDtl e : data.getDanhSachQuyetDinh()) {
             if (Contains.DCNB.equals(data.getLoaiDc()) && Contains.CAP_CUC.equals(currentUser.getUser().getCapDvi())) {
                 // được phép thêm mới kế hoạch và update kế hoạch (ngầm)
                 if (e.getKeHoachDcHdrId() != null) {
@@ -341,11 +343,11 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                 .reduce(BigDecimal.ZERO, BigDecimal::add);
                         dcnbKeHoachDcHdr.setTongDuToanKp(totalDuT);
                         total = total.add(totalDuT);
-                        for(DcnbKeHoachDcDtl e1 : e.getDanhSachKeHoach()){
+                        for (DcnbKeHoachDcDtl e1 : e.getDanhSachKeHoach()) {
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
                             e1.setDaXdinhDiemNhap(true);
                             e1.setDuToanKphi(e1.getDuToanKphi() == null ? new BigDecimal(0) : e1.getDuToanKphi());
-                            if(e1.getDonViTinh() == null){
+                            if (e1.getDonViTinh() == null) {
                                 throw new Exception("Đơn vị tính không được để trống!");
                             }
                         }
@@ -354,6 +356,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
                         for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
                             TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
+                            hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
                             trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
                             ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
                             BaseResponse body = responseNhan.getBody();
@@ -367,7 +370,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                     throw new Exception("Không lấy được trạng thái kho hiện thời!");
                                 }
                                 if (res.size() > 1) {
-                                    throw new Exception("Tìm thấy 2 trạng thái kho hiện thời!");
+                                    throw new Exception("Tìm thấy 2 trạng thái kho hiện thời! Mã: " + (hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan()));
                                 }
                                 if (!hh.getCloaiVthh().equals(res.get(0).getCloaiVthh())) {
                                     throw new Exception("Chủng loại hàng hóa không đúng trong kho hiện thời!");
@@ -393,10 +396,10 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                 .reduce(BigDecimal.ZERO, BigDecimal::add);
                         dcnbKeHoachDcHdr.setTongDuToanKp(totalDuT);
                         total = total.add(totalDuT);
-                        for(DcnbKeHoachDcDtl e1 : e.getDanhSachKeHoach()){
+                        for (DcnbKeHoachDcDtl e1 : e.getDanhSachKeHoach()) {
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
                             e1.setDaXdinhDiemNhap(true);
-                            if(e1.getDonViTinh() == null){
+                            if (e1.getDonViTinh() == null) {
                                 throw new Exception("Đơn vị tính không được để trống!");
                             }
                         }
@@ -407,6 +410,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
                         for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
                             TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
+                            hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
                             trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
                             ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
                             BaseResponse body = responseNhan.getBody();
@@ -420,7 +424,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                     throw new Exception("Không lấy được trạng thái kho hiện thời!");
                                 }
                                 if (res.size() > 1) {
-                                    throw new Exception("Tìm thấy 2 trạng thái kho hiện thời!");
+                                    throw new Exception("Tìm thấy 2 trạng thái kho hiện thời! Mã: " + (hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan()));
                                 }
                                 if (!hh.getCloaiVthh().equals(res.get(0).getCloaiVthh())) {
                                     throw new Exception("Chủng loại hàng hóa không đúng trong kho hiện thời!");
@@ -443,13 +447,13 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         throw new Exception("dcnbKeHoachDcHdr.id không tìm thấy trong hệ thống!");
                     }
                     if (e.getDanhSachKeHoach() != null && !e.getDanhSachKeHoach().isEmpty()) {
-                        for(DcnbKeHoachDcDtl e1 : e.getDanhSachKeHoach()){
+                        for (DcnbKeHoachDcDtl e1 : e.getDanhSachKeHoach()) {
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
                             Optional<DcnbKeHoachDcDtl> dcnbKeHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(e1.getHdrId());
                             if (dcnbKeHoachDcDtl.isPresent()) {
                                 e1.setParentId(dcnbKeHoachDcDtl.get().getParentId());
                             }
-                            if(e1.getDonViTinh() == null){
+                            if (e1.getDonViTinh() == null) {
                                 throw new Exception("Đơn vị tính không được để trống!");
                             }
                             e1.setDaXdinhDiemNhap(true);
@@ -465,6 +469,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                     //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
                     for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
                         TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
+                        hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
                         trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
                         ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
                         BaseResponse body = responseNhan.getBody();
@@ -478,7 +483,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                 throw new Exception("Không lấy được trạng thái kho hiện thời!");
                             }
                             if (res.size() > 1) {
-                                throw new Exception("Tìm thấy 2 trạng thái kho hiện thời!");
+                                throw new Exception("Tìm thấy 2 trạng thái kho hiện thời! Mã: " + (hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan()));
                             }
                             if (!hh.getCloaiVthh().equals(res.get(0).getCloaiVthh())) {
                                 throw new Exception("Chủng loại hàng hóa không đúng trong kho hiện thời!");
@@ -499,13 +504,13 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         if (!dcnbKeHoachDcHdr.isPresent()) {
                             throw new Exception("Không tìm thấy kế hoạch id = " + e.getDanhSachKeHoach().get(0).getHdrId());
                         }
-                        for(DcnbKeHoachDcDtl e1: e.getDanhSachKeHoach()){
+                        for (DcnbKeHoachDcDtl e1 : e.getDanhSachKeHoach()) {
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr.get());
                             Optional<DcnbKeHoachDcDtl> dcnbKeHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(e1.getHdrId());
                             if (dcnbKeHoachDcDtl.isPresent()) {
                                 e1.setParentId(dcnbKeHoachDcDtl.get().getParentId());
                             }
-                            if(e1.getDonViTinh() == null){
+                            if (e1.getDonViTinh() == null) {
                                 throw new Exception("Đơn vị tính không được để trống!");
                             }
                         }
@@ -515,6 +520,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
                         for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
                             TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
+                            hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
                             trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
                             ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
                             BaseResponse body = responseNhan.getBody();
@@ -528,7 +534,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                     throw new Exception("Không lấy được trạng thái kho hiện thời!");
                                 }
                                 if (res.size() > 1) {
-                                    throw new Exception("Tìm thấy 2 trạng thái kho hiện thời!");
+                                    throw new Exception("Tìm thấy 2 trạng thái kho hiện thời! Mã: " + (hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan()));
                                 }
                                 if (!hh.getCloaiVthh().equals(res.get(0).getCloaiVthh())) {
                                     throw new Exception("Chủng loại hàng hóa không đúng trong kho hiện thời!");
