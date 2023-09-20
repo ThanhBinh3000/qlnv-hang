@@ -156,7 +156,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         // Check số lượng hiện thời từng lo kho - (tổng đề kế hoạch xuất - tổng xuất trong thực tế)> 0 ;
                         //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
                         for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
-                            if(hh.getMaNganKhoNhan() != null){
+                            if(!StringUtils.isEmpty(hh.getMaNganKhoNhan())){
                                 TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
                                 hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
                                 trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
@@ -218,7 +218,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         // Check số lượng hiện thời từng lo kho - (tổng đề kế hoạch xuất - tổng xuất trong thực tế)> 0 ;
                         //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
                         for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
-                            if(hh.getMaNganKhoNhan() != null){
+                            if(!StringUtils.isEmpty(hh.getMaNganKhoNhan())){
                                 TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
                                 hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
                                 trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
@@ -359,7 +359,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         // Check số lượng hiện thời từng lo kho - (tổng đề kế hoạch xuất - tổng xuất trong thực tế)> 0 ;
                         //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
                         for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
-                            if(hh.getMaNganKhoNhan() != null){
+                            if(!StringUtils.isEmpty(hh.getMaNganKhoNhan())){
                                 TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
                                 hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
                                 trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
@@ -415,7 +415,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         // Check số lượng hiện thời từng lo kho - (tổng đề kế hoạch xuất - tổng xuất trong thực tế)> 0 ;
                         //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
                         for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
-                            if(hh.getMaNganKhoNhan() != null){
+                            if(!StringUtils.isEmpty(hh.getMaNganKhoNhan())){
                                 TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
                                 hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
                                 trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
@@ -476,7 +476,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                     // Check số lượng hiện thời từng lo kho - (tổng đề kế hoạch xuất - tổng xuất trong thực tế)> 0 ;
                     //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
                     for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
-                        if(hh.getMaNganKhoNhan() != null){
+                        if(!StringUtils.isEmpty(hh.getMaNganKhoNhan())){
                             TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
                             hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
                             trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
@@ -529,7 +529,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         // Check số lượng hiện thời từng lo kho - (tổng đề kế hoạch xuất - tổng xuất trong thực tế)> 0 ;
                         //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
                         for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
-                            if(hh.getMaNganKhoNhan() != null){
+                            if(!StringUtils.isEmpty(hh.getMaNganKhoNhan())){
                                 TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
                                 hh.setCoLoKhoNhan(hh.getMaLoKhoNhan() != null);
                                 trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
