@@ -85,7 +85,7 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl {
         Optional<XhQdPdKhBdgDtl> optional = xhQdPdKhBdgDtlRepository.findById(data.getIdQdPdDtl());
         XhQdPdKhBdgDtl xhQdPdKhBdgDtl = optional.orElseThrow(()
                 -> new Exception("Không tìm thấy Quyết định phê duyệt kế hoạch bán đấu giá"));
-        xhQdPdKhBdgDtl.setTrangThai(Contains.DANGCAPNHAT);
+        xhQdPdKhBdgDtl.setTrangThai(Contains.DANG_THUC_HIEN);
         xhQdPdKhBdgDtlRepository.save(xhQdPdKhBdgDtl);
         List<XhTcTtinBdgHdr> byIdQdPdDtl = xhTcTtinBdgHdrRepository.findByIdQdPdDtlOrderByLanDauGia(data.getIdQdPdDtl());
         data.setLanDauGia(byIdQdPdDtl.size() + 1);
@@ -224,11 +224,11 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl {
         Optional<XhQdPdKhBdgDtl> dauGia = xhQdPdKhBdgDtlRepository.findById(data.getIdQdPdDtl());
         dauGia.ifPresent(dauGiaDtl -> {
             int slDviTsan = dauGiaDtl.getSlDviTsan();
-            BigDecimal soDviTsanThanhCong = xhQdPdKhBdgDtlRepository.countSlDviTsanThanhCong(data.getIdQdPdDtl(), data.getMaDvi());
+            BigDecimal soDviTsanThanhCong = xhQdPdKhBdgDtlRepository.countSlDviTsanThanhCong(data.getIdQdPdDtl(),data.getLoaiVthh(), data.getMaDvi());
             BigDecimal soDviTsanKhongThanh = new BigDecimal(slDviTsan).subtract(soDviTsanThanhCong);
             dauGiaDtl.setSoDviTsanThanhCong(soDviTsanThanhCong);
             dauGiaDtl.setSoDviTsanKhongThanh(soDviTsanKhongThanh);
-            dauGiaDtl.setKetQuaDauGia(dauGiaDtl.getSoDviTsanThanhCong() + "/" + dauGiaDtl.getSlDviTsan());
+            dauGiaDtl.setKetQuaDauGia(dauGiaDtl.getSoDviTsanThanhCong() + "/" + slDviTsan);
             xhQdPdKhBdgDtlRepository.save(dauGiaDtl);
         });
     }

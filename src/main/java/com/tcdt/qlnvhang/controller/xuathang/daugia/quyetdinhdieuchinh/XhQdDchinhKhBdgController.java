@@ -117,7 +117,6 @@ public class XhQdDchinhKhBdgController extends BaseController {
             resp.setMsg(e.getMessage());
             log.error("Xoá thông tin : {}", e);
         }
-
         return ResponseEntity.ok(resp);
     }
 
