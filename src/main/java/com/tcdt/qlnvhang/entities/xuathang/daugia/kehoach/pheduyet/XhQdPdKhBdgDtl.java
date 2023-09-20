@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet;
 
+import com.tcdt.qlnvhang.entities.xuathang.daugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgHdr;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdr;
 import lombok.Data;
 
@@ -21,7 +22,7 @@ public class XhQdPdKhBdgDtl implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhQdPdKhBdgDtl.TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = XhQdPdKhBdgDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhQdPdKhBdgDtl.TABLE_NAME + "_SEQ")
     private Long id;
-    private Long idQdHdr;
+    private Long idHdr;
     private String maDvi;
     private String diaChi;
     private Long idDxHdr;
@@ -70,13 +71,17 @@ public class XhQdPdKhBdgDtl implements Serializable {
     private BigDecimal soDviTsanThanhCong;
     private BigDecimal soDviTsanKhongThanh;
     private String ketQuaDauGia;
-    private String soQdDcBdg;
+    private String soQdDc;
     private Integer nam;
     private String soQdPd;
+    private Boolean isDieuChinh;
+    private Boolean lastest;
     @Transient
     private String tenPthucTtoan;
     @Transient
     private XhQdPdKhBdg xhQdPdKhBdg;
+    @Transient
+    private XhQdDchinhKhBdgHdr xhQdDchinhKhBdgHdr;
     @Transient
     List<XhTcTtinBdgHdr> listTtinDg = new ArrayList<>();
 }

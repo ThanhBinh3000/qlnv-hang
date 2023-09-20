@@ -15,6 +15,7 @@ import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdg
 import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgPlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.tonghop.XhThopDxKhBdgRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -64,6 +65,8 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
     private XhDxKhBanDauGiaRepository xhDxKhBanDauGiaRepository;
     @Autowired
     private XhTcTtinBdgHdrRepository xhTcTtinBdgHdrRepository;
+    @Autowired
+    private XhQdDchinhKhBdgHdrRepository xhQdDchinhKhBdgHdrRepository;
     @Autowired
     private FileDinhKemService fileDinhKemService;
 
@@ -138,20 +141,22 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
     }
 
     void saveDetail(XhQdPdKhBdgReq req, Long idHdr) {
-        xhQdPdKhBdgDtlRepository.deleteAllByIdQdHdr(idHdr);
+        xhQdPdKhBdgDtlRepository.deleteAllByIdHdr(idHdr);
         for (XhQdPdKhBdgDtlReq dtlReq : req.getChildren()) {
             XhQdPdKhBdgDtl dtl = new XhQdPdKhBdgDtl();
             BeanUtils.copyProperties(dtlReq, dtl, "id");
-            dtl.setIdQdHdr(idHdr);
+            dtl.setIdHdr(idHdr);
             dtl.setNam(req.getNam());
             dtl.setSoQdPd(req.getSoQdPd());
-            dtl.setTrangThai(Contains.CHUACAPNHAT);
+            dtl.setIsDieuChinh(false);
+            dtl.setLastest(false);
+            dtl.setTrangThai(Contains.CHUA_THUC_HIEN);
             xhQdPdKhBdgDtlRepository.save(dtl);
-            xhQdPdKhBdgPlRepository.deleteAllByIdQdDtl(dtlReq.getId());
+            xhQdPdKhBdgPlRepository.deleteAllByIdDtl(dtlReq.getId());
             for (XhQdPdKhBdgPlReq plReq : dtlReq.getChildren()) {
                 XhQdPdKhBdgPl pl = new XhQdPdKhBdgPl();
                 BeanUtils.copyProperties(plReq, pl, "id");
-                pl.setIdQdDtl(dtl.getId());
+                pl.setIdDtl(dtl.getId());
                 xhQdPdKhBdgPlRepository.save(pl);
                 xhQdPdKhBdgPlDtlRepository.deleteAllByIdPhanLo(plReq.getId());
                 for (XhQdPdKhBdgPlDtlReq plDtlReq : plReq.getChildren()) {
@@ -216,10 +221,11 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
         Map<String, String> mapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
+        Map<String, String> mapPhuongThucTt = getListDanhMucChung("PHUONG_THUC_TT");
         for (XhQdPdKhBdg data : list) {
-            List<XhQdPdKhBdgDtl> qdDtl = xhQdPdKhBdgDtlRepository.findAllByIdQdHdr(data.getId());
+            List<XhQdPdKhBdgDtl> qdDtl = xhQdPdKhBdgDtlRepository.findAllByIdHdr(data.getId());
             for (XhQdPdKhBdgDtl dataDtl : qdDtl) {
-                List<XhQdPdKhBdgPl> qdPhanLo = xhQdPdKhBdgPlRepository.findAllByIdQdDtl(dataDtl.getId());
+                List<XhQdPdKhBdgPl> qdPhanLo = xhQdPdKhBdgPlRepository.findAllByIdDtl(dataDtl.getId());
                 for (XhQdPdKhBdgPl dataPhanLo : qdPhanLo) {
                     List<XhQdPdKhBdgPlDtl> qdPhanLoDtl = xhQdPdKhBdgPlDtlRepository.findAllByIdPhanLo(dataPhanLo.getId());
                     for (XhQdPdKhBdgPlDtl dataPhanLoDtl : qdPhanLoDtl) {
@@ -236,6 +242,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
                 dataDtl.setTenDvi(StringUtils.isEmpty(dataDtl.getMaDvi()) ? null : mapDmucDvi.get(dataDtl.getMaDvi()));
                 dataDtl.setTenLoaiVthh(StringUtils.isEmpty(dataDtl.getLoaiVthh()) ? null : mapVthh.get(dataDtl.getLoaiVthh()));
                 dataDtl.setTenCloaiVthh(StringUtils.isEmpty(dataDtl.getCloaiVthh()) ? null : mapVthh.get(dataDtl.getCloaiVthh()));
+                dataDtl.setTenPthucTtoan(StringUtils.isEmpty(dataDtl.getPthucTtoan()) ? null : mapPhuongThucTt.get(dataDtl.getPthucTtoan()));
                 dataDtl.setChildren(qdPhanLo);
             }
             data.setMapVthh(mapVthh);
@@ -247,7 +254,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
             data.setCanCuPhapLy(canCuPhapLy);
             List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBdg.TABLE_NAME + "_BAN_HANH"));
             data.setFileDinhKem(fileDinhKem);
-            data.setChildren(qdDtl);
+            data.setChildren(qdDtl.stream().filter(isDieuChinh -> !isDieuChinh.getIsDieuChinh()).collect(Collectors.toList()));
         }
         return list;
     }
@@ -265,13 +272,13 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
         if (!data.getTrangThai().equals(Contains.DANG_NHAP_DU_LIEU)) {
             throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái đang nhập dữ liệu");
         }
-        List<XhQdPdKhBdgDtl> dtl = xhQdPdKhBdgDtlRepository.findAllByIdQdHdr(data.getId());
+        List<XhQdPdKhBdgDtl> dtl = xhQdPdKhBdgDtlRepository.findAllByIdHdr(data.getId());
         dtl.forEach(dataDtl -> {
-            List<XhQdPdKhBdgPl> phanLo = xhQdPdKhBdgPlRepository.findAllByIdQdDtl(dataDtl.getId());
+            List<XhQdPdKhBdgPl> phanLo = xhQdPdKhBdgPlRepository.findAllByIdDtl(dataDtl.getId());
             phanLo.forEach(dataPhanLo -> xhQdPdKhBdgPlDtlRepository.deleteAllByIdPhanLo(dataPhanLo.getId()));
-            xhQdPdKhBdgPlRepository.deleteAllByIdQdDtl(dataDtl.getId());
+            xhQdPdKhBdgPlRepository.deleteAllByIdDtl(dataDtl.getId());
         });
-        xhQdPdKhBdgDtlRepository.deleteAllByIdQdHdr(data.getId());
+        xhQdPdKhBdgDtlRepository.deleteAllByIdHdr(data.getId());
         xhQdPdKhBdgRepository.delete(data);
         Set<String> tableNames = new HashSet<>();
         tableNames.add(XhQdPdKhBdg.TABLE_NAME);
@@ -307,9 +314,9 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
             }
         }
         List<Long> idQdHdr = list.stream().map(XhQdPdKhBdg::getId).collect(Collectors.toList());
-        List<XhQdPdKhBdgDtl> listDtl = xhQdPdKhBdgDtlRepository.findByIdQdHdrIn(idQdHdr);
+        List<XhQdPdKhBdgDtl> listDtl = xhQdPdKhBdgDtlRepository.findByIdHdrIn(idQdHdr);
         List<Long> idDtl = listDtl.stream().map(XhQdPdKhBdgDtl::getId).collect(Collectors.toList());
-        List<XhQdPdKhBdgPl> listPhanLo = xhQdPdKhBdgPlRepository.findByIdQdDtlIn(idDtl);
+        List<XhQdPdKhBdgPl> listPhanLo = xhQdPdKhBdgPlRepository.findByIdDtlIn(idDtl);
         List<Long> idPhanLo = listPhanLo.stream().map(XhQdPdKhBdgPl::getId).collect(Collectors.toList());
         List<XhQdPdKhBdgPlDtl> listPhanLoDtl = xhQdPdKhBdgPlDtlRepository.findByIdPhanLoIn(idPhanLo);
         xhQdPdKhBdgPlDtlRepository.deleteAll(listPhanLoDtl);
@@ -406,13 +413,14 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
             XhQdPdKhBdgDtl dxClone = new XhQdPdKhBdgDtl();
             BeanUtils.copyProperties(dx, dxClone);
             dxClone.setId(null);
-            dxClone.setIdQdHdr(hdrClone.getId());
+            dxClone.setLastest(true);
+            dxClone.setIdHdr(hdrClone.getId());
             xhQdPdKhBdgDtlRepository.save(dxClone);
             for (XhQdPdKhBdgPl pl : dxClone.getChildren()) {
                 XhQdPdKhBdgPl plClone = new XhQdPdKhBdgPl();
                 BeanUtils.copyProperties(pl, plClone);
                 plClone.setId(null);
-                plClone.setIdQdDtl(dxClone.getId());
+                plClone.setIdDtl(dxClone.getId());
                 xhQdPdKhBdgPlRepository.save(plClone);
                 for (XhQdPdKhBdgPlDtl plDtl : pl.getChildren()) {
                     XhQdPdKhBdgPlDtl plDtlClone = new XhQdPdKhBdgPlDtl();
@@ -462,7 +470,6 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
         Integer lastest = 1;
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
             req.setDvql(dvql.substring(0, 4));
-            req.setTrangThai(Contains.HOANTHANHCAPNHAT);
         } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
             req.setDvql(dvql);
             req.setLastest(lastest);
@@ -473,20 +480,26 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
         search.getContent().forEach(data -> {
             try {
-                if (mapDmucDvi.containsKey((data.getMaDvi()))) {
-                    Map<String, Object> objDonVi = mapDmucDvi.get(data.getMaDvi());
+                mapDmucDvi.computeIfPresent(data.getMaDvi(), (key, objDonVi) -> {
                     data.setTenDvi(objDonVi.get("tenDvi").toString());
-                }
-                if (mapDmucVthh.get((data.getLoaiVthh())) != null) {
-                    data.setTenLoaiVthh(mapDmucVthh.get(data.getLoaiVthh()));
-                }
-                if (mapDmucVthh.get((data.getCloaiVthh())) != null) {
-                    data.setTenCloaiVthh(mapDmucVthh.get(data.getCloaiVthh()));
-                }
+                    return objDonVi;
+                });
+                mapDmucVthh.computeIfPresent(data.getLoaiVthh(), (key, value) -> {
+                    data.setTenLoaiVthh(value);
+                    return value;
+                });
+                mapDmucVthh.computeIfPresent(data.getCloaiVthh(), (key, value) -> {
+                    data.setTenCloaiVthh(value);
+                    return value;
+                });
                 if (data.getTrangThai() != null) {
                     data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
                 }
-                data.setXhQdPdKhBdg(xhQdPdKhBdgRepository.findById(data.getIdQdHdr()).get());
+                if (!data.getIsDieuChinh()) {
+                    data.setXhQdPdKhBdg(xhQdPdKhBdgRepository.findById(data.getIdHdr()).get());
+                } else {
+                    data.setXhQdDchinhKhBdgHdr(xhQdDchinhKhBdgHdrRepository.findById(data.getIdHdr()).get());
+                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -513,7 +526,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
             dataDtl.setTenCloaiVthh(mapVthh.getOrDefault(dataDtl.getCloaiVthh(), null));
             dataDtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dataDtl.getTrangThai()));
             dataDtl.setTenPthucTtoan(mapPhuongThucTt.getOrDefault(dataDtl.getPthucTtoan(), null));
-            List<XhQdPdKhBdgPl> phanLo = xhQdPdKhBdgPlRepository.findAllByIdQdDtl(dataDtl.getId());
+            List<XhQdPdKhBdgPl> phanLo = xhQdPdKhBdgPlRepository.findAllByIdDtl(dataDtl.getId());
             phanLo.forEach(dataPhanLo -> {
                 dataPhanLo.setTenDvi(mapDmucDvi.getOrDefault(dataPhanLo.getMaDvi(), null));
                 List<XhQdPdKhBdgPlDtl> phanLoDtl = xhQdPdKhBdgPlDtlRepository.findAllByIdPhanLo(dataPhanLo.getId());
@@ -528,7 +541,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
             List<XhTcTtinBdgHdr> xhTcTtinBdgHdrs = xhTcTtinBdgHdrRepository.findByIdQdPdDtlOrderByLanDauGia(dataDtl.getId());
             dataDtl.setListTtinDg(xhTcTtinBdgHdrs);
             dataDtl.setChildren(phanLo);
-            XhQdPdKhBdg hdr = xhQdPdKhBdgRepository.findById(dataDtl.getIdQdHdr()).orElse(null);
+            XhQdPdKhBdg hdr = xhQdPdKhBdgRepository.findById(dataDtl.getIdHdr()).orElse(null);
             if (hdr != null) {
                 hdr.setMapVthh(mapVthh);
                 hdr.setMapKieuNx(mapKieuNx);
@@ -547,7 +560,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
         Optional<XhQdPdKhBdgDtl> optional = xhQdPdKhBdgDtlRepository.findById(dtlId);
         XhQdPdKhBdgDtl dataDtl = optional.orElseThrow(() -> new Exception("Không tìm thấy dữ liệu"));
         String status = statusReq.getTrangThai() + dataDtl.getTrangThai();
-        if (!status.equals(Contains.HOANTHANHCAPNHAT + Contains.DANGCAPNHAT)) {
+        if (!status.equals(Contains.DA_HOAN_THANH + Contains.DANG_THUC_HIEN)) {
             throw new Exception("Phê duyệt không thành công");
         }
         dataDtl.setTrangThai(statusReq.getTrangThai());
@@ -575,7 +588,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
             objs[0] = i;
             objs[1] = dtl.getNam();
             objs[2] = dtl.getSoQdPd();
-            objs[3] = dtl.getSoQdDcBdg();
+            objs[3] = dtl.getSoQdDc();
             objs[4] = dtl.getSoQdPdKqBdg();
             objs[5] = dtl.getSoDxuat();
             objs[6] = dtl.getNgayKyQdPdKqBdg();
