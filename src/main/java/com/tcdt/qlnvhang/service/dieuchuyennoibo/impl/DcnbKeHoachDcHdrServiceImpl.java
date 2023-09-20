@@ -18,8 +18,9 @@ import com.tcdt.qlnvhang.request.feign.TrangThaiHtReq;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbKeHoachDcDtlDTO;
+import com.tcdt.qlnvhang.response.feign.KtMlk;
 import com.tcdt.qlnvhang.response.feign.TrangThaiHtResponce;
-import com.tcdt.qlnvhang.service.feign.LuuKhoClient;
+import com.tcdt.qlnvhang.service.feign.KhoClient;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -68,7 +69,7 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
     @Autowired
     private FileDinhKemService fileDinhKemService;
     @Autowired
-    private LuuKhoClient luuKhoClient;
+    private KhoClient khoClient;
 
     public Page<DcnbKeHoachDcHdr> searchPage(CustomUserDetails currentUser, SearchDcnbKeHoachDc req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -84,7 +85,6 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
         return search;
     }
 
-    @Transactional
     public DcnbKeHoachDcHdr save(CustomUserDetails currentUser, DcnbKeHoachDcHdrReq objReq) throws Exception {
         if (currentUser == null) {
             throw new Exception("Bad request.");
@@ -119,21 +119,19 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
                     TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
                     hh.setCoLoKhoNhan(!StringUtils.isEmpty(hh.getMaLoKhoNhan()));
                     trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
-                    ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
+                    ResponseEntity<BaseResponse> responseNhan = khoClient.infoMlk(trangThaiHtReq);
                     BaseResponse body = responseNhan.getBody();
                     if (body != null && EnumResponse.RESP_SUCC.getDescription().equals(body.getMsg())) {
                         logger.debug(body.toString());
-                        TypeToken<List<TrangThaiHtResponce>> token = new TypeToken<List<TrangThaiHtResponce>>() {
-                        };
                         Gson gson = new Gson();
-                        List<TrangThaiHtResponce> res = gson.fromJson(gson.toJson(body.getData()), token.getType());
-                        if (res == null || res.isEmpty()) {
+                        KtMlk res = gson.fromJson(gson.toJson(body.getData()), KtMlk.class);
+                        if (res == null) {
                             throw new Exception("Không lấy được trạng thái kho hiện thời!");
                         }
-                        if (res.size() > 1) {
-                            throw new Exception("Tìm thấy 2 trạng thái kho hiện thời! Mã: " + (hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan()));
+                        if(res.getObject().getCloaiVthh() == null){
+                            throw new Exception("Chưa khởi tạo kho đầu kì!");
                         }
-                        if (!hh.getCloaiVthh().equals(res.get(0).getCloaiVthh())) {
+                        if (!hh.getCloaiVthh().equals(res.getObject().getCloaiVthh())) {
                             throw new Exception("Chủng loại hàng hóa không đúng trong kho hiện thời!");
                         }
                     } else {
@@ -156,7 +154,6 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
         return danhSachMaLoKho;
     }
 
-    @Transactional
     public DcnbKeHoachDcHdr update(CustomUserDetails currentUser, DcnbKeHoachDcHdrReq objReq) throws Exception {
         if (currentUser == null) {
             throw new Exception("Bad request.");
@@ -199,21 +196,19 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
                     TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
                     hh.setCoLoKhoNhan(!StringUtils.isEmpty(hh.getMaLoKhoNhan()));
                     trangThaiHtReq.setMaDvi(hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan());
-                    ResponseEntity<BaseResponse> responseNhan = luuKhoClient.trangThaiHt(trangThaiHtReq);
+                    ResponseEntity<BaseResponse> responseNhan = khoClient.infoMlk(trangThaiHtReq);
                     BaseResponse body = responseNhan.getBody();
                     if (body != null && EnumResponse.RESP_SUCC.getDescription().equals(body.getMsg())) {
                         logger.debug(body.toString());
-                        TypeToken<List<TrangThaiHtResponce>> token = new TypeToken<List<TrangThaiHtResponce>>() {
-                        };
                         Gson gson = new Gson();
-                        List<TrangThaiHtResponce> res = gson.fromJson(gson.toJson(body.getData()), token.getType());
-                        if (res == null || res.isEmpty()) {
+                        KtMlk res = gson.fromJson(gson.toJson(body.getData()), KtMlk.class);
+                        if (res == null) {
                             throw new Exception("Không lấy được trạng thái kho hiện thời!");
                         }
-                        if (res.size() > 1) {
-                            throw new Exception("Tìm thấy 2 trạng thái kho hiện thời! Mã: " + (hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan()));
+                        if(res.getObject().getCloaiVthh() == null){
+                            throw new Exception("Chưa khởi tạo kho đầu kì!");
                         }
-                        if (!hh.getCloaiVthh().equals(res.get(0).getCloaiVthh())) {
+                        if (!hh.getCloaiVthh().equals(res.getObject().getCloaiVthh())) {
                             throw new Exception("Chủng loại hàng hóa không đúng trong kho hiện thời!");
                         }
                     } else {
@@ -319,7 +314,7 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
                     TrangThaiHtReq objReq = new TrangThaiHtReq();
                     hh.setCoLoKhoNhan(!StringUtils.isEmpty(hh.getMaLoKhoNhan()));
                     objReq.setMaDvi(hh.getCoLoKho() ? hh.getMaLoKho() : hh.getMaNganKho());
-                    ResponseEntity<BaseResponse> response = luuKhoClient.trangThaiHt(objReq);
+                    ResponseEntity<BaseResponse> response = khoClient.infoMlk(objReq);
                     BaseResponse body = response.getBody();
                     if (body != null && EnumResponse.RESP_SUCC.getDescription().equals(body.getMsg())) {
                         logger.debug(body.toString());
