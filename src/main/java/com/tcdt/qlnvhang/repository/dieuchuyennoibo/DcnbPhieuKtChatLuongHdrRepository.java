@@ -61,7 +61,7 @@ public interface DcnbPhieuKtChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
             "AND ((:#{#param.maDvi} IS NULL OR LOWER(qdc.maDvi) LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND ((:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho})) " +
-            "AND ((qdc.loaiDc= 'DCNB' OR qdc.loaiDc= 'CHI_CUC') OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
+            "AND ((qdc.loaiDc= 'DCNB' OR qdc.loaiDc= 'CHI_CUC') OR  ((:#{#param.typeQd} IS NULL OR qdc.loaiQdinh = :#{#param.typeQd})))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
             "AND (:#{#param.trangThai} IS NULL OR pktcl.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.soPhieu} IS NULL OR LOWER(pktcl.soPhieu) LIKE CONCAT('%',LOWER(:#{#param.soPhieu}),'%')) " +

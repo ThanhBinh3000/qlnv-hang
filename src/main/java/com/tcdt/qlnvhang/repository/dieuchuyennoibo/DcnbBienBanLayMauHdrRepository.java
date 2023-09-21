@@ -35,7 +35,7 @@ public interface DcnbBienBanLayMauHdrRepository extends JpaRepository<DcnbBienBa
             "AND ((:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho})) " +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
             "AND ((:#{#param.maDvi} IS NULL OR LOWER(qdc.maDvi) LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
-            "AND ((qdc.loaiDc= 'DCNB' OR qdc.loaiDc= 'CHI_CUC') OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
+            "AND ((qdc.loaiDc= 'DCNB' OR qdc.loaiDc= 'CHI_CUC') OR  ((:#{#param.typeQd} IS NULL OR qdc.loaiQdinh = :#{#param.typeQd})))" +
             "AND (:#{#param.dViKiemNghiem} IS NULL OR bblm.dViKiemNghiem LIKE CONCAT(:#{#param.dViKiemNghiem},'%')) " +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
             "AND (:#{#param.trangThai} IS NULL OR bblm.trangThai = :#{#param.trangThai}) " +
@@ -113,7 +113,7 @@ public interface DcnbBienBanLayMauHdrRepository extends JpaRepository<DcnbBienBa
             "AND ((:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho})) " +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
             "AND ((:#{#param.maDvi} IS NULL OR LOWER(qdc.maDvi) LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
-            "AND ((qdc.loaiDc= 'DCNB' OR qdc.loaiDc= 'CHI_CUC') OR  ((:#{#param.typeQd} IS NULL OR qdc.type = :#{#param.typeQd})))" +
+            "AND ((qdc.loaiDc= 'DCNB' OR qdc.loaiDc= 'CHI_CUC') OR  ((:#{#param.typeQd} IS NULL OR qdc.loaiQdinh = :#{#param.typeQd})))" +
             "AND (:#{#param.dViKiemNghiem} IS NULL OR bblm.dViKiemNghiem LIKE CONCAT(:#{#param.dViKiemNghiem},'%')) " +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
             "AND (:#{#param.trangThai} IS NULL OR bblm.trangThai = :#{#param.trangThai}) " +

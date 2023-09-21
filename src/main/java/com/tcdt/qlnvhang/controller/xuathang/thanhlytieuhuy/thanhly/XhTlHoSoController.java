@@ -70,6 +70,23 @@ public class XhTlHoSoController {
     return ResponseEntity.ok(resp);
   }
 
+  @ApiOperation(value = "Danh sách tổng hợp để trình và thẩm định", response = List.class)
+  @PostMapping(value = "/ds-thong-bao", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> listThongBao(@RequestBody XhTlHoSoReq objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(xhTlHoSoService.dsTaoThongBaoThanhLy(objReq));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Tra cứu thông tin : {}", e);
+    }
+    return ResponseEntity.ok(resp);
+  }
+
   @ApiOperation(value = "Tạo mới", response = List.class)
   @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
