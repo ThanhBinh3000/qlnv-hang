@@ -85,7 +85,7 @@ public class XhXkVtBhPhieuXuatNhapKhoService extends BaseServiceImpl {
         XhXkVtBhPhieuXuatNhapKho created = xhXkVtBhPhieuXuatNhapKhoRepository.save(data);
         this.updatePhieuNk(created, false);
         // cập nhật trạng thái đang thực hiện cho QD giao nv nhập hàng
-        if (!DataUtils.isNullObject(data.getLoaiPhieu())) {
+        if (!DataUtils.isNullObject(created.getIdCanCu())) {
             Optional<XhXkVtBhQdGiaonvXnHdr> qdGiaoNvXh = xhXkVtBhQdGiaonvXnRepository.findById(created.getIdCanCu());
             if (qdGiaoNvXh.isPresent()) {
                 qdGiaoNvXh.get().setTrangThaiXh(TrangThaiAllEnum.DANG_THUC_HIEN.getId());
