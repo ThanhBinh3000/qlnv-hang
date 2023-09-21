@@ -3,23 +3,17 @@ package com.tcdt.qlnvhang.service.xuathang.kiemtrachatluong;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
-import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
-import com.tcdt.qlnvhang.repository.kiemtrachatluong.NhHoSoBienBanRepository;
-import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatRepository;
 import com.tcdt.qlnvhang.repository.xuathang.kiemtrachatluong.XhPhieuKnclRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.kiemtrachatluong.SearchPhieuKnclReq;
 import com.tcdt.qlnvhang.request.xuathang.kiemtrachatluong.XhPhieuKnclReq;
-import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.hosokythuat.NhHoSoKyThuatService;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.phieukncl.XhPhieuKnclHdr;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktluongthuc.XhXkLtPhieuKnClHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -73,10 +67,10 @@ public class XhPhieuKnclService extends BaseServiceImpl {
     if (currentUser == null) {
       throw new Exception("Bad request.");
     }
-    if (!DataUtils.isNullObject(objReq.getSoBbQd())) {
+    if (DataUtils.safeToString(objReq.getSoBbQd()).split("/").length != 1) {
       Optional<XhPhieuKnclHdr> optional = xhPhieuKnclRepository.findBySoBbQd(objReq.getSoBbQd());
       if (optional.isPresent()) {
-        throw new Exception("số quyết định đã tồn tại");
+        throw new Exception("Số quyết định đã tồn tại");
       }
     }
     XhPhieuKnclHdr data = new XhPhieuKnclHdr();
@@ -96,10 +90,12 @@ public class XhPhieuKnclService extends BaseServiceImpl {
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu cần sửa");
     }
-    Optional<XhPhieuKnclHdr> soQd = xhPhieuKnclRepository.findBySoBbQd(objReq.getSoBbQd());
-    if (soQd.isPresent()) {
-      if (!soQd.get().getId().equals(objReq.getId())) {
-        throw new Exception("số quyết định đã tồn tại");
+    if (DataUtils.safeToString(objReq.getSoBbQd()).split("/").length != 1) {
+      Optional<XhPhieuKnclHdr> soQd = xhPhieuKnclRepository.findBySoBbQd(objReq.getSoBbQd());
+      if (soQd.isPresent()) {
+        if (!soQd.get().getId().equals(objReq.getId())) {
+          throw new Exception("Số quyết định đã tồn tại");
+        }
       }
     }
 
@@ -202,7 +198,7 @@ public class XhPhieuKnclService extends BaseServiceImpl {
       ReportTemplate model = findByTenFile(reportTemplateRequest);
       byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
       ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-      List<XhPhieuKnclHdr>  detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
+      List<XhPhieuKnclHdr> detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
       return docxToPdfConverter.convertDocxToPdf(inputStream, detail.get(0));
     } catch (IOException e) {
       e.printStackTrace();
