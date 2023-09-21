@@ -57,7 +57,7 @@ public class DcnbBangKeNhapVTController {
     @ApiOperation(value = "Tạo mới  ", response = List.class)
     @PostMapping(value =  PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BaseResponse> insert(@RequestBody DcnbBangKeNhapVTReq objReq) {
+    public ResponseEntity<BaseResponse> insert(@Valid @RequestBody DcnbBangKeNhapVTReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(service.create(objReq));
