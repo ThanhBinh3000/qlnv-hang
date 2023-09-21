@@ -93,7 +93,11 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 
         for (KquaKnghiemReq kquaReq : req.getKquaKnghiem()) {
             KquaKnghiem kq = new KquaKnghiem();
-            BeanUtils.copyProperties(kquaReq, kq, "id");
+//            BeanUtils.copyProperties(kquaReq, kq, "id");
+            kq.setChiSoNhap(kquaReq.getMucYeuCauNhap());
+            kq.setPhuongPhap(kquaReq.getPhuongPhapXd());
+            kq.setTenTchuan(kquaReq.getTenChiTieu());
+            kq.setMaTchuan(kquaReq.getMaChiTieu());
             kq.setPhieuKnghiemId(id);
             kquaKnghiemRepository.save(kq);
         }

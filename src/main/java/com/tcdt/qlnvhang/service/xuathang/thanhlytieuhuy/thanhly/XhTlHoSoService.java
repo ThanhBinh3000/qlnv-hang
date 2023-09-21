@@ -146,7 +146,7 @@ public class XhTlHoSoService extends BaseServiceImpl {
       data.setFileDinhKem(fileDinhKem);
 
       List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(XhTlHoSoHdr.TABLE_NAME + "_CAN_CU"));
-      data.setCanCu(canCu);
+      data.setFileCanCu(canCu);
 
       data.getHoSoDtl().forEach(s -> {
         s.setMapDmucDvi(mapDmucDvi);

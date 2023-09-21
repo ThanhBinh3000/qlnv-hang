@@ -109,6 +109,7 @@ public class NhBbNhapDayKho extends TrangThaiBaseEntity implements Serializable 
 
     @Column(name = "GHI_CHU")
     private String ghiChu;
+    private String maQhns;
 
     @Transient
     private List<NhBbNhapDayKhoCt> chiTiets = new ArrayList<>();

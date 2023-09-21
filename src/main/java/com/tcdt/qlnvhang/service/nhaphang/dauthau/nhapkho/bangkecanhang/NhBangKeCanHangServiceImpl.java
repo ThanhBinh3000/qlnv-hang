@@ -202,7 +202,15 @@ public class NhBangKeCanHangServiceImpl extends BaseServiceImpl implements NhBan
 
     @Override
     public void delete(Long id) throws Exception {
-
+        Optional<NhBangKeCanHang> optional = nhBangKeCanHangRepository.findById(id);
+        if (!optional.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu cần xoá");
+        }
+        if (!optional.get().getTrangThai().equals(Contains.DUTHAO)) {
+            throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp.");
+        }
+        fileDinhKemService.delete(optional.get().getId(), Lists.newArrayList("NH_BANG_KE_CAN_HANG"));
+        nhBangKeCanHangRepository.delete(optional.get());
     }
 
     @Override
