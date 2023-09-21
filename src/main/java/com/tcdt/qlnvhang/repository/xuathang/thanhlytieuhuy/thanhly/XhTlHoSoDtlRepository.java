@@ -9,7 +9,7 @@ import java.util.List;
 public interface XhTlHoSoDtlRepository extends JpaRepository<XhTlHoSoDtl, Long> {
 
 
-    List<ScTrinhThamDinhDtl> findAllByIdHdr(Long idHdr);
+    List<XhTlHoSoDtl> findAllByIdHdr(Long idHdr);
 
     void deleteAllByIdHdr(Long idHdr);
 }
