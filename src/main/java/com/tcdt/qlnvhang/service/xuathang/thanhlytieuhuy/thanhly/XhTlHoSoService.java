@@ -93,6 +93,16 @@ public class XhTlHoSoService extends BaseServiceImpl {
     return list;
   }
 
+  public List<XhTlHoSoHdr> dsTaoThongBaoThanhLy(XhTlHoSoReq req) throws Exception {
+    UserInfo currentUser = SecurityContextService.getUser();
+    if (currentUser == null){
+      throw new Exception("Access denied.");
+    }
+    req.setTrangThai(TrangThaiAllEnum.TU_CHOI_BTC.getId());
+    List<XhTlHoSoHdr> list = hdrRepository.listTaoThongBaoThanhLy(req);
+    return list;
+  }
+
   @Transactional
   public XhTlHoSoHdr save(XhTlHoSoReq req) throws Exception {
     UserInfo userInfo = UserUtils.getUserInfo();
