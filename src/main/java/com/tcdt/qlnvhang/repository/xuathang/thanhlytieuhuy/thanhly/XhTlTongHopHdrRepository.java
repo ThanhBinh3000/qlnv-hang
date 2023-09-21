@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly;
 
+import com.tcdt.qlnvhang.request.suachua.ScTongHopReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlTongHopRequest;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTongHopHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlTongHopHdr;
 import feign.Param;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,16 @@ public interface XhTlTongHopHdrRepository extends JpaRepository<XhTlTongHopHdr, 
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
   Page<XhTlTongHopHdr> searchPage(@Param("param") XhTlTongHopRequest param, Pageable pageable);
+
+  @Query(value = "SELECT c FROM XhTlTongHopHdr c " +
+          " LEFT JOIN XhTlHoSoHdr tr on c.id = tr.idDanhSach " +
+          " WHERE 1 = 1 " +
+          " AND tr.id is null " +
+          " AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
+          " AND (:#{#param.maDviSr} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDviSr},'%')) " +
+          " ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc "
+  )
+  List<XhTlTongHopHdr> listTongHopTrinhThamDinh(@Param("param") ScTongHopReq param);
 
 
   void deleteAllByIdIn(List<Long> listId);

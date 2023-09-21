@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.suachua.ScTongHopReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlTongHopRequest;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly.XhTlTongHopService;
@@ -45,6 +46,23 @@ public class XhTlTongHopController {
       log.error("Tra cứu thông tin : {}", e);
     }
 
+    return ResponseEntity.ok(resp);
+  }
+
+  @ApiOperation(value = "Danh sách tổng hợp để trình và thẩm định", response = List.class)
+  @PostMapping(value = "/ds-trinh-tham-dinh", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> listTrinhThamDinh(@RequestBody ScTongHopReq objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(xhTlTongHopService.dsTongHopTrinhVaThamDinh(objReq));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Tra cứu thông tin : {}", e);
+    }
     return ResponseEntity.ok(resp);
   }
 

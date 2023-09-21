@@ -8,8 +8,10 @@ import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlTongHopD
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlTongHopHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.suachua.ScTongHopReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachRequest;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlTongHopRequest;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.UserInfo;
@@ -73,6 +75,20 @@ public class XhTlTongHopService extends BaseServiceImpl {
     s.setTenDvi(mapDmucDvi.containsKey(s.getMaDvi()) ? mapDmucDvi.get(s.getMaDvi()) : null);
     });
     return search;
+  }
+
+  public List<XhTlTongHopHdr> dsTongHopTrinhVaThamDinh(ScTongHopReq req) throws Exception {
+    UserInfo currentUser = SecurityContextService.getUser();
+    if (currentUser == null){
+      throw new Exception("Access denied.");
+    }
+    String dvql = currentUser.getDvql();
+    if (currentUser.getCapDvi().equals(Contains.CAP_CUC)) {
+      req.setMaDviSr(dvql);
+    }
+    req.setTrangThai(TrangThaiAllEnum.GUI_DUYET.getId());
+    List<XhTlTongHopHdr> list = hdrRepository.listTongHopTrinhThamDinh(req);
+    return list;
   }
 
   @Transactional
