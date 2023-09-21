@@ -19,7 +19,8 @@ import java.util.Optional;
 @Repository
 public interface HhQdPheduyetKhMttHdrRepository extends JpaRepository<HhQdPheduyetKhMttHdr, Long> {
 
-    @Query("SELECT DX from HhQdPheduyetKhMttHdr DX WHERE 1 = 1 " +
+    @Query("SELECT DX from HhQdPheduyetKhMttHdr DX LEFT JOIN HhQdPheduyetKhMttDx DTL ON DTL.idQdHdr = DX.id" +
+            " WHERE 1 = 1 " +
             "AND (:#{#param.namKh} IS NULL OR DX.namKh = :#{#param.namKh}) " +
             "AND (:#{#param.soQd} IS NULL OR LOWER(DX.soQd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQd}),'%' ) ) )" +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(DX.trichYeu) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.trichYeu}),'%'))) " +
@@ -28,7 +29,7 @@ public interface HhQdPheduyetKhMttHdrRepository extends JpaRepository<HhQdPheduy
             "AND (:#{#param.loaiVthh} IS NULL OR DX.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
             "AND (:#{#param.lastest} IS NULL OR LOWER(DX.lastest) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.lastest}),'%'))) " +
             "AND (:#{#param.trangThai} IS NULL OR DX.trangThai = :#{#param.trangThai}) "
-            + "AND (:#{#param.maDvi} IS NULL OR DX.maDvi LIKE CONCAT(:#{#param.maDvi},'%')) "
+            + "AND (:#{#param.maDvi} IS NULL OR DTL.maDvi LIKE CONCAT(:#{#param.maDvi},'%')) "
     )
     Page<HhQdPheduyetKhMttHdr> searchPage(@Param("param") HhQdPheduyetKhMttHdrSearchReq param, Pageable pageable);
 

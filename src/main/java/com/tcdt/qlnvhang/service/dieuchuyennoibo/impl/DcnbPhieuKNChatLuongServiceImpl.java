@@ -130,8 +130,8 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/PKNCL-" + currentUser.getUser().getDvqlTenVietTat();
         created.setSoPhieu(so);
         dcnbPhieuKnChatLuongHdrRepository.save(created);
-        List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU");
-        data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
+        List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getDinhKems(), created.getId(), DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU");
+        data.setDinhKems(bienBanLayMauDinhKem);
         return created;
     }
 
@@ -174,8 +174,8 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         created.setSoPhieu(so);
         dcnbPhieuKnChatLuongHdrRepository.save(created);
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU"));
-        List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU");
-        data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
+        List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getDinhKems(), created.getId(), DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU");
+        data.setDinhKems(bienBanLayMauDinhKem);
         return created;
     }
 
@@ -189,7 +189,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         List<DcnbPhieuKnChatLuongHdr> allById = dcnbPhieuKnChatLuongHdrRepository.findAllById(ids);
         allById.forEach(data -> {
             List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemRepository.findByDataIdAndDataTypeIn(data.getId(), Collections.singleton(DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU"));
-            data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
+            data.setDinhKems(bienBanLayMauDinhKem);
             List<DcnbPhieuKnChatLuongDtl> khs = dcnbPhieuKnChatLuongDtlRepository.findByHdrId(data.getId());
             data.setDcnbPhieuKnChatLuongDtl(khs);
         });

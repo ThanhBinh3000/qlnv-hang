@@ -23,8 +23,8 @@ public interface HhQdPheduyetKhMttDxRepository extends JpaRepository<HhQdPheduye
             "AND (:#{#param.ngayCgiadDen} IS NULL OR dtl.ngayNhanCgia <= :#{#param.ngayCgiadDen}) " +
             "AND (:#{#param.canhanTochuc} IS NULL OR LOWER(cg.canhanTochuc) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.canhanTochuc}),'%'))) " +
             "AND (:#{#param.maDvi} IS NULL OR dtl.maDvi = :#{#param.maDvi}) " +
-            "AND (:#{#param.maCuc} IS NULL OR LOWER(qdsldd.maDvi) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.maCuc}),'%'))) " +
-            "AND (:#{#param.maCuc} IS NULL OR LOWER(dcsldd.maDvi) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.maCuc}),'%'))) " +
+            "AND (:#{#param.maCuc} IS NULL OR LOWER(qdsldd.maDvi) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.maCuc}),'%')) OR :#{#param.maCuc} IS NULL OR LOWER(dcsldd.maDvi) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.maCuc}),'%')) ) " +
+//            "AND (:#{#param.maCuc} IS NULL OR LOWER(dcsldd.maDvi) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.maCuc}),'%'))) " +
             "AND (:#{#param.trangThai} IS NULL OR dtl.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.pthucMuaTrucTiep} IS NULL OR " +
             "    (:#{#param.pthucMuaTrucTiep} = '01' AND dtl.pthucMuaTrucTiep = '01') OR " +
