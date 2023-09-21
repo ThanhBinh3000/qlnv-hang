@@ -105,7 +105,6 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
         return search;
     }
 
-    @Transactional
     public DcnbQuyetDinhDcCHdr save(CustomUserDetails currentUser, DcnbQuyetDinhDcCHdrReq objReq) throws Exception {
         if (currentUser == null) {
             throw new Exception("Bad request.");
@@ -297,7 +296,6 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
         return null;
     }
 
-    @Transactional
     public DcnbQuyetDinhDcCHdr update(CustomUserDetails currentUser, DcnbQuyetDinhDcCHdrReq objReq) throws Exception {
         if (currentUser == null) {
             throw new Exception("Bad request.");
