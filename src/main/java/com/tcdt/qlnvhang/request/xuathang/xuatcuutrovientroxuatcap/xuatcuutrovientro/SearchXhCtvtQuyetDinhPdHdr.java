@@ -17,6 +17,7 @@ public class SearchXhCtvtQuyetDinhPdHdr extends BaseRequest {
     private String soDx;
     private String soBbQd;
     private String loaiVthh;
+    private String tenVthh;
     private LocalDate ngayKyTu;
     private LocalDate ngayKyDen;
     private LocalDate ngayDxTu;

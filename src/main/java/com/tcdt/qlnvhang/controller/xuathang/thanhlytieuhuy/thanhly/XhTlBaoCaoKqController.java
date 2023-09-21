@@ -59,7 +59,7 @@ public class XhTlBaoCaoKqController {
   public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhTlBaoCaoKqHdrReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhTlBaoCaoKqService.save(currentUser, objReq));
+      resp.setData(xhTlBaoCaoKqService.save(objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {

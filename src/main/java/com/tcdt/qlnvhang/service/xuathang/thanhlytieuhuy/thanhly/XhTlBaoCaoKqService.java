@@ -5,7 +5,7 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlBaoCaoKqRepository;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhRepository;
+import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -14,6 +14,8 @@ import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlBaoCaoKqHdr
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhSc;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTrinhThamDinhHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlBaoCaoKqHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -24,9 +26,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -40,7 +42,7 @@ public class XhTlBaoCaoKqService extends BaseServiceImpl {
   private XhTlBaoCaoKqRepository xhTlBaoCaoKqRepository;
 
   @Autowired
-  private XhTlQuyetDinhRepository xhTlQuyetDinhRepository;
+  private XhTlQuyetDinhHdrRepository xhTlQuyetDinhHdrRepository;
 
   @Autowired
   private FileDinhKemService fileDinhKemService;
@@ -68,40 +70,48 @@ public class XhTlBaoCaoKqService extends BaseServiceImpl {
   }
 
   @Transactional
-  public XhTlBaoCaoKqHdr save(CustomUserDetails currentUser, XhTlBaoCaoKqHdrReq objReq) throws Exception {
-    if (currentUser == null) {
-      throw new Exception("Bad request.");
-    }
-    if (!DataUtils.isNullObject(objReq.getSoBaoCao())) {
-      Optional<XhTlBaoCaoKqHdr> optional = xhTlBaoCaoKqRepository.findBySoBaoCao(objReq.getSoBaoCao());
-      if (optional.isPresent()) {
-        throw new Exception("số quyết định đã tồn tại");
-      }
-    }
-    XhTlBaoCaoKqHdr data = new XhTlBaoCaoKqHdr();
-    BeanUtils.copyProperties(objReq, data);
-    data.setMaDvi(currentUser.getUser().getDepartment());
-    data.setTrangThai(Contains.DUTHAO);
+  public XhTlBaoCaoKqHdr save( XhTlBaoCaoKqHdrReq req) throws Exception {
+//    XhTlBaoCaoKqHdr hdr = new XhTlBaoCaoKqHdr();
+//    validateData(req);
+//    BeanUtils.copyProperties(req, hdr);
+//    hdr.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
+//    XhTlBaoCaoKqHdr created = scQuyetDinhScRepository.save(hdr);
+//    this.updateScTongHopHdr(created,false);
+//    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), ScQuyetDinhSc.TABLE_NAME + "_CAN_CU");
+//    created.setFileCanCu(canCu);
+//    List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), ScQuyetDinhSc.TABLE_NAME + "_DINH_KEM");
+//    created.setFileDinhKem(fileDinhKem);
+    return null;
+  }
 
-    data.getBaoCaoKqDtl().forEach(s -> {
-      s.setBaoCaoKqHdr(data);
-    });
+//  void validateData(XhTlBaoCaoKqHdrReq req) throws Exception {
+//    Optional<ScQuyetDinhSc> bySoQd = hdr.findBySoQd(req.getSoQd());
+//    if(bySoQd.isPresent()){
+//      if(ObjectUtils.isEmpty(req.getId())){
+//        throw new Exception("Số quyết định " + bySoQd.get().getSoQd() +" đã tồn tại");
+//      }else{
+//        if(!req.getId().equals(bySoQd.get().getId())){
+//          throw new Exception("Số quyết định " + bySoQd.get().getSoQd() +" đã tồn tại");
+//        }
+//      }
+//    }
+//  }
 
-    XhTlBaoCaoKqHdr created = xhTlBaoCaoKqRepository.save(data);
-
-    if (!DataUtils.isNullObject(data.getIdQd())) {
-      xhTlQuyetDinhRepository.findById(data.getIdQd())
-          .ifPresent(item -> {
-            item.setIdKq(data.getId());
-            item.setSoKq(data.getSoBaoCao());
-            xhTlQuyetDinhRepository.save(item);
-          });
-    }
-    if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
-      fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(), XhTlBaoCaoKqHdr.TABLE_NAME);
-    }
-
-    return created;
+  void updateScTongHopHdr(ScQuyetDinhSc sc,boolean isDelete) throws Exception {
+//    Optional<ScTrinhThamDinhHdr> byId = scTrinhThamDinhRepository.findById(sc.getIdTtr());
+//    if(byId.isPresent()){
+//      ScTrinhThamDinhHdr data = byId.get();
+//      if(isDelete){
+//        data.setIdQdSc(null);
+//        data.setSoQdSc(null);
+//      }else{
+//        data.setIdQdSc(sc.getId());
+//        data.setSoQdSc(sc.getSoQd());
+//      }
+//      scTrinhThamDinhRepository.save(data);
+//    }else{
+//      throw new Exception("Không tìm thấy số tờ trình cần sửa chữa");
+//    }
   }
 
   @Transactional
@@ -130,14 +140,14 @@ public class XhTlBaoCaoKqService extends BaseServiceImpl {
     });
     XhTlBaoCaoKqHdr created = xhTlBaoCaoKqRepository.save(data);
 
-    if (!DataUtils.isNullObject(data.getIdQd())) {
-      xhTlQuyetDinhRepository.findById(data.getIdQd())
-          .ifPresent(item -> {
-            item.setIdKq(data.getId());
-            item.setSoKq(data.getSoBaoCao());
-            xhTlQuyetDinhRepository.save(item);
-          });
-    }
+//    if (!DataUtils.isNullObject(data.getIdQd())) {
+//      xhTlQuyetDinhHdrRepository.findById(data.getIdQd())
+//          .ifPresent(item -> {
+//            item.setIdKq(data.getId());
+//            item.setSoKq(data.getSoBaoCao());
+//            xhTlQuyetDinhHdrRepository.save(item);
+//          });
+//    }
 
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhTlBaoCaoKqHdr.TABLE_NAME + "_CAN_CU"));
 
@@ -187,14 +197,14 @@ public class XhTlBaoCaoKqService extends BaseServiceImpl {
     }
     XhTlBaoCaoKqHdr data = optional.get();
 
-    if (!DataUtils.isNullObject(data.getIdQd())) {
-      xhTlQuyetDinhRepository.findById(data.getIdQd())
-          .ifPresent(item -> {
-            item.setIdKq(null);
-            item.setSoKq(null);
-            xhTlQuyetDinhRepository.save(item);
-          });
-    }
+//    if (!DataUtils.isNullObject(data.getIdQd())) {
+//      xhTlQuyetDinhHdrRepository.findById(data.getIdQd())
+//          .ifPresent(item -> {
+//            item.setIdKq(null);
+//            item.setSoKq(null);
+//            xhTlQuyetDinhHdrRepository.save(item);
+//          });
+//    }
 
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhTlBaoCaoKqHdr.TABLE_NAME));
     xhTlBaoCaoKqRepository.delete(data);
@@ -209,16 +219,16 @@ public class XhTlBaoCaoKqService extends BaseServiceImpl {
       throw new Exception("Bản ghi không tồn tại");
     }
 
-    list.forEach(f -> {
-      if (!DataUtils.isNullObject(f.getIdQd())) {
-        xhTlQuyetDinhRepository.findById(f.getIdQd())
-            .ifPresent(item -> {
-              item.setIdKq(null);
-              item.setSoKq(null);
-              xhTlQuyetDinhRepository.save(item);
-            });
-      }
-    });
+//    list.forEach(f -> {
+//      if (!DataUtils.isNullObject(f.getIdQd())) {
+//        xhTlQuyetDinhHdrRepository.findById(f.getIdQd())
+//            .ifPresent(item -> {
+//              item.setIdKq(null);
+//              item.setSoKq(null);
+//              xhTlQuyetDinhHdrRepository.save(item);
+//            });
+//      }
+//    });
 
     fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhTlBaoCaoKqHdr.TABLE_NAME));
     xhTlBaoCaoKqRepository.deleteAll(list);
