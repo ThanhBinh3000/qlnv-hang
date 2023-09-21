@@ -39,7 +39,7 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
     )
     Page<DcnbQuyetDinhDcCHdr> searchCuc(@Param("param") SearchDcnbQuyetDinhDcC param, Pageable pageable);
 
-    @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO(c.id,c.soQdinh, c.ngayKyQdinh) FROM DcnbQuyetDinhDcCHdr c " +
+    @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO(c.id,c.soQdinh, c.ngayKyQdinh, c.ngayHieuLuc) FROM DcnbQuyetDinhDcCHdr c " +
             " LEFT JOIN DcnbQuyetDinhDcCDtl dtl on c.id = dtl.hdrId " +
             " LEFT JOIN DcnbKeHoachDcHdr kh on dtl.keHoachDcHdrId = kh.id " +
             " WHERE 1=1 " +
@@ -76,7 +76,7 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
     )
     Page<DcnbQuyetDinhDcCHdr> searchChiCuc(@Param("param") SearchDcnbQuyetDinhDcC param, Pageable pageable);
 
-    @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO(c.id,c.soQdinh, c.ngayKyQdinh) FROM DcnbQuyetDinhDcCHdr c " +
+    @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO(c.id,c.soQdinh, c.ngayKyQdinh,c.ngayHieuLuc) FROM DcnbQuyetDinhDcCHdr c " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl dtl on c.id = dtl.hdrId " +
             "LEFT JOIN DcnbKeHoachDcHdr kh on dtl.keHoachDcHdrId = kh.id " +
             "LEFT JOIN DcnbKeHoachDcDtl khd on kh.id = khd.hdrId " +
@@ -112,8 +112,8 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
     BigDecimal countTongKeHoachDeXuat(String cloaiVthh, String maLoKho);
 
     @Query("SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbQuyetDinhDcCHdrDTO(" +
-            "hdr.id, hdr.soQdinh , hdr.ngayKyQdinh) " +
-            "FROM DcnbQuyetDinhDcCHdr hdr\n" +
+            "hdr.id, hdr.soQdinh , hdr.ngayKyQdinh, hdr.ngayHieuLuc) " +
+            "FROM DcnbQuyetDinhDcCHdr hdr " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl dtl ON dtl.hdrId = hdr.id \n" +
             "LEFT JOIN DcnbKeHoachDcHdr h On h.id  = dtl.keHoachDcHdrId \n" +
             "LEFT JOIN DcnbKeHoachDcDtl d ON d.hdrId  = h.id " +
