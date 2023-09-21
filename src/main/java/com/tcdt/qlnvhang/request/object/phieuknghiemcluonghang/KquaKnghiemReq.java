@@ -16,4 +16,8 @@ public class KquaKnghiemReq {
 	private String kieu;
 
 	private String trangThai;
+	private String maChiTieu;
+	private String tenChiTieu;
+	private String mucYeuCauNhap;
+	private String phuongPhapXd;
 }

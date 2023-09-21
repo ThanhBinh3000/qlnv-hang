@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bienbannhapdaykho;
 
+import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKhoCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
@@ -10,9 +11,11 @@ import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.nhapkho.NhBbNhapDayKhoPrev
 import com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc.QlBienBanNdkCtLtReq;
 import com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +42,8 @@ public class NhBienBanNhapDayKhoServiceImpl extends BaseServiceImpl implements N
 
     @Autowired
     private UserInfoRepository userInfoRepository;
-
+    @Autowired
+    private FileDinhKemService fileDinhKemService;
     @Override
     public Page<NhBbNhapDayKho> searchPage(QlBienBanNhapDayKhoLtReq req) {
         return null;
@@ -64,7 +68,9 @@ public class NhBienBanNhapDayKhoServiceImpl extends BaseServiceImpl implements N
         item.setNam(LocalDate.now().getYear());
         item.setId(Long.valueOf(req.getSoBienBanNhapDayKho().split("/")[0]));
         nhBbNhapDayKhoRepository.save(item);
-
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+            fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), item.getId(), NhBbNhapDayKho.TABLE_NAME);
+        }
         List<NhBbNhapDayKhoCt> chiTiets = saveListChiTiet(item.getId(), req.getChiTiets());
         item.setChiTiets(chiTiets);
 
@@ -109,7 +115,10 @@ public class NhBienBanNhapDayKhoServiceImpl extends BaseServiceImpl implements N
         item.setNgaySua(new Date());
         item.setNguoiSuaId(userInfo.getId());
         nhBbNhapDayKhoRepository.save(item);
-
+        fileDinhKemService.delete(item.getId(), Lists.newArrayList(NhBbNhapDayKho.TABLE_NAME));
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+            fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), item.getId(), NhBbNhapDayKho.TABLE_NAME);
+        }
         List<NhBbNhapDayKhoCt> chiTiets = saveListChiTiet(item.getId(), req.getChiTiets());
         item.setChiTiets(chiTiets);
 
@@ -135,6 +144,8 @@ public class NhBienBanNhapDayKhoServiceImpl extends BaseServiceImpl implements N
         item.setTenKeToan(ObjectUtils.isEmpty(item.getIdKeToan()) ? null : userInfoRepository.findById(item.getIdKeToan()).get().getFullName());
         item.setTenKyThuatVien(ObjectUtils.isEmpty(item.getIdKyThuatVien()) ? null : userInfoRepository.findById(item.getIdKyThuatVien()).get().getFullName());
         item.setTenNguoiPduyet(ObjectUtils.isEmpty(item.getNguoiPduyetId()) ? null : userInfoRepository.findById(item.getNguoiPduyetId()).get().getFullName());
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(item.getId(), Collections.singletonList(NhBbNhapDayKho.TABLE_NAME));
+        item.setFileDinhKems(fileDinhKem);
         return item;
     }
 
@@ -189,7 +200,11 @@ public class NhBienBanNhapDayKhoServiceImpl extends BaseServiceImpl implements N
 
     @Override
     public void delete(Long id) throws Exception {
-
+        Optional<NhBbNhapDayKho> optional = nhBbNhapDayKhoRepository.findById(id);
+        if (!optional.isPresent())
+            throw new Exception("Biên bản không tồn tại.");
+        fileDinhKemService.delete(optional.get().getId(), Lists.newArrayList(NhBbNhapDayKho.TABLE_NAME));
+        nhBbNhapDayKhoRepository.delete(optional.get());
     }
 
     @Override
