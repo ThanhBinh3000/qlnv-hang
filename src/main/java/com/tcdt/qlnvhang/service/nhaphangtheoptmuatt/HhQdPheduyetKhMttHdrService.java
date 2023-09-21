@@ -227,7 +227,8 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         BeanUtils.copyProperties(req, dataDB, "id");
         dataDB.setNgaySua(getDateTimeNow());
         dataDB.setNguoiSuaId(getUser().getId());
-        dataDB.setMaDvi(dataDx.getMaDvi());
+//        dataDB.setMaDvi(dataDx.getMaDvi());
+        dataDB.setMaDvi(getUser().getDvql());
         HhQdPheduyetKhMttHdr  createCheck = hhQdPheduyetKhMttHdrRepository.save(dataDB);
 
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
