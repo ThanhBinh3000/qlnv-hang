@@ -94,7 +94,7 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
             "AND (c.type IS NULL OR (:#{#param.type} IS NULL OR c.type = :#{#param.type}))" +
             "AND (:#{#param.loaiDc} IS NULL OR c.loaiDc = :#{#param.loaiDc}) " +
             "AND (:#{#param.loaiQdinh} IS NULL OR c.loaiQdinh = :#{#param.loaiQdinh}) " +
-            "GROUP BY c.id, c.soQdinh, c.ngayKyQdinh " +
+            "GROUP BY c.id,c.soQdinh, c.ngayKyQdinh,c.ngayHieuLuc " +
             "ORDER BY c.id desc"
     )
     List<DcnbQuyetDinhDcCHdrDTO> searchListChiCuc(@Param("param") SearchDcnbQuyetDinhDcC param);
@@ -117,7 +117,7 @@ public interface DcnbQuyetDinhDcCHdrRepository extends JpaRepository<DcnbQuyetDi
             "LEFT JOIN DcnbQuyetDinhDcCDtl dtl ON dtl.hdrId = hdr.id \n" +
             "LEFT JOIN DcnbKeHoachDcHdr h On h.id  = dtl.keHoachDcHdrId \n" +
             "LEFT JOIN DcnbKeHoachDcDtl d ON d.hdrId  = h.id " +
-            "WHERE hdr.loaiDc  = ?1 AND hdr.trangThai = ?2 AND hdr.maDvi = ?3 AND (hdr.loaiQdinh is null or hdr.loaiQdinh = ?4) and hdr.type is null group by hdr.id,hdr.soQdinh,hdr.ngayKyQdinh")
+            "WHERE hdr.loaiDc  = ?1 AND hdr.trangThai = ?2 AND hdr.maDvi = ?3 AND (hdr.loaiQdinh is null or hdr.loaiQdinh = ?4) and hdr.type is null group by hdr.id, hdr.soQdinh , hdr.ngayKyQdinh, hdr.ngayHieuLuc ")
     List<DcnbQuyetDinhDcCHdrDTO> findByLoaiDcAndTrangThai(String loaiDc, String trangThai,String maDonVi, String loaiQdinh);
 
     List<DcnbQuyetDinhDcCHdr> findBySoQdinh(String soQdinh);

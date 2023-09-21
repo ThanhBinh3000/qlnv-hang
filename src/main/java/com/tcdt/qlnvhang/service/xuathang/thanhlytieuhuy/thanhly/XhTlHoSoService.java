@@ -10,7 +10,9 @@ import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoHdrR
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.suachua.ScTrinhThamDinhHdrReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoReq;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -79,6 +81,16 @@ public class XhTlHoSoService extends BaseServiceImpl {
       s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
     });
     return search;
+  }
+
+  public List<XhTlHoSoHdr> dsTaoQuyetDinhThanhLy(XhTlHoSoReq req) throws Exception {
+    UserInfo currentUser = SecurityContextService.getUser();
+    if (currentUser == null){
+      throw new Exception("Access denied.");
+    }
+    req.setTrangThai(TrangThaiAllEnum.DA_DUYET_BTC.getId());
+    List<XhTlHoSoHdr> list = hdrRepository.listTaoQuyetDinhThanhLy(req);
+    return list;
   }
 
   @Transactional
