@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.suachua.ScTongHopReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlTongHopRequest;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly.XhTlTongHopService;
@@ -48,13 +49,30 @@ public class XhTlTongHopController {
     return ResponseEntity.ok(resp);
   }
 
+  @ApiOperation(value = "Danh sách tổng hợp để trình và thẩm định", response = List.class)
+  @PostMapping(value = "/ds-trinh-tham-dinh", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> listTrinhThamDinh(@RequestBody ScTongHopReq objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(xhTlTongHopService.dsTongHopTrinhVaThamDinh(objReq));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Tra cứu thông tin : {}", e);
+    }
+    return ResponseEntity.ok(resp);
+  }
+
   @ApiOperation(value = "Tạo mới", response = List.class)
   @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhTlTongHopRequest objReq) {
+  public ResponseEntity<BaseResponse> insert(@Valid @RequestBody XhTlTongHopRequest objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhTlTongHopService.save(currentUser, objReq));
+      resp.setData(xhTlTongHopService.save(objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -65,30 +83,13 @@ public class XhTlTongHopController {
     return ResponseEntity.ok(resp);
   }
 
-
-  @ApiOperation(value = "Cập nhật", response = List.class)
-  @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhTlTongHopRequest objReq) {
-    BaseResponse resp = new BaseResponse();
-    try {
-      resp.setData(xhTlTongHopService.update(currentUser, objReq));
-      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-    } catch (Exception e) {
-      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-      resp.setMsg(e.getMessage());
-      log.error("Cập nhật thông tin : {}", e);
-    }
-    return ResponseEntity.ok(resp);
-  }
-
   @ApiOperation(value = "Lấy chi tiết", response = List.class)
-  @GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<BaseResponse> detail(@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids") List<Long> ids) {
+  public ResponseEntity<BaseResponse> detail(@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("id") Long id) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhTlTongHopService.detail(ids).get(0));
+      resp.setData(xhTlTongHopService.detail(id));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class XhTlDanhSachService extends BaseServiceImpl {
@@ -48,21 +49,18 @@ public class XhTlDanhSachService extends BaseServiceImpl {
     return search;
   }
 
-  public List<XhTlDanhSachHdr> detail(List<Long> ids) throws Exception {
-    if (DataUtils.isNullOrEmpty(ids)) throw new Exception("Tham số không hợp lệ.");
-    List<XhTlDanhSachHdr> optional = xhTlDanhSachRepository.findByIdIn(ids);
-    if (DataUtils.isNullOrEmpty(optional)) {
+  public XhTlDanhSachHdr detail(Long id) throws Exception {
+    Optional<XhTlDanhSachHdr> optional = xhTlDanhSachRepository.findById(id);
+    if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
-
-    List<XhTlDanhSachHdr> allById = xhTlDanhSachRepository.findAllById(ids);
+    XhTlDanhSachHdr data = optional.get();
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
-    allById.forEach(data -> {
-      data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
-      data.setMapDmucDvi(mapDmucDvi);
-      data.setMapVthh(mapVthh);
-    });
-    return allById;
+    data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
+    data.setMapDmucDvi(mapDmucDvi);
+    data.setMapVthh(mapVthh);
+
+    return data;
   }
 }
