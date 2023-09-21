@@ -207,7 +207,7 @@ public class DcnbPhieuKnChatLuongHdr extends BaseEntity implements Serializable,
     private List<DcnbPhieuKnChatLuongDtl> dcnbPhieuKnChatLuongDtl = new ArrayList<>();
 
     @Transient
-    private List<FileDinhKem> bienBanLayMauDinhKem = new ArrayList<>();
+    private List<FileDinhKem> dinhKems = new ArrayList<>();
     @Transient
     private String tenTrangThai;
     public void setTrangThai(String trangThai) {

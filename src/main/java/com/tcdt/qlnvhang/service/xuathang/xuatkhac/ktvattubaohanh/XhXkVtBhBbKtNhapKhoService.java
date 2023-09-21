@@ -13,10 +13,12 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhBbKtNhapKhoRequest;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
+import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhBbKtNhapKho;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhBbLayMauHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhQdGiaonvXnHdr;
@@ -169,6 +171,10 @@ public class XhXkVtBhBbKtNhapKhoService extends BaseServiceImpl {
     if (StringUtils.isEmpty(statusReq.getId())) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
+    UserInfo userInfo = SecurityContextService.getUser();
+    if (userInfo == null) {
+      throw new Exception("Access denied.");
+    }
     Optional<XhXkVtBhBbKtNhapKho> optional = xhXkVtBhBbKtNhapKhoRepository.findById(Long.valueOf(statusReq.getId()));
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu");
@@ -177,13 +183,18 @@ public class XhXkVtBhBbKtNhapKhoService extends BaseServiceImpl {
     String status = statusReq.getTrangThai() + optional.get().getTrangThai();
     switch (status) {
       case Contains.CHODUYET_KTVBQ + Contains.DUTHAO:
-      case Contains.CHODUYET_KT + Contains.CHODUYET_KTVBQ:
-      case Contains.CHODUYET_LDCC + Contains.CHODUYET_KT:
       case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_KTVBQ:
       case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_KT:
       case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_LDCC:
         optional.get().setNguoiGduyetId(currentUser.getUser().getId());
         optional.get().setNgayGduyet(LocalDate.now());
+        optional.get().setKtvBaoQuan(userInfo.getFullName());
+        break;
+      case Contains.CHODUYET_KT + Contains.CHODUYET_KTVBQ:
+      case Contains.CHODUYET_LDCC + Contains.CHODUYET_KT:
+        optional.get().setNguoiGduyetId(currentUser.getUser().getId());
+        optional.get().setNgayGduyet(LocalDate.now());
+        optional.get().setKeToanTruong(userInfo.getFullName());
         break;
       case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
       case Contains.TUCHOI_KT + Contains.CHODUYET_KT:
@@ -195,6 +206,7 @@ public class XhXkVtBhBbKtNhapKhoService extends BaseServiceImpl {
       case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
+        optional.get().setLdChiCuc(userInfo.getFullName());
         break;
       default:
         throw new Exception("Phê duyệt không thành công");

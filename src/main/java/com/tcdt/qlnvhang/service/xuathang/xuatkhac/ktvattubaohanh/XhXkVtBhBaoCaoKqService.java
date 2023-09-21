@@ -171,12 +171,15 @@ public class XhXkVtBhBaoCaoKqService extends BaseServiceImpl {
       throw new Exception("Không tìm thấy dữ liệu");
     }
     String status = statusReq.getTrangThai() + optional.get().getTrangThai();
-    switch (status) {
-      case Contains.CHODUYET_LDC + Contains.DUTHAO:
-      case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
+    switch (status){
+      case Contains.CHODUYET_TP + Contains.DUTHAO:
+      case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+      case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+      case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
         optional.get().setNguoiGduyetId(currentUser.getUser().getId());
         optional.get().setNgayGduyet(LocalDate.now());
         break;
+      case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
       case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());

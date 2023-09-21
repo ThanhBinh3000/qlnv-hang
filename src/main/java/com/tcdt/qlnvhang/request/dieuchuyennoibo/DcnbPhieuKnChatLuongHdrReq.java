@@ -5,7 +5,6 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuKnChatLuongDtl;
 import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 
-import javax.persistence.Column;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -129,7 +128,7 @@ public class DcnbPhieuKnChatLuongHdrReq {
 
     private String loaiDc;
 
-    private List<FileDinhKemReq> bienBanLayMauDinhKem = new ArrayList<>();
+    private List<FileDinhKemReq> dinhKems = new ArrayList<>();
     @Valid
     private List<DcnbPhieuKnChatLuongDtl> dcnbPhieuKnChatLuongDtl = new ArrayList<>();
     private ReportTemplateRequest reportTemplateRequest;

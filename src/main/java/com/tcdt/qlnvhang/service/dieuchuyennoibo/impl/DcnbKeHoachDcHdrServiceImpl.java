@@ -306,46 +306,24 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
                     throw new Exception("Vui lòng thêm danh sách hàng hóa!");
                 }
                 for (DcnbKeHoachDcDtl hh : danhSachHangHoa) {
-                    TrangThaiHtReq objReq = new TrangThaiHtReq();
-                    hh.setCoLoKhoNhan(!StringUtils.isEmpty(hh.getMaLoKhoNhan()));
-                    objReq.setMaDvi(hh.getCoLoKho() ? hh.getMaLoKho() : hh.getMaNganKho());
-                    ResponseEntity<BaseResponse> response = khoClient.infoMlk(objReq);
-                    BaseResponse body = response.getBody();
-                    if (body != null && EnumResponse.RESP_SUCC.getDescription().equals(body.getMsg())) {
-                        logger.debug(body.toString());
-                        TypeToken<List<TrangThaiHtResponce>> token = new TypeToken<List<TrangThaiHtResponce>>() {
-                        };
-                        Gson gson = new Gson();
-                        List<TrangThaiHtResponce> res = gson.fromJson(gson.toJson(body.getData()), token.getType());
-                        if (res == null || res.isEmpty()) {
-                            throw new Exception("Không lấy được trạng thái kho hiện thời!");
-                        }
-                        if (res.size() > 1) {
-                            throw new Exception("Tìm thấy 2 trạng thái kho hiện thời! Mã: " + (hh.getCoLoKhoNhan() ? hh.getMaLoKhoNhan() : hh.getMaNganKhoNhan()));
-                        }
-                        if (!hh.getCloaiVthh().equals(res.get(0).getCloaiVthh())) {
-                            throw new Exception("Chủng loại hàng hóa không đúng trong kho hiện thời!");
-                        }
-                        BigDecimal slHienThoi = new BigDecimal(res.get(0).getSlHienThoi());
-                        BigDecimal slConLai = new BigDecimal(0);
-                        if (hh.getCoLoKho()) {
-                            BigDecimal total = danhSachHangHoa.stream().filter(item -> item.getMaLoKho().equals(hh.getMaLoKho()))
-                                    .map(DcnbKeHoachDcDtl::getSoLuongDc)
-                                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-                            slConLai = slHienThoi.subtract(total);
-                        } else {
-                            BigDecimal total = danhSachHangHoa.stream().filter(item -> item.getMaNganKho().equals(hh.getMaNganKho()))
-                                    .map(DcnbKeHoachDcDtl::getSoLuongDc)
-                                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-                            slConLai = slHienThoi.subtract(total);
-                        }
-
-                        int result = slConLai.compareTo(BigDecimal.valueOf(0));
-                        if (result < 0) {
-                            throw new Exception(hh.getTenLoKho() + ": Không đủ số lượng xuất hàng!");
-                        }
+                    KtMlk tinKho = getThongTinKho(hh.getMaLoKho(),hh.getTenLoKho(), hh.getMaNganKho(),hh.getTenNganKho());
+                    BigDecimal slHienThoi = tinKho.getObject().getSlTon();
+                    BigDecimal slConLai = new BigDecimal(0);
+                    if (hh.getCoLoKho()) {
+                        BigDecimal total = danhSachHangHoa.stream().filter(item -> item.getMaLoKho().equals(hh.getMaLoKho()))
+                                .map(DcnbKeHoachDcDtl::getSoLuongDc)
+                                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                        slConLai = slHienThoi.subtract(total);
                     } else {
-                        throw new Exception("Không lấy được trạng thái kho hiện thời!");
+                        BigDecimal total = danhSachHangHoa.stream().filter(item -> item.getMaNganKho().equals(hh.getMaNganKho()))
+                                .map(DcnbKeHoachDcDtl::getSoLuongDc)
+                                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                        slConLai = slHienThoi.subtract(total);
+                    }
+
+                    int result = slConLai.compareTo(BigDecimal.valueOf(0));
+                    if (result < 0) {
+                        throw new Exception(hh.getTenLoKho() + ": Không đủ số lượng xuất hàng!");
                     }
                 }
                 break;
