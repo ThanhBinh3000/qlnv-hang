@@ -13,7 +13,7 @@ public class KtMlkObject {
     String tenNgankho;
     String diaChi;
 
-    LocalDate namSudung;
+    String namSudung;
     String nhiemVu;
     String ghiChu;
     String loaikhoId;
