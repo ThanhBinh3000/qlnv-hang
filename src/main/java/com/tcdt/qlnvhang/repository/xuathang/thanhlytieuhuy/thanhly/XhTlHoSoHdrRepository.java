@@ -35,6 +35,15 @@ public interface XhTlHoSoHdrRepository extends JpaRepository<XhTlHoSoHdr, Long> 
   )
   List<XhTlHoSoHdr> listTaoQuyetDinhThanhLy(@Param("param") XhTlHoSoReq param);
 
+  @Query(value = "SELECT c FROM XhTlHoSoHdr c " +
+          " LEFT JOIN XhTlThongBaoKq qd on c.id = qd.idHoSo " +
+          " WHERE 1 = 1 " +
+          " AND qd.id is null " +
+          " AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
+          " ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc "
+  )
+  List<XhTlHoSoHdr> listTaoThongBaoThanhLy(@Param("param") XhTlHoSoReq param);
+
   void deleteAllByIdIn(List<Long> listId);
 
   List<XhTlHoSoHdr> findByIdIn(List<Long> ids);
