@@ -15,10 +15,12 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTrinhThamDinhDtl;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTrinhThamDinhHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoDtl;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoHdr;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -52,6 +54,9 @@ public class XhTlHoSoService extends BaseServiceImpl {
 
   @Autowired
   private XhTlDanhSachRepository xhTlDanhSachRepository;
+
+  @Autowired
+  private XhTlDanhSachService xhTlDanhSachService;
 
   @Autowired
   private FileDinhKemService fileDinhKemService;
@@ -165,26 +170,39 @@ public class XhTlHoSoService extends BaseServiceImpl {
   }
 
 
-  public List<XhTlHoSoHdr> detail(List<Long> ids) throws Exception {
-    if (DataUtils.isNullOrEmpty(ids)) throw new Exception("Tham số không hợp lệ.");
-    List<XhTlHoSoHdr> optional = xhTlHoSoHdrRepository.findByIdIn(ids);
-    if (DataUtils.isNullOrEmpty(optional)) {
+  public XhTlHoSoHdr detail(Long id) throws Exception {
+    Optional<XhTlHoSoHdr> optional = xhTlHoSoHdrRepository.findById(id);
+    if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
 
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
-    List<XhTlHoSoHdr> allById = xhTlHoSoHdrRepository.findAllById(ids);
-    allById.forEach(data -> {
-      data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
-      List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhTlHoSoHdr.TABLE_NAME));
-      data.setFileDinhKem(fileDinhKem);
+    XhTlHoSoHdr data = optional.get();
 
-      List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(XhTlHoSoHdr.TABLE_NAME + "_CAN_CU"));
-      data.setFileCanCu(canCu);
+    List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhTlHoSoHdr.TABLE_NAME));
+    data.setFileDinhKem(fileDinhKem);
+    List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(XhTlHoSoHdr.TABLE_NAME + "_CAN_CU"));
+    data.setFileCanCu(canCu);
+    HashMap<Long, List<XhTlHoSoDtl>> dataChilren = getDataChilren(Collections.singletonList(data.getId()));
+    data.setChildren(dataChilren.get(data.getId()));
+    return data;
+  }
 
+  private HashMap<Long,List<XhTlHoSoDtl>> getDataChilren(List<Long> idHdr){
+    HashMap<Long,List<XhTlHoSoDtl>> hashMap = new HashMap<>();
+    idHdr.forEach(item -> {
+      List<XhTlHoSoDtl> dtl = dtlRepository.findAllByIdHdr(item);
+      dtl.forEach( dataChilren -> {
+        try {
+          dataChilren.setXhTlDanhSachHdr(xhTlDanhSachService.detail(dataChilren.getIdDsHdr()));
+        } catch (Exception e) {
+          throw new RuntimeException(e);
+        }
+      });
+      hashMap.put(item,dtl);
     });
-    return allById;
+    return hashMap;
   }
 
   @Transactional
@@ -216,58 +234,80 @@ public class XhTlHoSoService extends BaseServiceImpl {
   }
 
 
-  public XhTlHoSoHdr approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
+  public XhTlHoSoHdr approve(StatusReq req) throws Exception {
 
-    if (StringUtils.isEmpty(statusReq.getId())) {
+    if (StringUtils.isEmpty(req.getId())) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
-    Optional<XhTlHoSoHdr> optional = xhTlHoSoHdrRepository.findById(Long.valueOf(statusReq.getId()));
+    Optional<XhTlHoSoHdr> optional = hdrRepository.findById(Long.valueOf(req.getId()));
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
-
-    String status = statusReq.getTrangThai() + optional.get().getTrangThai();
-    switch (status) {
-      case Contains.CHODUYET_TP + Contains.DUTHAO:
-      case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
-      case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
-      case Contains.CHODUYET_TP + Contains.TUCHOI_LDV:
-      case Contains.CHODUYET_TP + Contains.TUCHOI_LDTC:
-      case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
-      case Contains.CHODUYET_LDV + Contains.DADUYET_LDC:
-        optional.get().setNguoiGduyetId(currentUser.getUser().getId());
-        optional.get().setNgayGduyet(LocalDate.now());
-        break;
-      case Contains.CHODUYET_LDV + Contains.CHODUYET_LDC:
-        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
-        optional.get().setNgayDuyetLan1(LocalDate.now());
-        break;
-      case Contains.CHODUYET_LDTC + Contains.CHODUYET_LDV:
-        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
-        optional.get().setNgayDuyetLan2(LocalDate.now());
-        break;
-      case Contains.DADUYET_LDTC + Contains.CHODUYET_LDTC:
-        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
-        optional.get().setNgayDuyetLan3(LocalDate.now());
-        break;
-      case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
-      case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
-      case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
-      case Contains.TUCHOI_LDTC + Contains.CHODUYET_LDTC:
-      case Contains.TU_CHOI_BTC + Contains.CHO_DUYET_BTC:
-        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
-        optional.get().setNgayPduyet(LocalDate.now());
-        optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
-        break;
-      case Contains.CHO_DUYET_BTC + Contains.DADUYET_LDTC:
-        break;
-      case Contains.DA_DUYET_BTC + Contains.CHO_DUYET_BTC:
-        break;
-      default:
-        throw new Exception("Phê duyệt không thành công");
+    XhTlHoSoHdr hdr = optional.get();
+    if(getUser().getCapDvi().equals(Contains.CAP_CUC)){
+      String status = hdr.getTrangThai() + req.getTrangThai();
+      switch (status) {
+        // Re approve : gửi lại duyệt
+        case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+        case Contains.TUCHOI_LDC + Contains.CHODUYET_TP:
+        case Contains.TUCHOI_LDV + Contains.CHODUYET_TP:
+        case Contains.TU_CHOI_CBV + Contains.CHODUYET_TP:
+        case Contains.TUCHOI_LDTC + Contains.CHODUYET_TP:
+          optional.get().setNguoiGduyetId(getUser().getId());
+          optional.get().setNgayGduyet(LocalDate.now());
+          break;
+        // Arena các cấp duuyệt
+        case Contains.DUTHAO + Contains.CHODUYET_TP:
+        case Contains.CHODUYET_TP + Contains.CHODUYET_LDC:
+          optional.get().setNguoiPduyetId(getUser().getId());
+          optional.get().setNgayPduyet(LocalDate.now());
+          break;
+        case Contains.CHODUYET_LDC + Contains.DADUYET_LDC:
+          optional.get().setIdLdc(getUser().getId());
+          optional.get().setNgayDuyetLdc(LocalDate.now());
+          break;
+        // Arena từ chối
+        case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+        case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
+          hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+          break;
+        default:
+          throw new Exception("Phê duyệt không thành công");
+      }
+      optional.get().setTrangThai(req.getTrangThai());
+    }else if (getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)){
+      String status = hdr.getTrangThai() + req.getTrangThai();
+      switch (status) {
+        case Contains.DANG_DUYET_CB_VU + Contains.CHODUYET_LDV:
+        case Contains.DADUYET_LDC + Contains.CHODUYET_LDV:
+          optional.get().setNguoiPduyetId(getUser().getId());
+          optional.get().setNgayDuyetLan2(LocalDate.now());
+          break;
+        case Contains.CHODUYET_LDV + Contains.CHODUYET_LDTC:
+          optional.get().setIdLdv(getUser().getId());
+          optional.get().setNgayDuyetLdv(LocalDate.now());
+          break;
+        case Contains.CHODUYET_LDTC + Contains.DADUYET_LDTC:
+          optional.get().setIdLdtc(getUser().getId());
+          optional.get().setNgayDuyetLdtc(LocalDate.now());
+          break;
+        case Contains.DADUYET_LDTC + Contains.CHO_DUYET_BTC:
+        case Contains.CHO_DUYET_BTC + Contains.DA_DUYET_BTC:
+          optional.get().setNguoiPduyetId(getUser().getId());
+          optional.get().setNgayDuyetLan3(LocalDate.now());
+          break;
+        case Contains.DA_DUYET_LDC + Contains.TU_CHOI_CBV:
+        case Contains.DANG_DUYET_CB_VU + Contains.TU_CHOI_CBV:
+        case Contains.CHO_DUYET_BTC + Contains.TU_CHOI_BTC:
+          hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+          break;
+        default:
+          throw new Exception("Phê duyệt không thành công");
+      }
+      optional.get().setTrangThai(req.getTrangThai());
     }
-    optional.get().setTrangThai(statusReq.getTrangThai());
-    XhTlHoSoHdr created = xhTlHoSoHdrRepository.save(optional.get());
+
+    XhTlHoSoHdr created = hdrRepository.save(optional.get());
     return created;
   }
 

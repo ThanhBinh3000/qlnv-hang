@@ -15,6 +15,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuKdclHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuXuatNhapKho;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhQdGiaonvXnDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhQdGiaonvXnHdr;
 import com.tcdt.qlnvhang.util.Contains;
@@ -173,7 +174,7 @@ public class XhXkVtBhPhieuKdclService extends BaseServiceImpl {
       throw new Exception("Không tìm thấy dữ liệu");
     }
     String status = statusReq.getTrangThai() + optional.get().getTrangThai();
-    switch (status){
+    switch (status) {
       case Contains.CHO_DUYET_TP + Contains.DUTHAO:
       case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
       case Contains.CHO_DUYET_TP + Contains.TUCHOI_TP:
@@ -252,10 +253,21 @@ public class XhXkVtBhPhieuKdclService extends BaseServiceImpl {
               f.setIsDat(phieuKdcl.getIsDat());
               f.setMauBiHuy(phieuKdcl.getMauBiHuy());
             }
-
+          }
+          List<XhXkVtBhPhieuXuatNhapKho> allByIdCanCuIn = xhXkVtBhPhieuXuatNhapKhoRepository.findAllByIdCanCuIn(Arrays.asList(phieuKdcl.getIdQdGiaoNvXh()));
+          if (!allByIdCanCuIn.isEmpty()) {
+            allByIdCanCuIn.forEach(xuatNhapKho -> {
+              if (xoa) {
+                xuatNhapKho.setIdPhieuKdcl(null);
+                xuatNhapKho.setSoPhieuKdcl(null);
+              } else {
+                xuatNhapKho.setIdPhieuKdcl(phieuKdcl.getId());
+                xuatNhapKho.setSoPhieuKdcl(phieuKdcl.getSoPhieu());
+              }
+            });
+            xhXkVtBhPhieuXuatNhapKhoRepository.saveAll(allByIdCanCuIn);
           }
         }
-        xhXkVtBhQdGiaonvXnRepository.save(item);
       }
     }
   }
