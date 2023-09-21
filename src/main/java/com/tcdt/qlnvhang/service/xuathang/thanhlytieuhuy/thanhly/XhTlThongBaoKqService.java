@@ -220,6 +220,7 @@ public class XhTlThongBaoKqService extends BaseServiceImpl {
       case Contains.DA_HOAN_THANH + Contains.DUTHAO:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
+        optional.get().setNgayThongBao(LocalDate.now());
         break;
       default:
         throw new Exception("Phê duyệt không thành công");
