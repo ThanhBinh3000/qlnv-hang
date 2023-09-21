@@ -94,9 +94,11 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     if (currentUser == null) {
       throw new Exception("Bad request.");
     }
-    Optional<XhCtvtDeXuatHdr> optional = xhCtvtDeXuatHdrRepository.findFirstBySoDx(objReq.getSoDx());
-    if (optional.isPresent()) {
-      throw new Exception("số đề xuất đã tồn tại");
+    if (DataUtils.safeToString(objReq.getSoDx()).split("/").length != 1) {
+      Optional<XhCtvtDeXuatHdr> optional = xhCtvtDeXuatHdrRepository.findFirstBySoDx(objReq.getSoDx());
+      if (optional.isPresent()) {
+        throw new Exception("số đề xuất đã tồn tại");
+      }
     }
     XhCtvtDeXuatHdr data = new XhCtvtDeXuatHdr();
     BeanUtils.copyProperties(objReq, data);
@@ -116,10 +118,12 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu cần sửa");
     }
-    Optional<XhCtvtDeXuatHdr> soDx = xhCtvtDeXuatHdrRepository.findFirstBySoDx(objReq.getSoDx());
-    if (soDx.isPresent()) {
-      if (!soDx.get().getId().equals(objReq.getId())) {
-        throw new Exception("số đề xuất đã tồn tại");
+    if (DataUtils.safeToString(objReq.getSoDx()).split("/").length != 1) {
+      Optional<XhCtvtDeXuatHdr> soDx = xhCtvtDeXuatHdrRepository.findFirstBySoDx(objReq.getSoDx());
+      if (soDx.isPresent()) {
+        if (!soDx.get().getId().equals(objReq.getId())) {
+          throw new Exception("Số đề xuất đã tồn tại");
+        }
       }
     }
     XhCtvtDeXuatHdr data = optional.get();
