@@ -19,7 +19,7 @@ import java.util.Optional;
 @Repository
 public interface HhQdPheduyetKhMttHdrRepository extends JpaRepository<HhQdPheduyetKhMttHdr, Long> {
 
-    @Query("SELECT DX from HhQdPheduyetKhMttHdr DX LEFT JOIN HhQdPheduyetKhMttDx DTL ON DTL.idQdHdr = DX.id" +
+    @Query("SELECT DISTINCT DX from HhQdPheduyetKhMttHdr DX LEFT JOIN HhQdPheduyetKhMttDx DTL ON DTL.idQdHdr = DX.id" +
             " WHERE 1 = 1 " +
             "AND (:#{#param.namKh} IS NULL OR DX.namKh = :#{#param.namKh}) " +
             "AND (:#{#param.soQd} IS NULL OR LOWER(DX.soQd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQd}),'%' ) ) )" +
