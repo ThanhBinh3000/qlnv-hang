@@ -105,7 +105,6 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
         return search;
     }
 
-    @Transactional
     public DcnbQuyetDinhDcCHdr save(CustomUserDetails currentUser, DcnbQuyetDinhDcCHdrReq objReq) throws Exception {
         if (currentUser == null) {
             throw new Exception("Bad request.");
@@ -149,14 +148,8 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         dcnbKeHoachDcHdr.setTongDuToanKp(totalDuT);
                         total = total.add(totalDuT);
                         dcnbKeHoachDcHdr.setDaXdinhDiemNhap(true);
-                        dcnbKeHoachDcHdr.setDanhSachHangHoa(e.getDanhSachKeHoach());
-                        DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
-                        e.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdrNew);
-                        e.setKeHoachDcHdrId(dcnbKeHoachDcHdrNew.getId());
-
                         // check hàng hóa trong kho xuất, kho nhận
                         // Check số lượng hiện thời từng lo kho - (tổng đề kế hoạch xuất - tổng xuất trong thực tế)> 0 ;
-                        //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
                         for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
                             hh.setCoLoKho(!StringUtils.isEmpty(hh.getMaLoKho()));
                             if(!StringUtils.isEmpty(hh.getMaNganKho())){
@@ -172,6 +165,13 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                 }
                             }
                         }
+                        dcnbKeHoachDcHdr.setDanhSachHangHoa(e.getDanhSachKeHoach());
+                        DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
+                        e.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdrNew);
+                        e.setKeHoachDcHdrId(dcnbKeHoachDcHdrNew.getId());
+
+                    }else {
+                        throw new Exception("DanhSachKeHoach không được để trống! ");
                     }
                 } else {
                     throw new Exception("dcnbKeHoachDcHdr.id phải là null!");
@@ -199,14 +199,8 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                     .reduce(BigDecimal.ZERO, BigDecimal::add);
                             total = total.add(totalDuT);
                         }
-                        dcnbKeHoachDcHdr.get().setDanhSachHangHoa(e.getDanhSachKeHoach());
-                        DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr.get());
-                        e.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdrNew);
-                        e.setKeHoachDcHdrId(dcnbKeHoachDcHdrNew.getId());
-
                         // check hàng hóa trong kho xuất, kho nhận
                         // Check số lượng hiện thời từng lo kho - (tổng đề kế hoạch xuất - tổng xuất trong thực tế)> 0 ;
-                        //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
                         for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
                             hh.setCoLoKho(!StringUtils.isEmpty(hh.getMaLoKho()));
                             if(!StringUtils.isEmpty(hh.getMaNganKho())){
@@ -222,6 +216,13 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                 }
                             }
                         }
+                        dcnbKeHoachDcHdr.get().setDanhSachHangHoa(e.getDanhSachKeHoach());
+                        DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr.get());
+                        e.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdrNew);
+                        e.setKeHoachDcHdrId(dcnbKeHoachDcHdrNew.getId());
+
+                    }else {
+                        throw new Exception("DanhSachKeHoach không được để trống! ");
                     }
                 } else {
                     throw new Exception("dcnbKeHoachDcHdr.id phải là null!");
@@ -297,7 +298,6 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
         return null;
     }
 
-    @Transactional
     public DcnbQuyetDinhDcCHdr update(CustomUserDetails currentUser, DcnbQuyetDinhDcCHdrReq objReq) throws Exception {
         if (currentUser == null) {
             throw new Exception("Bad request.");
@@ -355,7 +355,6 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         }
                         // check hàng hóa trong kho xuất, kho nhận
                         // Check số lượng hiện thời từng lo kho - (tổng đề kế hoạch xuất - tổng xuất trong thực tế)> 0 ;
-                        //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
                         for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
                             hh.setCoLoKho(!StringUtils.isEmpty(hh.getMaLoKho()));
                             if(!StringUtils.isEmpty(hh.getMaNganKho())){
@@ -374,6 +373,8 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         dcnbKeHoachDcHdr.setDaXdinhDiemNhap(true);
                         dcnbKeHoachDcHdr.setDanhSachHangHoa(e.getDanhSachKeHoach());
                         dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
+                    }else {
+                        throw new Exception("DanhSachKeHoach không được để trống! ");
                     }
                 } else {
                     if (e.getDanhSachKeHoach() != null && !e.getDanhSachKeHoach().isEmpty()) {
@@ -396,10 +397,8 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                             }
                         }
                         dcnbKeHoachDcHdr.setDaXdinhDiemNhap(true);
-                        dcnbKeHoachDcHdr.setDanhSachHangHoa(e.getDanhSachKeHoach());
                         // check hàng hóa trong kho xuất, kho nhận
                         // Check số lượng hiện thời từng lo kho - (tổng đề kế hoạch xuất - tổng xuất trong thực tế)> 0 ;
-                        //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
                         for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
                             hh.setCoLoKho(!StringUtils.isEmpty(hh.getMaLoKho()));
                             if(!StringUtils.isEmpty(hh.getMaNganKho())){
@@ -415,9 +414,12 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                 }
                             }
                         }
+                        dcnbKeHoachDcHdr.setDanhSachHangHoa(e.getDanhSachKeHoach());
                         DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
                         e.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdrNew);
                         e.setKeHoachDcHdrId(dcnbKeHoachDcHdrNew.getId());
+                    }else {
+                        throw new Exception("DanhSachKeHoach không được để trống! ");
                     }
                 }
             } else if (Contains.GIUA_2_CUC_DTNN_KV.equals(data.getLoaiDc()) && Contains.QD_NHAP.equals(data.getLoaiQdinh()) && Contains.CAP_CHI_CUC.equals(currentUser.getUser().getCapDvi())) {
@@ -445,24 +447,25 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                     .reduce(BigDecimal.ZERO, BigDecimal::add);
                             total = total.add(totalDuT);
                         }
-                    }
-                    // check hàng hóa trong kho xuất, kho nhận
-                    // Check số lượng hiện thời từng lo kho - (tổng đề kế hoạch xuất - tổng xuất trong thực tế)> 0 ;
-                    //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
-                    for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
-                        hh.setCoLoKho(!StringUtils.isEmpty(hh.getMaLoKho()));
-                        if(!StringUtils.isEmpty(hh.getMaNganKho())){
-                            KtMlk tinKho = getThongTinKho(hh.getMaLoKho(),hh.getTenLoKho(), hh.getMaNganKho(),hh.getTenNganKho());
-                            hh.setLoaiVthh(tinKho.getObject().getLoaiVthh());
-                            hh.setCloaiVthh(tinKho.getObject().getCloaiVthh());
-                        }
-                        hh.setCoLoKhoNhan(!StringUtils.isEmpty(hh.getMaLoKhoNhan()));
-                        if(!StringUtils.isEmpty(hh.getMaNganKhoNhan())){
-                            KtMlk tinKho = getThongTinKho(hh.getMaLoKhoNhan(),hh.getTenLoKhoNhan(), hh.getMaNganKhoNhan(),hh.getTenNganKhoNhan());
-                            if (!hh.getCloaiVthh().equals(tinKho.getObject().getCloaiVthh())) {
-                                throw new Exception("Chủng loại hàng hóa kho xuất và nhận không giống nhau!");
+                        // check hàng hóa trong kho xuất, kho nhận
+                        // Check số lượng hiện thời từng lo kho - (tổng đề kế hoạch xuất - tổng xuất trong thực tế)> 0 ;
+                        for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
+                            hh.setCoLoKho(!StringUtils.isEmpty(hh.getMaLoKho()));
+                            if(!StringUtils.isEmpty(hh.getMaNganKho())){
+                                KtMlk tinKho = getThongTinKho(hh.getMaLoKho(),hh.getTenLoKho(), hh.getMaNganKho(),hh.getTenNganKho());
+                                hh.setLoaiVthh(tinKho.getObject().getLoaiVthh());
+                                hh.setCloaiVthh(tinKho.getObject().getCloaiVthh());
+                            }
+                            hh.setCoLoKhoNhan(!StringUtils.isEmpty(hh.getMaLoKhoNhan()));
+                            if(!StringUtils.isEmpty(hh.getMaNganKhoNhan())){
+                                KtMlk tinKho = getThongTinKho(hh.getMaLoKhoNhan(),hh.getTenLoKhoNhan(), hh.getMaNganKhoNhan(),hh.getTenNganKhoNhan());
+                                if (!hh.getCloaiVthh().equals(tinKho.getObject().getCloaiVthh())) {
+                                    throw new Exception("Chủng loại hàng hóa kho xuất và nhận không giống nhau!");
+                                }
                             }
                         }
+                    }else {
+                        throw new Exception("DanhSachKeHoach không được để trống! ");
                     }
                     dcnbKeHoachDcHdr.setDanhSachHangHoa(e.getDanhSachKeHoach());
                     dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
@@ -486,10 +489,8 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                 throw new Exception("Đơn vị tính không được để trống!");
                             }
                         }
-                        dcnbKeHoachDcHdr.get().setDanhSachHangHoa(e.getDanhSachKeHoach());
                         // check hàng hóa trong kho xuất, kho nhận
                         // Check số lượng hiện thời từng lo kho - (tổng đề kế hoạch xuất - tổng xuất trong thực tế)> 0 ;
-                        //  /qlnv-luukho/hang-trong-kho/trang-thai-ht
                         for (DcnbKeHoachDcDtl hh : e.getDanhSachKeHoach()) {
                             hh.setCoLoKho(!StringUtils.isEmpty(hh.getMaLoKho()));
                             if(!StringUtils.isEmpty(hh.getMaNganKho())){
@@ -505,6 +506,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                 }
                             }
                         }
+                        dcnbKeHoachDcHdr.get().setDanhSachHangHoa(e.getDanhSachKeHoach());
                         DcnbKeHoachDcHdr dcnbKeHoachDcHdrNew = dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr.get());
                         e.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdrNew);
                         e.setKeHoachDcHdrId(dcnbKeHoachDcHdrNew.getId());
@@ -513,6 +515,8 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                 .map(kphi -> kphi != null ? kphi : BigDecimal.ZERO)
                                 .reduce(BigDecimal.ZERO, BigDecimal::add);
                         total = total.add(totalDuT);
+                    } else {
+                        throw new Exception("dcnbKeHoachDcHdr.id phải khác null!");
                     }
                 } else {
                     throw new Exception("dcnbKeHoachDcHdr.id phải khác null!");
