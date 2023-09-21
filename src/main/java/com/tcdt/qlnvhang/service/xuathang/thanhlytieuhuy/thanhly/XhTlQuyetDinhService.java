@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly;
 
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlToChucRepository;
@@ -41,7 +41,7 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
     @Autowired
     private XhTlQuyetDinhDtlRepository xhTlQuyetDinhDtlRepository;
     @Autowired
-    private XhTlHoSoRepository xhTlHoSoRepository;
+    private XhTlHoSoHdrRepository xhTlHoSoHdrRepository;
     @Autowired
     private XhTlToChucRepository xhTlToChucRepository;
 
@@ -139,11 +139,11 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
         if (!optional.isPresent()) throw new Exception("Bản ghi không tồn tại");
         XhTlQuyetDinhHdr data = optional.get();
         if (!DataUtils.isNullObject(data.getIdHoSo())) {
-            Optional<XhTlHoSoHdr> hoSo = xhTlHoSoRepository.findById(data.getIdHoSo());
+            Optional<XhTlHoSoHdr> hoSo = xhTlHoSoHdrRepository.findById(data.getIdHoSo());
             if (hoSo.isPresent()) {
                 hoSo.get().setIdQd(null);
                 hoSo.get().setSoQd(null);
-                xhTlHoSoRepository.save(hoSo.get());
+                xhTlHoSoHdrRepository.save(hoSo.get());
             }
         }
         xhTlQuyetDinhRepository.delete(data);
@@ -154,12 +154,12 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
         List<XhTlQuyetDinhHdr> list = xhTlQuyetDinhRepository.findAllByIdIn(idSearchReq.getIdList());
         if (list.isEmpty()) throw new Exception("Bản ghi không tồn tại");
         List<Long> listHoSo = list.stream().map(XhTlQuyetDinhHdr::getIdHoSo).collect(Collectors.toList());
-        List<XhTlHoSoHdr> listObjQdPd = xhTlHoSoRepository.findByIdIn(listHoSo);
+        List<XhTlHoSoHdr> listObjQdPd = xhTlHoSoHdrRepository.findByIdIn(listHoSo);
         listObjQdPd.forEach(s -> {
             s.setIdQd(null);
             s.setSoQd(null);
         });
-        xhTlHoSoRepository.saveAll(listObjQdPd);
+        xhTlHoSoHdrRepository.saveAll(listObjQdPd);
         xhTlQuyetDinhRepository.deleteAll(list);
     }
 
@@ -193,11 +193,11 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
         data.setTrangThai(statusReq.getTrangThai());
         if (statusReq.getTrangThai().equals(Contains.BAN_HANH)) {
             if (!DataUtils.isNullObject(data.getIdHoSo())) {
-                Optional<XhTlHoSoHdr> hoSo = xhTlHoSoRepository.findById(data.getIdHoSo());
+                Optional<XhTlHoSoHdr> hoSo = xhTlHoSoHdrRepository.findById(data.getIdHoSo());
                 if (hoSo.isPresent()) {
                     hoSo.get().setIdQd(data.getId());
                     hoSo.get().setSoQd(data.getSoQd());
-                    xhTlHoSoRepository.save(hoSo.get());
+                    xhTlHoSoHdrRepository.save(hoSo.get());
                 }
             }
         }

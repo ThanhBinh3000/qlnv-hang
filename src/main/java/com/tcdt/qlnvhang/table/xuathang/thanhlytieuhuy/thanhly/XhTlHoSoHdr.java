@@ -66,6 +66,6 @@ public class XhTlHoSoHdr extends BaseEntity implements Serializable {
   @Transient
   private String tenDvql;
 
-  @OneToMany(mappedBy = "hoSoHdr", cascade = CascadeType.ALL)
-  private List<XhTlHoSoDtl> hoSoDtl = new ArrayList<>();
+  @Transient
+  private List<XhTlHoSoDtl> children = new ArrayList<>();
 }

@@ -1,6 +1,6 @@
 package com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly;
 
-import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoRequest;
+import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoReq;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoHdr;
 import feign.Param;
 import org.springframework.data.domain.Page;
@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface XhTlHoSoRepository extends JpaRepository<XhTlHoSoHdr, Long> {
+public interface XhTlHoSoHdrRepository extends JpaRepository<XhTlHoSoHdr, Long> {
 
   @Query("SELECT DISTINCT  c FROM XhTlHoSoHdr c " +
       " WHERE 1=1 " +
@@ -22,7 +22,7 @@ public interface XhTlHoSoRepository extends JpaRepository<XhTlHoSoHdr, Long> {
       "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
-  Page<XhTlHoSoHdr> searchPage(@Param("param") XhTlHoSoRequest param, Pageable pageable);
+  Page<XhTlHoSoHdr> searchPage(@Param("param") XhTlHoSoReq param, Pageable pageable);
 
 
   void deleteAllByIdIn(List<Long> listId);
