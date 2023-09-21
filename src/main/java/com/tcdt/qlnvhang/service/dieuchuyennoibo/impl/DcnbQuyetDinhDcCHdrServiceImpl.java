@@ -96,9 +96,10 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                 List<DcnbQuyetDinhDcCDtl> danhSachQuyetDinh = item.getDanhSachQuyetDinh();
                 danhSachQuyetDinh.forEach(i -> {
                     if (!Objects.isNull(i.getKeHoachDcHdrId())) {
-                        Optional<DcnbKeHoachDcHdr> byId = dcnbKeHoachDcHdrRepository.findById(i.getKeHoachDcHdrId());
-                        if (byId.isPresent()) {
-                            i.setDanhSachKeHoach(byId.get().getDanhSachHangHoa());
+                        Optional<DcnbKeHoachDcHdr> dcnbKeHoachDcHdr = dcnbKeHoachDcHdrRepository.findById(i.getKeHoachDcHdrId());
+                        if (dcnbKeHoachDcHdr.isPresent()) {
+                            i.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr.get());
+                            i.setDanhSachKeHoach(dcnbKeHoachDcHdr.get().getDanhSachHangHoa());
                         }
                     }
                 });
