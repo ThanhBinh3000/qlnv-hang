@@ -13,7 +13,6 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdr;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtTongHopHdr;
 import com.tcdt.qlnvhang.util.Contains;
@@ -246,19 +245,44 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     }
 
     String status = statusReq.getTrangThai() + optional.get().getTrangThai();
-    switch (status) {
-      case Contains.BAN_HANH + Contains.DUTHAO:
-        optional.get().setNgayPduyet(LocalDate.now());
-        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
-        break;
-      default:
-        throw new Exception("Phê duyệt không thành công");
+    if (optional.get().getType().equals("XC")) {
+      switch (status) {
+        case Contains.CHODUYET_LDV + Contains.DUTHAO:
+        case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
+        case Contains.CHODUYET_LDV + Contains.TUCHOI_LDTC:
+          optional.get().setNgayPduyet(LocalDate.now());
+          optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+          break;
+        case Contains.CHODUYET_LDTC + Contains.CHODUYET_LDV:
+        case Contains.DADUYET_LDTC + Contains.CHODUYET_LDTC:
+          optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+          optional.get().setNgayPduyet(LocalDate.now());
+          break;
+        case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
+        case Contains.TUCHOI_LDTC + Contains.CHODUYET_LDTC:
+          optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+          optional.get().setNgayPduyet(LocalDate.now());
+          optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
+          break;
+        default:
+          throw new Exception("Phê duyệt không thành công");
+      }
+    } else {
+      switch (status) {
+        case Contains.BAN_HANH + Contains.DUTHAO:
+          optional.get().setNgayPduyet(LocalDate.now());
+          optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+          break;
+        default:
+          throw new Exception("Phê duyệt không thành công");
+      }
     }
     optional.get().setTrangThai(statusReq.getTrangThai());
     XhCtvtQuyetDinhPdHdr pheDuyetRow = optional.get();
 
     //xcap
-    if (pheDuyetRow.isXuatCap()) {
+
+    /*if (pheDuyetRow.isXuatCap()) {
       XhCtvtQuyetDinhPdHdr data = new XhCtvtQuyetDinhPdHdr();
       data.setMaDvi(pheDuyetRow.getMaDvi());
       data.setNam(pheDuyetRow.getNam());
@@ -291,7 +315,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
       data.setQuyetDinhPdDtl(listDtl);
       XhCtvtQuyetDinhPdHdr xuatCapRow = xhCtvtQdPdHdrRepository.save(data);
       pheDuyetRow.setIdXc(xuatCapRow.getId());
-    }
+    }*/
     XhCtvtQuyetDinhPdHdr created = xhCtvtQdPdHdrRepository.save(pheDuyetRow);
     return created;
   }
