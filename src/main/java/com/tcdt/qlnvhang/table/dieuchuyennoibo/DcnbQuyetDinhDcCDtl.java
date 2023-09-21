@@ -32,9 +32,9 @@ public class DcnbQuyetDinhDcCDtl implements Serializable, Cloneable {
     @JsonIgnore
     private DcnbQuyetDinhDcCHdr dcnbQuyetDinhDcCHdr;
 
-//    @Transient
-//    @JsonIgnore
-//    private DcnbKeHoachDcHdr dcnbKeHoachDcHdr;
+    @Transient
+    @JsonIgnore
+    private DcnbKeHoachDcHdr dcnbKeHoachDcHdr;
     @Transient
     private List<DcnbKeHoachDcDtl> danhSachKeHoach = new ArrayList<>();
 }
