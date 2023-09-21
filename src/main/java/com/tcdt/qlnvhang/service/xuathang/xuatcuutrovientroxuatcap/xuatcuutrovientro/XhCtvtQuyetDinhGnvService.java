@@ -67,9 +67,11 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
     if (currentUser == null) {
       throw new Exception("Bad request.");
     }
-    Optional<XhCtvtQuyetDinhGnvHdr> optional = xhCtvtQuyetDinhGnvHdrRepository.findBySoBbQd(objReq.getSoBbQd());
-    if (optional.isPresent()) {
-      throw new Exception("Số quyết định đã tồn tại");
+    if (DataUtils.safeToString(objReq.getSoBbQd()).split("/").length != 1) {
+      Optional<XhCtvtQuyetDinhGnvHdr> optional = xhCtvtQuyetDinhGnvHdrRepository.findBySoBbQd(objReq.getSoBbQd());
+      if (optional.isPresent()) {
+        throw new Exception("Số quyết định đã tồn tại");
+      }
     }
 
     XhCtvtQuyetDinhGnvHdr saveData = new XhCtvtQuyetDinhGnvHdr();
@@ -103,10 +105,12 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu cần sửa");
     }
-    Optional<XhCtvtQuyetDinhGnvHdr> soBbQd = xhCtvtQuyetDinhGnvHdrRepository.findBySoBbQd(objReq.getSoBbQd());
-    if (soBbQd.isPresent()) {
-      if (!soBbQd.get().getId().equals(objReq.getId())) {
-        throw new Exception("số quyết định đã tồn tại");
+    if (DataUtils.safeToString(objReq.getSoBbQd()).split("/").length != 1) {
+      Optional<XhCtvtQuyetDinhGnvHdr> soBbQd = xhCtvtQuyetDinhGnvHdrRepository.findBySoBbQd(objReq.getSoBbQd());
+      if (soBbQd.isPresent()) {
+        if (!soBbQd.get().getId().equals(objReq.getId())) {
+          throw new Exception("số quyết định đã tồn tại");
+        }
       }
     }
 
