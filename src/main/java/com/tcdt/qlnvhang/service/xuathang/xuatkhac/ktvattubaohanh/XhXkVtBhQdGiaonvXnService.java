@@ -95,7 +95,6 @@ public class XhXkVtBhQdGiaonvXnService extends BaseServiceImpl {
     XhXkVtBhQdGiaonvXnHdr data = new XhXkVtBhQdGiaonvXnHdr();
     BeanUtils.copyProperties(objReq, data);
     data.setTrangThai(Contains.DUTHAO);
-    data.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
     data.getQdGiaonvXhDtl().forEach(s -> {
       s.setQdGiaonvXhHdr(data);
       s.setId(null);
