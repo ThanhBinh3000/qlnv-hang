@@ -248,8 +248,8 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
     }
     private KtMlk getThongTinKho(String maLoKho, String tenLoKho,String maNganKho, String tenNganKho) throws Exception {
         TrangThaiHtReq trangThaiHtReq = new TrangThaiHtReq();
-        trangThaiHtReq.setMaDvi(maLoKho != null ? maLoKho : maNganKho);
-        trangThaiHtReq.setTenDvi(maLoKho != null ? tenLoKho : tenNganKho);
+        trangThaiHtReq.setMaDvi(!StringUtils.isEmpty(maLoKho) ? maLoKho : maNganKho);
+        trangThaiHtReq.setTenDvi(!StringUtils.isEmpty(maLoKho) ? tenLoKho : tenNganKho);
         ResponseEntity<BaseResponse> responseNhan = khoClient.infoMlk(trangThaiHtReq);
         BaseResponse body = responseNhan.getBody();
         if (body != null && EnumResponse.RESP_SUCC.getDescription().equals(body.getMsg())) {
