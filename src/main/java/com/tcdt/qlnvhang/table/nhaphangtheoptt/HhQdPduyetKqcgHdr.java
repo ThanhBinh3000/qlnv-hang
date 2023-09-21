@@ -87,6 +87,15 @@ public class HhQdPduyetKqcgHdr extends TrangThaiBaseEntity implements Serializab
     @Transient
     private String tenTrangThaiNh;
 
+    @Transient
+    private Integer slHd;
+
+    @Transient
+    private Integer slHdDaKy;
+
+    @Transient
+    private BigDecimal tongGtriHd;
+
 //    preview
     @Transient
     private String dvt;
