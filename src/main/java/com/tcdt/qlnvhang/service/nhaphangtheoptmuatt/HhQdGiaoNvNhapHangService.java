@@ -140,6 +140,10 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
         Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
         data.getContent().forEach( f -> {
+            List<HopDongMttHdr> listHd = hopDongMttHdrRepository.findAllByIdQdGiaoNvNh(f.getId());
+            List<HopDongMttHdr> listHdDaKy = hopDongMttHdrRepository.findAllByIdQdGiaoNvNhAndTrangThai(f.getId(), Contains.DAKY);
+            f.setSlHd(listHd.size());
+            f.setSlHdDaKy(listHdDaKy.size());
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
