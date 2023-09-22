@@ -388,7 +388,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
                 .tenNhaKho(dcnbPhieuKnChatLuongHdr.get().getTenNhaKho())
                 .tenDiemKho(dcnbPhieuKnChatLuongHdr.get().getTenDiemKho())
                 .soLuongHangBaoQuan("")
-                .hinhThucBq(dcnbPhieuKnChatLuongHdr.get().getHinhThucBq())
+                .hinhThucBq(DieuChuyenNoiBo.getData(dcnbPhieuKnChatLuongHdr.get().getHinhThucBq()))
                 .tenThuKho(dcnbPhieuKnChatLuongHdr.get().getTenThuKho())
                 .ngayNhapDayKho(dcnbPhieuKnChatLuongHdr.get().getNgayNhapDayKho().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .ngayLayMau(dcnbPhieuKnChatLuongHdr.get().getNgayLayMau().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
@@ -403,7 +403,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
                 .lanhDaoCuc(userInfo.isPresent() ? userInfo.get().getFullName() : "")
                 .maQhns(dcnbPhieuKnChatLuongHdr.get().getMaQhns())
                 .loaiHangHoa(dcnbPhieuKnChatLuongHdr.get().getTenCloaiVthh())
-                .hinhThucKeLot(dcnbPhieuKnChatLuongHdr.get().getHinhThucBq())
+                .hinhThucKeLot(DieuChuyenNoiBo.getData(dcnbPhieuKnChatLuongHdr.get().getHinhThucBq()))
                 .dcnbPhieuKnChatLuongDtls(DcnbPhieuKnChatLuongDtlToDto(dcnbPhieuKnChatLuongHdr.get().getDcnbPhieuKnChatLuongDtl()))
                 .build();
     }

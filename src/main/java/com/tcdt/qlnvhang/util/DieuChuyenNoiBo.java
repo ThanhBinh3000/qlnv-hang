@@ -15,7 +15,7 @@ public class DieuChuyenNoiBo {
         if (type.equals("00")) return PathContains.BANG_KE_CAN_HANG_XUAT;
         return PathContains.BANG_KE_CAN_HANG_NHAP;
     }
-    public static String getChiTieuKiemTra(String chiTieuKiemTra){
+    public static String getData(String chiTieuKiemTra){
         var list = Lists.newArrayList(Splitter.on("+*").split(chiTieuKiemTra));
         List<String> nds = new ArrayList<>();
         for (String res : list) {
