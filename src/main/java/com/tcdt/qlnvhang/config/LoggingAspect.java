@@ -32,6 +32,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -155,7 +156,7 @@ public class LoggingAspect {
             phieuNhapXuatHistory.setSoPhieu(rowData.getSoPhieuXuatKho());
             phieuNhapXuatHistory.setLoaiVthh(rowData.getLoaiVthh());
             phieuNhapXuatHistory.setCloaiVthh(rowData.getCloaiVthh());
-            phieuNhapXuatHistory.setMaKho(rowData.getMaLoKho() == null ? rowData.getMaNganKho() : rowData.getMaLoKho());
+            phieuNhapXuatHistory.setMaKho(StringUtils.isEmpty(rowData.getMaLoKho()) ? rowData.getMaNganKho() : rowData.getMaLoKho());
             phieuNhapXuatHistory.setNgayDuyet(rowData.getNgayPduyet());
             phieuNhapXuatHistory.setLoaiNhapXuat(-1);//fix tam 1 la nhap -1 la xuat
             phieuNhapXuatHistory.setKieu("NHAP_XUAT");//nhap xuat hoac khoi tao so du dau ky
@@ -172,7 +173,7 @@ public class LoggingAspect {
               phieuNhapXuatHistory.setSoPhieu(rowData.getSoPhieuNhapKho());
               phieuNhapXuatHistory.setLoaiVthh(rowData.getLoaiVthh());
               phieuNhapXuatHistory.setCloaiVthh(rowData.getCloaiVthh());
-              phieuNhapXuatHistory.setMaKho(rowData.getMaLoKho() == null ? rowData.getMaNganKho() : rowData.getMaLoKho());
+              phieuNhapXuatHistory.setMaKho(StringUtils.isEmpty(rowData.getMaLoKho())  ? rowData.getMaNganKho() : rowData.getMaLoKho());
               phieuNhapXuatHistory.setNgayDuyet(rowData.getNgayPDuyet());
               phieuNhapXuatHistory.setLoaiNhapXuat(1);//fix tam 1 la nhap -1 la xuat
               phieuNhapXuatHistory.setKieu("NHAP_XUAT");//nhap xuat hoac khoi tao so du dau ky
