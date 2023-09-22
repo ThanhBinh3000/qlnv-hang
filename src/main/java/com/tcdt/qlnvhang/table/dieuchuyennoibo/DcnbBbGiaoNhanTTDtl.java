@@ -27,10 +27,8 @@ public class DcnbBbGiaoNhanTTDtl implements Serializable, Cloneable{
     private Long id;
     @Column(name = "HDR_ID", insertable = true, updatable = true)
     private Long hdrId;
-    @NotNull
     @Column(name = "BB_CBI_KHO_ID")
     private Long bbCbiKhoId;
-    @NotNull
     @Column(name = "SO_BB_CBI_KHO")
     private String soBbCbiKho;
     @NotNull

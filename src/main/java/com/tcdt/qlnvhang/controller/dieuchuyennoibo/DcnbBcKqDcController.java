@@ -76,7 +76,7 @@ public class DcnbBcKqDcController {
     @ApiOperation(value = "Tạo mới  ", response = List.class)
     @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BaseResponse> insert(@RequestBody DcnbBbKqDcDTO objReq) {
+    public ResponseEntity<BaseResponse> insert(@Valid @RequestBody DcnbBbKqDcDTO objReq) {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(service.create(objReq));

@@ -30,6 +30,7 @@ public class XhXkVtBhQdGiaonvXnDtl {
   BigDecimal slTonKho;
   String maDviTsan;
   String soPhieuKdcl;
+  String trangThaiXh;
   Long idPhieuKdcl;
   Boolean isDat;
   Boolean mauBiHuy;
@@ -60,6 +61,8 @@ public class XhXkVtBhQdGiaonvXnDtl {
   private String tenNganKho;
   @Transient
   private String tenLoKho;
+  @Transient
+  private String tenTrangThaiXh;
 
   public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
     this.mapDmucDvi = mapDmucDvi;

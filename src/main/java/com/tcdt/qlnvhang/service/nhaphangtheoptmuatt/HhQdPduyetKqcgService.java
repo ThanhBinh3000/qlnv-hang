@@ -67,6 +67,17 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
         data.getContent().forEach(f->{
+            List<HopDongMttHdr> listHd = hopDongMttHdrRepository.findAllByIdQdKq(f.getId());
+            List<HopDongMttHdr> listHdDaKy = hopDongMttHdrRepository.findAllByIdQdKqAndTrangThai(f.getId(), Contains.DAKY);
+            f.setSlHd(listHd.size());
+            f.setSlHdDaKy(listHdDaKy.size());
+            BigDecimal tongGtriHd = BigDecimal.ZERO;
+            for (HopDongMttHdr hopDongMttHdr : listHd) {
+//                tongGtriHd.add(hopDongMttHdr.getSoLuong().multiply(hopDongMttHdr.getDonGiaGomThue()).multiply(BigDecimal.valueOf(1000)));
+                BigDecimal product = hopDongMttHdr.getSoLuong().multiply(hopDongMttHdr.getDonGiaGomThue()).multiply(new BigDecimal("1000"));
+                tongGtriHd = tongGtriHd.add(product);
+            }
+            f.setTongGtriHd(tongGtriHd);
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiHd()));
             f.setTenTrangThaiNh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiNh()));
@@ -233,9 +244,10 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
         HhQdPduyetKqcgHdr data = qOptional.get();
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
-
-
-
+//        List<HopDongMttHdr> listHd = hopDongMttHdrRepository.findAllByIdQdKq(data.getId());
+//        List<HopDongMttHdr> listHdDaKy = hopDongMttHdrRepository.findAllByIdQdGiaoNvNhAndTrangThai(f.getId(), Contains.DAKY);
+//        f.setSlHd(listHd.size());
+//        f.setSlHdDaKy(listHdDaKy.size());
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         data.setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiHd()));
         data.setTenTrangThaiNh(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiNh()));

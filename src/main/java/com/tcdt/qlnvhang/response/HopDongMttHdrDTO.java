@@ -30,6 +30,12 @@ public class HopDongMttHdrDTO {
     private Long id;
     private Integer namNhap;
     private String soQd;
+    @Transient
+    private Integer slHd;
+    @Transient
+    private Integer slHdDaKy;
+    @Transient
+    private BigDecimal tongGtriHd;
     @Temporal(TemporalType.DATE)
     private Date ngayQd;
     @Temporal(TemporalType.DATE)
