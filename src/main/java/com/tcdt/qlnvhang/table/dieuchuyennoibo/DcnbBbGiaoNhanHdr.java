@@ -79,6 +79,9 @@ public class DcnbBbGiaoNhanHdr extends BaseEntity implements Serializable, Clone
     private String lyDoTuChoi;
     @Column(name = "KE_HOACH_DC_DTL_ID")
     private Long keHoachDcDtlId;
+    private String benNhan;
+    private String benGiao;
+    private String ghiChuThem;
     @Transient
     private List<FileDinhKem> fileCanCu = new ArrayList<>();
     @Transient
