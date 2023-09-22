@@ -124,6 +124,9 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
         data.setTrangThai(Contains.DUTHAO);
         data.setType(null);
         BigDecimal total = new BigDecimal(0l);
+        if (data.getDanhSachQuyetDinh() == null || data.getDanhSachQuyetDinh().isEmpty()) {
+            throw new Exception("DanhSachQuyetDinh không được để trống!");
+        }
         for (DcnbQuyetDinhDcCDtl e : data.getDanhSachQuyetDinh()) {
             if (Contains.DCNB.equals(data.getLoaiDc()) && Contains.CAP_CUC.equals(currentUser.getUser().getCapDvi())) {
                 // được phép thêm mới kế hoạch và update kế hoạch (ngầm)
@@ -655,7 +658,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                     if (keHoachDcHdr.isPresent()) {
                         keHoachDcHdr.get().setDaXdinhDiemNhap(true);
                         dcnbKeHoachDcHdrRepository.save(keHoachDcHdr.get());
-                    }else {
+                    } else {
                         throw new Exception("Không tìm thấy kế hoạch! id: " + hh.getKeHoachDcHdrId());
                     }
                     hh.setDcnbKeHoachDcHdr(keHoachDcHdr.get());
