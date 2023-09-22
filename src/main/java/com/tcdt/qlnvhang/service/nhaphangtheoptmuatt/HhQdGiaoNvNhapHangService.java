@@ -466,6 +466,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
             dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi())?null:hashMapDmdv.get(dtl.getMaDvi()));
             dtl.setTenDiemKho(StringUtils.isEmpty(dtl.getMaDiemKho())?null:hashMapDmdv.get(dtl.getMaDiemKho()));
             dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
+            BigDecimal tongSl = BigDecimal.ZERO;
             for (HhQdGiaoNvNhDdiem dDiem : listDd){
                 dDiem.setTenCuc(StringUtils.isEmpty(dDiem.getMaCuc())?null:hashMapDmdv.get(dDiem.getMaCuc()));
                 dDiem.setTenChiCuc(StringUtils.isEmpty(dDiem.getMaChiCuc())?null:hashMapDmdv.get(dDiem.getMaChiCuc()));
@@ -473,6 +474,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 dDiem.setTenNhaKho(StringUtils.isEmpty(dDiem.getMaNhaKho())?null:hashMapDmdv.get(dDiem.getMaNhaKho()));
                 dDiem.setTenNganKho(StringUtils.isEmpty(dDiem.getMaNganKho())?null:hashMapDmdv.get(dDiem.getMaNganKho()));
                 dDiem.setTenLoKho(StringUtils.isEmpty(dDiem.getMaLoKho())?null:hashMapDmdv.get(dDiem.getMaLoKho()));
+                tongSl = tongSl.add(dDiem.getSoLuong());
                 this.setDataPhieu(null,dDiem);
                 if(dDiem.getIdDtl().equals(dtl.getId())){
                     qdGiaoNvNhDdiem.add(dDiem);
@@ -490,6 +492,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 });
                 dDiem.setListBienBanLayMau(bbLayMau);
             }
+            dtl.setSoLuong(tongSl);
             dtl.setChildren(qdGiaoNvNhDdiem);
         }
         data.setHhQdGiaoNvNhangDtlList(listDtl);
