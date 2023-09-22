@@ -52,6 +52,8 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
     private DcnbBienBanLayMauHdrRepository dcnbBienBanLayMauHdrRepository;
     @Autowired
     private FileDinhKemService fileDinhKemService;
+    @Autowired
+    private DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
 
     @Autowired
     private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
@@ -104,6 +106,14 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
 
         DcnbBbGiaoNhanHdr data = new DcnbBbGiaoNhanHdr();
         BeanUtils.copyProperties(req, data);
+        Optional<DcnbKeHoachDcDtl> keHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(req.getKeHoachDcDtlId());
+        if (keHoachDcDtl.isPresent()) {
+            if (keHoachDcDtl.get().getParentId() != null) {
+                data.setKeHoachDcDtlId(keHoachDcDtl.get().getParentId());
+            } else {
+                data.setKeHoachDcDtlId(req.getKeHoachDcDtlId());
+            }
+        }
         data.setMaDvi(userInfo.getDvql());
         data.setId(null);
         req.getDanhSachDaiDien().forEach(e -> {
@@ -160,6 +170,14 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
         }
         DcnbBbGiaoNhanHdr data = optional.get();
         BeanUtils.copyProperties(req, data);
+        Optional<DcnbKeHoachDcDtl> keHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(req.getKeHoachDcDtlId());
+        if (keHoachDcDtl.isPresent()) {
+            if (keHoachDcDtl.get().getParentId() != null) {
+                data.setKeHoachDcDtlId(keHoachDcDtl.get().getParentId());
+            } else {
+                data.setKeHoachDcDtlId(req.getKeHoachDcDtlId());
+            }
+        }
         data.setDanhSachDaiDien(req.getDanhSachDaiDien());
         data.setDanhSachBangKe(req.getDanhSachBangKe());
         DcnbBbGiaoNhanHdr update = hdrRepository.save(data);
