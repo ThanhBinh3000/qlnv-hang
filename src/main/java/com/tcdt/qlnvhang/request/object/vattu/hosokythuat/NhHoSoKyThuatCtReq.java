@@ -23,5 +23,5 @@ public class NhHoSoKyThuatCtReq {
     private Date tdiemNhap;
     private Integer soLuong;
     private String ghiChu;
-    private FileDinhKemReq fileDinhKems;
+    private List<FileDinhKemReq> fileDinhKem;
 }

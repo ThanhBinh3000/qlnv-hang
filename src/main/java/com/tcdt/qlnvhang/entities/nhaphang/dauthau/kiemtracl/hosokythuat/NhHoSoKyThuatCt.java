@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat;
 
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -36,5 +38,10 @@ public class NhHoSoKyThuatCt implements Serializable {
 
     @Column(name = "GHI_CHU")
     private String ghiChu;
+    @Transient
+    private String fileName;
+
+    @Transient
+    private List<FileDinhKem> fileDinhKem;
 
 }
