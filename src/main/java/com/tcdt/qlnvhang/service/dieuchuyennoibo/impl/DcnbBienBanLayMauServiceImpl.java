@@ -348,7 +348,7 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
                 .soLuongMau(dcnbBienBanLayMauHdr.get().getSoLuongMau())
                 .donViTinh(dcnbBienBanLayMauHdr.get().getDonViTinh())
                 .pPLayMau(dcnbBienBanLayMauHdr.get().getPPLayMau())
-                .chiTieuKiemTra(DieuChuyenNoiBo.getChiTieuKiemTra(dcnbBienBanLayMauHdr.get().getChiTieuKiemTra()))
+                .chiTieuKiemTra(DieuChuyenNoiBo.getData(dcnbBienBanLayMauHdr.get().getChiTieuKiemTra()))
                 .ktvBaoQuan(dcnbBienBanLayMauHdr.get().getKtvBaoQuan())
                 .truongBpKtbq(dcnbBienBanLayMauHdr.get().getKtvBaoQuan())
                 .lanhDaoChiCuc(userInfo.isPresent() ? userInfo.get().getFullName() : "")
