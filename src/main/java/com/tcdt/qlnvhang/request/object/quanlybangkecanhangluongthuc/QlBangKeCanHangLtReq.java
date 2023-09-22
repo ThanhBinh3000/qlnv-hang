@@ -40,6 +40,7 @@ public class QlBangKeCanHangLtReq extends BaseRequest {
     private String soPhieuNhapKho;
     private String maQhns;
     private String nguoiGiamSat;
+    private BigDecimal trongLuongBaoBi;
     private List<FileDinhKemReq> fileDinhKems;
 
     private List<QlBangKeChCtLtReq> chiTiets = new ArrayList<>();

@@ -159,14 +159,16 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 
 		HhDchinhDxKhLcntHdr dataMap = new ModelMapper().map(objReq, HhDchinhDxKhLcntHdr.class);
 		dataMap.setNgayTao(getDateTimeNow());
-		dataMap.setTrangThai(Contains.DUTHAO);
+		dataMap.setTrangThai(Contains.DA_LAP);
 		dataMap.setNguoiTaoId(getUser().getId());
 		dataMap.setFileDinhKem(fileDinhKemList);
 
 		hdrRepository.save(dataMap);
-		HhQdKhlcntDtl hhQdKhlcntDtl =  hhQdKhlcntDtlRepository.findByIdQdHdr(dataMap.getIdQdGoc());
-		hhQdKhlcntDtl.setIdDcDxHdr(dataMap.getId());
-		hhQdKhlcntDtlRepository.save(hhQdKhlcntDtl);
+		List<HhQdKhlcntDtl> hhQdKhlcntDtl =  hhQdKhlcntDtlRepository.findByIdQdHdr(dataMap.getIdQdGoc());
+		hhQdKhlcntDtl.forEach(item -> {
+			item.setIdDcDxHdr(dataMap.getId());
+			hhQdKhlcntDtlRepository.save(item);
+		});
 		this.saveCtietLT(dataMap.getId(),objReq);
 		return dataMap;
 	}
@@ -385,7 +387,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 				throw new Exception("Phê duyệt không thành công");
 			}
 		} else {
-			if ((Contains.BAN_HANH + Contains.DUTHAO).equals(status)) {
+			if ((Contains.BAN_HANH + Contains.DA_LAP).equals(status)) {
 				optional.get().setNguoiPduyetId(getUser().getId());
 				optional.get().setNgayPduyet(getDateTimeNow());
 			} else {
@@ -599,12 +601,14 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 			gThauCietRepository.deleteAll(listGthauCtiet);
 			gThauCietVtRepository.deleteAll(listGthauCtietVt);
 		} else {
-			if (!optional.get().getTrangThai().equals(Contains.DUTHAO)){
-				throw new Exception("Chỉ cho phép xóa bản ghi ở trạng thái dự thảo");
+			if (!optional.get().getTrangThai().equals(Contains.DA_LAP)){
+				throw new Exception("Chỉ cho phép xóa bản ghi ở trạng thái nháp");
 			}
-			HhQdKhlcntDtl hhQdKhlcntDtl = hhQdKhlcntDtlRepository.findByIdQdHdr(optional.get().getIdQdGoc());
-			hhQdKhlcntDtl.setIdDcDxHdr(null);
-			hhQdKhlcntDtlRepository.save(hhQdKhlcntDtl);
+			List<HhQdKhlcntDtl> hhQdKhlcntDtl = hhQdKhlcntDtlRepository.findByIdQdHdr(optional.get().getIdQdGoc());
+			hhQdKhlcntDtl.forEach(item -> {
+				item.setIdDcDxHdr(null);
+				hhQdKhlcntDtlRepository.save(item);
+			});
 			List<HhDchinhDxKhLcntDtl> listDtl=dtlRepository.findAllByIdDxDcHdr(optional.get().getId());
 			List<Long> idListDtl=listDtl.stream().map(HhDchinhDxKhLcntDtl::getId).collect(Collectors.toList());
 			List<HhDchinhDxKhLcntDsgthau>  listGthau = gThauRepository.findAllByIdDcDxDtlIn(idListDtl);

@@ -49,7 +49,7 @@ public class NhBangKeCanHang extends TrangThaiBaseEntity implements Serializable
     private String maDvi;
     private String maQhns;
     private String nguoiGiamSat;
-
+    private BigDecimal trongLuongBaoBi;
     @Transient
     private String tenDvi;
 
