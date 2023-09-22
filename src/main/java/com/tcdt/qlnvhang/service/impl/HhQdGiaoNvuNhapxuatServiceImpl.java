@@ -389,17 +389,17 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
 			case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
 			case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
-				optional.get().setNguoiGuiDuyet(getUser().getUsername());
+				optional.get().setNguoiGuiDuyet(getUser().getFullName());
 				optional.get().setNgayGuiDuyet(getDateTimeNow());
 				break;
 			case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
 			case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
-				optional.get().setNguoiPduyet(getUser().getUsername());
+				optional.get().setNguoiPduyet(getUser().getFullName());
 				optional.get().setNgayPduyet(getDateTimeNow());
 				optional.get().setLdoTuchoi(stReq.getLyDo());
 				break;
 			case Contains.BAN_HANH + Contains.CHODUYET_LDC:
-				optional.get().setNguoiPduyet(getUser().getUsername());
+				optional.get().setNguoiPduyet(getUser().getFullName());
 				optional.get().setNgayPduyet(getDateTimeNow());
 				break;
 			default:
@@ -907,10 +907,19 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 	@Override
 	public ReportTemplateResponse preview(HhQdGiaoNvuNhapxuatHdrReq hhQdGiaoNvuNhapxuatHdrReq) throws Exception {
 		NhQdGiaoNvuNhapxuatHdr qdGiaoNvuNhapxuatHdr = detail(hhQdGiaoNvuNhapxuatHdrReq.getId().toString());
+		if (!hhQdGiaoNvuNhapxuatHdrReq.getLoaiVthh().startsWith("02")) {
+			qdGiaoNvuNhapxuatHdr.setDonViTinh("tấn");
+		}
 		ReportTemplate model = findByTenFile(hhQdGiaoNvuNhapxuatHdrReq.getReportTemplateRequest());
 		byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
 		NhQdGiaoNvuNhapxuatPreview object = new NhQdGiaoNvuNhapxuatPreview();
+		object.setHdr(qdGiaoNvuNhapxuatHdr);
+		object.setThoiHanNk(convertDate(qdGiaoNvuNhapxuatHdr.getTgianNkho()));
+		String[] parts = Objects.requireNonNull(convertDate(qdGiaoNvuNhapxuatHdr.getNgayPduyet())).split("/");
+		object.setNgayKy(parts[0]);
+		object.setThangKy(parts[1]);
+		object.setNamKy(parts[2]);
 		return docxToPdfConverter.convertDocxToPdf(inputStream, object);
 	}
 }
