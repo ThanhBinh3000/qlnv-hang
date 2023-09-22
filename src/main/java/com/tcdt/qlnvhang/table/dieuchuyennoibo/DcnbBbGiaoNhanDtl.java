@@ -31,6 +31,9 @@ public class DcnbBbGiaoNhanDtl implements Serializable, Cloneable{
     private String chucVu;
     @NotNull
     private String type;
+    private String benNhan;
+    private String benGiao;
+    private String ghiChu;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
