@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.controller.nhaphang.dauthau.nhapkho;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
+import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtReq;
 import com.tcdt.qlnvhang.request.search.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
@@ -77,19 +78,21 @@ public class NhBienBanNhapDayKhoController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xóa Quản lý lương thực", response = List.class)
-    @DeleteMapping("/{id}")
-    public ResponseEntity<BaseResponse> delete(@PathVariable Long id) {
+    @ApiOperation(value = "Xoá", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_XOA, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> delete(@RequestBody IdSearchReq idSearchReq) {
         BaseResponse resp = new BaseResponse();
         try {
-//            resp.setData(service.delete(id));
+            service.delete(idSearchReq.getId());
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
-            log.error("Xóa Quản lý lương thực lỗi: {}", e);
+            log.error("Xoá trace: {}", e);
         }
+
         return ResponseEntity.ok(resp);
     }
 
