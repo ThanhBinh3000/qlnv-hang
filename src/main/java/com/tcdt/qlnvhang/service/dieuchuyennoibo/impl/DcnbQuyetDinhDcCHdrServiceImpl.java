@@ -918,7 +918,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                     dcnbKeHoachDcHdrClone.setTrangThai(statusReq.getTrangThai());
                     DcnbKeHoachDcHdr finalDcnbKeHoachDcHdrClone = dcnbKeHoachDcHdrClone;
                     dcnbKeHoachDcHdrClone.setDanhSachHangHoa(dcnbKeHoachDcHdrClone.getDanhSachHangHoa().stream()
-                            .filter(item -> item.getMaDiemKho().substring(0, 10).equals(maChiCucThue)).map(itemMap1 -> {
+                            .filter(item -> item.getMaDiemKho().substring(0, 8).equals(maChiCucThue)).map(itemMap1 -> {
                                 itemMap1.setParentId(itemMap1.getId());
                                 itemMap1.setId(null);
                                 itemMap1.setHdrId(finalDcnbKeHoachDcHdrClone.getId());
