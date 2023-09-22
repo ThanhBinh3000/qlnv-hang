@@ -33,7 +33,6 @@ public class DcnbBbChuanBiKhoHdrReq extends BaseRequest {
     @NotNull
     private Long qdDcCucId;
     private LocalDate ngayQdDcCuc;
-    @NotNull
     private BigDecimal soLuongQdDcCuc;
     private String soBban;
     @NotNull
