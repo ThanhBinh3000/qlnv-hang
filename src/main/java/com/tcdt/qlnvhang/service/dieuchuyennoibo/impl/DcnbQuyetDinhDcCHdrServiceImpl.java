@@ -380,7 +380,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                     if (e.getDcnbKeHoachDcHdr().getDanhSachHangHoa() != null && !e.getDcnbKeHoachDcHdr().getDanhSachHangHoa().isEmpty()) {
                         DcnbKeHoachDcHdr dcnbKeHoachDcHdr = new DcnbKeHoachDcHdr();
                         dcnbKeHoachDcHdr.setType(Contains.NHAN_DIEU_CHUYEN_TS);
-                        dcnbKeHoachDcHdr.setMaDviPq(e.getDcnbKeHoachDcHdr().getDanhSachHangHoa().get(0).getMaChiCucNhan());
+                        dcnbKeHoachDcHdr.setMaDviPq(e.getDcnbKeHoachDcHdr().getDanhSachHangHoa().get(0).getMaDiemKhoNhan().substring(0, 8));
                         dcnbKeHoachDcHdr.setPhuongAnDieuChuyen(new ArrayList<>());
 
                         BigDecimal totalDuT = e.getDcnbKeHoachDcHdr().getDanhSachHangHoa().stream()
