@@ -21,6 +21,7 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DieuChuyenNoiBo;
 import lombok.RequiredArgsConstructor;
 import lombok.var;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbNhapDayKhoHdr;
@@ -427,8 +428,8 @@ public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBN
                 .tichLuongKhaDung(dcnbBBNTBQHdr.get().getTichLuongKhaDung())
                 .slThucNhapDc(dcnbBBNTBQHdr.get().getSlThucNhapDc())
                 .phuongThucBaoQuan(dcnbBBNTBQHdr.get().getPhuongThucBaoQuan())
-                .hinhThucKeLot(dcnbBBNTBQHdr.get().getHinhThucBaoQuan())
-                .hinhThucBaoQuan(dcnbBBNTBQHdr.get().getHinhThucBaoQuan())
+                .hinhThucKeLot(DieuChuyenNoiBo.getData(dcnbBBNTBQHdr.get().getHinhThucBaoQuan()))
+                .hinhThucBaoQuan(DieuChuyenNoiBo.getData(dcnbBBNTBQHdr.get().getHinhThucBaoQuan()))
                 .dinhMucDuocGiao(dcnbBBNTBQHdr.get().getDinhMucDuocGiao())
                 .dinhMucTT(dcnbBBNTBQHdr.get().getDinhMucTT())
                 .tongKinhPhiDaTh(dcnbBBNTBQHdr.get().getTongKinhPhiDaTh())
