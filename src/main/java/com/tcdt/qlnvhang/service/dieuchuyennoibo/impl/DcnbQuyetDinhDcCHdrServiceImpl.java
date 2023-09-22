@@ -347,7 +347,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                 .reduce(BigDecimal.ZERO, BigDecimal::add);
                         dcnbKeHoachDcHdr.setTongDuToanKp(totalDuT);
                         total = total.add(totalDuT);
-                        for (DcnbKeHoachDcDtl e1 : dcnbKeHoachDcHdr.getDanhSachHangHoa()) {
+                        for (DcnbKeHoachDcDtl e1 : e.getDcnbKeHoachDcHdr().getDanhSachHangHoa()) {
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
                             e1.setDaXdinhDiemNhap(true);
                             e1.setDuToanKphi(e1.getDuToanKphi() == null ? new BigDecimal(0) : e1.getDuToanKphi());
@@ -357,7 +357,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         }
                         // check hàng hóa trong kho xuất, kho nhận
                         // Check số lượng hiện thời từng lo kho - (tổng đề kế hoạch xuất - tổng xuất trong thực tế)> 0 ;
-                        for (DcnbKeHoachDcDtl hh : dcnbKeHoachDcHdr.getDanhSachHangHoa()) {
+                        for (DcnbKeHoachDcDtl hh : e.getDcnbKeHoachDcHdr().getDanhSachHangHoa()) {
                             hh.setCoLoKho(!StringUtils.isEmpty(hh.getMaLoKho()));
                             if (!StringUtils.isEmpty(hh.getMaNganKho())) {
                                 KtMlk tinKho = getThongTinKho(hh.getMaLoKho(), hh.getTenLoKho(), hh.getMaNganKho(), hh.getTenNganKho());
@@ -372,6 +372,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                 }
                             }
                         }
+                        dcnbKeHoachDcHdr.setDanhSachHangHoa(e.getDcnbKeHoachDcHdr().getDanhSachHangHoa());
                         dcnbKeHoachDcHdr.setDaXdinhDiemNhap(true);
                         dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
                     } else {
