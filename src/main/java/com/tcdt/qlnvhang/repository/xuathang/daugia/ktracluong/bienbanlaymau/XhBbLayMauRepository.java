@@ -10,31 +10,28 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface XhBbLayMauRepository extends BaseRepository<XhBbLayMau, Long> {
 
-	@Query("SELECT DISTINCT LM from XhBbLayMau LM " +
-			"LEFT JOIN XhQdGiaoNvXh QD ON LM.idQd = QD.id WHERE 1 = 1 " +
-			"AND (:#{#param.nam} IS NULL OR LM.nam = :#{#param.nam}) " +
-			"AND (:#{#param.soBienBan} IS NULL OR LOWER(LM.soBienBan) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soBienBan}),'%' ) ) )" +
-			"AND (:#{#param.soQd} IS NULL OR LOWER(LM.soQd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQd}),'%' ) ) )" +
-			"AND (:#{#param.dviKnghiem} IS NULL OR LOWER(LM.dviKnghiem) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.dviKnghiem}),'%'))) " +
-			"AND (:#{#param.ngayLayMauTu} IS NULL OR LM.ngayLayMau >= :#{#param.ngayLayMauTu}) " +
-			"AND (:#{#param.ngayLayMauDen} IS NULL OR LM.ngayLayMau <= :#{#param.ngayLayMauDen}) " +
-			"AND (:#{#param.loaiVthh} IS NULL OR LM.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
-			"AND (:#{#param.trangThai} IS NULL OR LM.trangThai = :#{#param.trangThai}) " +
-			"AND (:#{#param.maDviCuc} IS NULL OR QD.maDvi = :#{#param.maDviCuc}) " +
-			"AND (:#{#param.maDvi} IS NULL OR LM.maDvi = :#{#param.maDvi})")
-	Page<XhBbLayMau> searchPage(@Param("param") XhBbLayMauRequest param, Pageable pageable);
+    @Query("SELECT DISTINCT QD FROM XhBbLayMau QD " +
+            "WHERE (:#{#param.dvql} IS NULL OR QD.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
+            "AND (:#{#param.nam} IS NULL OR QD.nam = :#{#param.nam}) " +
+            "AND (:#{#param.soBbLayMau} IS NULL OR QD.soBbLayMau = :#{#param.soBbLayMau}) " +
+            "AND (:#{#param.soQdNv} IS NULL OR QD.soQdNv = :#{#param.soQdNv}) " +
+            "AND (:#{#param.donViKnghiem} IS NULL OR LOWER(QD.donViKnghiem) LIKE LOWER(CONCAT('%', :#{#param.donViKnghiem}, '%'))) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR QD.loaiVthh = :#{#param.loaiVthh}) " +
+            "AND (:#{#param.ngayLayMauTu} IS NULL OR QD.ngayLayMau >= :#{#param.ngayLayMauTu}) " +
+            "AND (:#{#param.ngayLayMauDen} IS NULL OR QD.ngayLayMau <= :#{#param.ngayLayMauDen}) " +
+            "AND (:#{#param.trangThai} IS NULL OR QD.trangThai = :#{#param.trangThai}) " +
+            "ORDER BY QD.ngaySua DESC, QD.ngayTao DESC, QD.id DESC")
+    Page<XhBbLayMau> searchPage(@Param("param") XhBbLayMauRequest param, Pageable pageable);
 
-	Optional<XhBbLayMau> findBySoBienBan(String soBienBan);
+    boolean existsBySoBbLayMau(String soBbLayMau);
 
-	List<XhBbLayMau> findByIdIn(List<Long> idList);
+    boolean existsBySoBbLayMauAndIdNot(String soBbLayMau, Long id);
 
-	List<XhBbLayMau> findAllByIdQd (Long idQd);
+    List<XhBbLayMau> findByIdIn(List<Long> idList);
 
-
-
+    List<XhBbLayMau> findAllByIdIn(List<Long> listId);
 }

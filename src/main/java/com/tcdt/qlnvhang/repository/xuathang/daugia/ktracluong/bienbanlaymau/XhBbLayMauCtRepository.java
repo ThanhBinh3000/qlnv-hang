@@ -9,8 +9,9 @@ import java.util.List;
 @Repository
 public interface XhBbLayMauCtRepository extends BaseRepository<XhBbLayMauCt, Long> {
 
-	void deleteAllByIdHdr(Long idHdr);
+    void deleteAllByIdHdr(Long idHdr);
 
-	List<XhBbLayMauCt> findAllByIdHdr (Long idHdr);
+    List<XhBbLayMauCt> findAllByIdHdr(Long idHdr);
 
+    List<XhBbLayMauCt> findByIdHdrIn(List<Long> listId);
 }

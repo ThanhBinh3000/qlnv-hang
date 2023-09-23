@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgDt
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgPl;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgPlDtl;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.tonghop.XhThopDxKhBdg;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgHdr;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
@@ -495,10 +496,10 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
                 if (data.getTrangThai() != null) {
                     data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
                 }
-                if (!data.getIsDieuChinh()) {
-                    data.setXhQdPdKhBdg(xhQdPdKhBdgRepository.findById(data.getIdHdr()).get());
-                } else {
+                if (data.getSoQdDc() != null) {
                     data.setXhQdDchinhKhBdgHdr(xhQdDchinhKhBdgHdrRepository.findById(data.getIdHdr()).get());
+                } else {
+                    data.setXhQdPdKhBdg(xhQdPdKhBdgRepository.findById(data.getIdHdr()).get());
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -541,12 +542,22 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
             List<XhTcTtinBdgHdr> xhTcTtinBdgHdrs = xhTcTtinBdgHdrRepository.findByIdQdPdDtlOrderByLanDauGia(dataDtl.getId());
             dataDtl.setListTtinDg(xhTcTtinBdgHdrs);
             dataDtl.setChildren(phanLo);
-            XhQdPdKhBdg hdr = xhQdPdKhBdgRepository.findById(dataDtl.getIdHdr()).orElse(null);
-            if (hdr != null) {
-                hdr.setMapVthh(mapVthh);
-                hdr.setMapKieuNx(mapKieuNx);
-                hdr.setMapLoaiHinhNx(mapLoaiHinhNx);
-                dataDtl.setXhQdPdKhBdg(hdr);
+            if (dataDtl.getSoQdDc() != null) {
+                XhQdDchinhKhBdgHdr dieuChinh = xhQdDchinhKhBdgHdrRepository.findById(dataDtl.getIdHdr()).orElse(null);
+                if (dieuChinh != null) {
+                    dieuChinh.setMapVthh(mapVthh);
+                    dieuChinh.setMapKieuNx(mapKieuNx);
+                    dieuChinh.setMapLoaiHinhNx(mapLoaiHinhNx);
+                    dataDtl.setXhQdDchinhKhBdgHdr(dieuChinh);
+                }
+            } else {
+                XhQdPdKhBdg quyetDinh = xhQdPdKhBdgRepository.findById(dataDtl.getIdHdr()).orElse(null);
+                if (quyetDinh != null) {
+                    quyetDinh.setMapVthh(mapVthh);
+                    quyetDinh.setMapKieuNx(mapKieuNx);
+                    quyetDinh.setMapLoaiHinhNx(mapLoaiHinhNx);
+                    dataDtl.setXhQdPdKhBdg(quyetDinh);
+                }
             }
         });
         return allByIdDtl;
