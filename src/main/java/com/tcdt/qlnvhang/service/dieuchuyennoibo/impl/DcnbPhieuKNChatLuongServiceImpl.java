@@ -108,6 +108,15 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
 //        if (optional.isPresent() && objReq.getSoPhieu().split("/").length == 1) {
 //            throw new Exception("Số phiếu đã tồn tại");
 //        }
+        List<DcnbPhieuKnChatLuongHdr> lists = new ArrayList<>();
+        if(StringUtils.isEmpty(objReq.getMaLoKho())){
+            lists = dcnbPhieuKnChatLuongHdrRepository.findByMaDviAndSoQdinhDcAndMaNganKho(currentUser.getDvql(), objReq.getSoQdinhDc(), objReq.getMaNganKho());
+        }else {
+            lists = dcnbPhieuKnChatLuongHdrRepository.findByMaDviAndSoQdinhDcAndMaLoKho(currentUser.getDvql(), objReq.getSoQdinhDc(), objReq.getMaLoKho());
+        }
+        if(!lists.isEmpty()){
+            throw new Exception("Ngăn Lô kho đã được khởi tạo!");
+        }
         DcnbPhieuKnChatLuongHdr data = new DcnbPhieuKnChatLuongHdr();
         BeanUtils.copyProperties(objReq, data);
         Optional<DcnbKeHoachDcDtl> keHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(objReq.getKeHoachDcDtlId());

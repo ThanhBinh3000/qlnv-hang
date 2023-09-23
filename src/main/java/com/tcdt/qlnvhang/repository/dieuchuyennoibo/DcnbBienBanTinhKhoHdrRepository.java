@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.repository.dieuchuyennoibo;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbBienBanTinhKho;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBienBanTinhKhoHdrDTO;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBienBanTinhKhoHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuKnChatLuongHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -101,4 +102,10 @@ public interface DcnbBienBanTinhKhoHdrRepository extends JpaRepository<DcnbBienB
             "khdcd.maNganKho,khdcd.tenNganKho,qdc.ngayHieuLuc,qdc.ngayKyQdinh,bbtk.keHoachDcDtlId "+
             "ORDER BY qdc.soQdinh DESC")
     List<DcnbBienBanTinhKhoHdrDTO> searchList(@Param("param") SearchDcnbBienBanTinhKho req);
+    @Query(value ="SELECT distinct hdr FROM DcnbBienBanTinhKhoHdr hdr " +
+            "WHERE hdr.maDvi = ?1 AND hdr.soQdinhDcc = ?2 AND hdr.maNganKho = ?3 and hdr.trangThai != '16' ")
+    List<DcnbBienBanTinhKhoHdr> findByMaDviAndSoQdinhDcAndMaNganKho(String dvql, String soQdinhDcc, String maNganKho);
+    @Query(value ="SELECT distinct hdr FROM DcnbBienBanTinhKhoHdr hdr " +
+            "WHERE hdr.maDvi = ?1 AND hdr.soQdinhDcc = ?2 AND hdr.maNganKho = ?3 and hdr.trangThai != '16' ")
+    List<DcnbBienBanTinhKhoHdr> findByMaDviAndSoQdinhDcAndMaLoKho(String dvql, String soQdinhDcc, String maLoKho);
 }

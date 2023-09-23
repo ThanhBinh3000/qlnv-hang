@@ -60,4 +60,10 @@ public interface DcnbBienBanHaoDoiHdrRepository extends JpaRepository<DcnbBienBa
     List<DcnbBienBanHaoDoiHdr> findByIdIn(List<Long> ids);
 
     List<DcnbBienBanHaoDoiHdr> findAllByIdIn(List<Long> idList);
+    @Query(value ="SELECT distinct hdr FROM DcnbBienBanHaoDoiHdr hdr " +
+            "WHERE hdr.maDvi = ?1 AND hdr.soQdinhDcc = ?2 AND hdr.maNganKho = ?3 and hdr.trangThai != '16' ")
+    List<DcnbBienBanHaoDoiHdr> findByMaDviAndSoQdinhDcAndMaNganKho(String dvql, String soQdinhDcc, String maNganKho);
+    @Query(value ="SELECT distinct hdr FROM DcnbBienBanHaoDoiHdr hdr " +
+            "WHERE hdr.maDvi = ?1 AND hdr.soQdinhDcc = ?2 AND hdr.maNganKho = ?3 and hdr.trangThai != '16' ")
+    List<DcnbBienBanHaoDoiHdr> findByMaDviAndSoQdinhDcAndMaLoKho(String dvql, String soQdinhDcc, String maLoKho);
 }

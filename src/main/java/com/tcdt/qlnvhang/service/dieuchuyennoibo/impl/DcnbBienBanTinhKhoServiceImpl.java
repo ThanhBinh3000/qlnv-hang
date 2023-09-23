@@ -89,6 +89,15 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
 //        if (optional.isPresent() && objReq.getSoBbTinhKho().split("/").length == 1) {
 //            throw new Exception("Số biên bản đã tồn tại");
 //        }
+        List<DcnbBienBanTinhKhoHdr> lists = new ArrayList<>();
+        if(StringUtils.isEmpty(objReq.getMaLoKho())){
+            lists = dcnbBienBanTinhKhoHdrRepository.findByMaDviAndSoQdinhDcAndMaNganKho(currentUser.getDvql(), objReq.getSoQdinhDcc(), objReq.getMaNganKho());
+        }else {
+            lists = dcnbBienBanTinhKhoHdrRepository.findByMaDviAndSoQdinhDcAndMaLoKho(currentUser.getDvql(), objReq.getSoQdinhDcc(), objReq.getMaLoKho());
+        }
+        if(!lists.isEmpty()){
+            throw new Exception("Ngăn Lô kho đã được khởi tạo!");
+        }
         DcnbBienBanTinhKhoHdr data = new DcnbBienBanTinhKhoHdr();
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(currentUser.getDvql());
