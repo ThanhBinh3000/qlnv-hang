@@ -35,6 +35,12 @@ public class DcnbBbChuanBiKhoDtl implements Serializable, Cloneable{
     private BigDecimal thanhTienNamTruoc;
     private BigDecimal tongGiaTri;
     private String type;
+    private String danhMuc;
+    private String donViTinh;
+    private String tenMatHang;
+    private Double donGia;
+    private Boolean isParent;
+    private String idParent;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
