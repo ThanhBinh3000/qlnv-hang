@@ -52,10 +52,6 @@ public class DcnbBangKeNhapVTServiceImpl extends BaseServiceImpl implements Dcnb
     @Autowired
     private DcnbBangKeNhapVTDtlRepository dtlRepository;
     @Autowired
-    private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
-    @Autowired
-    private DcnbDataLinkDtlRepository dcnbDataLinkDtlRepository;
-    @Autowired
     private DcnbPhieuNhapKhoHdrRepository dcnbPhieuNhapKhoHdrRepository;
     @Autowired
     private DcnbBangKeCanHangDtlRepository dcnbBangKeCanHangDtlRepository;
@@ -104,6 +100,12 @@ public class DcnbBangKeNhapVTServiceImpl extends BaseServiceImpl implements Dcnb
 //        if (optional.isPresent() && objReq.getSoBangKe().split("/").length == 1) {
 //            throw new Exception("Số bảng kê đã tồn tại");
 //        }
+        Optional<DcnbPhieuNhapKhoHdr> phieuNhapKhoHdr = dcnbPhieuNhapKhoHdrRepository.findById(objReq.getPhieuNhapKhoId());
+        if(phieuNhapKhoHdr.isPresent()){
+            if(phieuNhapKhoHdr.get().getBangKeVtId()!= null){
+                throw new Exception("Phiếu nhập đã có bảng kê!");
+            }
+        }
         DcnbBangKeNhapVTHdr data = new DcnbBangKeNhapVTHdr();
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(dvql);
@@ -131,7 +133,14 @@ public class DcnbBangKeNhapVTServiceImpl extends BaseServiceImpl implements Dcnb
 //                }
 //            }
 //        }
-
+        Optional<DcnbPhieuNhapKhoHdr> phieuNhapKhoHdr = dcnbPhieuNhapKhoHdrRepository.findById(objReq.getPhieuNhapKhoId());
+        if(phieuNhapKhoHdr.isPresent()){
+            if(!objReq.getPhieuNhapKhoId().equals(optional.get().getPhieuNhapKhoId())){
+                if(phieuNhapKhoHdr.get().getBangKeVtId()!= null){
+                    throw new Exception("Phiếu nhập đã có bảng kê!");
+                }
+            }
+        }
         DcnbBangKeNhapVTHdr data = optional.get();
         objReq.setMaDvi(data.getMaDvi());
         BeanUtils.copyProperties(objReq, data);

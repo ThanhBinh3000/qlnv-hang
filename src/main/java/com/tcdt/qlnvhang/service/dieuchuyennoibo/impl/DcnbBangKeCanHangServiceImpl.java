@@ -51,9 +51,6 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
     private DcnbBangKeCanHangDtlRepository dcnbBangKeCanHangDtlRepository;
 
     @Autowired
-    private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
-
-    @Autowired
     private DcnbPhieuXuatKhoHdrRepository dcnbPhieuXuatKhoHdrRepository;
 
     @Autowired
@@ -74,6 +71,22 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
 //        if (optional.isPresent() && objReq.getSoBangKe().split("/").length == 1) {
 //            throw new Exception("Số bảng kê đã tồn tại");
 //        }
+        if("00".equals(objReq.getType())){
+            Optional<DcnbPhieuXuatKhoHdr> phieuXuatKhoHdr = dcnbPhieuXuatKhoHdrRepository.findById(objReq.getPhieuXuatKhoId());
+            if(phieuXuatKhoHdr.isPresent()){
+                if(phieuXuatKhoHdr.get().getBangKeVtId()!= null){
+                    throw new Exception("Phiếu xuất đã có bảng kê!");
+                }
+            }
+        }else if("01".equals(objReq.getType())){
+            Optional<DcnbPhieuNhapKhoHdr> phieuNhapKhoHdr = dcnbPhieuNhapKhoHdrRepository.findById(objReq.getPhieuNhapKhoId());
+            if(phieuNhapKhoHdr.isPresent()){
+                if(phieuNhapKhoHdr.get().getBangKeVtId()!= null){
+                    throw new Exception("Phiếu nhập đã có bảng kê!");
+                }
+            }
+        }
+
         DcnbBangKeCanHangHdr data = new DcnbBangKeCanHangHdr();
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(currentUser.getDvql());
@@ -129,7 +142,25 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
 //                }
 //            }
 //        }
-
+        if("00".equals(objReq.getType())){
+            Optional<DcnbPhieuXuatKhoHdr> phieuXuatKhoHdr = dcnbPhieuXuatKhoHdrRepository.findById(objReq.getPhieuXuatKhoId());
+            if(phieuXuatKhoHdr.isPresent()){
+                if(!objReq.getPhieuNhapKhoId().equals(optional.get().getPhieuNhapKhoId())){
+                    if(phieuXuatKhoHdr.get().getBangKeVtId()!= null){
+                        throw new Exception("Phiếu nhập đã có bảng cân hàng!");
+                    }
+                }
+            }
+        }else if("01".equals(objReq.getType())){
+            Optional<DcnbPhieuNhapKhoHdr> phieuNhapKhoHdr = dcnbPhieuNhapKhoHdrRepository.findById(objReq.getPhieuNhapKhoId());
+            if(phieuNhapKhoHdr.isPresent()){
+                if(!objReq.getPhieuNhapKhoId().equals(optional.get().getPhieuNhapKhoId())){
+                    if(phieuNhapKhoHdr.get().getBangKeVtId()!= null){
+                        throw new Exception("Phiếu nhập đã có bảng cân hàng!");
+                    }
+                }
+            }
+        }
         DcnbBangKeCanHangHdr data = optional.get();
         objReq.setMaDvi(data.getMaDvi());
         objReq.setType(optional.get().getType());
