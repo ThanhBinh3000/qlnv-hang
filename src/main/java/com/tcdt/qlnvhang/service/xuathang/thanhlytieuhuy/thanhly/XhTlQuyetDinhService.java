@@ -12,10 +12,13 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.SearchXhTlQuyetDinh;
+import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhHdrReq;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhSc;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTrinhThamDinhHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoHdr;
@@ -269,5 +272,15 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
         optional.get().setTrangThaiThucHien(statusReq.getTrangThai());
         xhTlQuyetDinhDtlRepository.save(optional.get());
         return optional.get();
+    }
+
+    public List<XhTlQuyetDinhHdr> dsTaoBaoCaoThanhLy(XhTlHoSoReq req) throws Exception {
+        UserInfo currentUser = SecurityContextService.getUser();
+        if (currentUser == null){
+            throw new Exception("Access denied.");
+        }
+        req.setTrangThai(TrangThaiAllEnum.DA_DUYET_BTC.getId());
+        List<XhTlQuyetDinhHdr> list = hdrRepository.listTaoBaoCaoThanhLy(req);
+        return list;
     }
 }

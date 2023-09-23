@@ -53,6 +53,7 @@ public class XhTlThongBaoKqController {
     return ResponseEntity.ok(resp);
   }
 
+
   @ApiOperation(value = "Tạo mới", response = List.class)
   @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)

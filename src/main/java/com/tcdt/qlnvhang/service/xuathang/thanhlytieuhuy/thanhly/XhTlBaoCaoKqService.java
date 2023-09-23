@@ -251,18 +251,18 @@ public class XhTlBaoCaoKqService extends BaseServiceImpl {
       case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
       case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
       case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
-        optional.get().setNguoiGduyetId(currentUser.getUser().getId());
-        optional.get().setNgayGduyet(LocalDate.now());
+//        optional.get().setNguoiGduyetId(currentUser.getUser().getId());
+//        optional.get().setNgayGduyet(LocalDate.now());
         break;
       case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
       case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
-        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
-        optional.get().setNgayPduyet(LocalDate.now());
+//        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+//        optional.get().setNgayPduyet(LocalDate.now());
         optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
         break;
       case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
-        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
-        optional.get().setNgayPduyet(LocalDate.now());
+//        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+//        optional.get().setNgayPduyet(LocalDate.now());
         break;
       default:
         throw new Exception("Phê duyệt không thành công");
