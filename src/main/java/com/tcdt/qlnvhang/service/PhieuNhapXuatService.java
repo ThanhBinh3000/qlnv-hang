@@ -20,7 +20,7 @@ public class PhieuNhapXuatService extends BaseServiceImpl {
 
     public List<TheKhoCtResponse> listPhieuTheKhoCt(QlnvQdKQDGHangSearchReq req) throws Exception {
         List<TheKhoCtResponse> listResult = new ArrayList<>();
-        List<PhieuNhapXuatHistory> dsPhieuNhapXuat = phieuNhapXuatRepository.selectPage(req.getLoaiVthh(), req.getCloaiVthh(),convertDateToString(req.getTuNgay()),convertDateToString(req.getDenNgay()));
+        List<PhieuNhapXuatHistory> dsPhieuNhapXuat = phieuNhapXuatRepository.selectPage(req.getLoaiVthh(), req.getCloaiVthh(),convertDateToString(req.getTuNgay()),convertDateToString(req.getDenNgay()), req.getMaKho());
         if (!CollectionUtils.isEmpty(dsPhieuNhapXuat)) {
             dsPhieuNhapXuat.forEach(phieuNx -> {
                 TheKhoCtResponse theKhoCtResponse = new TheKhoCtResponse();
@@ -30,6 +30,9 @@ public class PhieuNhapXuatService extends BaseServiceImpl {
                 theKhoCtResponse.setSlThucTe(DataUtils.safeToBigDecimal(phieuNx.getSoLuong()));
                 theKhoCtResponse.setSlChungTu(phieuNx.getSoLuongChungTu());
                 theKhoCtResponse.setMaBanGhi(phieuNx.getIdPhieu());
+                theKhoCtResponse.setMaKho(phieuNx.getMaKho());
+                theKhoCtResponse.setKieu(phieuNx.getKieu());
+                theKhoCtResponse.setBang(phieuNx.getBang());
                 listResult.add(theKhoCtResponse);
             });
         }

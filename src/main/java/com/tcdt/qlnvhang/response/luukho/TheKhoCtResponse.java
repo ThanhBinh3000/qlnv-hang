@@ -8,6 +8,9 @@ import java.time.LocalDate;
 @Data
 public class TheKhoCtResponse {
     private String soPhieu;
+    private String maKho;
+    private String bang;
+    private String kieu;
     private int loaiPhieu;
     private LocalDate ngay;
     private BigDecimal slThucTe;
