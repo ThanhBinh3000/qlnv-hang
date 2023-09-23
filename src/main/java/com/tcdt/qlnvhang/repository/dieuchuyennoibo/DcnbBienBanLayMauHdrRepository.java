@@ -132,4 +132,6 @@ public interface DcnbBienBanLayMauHdrRepository extends JpaRepository<DcnbBienBa
     List<DcnbBienBanLayMauHdr> findByMaDviAndQdccIdAndMaNganKho(String maDvi, Long qdDcCucId, String maNganKho);
 
     List<DcnbBienBanLayMauHdr> findByMaDviAndQdccIdAndMaNganKhoAndMaLoKho(String maDvi, Long qdDcCucId, String maNganKho, String maLoKho);
+
+    List<DcnbBienBanLayMauHdr> findByKeHoachDcDtlId(Long keHoachDcDtlId);
 }

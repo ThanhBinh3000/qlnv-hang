@@ -4,8 +4,8 @@ import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBcKqDcDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBcKqDcHdrRepository;
+import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbKqDcSearch;
@@ -14,6 +14,7 @@ import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBbKqDcService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBcKqDcDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBcKqDcHdr;
 import com.tcdt.qlnvhang.util.Contains;
@@ -45,6 +46,14 @@ public class DcnbBcKqDcServiceImpl implements DcnbBbKqDcService {
     private FileDinhKemService fileDinhKemService;
     @Autowired
     private FileDinhKemRepository fileDinhKemRepository;
+    @Autowired
+    private DcnbBienBanLayMauHdrRepository dcnbBienBanLayMauHdrRepository;
+    @Autowired
+    private DcnbBbGiaoNhanHdrRepository dcnbBbGiaoNhanHdrRepository;
+    @Autowired
+    private DcnbBbNhapDayKhoHdrRepository dcnbBbNhapDayKhoHdrRepository;
+    @Autowired
+    private QlnvDmVattuRepository qlnvDmVattuRepository;
 
     @Override
     public Page<DcnbBcKqDcHdr> search(CustomUserDetails currentUser, DcnbBbKqDcSearch req) {
@@ -239,7 +248,24 @@ public class DcnbBcKqDcServiceImpl implements DcnbBbKqDcService {
     public List<DcnbBcKqDcDtl> thongTinNhapXuatHangChiCuc(DcnbBbKqDcSearch objReq) throws Exception {
         CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
         objReq.setMaDvi(currentUser.getDvql());
-        return dtlRepository.thongTinXuatNhapHangChiCuc(objReq);
+        List<DcnbBcKqDcDtl> kqdcs = dtlRepository.thongTinXuatNhapHangChiCuc(objReq);
+        for (DcnbBcKqDcDtl dtl : kqdcs) {
+            if (dcnbBbGiaoNhanHdrRepository.findByKeHoachDcDtlId(dtl.getKeHoachDcDtlId()).isEmpty()) { // có biên bản nhập đầy kho đối với lương thực || có biên bản giao nhận đối với vt
+                dtl.setKetQua(Contains.DA_HOAN_THANH);
+            } else if (dcnbBbNhapDayKhoHdrRepository.findByKeHoachDcDtlId(dtl.getKeHoachDcDtlId()).isEmpty()) { // có biên bản nhập đầy kho đối với lương thực || có biên bản giao nhận đối với vt
+                QlnvDmVattu byMa = qlnvDmVattuRepository.findByMa(dtl.getCloaiVthh());
+                if("VT".equals(byMa.getLoaiHang())){ // là vật từ thì đang thực hiện
+                    dtl.setKetQua(Contains.DANG_THUC_HIEN);
+                }else {
+                    dtl.setKetQua(Contains.DA_HOAN_THANH);
+                }
+            } else if (!dcnbBienBanLayMauHdrRepository.findByKeHoachDcDtlId(dtl.getKeHoachDcDtlId()).isEmpty()) { // có biên bản lấy mẫu
+                dtl.setKetQua(Contains.DANG_THUC_HIEN);
+            } else {
+                dtl.setKetQua(Contains.CHUA_THUC_HIEN);
+            }
+        }
+        return kqdcs;
     }
 
     @Override
