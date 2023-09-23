@@ -71,7 +71,13 @@ public class LoggingAspect {
   public void v3Controller() {
   }
 
-  @Pointcut("execution(* com.tcdt.qlnvhang.controller.nhaphang.dauthau.nhapkho.NhPhieuNhapKhoController.updateStatus(..)) ||" + "execution(* com.tcdt.qlnvhang.controller.nhaphangtheoptmuatt.HhPhieuNhapKhoControler.updateStatusUbtvqh(..)) ||" + "execution(* com.tcdt.qlnvhang.controller.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuXuatKhoController.updateStatus(..)) ||" + "execution(* com.tcdt.qlnvhang.controller.xuathang.daugia.xuatkho.XhDgPhieuXuatKhoController.updateStatus(..)) ||" + "execution(* com.tcdt.qlnvhang.controller.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBttControler.updateStatus(..)) ||" + "execution(* com.tcdt.qlnvhang.controller.dieuchuyennoibo.DcnbPhieuXuatKhoController.updateStatus(..)) || " + "execution(* com.tcdt.qlnvhang.controller.dieuchuyennoibo.DcnbPhieuNhapKhoController.updateStatus(..))")
+  @Pointcut("execution(* com.tcdt.qlnvhang.controller.nhaphang.dauthau.nhapkho.NhPhieuNhapKhoController.updateStatus(..)) ||" +
+      "execution(* com.tcdt.qlnvhang.controller.nhaphangtheoptmuatt.HhPhieuNhapKhoControler.updateStatusUbtvqh(..)) ||" +
+      "execution(* com.tcdt.qlnvhang.controller.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuXuatKhoController.updateStatus(..)) ||" +
+      "execution(* com.tcdt.qlnvhang.controller.xuathang.daugia.xuatkho.XhDgPhieuXuatKhoController.updateStatus(..)) ||" +
+      "execution(* com.tcdt.qlnvhang.controller.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBttControler.updateStatus(..)) ||" +
+      "execution(* com.tcdt.qlnvhang.controller.dieuchuyennoibo.DcnbPhieuXuatKhoController.updateStatus(..)) || " +
+      "execution(* com.tcdt.qlnvhang.controller.dieuchuyennoibo.DcnbPhieuNhapKhoController.updateStatus(..))")
   public void phieuNhapXuatPointCut() {
   }
 
