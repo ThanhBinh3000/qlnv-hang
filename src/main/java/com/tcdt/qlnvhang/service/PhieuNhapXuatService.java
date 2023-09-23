@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.request.search.QlnvQdKQDGHangSearchReq;
 import com.tcdt.qlnvhang.response.luukho.TheKhoCtResponse;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.PhieuNhapXuatHistory;
+import com.tcdt.qlnvhang.util.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -26,9 +27,9 @@ public class PhieuNhapXuatService extends BaseServiceImpl {
                 theKhoCtResponse.setNgay(phieuNx.getNgayDuyet());
                 theKhoCtResponse.setLoaiPhieu(phieuNx.getLoaiNhapXuat());
                 theKhoCtResponse.setSoPhieu(phieuNx.getSoPhieu());
-                theKhoCtResponse.setSlThucTe(phieuNx.getSoLuong());
+                theKhoCtResponse.setSlThucTe(DataUtils.safeToBigDecimal(phieuNx.getSoLuong()));
                 theKhoCtResponse.setSlChungTu(phieuNx.getSoLuongChungTu());
-                theKhoCtResponse.setMaBanGhi(phieuNx.getMaBanGhi());
+                theKhoCtResponse.setMaBanGhi(phieuNx.getIdPhieu());
                 listResult.add(theKhoCtResponse);
             });
         }
