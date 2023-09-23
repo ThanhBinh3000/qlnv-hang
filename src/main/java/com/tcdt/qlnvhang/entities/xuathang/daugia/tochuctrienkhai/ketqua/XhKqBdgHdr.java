@@ -38,6 +38,8 @@ public class XhKqBdgHdr implements Serializable {
     private Long idQdPd;
     private Long idQdPdDtl;
     private String soQdPd;
+    private Long idQdDc;
+    private String soQdDc;
     private Long idThongBao;
     private String maThongBao;
     private String soBienBan;
