@@ -24,6 +24,8 @@ public class SearchDcnbBienBanHaoDoi extends BaseRequest {
     private LocalDate tuNgayXhXuat;
     private LocalDate denNgayXhXuat;
     private String maDvi;
+    private String maLoKho;
+    private String maNganKho;
     private String loaiDc;
     private String loaiQdinh;
     private Boolean isVatTu = false;

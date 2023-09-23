@@ -39,6 +39,8 @@ public interface DcnbBienBanHaoDoiHdrRepository extends JpaRepository<DcnbBienBa
             "AND ((qdc.loaiDc= 'DCNB' OR qdc.loaiDc= 'CHI_CUC') OR  ((:#{#param.typeQd} IS NULL OR qdc.loaiQdinh = :#{#param.typeQd})))" +
             "AND (:#{#param.nam} IS NULL OR qdc.nam = :#{#param.nam}) " +
             "AND (:#{#param.trangThai} IS NULL OR bbhd.trangThai = :#{#param.trangThai}) " +
+            "AND (:#{#param.maLoKho} IS NULL OR khdcd.maLoKho = :#{#param.maLoKho}) " +
+            "AND (:#{#param.maNganKho} IS NULL OR khdcd.maNganKho = :#{#param.maNganKho}) " +
             "AND (:#{#param.soBbHaoDoi} IS NULL OR LOWER(bbhd.soBienBan) LIKE CONCAT('%',LOWER(:#{#param.soBbHaoDoi}),'%')) " +
             "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
             "AND ((:#{#param.tuNgayLapBb}  IS NULL OR bbhd.ngayLap >= :#{#param.tuNgayLapBb})" +
