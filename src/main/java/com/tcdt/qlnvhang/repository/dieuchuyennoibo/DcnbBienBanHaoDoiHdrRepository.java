@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,4 +69,6 @@ public interface DcnbBienBanHaoDoiHdrRepository extends JpaRepository<DcnbBienBa
     @Query(value ="SELECT distinct hdr FROM DcnbBienBanHaoDoiHdr hdr " +
             "WHERE hdr.maDvi = ?1 AND hdr.soQdinhDcc = ?2 AND hdr.maNganKho = ?3 and hdr.trangThai != '16' ")
     List<DcnbBienBanHaoDoiHdr> findByMaDviAndSoQdinhDcAndMaLoKho(String dvql, String soQdinhDcc, String maLoKho);
+
+    List<DcnbBienBanHaoDoiHdr> findByKeHoachDcDtlId(Long keHoachDcDtlId);
 }

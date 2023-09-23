@@ -259,7 +259,7 @@ public class DcnbBcKqDcServiceImpl implements DcnbBbKqDcService {
                 }else {
                     dtl.setKetQua(Contains.DA_HOAN_THANH);
                 }
-            } else if (!dcnbBienBanLayMauHdrRepository.findByKeHoachDcDtlId(dtl.getKeHoachDcDtlId()).isEmpty()) { // có biên bản lấy mẫu
+            } else if (!dcnbBienBanLayMauHdrRepository.findByKeHoachDcDtlIdAndType(dtl.getKeHoachDcDtlId(),"01").isEmpty()) { // có biên bản lấy mẫu
                 dtl.setKetQua(Contains.DANG_THUC_HIEN);
             } else {
                 dtl.setKetQua(Contains.CHUA_THUC_HIEN);
