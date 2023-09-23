@@ -99,4 +99,10 @@ public interface DcnbBbNhapDayKhoHdrRepository extends JpaRepository<DcnbBbNhapD
             "AND c.qdDcCucId = :qdDcCucId " +
             "AND c.maNganKho = :maNganKho ")
     DcnbBbNhapDayKhoHdr findByMaDviAndQdDcCucIdAndMaNganKhoAndTrangThai(String dvql, Long qdDcCucId, String maNganKho, String trangThai);
+    @Query(value ="SELECT distinct hdr FROM DcnbBbNhapDayKhoHdr hdr " +
+            "WHERE hdr.maDvi = ?1 AND hdr.soQdDcCuc = ?2 AND hdr.maNganKho = ?3 and hdr.trangThai != '16' ")
+    List<DcnbBbNhapDayKhoHdr> findByMaDviAndSoQdDcCucAndMaNganKho(String dvql, String soQdDcCuc, String maNganKho);
+    @Query(value ="SELECT distinct hdr FROM DcnbBbNhapDayKhoHdr hdr " +
+            "WHERE hdr.maDvi = ?1 AND hdr.soQdDcCuc = ?2 AND hdr.maNganKho = ?3 and hdr.trangThai != '16' ")
+    List<DcnbBbNhapDayKhoHdr> findByMaDviAndSoQdDcCucAndMaLoKho(String dvql, String soQdDcCuc, String maLoKho);
 }

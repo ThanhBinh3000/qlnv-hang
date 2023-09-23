@@ -69,5 +69,10 @@ public interface DcnbBbGiaoNhanHdrRepository extends JpaRepository<DcnbBbGiaoNha
             "hskt.soHskt, hskt.id, bbgn.soBb,bbktnk.soBb,bbktnk.id, bbktnk.ngayKetThucNhap, bbgn.soBienBanLayMau, bbgn.trangThai, bbgn.trangThai,khdcd.id "+
             "ORDER BY qdc.soQdinh DESC")
     Page<DcnbBbGiaoNhanHdrDTO> searchPage(@Param("param") DcnbBbGiaoNhanHdrReq req, Pageable pageable);
-
+    @Query(value ="SELECT distinct hdr FROM DcnbBbGiaoNhanHdr hdr " +
+            "WHERE hdr.maDvi = ?1 AND hdr.soQdDcCuc = ?2 AND hdr.maNganKho = ?3 and hdr.trangThai != '04' ")
+    List<DcnbBbGiaoNhanHdr> findByMaDviAndSoQdDcCucAndMaNganKho(String dvql, String soQdDcCuc, String maNganKho);
+    @Query(value ="SELECT distinct hdr FROM DcnbBbGiaoNhanHdr hdr " +
+            "WHERE hdr.maDvi = ?1 AND hdr.soQdDcCuc = ?2 AND hdr.maNganKho = ?3 and hdr.trangThai != '04' ")
+    List<DcnbBbGiaoNhanHdr> findByMaDviAndSoQdDcCucAndMaLoKho(String dvql, String soQdDcCuc, String maLoKho);
 }

@@ -139,7 +139,9 @@ public class DcnbPhieuKtChatLuongHdrReq {
     private String toChucGiamDinh;
     @NotNull
     private String donViTinh;
+    @NotNull
     private String bBNtLdId;
+    @NotNull
     private String soBBNtLd;
     private List<FileDinhKemReq> phieuKTCLDinhKem = new ArrayList<>();
     private List<FileDinhKemReq> bienBanLayMauDinhKem = new ArrayList<>();
