@@ -22,7 +22,6 @@ public class DcnbPhieuKnChatLuongDtl {
 
     @Column(name = "HDR_ID")
     private Long hdrId;
-    @NotNull
     @Column(name = "CHI_TIEU_CL")
     private String chiTieuCl;
     @Column(name = "CHI_SO_CL")
