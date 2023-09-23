@@ -102,12 +102,12 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                     .map(Long::valueOf)
                     .toArray(Long[]::new));
         }
-//        if (!ObjectUtils.isEmpty(objReq.getIdVanBanSuaDoi())) {
-//            listIdThayThe.add(objReq.getIdVanBanSuaDoi());
-//        }
-        List<Long> finalListIdThayThe = listIdThayThe;
+        List<Long> finalListIdThayTheSd = listIdThayThe;
+        if (!ObjectUtils.isEmpty(objReq.getIdVanBanSuaDoi())) {
+            finalListIdThayTheSd.add(objReq.getIdVanBanSuaDoi());
+        }
         List<Long> listHdrCoHieuLuc = allHdrCoHieuLuc.stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList()).stream()
-                .filter(item -> !finalListIdThayThe.contains(item))
+                .filter(item -> !finalListIdThayTheSd.contains(item))
                 .collect(Collectors.toList());
 
         List<String> listCloai = quyChuanQuocGiaDtlRepository.findAllByIdHdrIn(listHdrCoHieuLuc).stream().map(QuyChuanQuocGiaDtl::getCloaiVthh).collect(Collectors.toList());
@@ -160,12 +160,12 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                     .map(Long::valueOf)
                     .toArray(Long[]::new));
         }
-//        if (!ObjectUtils.isEmpty(objReq.getIdVanBanSuaDoi())) {
-//            listIdThayThe.add(objReq.getIdVanBanSuaDoi());
-//        }
-        List<Long> finalListIdThayThe = listIdThayThe;
+        List<Long> finalListIdThayTheSd = listIdThayThe;
+        if (!ObjectUtils.isEmpty(objReq.getIdVanBanSuaDoi())) {
+            finalListIdThayTheSd.add(objReq.getIdVanBanSuaDoi());
+        }
         List<Long> listHdrCoHieuLuc = allHdrCoHieuLuc.stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList()).stream()
-                .filter(item -> !finalListIdThayThe.contains(item))
+                .filter(item -> !finalListIdThayTheSd.contains(item))
                 .collect(Collectors.toList());
 
         List<String> listCloai = quyChuanQuocGiaDtlRepository.findAllByIdHdrIn(listHdrCoHieuLuc).stream().map(QuyChuanQuocGiaDtl::getCloaiVthh).collect(Collectors.toList());
