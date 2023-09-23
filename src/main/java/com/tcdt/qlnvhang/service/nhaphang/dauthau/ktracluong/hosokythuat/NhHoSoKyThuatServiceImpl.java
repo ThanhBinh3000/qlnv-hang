@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.hosokythuat;
 
+import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoBienBan;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoKyThuat;
@@ -21,9 +22,12 @@ import com.tcdt.qlnvhang.request.object.vattu.hosokythuat.NhHoSoKyThuatCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.hosokythuat.NhHoSoKyThuatReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.HhQdPduyetKqlcntHdr;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -115,6 +119,10 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
             BeanUtils.copyProperties(ctReq,ct,"id");
             ct.setHoSoKyThuatId(id);
             nhHoSoKyThuatCtRepository.save(ct);
+            fileDinhKemService.delete(ct.getId(), Lists.newArrayList("NH_HO_SO_KY_THUAT_CT"));
+            if (!DataUtils.isNullOrEmpty(ctReq.getFileDinhKem())) {
+                fileDinhKemService.saveListFileDinhKem(ctReq.getFileDinhKem(), ct.getId(), "NH_HO_SO_KY_THUAT_CT");
+            }
         }
     }
 
@@ -142,7 +150,15 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
         Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
         NhHoSoKyThuat item = optional.get();
         item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
-        item.setChildren(nhHoSoKyThuatCtRepository.findByHoSoKyThuatId(item.getId()));
+        List<NhHoSoKyThuatCt> ctiet = nhHoSoKyThuatCtRepository.findByHoSoKyThuatId(item.getId());
+        for (NhHoSoKyThuatCt nhHoSoKyThuatCt : ctiet) {
+            List<FileDinhKem> fileDinhKem = fileDinhKemService.search(nhHoSoKyThuatCt.getId(), Collections.singletonList("NH_HO_SO_KY_THUAT_CT"));
+            nhHoSoKyThuatCt.setFileDinhKem(fileDinhKem);
+            if (!fileDinhKem.isEmpty()) {
+                nhHoSoKyThuatCt.setFileName(fileDinhKem.get(0).getFileName());
+            }
+        }
+        item.setChildren(ctiet);
 
         item.setListHoSoBienBan(nhHoSoBienBanRepository.findAllBySoHoSoKyThuat(optional.get().getSoHoSoKyThuat()));
         return item;

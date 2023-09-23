@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -99,4 +100,12 @@ public interface DcnbBbNhapDayKhoHdrRepository extends JpaRepository<DcnbBbNhapD
             "AND c.qdDcCucId = :qdDcCucId " +
             "AND c.maNganKho = :maNganKho ")
     DcnbBbNhapDayKhoHdr findByMaDviAndQdDcCucIdAndMaNganKhoAndTrangThai(String dvql, Long qdDcCucId, String maNganKho, String trangThai);
+    @Query(value ="SELECT distinct hdr FROM DcnbBbNhapDayKhoHdr hdr " +
+            "WHERE hdr.maDvi = ?1 AND hdr.soQdDcCuc = ?2 AND hdr.maNganKho = ?3 and hdr.trangThai != '16' ")
+    List<DcnbBbNhapDayKhoHdr> findByMaDviAndSoQdDcCucAndMaNganKho(String dvql, String soQdDcCuc, String maNganKho);
+    @Query(value ="SELECT distinct hdr FROM DcnbBbNhapDayKhoHdr hdr " +
+            "WHERE hdr.maDvi = ?1 AND hdr.soQdDcCuc = ?2 AND hdr.maNganKho = ?3 and hdr.trangThai != '16' ")
+    List<DcnbBbNhapDayKhoHdr> findByMaDviAndSoQdDcCucAndMaLoKho(String dvql, String soQdDcCuc, String maLoKho);
+
+    List<DcnbBbNhapDayKhoHdr> findByKeHoachDcDtlId(Long keHoachDcDtlId);
 }

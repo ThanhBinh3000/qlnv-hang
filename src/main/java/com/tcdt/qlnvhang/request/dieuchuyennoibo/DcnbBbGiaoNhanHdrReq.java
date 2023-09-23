@@ -82,6 +82,7 @@ public class DcnbBbGiaoNhanHdrReq extends BaseRequest {
     private Boolean thayDoiThuKho;
     private Boolean isVatTu = false;
     private List<String> dsLoaiHang;
+    private String ghiChuNhan;
     private List<FileDinhKemReq> fileCanCuReq = new ArrayList<>();
     @Valid
     private List<DcnbBbGiaoNhanDtl> danhSachDaiDien = new ArrayList<>();

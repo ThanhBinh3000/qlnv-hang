@@ -315,10 +315,14 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		if (bienBanLayMau == null) {
 			throw new Exception("Biên bản lấy mẫu không tồn tại.");
 		}
+		bienBanLayMau.setTenCloaiVthh(bienBanLayMau.getTenCloaiVthh().toUpperCase());
 		BienBanLayMauPreview object = new BienBanLayMauPreview();
 		ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
 		byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+		object.setHdr(bienBanLayMau);
+		object.setNgayHd(convertDate(bienBanLayMau.getBbNhapDayKho().getNgayHd()));
+		object.setNgayTao(convertDate(bienBanLayMau.getNgayTao()));
 		return docxToPdfConverter.convertDocxToPdf(inputStream, object);
 	}
 //

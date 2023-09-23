@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,5 +70,12 @@ public interface DcnbBbGiaoNhanHdrRepository extends JpaRepository<DcnbBbGiaoNha
             "hskt.soHskt, hskt.id, bbgn.soBb,bbktnk.soBb,bbktnk.id, bbktnk.ngayKetThucNhap, bbgn.soBienBanLayMau, bbgn.trangThai, bbgn.trangThai,khdcd.id "+
             "ORDER BY qdc.soQdinh DESC")
     Page<DcnbBbGiaoNhanHdrDTO> searchPage(@Param("param") DcnbBbGiaoNhanHdrReq req, Pageable pageable);
+    @Query(value ="SELECT distinct hdr FROM DcnbBbGiaoNhanHdr hdr " +
+            "WHERE hdr.maDvi = ?1 AND hdr.soQdDcCuc = ?2 AND hdr.maNganKho = ?3 and hdr.trangThai != '04' ")
+    List<DcnbBbGiaoNhanHdr> findByMaDviAndSoQdDcCucAndMaNganKho(String dvql, String soQdDcCuc, String maNganKho);
+    @Query(value ="SELECT distinct hdr FROM DcnbBbGiaoNhanHdr hdr " +
+            "WHERE hdr.maDvi = ?1 AND hdr.soQdDcCuc = ?2 AND hdr.maNganKho = ?3 and hdr.trangThai != '04' ")
+    List<DcnbBbGiaoNhanHdr> findByMaDviAndSoQdDcCucAndMaLoKho(String dvql, String soQdDcCuc, String maLoKho);
 
+    List<DcnbBbGiaoNhanHdr> findByKeHoachDcDtlId(Long keHoachDcDtlId);
 }

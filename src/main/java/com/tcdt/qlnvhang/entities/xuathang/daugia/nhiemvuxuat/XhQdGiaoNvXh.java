@@ -147,7 +147,7 @@ public class XhQdGiaoNvXh implements Serializable {
     @Where(clause = "data_type='" + XhQdGiaoNvXh.TABLE_NAME + "_CAN_CU'")
     private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
 
-    private void setFileCanCu(List<FileDinhKemJoinTable> fileCanCu) {
+    public void setFileCanCu(List<FileDinhKemJoinTable> fileCanCu) {
         this.fileCanCu.clear();
         if (!DataUtils.isNullObject(fileCanCu)) {
             fileCanCu.forEach(s -> {

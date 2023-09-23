@@ -124,6 +124,9 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
         data.setTrangThai(Contains.DUTHAO);
         data.setType(null);
         BigDecimal total = new BigDecimal(0l);
+        if (data.getDanhSachQuyetDinh() == null || data.getDanhSachQuyetDinh().isEmpty()) {
+            throw new Exception("DanhSachQuyetDinh không được để trống!");
+        }
         for (DcnbQuyetDinhDcCDtl e : data.getDanhSachQuyetDinh()) {
             if (Contains.DCNB.equals(data.getLoaiDc()) && Contains.CAP_CUC.equals(currentUser.getUser().getCapDvi())) {
                 // được phép thêm mới kế hoạch và update kế hoạch (ngầm)
@@ -336,15 +339,13 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         dcnbKeHoachDcHdr.setMaDviPq(e.getDcnbKeHoachDcHdr().getDanhSachHangHoa().get(0).getMaChiCucNhan());
                         dcnbKeHoachDcHdr.setPhuongAnDieuChuyen(new ArrayList<>());
 
-                        dcnbKeHoachDcHdr.setMaDviPq(e.getDcnbKeHoachDcHdr().getDanhSachHangHoa().get(0).getMaChiCucNhan());
-
                         BigDecimal totalDuT = e.getDcnbKeHoachDcHdr().getDanhSachHangHoa().stream()
                                 .map(DcnbKeHoachDcDtl::getDuToanKphi)
                                 .map(kphi -> kphi != null ? kphi : BigDecimal.ZERO)
                                 .reduce(BigDecimal.ZERO, BigDecimal::add);
                         dcnbKeHoachDcHdr.setTongDuToanKp(totalDuT);
                         total = total.add(totalDuT);
-                        for (DcnbKeHoachDcDtl e1 : dcnbKeHoachDcHdr.getDanhSachHangHoa()) {
+                        for (DcnbKeHoachDcDtl e1 : e.getDcnbKeHoachDcHdr().getDanhSachHangHoa()) {
                             e1.setDcnbKeHoachDcHdr(dcnbKeHoachDcHdr);
                             e1.setDaXdinhDiemNhap(true);
                             e1.setDuToanKphi(e1.getDuToanKphi() == null ? new BigDecimal(0) : e1.getDuToanKphi());
@@ -354,7 +355,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                         }
                         // check hàng hóa trong kho xuất, kho nhận
                         // Check số lượng hiện thời từng lo kho - (tổng đề kế hoạch xuất - tổng xuất trong thực tế)> 0 ;
-                        for (DcnbKeHoachDcDtl hh : dcnbKeHoachDcHdr.getDanhSachHangHoa()) {
+                        for (DcnbKeHoachDcDtl hh : e.getDcnbKeHoachDcHdr().getDanhSachHangHoa()) {
                             hh.setCoLoKho(!StringUtils.isEmpty(hh.getMaLoKho()));
                             if (!StringUtils.isEmpty(hh.getMaNganKho())) {
                                 KtMlk tinKho = getThongTinKho(hh.getMaLoKho(), hh.getTenLoKho(), hh.getMaNganKho(), hh.getTenNganKho());
@@ -369,6 +370,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                 }
                             }
                         }
+                        dcnbKeHoachDcHdr.setDanhSachHangHoa(e.getDcnbKeHoachDcHdr().getDanhSachHangHoa());
                         dcnbKeHoachDcHdr.setDaXdinhDiemNhap(true);
                         dcnbKeHoachDcHdrRepository.save(dcnbKeHoachDcHdr);
                     } else {
@@ -378,7 +380,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                     if (e.getDcnbKeHoachDcHdr().getDanhSachHangHoa() != null && !e.getDcnbKeHoachDcHdr().getDanhSachHangHoa().isEmpty()) {
                         DcnbKeHoachDcHdr dcnbKeHoachDcHdr = new DcnbKeHoachDcHdr();
                         dcnbKeHoachDcHdr.setType(Contains.NHAN_DIEU_CHUYEN_TS);
-                        dcnbKeHoachDcHdr.setMaDviPq(e.getDcnbKeHoachDcHdr().getDanhSachHangHoa().get(0).getMaDiemKhoNhan());
+                        dcnbKeHoachDcHdr.setMaDviPq(e.getDcnbKeHoachDcHdr().getDanhSachHangHoa().get(0).getMaDiemKhoNhan().substring(0, 8));
                         dcnbKeHoachDcHdr.setPhuongAnDieuChuyen(new ArrayList<>());
 
                         BigDecimal totalDuT = e.getDcnbKeHoachDcHdr().getDanhSachHangHoa().stream()
@@ -655,7 +657,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                     if (keHoachDcHdr.isPresent()) {
                         keHoachDcHdr.get().setDaXdinhDiemNhap(true);
                         dcnbKeHoachDcHdrRepository.save(keHoachDcHdr.get());
-                    }else {
+                    } else {
                         throw new Exception("Không tìm thấy kế hoạch! id: " + hh.getKeHoachDcHdrId());
                     }
                     hh.setDcnbKeHoachDcHdr(keHoachDcHdr.get());

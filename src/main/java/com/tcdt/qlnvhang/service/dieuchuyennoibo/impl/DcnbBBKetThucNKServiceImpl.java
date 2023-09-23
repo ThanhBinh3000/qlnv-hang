@@ -34,6 +34,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
@@ -100,7 +101,15 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
 //        if (optional.isPresent()) {
 //            throw new Exception("Số biên bản đã tồn tại");
 //        }
-
+        List<DcnbBBKetThucNKHdr> lists = new ArrayList<>();
+        if(StringUtils.isEmpty(req.getMaLoKho())){
+            lists = hdrRepository.findByMaDviAndSoQdinhDccAndMaNganKho(userInfo.getDvql(), req.getSoQdinhDcc(), req.getMaNganKho());
+        }else {
+            lists = hdrRepository.findByMaDviAndSoQdinhDccAndMaLoKho(userInfo.getDvql(), req.getSoQdinhDcc(), req.getMaLoKho());
+        }
+        if(!lists.isEmpty()){
+            throw new Exception("Ngăn Lô kho đã được khởi tạo!");
+        }
         DcnbBBKetThucNKHdr data = new DcnbBBKetThucNKHdr();
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(userInfo.getDvql());

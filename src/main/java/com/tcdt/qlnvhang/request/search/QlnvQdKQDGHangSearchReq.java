@@ -34,4 +34,6 @@ public class QlnvQdKQDGHangSearchReq extends BaseRequest {
 	String loaiVthh;
 	String cloaiVthh;
 
+	String maKho;
+
 }

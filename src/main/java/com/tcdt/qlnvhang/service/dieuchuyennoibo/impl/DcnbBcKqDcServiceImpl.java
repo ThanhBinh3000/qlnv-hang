@@ -4,8 +4,8 @@ import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBcKqDcDtlRepository;
-import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBcKqDcHdrRepository;
+import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
+import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbKqDcSearch;
@@ -14,6 +14,7 @@ import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBbKqDcService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBcKqDcDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBcKqDcHdr;
 import com.tcdt.qlnvhang.util.Contains;
@@ -45,6 +46,14 @@ public class DcnbBcKqDcServiceImpl implements DcnbBbKqDcService {
     private FileDinhKemService fileDinhKemService;
     @Autowired
     private FileDinhKemRepository fileDinhKemRepository;
+    @Autowired
+    private DcnbBienBanLayMauHdrRepository dcnbBienBanLayMauHdrRepository;
+    @Autowired
+    private DcnbBbGiaoNhanHdrRepository dcnbBbGiaoNhanHdrRepository;
+    @Autowired
+    private DcnbBbNhapDayKhoHdrRepository dcnbBbNhapDayKhoHdrRepository;
+    @Autowired
+    private QlnvDmVattuRepository qlnvDmVattuRepository;
 
     @Override
     public Page<DcnbBcKqDcHdr> search(CustomUserDetails currentUser, DcnbBbKqDcSearch req) {
@@ -69,10 +78,10 @@ public class DcnbBcKqDcServiceImpl implements DcnbBbKqDcService {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
-//        Optional<DcnbBbKqDcHdr> optional = hdrRepository.findFirstBySoBc(objReq.getSoBc());
-//        if (optional.isPresent() && objReq.getSoBc() != null && objReq.getSoBc().split("/").length == 1) {
-//            throw new Exception("số biên bản lấy mẫu đã tồn tại");
-//        }
+        Optional<DcnbBcKqDcHdr> optional = hdrRepository.findFirstBySoBc(objReq.getSoBc());
+        if (optional.isPresent() && objReq.getSoBc() != null) {
+            throw new Exception("Số báo cáo đã tồn tại");
+        }
         DcnbBcKqDcHdr data = new DcnbBcKqDcHdr();
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(cqt.getMaDvi());
@@ -85,8 +94,8 @@ public class DcnbBcKqDcServiceImpl implements DcnbBbKqDcService {
             e.setDcnbBcKqDcHdr(data);
         });
         DcnbBcKqDcHdr created = hdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BCKQNX-" + currentUser.getUser().getDvqlTenVietTat();
-        created.setSoBc(so);
+//        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BCKQNX-" + currentUser.getUser().getDvqlTenVietTat();
+//        created.setSoBc(so);
         hdrRepository.save(created);
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), DcnbBcKqDcHdr.TABLE_NAME);
         created.setFileDinhKems(canCu);
@@ -103,20 +112,20 @@ public class DcnbBcKqDcServiceImpl implements DcnbBbKqDcService {
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-//        Optional<DcnbBbKqDcHdr> soDxuat = hdrRepository.findFirstBySoBc(objReq.getSoBc());
-//        if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoBc())) {
-//            if (soDxuat.isPresent() && objReq.getSoBc().split("/").length == 1) {
-//                if (!soDxuat.get().getId().equals(objReq.getId())) {
-//                    throw new Exception("số biên bản lấy mẫu đã tồn tại");
-//                }
-//            }
-//        }
+        Optional<DcnbBcKqDcHdr> soDxuat = hdrRepository.findFirstBySoBc(objReq.getSoBc());
+        if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoBc())) {
+            if (soDxuat.isPresent()) {
+                if (!soDxuat.get().getId().equals(objReq.getId())) {
+                    throw new Exception("Số báo cáo đã tồn tại");
+                }
+            }
+        }
         DcnbBcKqDcHdr data = optional.get();
         BeanUtils.copyProperties(objReq, data);
         data.setDanhSachKetQua(objReq.getDanhSachKetQua());
         DcnbBcKqDcHdr created = hdrRepository.save(data);
-        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BCKQNX-" + currentUser.getUser().getDvqlTenVietTat();
-        created.setSoBc(so);
+//        String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/BCKQNX-" + currentUser.getUser().getDvqlTenVietTat();
+//        created.setSoBc(so);
         hdrRepository.save(created);
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbBcKqDcHdr.TABLE_NAME));
         List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), DcnbBcKqDcHdr.TABLE_NAME);
@@ -239,7 +248,24 @@ public class DcnbBcKqDcServiceImpl implements DcnbBbKqDcService {
     public List<DcnbBcKqDcDtl> thongTinNhapXuatHangChiCuc(DcnbBbKqDcSearch objReq) throws Exception {
         CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
         objReq.setMaDvi(currentUser.getDvql());
-        return dtlRepository.thongTinXuatNhapHangChiCuc(objReq);
+        List<DcnbBcKqDcDtl> kqdcs = dtlRepository.thongTinXuatNhapHangChiCuc(objReq);
+        for (DcnbBcKqDcDtl dtl : kqdcs) {
+            if (dcnbBbGiaoNhanHdrRepository.findByKeHoachDcDtlId(dtl.getKeHoachDcDtlId()).isEmpty()) { // có biên bản nhập đầy kho đối với lương thực || có biên bản giao nhận đối với vt
+                dtl.setKetQua(Contains.DA_HOAN_THANH);
+            } else if (dcnbBbNhapDayKhoHdrRepository.findByKeHoachDcDtlId(dtl.getKeHoachDcDtlId()).isEmpty()) { // có biên bản nhập đầy kho đối với lương thực || có biên bản giao nhận đối với vt
+                QlnvDmVattu byMa = qlnvDmVattuRepository.findByMa(dtl.getCloaiVthh());
+                if("VT".equals(byMa.getLoaiHang())){ // là vật từ thì đang thực hiện
+                    dtl.setKetQua(Contains.DANG_THUC_HIEN);
+                }else {
+                    dtl.setKetQua(Contains.DA_HOAN_THANH);
+                }
+            } else if (!dcnbBienBanLayMauHdrRepository.findByKeHoachDcDtlIdAndType(dtl.getKeHoachDcDtlId(),"01").isEmpty()) { // có biên bản lấy mẫu
+                dtl.setKetQua(Contains.DANG_THUC_HIEN);
+            } else {
+                dtl.setKetQua(Contains.CHUA_THUC_HIEN);
+            }
+        }
+        return kqdcs;
     }
 
     @Override

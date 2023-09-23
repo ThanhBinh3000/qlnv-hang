@@ -134,7 +134,12 @@ public interface DcnbPhieuKnChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "ORDER BY qdc.soQdinh DESC")
     Page<DcnbPhieuKnChatLuongHdrDTO> searchPageNhan(@Param("param") SearchPhieuKnChatLuong req, Pageable pageable);
 
-    List<DcnbPhieuKnChatLuongHdr> findByMaDviAndSoQdinhDcAndMaNganKho(String maDvi, String soQdDcCuc, String maNganKho);
-
     List<DcnbPhieuKnChatLuongHdr> findByMaDviAndSoQdinhDcAndMaNganKhoAndMaLoKho(String maDvi, String soQdDcCuc, String maNganKho, String maLoKho);
+
+    @Query(value ="SELECT distinct hdr FROM DcnbPhieuKnChatLuongHdr hdr " +
+            "WHERE hdr.maDvi = ?1 AND hdr.soQdinhDc = ?2 AND hdr.maNganKho = ?3 and hdr.trangThai != '04' ")
+    List<DcnbPhieuKnChatLuongHdr> findByMaDviAndSoQdinhDcAndMaNganKho(String dvql, String soQdinhDc, String maNganKho);
+    @Query(value ="SELECT distinct hdr FROM DcnbPhieuKnChatLuongHdr hdr " +
+            "WHERE hdr.maDvi = ?1 AND hdr.soQdinhDc = ?2 AND hdr.maLoKho = ?3 and hdr.trangThai != '04' ")
+    List<DcnbPhieuKnChatLuongHdr> findByMaDviAndSoQdinhDcAndMaLoKho(String dvql, String soQdinhDc, String maLoKho);
 }

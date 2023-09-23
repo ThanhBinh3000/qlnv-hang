@@ -102,12 +102,12 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                     .map(Long::valueOf)
                     .toArray(Long[]::new));
         }
-//        if (!ObjectUtils.isEmpty(objReq.getIdVanBanSuaDoi())) {
-//            listIdThayThe.add(objReq.getIdVanBanSuaDoi());
-//        }
-        List<Long> finalListIdThayThe = listIdThayThe;
+        List<Long> finalListIdThayTheSd = listIdThayThe;
+        if (!ObjectUtils.isEmpty(objReq.getIdVanBanSuaDoi())) {
+            finalListIdThayTheSd.add(objReq.getIdVanBanSuaDoi());
+        }
         List<Long> listHdrCoHieuLuc = allHdrCoHieuLuc.stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList()).stream()
-                .filter(item -> !finalListIdThayThe.contains(item))
+                .filter(item -> !finalListIdThayTheSd.contains(item))
                 .collect(Collectors.toList());
 
         List<String> listCloai = quyChuanQuocGiaDtlRepository.findAllByIdHdrIn(listHdrCoHieuLuc).stream().map(QuyChuanQuocGiaDtl::getCloaiVthh).collect(Collectors.toList());
@@ -127,7 +127,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         if (created.getTrangThaiHl().equals("01") && !listIdThayThe.isEmpty() && listIdThayThe.size() > 0) {
             List<QuyChuanQuocGiaHdr> allByIdIn = quyChuanQuocGiaHdrRepository.findAllByIdIn(listIdThayThe);
             allByIdIn.forEach(item -> {
-                item.setNgayHetHieuLuc(LocalDate.now().minusDays(1));
+                item.setNgayHetHieuLuc(created.getNgayHieuLuc().minusDays(1));
                 item.setTrangThaiHl(Contains.HET_HIEU_LUC);
             });
             quyChuanQuocGiaHdrRepository.saveAll(allByIdIn);
@@ -160,12 +160,12 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                     .map(Long::valueOf)
                     .toArray(Long[]::new));
         }
-//        if (!ObjectUtils.isEmpty(objReq.getIdVanBanSuaDoi())) {
-//            listIdThayThe.add(objReq.getIdVanBanSuaDoi());
-//        }
-        List<Long> finalListIdThayThe = listIdThayThe;
+        List<Long> finalListIdThayTheSd = listIdThayThe;
+        if (!ObjectUtils.isEmpty(objReq.getIdVanBanSuaDoi())) {
+            finalListIdThayTheSd.add(objReq.getIdVanBanSuaDoi());
+        }
         List<Long> listHdrCoHieuLuc = allHdrCoHieuLuc.stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList()).stream()
-                .filter(item -> !finalListIdThayThe.contains(item))
+                .filter(item -> !finalListIdThayTheSd.contains(item))
                 .collect(Collectors.toList());
 
         List<String> listCloai = quyChuanQuocGiaDtlRepository.findAllByIdHdrIn(listHdrCoHieuLuc).stream().map(QuyChuanQuocGiaDtl::getCloaiVthh).collect(Collectors.toList());
@@ -184,7 +184,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         if (created.getTrangThaiHl().equals("01") && listIdThayThe.size() > 0) {
             List<QuyChuanQuocGiaHdr> allByIdIn = quyChuanQuocGiaHdrRepository.findAllByIdIn(listIdThayThe);
             allByIdIn.forEach(item -> {
-                item.setNgayHetHieuLuc(LocalDate.now().minusDays(1));
+                item.setNgayHetHieuLuc(created.getNgayHieuLuc().minusDays(1));
                 item.setTrangThaiHl(Contains.HET_HIEU_LUC);
             });
             quyChuanQuocGiaHdrRepository.saveAll(allByIdIn);

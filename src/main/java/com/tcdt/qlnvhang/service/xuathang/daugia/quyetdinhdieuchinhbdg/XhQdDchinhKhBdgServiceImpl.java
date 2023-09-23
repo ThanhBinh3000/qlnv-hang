@@ -94,7 +94,7 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl {
             dtl.setIdHdr(idHdr);
             dtl.setNam(req.getNam());
             dtl.setSoQdPd(req.getSoQdPd());
-            dtl.setIsDieuChinh(true);
+            dtl.setIsDieuChinh(false);
             dtl.setLastest(true);
             dtl.setSoQdDc(req.getSoQdDc());
             dtl.setTrangThai(Contains.CHUA_THUC_HIEN);
@@ -252,6 +252,11 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl {
                 throw new Exception("Phê duyệt không thành công");
         }
         data.setTrangThai(statusReq.getTrangThai());
+        if (statusReq.getTrangThai().equals(Contains.BAN_HANH)) {
+            List<XhQdPdKhBdgDtl> list = xhQdPdKhBdgDtlRepository.findAllByIdHdr(data.getId());
+            list.forEach(dataDtl -> dataDtl.setIsDieuChinh(true));
+            xhQdPdKhBdgDtlRepository.saveAll(list);
+        }
         XhQdDchinhKhBdgHdr created = xhQdDchinhKhBdgHdrRepository.save(data);
         return created;
     }

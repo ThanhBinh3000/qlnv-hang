@@ -16,7 +16,7 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
     List<HhQdKhlcntDtl> findAllByIdQdHdr (Long idQdHdr);
     List<HhQdKhlcntDtl> findAllByIdQdHdrIn (List<Long> ids);
 
-    HhQdKhlcntDtl findByIdQdHdr(Long idQdHdr);
+    List<HhQdKhlcntDtl> findByIdQdHdr(Long idQdHdr);
 
     @Query(value = "SELECT HDR.ID,COUNT( DISTINCT GT.ID ) AS C " +
             " FROM HH_QD_KHLCNT_HDR HDR " +

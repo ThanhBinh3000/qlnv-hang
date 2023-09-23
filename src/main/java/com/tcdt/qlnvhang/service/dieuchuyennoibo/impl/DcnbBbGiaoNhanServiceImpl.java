@@ -28,6 +28,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
@@ -52,6 +53,8 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
     private DcnbBienBanLayMauHdrRepository dcnbBienBanLayMauHdrRepository;
     @Autowired
     private FileDinhKemService fileDinhKemService;
+    @Autowired
+    private DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
 
     @Autowired
     private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
@@ -101,9 +104,25 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
 //        if (optional.isPresent()) {
 //            throw new Exception("Số biên bản đã tồn tại");
 //        }
-
+        List<DcnbBbGiaoNhanHdr> lists = new ArrayList<>();
+        if(StringUtils.isEmpty(req.getMaLoKho())){
+            lists = hdrRepository.findByMaDviAndSoQdDcCucAndMaNganKho(userInfo.getDvql(), req.getSoQdDcCuc(), req.getMaNganKho());
+        }else {
+            lists = hdrRepository.findByMaDviAndSoQdDcCucAndMaLoKho(userInfo.getDvql(), req.getSoQdDcCuc(), req.getMaLoKho());
+        }
+        if(!lists.isEmpty()){
+            throw new Exception("Ngăn Lô kho đã được khởi tạo!");
+        }
         DcnbBbGiaoNhanHdr data = new DcnbBbGiaoNhanHdr();
         BeanUtils.copyProperties(req, data);
+        Optional<DcnbKeHoachDcDtl> keHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(req.getKeHoachDcDtlId());
+        if (keHoachDcDtl.isPresent()) {
+            if (keHoachDcDtl.get().getParentId() != null) {
+                data.setKeHoachDcDtlId(keHoachDcDtl.get().getParentId());
+            } else {
+                data.setKeHoachDcDtlId(req.getKeHoachDcDtlId());
+            }
+        }
         data.setMaDvi(userInfo.getDvql());
         data.setId(null);
         req.getDanhSachDaiDien().forEach(e -> {
@@ -160,6 +179,14 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
         }
         DcnbBbGiaoNhanHdr data = optional.get();
         BeanUtils.copyProperties(req, data);
+        Optional<DcnbKeHoachDcDtl> keHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(req.getKeHoachDcDtlId());
+        if (keHoachDcDtl.isPresent()) {
+            if (keHoachDcDtl.get().getParentId() != null) {
+                data.setKeHoachDcDtlId(keHoachDcDtl.get().getParentId());
+            } else {
+                data.setKeHoachDcDtlId(req.getKeHoachDcDtlId());
+            }
+        }
         data.setDanhSachDaiDien(req.getDanhSachDaiDien());
         data.setDanhSachBangKe(req.getDanhSachBangKe());
         DcnbBbGiaoNhanHdr update = hdrRepository.save(data);
