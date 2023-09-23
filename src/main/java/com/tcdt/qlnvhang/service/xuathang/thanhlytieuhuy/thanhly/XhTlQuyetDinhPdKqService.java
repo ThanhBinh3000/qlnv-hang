@@ -2,7 +2,7 @@ package com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlHopDongRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhQdPdRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlToChucRepository;
@@ -48,7 +48,7 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
     private XhTlHopDongRepository xhTlHopDongRepository;
 
     @Autowired
-    private XhTlHoSoRepository xhTlHoSoRepository;
+    private XhTlHoSoHdrRepository xhTlHoSoHdrRepository;
 
     @Autowired
     private FileDinhKemService fileDinhKemService;

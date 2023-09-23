@@ -26,6 +26,7 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbChuanBiKhoDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbChuanBiKhoHdr;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DieuChuyenNoiBo;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.var;
@@ -335,8 +336,8 @@ public class DcnbBbChuanBiKhoServiceImpl extends BaseServiceImpl implements Dcnb
                 .loaiHinhKho(dcnbBbChuanBiKhoHdr.get().getLoaiHinhKho())
                 .tichLuong(dcnbBbChuanBiKhoHdr.get().getTichLuong())
                 .thucNhap(BigDecimal.ZERO)
-                .pthucBquan(dcnbBbChuanBiKhoHdr.get().getPthucBquan())
-                .hthucKlot(dcnbBbChuanBiKhoHdr.get().getHthucKlot())
+                .pthucBquan(DieuChuyenNoiBo.getData(dcnbBbChuanBiKhoHdr.get().getPthucBquan()))
+                .hthucKlot(DieuChuyenNoiBo.getData(dcnbBbChuanBiKhoHdr.get().getHthucKlot()))
                 .dinhMucGiao(dcnbBbChuanBiKhoHdr.get().getDinhMucGiao())
                 .dinhMucThucTe(dcnbBbChuanBiKhoHdr.get().getDinhMucThucTe())
                 .nhanXet(dcnbBbChuanBiKhoHdr.get().getNhanXet())

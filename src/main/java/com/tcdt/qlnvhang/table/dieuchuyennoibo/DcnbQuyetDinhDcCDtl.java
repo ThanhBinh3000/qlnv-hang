@@ -34,6 +34,4 @@ public class DcnbQuyetDinhDcCDtl implements Serializable, Cloneable {
 
     @Transient
     private DcnbKeHoachDcHdr dcnbKeHoachDcHdr;
-    @Transient
-    private List<DcnbKeHoachDcDtl> danhSachKeHoach = new ArrayList<>();
 }

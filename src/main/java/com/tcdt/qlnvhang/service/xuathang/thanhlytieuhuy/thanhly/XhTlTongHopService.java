@@ -8,8 +8,10 @@ import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlTongHopD
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlTongHopHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.suachua.ScTongHopReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachRequest;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlTongHopRequest;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.UserInfo;
@@ -75,6 +77,20 @@ public class XhTlTongHopService extends BaseServiceImpl {
     return search;
   }
 
+  public List<XhTlTongHopHdr> dsTongHopTrinhVaThamDinh(ScTongHopReq req) throws Exception {
+    UserInfo currentUser = SecurityContextService.getUser();
+    if (currentUser == null){
+      throw new Exception("Access denied.");
+    }
+    String dvql = currentUser.getDvql();
+    if (currentUser.getCapDvi().equals(Contains.CAP_CUC)) {
+      req.setMaDviSr(dvql);
+    }
+    req.setTrangThai(TrangThaiAllEnum.GUI_DUYET.getId());
+    List<XhTlTongHopHdr> list = hdrRepository.listTongHopTrinhThamDinh(req);
+    return list;
+  }
+
   @Transactional
   public XhTlTongHopHdr save(XhTlTongHopRequest req) throws Exception {
     UserInfo userInfo = UserUtils.getUserInfo();
@@ -83,6 +99,7 @@ public class XhTlTongHopService extends BaseServiceImpl {
     }
     XhTlDanhSachRequest reqTh = new XhTlDanhSachRequest();
     reqTh.setDvql(userInfo.getDvql());
+    reqTh.setTrangThai(TrangThaiAllEnum.CHUA_CHOT.getId());
     List<XhTlDanhSachHdr> listTh = xhTlDanhSachRepository.listTongHop(reqTh);
     if(listTh == null || listTh.isEmpty()){
       throw new Exception("Không có dữ liệu để tổng hợp");

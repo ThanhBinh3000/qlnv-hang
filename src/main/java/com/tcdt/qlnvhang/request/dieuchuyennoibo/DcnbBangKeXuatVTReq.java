@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBangKeXuatVTDtl;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -30,6 +31,10 @@ public class DcnbBangKeXuatVTReq extends BaseRequest {
     private String loaiVthh;
     @NotNull
     private String cloaiVthh;
+    @NotNull
+    private String tenLoaiVthh;
+    @NotNull
+    private String tenCloaiVthh;
     private String soBangKe;
     @NotNull
     private LocalDate ngayNhap;

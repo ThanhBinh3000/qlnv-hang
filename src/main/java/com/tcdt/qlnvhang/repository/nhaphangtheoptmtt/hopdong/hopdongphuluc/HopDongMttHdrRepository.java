@@ -45,7 +45,13 @@ public interface HopDongMttHdrRepository extends JpaRepository<HopDongMttHdr, Lo
   List<HopDongMttHdr> findAllByIdQdKq(Long idQdKq);
 
   @Transactional
+  List<HopDongMttHdr> findAllByIdQdKqAndTrangThai(Long idQdKq, String trangThai);
+
+  @Transactional
   List<HopDongMttHdr> findAllByIdQdGiaoNvNh(Long idQdGiaoNvuNh);
+
+  @Transactional
+  List<HopDongMttHdr> findAllByIdQdGiaoNvNhAndTrangThai(Long idQdKq, String trangThai);
 
   @Transactional
   List<HopDongMttHdr> findAllByIdQdPdSldd(Long idQdPdKqSldd);

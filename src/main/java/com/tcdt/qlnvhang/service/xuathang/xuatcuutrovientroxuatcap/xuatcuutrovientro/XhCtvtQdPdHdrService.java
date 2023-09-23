@@ -95,7 +95,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     if (currentUser == null) {
       throw new Exception("Bad request.");
     }
-    if (!DataUtils.isNullObject(objReq.getSoBbQd())) {
+    if (DataUtils.safeToString(objReq.getSoBbQd()).split("/").length != 1) {
       Optional<XhCtvtQuyetDinhPdHdr> optional = xhCtvtQdPdHdrRepository.findBySoBbQd(objReq.getSoBbQd());
       if (optional.isPresent()) {
         throw new Exception("số quyết định đã tồn tại");
@@ -136,10 +136,12 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu cần sửa");
     }
-    Optional<XhCtvtQuyetDinhPdHdr> soDx = xhCtvtQdPdHdrRepository.findBySoBbQd(objReq.getSoBbQd());
-    if (soDx.isPresent()) {
-      if (!soDx.get().getId().equals(objReq.getId())) {
-        throw new Exception("số quyết định đã tồn tại");
+    if (DataUtils.safeToString(objReq.getSoBbQd()).split("/").length != 1) {
+      Optional<XhCtvtQuyetDinhPdHdr> soDx = xhCtvtQdPdHdrRepository.findBySoBbQd(objReq.getSoBbQd());
+      if (soDx.isPresent()) {
+        if (!soDx.get().getId().equals(objReq.getId())) {
+          throw new Exception("số quyết định đã tồn tại");
+        }
       }
     }
 
@@ -243,33 +245,78 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     }
 
     String status = statusReq.getTrangThai() + optional.get().getTrangThai();
-    switch (status) {
-      case Contains.BAN_HANH + Contains.DUTHAO:
-        optional.get().setNgayPduyet(LocalDate.now());
-        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
-        break;
-      default:
-        throw new Exception("Phê duyệt không thành công");
+    if (optional.get().getType().equals("XC")) {
+      switch (status) {
+        case Contains.CHODUYET_LDV + Contains.DUTHAO:
+        case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
+        case Contains.CHODUYET_LDV + Contains.TUCHOI_LDTC:
+          optional.get().setNgayPduyet(LocalDate.now());
+          optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+          break;
+        case Contains.CHODUYET_LDTC + Contains.CHODUYET_LDV:
+        case Contains.DADUYET_LDTC + Contains.CHODUYET_LDTC:
+          optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+          optional.get().setNgayPduyet(LocalDate.now());
+          break;
+        case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
+        case Contains.TUCHOI_LDTC + Contains.CHODUYET_LDTC:
+          optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+          optional.get().setNgayPduyet(LocalDate.now());
+          optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
+          break;
+        default:
+          throw new Exception("Phê duyệt không thành công");
+      }
+    } else {
+      switch (status) {
+        case Contains.BAN_HANH + Contains.DUTHAO:
+          optional.get().setNgayPduyet(LocalDate.now());
+          optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+          break;
+        default:
+          throw new Exception("Phê duyệt không thành công");
+      }
     }
     optional.get().setTrangThai(statusReq.getTrangThai());
-    XhCtvtQuyetDinhPdHdr created = xhCtvtQdPdHdrRepository.save(optional.get());
+    XhCtvtQuyetDinhPdHdr pheDuyetRow = optional.get();
+
     //xcap
-    if (created.isXuatCap()) {
+
+    /*if (pheDuyetRow.isXuatCap()) {
       XhCtvtQuyetDinhPdHdr data = new XhCtvtQuyetDinhPdHdr();
-      data.setMaDvi(created.getMaDvi());
-      data.setNam(created.getNam());
-      data.setIdDx(created.getIdDx());
-      data.setSoDx(created.getSoDx());
+      data.setMaDvi(pheDuyetRow.getMaDvi());
+      data.setNam(pheDuyetRow.getNam());
+      data.setIdDx(pheDuyetRow.getIdDx());
+      data.setSoDx(pheDuyetRow.getSoDx());
       data.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
       data.setType("XC");
-      data.setLoaiNhapXuat(created.getLoaiNhapXuat());
-      data.setKieuNhapXuat(created.getKieuNhapXuat());
-      data.setIdXc(created.getId());
-      data.setSoXc(created.getSoBbQd());
-      data.setMucDichXuat(created.getMucDichXuat());
-      data.setTenVthh(created.getTenVthh());
-      xhCtvtQdPdHdrRepository.save(data);
-    }
+      data.setLoaiNhapXuat(pheDuyetRow.getLoaiNhapXuat());
+      data.setKieuNhapXuat(pheDuyetRow.getKieuNhapXuat());
+      data.setIdXc(pheDuyetRow.getId());
+      data.setSoXc(pheDuyetRow.getSoBbQd());
+      data.setMucDichXuat(pheDuyetRow.getMucDichXuat());
+      data.setTenVthh(pheDuyetRow.getTenVthh());
+      List<XhCtvtQuyetDinhPdDtl> listDtl = new ArrayList<>();
+      pheDuyetRow.getQuyetDinhPdDtl().forEach(s -> {
+        if (DataUtils.safeToLong(s.getSoLuongXc()) != 0) {
+          XhCtvtQuyetDinhPdDtl dtl = new XhCtvtQuyetDinhPdDtl();
+          dtl.setMaDvi(s.getMaDvi());
+          dtl.setSoLuongDx(s.getSoLuongDx());
+          dtl.setSoLuongXc(s.getSoLuongXc());
+          dtl.setDonViTinh(s.getDonViTinh());
+          dtl.setTonKhoLoaiVthh(s.getTonKhoLoaiVthh());
+          dtl.setLoaiVthh(s.getLoaiVthh());
+          dtl.setNoiDungDx(s.getNoiDungDx());
+          dtl.setKieuNhapXuat(s.getKieuNhapXuat());
+          dtl.setXhCtvtQuyetDinhPdHdr(data);
+          listDtl.add(dtl);
+        }
+      });
+      data.setQuyetDinhPdDtl(listDtl);
+      XhCtvtQuyetDinhPdHdr xuatCapRow = xhCtvtQdPdHdrRepository.save(data);
+      pheDuyetRow.setIdXc(xuatCapRow.getId());
+    }*/
+    XhCtvtQuyetDinhPdHdr created = xhCtvtQdPdHdrRepository.save(pheDuyetRow);
     return created;
   }
 

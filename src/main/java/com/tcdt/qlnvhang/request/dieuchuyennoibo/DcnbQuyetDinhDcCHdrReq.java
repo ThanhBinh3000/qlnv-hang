@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbQuyetDinhDcCDtl;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -39,6 +40,7 @@ public class DcnbQuyetDinhDcCHdrReq implements Serializable {
   private Long nguoiPduyetId;
   private String tenTrangThai;
   private String type;
+  @NotNull
   private LocalDate ngayHieuLuc;
   private List<FileDinhKemReq> canCu = new ArrayList<>();
   private List<FileDinhKemReq> quyetDinh = new ArrayList<>();

@@ -42,6 +42,10 @@ public class HhQdGiaoNvNhapHang implements Serializable {
     private String loaiVthh;
     @Transient
     private String tenLoaiVthh;
+    @Transient
+    private Integer slHd;
+    @Transient
+    private Integer slHdDaKy;
     private String cloaiVthh;
     @Transient
     private String tenCloaiVthh;

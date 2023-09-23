@@ -30,6 +30,8 @@ public class DcnbBbGiaoNhanDtl implements Serializable, Cloneable{
     @NotNull
     private String chucVu;
     @NotNull
+    private String donVi;
+    @NotNull
     private String type;
 
     @ManyToOne(fetch = FetchType.LAZY)

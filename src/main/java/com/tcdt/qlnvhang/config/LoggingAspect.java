@@ -32,6 +32,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -155,7 +156,7 @@ public class LoggingAspect {
             phieuNhapXuatHistory.setSoPhieu(rowData.getSoPhieuXuatKho());
             phieuNhapXuatHistory.setLoaiVthh(rowData.getLoaiVthh());
             phieuNhapXuatHistory.setCloaiVthh(rowData.getCloaiVthh());
-            phieuNhapXuatHistory.setMaKho(rowData.getMaLoKho() == null ? rowData.getMaNganKho() : rowData.getMaLoKho());
+            phieuNhapXuatHistory.setMaKho(StringUtils.isEmpty(rowData.getMaLoKho()) ? rowData.getMaNganKho() : rowData.getMaLoKho());
             phieuNhapXuatHistory.setNgayDuyet(rowData.getNgayPduyet());
             phieuNhapXuatHistory.setLoaiNhapXuat(-1);//fix tam 1 la nhap -1 la xuat
             phieuNhapXuatHistory.setKieu("NHAP_XUAT");//nhap xuat hoac khoi tao so du dau ky
@@ -163,22 +164,21 @@ public class LoggingAspect {
             logger.info("Cập nhật kho theo Phiếu nhập kho DcnbPhieuXuatKhoController {}", rowData);
           }
         }
-        else if (joinPoint.getTarget().toString().contains("DcnbPhieuNhapKhoController")) {
-          if (result != null && result.getBody().getMsg().equals(EnumResponse.RESP_SUCC.getDescription())) {
-              DcnbPhieuNhapKhoHdr rowData = objectMapper.convertValue(result.getBody().getData(), DcnbPhieuNhapKhoHdr.class);
-            if (rowData.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
-              PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
-              phieuNhapXuatHistory.setSoLuong(rowData.getTongSoLuong()); //ThucXuat
-              phieuNhapXuatHistory.setSoPhieu(rowData.getSoPhieuNhapKho());
-              phieuNhapXuatHistory.setLoaiVthh(rowData.getLoaiVthh());
-              phieuNhapXuatHistory.setCloaiVthh(rowData.getCloaiVthh());
-              phieuNhapXuatHistory.setMaKho(rowData.getMaLoKho() == null ? rowData.getMaNganKho() : rowData.getMaLoKho());
-              phieuNhapXuatHistory.setNgayDuyet(rowData.getNgayPDuyet());
-              phieuNhapXuatHistory.setLoaiNhapXuat(1);//fix tam 1 la nhap -1 la xuat
-              phieuNhapXuatHistory.setKieu("NHAP_XUAT");//nhap xuat hoac khoi tao so du dau ky
-              luuKhoClient.synchronizeData(phieuNhapXuatHistory);
-              logger.info("Cập nhật kho theo Phiếu nhập kho DcnbPhieuXuatKhoController {}", rowData);
-            }
+      }else if (joinPoint.getTarget().toString().contains("DcnbPhieuNhapKhoController")) {
+        if (result != null && result.getBody().getMsg().equals(EnumResponse.RESP_SUCC.getDescription())) {
+          DcnbPhieuNhapKhoHdr rowData = objectMapper.convertValue(result.getBody().getData(), DcnbPhieuNhapKhoHdr.class);
+          if (rowData.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
+            PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
+            phieuNhapXuatHistory.setSoLuong(rowData.getTongSoLuong()); //ThucXuat
+            phieuNhapXuatHistory.setSoPhieu(rowData.getSoPhieuNhapKho());
+            phieuNhapXuatHistory.setLoaiVthh(rowData.getLoaiVthh());
+            phieuNhapXuatHistory.setCloaiVthh(rowData.getCloaiVthh());
+            phieuNhapXuatHistory.setMaKho(StringUtils.isEmpty(rowData.getMaLoKho())  ? rowData.getMaNganKho() : rowData.getMaLoKho());
+            phieuNhapXuatHistory.setNgayDuyet(rowData.getNgayPDuyet());
+            phieuNhapXuatHistory.setLoaiNhapXuat(1);//fix tam 1 la nhap -1 la xuat
+            phieuNhapXuatHistory.setKieu("NHAP_XUAT");//nhap xuat hoac khoi tao so du dau ky
+            luuKhoClient.synchronizeData(phieuNhapXuatHistory);
+            logger.info("Cập nhật kho theo Phiếu nhập kho DcnbPhieuXuatKhoController {}", rowData);
           }
         }
       }

@@ -130,8 +130,8 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         String so = created.getId() + "/" + (new Date().getYear() + 1900) + "/PKNCL-" + currentUser.getUser().getDvqlTenVietTat();
         created.setSoPhieu(so);
         dcnbPhieuKnChatLuongHdrRepository.save(created);
-        List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU");
-        data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
+        List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getDinhKems(), created.getId(), DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU");
+        data.setDinhKems(bienBanLayMauDinhKem);
         return created;
     }
 
@@ -174,8 +174,8 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         created.setSoPhieu(so);
         dcnbPhieuKnChatLuongHdrRepository.save(created);
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU"));
-        List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getBienBanLayMauDinhKem(), created.getId(), DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU");
-        data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
+        List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getDinhKems(), created.getId(), DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU");
+        data.setDinhKems(bienBanLayMauDinhKem);
         return created;
     }
 
@@ -189,7 +189,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         List<DcnbPhieuKnChatLuongHdr> allById = dcnbPhieuKnChatLuongHdrRepository.findAllById(ids);
         allById.forEach(data -> {
             List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemRepository.findByDataIdAndDataTypeIn(data.getId(), Collections.singleton(DcnbPhieuKnChatLuongHdr.TABLE_NAME + "_CAN_CU"));
-            data.setBienBanLayMauDinhKem(bienBanLayMauDinhKem);
+            data.setDinhKems(bienBanLayMauDinhKem);
             List<DcnbPhieuKnChatLuongDtl> khs = dcnbPhieuKnChatLuongDtlRepository.findByHdrId(data.getId());
             data.setDcnbPhieuKnChatLuongDtl(khs);
         });
@@ -388,7 +388,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
                 .tenNhaKho(dcnbPhieuKnChatLuongHdr.get().getTenNhaKho())
                 .tenDiemKho(dcnbPhieuKnChatLuongHdr.get().getTenDiemKho())
                 .soLuongHangBaoQuan("")
-                .hinhThucBq(dcnbPhieuKnChatLuongHdr.get().getHinhThucBq())
+                .hinhThucBq(DieuChuyenNoiBo.getData(dcnbPhieuKnChatLuongHdr.get().getHinhThucBq()))
                 .tenThuKho(dcnbPhieuKnChatLuongHdr.get().getTenThuKho())
                 .ngayNhapDayKho(dcnbPhieuKnChatLuongHdr.get().getNgayNhapDayKho().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .ngayLayMau(dcnbPhieuKnChatLuongHdr.get().getNgayLayMau().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
@@ -403,7 +403,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
                 .lanhDaoCuc(userInfo.isPresent() ? userInfo.get().getFullName() : "")
                 .maQhns(dcnbPhieuKnChatLuongHdr.get().getMaQhns())
                 .loaiHangHoa(dcnbPhieuKnChatLuongHdr.get().getTenCloaiVthh())
-                .hinhThucKeLot(dcnbPhieuKnChatLuongHdr.get().getHinhThucBq())
+                .hinhThucKeLot(DieuChuyenNoiBo.getData(dcnbPhieuKnChatLuongHdr.get().getHinhThucBq()))
                 .dcnbPhieuKnChatLuongDtls(DcnbPhieuKnChatLuongDtlToDto(dcnbPhieuKnChatLuongHdr.get().getDcnbPhieuKnChatLuongDtl()))
                 .build();
     }

@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.tieuhuy;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThQuyetDinhRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -14,8 +13,6 @@ import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.tieuhuy.XhThQuyetDinhHd
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoHdr;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThQuyetDinhHdr;
 import com.tcdt.qlnvhang.util.Contains;
@@ -29,7 +26,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;

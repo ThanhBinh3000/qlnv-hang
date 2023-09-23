@@ -6,7 +6,8 @@ import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoRequest;
+import com.tcdt.qlnvhang.request.suachua.ScTrinhThamDinhHdrReq;
+import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoService;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -37,7 +38,7 @@ public class XhTlHoSoController {
   @ApiOperation(value = "Tra cứu", response = List.class)
   @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody XhTlHoSoRequest objReq) {
+  public ResponseEntity<BaseResponse> colection(@CurrentUser CustomUserDetails currentUser, @RequestBody XhTlHoSoReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
       resp.setData(xhTlHoSoService.searchPage(currentUser, objReq));
@@ -52,13 +53,47 @@ public class XhTlHoSoController {
     return ResponseEntity.ok(resp);
   }
 
+  @ApiOperation(value = "Danh sách tổng hợp để trình và thẩm định", response = List.class)
+  @PostMapping(value = "/ds-quyet-dinh", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> listTrinhThamDinh(@RequestBody XhTlHoSoReq objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(xhTlHoSoService.dsTaoQuyetDinhThanhLy(objReq));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Tra cứu thông tin : {}", e);
+    }
+    return ResponseEntity.ok(resp);
+  }
+
+  @ApiOperation(value = "Danh sách tổng hợp để trình và thẩm định", response = List.class)
+  @PostMapping(value = "/ds-thong-bao", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> listThongBao(@RequestBody XhTlHoSoReq objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(xhTlHoSoService.dsTaoThongBaoThanhLy(objReq));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Tra cứu thông tin : {}", e);
+    }
+    return ResponseEntity.ok(resp);
+  }
+
   @ApiOperation(value = "Tạo mới", response = List.class)
   @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhTlHoSoRequest objReq) {
+  public ResponseEntity<BaseResponse> insert(@Valid @RequestBody XhTlHoSoReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhTlHoSoService.save(currentUser, objReq));
+      resp.setData(xhTlHoSoService.save(objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -72,10 +107,10 @@ public class XhTlHoSoController {
 
   @ApiOperation(value = "Cập nhật", response = List.class)
   @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhTlHoSoRequest objReq) {
+  public ResponseEntity<BaseResponse> update(@Valid @RequestBody XhTlHoSoReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhTlHoSoService.update(currentUser, objReq));
+      resp.setData(xhTlHoSoService.update(objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -87,12 +122,12 @@ public class XhTlHoSoController {
   }
 
   @ApiOperation(value = "Lấy chi tiết", response = List.class)
-  @GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<BaseResponse> detail(@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids") List<Long> ids) {
+  public ResponseEntity<BaseResponse> detail(@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("id") Long id) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhTlHoSoService.detail(ids).get(0));
+      resp.setData(xhTlHoSoService.detail(id));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -105,10 +140,10 @@ public class XhTlHoSoController {
 
   @ApiOperation(value = "Trình duyệt", response = List.class)
   @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody StatusReq stReq) {
+  public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq stReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      xhTlHoSoService.approve(currentUser, stReq);
+      xhTlHoSoService.approve(stReq);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -158,7 +193,7 @@ public class XhTlHoSoController {
   @ApiOperation(value = "Kết xuất danh sách", response = List.class)
   @PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public void exportList(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhTlHoSoRequest objReq, HttpServletResponse response) throws Exception {
+  public void exportList(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhTlHoSoReq objReq, HttpServletResponse response) throws Exception {
     try {
       xhTlHoSoService.export(currentUser, objReq, response);
 

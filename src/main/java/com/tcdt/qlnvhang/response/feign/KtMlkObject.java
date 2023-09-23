@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.response.feign;
 
 import lombok.Data;
 
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
@@ -12,7 +13,7 @@ public class KtMlkObject {
     String tenNgankho;
     String diaChi;
 
-    LocalDate namSudung;
+    String namSudung;
     String nhiemVu;
     String ghiChu;
     String loaikhoId;
@@ -76,4 +77,15 @@ public class KtMlkObject {
     String maThuKho;
 
     Long idThuKho;
+
+    String tenNhakho;
+
+    String tenDiemkho;
+
+    String tenTongKho;
+
+    String tenDtkvqg;
+    String tenLoaiVthh;
+
+    String tenCloaiVthh;
 }
