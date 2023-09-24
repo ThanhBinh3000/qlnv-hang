@@ -4,20 +4,13 @@ import lombok.Data;
 
 @Data
 public class XhPhieuKnghiemCluongCtReq {
-
-	private Long idHdr;
-
-	private String tenTchuan;
-
-	private String ketQuaKiemTra; // Ket qua phan tich
-
-	private String phuongPhap;
-
-	private String trangThai;
-
-	private String chiSoNhap;
-
-	private String kieu;
-
-	private String danhGia;
+    private Long id;
+    private Long idHdr;
+    private Integer ma;
+    private String chiTieuCl;
+    private String chiSoCl;
+    private String ketQua;
+    private String phuongPhap;
+    private String danhGia;
+    private String trangThai;
 }

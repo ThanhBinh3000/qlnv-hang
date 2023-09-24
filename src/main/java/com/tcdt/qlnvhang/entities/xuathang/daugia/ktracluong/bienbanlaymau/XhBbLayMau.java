@@ -83,6 +83,8 @@ public class XhBbLayMau implements Serializable {
     @Transient
     private String tenLoKho;
     @Transient
+    private String tenKtvBaoQuan;
+    @Transient
     private String tenLoaiHinhNx;
     @Transient
     private String tenKieuNhapXuat;
