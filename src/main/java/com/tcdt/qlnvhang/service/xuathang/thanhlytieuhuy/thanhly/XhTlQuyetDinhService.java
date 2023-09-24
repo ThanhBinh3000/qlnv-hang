@@ -279,7 +279,7 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
         if (currentUser == null){
             throw new Exception("Access denied.");
         }
-        req.setTrangThai(TrangThaiAllEnum.DA_DUYET_BTC.getId());
+        req.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
         List<XhTlQuyetDinhHdr> list = hdrRepository.listTaoBaoCaoThanhLy(req);
         return list;
     }

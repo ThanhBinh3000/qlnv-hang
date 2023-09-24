@@ -55,6 +55,16 @@ public class XhTlToChucService extends BaseServiceImpl {
         return search;
     }
 
+    public List<XhTlToChucHdr> searchAll( SearchXhTlToChuc req) throws Exception {
+        List<XhTlToChucHdr> search = xhTlToChucRepository.searchAll(req);
+        return search;
+    }
+
+    public List<XhTlToChucHdr> dsTaoQuyetDinhPdKq( SearchXhTlToChuc req) throws Exception {
+        List<XhTlToChucHdr> search = xhTlToChucRepository.dsTaoQdPdKq(req);
+        return search;
+    }
+
     @Transactional
     public XhTlToChucHdr create(CustomUserDetails currentUser, XhTlToChucHdrReq req) throws Exception {
         if (currentUser == null) throw new Exception("Bad request.");
@@ -69,11 +79,11 @@ public class XhTlToChucService extends BaseServiceImpl {
         data.getToChucNlq().forEach(f -> {
             f.setToChucHdr(data);
         });
-        Optional<XhTlQuyetDinhDtl> byId = xhTlQuyetDinhDtlRepository.findById(data.getIdQdTlDtl());
-        if (byId.isPresent()) {
-            byId.get().setTrangThaiThucHien(NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId());
-            xhTlQuyetDinhDtlRepository.save(byId.get());
-        }
+//        Optional<XhTlQuyetDinhDtl> byId = xhTlQuyetDinhDtlRepository.findById(data.getIdQdTlDtl());
+//        if (byId.isPresent()) {
+//            byId.get().setTrangThaiThucHien(NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId());
+//            xhTlQuyetDinhDtlRepository.save(byId.get());
+//        }
         XhTlToChucHdr created = xhTlToChucRepository.save(data);
         return created;
     }
