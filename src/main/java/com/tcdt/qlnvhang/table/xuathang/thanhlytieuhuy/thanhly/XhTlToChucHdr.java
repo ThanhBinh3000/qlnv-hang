@@ -34,7 +34,6 @@ public class XhTlToChucHdr extends BaseEntity implements Serializable {
     private Integer lanDauGia;
     private String maThongBao;
     private Long idQdTl;
-    private Long idQdTlDtl;
     private String soQdTl;
     private String trichYeuTbao;
     private String tenToChuc;
@@ -118,6 +117,10 @@ public class XhTlToChucHdr extends BaseEntity implements Serializable {
     public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
         this.tenTrangThai = TrangThaiAllEnum.getLabelById(this.trangThai);
+    }
+
+    public String getTenTrangThai() {
+        return TrangThaiAllEnum.getLabelById(trangThai);
     }
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

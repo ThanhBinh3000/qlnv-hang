@@ -8,4 +8,6 @@ public class SearchXhTlToChuc extends BaseRequest {
     private String dvql;
 
     private Integer nam;
+
+    private Long idQdTl;
 }
