@@ -41,13 +41,10 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl {
 
     @Autowired
     private XhBbLayMauRepository xhBbLayMauRepository;
-
     @Autowired
     private XhBbLayMauCtRepository xhBbLayMauCtRepository;
-
     @Autowired
     private XhQdGiaoNvXhRepository xhQdGiaoNvXhRepository;
-
     @Autowired
     private UserInfoRepository userInfoRepository;
 
@@ -145,6 +142,11 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl {
                     data.setTenThuKho(userInfo.getFullName());
                 });
             }
+            if (data.getIdKtvBaoQuan() != null){
+                userInfoRepository.findById(data.getIdKtvBaoQuan()).ifPresent(userInfo -> {
+                    data.setTenKtvBaoQuan(userInfo.getFullName());
+                });
+            }
             if (data.getIdLanhDaoChiCuc() != null) {
                 userInfoRepository.findById(data.getIdLanhDaoChiCuc()).ifPresent(userInfo -> {
                     data.setTenLanhDaoChiCuc(userInfo.getFullName());
@@ -168,11 +170,10 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl {
     public void delete(IdSearchReq idSearchReq) throws Exception {
         XhBbLayMau data = xhBbLayMauRepository.findById(idSearchReq.getId())
                 .orElseThrow(() -> new Exception("Bản ghi không tồn tại"));
-        if (!data.getTrangThai().equals(Contains.DUTHAO)
-                && !data.getTrangThai().equals(Contains.TUCHOI_LDCC)) {
+        List<String> allowedStatus = Arrays.asList(Contains.DUTHAO, Contains.TUCHOI_LDCC);
+        if (!allowedStatus.contains(data.getTrangThai())) {
             throw new Exception("Chỉ thực hiện xóa với phiếu xuất kho ở trạng thái bản nháp hoặc từ chối");
         }
-        List<XhBbLayMauCt> listDtl = xhBbLayMauCtRepository.findAllByIdHdr(data.getId());
         xhBbLayMauCtRepository.deleteAllByIdHdr(data.getId());
         xhBbLayMauRepository.delete(data);
         if (data.getIdQdNv() != null) {
