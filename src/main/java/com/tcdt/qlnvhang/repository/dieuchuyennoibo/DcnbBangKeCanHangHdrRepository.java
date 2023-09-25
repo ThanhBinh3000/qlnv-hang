@@ -170,4 +170,5 @@ public interface DcnbBangKeCanHangHdrRepository extends JpaRepository<DcnbBangKe
             "khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan,pxk.nguoiGiaoHang,pxk.soCmt,pxk.ctyNguoiGh,pxk.diaChi,pxk.thoiGianGiaoNhan,khdcd.id " +
             "ORDER BY qdc.soQdinh DESC")
     List<DcnbBangKeCanHangHdrDTO> searchListNhan(@Param("param") SearchBangKeCanHang req);
+    Optional<DcnbBangKeCanHangHdr> findByMaDvi (String maDvi);
 }
