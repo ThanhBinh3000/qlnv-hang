@@ -218,7 +218,7 @@ public class DcnbPhieuKtChatLuongHdr extends BaseEntity implements Serializable,
     @Column(name = "TICH_LUONG_KHA_DUNG")
     private BigDecimal tichLuongKhaDung;
     @Column(name = "BB_NT_BQ_LD_ID")
-    private String bBNtLdId;
+    private String bbNtLdId;
     @Column(name = "SO_BB_NT_BQ_LD")
     private String soBBNtLd;
     @Column(name = "KE_HOACH_DC_DTL_ID")
