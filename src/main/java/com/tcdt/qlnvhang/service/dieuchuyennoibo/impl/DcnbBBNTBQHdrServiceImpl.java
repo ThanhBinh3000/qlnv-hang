@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.common.DocxToPdfConverter;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.DmVattuBqRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -19,6 +20,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmVattuBq;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
@@ -72,6 +74,8 @@ public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBN
     private DcnbBienBanHaoDoiHdrRepository dcnbBienBanHaoDoiHdrRepository;
     @Autowired
     private DcnbBienBanTinhKhoHdrRepository dcnbBienBanTinhKhoHdrRepository;
+    @Autowired
+    private DmVattuBqRepository dmVattuBqRepository;
 
     @Override
     public Page<DcnbBBNTBQHdr> searchPage(DcnbBBNTBQHdrReq req) throws Exception {
@@ -475,9 +479,9 @@ public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBN
                 .loaiHinhKho(dcnbBBNTBQHdr.get().getLoaiHinhKho())
                 .tichLuongKhaDung(dcnbBBNTBQHdr.get().getTichLuongKhaDung())
                 .slThucNhapDc(dcnbBBNTBQHdr.get().getSlThucNhapDc())
-                .phuongThucBaoQuan(dcnbBBNTBQHdr.get().getPhuongThucBaoQuan())
-                .hinhThucKeLot(DieuChuyenNoiBo.getData(dcnbBBNTBQHdr.get().getHinhThucBaoQuan()))
-                .hinhThucBaoQuan(DieuChuyenNoiBo.getData(dcnbBBNTBQHdr.get().getHinhThucBaoQuan()))
+                .phuongThucBaoQuan(phuongThucBaoQuanList(dcnbBBNTBQHdr.get().getPhuongThucBaoQuan()))
+                .hinhThucKeLot(hinhThucBaoQuanKlot(dcnbBBNTBQHdr.get().getHinhThucBaoQuan()))
+                .hinhThucBaoQuan(phuongThucBaoQuanList(dcnbBBNTBQHdr.get().getHinhThucBaoQuan()))
                 .dinhMucDuocGiao(dcnbBBNTBQHdr.get().getDinhMucDuocGiao())
                 .dinhMucTT(dcnbBBNTBQHdr.get().getDinhMucTT())
                 .tongKinhPhiDaTh(dcnbBBNTBQHdr.get().getTongKinhPhiDaTh())
@@ -487,6 +491,16 @@ public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBN
                 .dcnbBBNTBQDtlThucHienDto(dcnbBBNTBQDtlThucHienDtos)
                 .build();
     }
+
+    private String hinhThucBaoQuanKlot (String maHinhThucBaoQuan) {
+        var qlnvDmVattuBq = dmVattuBqRepository.findAllByMaAndType(maHinhThucBaoQuan, "htbq");
+        return qlnvDmVattuBq.stream().findFirst().map(QlnvDmVattuBq::getGiaTri).get();
+    }
+    private String phuongThucBaoQuanList (String maPhuongThucBaoQuan) {
+        var qlnvDmVattuBq = dmVattuBqRepository.findAllByMaAndType(maPhuongThucBaoQuan, "ppbq");
+        return qlnvDmVattuBq.stream().findFirst().map(QlnvDmVattuBq::getGiaTri).get();
+    }
+
 
     private List<DcnbBBNTBQDtlPheDuyetDto> dcnbBBNTBQDtlPheDuyetDto(List<DcnbBBNTBQDtl> dcnbBBNTBQDtl) {
         List<DcnbBBNTBQDtlPheDuyetDto> dcnbBBNTBQDtlPheDuyetDtos = new ArrayList<>();

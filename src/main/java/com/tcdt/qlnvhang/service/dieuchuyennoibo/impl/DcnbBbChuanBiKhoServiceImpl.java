@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.common.DocxToPdfConverter;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.DmVattuBqRepository;
 import com.tcdt.qlnvhang.repository.KtTrangThaiHienThoiRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbChuanBiKhoDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbBbChuanBiKhoHdrRepository;
@@ -22,6 +23,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmVattuBq;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbChuanBiKhoDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbChuanBiKhoHdr;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
@@ -63,6 +65,8 @@ public class DcnbBbChuanBiKhoServiceImpl extends BaseServiceImpl implements Dcnb
     public DocxToPdfConverter docxToPdfConverter;
     private KtTrangThaiHienThoiRepository ktTrangThaiHienThoiRepository;
 
+    @Autowired
+    private DmVattuBqRepository dmVattuBqRepository;
 
     @Override
     public Page<DcnbBbChuanBiKhoHdr> searchPage(DcnbBbChuanBiKhoHdrReq req) throws Exception {
@@ -336,8 +340,8 @@ public class DcnbBbChuanBiKhoServiceImpl extends BaseServiceImpl implements Dcnb
                 .loaiHinhKho(dcnbBbChuanBiKhoHdr.get().getLoaiHinhKho())
                 .tichLuong(dcnbBbChuanBiKhoHdr.get().getTichLuong())
                 .thucNhap(BigDecimal.ZERO)
-                .pthucBquan(DieuChuyenNoiBo.getData(dcnbBbChuanBiKhoHdr.get().getPthucBquan()))
-                .hthucKlot(DieuChuyenNoiBo.getData(dcnbBbChuanBiKhoHdr.get().getHthucKlot()))
+                .pthucBquan(phuongThucBaoQuanList(dcnbBbChuanBiKhoHdr.get().getPthucBquan()))
+                .hthucKlot(hinhThucBaoQuanKlot(dcnbBbChuanBiKhoHdr.get().getHthucKlot()))
                 .dinhMucGiao(dcnbBbChuanBiKhoHdr.get().getDinhMucGiao())
                 .dinhMucThucTe(dcnbBbChuanBiKhoHdr.get().getDinhMucThucTe())
                 .nhanXet(dcnbBbChuanBiKhoHdr.get().getNhanXet())
@@ -349,6 +353,15 @@ public class DcnbBbChuanBiKhoServiceImpl extends BaseServiceImpl implements Dcnb
                 .tongSoKinhPhiThucTeDaThucHien(tongTien)
                 .tongSoKinhPhiThucTeDaThucHienText(dcnbBbChuanBiKhoHdr.get().getTongKinhPhiDaThBc())
                 .build();
+    }
+
+    private String hinhThucBaoQuanKlot (String maHinhThucBaoQuan) {
+        var qlnvDmVattuBq = dmVattuBqRepository.findAllByMaAndType(maHinhThucBaoQuan, "htbq");
+        return qlnvDmVattuBq.stream().findFirst().map(QlnvDmVattuBq::getGiaTri).get();
+    }
+    private String phuongThucBaoQuanList (String maPhuongThucBaoQuan) {
+        var qlnvDmVattuBq = dmVattuBqRepository.findAllByMaAndType(maPhuongThucBaoQuan, "ppbq");
+        return qlnvDmVattuBq.stream().findFirst().map(QlnvDmVattuBq::getGiaTri).get();
     }
 
     private BigDecimal tongTienDcnbBbChuanBiKhoDtl(List<DcnbBbChuanBiKhoDtl> dcnbBbChuanBiKhoDtl) {
