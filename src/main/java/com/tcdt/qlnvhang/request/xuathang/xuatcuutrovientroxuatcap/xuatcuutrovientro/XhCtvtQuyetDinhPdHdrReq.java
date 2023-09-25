@@ -38,7 +38,9 @@ public class XhCtvtQuyetDinhPdHdrReq {
   private String lyDoTuChoi;
   private String type;
   private Boolean xuatCap;
-
+  private Boolean paXuatGaoChuyenXc;
+  private Long qdPaXuatCapId;
+  private String qdPaXuatCap;
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
   private String donViTinh;
