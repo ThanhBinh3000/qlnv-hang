@@ -373,17 +373,16 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
         String daiDienChiCucDtnn = "";
 
         for (var res : dcnbBbGiaoNhanDtl) {
-            if (res.getType().equals("GIAO") && res.getDonVi().equals("GIAO_HANG")) {
+            if (res.getType().equals("GIAO") && res.getDonVi().equals("GIAO_HANG") && res.getChucVu().equals("Giao hàng")) {
                 daiDienBenGiaoHang = res.getHoVaTen();
                 continue;
             }
-            if (res.getType().equals("NHAN") && res.getDonVi().equals("CUC")) {
+            if (res.getType().equals("NHAN") && res.getDonVi().equals("CUC") && res.getChucVu().equals("Cán bộ Cục")) {
                 daiDienCucDtnn = res.getHoVaTen();
                 continue;
             }
-            if (res.getType().equals("NHAN") && res.getDonVi().equals("CHI_CUC")) {
+            if (res.getType().equals("NHAN") && res.getDonVi().equals("CHI_CUC") && res.getChucVu().equals("Cán bộ chi cục")) {
                 daiDienChiCucDtnn = res.getHoVaTen();
-                continue;
             }
 
         }
