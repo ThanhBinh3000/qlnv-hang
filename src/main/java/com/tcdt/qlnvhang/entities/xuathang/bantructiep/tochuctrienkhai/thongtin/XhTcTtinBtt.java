@@ -29,7 +29,7 @@ public class XhTcTtinBtt implements Serializable {
     private BigDecimal donGia;
     private BigDecimal thanhTien;
     private Boolean luaChon;
-    private Boolean typeQdKq;
+    private String type;
     @Transient
     private FileDinhKem fileDinhKems;
 }

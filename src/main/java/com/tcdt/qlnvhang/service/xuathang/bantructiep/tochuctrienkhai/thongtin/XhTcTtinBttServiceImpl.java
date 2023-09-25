@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKh
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBtt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.dieuchinh.XhQdDchinhKhBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviDtlRepository;
@@ -59,6 +60,8 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
     @Autowired
     private XhHopDongBttHdrRepository xhHopDongBttHdrRepository;
     @Autowired
+    private XhQdDchinhKhBttHdrRepository xhQdDchinhKhBttHdrRepository;
+    @Autowired
     private FileDinhKemService fileDinhKemService;
 
     public Page<XhQdPdKhBttDtl> searchPage(CustomUserDetails currentUser, SearchXhTcTtinBttReq req) throws Exception {
@@ -66,14 +69,13 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
         Integer lastest = 1;
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
             req.setLastest(lastest);
-            req.setTrangThai(Contains.HOANTHANHCAPNHAT);
+            req.setTrangThai(Contains.DA_HOAN_THANH);
         } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
             req.setDvql(dvql);
             req.setLastest(lastest);
         } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            req.setMaChiCuc(dvql);
             req.setLastest(lastest);
-            req.setTrangThai(Contains.HOANTHANHCAPNHAT);
+            req.setTrangThai(Contains.DA_HOAN_THANH);
         }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhQdPdKhBttDtl> search = xhQdPdKhBttDtlRepository.searchPage(req, pageable);
@@ -82,18 +84,18 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
         search.getContent().forEach(data -> {
             try {
                 String maDvi = data.getMaDvi();
-                String loaiVthh = data.getLoaiVthh();
-                String cloaiVthh = data.getCloaiVthh();
                 if (mapDmucDvi.containsKey(maDvi)) {
                     Map<String, Object> objDonVi = mapDmucDvi.get(maDvi);
                     data.setTenDvi(objDonVi.get("tenDvi").toString());
                 }
-                if (mapDmucVthh.containsKey(loaiVthh)) {
-                    data.setTenLoaiVthh(mapDmucVthh.get(loaiVthh));
-                }
-                if (mapDmucVthh.containsKey(cloaiVthh)) {
-                    data.setTenCloaiVthh(mapDmucVthh.get(cloaiVthh));
-                }
+                mapDmucVthh.computeIfPresent(data.getLoaiVthh(), (key, value) -> {
+                    data.setTenLoaiVthh(value);
+                    return value;
+                });
+                mapDmucVthh.computeIfPresent(data.getCloaiVthh(), (key, value) -> {
+                    data.setTenCloaiVthh(value);
+                    return value;
+                });
                 if (data.getTrangThai() != null) {
                     data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
                 }
@@ -103,7 +105,11 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
                 if (data.getTrangThaiXh() != null) {
                     data.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiXh()));
                 }
-                data.setXhQdPdKhBttHdr(xhQdPdKhBttHdrRepository.findById(data.getIdHdr()).orElse(null));
+                if (data.getSoQdDc() != null) {
+                    data.setXhQdDchinhKhBttHdr(xhQdDchinhKhBttHdrRepository.findById(data.getIdHdr()).orElse(null));
+                } else {
+                    data.setXhQdPdKhBttHdr(xhQdPdKhBttHdrRepository.findById(data.getIdHdr()).orElse(null));
+                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -125,7 +131,7 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
         data.setGhiChuChaoGia(req.getGhiChuChaoGia());
         data.setThoiHanBan(req.getThoiHanBan());
         data.setTongGiaTriHdong(req.getTongGiaTriHdong());
-        data.setTrangThai(Contains.DANGCAPNHAT);
+        data.setTrangThai(Contains.DANG_THUC_HIEN);
         if (req.getPthucBanTrucTiep().equals(Contains.UY_QUYEN) && !DataUtils.isNullOrEmpty(req.getFileUyQuyen())) {
             List<FileDinhKem> fileUyQuyen = fileDinhKemService.saveListFileDinhKem(req.getFileUyQuyen(), data.getId(), XhQdPdKhBttDtl.TABLE_NAME + "_UY_QUYEN");
             data.setFileUyQuyen(fileUyQuyen);
@@ -140,11 +146,12 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
             for (XhQdPdKhBttDviDtlReq dviDtlReq : dviReq.getChildren()) {
                 xhTcTtinBttRepository.deleteAllByIdDviDtl(dviDtlReq.getId());
                 for (XhTcTtinBttReq chaoGiaReq : dviDtlReq.getChildren()) {
+                    String type = "tcTt";
                     XhTcTtinBtt chaoGia = new XhTcTtinBtt();
                     BeanUtils.copyProperties(chaoGiaReq, chaoGia, "id");
                     chaoGia.setId(null);
                     chaoGia.setIdQdPdDtl(req.getIdDtl());
-                    chaoGia.setTypeQdKq(false);
+                    chaoGia.setType(type);
                     XhTcTtinBtt create = xhTcTtinBttRepository.save(chaoGia);
                     fileDinhKemService.delete(create.getId(), Collections.singleton(XhTcTtinBtt.TABLE_NAME));
                     if (!DataUtils.isNullObject(chaoGiaReq.getFileDinhKems())) {
@@ -171,14 +178,19 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
         Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
         Map<String, String> mapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
         list.forEach(data -> {
-            data.setTenDvi(StringUtils.isEmpty(data.getMaDvi()) ? null : mapDmucDvi.get(data.getMaDvi()));
-            data.setTenLoaiHinhNx(StringUtils.isEmpty(data.getLoaiHinhNx()) ? null : mapLoaiHinhNx.get(data.getLoaiHinhNx()));
-            data.setTenKieuNx(StringUtils.isEmpty(data.getKieuNx()) ? null : mapKieuNx.get(data.getKieuNx()));
-            data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : mapDmucVthh.get(data.getLoaiVthh()));
-            data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh()) ? null : mapDmucVthh.get(data.getCloaiVthh()));
+            data.setTenDvi(mapDmucDvi.getOrDefault(data.getMaDvi(), null));
+            data.setTenLoaiHinhNx(mapLoaiHinhNx.getOrDefault(data.getLoaiHinhNx(), null));
+            data.setTenKieuNx(mapKieuNx.getOrDefault(data.getKieuNx(), null));
+            data.setTenLoaiVthh(mapDmucDvi.getOrDefault(data.getLoaiVthh(), null));
+            data.setTenCloaiVthh(mapDmucDvi.getOrDefault(data.getCloaiVthh(), null));
             data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
             data.setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiHd()));
-            data.setXhQdPdKhBttHdr(xhQdPdKhBttHdrRepository.findById(data.getIdHdr()).get());
+            data.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiXh()));
+            if (data.getSoQdDc() != null) {
+                data.setXhQdDchinhKhBttHdr(xhQdDchinhKhBttHdrRepository.findById(data.getIdHdr()).orElse(null));
+            } else {
+                data.setXhQdPdKhBttHdr(xhQdPdKhBttHdrRepository.findById(data.getIdHdr()).orElse(null));
+            }
             data.setListHopDongBtt(xhHopDongBttHdrRepository.findAllByIdChaoGia(data.getId()));
             if (!DataUtils.isNullObject(data.getPthucBanTrucTiep())) {
                 List<FileDinhKem> fileDinhKems = new ArrayList<>();
@@ -190,12 +202,10 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
                     data.setFileBanLe(fileDinhKems);
                 }
             }
-        });
-        list.parallelStream().forEach(data -> {
             List<XhQdPdKhBttDvi> dvi = xhQdPdKhBttDviRepository.findAllByIdDtl(data.getId());
-            dvi.parallelStream().forEach(dataDvi -> {
+            dvi.forEach(dataDvi -> {
                 List<XhQdPdKhBttDviDtl> dviDtl = xhQdPdKhBttDviDtlRepository.findAllByIdDvi(dataDvi.getId());
-                dviDtl.parallelStream().forEach(dataDviDtl -> {
+                dviDtl.forEach(dataDviDtl -> {
                     List<XhTcTtinBtt> toChuc = xhTcTtinBttRepository.findAllByIdDviDtl(dataDviDtl.getId());
                     toChuc.forEach(dataToChuc -> {
                         List<FileDinhKem> fileDinhKems = fileDinhKemService.search(dataToChuc.getId(), Arrays.asList(XhTcTtinBtt.TABLE_NAME));
@@ -203,18 +213,26 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
                             dataToChuc.setFileDinhKems(fileDinhKems.get(0));
                         }
                     });
-                    dataDviDtl.setTenDiemKho(StringUtils.isEmpty(dataDviDtl.getMaDiemKho()) ? null : mapDmucDvi.get(dataDviDtl.getMaDiemKho()));
-                    dataDviDtl.setTenNhaKho(StringUtils.isEmpty(dataDviDtl.getMaNhaKho()) ? null : mapDmucDvi.get(dataDviDtl.getMaNhaKho()));
-                    dataDviDtl.setTenNganKho(StringUtils.isEmpty(dataDviDtl.getMaNganKho()) ? null : mapDmucDvi.get(dataDviDtl.getMaNganKho()));
-                    dataDviDtl.setTenLoKho(StringUtils.isEmpty(dataDviDtl.getMaLoKho()) ? null : mapDmucDvi.get(dataDviDtl.getMaLoKho()));
-                    dataDviDtl.setTenLoaiVthh(StringUtils.isEmpty(dataDviDtl.getLoaiVthh()) ? null : mapDmucVthh.get(dataDviDtl.getLoaiVthh()));
-                    dataDviDtl.setTenCloaiVthh(StringUtils.isEmpty(dataDviDtl.getCloaiVthh()) ? null : mapDmucVthh.get(dataDviDtl.getCloaiVthh()));
-                    dataDviDtl.setChildren(toChuc.stream().filter(type -> !type.getTypeQdKq()).collect(Collectors.toList()));
+                    dataDviDtl.setTenDiemKho(mapDmucDvi.getOrDefault(dataDviDtl.getMaDiemKho(), null));
+                    dataDviDtl.setTenNhaKho(mapDmucDvi.getOrDefault(dataDviDtl.getMaNhaKho(), null));
+                    dataDviDtl.setTenNganKho(mapDmucDvi.getOrDefault(dataDviDtl.getMaNganKho(), null));
+                    dataDviDtl.setTenLoKho(mapDmucDvi.getOrDefault(dataDviDtl.getMaLoKho(), null));
+                    dataDviDtl.setTenLoaiVthh(mapDmucVthh.getOrDefault(dataDviDtl.getLoaiVthh(), null));
+                    dataDviDtl.setTenCloaiVthh(mapDmucVthh.getOrDefault(dataDviDtl.getCloaiVthh(), null));
+                    dataDviDtl.setChildren(toChuc.stream().filter(type -> "tcTt".equals(type.getType())).collect(Collectors.toList()));
                 });
-                dataDvi.setTenDvi(StringUtils.isEmpty(dataDvi.getMaDvi()) ? null : mapDmucDvi.get(dataDvi.getMaDvi()));
-                dataDvi.setChildren(dviDtl.stream().filter(type -> !type.getTypeQdKq()).collect(Collectors.toList()));
+                dataDvi.setTenDvi(mapDmucDvi.getOrDefault(dataDvi.getMaDvi(), null));
+                if (data.getSoQdDc() != null) {
+                    dataDvi.setChildren(dviDtl.stream().filter(type -> "QdDc".equals(type.getType())).collect(Collectors.toList()));
+                } else {
+                    dataDvi.setChildren(dviDtl.stream().filter(type -> "QdKh".equals(type.getType())).collect(Collectors.toList()));
+                }
             });
-            data.setChildren(dvi.stream().filter(type -> !type.getTypeQdKq()).collect(Collectors.toList()));
+            if (data.getSoQdDc() != null) {
+                data.setChildren(dvi.stream().filter(type -> "QdDc".equals(type.getType())).collect(Collectors.toList()));
+            } else {
+                data.setChildren(dvi.stream().filter(type -> "QdKh".equals(type.getType())).collect(Collectors.toList()));
+            }
         });
         return list;
     }
@@ -232,7 +250,7 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
             data.setTrangThaiHd(statusReq.getTrangThai());
         } else {
             switch (status) {
-                case Contains.HOANTHANHCAPNHAT + Contains.DANGCAPNHAT:
+                case Contains.DA_HOAN_THANH + Contains.DANG_THUC_HIEN:
                     data.setNgayNhanCgia(LocalDate.now());
                     break;
                 default:
@@ -245,11 +263,12 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
 
     public void export(CustomUserDetails currentUser, SearchXhTcTtinBttReq req, HttpServletResponse response) throws Exception {
         String capDvi = (currentUser.getUser().getCapDvi());
-        if (Contains.CAP_CUC.equals(capDvi)) {
-            exportCuc(currentUser, req, response);
+        if (Contains.CAP_CHI_CUC.equals(capDvi)) {
+            exportChiCuc(currentUser, req, response);
             return;
         }
-        exportChiCuc(currentUser, req, response);
+        exportCuc(currentUser, req, response);
+
     }
 
     void exportCuc(CustomUserDetails currentUser, SearchXhTcTtinBttReq req, HttpServletResponse response) throws Exception {

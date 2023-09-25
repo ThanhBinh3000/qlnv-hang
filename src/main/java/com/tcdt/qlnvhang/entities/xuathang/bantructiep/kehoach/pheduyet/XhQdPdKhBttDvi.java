@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet;
 
-import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -27,7 +26,7 @@ public class XhQdPdKhBttDvi implements Serializable {
     private BigDecimal soLuongKhDaDuyet;
     private String donViTinh;
     private Long idQdKqHdr;
-    private Boolean typeQdKq;
+    private String type;
     @Transient
     private String tenDvi;
 

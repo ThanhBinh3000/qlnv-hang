@@ -1,8 +1,8 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.dieuchinh;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtl;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
@@ -20,29 +20,42 @@ import java.util.Map;
 @Entity
 @Table(name = XhQdDchinhKhBttHdr.TABLE_NAME)
 @Data
-public class XhQdDchinhKhBttHdr extends BaseEntity implements Serializable {
+public class XhQdDchinhKhBttHdr implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_QD_DC_KH_BTT_HDR";
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = TABLE_NAME + "_SEQ", allocationSize = 1, name = TABLE_NAME + "_SEQ")
     private Long id;
-    private Integer namKh;
     private String maDvi;
+    private Integer namKh;
+    private String soCongVan;
+    private LocalDate ngayTaoCongVan;
+    private String trichYeu;
+    private Long idQdPd;
+    private String soQdPd;
+    private Integer lanDieuChinh;
+    private LocalDate ngayKyQd;
+    private String soQdCc;
     private String soQdDc;
     private LocalDate ngayKyDc;
-    private LocalDate ngayHluc;
+    private LocalDate ngayHlucDc;
+    private String noiDungDieuChinh;
     private String loaiHinhNx;
     private String kieuNx;
-    private String trichYeu;
-    private Long idQdGoc;
-    private String soQdGoc;
-    private LocalDate ngayKyQdGoc;
     private String loaiVthh;
     private String cloaiVthh;
     private String moTaHangHoa;
+    private String tchuanCluong;
+    private Integer slDviTsan;
+    private Integer slHdongDaKy;
+    private Integer thoiHanGiaoNhan;
     private String trangThai;
     private String lyDoTuChoi;
+    private LocalDate ngayTao;
+    private Long nguoiTaoId;
+    private LocalDate ngaySua;
+    private Long nguoiSuaId;
     private LocalDate ngayGuiDuyet;
     private Long nguoiGuiDuyetId;
     private LocalDate ngayPduyet;
@@ -115,17 +128,17 @@ public class XhQdDchinhKhBttHdr extends BaseEntity implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "dataId")
-    @Where(clause = "data_type='" + XhQdDchinhKhBttHdr.TABLE_NAME + "_CAN_CU'")
-    private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
+    @Where(clause = "data_type='" + XhQdDchinhKhBttHdr.TABLE_NAME + "_TO_TRINH'")
+    private List<FileDinhKemJoinTable> fileToTrinh = new ArrayList<>();
 
-    public void setFileCanCu(List<FileDinhKemJoinTable> fileCanCu) {
-        this.fileCanCu.clear();
-        if (!DataUtils.isNullObject(fileCanCu)) {
-            fileCanCu.forEach(s -> {
-                s.setDataType(XhQdDchinhKhBttHdr.TABLE_NAME + "_CAN_CU");
+    public void setFileToTrinh(List<FileDinhKemJoinTable> fileToTrinh) {
+        this.fileToTrinh.clear();
+        if (!DataUtils.isNullObject(fileToTrinh)) {
+            fileToTrinh.forEach(s -> {
+                s.setDataType(XhQdDchinhKhBttHdr.TABLE_NAME + "_TO_TRINH");
                 s.setXhQdDchinhKhBttHdr(this);
             });
-            this.fileCanCu.addAll(fileCanCu);
+            this.fileToTrinh.addAll(fileToTrinh);
         }
     }
 
@@ -146,6 +159,23 @@ public class XhQdDchinhKhBttHdr extends BaseEntity implements Serializable {
         }
     }
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(value = FetchMode.SUBSELECT)
+    @JoinColumn(name = "dataId")
+    @Where(clause = "data_type='" + XhQdDchinhKhBttHdr.TABLE_NAME + "_CAN_CU'")
+    private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
+
+    public void setFileCanCu(List<FileDinhKemJoinTable> fileCanCu) {
+        this.fileCanCu.clear();
+        if (!DataUtils.isNullObject(fileCanCu)) {
+            fileCanCu.forEach(s -> {
+                s.setDataType(XhQdDchinhKhBttHdr.TABLE_NAME + "_CAN_CU");
+                s.setXhQdDchinhKhBttHdr(this);
+            });
+            this.fileCanCu.addAll(fileCanCu);
+        }
+    }
+
     @Transient
-    List<XhQdDchinhKhBttDtl> children = new ArrayList<>();
+    private List<XhQdPdKhBttDtl> children = new ArrayList<>();
 }

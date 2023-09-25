@@ -38,6 +38,8 @@ public class XhKqBttHdrReq extends BaseRequest {
     private String trangThai;
     private String trangThaiHd;
     private String trangThaiXh;
+    private Long idQdDc;
+    private String soQdDc;
     private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
     private List<FileDinhKemJoinTable> fileDaKy = new ArrayList<>();
     private List<FileDinhKemJoinTable> fileQd = new ArrayList<>();

@@ -147,7 +147,7 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl {
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
         Map<String, String> mapKieuNhapXuat = getListDanhMucChung("KIEU_NHAP_XUAT");
-        for (XhQdDchinhKhBdgHdr data : list) {
+        for (XhQdDchinhKhBdgHdr data : allById) {
             List<XhQdPdKhBdgDtl> listDtl = xhQdPdKhBdgDtlRepository.findAllByIdHdr(data.getId());
             for (XhQdPdKhBdgDtl dataDtl : listDtl) {
                 List<XhQdPdKhBdgPl> listPhanLo = xhQdPdKhBdgPlRepository.findAllByIdDtl(dataDtl.getId());
@@ -174,9 +174,9 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl {
             data.setMapLoaiHinhNx(mapLoaiHinhNx);
             data.setMapKieuNx(mapKieuNhapXuat);
             data.setTrangThai(data.getTrangThai());
-            data.setChildren(listDtl.stream().filter(isDieuChinh -> isDieuChinh.getIsDieuChinh()).collect(Collectors.toList()));
+            data.setChildren(listDtl);
         }
-        return list;
+        return allById;
     }
 
     @Transactional

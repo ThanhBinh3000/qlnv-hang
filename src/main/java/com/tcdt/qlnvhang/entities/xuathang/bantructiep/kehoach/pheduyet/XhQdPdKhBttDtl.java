@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet;
 
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.dieuchinh.XhQdDchinhKhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
@@ -73,6 +74,9 @@ public class XhQdPdKhBttDtl implements Serializable {
     private BigDecimal tongSlDaKyHdong;
     private BigDecimal tongSlChuaKyHdong;
     private Integer namKh;
+    private Boolean isDieuChinh;
+    private Boolean lastest;
+    private String soQdDc;
     @Transient
     private String tenLoaiHinhNx;
     @Transient
@@ -88,7 +92,11 @@ public class XhQdPdKhBttDtl implements Serializable {
     @Transient
     private String tenTrangThaiHd;
     @Transient
+    private String tenPthucTtoan;
+    @Transient
     private XhQdPdKhBttHdr xhQdPdKhBttHdr;
+    @Transient
+    private XhQdDchinhKhBttHdr xhQdDchinhKhBttHdr;
     @Transient
     private List<FileDinhKem> fileUyQuyen = new ArrayList<>();
     @Transient
