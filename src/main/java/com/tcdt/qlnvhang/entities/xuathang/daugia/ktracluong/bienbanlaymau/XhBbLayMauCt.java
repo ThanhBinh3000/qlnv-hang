@@ -9,8 +9,8 @@ import java.io.Serializable;
 @Table(name = XhBbLayMauCt.TABLE_NAME)
 @Data
 public class XhBbLayMauCt implements Serializable {
+    private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_BB_LAY_MAU_CT";
-    private static final long serialVersionUID = 5219010961728948644L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhBbLayMauCt.TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = XhBbLayMauCt.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhBbLayMauCt.TABLE_NAME + "_SEQ")

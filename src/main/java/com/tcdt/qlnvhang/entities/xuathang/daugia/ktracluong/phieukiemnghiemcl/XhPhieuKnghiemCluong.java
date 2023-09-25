@@ -1,163 +1,180 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.phieukiemnghiemcl;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
-import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.util.Contains;
-import lombok.AllArgsConstructor;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import org.springframework.util.StringUtils;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.*;
 
 @Entity
-@Table(name = XhPhieuKnghiemCluong.TABLE_NAME )
-@EqualsAndHashCode(callSuper = false)
+@Table(name = XhPhieuKnghiemCluong.TABLE_NAME)
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class XhPhieuKnghiemCluong extends TrangThaiBaseEntity implements Serializable {
+public class XhPhieuKnghiemCluong implements Serializable {
+    private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_PHIEU_KNGHIEM_CLUONG";
-    private static final long serialVersionUID = -1315211820556764708L;
-  
     @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_PHIEU_KNGHIEM_CLUONG_SEQ")
-//    @SequenceGenerator(sequenceName = "XH_PHIEU_KNGHIEM_CLUONG_SEQ", allocationSize = 1, name = "XH_PHIEU_KNGHIEM_CLUONG_SEQ")
-    @Column(name = "ID")
+//  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhPhieuKnghiemCluong.TABLE_NAME + "_SEQ")
+//  @SequenceGenerator(sequenceName = XhPhieuKnghiemCluong.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhPhieuKnghiemCluong.TABLE_NAME + "_SEQ")
     private Long id;
-
     private Integer nam;
-
     private String maDvi;
-
-    private String maQhns;
-
+    private String maQhNs;
+    private String soPhieuKiemNghiem;
+    private LocalDate ngayLapPhieu;
+    private Long idQdNv;
+    private String soQdNv;
+    private LocalDate ngayKyQdNv;
+    private Long idHopDong;
+    private String soHopDong;
+    private LocalDate ngayKyHopDong;
     private Long idBbLayMau;
-
     private String soBbLayMau;
-
-    private String soQdGiaoNvXh;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayQdGiaoNvXh;
-
-    private Long idQdGiaoNvXh;
-
-    private String soPhieu;
-
-    private Long idNguoiKiemNghiem;
-
-    private Long idTruongPhong;
-
-    private Long idThuKho;
-
+    private LocalDate ngayLayMau;
     private String maDiemKho;
-
+    private String diaDiemKho;
     private String maNhaKho;
-
     private String maNganKho;
-
     private String maLoKho;
-
+    private String loaiHinhNx;
+    private String kieuNhapXuat;
     private String loaiVthh;
-
     private String cloaiVthh;
-
-    private String moTaHangHoa;
-
-    private String hthucBquan;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayLayMau;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKnghiem;
-
+    private String tenHangHoa;
+    private String donViTinh;
+    private String hinhThucBaoQuan;
+    private LocalDate ngayKiemNghiemMau;
+    private Long idNguoiKiemNghiem;
+    private Long idThuKho;
+    private Long idTruongPhongKtvbq;
+    private Long idLanhDaoCuc;
     private String ketQua;
-
-    private String ketLuan;
-
-    private String soBbXuatDocKho;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayXuatDocKho;
-
-    // Transient
-    @Transient
-    private String tenThuKho;
-
-    @Transient
-    private String tenTruongPhong;
-
-    @Transient
-    private String tenNguoiKiemNghiem;
-
+    private String nhanXet;
+    private Long idTinhKho;
+    private String soBbTinhKho;
+    private LocalDate ngayLapTinhKho;
+    private String trangThai;
+    private String LyDoTuChoi;
+    private LocalDate ngayTao;
+    private Long nguoiTaoId;
+    private LocalDate ngaySua;
+    private Long nguoiSuaId;
+    private LocalDate ngayGuiDuyet;
+    private Long nguoiGuiDuyetId;
+    private LocalDate ngayPduyet;
+    private Long nguoiPduyetId;
     @Transient
     private String tenDvi;
-
-    @Transient
-    private String tenLoaiVthh;
-
-    @Transient
-    private String tenCloaiVthh;
-
     @Transient
     private String tenDiemKho;
-
     @Transient
     private String tenNhaKho;
-
     @Transient
     private String tenNganKho;
-
     @Transient
     private String tenLoKho;
-
     @Transient
-    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+    private String tenLoaiVthh;
+    @Transient
+    private String tenCloaiVthh;
+    @Transient
+    private String tenHinhThucBaoQuan;
+    @Transient
+    private String tenNguoiKiemNghiem;
+    @Transient
+    private String tenThuKho;
+    @Transient
+    private String tenTruongPhongKtvbq;
+    @Transient
+    private String tenLanhDaoCuc;
+    @Transient
+    private String tenTrangThai;
+    @Transient
+    private String maDviCon;
+    @Transient
+    private String tenDviCon;
+    @Transient
+    private BigDecimal soLuongHangbaoQuan;
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucDvi;
+
+    public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+        this.mapDmucDvi = mapDmucDvi;
+        if (!DataUtils.isNullObject(getMaDvi())) {
+            setTenDvi(mapDmucDvi.containsKey(getMaDvi()) ? mapDmucDvi.get(getMaDvi()) : null);
+        }
+        if (!DataUtils.isNullObject(getMaDiemKho())) {
+            setTenDiemKho(mapDmucDvi.containsKey(getMaDiemKho()) ? mapDmucDvi.get(getMaDiemKho()) : null);
+        }
+        if (!DataUtils.isNullObject(getMaNhaKho())) {
+            setTenNhaKho(mapDmucDvi.containsKey(getMaNhaKho()) ? mapDmucDvi.get(getMaNhaKho()) : null);
+        }
+        if (!DataUtils.isNullObject(getMaNganKho())) {
+            setTenNganKho(mapDmucDvi.containsKey(getMaNganKho()) ? mapDmucDvi.get(getMaNganKho()) : null);
+        }
+        if (!DataUtils.isNullObject(getMaLoKho())) {
+            setTenLoKho(mapDmucDvi.containsKey(getMaLoKho()) ? mapDmucDvi.get(getMaLoKho()) : null);
+        }
+    }
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapVthh;
+
+    public void setMapVthh(Map<String, String> mapVthh) {
+        this.mapVthh = mapVthh;
+        if (!DataUtils.isNullObject(getLoaiVthh())) {
+            setTenLoaiVthh(mapVthh.containsKey(getLoaiVthh()) ? mapVthh.get(getLoaiVthh()) : null);
+        }
+        if (!DataUtils.isNullObject(getCloaiVthh())) {
+            setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
+        }
+    }
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapHinhThucBaoQuan;
+
+    public void setMapHinhThucBaoQuan(Map<String, String> mapHinhThucBaoQuan) {
+        this.mapHinhThucBaoQuan = mapHinhThucBaoQuan;
+        if (!DataUtils.isNullObject(getKieuNhapXuat())) {
+            setTenHinhThucBaoQuan(mapHinhThucBaoQuan.containsKey(getHinhThucBaoQuan()) ? mapHinhThucBaoQuan.get(getHinhThucBaoQuan()) : null);
+        }
+    }
+
+    public String getTrangThai() {
+        setTenTrangThai(TrangThaiAllEnum.getLabelById(trangThai));
+        return trangThai;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(value = FetchMode.SUBSELECT)
+    @JoinColumn(name = "dataId")
+    @Where(clause = "data_type='" + XhPhieuKnghiemCluong.TABLE_NAME + "_DINH_KEM'")
+    private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
+
+    public void setFileDinhKem(List<FileDinhKemJoinTable> fileDinhKem) {
+        this.fileDinhKem.clear();
+        if (!DataUtils.isNullObject(fileDinhKem)) {
+            fileDinhKem.forEach(s -> {
+                s.setDataType(XhPhieuKnghiemCluong.TABLE_NAME + "_DINH_KEM");
+                s.setXhPhieuKnghiemCluong(this);
+            });
+            this.fileDinhKem.addAll(fileDinhKem);
+        }
+    }
 
     @Transient
     private List<XhPhieuKnghiemCluongCt> children = new ArrayList<>();
-
-    // Print preview
-
-    @Transient
-    private String ngayLayMauFormat;
-    @Transient
-    private String ngayKnghiemFormat;
-    @Transient
-    private String tenHthucBquan;
-
-    @Transient
-    private String ngay;
-
-    @Transient
-    private String thang;
-
-
-    public String getNgayLayMauFormat() {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        return Objects.isNull(ngayLayMau) ? null : formatter.format(ngayLayMau);
-    }
-
-    public String getNgayKnghiemFormat() {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        return Objects.isNull(ngayKnghiem) ? null : formatter.format(ngayKnghiem);
-    }
-
-    public String getNgay() {
-        return Objects.isNull(this.getNgayTao()) ? null : String.valueOf(this.getNgayTao().getDate());
-    }
-
-    public String getThang() {
-        return Objects.isNull(this.getNgayTao()) ? null : String.valueOf(this.getNgayTao().getMonth()+1);
-    }
 }

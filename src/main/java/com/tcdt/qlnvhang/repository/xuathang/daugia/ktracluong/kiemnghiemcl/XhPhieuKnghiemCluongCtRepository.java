@@ -9,9 +9,9 @@ import java.util.List;
 @Repository
 public interface XhPhieuKnghiemCluongCtRepository extends BaseRepository<XhPhieuKnghiemCluongCt, Long> {
 
+    void deleteAllByIdHdr(Long idHdr);
+
     List<XhPhieuKnghiemCluongCt> findAllByIdHdr(Long idHdr);
 
-    void deleteAllByIdHdr (Long idHdr);
-
-
+    List<XhPhieuKnghiemCluongCt> findByIdHdrIn(List<Long> listId);
 }
