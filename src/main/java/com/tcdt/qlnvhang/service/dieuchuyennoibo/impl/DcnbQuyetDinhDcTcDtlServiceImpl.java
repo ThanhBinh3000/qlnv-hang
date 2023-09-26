@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -163,8 +164,8 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
         List<THKeHoachDieuChuyenTongCucDtl> quyetDinhPdDtl = objReq.getQuyetDinhPdDtl();
         for (THKeHoachDieuChuyenTongCucDtl qd : quyetDinhPdDtl) {
             DcnbQuyetDinhDcTcDtl qdtc = new DcnbQuyetDinhDcTcDtl();
-            qdtc.setId(isUpdate ? qd.getId() :null);
-            qdtc.setHdrId(isUpdate ? qd.getHdrId() :null);
+            qdtc.setId(isUpdate ? qd.getId() : null);
+            qdtc.setHdrId(isUpdate ? qd.getHdrId() : null);
             qdtc.setMaCucXuat(qd.getMaCucDxuat() == null ? qd.getMaCucXuat() : qd.getMaCucDxuat());
             qdtc.setTenCucXuat(qd.getTenCucDxuat() == null ? qd.getTenCucXuat() : qd.getTenCucDxuat());
             qdtc.setMaCucNhan(qd.getMaCucNhan());
@@ -192,11 +193,11 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
                     dcnbQuyetDinhDcTcTTDtl.setKeHoachDcHdrId(id);
                     danhSachQuyetDinhChiTiet.add(dcnbQuyetDinhDcTcTTDtl);
                 }
-            }else if(qd.getDanhSachQuyetDinhChiTiet() != null && !qd.getDanhSachQuyetDinhChiTiet().isEmpty()){
+            } else if (qd.getDanhSachQuyetDinhChiTiet() != null && !qd.getDanhSachQuyetDinhChiTiet().isEmpty()) {
                 for (DcnbQuyetDinhDcTcTTDtl dc : qd.getDanhSachQuyetDinhChiTiet()) {
                     danhSachQuyetDinhChiTiet.add(dc);
                 }
-            }else if(qd.getDanhSachHangHoa() != null && !qd.getDanhSachHangHoa().isEmpty()){
+            } else if (qd.getDanhSachHangHoa() != null && !qd.getDanhSachHangHoa().isEmpty()) {
                 Set<Long> ids = new HashSet<>();
                 for (DcnbKeHoachDcDtl khct : qd.getDanhSachHangHoa()) {
                     ids.add(khct.getHdrId());
@@ -397,8 +398,8 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
         Page<DcnbQuyetDinhDcTcHdr> page = this.searchPage(currentUser, objReq);
         List<DcnbQuyetDinhDcTcHdr> data = page.getContent();
 
-        String title = "Danh sách phương án xuất cứu trợ, viện trợ ";
-        String[] rowsName = new String[]{"STT", "Năm kH", "Số công văn/đề xuất", "Ngày duyệt LĐ Cục", "Loại điều chuyển", "Đơn vị đề xuất", "Trạng thái",};
+        String title = "Danh sách quyết định tổng cục ";
+        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số quyết định", "Ngày ký quyết định", "Loại điều chuyển", "Trích yếu", "Số đề xuất/công văn", "Mã tổng hợp", "Số QĐ xuất ĐC", "Số QĐ nhập ĐC", "Trạng thái QĐ"};
         String fileName = "danh-sach-ke-hoach-dieu-chuyen-noi-bo-hang-dtqg.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
@@ -408,9 +409,14 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
             objs[0] = i;
             objs[1] = dx.getNam();
             objs[2] = dx.getSoQdinh();
-            objs[3] = dx.getNgayDuyetTc();
+            objs[3] = dx.getNgayKyQdinh();
             objs[4] = dx.getLoaiDc();
-            objs[5] = dx.getTenDvi();
+            objs[5] = dx.getTrichYeu();
+            objs[6] = dx.getMaDxuat();
+            objs[7] = dx.getMaThop();
+            objs[8] = dx.getSoQdinhXuatCuc();
+            objs[9] = dx.getSoQdinhNhapCuc();
+            objs[10] = TrangThaiAllEnum.getLabelById(dx.getTrangThai());
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
