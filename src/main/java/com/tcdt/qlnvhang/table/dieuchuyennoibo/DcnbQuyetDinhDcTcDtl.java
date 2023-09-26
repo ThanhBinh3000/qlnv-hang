@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -26,9 +27,13 @@ public class DcnbQuyetDinhDcTcDtl implements Serializable {
     private Long id;
     @Column(name = "HDR_ID")
     private Long hdrId;
+    @NotNull
     private String maCucXuat;
+    @NotNull
     private String tenCucXuat;
+    @NotNull
     private String maCucNhan;
+    @NotNull
     private String tenCucNhan;
     private String soDxuat;
     private LocalDate ngayTrinhTc;
