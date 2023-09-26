@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.repository.khotang.KtNganKhoRepository;
@@ -341,7 +342,7 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
             objs[6] = dx.getSoPhieuXuatKho() == null ? dx.getSoPhieuNhapKho() : dx.getSoPhieuXuatKho();
             objs[7] = dx.getSoBangKe();
             objs[8] = dx.getNgayXuatKho() == null ? dx.getNgayNhapKho() : dx.getNgayXuatKho();
-            objs[9] = dx.getTrangThai();
+            objs[9] = TrangThaiAllEnum.getLabelById(dx.getTrangThai());
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

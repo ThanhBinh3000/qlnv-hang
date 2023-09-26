@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkDtlRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
@@ -233,7 +234,7 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
             objs[7] = dx.getNgayGiamDinh();
             objs[8] = dx.getSoPhieuXuatKho();
             objs[9] = dx.getNgayXuatKho();
-            objs[10] = dx.getTrangThai();
+            objs[10] = TrangThaiAllEnum.getLabelById(dx.getTrangThai());
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

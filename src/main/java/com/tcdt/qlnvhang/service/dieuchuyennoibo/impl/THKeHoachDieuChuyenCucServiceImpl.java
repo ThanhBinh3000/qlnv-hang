@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
@@ -527,7 +528,7 @@ public class THKeHoachDieuChuyenCucServiceImpl extends BaseServiceImpl {
             objs[3] = dx.getLoaiDieuChuyen();
             objs[4] = dx.getNgayTongHop();
             objs[5] = dx.getTrichYeu();
-            objs[6] = dx.getTrangThai();
+            objs[6] = TrangThaiAllEnum.getLabelById(dx.getTrangThai());
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
