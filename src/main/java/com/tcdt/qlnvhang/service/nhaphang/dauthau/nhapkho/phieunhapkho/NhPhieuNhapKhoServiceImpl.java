@@ -1,8 +1,10 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieunhapkho;
 
+import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHangRepository;
@@ -15,10 +17,13 @@ import com.tcdt.qlnvhang.request.object.sokho.LkPhieuNhapKhoReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.HhQdPduyetKqlcntHdr;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
@@ -94,6 +99,7 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
         phieu.setNam(LocalDate.now().getYear());
         phieu.setId(Long.valueOf(phieu.getSoPhieuNhapKho().split("/")[0]));
         nhPhieuNhapKhoRepository.save(phieu);
+        saveFile(req, phieu);
         this.saveCtiet(phieu.getId(),req);
         return phieu;
     }
@@ -119,6 +125,7 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
         phieu.setNgaySua(new Date());
         phieu.setNguoiSuaId(userInfo.getId());
         nhPhieuNhapKhoRepository.save(phieu);
+        saveFile(req, phieu);
         this.saveCtiet(phieu.getId(),req);
         return phieu;
     }
@@ -133,6 +140,17 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
                 data.setIdPhieuNkHdr(idHdr);
                 nhPhieuNhapKhoCtRepository.save(data);
             }
+        }
+    }
+
+    private void saveFile (NhPhieuNhapKhoReq req, NhPhieuNhapKho phieu) {
+        fileDinhKemService.delete(phieu.getId(),  Lists.newArrayList(NhPhieuNhapKho.TABLE_NAME));
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+            fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), phieu.getId(), NhPhieuNhapKho.TABLE_NAME);
+        }
+        fileDinhKemService.delete(phieu.getId(),  Lists.newArrayList(NhPhieuNhapKho.TABLE_NAME + "_CHUNG_TU"));
+        if (!DataUtils.isNullObject(req.getChungTuKemTheo())) {
+            fileDinhKemService.saveListFileDinhKem(req.getChungTuKemTheo(), phieu.getId(), NhPhieuNhapKho.TABLE_NAME + "_CHUNG_TU");
         }
     }
 
@@ -165,6 +183,10 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
         data.setTenNguoiTao(ObjectUtils.isEmpty(data.getNguoiTaoId()) ? null : userInfoRepository.findById(data.getNguoiTaoId()).get().getFullName());
         data.setTenNguoiPduyet(ObjectUtils.isEmpty(data.getNguoiPduyetId()) ? null : userInfoRepository.findById(data.getNguoiPduyetId()).get().getFullName());
         data.setHangHoaList(nhPhieuNhapKhoCtRepository.findAllByIdPhieuNkHdr(data.getId()));
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Collections.singletonList(NhPhieuNhapKho.TABLE_NAME));
+        data.setFileDinhKems(fileDinhKem);
+        List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Collections.singletonList(NhPhieuNhapKho.TABLE_NAME + "_CHUNG_TU"));
+        data.setChungTuKemTheo(canCu);
         NhBangKeCanHang bySoPhieuNhapKho = nhBangKeCanHangRepository.findBySoPhieuNhapKho(data.getSoPhieuNhapKho());
         if(!ObjectUtils.isEmpty(bySoPhieuNhapKho)){
             data.setBangKeCanHang(bySoPhieuNhapKho);

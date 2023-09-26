@@ -177,6 +177,8 @@ public class NhPhieuNhapKho extends TrangThaiBaseEntity implements Serializable 
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+    @Transient
+    private List<FileDinhKem> chungTuKemTheo = new ArrayList<>();
 
     @Transient
     private List<NhPhieuNhapKhoCt1> chiTiet1s = new ArrayList<>();
