@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.service.xuathang.bantructiep.tochuctrienkhai.ketqua;
 
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDvi;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdr;
@@ -15,7 +14,6 @@ import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPd
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBttRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviReq;
@@ -111,24 +109,25 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
     void saveDetail(XhKqBttHdrReq req, Long idQdKqHdr) {
         xhQdPdKhBttDviRepository.deleteAllByIdQdKqHdr(idQdKqHdr);
         for (XhQdPdKhBttDviReq dviReq : req.getChildren()) {
+            String type = "QdKq";
             XhQdPdKhBttDvi dvi = new XhQdPdKhBttDvi();
             BeanUtils.copyProperties(dviReq, dvi, "id");
             dvi.setIdQdKqHdr(idQdKqHdr);
-            dvi.setTypeQdKq(true);
+            dvi.setType(type);
             xhQdPdKhBttDviRepository.save(dvi);
             xhQdPdKhBttDviDtlRepository.deleteAllByIdDvi(dviReq.getId());
             for (XhQdPdKhBttDviDtlReq dviDtlReq : dviReq.getChildren()) {
                 XhQdPdKhBttDviDtl dviDtl = new XhQdPdKhBttDviDtl();
                 BeanUtils.copyProperties(dviDtlReq, dviDtl, "id");
                 dviDtl.setIdDvi(dvi.getId());
-                dviDtl.setTypeQdKq(true);
+                dviDtl.setType(type);
                 xhQdPdKhBttDviDtlRepository.save(dviDtl);
                 xhTcTtinBttRepository.deleteAllByIdDviDtl(dviDtlReq.getId());
                 for (XhTcTtinBttReq tTinReq : dviDtlReq.getChildren()) {
                     XhTcTtinBtt tTtin = new XhTcTtinBtt();
                     BeanUtils.copyProperties(tTinReq, tTtin, "id");
                     tTtin.setIdDviDtl(dviDtl.getId());
-                    tTtin.setTypeQdKq(true);
+                    tTtin.setType(type);
                     XhTcTtinBtt create = xhTcTtinBttRepository.save(tTtin);
                     if (!DataUtils.isNullObject(tTinReq.getFileDinhKems())) {
                         List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(
@@ -194,11 +193,11 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
                             dataTtin.setFileDinhKems(fileDinhKem.get(0));
                         }
                     });
-                    dviDtl.setChildren(listTtin);
+                    dviDtl.setChildren(listTtin.stream().filter(type -> "QdKq".equals(type.getType())).collect(Collectors.toList()));
                 }
-                dataDvi.setChildren(listDviDtl);
+                dataDvi.setChildren(listDviDtl.stream().filter(type -> "QdKq".equals(type.getType())).collect(Collectors.toList()));
             }
-            data.setChildren(listDvi);
+            data.setChildren(listDvi.stream().filter(type -> "QdKq".equals(type.getType())).collect(Collectors.toList()));
             List<XhHopDongBttHdr> listHd = xhHopDongBttHdrRepository.findAllByIdQdKq(data.getId());
             listHd.forEach(dataHd -> {
                 dataHd.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(dataHd.getTrangThai()));
@@ -262,39 +261,41 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
             throw new Exception("Bad request.");
         }
         Optional<XhKqBttHdr> optional = xhKqBttHdrRepository.findById(Long.valueOf(statusReq.getId()));
-        if (!optional.isPresent()) {
-            throw new Exception("Không tìm thấy dữ liệu");
-        }
-        XhKqBttHdr data = optional.get();
-        String trangThai = statusReq.getTrangThai() + data.getTrangThai();
-        switch (trangThai) {
-            case Contains.CHODUYET_TP + Contains.DUTHAO:
-            case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
-            case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
-                data.setNguoiGuiDuyetId(currentUser.getUser().getId());
-                data.setNgayGuiDuyet(LocalDate.now());
-                break;
-            case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
-            case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
-                data.setNguoiPduyetId(currentUser.getUser().getId());
-                data.setNgayPduyet(LocalDate.now());
-                data.setLyDoTuChoi(statusReq.getLyDoTuChoi());
-                break;
-            case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
-            case Contains.BAN_HANH + Contains.CHODUYET_LDC:
-                data.setNguoiPduyetId(currentUser.getUser().getId());
-                data.setNgayPduyet(LocalDate.now());
-                break;
-            default:
-                throw new Exception("Phê duyệt không thành công");
-        }
-        data.setTrangThai(statusReq.getTrangThai());
-        if (statusReq.getTrangThai().equals(Contains.BAN_HANH)) {
-            xhQdPdKhBttDtlRepository.findById(data.getIdChaoGia()).ifPresent(dtl -> {
-                dtl.setIdQdKq(data.getId());
-                dtl.setSoQdKq(data.getSoQdKq());
-                xhQdPdKhBttDtlRepository.save(dtl);
-            });
+        XhKqBttHdr data = optional.orElseThrow(() -> new Exception("Không tìm thấy dữ liệu"));
+        String status = statusReq.getTrangThai() + data.getTrangThai();
+        if (statusReq.getTrangThai().equals(Contains.DA_HOAN_THANH)
+                && data.getTrangThaiHd().equals(Contains.DANG_THUC_HIEN)) {
+            data.setTrangThaiHd(statusReq.getTrangThai());
+        } else {
+            switch (status) {
+                case Contains.CHODUYET_TP + Contains.DUTHAO:
+                case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+                case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
+                    data.setNguoiGuiDuyetId(currentUser.getUser().getId());
+                    data.setNgayGuiDuyet(LocalDate.now());
+                    break;
+                case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+                case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
+                    data.setNguoiPduyetId(currentUser.getUser().getId());
+                    data.setNgayPduyet(LocalDate.now());
+                    data.setLyDoTuChoi(statusReq.getLyDoTuChoi());
+                    break;
+                case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+                case Contains.BAN_HANH + Contains.CHODUYET_LDC:
+                    data.setNguoiPduyetId(currentUser.getUser().getId());
+                    data.setNgayPduyet(LocalDate.now());
+                    break;
+                default:
+                    throw new Exception("Phê duyệt không thành công");
+            }
+            data.setTrangThai(statusReq.getTrangThai());
+            if (statusReq.getTrangThai().equals(Contains.BAN_HANH)) {
+                xhQdPdKhBttDtlRepository.findById(data.getIdChaoGia()).ifPresent(dtl -> {
+                    dtl.setIdQdKq(data.getId());
+                    dtl.setSoQdKq(data.getSoQdKq());
+                    xhQdPdKhBttDtlRepository.save(dtl);
+                });
+            }
         }
         XhKqBttHdr created = xhKqBttHdrRepository.save(data);
         return created;
