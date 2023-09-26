@@ -39,6 +39,9 @@ public interface DcnbBbNhapDayKhoHdrRepository extends JpaRepository<DcnbBbNhapD
     @Query(value = "SELECT distinct c FROM DcnbBbNhapDayKhoHdr c " +
             "WHERE 1=1 " +
             "AND c.trangThai = '17' " +
+            "AND (:#{#param.maNganKho} IS NULL OR c.maNganKho = :#{#param.maNganKho}) " +
+            "AND (:#{#param.maLoKho} IS NULL OR c.maLoKho = :#{#param.maLoKho}) "+
+            "AND (:#{#param.soQdDcCuc} IS NULL OR c.soQdDcCuc = :#{#param.soQdDcCuc}) "+
             "AND (:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDvi},'%')) " +
             "ORDER BY c.soQdDcCuc desc , c.nam desc, c.id desc")
     List<DcnbBbNhapDayKhoHdr> searchList(@Param("param") DcnbBbNhapDayKhoHdrReq param);
