@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tcdt.qlnvhang.enums.EnumResponse;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
@@ -1118,8 +1119,8 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
         Page<DcnbQuyetDinhDcCHdr> page = this.searchPage(currentUser, objReq);
         List<DcnbQuyetDinhDcCHdr> data = page.getContent();
 
-        String title = "Danh sách phương án xuất cứu trợ, viện trợ ";
-        String[] rowsName = new String[]{"STT", "Năm kH", "Số công văn/đề xuất", "Ngày duyệt LĐ Cục", "Loại điều chuyển", "Đơn vị đề xuất", "Trạng thái",};
+        String title = "Danh sách quyết định cục ";
+        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số quyết định", "Ngày ký quyết định", "Loại điều chuyển", "Loại quyết định", "Trích yếu", "Số đề xuất/công văn", "Trạng thái"};
         String fileName = "danh-sach-ke-hoach-dieu-chuyen-noi-bo-hang-dtqg.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
@@ -1129,9 +1130,12 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
             objs[0] = i;
             objs[1] = dx.getNam();
             objs[2] = dx.getSoQdinh();
-            objs[3] = dx.getNgayDuyetTc();
+            objs[3] = dx.getNgayKyQdinh();
             objs[4] = dx.getLoaiDc();
-            objs[5] = dx.getTenDvi();
+            objs[5] = dx.getLoaiQdinh();
+            objs[6] = dx.getTrichYeu();
+            objs[7] = dx.getSoDxuat();
+            objs[8] = TrangThaiAllEnum.getLabelById(dx.getTrangThai());
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
