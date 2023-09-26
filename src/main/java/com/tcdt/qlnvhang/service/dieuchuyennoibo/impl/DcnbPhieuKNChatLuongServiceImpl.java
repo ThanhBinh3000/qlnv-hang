@@ -319,9 +319,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
-        objReq.setMaDvi(currentUser.getDvql());
-        Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
-        Page<DcnbPhieuKnChatLuongHdrDTO> page = dcnbPhieuKnChatLuongHdrRepository.searchPageXuat(objReq, pageable);
+        Page<DcnbPhieuKnChatLuongHdrDTO> page = searchPage(currentUser, objReq);
         List<DcnbPhieuKnChatLuongHdrDTO> data = page.getContent();
 
         String title = "Danh sách phiếu kiểm nghiệm chất lượng ";
