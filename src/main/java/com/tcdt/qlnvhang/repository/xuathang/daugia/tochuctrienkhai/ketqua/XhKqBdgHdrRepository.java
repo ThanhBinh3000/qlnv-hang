@@ -24,7 +24,7 @@ public interface XhKqBdgHdrRepository extends JpaRepository<XhKqBdgHdr, Long> {
             "AND (:#{#param.ngayKyDen} IS NULL OR KQ.ngayKy <= :#{#param.ngayKyDen}) " +
             "AND (:#{#param.trangThai} IS NULL OR KQ.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.trangThaiHd} IS NULL OR KQ.trangThaiHd = :#{#param.trangThaiHd}) " +
-            "ORDER BY KQ.ngaySua DESC, KQ.ngayTao DESC, KQ.id DESC")
+            "ORDER BY KQ.nam DESC, KQ.ngaySua DESC, KQ.ngayTao DESC, KQ.id DESC")
     Page<XhKqBdgHdr> searchPage(@Param("param") XhKqBdgHdrReq param, Pageable pageable);
 
     boolean existsBySoQdKq(String soQdKq);

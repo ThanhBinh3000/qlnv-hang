@@ -25,7 +25,8 @@ public interface XhQdPdKhBdgDtlRepository extends JpaRepository<XhQdPdKhBdgDtl, 
             "AND (:#{#param.ngayKyQdPdKqBdgDen} IS NULL OR dtl.ngayKyQdPdKqBdg <= :#{#param.ngayKyQdPdKqBdgDen}) " +
             "AND (:#{#param.trangThai} IS NULL OR dtl.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.lastest} IS NULL OR LOWER(dtl.lastest) LIKE LOWER(CONCAT(:#{#param.lastest},'%'))) " +
-            "AND (:#{#param.loaiVthh} IS NULL OR LOWER(dtl.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%'))")
+            "AND (:#{#param.loaiVthh} IS NULL OR LOWER(dtl.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+            "ORDER BY dtl.nam DESC, dtl.id DESC")
     Page<XhQdPdKhBdgDtl> searchDtl(@Param("param") XhQdPdKhBdgDtlReq param, Pageable pageable);
 
     @Query(value = "SELECT COALESCE(SUM(TTHDR.SO_DVI_TSAN), 0) " +
