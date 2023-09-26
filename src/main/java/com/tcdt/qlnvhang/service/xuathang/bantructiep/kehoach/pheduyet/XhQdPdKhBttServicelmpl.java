@@ -146,23 +146,26 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
             dtl.setLoaiVthh(req.getLoaiVthh());
             dtl.setCloaiVthh(req.getCloaiVthh());
             dtl.setMoTaHangHoa(req.getMoTaHangHoa());
-            dtl.setTrangThai(Contains.CHUACAPNHAT);
+            dtl.setIsDieuChinh(false);
+            dtl.setLastest(false);
+            dtl.setTrangThai(Contains.CHUA_THUC_HIEN);
             dtl.setTrangThaiHd(Contains.CHUA_THUC_HIEN);
             dtl.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
             xhQdPdKhBttDtlRepository.save(dtl);
             xhQdPdKhBttDviRepository.deleteAllByIdDtl(dtlReq.getId());
             for (XhQdPdKhBttDviReq dviReq : dtlReq.getChildren()) {
+                String type = "QdKh";
                 XhQdPdKhBttDvi dvi = new XhQdPdKhBttDvi();
                 BeanUtils.copyProperties(dviReq, dvi, "id");
                 dvi.setIdDtl(dtl.getId());
-                dvi.setTypeQdKq(false);
+                dvi.setType(type);
                 xhQdPdKhBttDviRepository.save(dvi);
                 xhQdPdKhBttDviDtlRepository.deleteAllByIdDvi(dviReq.getId());
                 for (XhQdPdKhBttDviDtlReq dviDtlReq : dviReq.getChildren()) {
                     XhQdPdKhBttDviDtl dviDtl = new XhQdPdKhBttDviDtl();
                     BeanUtils.copyProperties(dviDtlReq, dviDtl, "id");
                     dviDtl.setIdDvi(dvi.getId());
-                    dviDtl.setTypeQdKq(false);
+                    dviDtl.setType(type);
                     xhQdPdKhBttDviDtlRepository.save(dviDtl);
                 }
             }
@@ -221,25 +224,29 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
         Map<String, String> mapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
+        Map<String, String> mapPhuongThucTt = getListDanhMucChung("PHUONG_THUC_TT");
         for (XhQdPdKhBttHdr data : allById) {
-            List<XhQdPdKhBttDtl> qdDtl = xhQdPdKhBttDtlRepository.findAllByIdHdr(data.getId());
-            for (XhQdPdKhBttDtl dataDtl : qdDtl) {
-                List<XhQdPdKhBttDvi> qdDvi = xhQdPdKhBttDviRepository.findAllByIdDtl(dataDtl.getId());
-                for (XhQdPdKhBttDvi dataDvi : qdDvi) {
-                    List<XhQdPdKhBttDviDtl> qdDviDtl = xhQdPdKhBttDviDtlRepository.findAllByIdDvi(dataDvi.getId());
-                    for (XhQdPdKhBttDviDtl dataDviDtl : qdDviDtl) {
-                        dataDviDtl.setTenDiemKho(StringUtils.isEmpty(dataDviDtl.getMaDiemKho()) ? null : mapDmucDvi.get(dataDviDtl.getMaDiemKho()));
-                        dataDviDtl.setTenNhaKho(StringUtils.isEmpty(dataDviDtl.getMaNhaKho()) ? null : mapDmucDvi.get(dataDviDtl.getMaNhaKho()));
-                        dataDviDtl.setTenNganKho(StringUtils.isEmpty(dataDviDtl.getMaNganKho()) ? null : mapDmucDvi.get(dataDviDtl.getMaNganKho()));
-                        dataDviDtl.setTenLoKho(StringUtils.isEmpty(dataDviDtl.getMaLoKho()) ? null : mapDmucDvi.get(dataDviDtl.getMaLoKho()));
-                        dataDviDtl.setTenLoaiVthh(StringUtils.isEmpty(dataDviDtl.getLoaiVthh()) ? null : mapVthh.get(dataDviDtl.getLoaiVthh()));
-                        dataDviDtl.setTenCloaiVthh(StringUtils.isEmpty(dataDviDtl.getCloaiVthh()) ? null : mapVthh.get(dataDviDtl.getCloaiVthh()));
+            List<XhQdPdKhBttDtl> listDtl = xhQdPdKhBttDtlRepository.findAllByIdHdr(data.getId());
+            for (XhQdPdKhBttDtl dataDtl : listDtl) {
+                List<XhQdPdKhBttDvi> listDvi = xhQdPdKhBttDviRepository.findAllByIdDtl(dataDtl.getId());
+                for (XhQdPdKhBttDvi dataDvi : listDvi) {
+                    List<XhQdPdKhBttDviDtl> listDviDtl = xhQdPdKhBttDviDtlRepository.findAllByIdDvi(dataDvi.getId());
+                    for (XhQdPdKhBttDviDtl dataDviDtl : listDviDtl) {
+                        dataDviDtl.setTenDiemKho(mapDmucDvi.getOrDefault(dataDviDtl.getMaDiemKho(), null));
+                        dataDviDtl.setTenNhaKho(mapDmucDvi.getOrDefault(dataDviDtl.getMaNhaKho(), null));
+                        dataDviDtl.setTenNganKho(mapDmucDvi.getOrDefault(dataDviDtl.getMaNganKho(), null));
+                        dataDviDtl.setTenLoKho(mapDmucDvi.getOrDefault(dataDviDtl.getMaLoKho(), null));
+                        dataDviDtl.setTenLoaiVthh(mapVthh.getOrDefault(dataDviDtl.getLoaiVthh(), null));
+                        dataDviDtl.setTenCloaiVthh(mapVthh.getOrDefault(dataDviDtl.getCloaiVthh(), null));
                     }
-                    dataDvi.setTenDvi(StringUtils.isEmpty(dataDvi.getMaDvi()) ? null : mapDmucDvi.get(dataDvi.getMaDvi()));
-                    dataDvi.setChildren(qdDviDtl);
+                    dataDvi.setTenDvi(mapDmucDvi.getOrDefault(dataDvi.getMaDvi(), null));
+                    dataDvi.setChildren(listDviDtl.stream().filter(type -> "QdKh".equals(type.getType())).collect(Collectors.toList()));
                 }
-                dataDtl.setTenDvi(StringUtils.isEmpty(dataDtl.getMaDvi()) ? null : mapDmucDvi.get(dataDtl.getMaDvi()));
-                dataDtl.setChildren(qdDvi);
+                dataDtl.setTenDvi(mapDmucDvi.getOrDefault(dataDtl.getMaDvi(), null));
+                dataDtl.setTenLoaiVthh(mapDmucDvi.getOrDefault(dataDtl.getLoaiVthh(), null));
+                dataDtl.setTenCloaiVthh(mapDmucDvi.getOrDefault(dataDtl.getCloaiVthh(), null));
+                dataDtl.setTenPthucTtoan(mapPhuongThucTt.getOrDefault(dataDtl.getPthucTtoan(), null));
+                dataDtl.setChildren(listDvi.stream().filter(type -> "QdKh".equals(type.getType())).collect(Collectors.toList()));
             }
             data.setMapVthh(mapVthh);
             data.setMapDmucDvi(mapDmucDvi);
@@ -250,7 +257,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
             data.setCanCuPhapLy(canCuPhapLy);
             List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBttHdr.TABLE_NAME + "_BAN_HANH"));
             data.setFileDinhKem(fileDinhKem);
-            data.setChildren(qdDtl);
+            data.setChildren(listDtl.stream().filter(isDieuChinh -> !isDieuChinh.getIsDieuChinh()).collect(Collectors.toList()));
         }
         return allById;
     }
@@ -411,6 +418,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
             XhQdPdKhBttDtl dtlClone = new XhQdPdKhBttDtl();
             BeanUtils.copyProperties(dtl, dtlClone);
             dtlClone.setId(null);
+            dtlClone.setLastest(true);
             dtlClone.setIdHdr(hdrClone.getId());
             xhQdPdKhBttDtlRepository.save(dtlClone);
             for (XhQdPdKhBttDvi dvi : dtlClone.getChildren()) {

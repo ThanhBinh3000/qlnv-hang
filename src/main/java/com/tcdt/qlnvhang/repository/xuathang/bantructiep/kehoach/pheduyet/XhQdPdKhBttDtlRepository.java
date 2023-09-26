@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet;
 
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtl;
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdr;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.thongtin.SearchXhTcTtinBttReq;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,20 +12,19 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface XhQdPdKhBttDtlRepository extends JpaRepository<XhQdPdKhBttDtl , Long> {
+public interface XhQdPdKhBttDtlRepository extends JpaRepository<XhQdPdKhBttDtl, Long> {
 
     @Query("SELECT DISTINCT DTL FROM XhQdPdKhBttDtl DTL" +
-            " LEFT JOIN XhQdPdKhBttHdr HDR on HDR.id = DTL.idHdr" +
             " LEFT JOIN XhQdPdKhBttDvi DVI on DTL.id = DVI.idDtl" +
             " LEFT JOIN XhTcTtinBtt TT on DTL.id = TT.idQdPdDtl WHERE" +
             " (:#{#param.dvql} IS NULL OR DTL.maDvi LIKE CONCAT(:#{#param.dvql}, '%'))" +
-            " AND (:#{#param.namKh} IS NULL OR HDR.namKh = :#{#param.namKh})" +
+            " AND (:#{#param.namKh} IS NULL OR DTL.namKh = :#{#param.namKh})" +
             " AND (:#{#param.ngayCgiaTu} IS NULL OR DTL.ngayNhanCgia >= :#{#param.ngayCgiaTu})" +
             " AND (:#{#param.ngayCgiaDen} IS NULL OR DTL.ngayNhanCgia <= :#{#param.ngayCgiaDen})" +
             " AND (:#{#param.tochucCanhan} IS NULL OR LOWER(TT.tochucCanhan) LIKE LOWER(CONCAT('%', :#{#param.tochucCanhan}, '%')))" +
             " AND (:#{#param.trangThai} IS NULL OR DTL.trangThai = :#{#param.trangThai})" +
-            " AND (:#{#param.lastest} IS NULL OR LOWER(HDR.lastest) LIKE LOWER(CONCAT('%', :#{#param.lastest}, '%')))" +
-            " AND (:#{#param.loaiVthh} IS NULL OR LOWER(HDR.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh}, '%'))" +
+            " AND (:#{#param.lastest} IS NULL OR LOWER(DTL.lastest) LIKE LOWER(CONCAT('%', :#{#param.lastest}, '%')))" +
+            " AND (:#{#param.loaiVthh} IS NULL OR LOWER(DTL.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh}, '%'))" +
             " AND (:#{#param.pthucBanTrucTiep == null || #param.pthucBanTrucTiep.isEmpty()} = TRUE OR DTL.pthucBanTrucTiep IN :#{#param.pthucBanTrucTiep})")
     Page<XhQdPdKhBttDtl> searchPage(@Param("param") SearchXhTcTtinBttReq param, Pageable pageable);
 

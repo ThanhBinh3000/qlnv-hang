@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet;
+
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import lombok.Data;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -43,6 +45,9 @@ public class XhQdPdKhBttDtlReq {
     private String ghiChuChaoGia;
     private BigDecimal tongGiaTriHdong;
     private LocalDate thoiHanBan;
+    private Boolean isDieuChinh;
+    private Boolean lastest;
+    private String soQdDc;
     private List<FileDinhKemReq> fileUyQuyen = new ArrayList<>();
     private List<FileDinhKemReq> fileBanLe = new ArrayList<>();
 }
