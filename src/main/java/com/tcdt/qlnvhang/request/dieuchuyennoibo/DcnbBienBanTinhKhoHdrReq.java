@@ -87,7 +87,7 @@ public class DcnbBienBanTinhKhoHdrReq {
 
     private String loaiDc;
 
-    private String nguyeNhan;
+    private String nguyenNhan;
 
     private String kienNghi;
 
