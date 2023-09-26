@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia, Long> {
@@ -33,7 +32,7 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
             "AND (:#{#param.trangThai} IS NULL OR DX.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.trangThaiTh} IS NULL OR DX.trangThaiTh = :#{#param.trangThaiTh}) " +
             "AND (:#{#param.trangThaiList == null || #param.trangThaiList.isEmpty()} = true OR DX.trangThai IN :#{#param.trangThaiList}) " +
-            "ORDER BY DX.ngaySua DESC, DX.ngayTao DESC, DX.id DESC")
+            "ORDER BY DX.namKh DESC, DX.ngaySua DESC, DX.ngayTao DESC, DX.id DESC")
     Page<XhDxKhBanDauGia> searchPage(@Param("param") XhDxKhBanDauGiaReq param, Pageable pageable);
 
     @Query("SELECT TH FROM XhDxKhBanDauGia TH " +
@@ -49,13 +48,13 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
     List<XhDxKhBanDauGia> listTongHop(@Param("param") XhThopChiTieuReq param);
 
     @Query(value = "SELECT COALESCE(SUM(DSG.TONG_SL_XUAT_BAN_DX), 0) " +
-                    "FROM XH_QD_PD_KH_BDG HDR " +
-                    "INNER JOIN XH_QD_PD_KH_BDG_DTL DTL ON HDR.ID = DTL.ID_QD_HDR " +
-                    "LEFT JOIN XH_QD_PD_KH_BDG_PL DSG ON DSG.ID_QD_DTL = DTL.ID " +
-                    "WHERE HDR.NAM = :namKh " +
-                    "  AND HDR.LOAI_VTHH = :loaiVthh " +
-                    "  AND DSG.MA_DVI = :maDvi " +
-                    "  AND HDR.LASTEST = :lastest",
+            "FROM XH_QD_PD_KH_BDG HDR " +
+            "INNER JOIN XH_QD_PD_KH_BDG_DTL DTL ON HDR.ID = DTL.ID_QD_HDR " +
+            "LEFT JOIN XH_QD_PD_KH_BDG_PL DSG ON DSG.ID_QD_DTL = DTL.ID " +
+            "WHERE HDR.NAM = :namKh " +
+            "  AND HDR.LOAI_VTHH = :loaiVthh " +
+            "  AND DSG.MA_DVI = :maDvi " +
+            "  AND HDR.LASTEST = :lastest",
             nativeQuery = true)
     BigDecimal countSLDalenKh(@Param("namKh") Integer namKh,
                               @Param("loaiVthh") String loaiVthh,
