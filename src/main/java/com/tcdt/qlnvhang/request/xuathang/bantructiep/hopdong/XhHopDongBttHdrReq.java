@@ -93,5 +93,4 @@ public class XhHopDongBttHdrReq extends BaseRequest {
     private List<XhHopDongBttHdrReq> phuLuc = new ArrayList<>();
     private List<XhHopDongBttDtlReq> phuLucDtl = new ArrayList<>();
     private String dvql;
-    private String soDxuat;
 }
