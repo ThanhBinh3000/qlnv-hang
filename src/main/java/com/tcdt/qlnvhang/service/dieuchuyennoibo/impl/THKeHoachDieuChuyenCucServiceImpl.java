@@ -309,7 +309,10 @@ public class THKeHoachDieuChuyenCucServiceImpl extends BaseServiceImpl {
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-        if(!optional.get().getTrangThai().equals(Contains.DUTHAO) && !optional.get().getTrangThai().equals(Contains.YC_CHICUC_PHANBO_DC)){
+        if(!(optional.get().getTrangThai().equals(Contains.DUTHAO) ||
+                optional.get().getTrangThai().equals(Contains.YC_CHICUC_PHANBO_DC) ||
+                optional.get().getTrangThai().equals(Contains.TU_CHOI_TP)
+                )){
             throw new Exception("Không được phép chỉnh sửa dữ liệu");
         }
 //        List<THKeHoachDieuChuyenCucHdr> soDeXuat = thKeHoachDieuChuyenHdrRepository.findBySoDeXuat(optional.get().getSoDeXuat());
