@@ -90,7 +90,7 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
             throw new Exception("Bad request.");
         }
         Optional<DcnbKeHoachDcHdr> optional = dcnbKeHoachDcHdrRepository.findFirstBySoDxuat(objReq.getSoDxuat());
-        if (optional.isPresent() && objReq.getSoDxuat().split("/").length == 1) {
+        if (optional.isPresent()) {
             throw new Exception("số đề xuất đã tồn tại");
         }
         DcnbKeHoachDcHdr data = new DcnbKeHoachDcHdr();
@@ -170,7 +170,7 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
         }
         Optional<DcnbKeHoachDcHdr> soDxuat = dcnbKeHoachDcHdrRepository.findFirstBySoDxuat(objReq.getSoDxuat());
         if (org.apache.commons.lang3.StringUtils.isNotEmpty(objReq.getSoDxuat())) {
-            if (soDxuat.isPresent() && objReq.getSoDxuat().split("/").length == 1) {
+            if (soDxuat.isPresent()) {
                 if (!soDxuat.get().getId().equals(objReq.getId()) && !Contains.NHAN_DIEU_CHUYEN.equals(optional.get().getType())) {
                     throw new Exception("số đề xuất đã tồn tại");
                 }
