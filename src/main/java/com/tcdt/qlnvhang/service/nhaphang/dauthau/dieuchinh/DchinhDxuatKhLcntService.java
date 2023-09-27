@@ -275,7 +275,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 			throw new Exception("Không tìm thấy số đề xuất để điều chỉnh kế hoạch lựa chọn nhà thầu");
 		}
 
-		if (objReq.getSoQdDc() != null && !hdrData.get().getSoQdDc().equals(objReq.getSoQdDc())) {
+		if (objReq.getSoQdDc() != null && hdrData.get().getSoQdDc() != null && !hdrData.get().getSoQdDc().equals(objReq.getSoQdDc())) {
 			Optional<HhDchinhDxKhLcntHdr> checkSoQd = hdrRepository.findBySoQdDc(objReq.getSoQdDc());
 			if (checkSoQd.isPresent()){
 				throw new Exception("Số quyết định " + objReq.getSoQdDc() + " đã tồn tại");

@@ -118,8 +118,8 @@ public class NhPhieuNhapKhoReq extends BaseRequest {
 
     private Long idDdiemGiaoNvNh;
 
-    @Transient
-    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+    private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
+    private List<FileDinhKemReq> chungTuKemTheo = new ArrayList<>();
 
     @Transient
     private List<NhPhieuNhapKhoCt1> chiTiet1s = new ArrayList<>();
