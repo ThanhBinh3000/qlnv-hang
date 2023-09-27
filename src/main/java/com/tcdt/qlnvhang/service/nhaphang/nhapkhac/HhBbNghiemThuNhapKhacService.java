@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.nhaphang.nhapkhac;
 
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhBbNghiemThuNhapKhac;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.nvnhap.HhQdGiaoNvuNhapHangKhacHdr;
+import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhBbNghiemThuNhapKhacReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhBbNghiemThuNhapKhacSearch;
@@ -18,6 +19,7 @@ public interface HhBbNghiemThuNhapKhacService {
     HhBbNghiemThuNhapKhac chiTiet (Long id) throws Exception;
     HhBbNghiemThuNhapKhac pheDuyet(StatusReq stReq) throws Exception;
     Object getDataKho(String maDvi) throws Exception;
+    void xoa (IdSearchReq idSearchReq) throws Exception;
     void exportBbNtBq (HhBbNghiemThuNhapKhacSearch req, HttpServletResponse response) throws Exception;
     List<HhBbNghiemThuNhapKhac> timKiemBbtheoMaNganLo (HhBbNghiemThuNhapKhacSearch objReq) throws Exception;
     List<HhQdGiaoNvuNhapHangKhacHdr> dsQdNvuDuocLapBbNtBqLd (HhBbNghiemThuNhapKhacSearch objReq) throws Exception;
