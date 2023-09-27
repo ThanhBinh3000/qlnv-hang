@@ -23,7 +23,7 @@ public interface XhQdGiaoNvXhRepository extends BaseRepository<XhQdGiaoNvXh, Lon
             "AND (:#{#param.ngayKyTu} IS NULL OR QD.ngayKy >= :#{#param.ngayKyTu}) " +
             "AND (:#{#param.ngayKyDen} IS NULL OR QD.ngayKy <= :#{#param.ngayKyDen}) " +
             "AND (:#{#param.trangThai} IS NULL OR QD.trangThai = :#{#param.trangThai}) " +
-            "ORDER BY QD.ngaySua DESC, QD.ngayTao DESC, QD.id DESC")
+            "ORDER BY QD.nam DESC, QD.ngaySua DESC, QD.ngayTao DESC, QD.id DESC")
     Page<XhQdGiaoNvXh> searchPage(@Param("param") XhQdGiaoNvuXuatReq param, Pageable pageable);
 
     boolean existsBySoQdNv(String soQdNv);
