@@ -103,10 +103,16 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
             }
         }
         double tongSoLuongDeXuat = objReq.getDeXuatPhuongAn().stream().map(item -> item.getSoLuong() != null ? item.getSoLuong() : new BigDecimal(0l)).mapToDouble(BigDecimal::doubleValue).sum();
+        double tongNhuCapXuat = objReq.getDeXuatPhuongAn().stream().map(item -> item.getSoLuongNhuCauXuat() != null ? item.getSoLuongNhuCauXuat() : new BigDecimal(0l)).mapToDouble(BigDecimal::doubleValue).sum();
         double tongSoLuongXuatCap = objReq.getDeXuatPhuongAn().stream().map(item -> item.getSoLuongChuyenCapThoc() != null ? item.getSoLuongChuyenCapThoc() : new BigDecimal(0l)).mapToDouble(BigDecimal::doubleValue).sum();
         XhCtvtDeXuatHdr data = new XhCtvtDeXuatHdr();
         BeanUtils.copyProperties(objReq, data);
         data.setTongSoLuongDeXuat(new BigDecimal(tongSoLuongDeXuat));
+        if(tongNhuCapXuat > tongSoLuongDeXuat){
+            if(tongSoLuongXuatCap == 0){
+                tongSoLuongXuatCap = tongNhuCapXuat- tongSoLuongDeXuat;
+            }
+        }
         data.setTongSoLuongXuatCap(new BigDecimal(tongSoLuongXuatCap));
         data.setMaDvi(currentUser.getUser().getDepartment());
         data.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
