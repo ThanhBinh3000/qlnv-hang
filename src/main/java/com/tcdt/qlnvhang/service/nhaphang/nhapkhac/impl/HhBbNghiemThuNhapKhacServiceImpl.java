@@ -3,12 +3,14 @@ package com.tcdt.qlnvhang.service.nhaphang.nhapkhac.impl;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhBbNghiemThuNhapKhac;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhBbNghiemThuNhapKhacDtl;
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhNkPhieuKtcl;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.nvnhap.HhQdGiaoNvuNhapHangKhacHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.qdpdnk.HhQdPdNhapKhacDtl;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.khotang.KtNganKhoRepository;
 import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.*;
+import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhBbNghiemThuNhapKhacReq;
@@ -36,6 +38,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.nio.file.Files;
@@ -232,6 +235,26 @@ public class HhBbNghiemThuNhapKhacServiceImpl extends BaseServiceImpl implements
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    @Transactional
+    public void xoa(IdSearchReq idSearchReq) throws Exception {
+        if (StringUtils.isEmpty(idSearchReq.getId())) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        Optional<HhBbNghiemThuNhapKhac> qOptional = hhBbNghiemThuNhapKhacRepository.findById(idSearchReq.getId());
+        if (!qOptional.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu.");
+        }
+        if (!qOptional.get().getTrangThai().equals(Contains.DUTHAO)
+                && !qOptional.get().getTrangThai().equals(Contains.TUCHOI_LDCC)) {
+            throw new Exception("Chỉ thực hiện xóa với bản ghi ở trạng thái bản nháp hoặc từ chối");
+        }
+//        fileDinhKemService.delete(qOptional.get().getId(), Lists.newArrayList(HhNkPhieuKtcl.TABLE_NAME + "_CTGD"));
+//        fileDinhKemService.delete(qOptional.get().getId(), Lists.newArrayList(HhNkPhieuKtcl.TABLE_NAME + "_KTCL"));
+//        hhNkPhieuKtclCtRepository.deleteAllByPhieuKtChatLuongId(qOptional.get().getId());
+        hhBbNghiemThuNhapKhacRepository.delete(qOptional.get());
     }
 
     @Override
