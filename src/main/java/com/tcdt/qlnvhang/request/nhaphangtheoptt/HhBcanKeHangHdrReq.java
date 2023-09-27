@@ -76,6 +76,9 @@ public class HhBcanKeHangHdrReq {
     private String donViTinh;
 
     private String soPhieuKtraCluong;
+    private Long tongSlBaoBi;
+    private Long tongSlCaBaoBi;
+    private Long tongSlDaTruBaoBi;
 
     @Transient
     List<HhBcanKeHangDtlReq> hhBcanKeHangDtlReqList = new ArrayList<>();
