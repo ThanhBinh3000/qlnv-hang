@@ -212,39 +212,15 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 	@Override
 	@Transactional()
 	public HhDxKhLcntThopHdr update(HhDxKhLcntThopHdrReq objReq) throws Exception {
-		if (objReq.getLoaiVthh() == null || !Contains.mpLoaiVthh.containsKey(objReq.getLoaiVthh())){
-			throw new Exception("Loại vật tư hàng hóa không phù hợp");
+		if (objReq.getId() == null ){
+			throw new Exception("Không tìm thấy bản ghi tổng hợp");
 		}
-		// Set thong tin hdr tong hop
-		HhDxKhLcntThopHdr thopHdr = sumarryData(objReq);
-		thopHdr.setNgayTao(getDateTimeNow());
-		thopHdr.setNguoiTao(getUser().getUsername());
-		thopHdr.setNoiDung(objReq.getNoiDung());
-		thopHdr.setTrangThai(Contains.CHUATAO_QD);
-		thopHdr.setNgayThop(new Date());
-		thopHdr.setGhiChu(objReq.getGhiChu());
-		thopHdr.setId(objReq.getId());
-		thopHdr.setSoQdCc(objReq.getSoQdCc());
-		List<FileDKemJoinDxKhlcntThopHdr> fileDinhKemList = new ArrayList<FileDKemJoinDxKhlcntThopHdr>();
-		if (objReq.getFileDinhKems() != null) {
-			fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKems(), FileDKemJoinDxKhlcntThopHdr.class);
-			fileDinhKemList.forEach(f -> {
-				f.setDataType(HhDxKhLcntThopHdr.TABLE_NAME);
-				f.setCreateDate(new Date());
-			});
+		Optional<HhDxKhLcntThopHdr> thopHdr = hhDxKhLcntThopHdrRepository.findById(objReq.getId());
+		if (!thopHdr.isPresent()){
+			throw new Exception("Không tìm thấy bản ghi tổng hợp");
 		}
-		thopHdr.setFileDinhKems(fileDinhKemList);
-		hhDxKhLcntThopHdrRepository.save(thopHdr);
-		for (HhDxKhLcntThopDtl dtl : thopHdr.getHhDxKhLcntThopDtlList()){
-			dtl.setIdThopHdr(thopHdr.getId());
-			hhDxKhLcntThopDtlRepository.save(dtl);
-		}
-		if (thopHdr.getId() > 0 && thopHdr.getHhDxKhLcntThopDtlList().size() > 0) {
-			List<String> soDxuatList = thopHdr.getHhDxKhLcntThopDtlList().stream().map(HhDxKhLcntThopDtl::getSoDxuat)
-					.collect(Collectors.toList());
-			hhDxuatKhLcntHdrRepository.updateStatusInList(soDxuatList, Contains.DATONGHOP);
-		}
-		return thopHdr;
+		thopHdr.get().setNoiDung(objReq.getNoiDung());
+		return hhDxKhLcntThopHdrRepository.save(thopHdr.get());
 	}
 
 	@Override

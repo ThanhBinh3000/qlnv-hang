@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
@@ -309,7 +310,10 @@ public class THKeHoachDieuChuyenCucServiceImpl extends BaseServiceImpl {
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu cần sửa");
         }
-        if(!optional.get().getTrangThai().equals(Contains.DUTHAO) && !optional.get().getTrangThai().equals(Contains.YC_CHICUC_PHANBO_DC)){
+        if(!(optional.get().getTrangThai().equals(Contains.DUTHAO) ||
+                optional.get().getTrangThai().equals(Contains.YC_CHICUC_PHANBO_DC) ||
+                optional.get().getTrangThai().equals(Contains.TU_CHOI_TP)
+                )){
             throw new Exception("Không được phép chỉnh sửa dữ liệu");
         }
 //        List<THKeHoachDieuChuyenCucHdr> soDeXuat = thKeHoachDieuChuyenHdrRepository.findBySoDeXuat(optional.get().getSoDeXuat());
@@ -524,7 +528,7 @@ public class THKeHoachDieuChuyenCucServiceImpl extends BaseServiceImpl {
             objs[3] = dx.getLoaiDieuChuyen();
             objs[4] = dx.getNgayTongHop();
             objs[5] = dx.getTrichYeu();
-            objs[6] = dx.getTrangThai();
+            objs[6] = TrangThaiAllEnum.getLabelById(dx.getTrangThai());
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

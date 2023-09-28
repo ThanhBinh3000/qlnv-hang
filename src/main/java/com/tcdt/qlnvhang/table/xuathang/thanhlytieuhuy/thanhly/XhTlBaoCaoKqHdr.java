@@ -31,21 +31,11 @@ public class XhTlBaoCaoKqHdr extends BaseEntity implements Serializable {
   private String soQd;
   private String noiDung;
   private String trangThai;
-  private BigDecimal tongSoLuongTl;
-  private BigDecimal tongSoLuongCon;
-  private BigDecimal tongThanhTien;
-
-  private LocalDate ngayPduyet;
-  private Long nguoiPduyetId;
-  private LocalDate ngayGduyet;
-  private Long nguoiGduyetId;
   private String lyDoTuChoi;
-
   @Transient
   private String tenDvi;
   @Transient
   private String tenTrangThai;
-
   @Transient
   private List<FileDinhKem> fileDinhKem;
 

@@ -17,8 +17,8 @@ import java.util.Optional;
 public interface DcnbQuyetDinhDcTcHdrRepository extends JpaRepository<DcnbQuyetDinhDcTcHdr, Long> {
 
     @Query(value = "SELECT distinct c FROM DcnbQuyetDinhDcTcHdr c WHERE 1=1 " +
+            "AND c.id in (SELECT d.hdrId FROM DcnbQuyetDinhDcTcDtl d where (d.maCucNhan LIKE CONCAT(:#{#param.maDvi},'%')) OR (d.maCucXuat LIKE CONCAT(:#{#param.maDvi},'%'))) " +
             "AND (:#{#param.soQdinh} IS NULL OR LOWER(c.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinh}),'%')) " +
-            "AND (:#{#param.maDvi} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDvi},'%')) " +
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
             "AND ((:#{#param.ngayDuyetTcTu}  IS NULL OR c.ngayDuyetTc >= :#{#param.ngayDuyetTcTu})" +
             "AND (:#{#param.ngayDuyetTcDen}  IS NULL OR c.ngayDuyetTc <= :#{#param.ngayDuyetTcDen}) ) " +

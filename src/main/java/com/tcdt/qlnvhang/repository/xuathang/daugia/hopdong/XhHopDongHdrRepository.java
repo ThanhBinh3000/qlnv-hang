@@ -1,9 +1,7 @@
 package com.tcdt.qlnvhang.repository.xuathang.daugia.hopdong;
 
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongHdr;
-import com.tcdt.qlnvhang.request.xuathang.bantructiep.hopdong.XhHopDongBttHdrReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.hopdong.XhHopDongHdrReq;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -31,8 +30,16 @@ public interface XhHopDongHdrRepository extends JpaRepository<XhHopDongHdr, Long
             "ORDER BY HD.ngaySua DESC, HD.ngayTao DESC, HD.id DESC")
     Page<XhHopDongHdr> searchPage(@Param("param") XhHopDongHdrReq param, Pageable pageable);
 
-    @Query("SELECT COUNT(HD) FROM XhHopDongHdr HD WHERE HD.trangThai = :trangThai AND HD.idQdKq = :idQdKq")
-    Integer countSlHopDongDaKy(@Param("idQdKq") Long idQdKq, @Param("trangThai") String trangThai);
+    @Query(value = "SELECT COUNT(*) " +
+            "FROM XH_HOP_DONG_HDR " +
+            "WHERE TRANG_THAI = '30' " +
+            "AND ID_QD_KQ = :idQdKq " +
+            "AND LOAI_VTHH = :loaiVthh " +
+            "AND MA_DVI = :maDvi",
+            nativeQuery = true)
+    Integer countSlHopDongDaKy(@Param("idQdKq") Long idQdKq,
+                               @Param("loaiVthh") String loaiVthh,
+                               @Param("maDvi") String maDvi);
 
     boolean existsBySoHopDong(String soHopDong);
 

@@ -1,10 +1,8 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.tcdt.qlnvhang.common.DocxToPdfConverter;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho.XhDgPhieuXuatKho;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
-import com.tcdt.qlnvhang.repository.xuathang.daugia.xuatkho.XhDgPhieuXuatKhoRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBangKeXuatVTReq;
@@ -44,15 +42,9 @@ public class DcnbBangKeXuatVTServiceImpl extends BaseServiceImpl implements Dcnb
     @Autowired
     private DcnbBangKeXuatVTDtlRepository dtlRepository;
     @Autowired
-    private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
-    @Autowired
-    private DcnbDataLinkDtlRepository dcnbDataLinkDtlRepository;
-    @Autowired
     private DcnbPhieuXuatKhoHdrRepository dcnbPhieuXuatKhoHdrRepository;
     @Autowired
     public DocxToPdfConverter docxToPdfConverter;
-    @Autowired
-    public XhDgPhieuXuatKhoRepository xhDgPhieuXuatKhoRepository;
 
     @Override
     public Page<DcnbBangKeXuatVTHdr> searchPage(DcnbBangKeXuatVTReq req) throws Exception {
@@ -86,6 +78,12 @@ public class DcnbBangKeXuatVTServiceImpl extends BaseServiceImpl implements Dcnb
 //        if (optional.isPresent() && objReq.getSoBangKe().split("/").length == 1) {
 //            throw new Exception("Số bảng kê đã tồn tại");
 //        }
+        Optional<DcnbPhieuXuatKhoHdr> phieuXuatKhoHdr = dcnbPhieuXuatKhoHdrRepository.findById(objReq.getPhieuXuatKhoId());
+        if(phieuXuatKhoHdr.isPresent()){
+            if(phieuXuatKhoHdr.get().getBangKeVtId()!= null){
+                throw new Exception("Phiếu xuất đã có bảng kê!");
+            }
+        }
         DcnbBangKeXuatVTHdr data = new DcnbBangKeXuatVTHdr();
         BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(dvql);
@@ -113,7 +111,14 @@ public class DcnbBangKeXuatVTServiceImpl extends BaseServiceImpl implements Dcnb
 //                }
 //            }
 //        }
-
+        Optional<DcnbPhieuXuatKhoHdr> phieuXuatKhoHdr = dcnbPhieuXuatKhoHdrRepository.findById(objReq.getPhieuXuatKhoId());
+        if(phieuXuatKhoHdr.isPresent()){
+            if(!objReq.getPhieuXuatKhoId().equals(optional.get().getPhieuXuatKhoId())){
+                if(phieuXuatKhoHdr.get().getBangKeVtId()!= null){
+                    throw new Exception("Phiếu xuất đã có bảng kê!");
+                }
+            }
+        }
         DcnbBangKeXuatVTHdr data = optional.get();
         objReq.setMaDvi(data.getMaDvi());
         BeanUtils.copyProperties(objReq, data);
@@ -257,7 +262,7 @@ public class DcnbBangKeXuatVTServiceImpl extends BaseServiceImpl implements Dcnb
     public ReportTemplateResponse preview(DcnbBangKeXuatVTReq objReq) throws Exception {
         var dcnbBangKeXuatVT = hdrRepository.findById(objReq.getId());
         if (!dcnbBangKeXuatVT.isPresent()) throw new Exception("Không tồn tại bản ghi");
-        var soDxuat = xhDgPhieuXuatKhoRepository.findBySoPhieuXuatKho(dcnbBangKeXuatVT.get().getSoPhieuXuatKho());
+        var soDxuat = dcnbPhieuXuatKhoHdrRepository.findBySoPhieuXuatKho(dcnbBangKeXuatVT.get().getSoPhieuXuatKho());
         if (!soDxuat.isPresent()) throw new Exception("Không tồn tại bản ghi");
         ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
@@ -267,7 +272,7 @@ public class DcnbBangKeXuatVTServiceImpl extends BaseServiceImpl implements Dcnb
     }
 
     private DcnbBangKeXuatVTPreview setDataToPreview(Optional<DcnbBangKeXuatVTHdr> dcnbBangKeXuatVT,
-                                                     Optional<XhDgPhieuXuatKho> soDxuat) {
+                                                     Optional<DcnbPhieuXuatKhoHdr> soDxuat) {
         Long tongSlHang = tongSlHang(dcnbBangKeXuatVT.get().getDcnbBangKeXuatVTDtl());
         return DcnbBangKeXuatVTPreview.builder()
                 .tenDvi(dcnbBangKeXuatVT.get().getTenDvi())

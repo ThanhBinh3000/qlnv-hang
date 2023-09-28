@@ -1,5 +1,7 @@
 package com.tcdt.qlnvhang.table.nhaphangtheoptt;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
@@ -36,6 +38,7 @@ public class HhPhieuNhapKhoHdr implements Serializable {
     private String soPhieuNhapKho;
 
     @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayNkho;
 
     private BigDecimal no;
@@ -47,6 +50,7 @@ public class HhPhieuNhapKhoHdr implements Serializable {
     private String soHdong;
 
     @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKiHdong;
 
     private String maDiemKho;
@@ -94,6 +98,7 @@ public class HhPhieuNhapKhoHdr implements Serializable {
     private String diaChiNguoiGiao;
 
     @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date thoiGianGiaoNhan;
 
     private String soBangKeCanHang;
@@ -101,18 +106,22 @@ public class HhPhieuNhapKhoHdr implements Serializable {
     private String ghiChu;
 
     @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayTao;
     private String nguoiTao;
 
     @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayPduyet;
     private String nguoiPduyet;
 
     @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngaySua;
     private  String nguoiSua;
 
     @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayGuiDuyet;
     private String nguoiGuiDuyet;
 
@@ -123,6 +132,7 @@ public class HhPhieuNhapKhoHdr implements Serializable {
     private String lyDoTuChoi;
 
     @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayGdinh;
 
 

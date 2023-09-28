@@ -14,17 +14,16 @@ import java.util.List;
 @Repository
 public interface XhThopDxKhBdgRepository extends JpaRepository<XhThopDxKhBdg, Long> {
 
-    @Query("SELECT DISTINCT c FROM XhThopDxKhBdg c WHERE " +
-            "(:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
-            "AND (:#{#param.namKh} IS NULL OR c.namKh = :#{#param.namKh}) " +
-            "AND (:#{#param.loaiVthh} IS NULL OR c.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
-            "AND (:#{#param.cloaiVthh} IS NULL OR c.cloaiVthh LIKE CONCAT(:#{#param.cloaiVthh}, '%')) " +
-            "AND (:#{#param.noiDungThop} IS NULL OR LOWER(c.noiDungThop) LIKE LOWER(CONCAT('%', :#{#param.noiDungThop}, '%'))) " +
-            "AND (:#{#param.ngayThopTu} IS NULL OR c.ngayThop >= :#{#param.ngayThopTu}) " +
-            "AND (:#{#param.ngayThopDen} IS NULL OR c.ngayThop <= :#{#param.ngayThopDen}) " +
-            "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
-            "ORDER BY c.ngaySua DESC, c.ngayTao DESC, c.id DESC"
-    )
+    @Query("SELECT DISTINCT TH FROM XhThopDxKhBdg TH WHERE " +
+            "(:#{#param.dvql} IS NULL OR TH.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
+            "AND (:#{#param.namKh} IS NULL OR TH.namKh = :#{#param.namKh}) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR TH.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
+            "AND (:#{#param.cloaiVthh} IS NULL OR TH.cloaiVthh LIKE CONCAT(:#{#param.cloaiVthh}, '%')) " +
+            "AND (:#{#param.noiDungThop} IS NULL OR LOWER(TH.noiDungThop) LIKE LOWER(CONCAT('%', :#{#param.noiDungThop}, '%'))) " +
+            "AND (:#{#param.ngayThopTu} IS NULL OR TH.ngayThop >= :#{#param.ngayThopTu}) " +
+            "AND (:#{#param.ngayThopDen} IS NULL OR TH.ngayThop <= :#{#param.ngayThopDen}) " +
+            "AND (:#{#param.trangThai} IS NULL OR TH.trangThai = :#{#param.trangThai}) " +
+            "ORDER BY TH.namKh DESC, TH.ngaySua DESC, TH.ngayTao DESC, TH.id DESC")
     Page<XhThopDxKhBdg> searchPage(@Param("param") SearchXhThopDxKhBdg param, Pageable pageable);
 
     List<XhThopDxKhBdg> findAllByIdIn(List<Long> ids);

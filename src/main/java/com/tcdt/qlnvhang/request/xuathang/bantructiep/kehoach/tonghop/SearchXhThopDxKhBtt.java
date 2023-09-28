@@ -15,6 +15,8 @@ public class SearchXhThopDxKhBtt extends BaseRequest {
    private String noiDungThop;
    private Integer namKh;
    private String maDvi;
+   private String loaiHinhNx;
+   private String kieuNx;
    private String trangThai;
    private LocalDateTime ngayThopTu;
    private LocalDateTime ngayThopDen;

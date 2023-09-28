@@ -40,7 +40,7 @@ public interface DcnbPhieuKtChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "ORDER BY pktcl.soQdinhDc desc, pktcl.nam desc")
     List<DcnbPhieuKtChatLuongHdrLsDTO> searchList(@Param("param") SearchPhieuKtChatLuong req);
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuKtChatLuongHdrDTO(" +
-            "pktcl.id,pktcl.bBNtLdId,qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,pktcl.soBBNtLd,khdcd.thoiGianDkDc,qdc.nam,pktcl.nhanXetKetLuan,khdcd.maNhaKho," +
+            "pktcl.id,pktcl.bbNtLdId,qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,pktcl.soBBNtLd,khdcd.thoiGianDkDc,qdc.nam,pktcl.nhanXetKetLuan,khdcd.maNhaKho," +
             "khdcd.tenNhaKho,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
             "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.soLuongDc,khdcd.donViTinh," +
             "khdcd.thayDoiThuKho,pktcl.soPhieu,pktcl.ngayGiamDinh,pktcl.nhanXetKetLuan,pnk.soPhieuNhapKho, pnk.ngayLap, " +
@@ -68,7 +68,7 @@ public interface DcnbPhieuKtChatLuongHdrRepository extends JpaRepository<DcnbPhi
             "AND (:#{#param.soQdinhDcc} IS NULL OR LOWER(pktcl.soQdinhDc) LIKE CONCAT('%',LOWER(:#{#param.soQdinhDcc}),'%')) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR pktcl.ngayKiem >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR pktcl.ngayKiem <= :#{#param.denNgay}) ) " +
-            "GROUP BY pktcl.id,pktcl.bBNtLdId,qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,pktcl.soBBNtLd,khdcd.thoiGianDkDc,qdc.nam,pktcl.nhanXetKetLuan,khdcd.maNhaKho," +
+            "GROUP BY pktcl.id,pktcl.bbNtLdId,qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,pktcl.soBBNtLd,khdcd.thoiGianDkDc,qdc.nam,pktcl.nhanXetKetLuan,khdcd.maNhaKho," +
             "khdcd.tenNhaKho,khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
             "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho,khdcd.loaiVthh,khdcd.tenLoaiVthh,khdcd.cloaiVthh,khdcd.tenCloaiVthh,khdcd.soLuongDc,khdcd.donViTinh," +
             "khdcd.thayDoiThuKho,pktcl.soPhieu,pktcl.ngayGiamDinh,pktcl.nhanXetKetLuan,pnk.soPhieuNhapKho, pnk.ngayLap, " +

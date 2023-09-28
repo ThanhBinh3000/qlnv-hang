@@ -368,9 +368,24 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
     }
 
     private DcnbBbGiaoNhanHdrPreview setDataToPreview(Optional<DcnbBbGiaoNhanHdr> dcnbBBKetThucNKHdr, List<DcnbBbGiaoNhanDtl> dcnbBbGiaoNhanDtl) {
-        var daiDienBenGiaoHang = dcnbBbGiaoNhanDtl.stream().findFirst().filter(s -> s.getType().equals("Đại diện bên giao hàng"));
-        var daiDienCucDtnn = dcnbBbGiaoNhanDtl.stream().findFirst().filter(s -> s.getType().equals("Đại diện cục DTNN KV"));
-        var daiDienChiCucDtnn = dcnbBbGiaoNhanDtl.stream().findFirst().filter(s -> s.getType().equals("Đại diện chi cục DTNN KV"));
+        String daiDienBenGiaoHang = "";
+        String daiDienCucDtnn = "";
+        String daiDienChiCucDtnn = "";
+
+        for (var res : dcnbBbGiaoNhanDtl) {
+            if (res.getType().equals("GIAO") && res.getDonVi().equals("GIAO_HANG") && res.getChucVu().equals("Giao hàng")) {
+                daiDienBenGiaoHang = res.getHoVaTen();
+                continue;
+            }
+            if (res.getType().equals("NHAN") && res.getDonVi().equals("CUC") && res.getChucVu().equals("Cán bộ Cục")) {
+                daiDienCucDtnn = res.getHoVaTen();
+                continue;
+            }
+            if (res.getType().equals("NHAN") && res.getDonVi().equals("CHI_CUC") && res.getChucVu().equals("Cán bộ chi cục")) {
+                daiDienChiCucDtnn = res.getHoVaTen();
+            }
+
+        }
         return DcnbBbGiaoNhanHdrPreview.builder()
                 .chungLoaiHangHoa(dcnbBBKetThucNKHdr.get().getCloaiVthh())
                 .donViCungCapHang(dcnbBBKetThucNKHdr.get().getTenDvi())
@@ -387,9 +402,9 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
                 .tenDiemKho(dcnbBBKetThucNKHdr.get().getTenDiemKho())
                 .daiDienDonViCungCapHang(dcnbBBKetThucNKHdr.get().getTenDvi())
                 .truongBpKtbq("")
-                .daiDienCty(daiDienBenGiaoHang.get().getHoVaTen())
-                .daiDienCucDtnn(daiDienCucDtnn.get().getHoVaTen())
-                .daiDienChiCucDtnn(daiDienChiCucDtnn.get().getHoVaTen())
+                .daiDienCty(daiDienBenGiaoHang)
+                .daiDienCucDtnn(daiDienCucDtnn)
+                .daiDienChiCucDtnn(daiDienChiCucDtnn)
                 .build();
     }
 }

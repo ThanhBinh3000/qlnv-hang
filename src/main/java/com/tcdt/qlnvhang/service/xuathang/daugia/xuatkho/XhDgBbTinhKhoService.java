@@ -278,18 +278,18 @@ public class XhDgBbTinhKhoService extends BaseServiceImpl {
                 throw new Exception("Phê duyệt không thành công");
         }
         optional.get().setTrangThai(statusReq.getTrangThai());
-        if (statusReq.getTrangThai().equals(Contains.DADUYET_LDCC)) {
-            List<XhDgBbTinhKhoDtl> listDtl = xhDgBbTinhKhoDtlRepository.findAllByIdHdr(optional.get().getId());
-            listDtl.forEach(f -> {
-                Optional<XhPhieuKnghiemCluong> xhPhieuKnghiemCluong = xhPhieuKnghiemCluongRepository.findById(f.getIdPhieuKnCl());
-                if (xhPhieuKnghiemCluong.isPresent()) {
-                    Optional<XhBbLayMau> xhBbLayMau = xhBbLayMauRepository.findById(xhPhieuKnghiemCluong.get().getIdBbLayMau());
-                    xhBbLayMau.get().setIdBbTinhKho(optional.get().getId());
-                    xhBbLayMau.get().setSoBbTinhKho(optional.get().getSoBbTinhKho());
-                    xhBbLayMauRepository.save(xhBbLayMau.get());
-                }
-            });
-        }
+//        if (statusReq.getTrangThai().equals(Contains.DADUYET_LDCC)) {
+//            List<XhDgBbTinhKhoDtl> listDtl = xhDgBbTinhKhoDtlRepository.findAllByIdHdr(optional.get().getId());
+//            listDtl.forEach(f -> {
+//                Optional<XhPhieuKnghiemCluong> xhPhieuKnghiemCluong = xhPhieuKnghiemCluongRepository.findById(f.getIdPhieuKnCl());
+//                if (xhPhieuKnghiemCluong.isPresent()) {
+//                    Optional<XhBbLayMau> xhBbLayMau = xhBbLayMauRepository.findById(xhPhieuKnghiemCluong.get().getIdBbLayMau());
+//                    xhBbLayMau.get().setIdBbTinhKho(optional.get().getId());
+//                    xhBbLayMau.get().setSoBbTinhKho(optional.get().getSoBbTinhKho());
+//                    xhBbLayMauRepository.save(xhBbLayMau.get());
+//                }
+//            });
+//        }
         XhDgBbTinhKhoHdr created = xhDgBbTinhKhoHdrRepository.save(optional.get());
         return created;
     }

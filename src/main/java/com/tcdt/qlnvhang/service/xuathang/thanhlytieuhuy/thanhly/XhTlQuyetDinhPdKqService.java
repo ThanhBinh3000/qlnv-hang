@@ -213,8 +213,7 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
                     data.setNgayPduyet(LocalDate.now());
                     data.setLyDoTuChoi(statusReq.getLyDoTuChoi());
                     break;
-                case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
-                case Contains.BAN_HANH + Contains.DADUYET_LDC:
+                case Contains.BAN_HANH + Contains.CHODUYET_LDC:
                     data.setNguoiPduyetId(currentUser.getUser().getId());
                     data.setNgayPduyet(LocalDate.now());
                     break;

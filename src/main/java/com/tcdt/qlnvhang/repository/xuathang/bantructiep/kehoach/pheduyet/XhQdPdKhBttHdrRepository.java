@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface XhQdPdKhBttHdrRepository extends JpaRepository<XhQdPdKhBttHdr, Long> {
 
-    @Query("SELECT QD FROM XhQdPdKhBttHdr QD " +
+    @Query("SELECT DISTINCT QD FROM XhQdPdKhBttHdr QD " +
             "LEFT JOIN XhQdPdKhBttDtl DTL ON QD.id = DTL.idHdr " +
             "WHERE (:#{#param.dvql} IS NULL OR QD.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
             "AND (:#{#param.namKh} IS NULL OR QD.namKh = :#{#param.namKh}) " +

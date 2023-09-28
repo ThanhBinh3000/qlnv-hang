@@ -233,11 +233,10 @@ public class XhHopDongServiceImpl extends BaseServiceImpl {
         }
         data.setTrangThai(statusReq.getTrangThai());
         XhHopDongHdr created = xhHopDongHdrRepository.save(data);
-        Optional<XhKqBdgHdr> optionalKq = xhKqBdgHdrRepository.findById(data.getId());
-        optionalKq.ifPresent(kq -> {
-            Integer slHdongDaKy = xhHopDongHdrRepository.countSlHopDongDaKy(data.getIdQdKq(), data.getTrangThai());
-            kq.setSlHopDongDaKy(slHdongDaKy);
-            xhKqBdgHdrRepository.save(kq);
+        xhKqBdgHdrRepository.findById(data.getIdQdKq()).ifPresent(ketQua ->{
+            Integer slHdongDaKy = xhHopDongHdrRepository.countSlHopDongDaKy(data.getIdQdKq(), data.getLoaiVthh(), data.getMaDvi());
+            ketQua.setSlHopDongDaKy(slHdongDaKy);
+            xhKqBdgHdrRepository.save(ketQua);
         });
         return created;
     }

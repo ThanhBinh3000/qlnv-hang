@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.common.DocxToPdfConverter;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.DmVattuBqRepository;
+import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -17,12 +19,13 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmVattuBq;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQDtl;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBBNTBQHdr;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DieuChuyenNoiBo;
-import lombok.RequiredArgsConstructor;
 import lombok.var;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbNhapDayKhoHdr;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -55,17 +58,24 @@ public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBN
     private FileDinhKemService fileDinhKemService;
 
     @Autowired
-    private DcnbDataLinkHdrRepository dcnbDataLinkHdrRepository;
+    private DcnbBbGiaoNhanHdrRepository dcnbBbGiaoNhanHdrRepository;
 
     @Autowired
-    private DcnbDataLinkDtlRepository dcnbDataLinkDtlRepository;
+    private QlnvDmVattuRepository qlnvDmVattuRepository;
 
     @Autowired
-    private DcnbQuyetDinhDcCHdrServiceImpl dcnbQuyetDinhDcCHdrServiceImpl;
+    private DcnbBienBanLayMauHdrRepository dcnbBienBanLayMauHdrRepository;
     @Autowired
     public DocxToPdfConverter docxToPdfConverter;
     @Autowired
     private DcnbBbNhapDayKhoHdrRepository dcnbBbNhapDayKhoHdrRepository;
+
+    @Autowired
+    private DcnbBienBanHaoDoiHdrRepository dcnbBienBanHaoDoiHdrRepository;
+    @Autowired
+    private DcnbBienBanTinhKhoHdrRepository dcnbBienBanTinhKhoHdrRepository;
+    @Autowired
+    private DmVattuBqRepository dmVattuBqRepository;
 
     @Override
     public Page<DcnbBBNTBQHdr> searchPage(DcnbBBNTBQHdrReq req) throws Exception {
@@ -90,6 +100,48 @@ public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBN
         }
         req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         searchDto = hdrRepository.searchPage(req, pageable);
+
+        for (DcnbBBNTBQHdrDTO dto : searchDto.getContent()) {
+            if (dcnbBbGiaoNhanHdrRepository.findByKeHoachDcDtlId(dto.getKeHoachDcDtlId()).isEmpty()) { // có biên bản nhập đầy kho đối với lương thực || có biên bản giao nhận đối với vt
+                dto.setTrangThaiNhan(Contains.DA_HOAN_THANH);
+                dto.setTenTrangThaiNhan(TrangThaiAllEnum.getLabelById(dto.getTrangThaiNhan()));
+            } else if (dcnbBbNhapDayKhoHdrRepository.findByKeHoachDcDtlId(dto.getKeHoachDcDtlId()).isEmpty()) { // có biên bản nhập đầy kho đối với lương thực || có biên bản giao nhận đối với vt
+                QlnvDmVattu byMa = qlnvDmVattuRepository.findByMa(dto.getCloaiVthh());
+                if ("VT".equals(byMa.getLoaiHang())) { // là vật từ thì đang thực hiện
+                    dto.setTrangThaiNhan(Contains.DANG_THUC_HIEN);
+                    dto.setTenTrangThaiNhan(TrangThaiAllEnum.getLabelById(dto.getTrangThaiNhan()));
+                } else {
+                    dto.setTrangThaiNhan(Contains.DA_HOAN_THANH);
+                    dto.setTenTrangThaiNhan(TrangThaiAllEnum.getLabelById(dto.getTrangThaiNhan()));
+                }
+            } else if (!dcnbBienBanLayMauHdrRepository.findByKeHoachDcDtlIdAndType(dto.getKeHoachDcDtlId(), "01").isEmpty()) { // có biên bản lấy mẫu
+                dto.setTrangThaiNhan(Contains.DANG_THUC_HIEN);
+                dto.setTenTrangThaiNhan(TrangThaiAllEnum.getLabelById(dto.getTrangThaiNhan()));
+            } else {
+                dto.setTrangThaiNhan(Contains.CHUA_THUC_HIEN);
+                dto.setTenTrangThaiNhan(TrangThaiAllEnum.getLabelById(dto.getTrangThaiNhan()));
+            }
+
+            if (dcnbBienBanHaoDoiHdrRepository.findByKeHoachDcDtlId(dto.getKeHoachDcDtlId()).isEmpty()) { // có biên bản nhập đầy kho đối với lương thực || có biên bản giao nhận đối với vt
+                dto.setTrangThaiXuat(Contains.DA_HOAN_THANH);
+                dto.setTenTrangThaiXuat(TrangThaiAllEnum.getLabelById(dto.getTrangThaiNhan()));
+            } else if (dcnbBienBanTinhKhoHdrRepository.findByKeHoachDcDtlId(dto.getKeHoachDcDtlId()).isEmpty()) { // có biên bản nhập đầy kho đối với lương thực || có biên bản giao nhận đối với vt
+                QlnvDmVattu byMa = qlnvDmVattuRepository.findByMa(dto.getCloaiVthh());
+                if ("VT".equals(byMa.getLoaiHang())) { // là vật từ thì đã hoàn thành
+                    dto.setTrangThaiXuat(Contains.DA_HOAN_THANH);
+                    dto.setTenTrangThaiXuat(TrangThaiAllEnum.getLabelById(dto.getTrangThaiNhan()));
+                } else {
+                    dto.setTrangThaiXuat(Contains.DANG_THUC_HIEN);
+                    dto.setTenTrangThaiXuat(TrangThaiAllEnum.getLabelById(dto.getTrangThaiNhan()));
+                }
+            } else if (!dcnbBienBanLayMauHdrRepository.findByKeHoachDcDtlIdAndType(dto.getKeHoachDcDtlId(), "00").isEmpty()) { // có biên bản lấy mẫu
+                dto.setTrangThaiXuat(Contains.DANG_THUC_HIEN);
+                dto.setTenTrangThaiXuat(TrangThaiAllEnum.getLabelById(dto.getTrangThaiNhan()));
+            } else {
+                dto.setTrangThaiXuat(Contains.CHUA_THUC_HIEN);
+                dto.setTenTrangThaiXuat(TrangThaiAllEnum.getLabelById(dto.getTrangThaiNhan()));
+            }
+        }
 
         return searchDto;
     }
@@ -427,9 +479,9 @@ public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBN
                 .loaiHinhKho(dcnbBBNTBQHdr.get().getLoaiHinhKho())
                 .tichLuongKhaDung(dcnbBBNTBQHdr.get().getTichLuongKhaDung())
                 .slThucNhapDc(dcnbBBNTBQHdr.get().getSlThucNhapDc())
-                .phuongThucBaoQuan(dcnbBBNTBQHdr.get().getPhuongThucBaoQuan())
-                .hinhThucKeLot(DieuChuyenNoiBo.getData(dcnbBBNTBQHdr.get().getHinhThucBaoQuan()))
-                .hinhThucBaoQuan(DieuChuyenNoiBo.getData(dcnbBBNTBQHdr.get().getHinhThucBaoQuan()))
+                .phuongThucBaoQuan(phuongThucBaoQuanList(dcnbBBNTBQHdr.get().getPhuongThucBaoQuan()))
+                .hinhThucKeLot(hinhThucBaoQuanKlot(dcnbBBNTBQHdr.get().getHinhThucBaoQuan()))
+                .hinhThucBaoQuan(phuongThucBaoQuanList(dcnbBBNTBQHdr.get().getHinhThucBaoQuan()))
                 .dinhMucDuocGiao(dcnbBBNTBQHdr.get().getDinhMucDuocGiao())
                 .dinhMucTT(dcnbBBNTBQHdr.get().getDinhMucTT())
                 .tongKinhPhiDaTh(dcnbBBNTBQHdr.get().getTongKinhPhiDaTh())
@@ -439,6 +491,16 @@ public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBN
                 .dcnbBBNTBQDtlThucHienDto(dcnbBBNTBQDtlThucHienDtos)
                 .build();
     }
+
+    private String hinhThucBaoQuanKlot (String maHinhThucBaoQuan) {
+        var qlnvDmVattuBq = dmVattuBqRepository.findAllByMaAndType(maHinhThucBaoQuan, "htbq");
+        return qlnvDmVattuBq.stream().findFirst().map(QlnvDmVattuBq::getGiaTri).get();
+    }
+    private String phuongThucBaoQuanList (String maPhuongThucBaoQuan) {
+        var qlnvDmVattuBq = dmVattuBqRepository.findAllByMaAndType(maPhuongThucBaoQuan, "ppbq");
+        return qlnvDmVattuBq.stream().findFirst().map(QlnvDmVattuBq::getGiaTri).get();
+    }
+
 
     private List<DcnbBBNTBQDtlPheDuyetDto> dcnbBBNTBQDtlPheDuyetDto(List<DcnbBBNTBQDtl> dcnbBBNTBQDtl) {
         List<DcnbBBNTBQDtlPheDuyetDto> dcnbBBNTBQDtlPheDuyetDtos = new ArrayList<>();

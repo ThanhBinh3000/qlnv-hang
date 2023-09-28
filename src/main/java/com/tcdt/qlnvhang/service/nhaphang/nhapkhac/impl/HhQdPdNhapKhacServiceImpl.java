@@ -311,7 +311,7 @@ public class HhQdPdNhapKhacServiceImpl extends BaseServiceImpl implements HhQdPd
                 qOptional.get().setNguoiGuiDuyet(getUser().getUsername());
                 qOptional.get().setNgayGuiDuyet(getDateTimeNow());
                 break;
-            case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
+            case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
                 qOptional.get().setNguoiPduyet(getUser().getUsername());
                 qOptional.get().setNgayPduyet(getDateTimeNow());
                 qOptional.get().setLyDoTuChoi(stReq.getLyDo());

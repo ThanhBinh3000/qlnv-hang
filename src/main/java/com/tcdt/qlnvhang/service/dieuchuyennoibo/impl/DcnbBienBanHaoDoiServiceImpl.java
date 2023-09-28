@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
@@ -317,7 +318,6 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
-        objReq.setMaDvi(currentUser.getDvql());
         Page<DcnbBienBanHaoDoiHdrDTO> page = searchPage(currentUser, objReq);
         List<DcnbBienBanHaoDoiHdrDTO> data = page.getContent();
 
@@ -342,7 +342,7 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
             objs[10] = dx.getSoPhieuXuatKho();
             objs[11] = dx.getSoBangKeXuatDcLt();
             objs[12] = dx.getNgayXuatKho();
-            objs[13] = dx.getTrangThai();
+            objs[13] = TrangThaiAllEnum.getLabelById(dx.getTrangThai());
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

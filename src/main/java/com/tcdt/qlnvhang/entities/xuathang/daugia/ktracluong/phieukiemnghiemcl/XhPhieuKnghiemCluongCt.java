@@ -1,42 +1,26 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.phieukiemnghiemcl;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "XH_PHIEU_KNGHIEM_CLUONG_CT")
-@EqualsAndHashCode(callSuper = false)
+@Table(name = XhPhieuKnghiemCluongCt.TABLE_NAME)
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class XhPhieuKnghiemCluongCt implements Serializable {
-    private static final long serialVersionUID = -1315211820556764708L;
-
+    private static final long serialVersionUID = 1L;
+    public static final String TABLE_NAME = "XH_PHIEU_KNGHIEM_CLUONG_CT";
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_PHIEU_KNGHIEM_CLUONG_CT_SEQ")
-    @SequenceGenerator(sequenceName = "XH_PHIEU_KNGHIEM_CLUONG_CT_SEQ", allocationSize = 1, name = "XH_PHIEU_KNGHIEM_CLUONG_CT_SEQ")
-    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhPhieuKnghiemCluongCt.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = XhPhieuKnghiemCluongCt.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhPhieuKnghiemCluongCt.TABLE_NAME + "_SEQ")
     private Long id;
-
     private Long idHdr;
-
-    private String tenTchuan;
-
-    private String ketQuaKiemTra; // Ket qua phan tich
-
+    private Integer ma;
+    private String chiTieuCl;
+    private String chiSoCl;
+    private String ketQua;
     private String phuongPhap;
-
-    private String trangThai;
-
-    private String chiSoNhap;
-
-    private String kieu;
-
     private String danhGia;
-
+    private String trangThai;
 }

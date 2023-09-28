@@ -34,7 +34,7 @@ public class XhQdPdKhBttDviDtl implements Serializable {
     private BigDecimal thanhTien;
     private String loaiVthh;
     private String cloaiVthh;
-    private Boolean typeQdKq;
+    private String type;
     @Transient
     private String tenDiemKho;
     @Transient

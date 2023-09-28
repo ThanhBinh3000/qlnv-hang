@@ -63,6 +63,7 @@ public interface DcnbBBKetThucNKHdrRepository extends JpaRepository<DcnbBBKetThu
             "LEFT JOIN DcnbQuyetDinhDcCHdr qdc On bbkt.qdinhDccId = qdc.id " +
             "WHERE 1 =1 " +
             "AND qdc.trangThai = '29'" +
+            "AND ((:#{#param.trangThai} IS NULL OR bbkt.trangThai = :#{#param.trangThai})) " +
             "AND ((:#{#param.qDinhDccId} IS NULL OR qdc.id = :#{#param.qDinhDccId})) " +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
             "AND ((:#{#param.maDvi} IS NULL OR LOWER(qdc.maDvi) LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +

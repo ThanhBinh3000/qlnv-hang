@@ -7,6 +7,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -201,6 +202,8 @@ public class DcnbPhieuKnChatLuongHdr extends BaseEntity implements Serializable,
     private String loaiDc;
     @Column(name = "KE_HOACH_DC_DTL_ID")
     private Long keHoachDcDtlId;
+    @Column(name = "SL_HANG_BQ")
+    private BigDecimal slHangBQ;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")

@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
@@ -318,9 +319,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
-        objReq.setMaDvi(currentUser.getDvql());
-        Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
-        Page<DcnbPhieuKnChatLuongHdrDTO> page = dcnbPhieuKnChatLuongHdrRepository.searchPageXuat(objReq, pageable);
+        Page<DcnbPhieuKnChatLuongHdrDTO> page = searchPage(currentUser, objReq);
         List<DcnbPhieuKnChatLuongHdrDTO> data = page.getContent();
 
         String title = "Danh sách phiếu kiểm nghiệm chất lượng ";
@@ -343,7 +342,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
             objs[9] = dx.getNgaylayMau();
             objs[10] = dx.getSoBBTinhKho();
             objs[11] = dx.getNgayXuatDocKho();
-            objs[12] = dx.getTrangThai();
+            objs[12] = TrangThaiAllEnum.getLabelById(dx.getTrangThai());
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

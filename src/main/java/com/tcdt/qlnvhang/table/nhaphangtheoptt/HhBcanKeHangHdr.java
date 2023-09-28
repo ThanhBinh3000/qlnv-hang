@@ -115,6 +115,9 @@ public class HhBcanKeHangHdr  implements Serializable {
     private String nguoiSua;
 
     private String soPhieuKtraCluong;
+    private Long tongSlBaoBi;
+    private Long tongSlCaBaoBi;
+    private Long tongSlDaTruBaoBi;
 
 
     @Transient
