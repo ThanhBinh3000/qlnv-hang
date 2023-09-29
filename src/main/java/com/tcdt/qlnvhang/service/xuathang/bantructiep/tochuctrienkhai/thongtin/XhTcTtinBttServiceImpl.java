@@ -181,8 +181,8 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
             data.setTenDvi(mapDmucDvi.getOrDefault(data.getMaDvi(), null));
             data.setTenLoaiHinhNx(mapLoaiHinhNx.getOrDefault(data.getLoaiHinhNx(), null));
             data.setTenKieuNx(mapKieuNx.getOrDefault(data.getKieuNx(), null));
-            data.setTenLoaiVthh(mapDmucDvi.getOrDefault(data.getLoaiVthh(), null));
-            data.setTenCloaiVthh(mapDmucDvi.getOrDefault(data.getCloaiVthh(), null));
+            data.setTenLoaiVthh(mapDmucVthh.getOrDefault(data.getLoaiVthh(), null));
+            data.setTenCloaiVthh(mapDmucVthh.getOrDefault(data.getCloaiVthh(), null));
             data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
             data.setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiHd()));
             data.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiXh()));
