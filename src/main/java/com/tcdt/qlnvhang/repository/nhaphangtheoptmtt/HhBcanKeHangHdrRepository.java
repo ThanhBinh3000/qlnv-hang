@@ -41,6 +41,6 @@ public interface HhBcanKeHangHdrRepository extends  JpaRepository<HhBcanKeHangHd
 
     List<HhBcanKeHangHdr> findAllByIdQdGiaoNvNh(Long idQdGiaoNvNh);
 
-    HhBcanKeHangHdr findBySoPhieuKtraCluong(String soPhieuKtraCluong);
+    List<HhBcanKeHangHdr> findAllBySoPhieuKtraCluong(String soPhieuKtraCluong);
 
 }

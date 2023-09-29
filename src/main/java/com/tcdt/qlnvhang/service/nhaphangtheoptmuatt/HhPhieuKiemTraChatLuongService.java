@@ -313,7 +313,7 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
     }
     List<HhPhieuKiemTraChatLuong> setDetailList(List<HhPhieuKiemTraChatLuong> list){
         list.forEach( item -> {
-            item.setPhieuNhapKhoHdr(hhPhieuNhapKhoHdrRepository.findBySoPhieuKtraCluong(item.getSoPhieu()));
+            item.setPhieuNhapKhoHdr(hhPhieuNhapKhoHdrRepository.findAllBySoPhieuKtraCluong(item.getSoPhieu()));
         });
         return list;
     }
