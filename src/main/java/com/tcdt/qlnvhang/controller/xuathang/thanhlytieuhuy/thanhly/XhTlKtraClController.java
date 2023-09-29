@@ -49,12 +49,12 @@ public class XhTlKtraClController {
     }
 
     @ApiOperation(value = "Tra cứu ", response = List.class)
-    @PostMapping(value = "/ds-tao-qd-nh", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/ds-tao-pxk", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> getDanhSachTaoQdNh(@RequestBody XhTlKtraClReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-//            resp.setData(service.searchDanhSachTaoQuyetDinhNhapHang(objReq));
+            resp.setData(service.dsTaoPhieuXuatKho(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch ( Exception e) {

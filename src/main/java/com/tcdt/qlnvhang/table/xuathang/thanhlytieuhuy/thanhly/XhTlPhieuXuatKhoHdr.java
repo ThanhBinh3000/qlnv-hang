@@ -46,6 +46,7 @@ public class XhTlPhieuXuatKhoHdr extends BaseEntity implements Serializable {
     private LocalDate ngayQdXh;
     private Long idPhieuKtcl;
     private String soPhieuKtcl;
+    private Long idDiaDiemXh;
     private String maDiaDiem;
     private String loaiVthh;
     private String cloaiVthh;
@@ -74,7 +75,7 @@ public class XhTlPhieuXuatKhoHdr extends BaseEntity implements Serializable {
     @Transient
     List<FileDinhKem> fileCanCu = new ArrayList<>();
     @Transient
-    private List<XhtlPhieuXuatKhoDtl> children = new ArrayList<>();
+    private List<XhTlPhieuXuatKhoDtl> children = new ArrayList<>();
     @JsonIgnore
     @Transient
     private Map<String, String> mapVthh;

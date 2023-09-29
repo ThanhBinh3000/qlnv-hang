@@ -34,4 +34,10 @@ public class XhTlKtraClReq extends BaseRequest {
   private String ketQua;
   private String nhanXet;
   private List<XhTlKtraClDtl> children = new ArrayList<>();
+
+  //
+  private String maDviSr;
+  private String phanLoai;
+  private String typeLt;
+  private String typeVt;
 }

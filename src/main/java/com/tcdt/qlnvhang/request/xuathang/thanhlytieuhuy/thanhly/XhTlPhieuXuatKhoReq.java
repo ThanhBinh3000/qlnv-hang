@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly;
 
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlKtraClDtl;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlPhieuXuatKhoDtl;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -33,5 +34,5 @@ public class XhTlPhieuXuatKhoReq extends BaseRequest {
   private String hinhThucBaoQuan;
   private String ketQua;
   private String nhanXet;
-  private List<XhTlKtraClDtl> children = new ArrayList<>();
+  private List<XhTlPhieuXuatKhoDtl> children = new ArrayList<>();
 }

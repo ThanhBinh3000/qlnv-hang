@@ -8,6 +8,7 @@ import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlKtraClHd
 import com.tcdt.qlnvhang.request.suachua.ScKiemTraChatLuongReq;
 import com.tcdt.qlnvhang.request.suachua.ScPhieuXuatKhoReq;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhXuatHangReq;
+import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlBbLayMauReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlKtraClReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -20,6 +21,7 @@ import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.*;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlBbLayMauHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlKtraClDtl;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlKtraClHdr;
 import com.tcdt.qlnvhang.util.Contains;
@@ -209,6 +211,21 @@ public class XhTlKtraClImpl extends BaseServiceImpl implements XhTlKtraClService
     @Override
     public void export(XhTlKtraClReq req, HttpServletResponse response) throws Exception {
 
+    }
+
+    @Override
+    public List<XhTlKtraClHdr> dsTaoPhieuXuatKho(XhTlKtraClReq req) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        if (userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            req.setMaDviSr(userInfo.getDvql().substring(0,6));
+        }
+        if(req.getPhanLoai().equals("LT")){
+            req.setTypeLt("1");
+        }else{
+            req.setTypeVt("1");
+        }
+        List<XhTlKtraClHdr> list = hdrRepository.searchDsTaoPhieuXuatKho(req);
+        return list;
     }
 
 //    @Override
