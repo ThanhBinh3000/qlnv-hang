@@ -54,7 +54,7 @@ public interface NhPhieuNhapKhoRepository extends BaseRepository<NhPhieuNhapKho,
 
     List<NhPhieuNhapKho> findByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh);
 
-    NhPhieuNhapKho findBySoPhieuKtraCl(String soPhieuKtraCl);
+    List<NhPhieuNhapKho> findBySoPhieuKtraCl(String soPhieuKtraCl);
 
 
 }

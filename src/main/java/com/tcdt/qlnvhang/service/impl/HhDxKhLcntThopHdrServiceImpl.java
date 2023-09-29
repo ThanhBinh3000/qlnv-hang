@@ -14,12 +14,17 @@ import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhlcntThopHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxKhlcntDsgthau;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxKhlcntDsgthauCtiet;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthau;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtl;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.*;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxKhlcntDsgthauCtietRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntDsgtDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdrRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthauCtietRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthauRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.DsChiCucPreview;
@@ -64,6 +69,15 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 
 	@Autowired
 	private HhDxKhlcntDsgthauCtietRepository hhDxKhlcntDsgthauCtietRepository;
+
+	@Autowired
+	private HhQdKhlcntDtlRepository hhQdKhlcntDtlRepository;
+
+	@Autowired
+	private HhQdKhlcntDsgthauRepository hhQdKhlcntDsgthauRepository;
+
+	@Autowired
+	private HhQdKhlcntDsgthauCtietRepository hhQdKhlcntDsgthauCtietRepository;
 
 	@Override
 	public HhDxKhLcntThopHdr sumarryData(HhDxKhLcntTChiThopReq objReq) throws Exception {
@@ -275,12 +289,16 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 
 	@Override
 	public void delete(IdSearchReq idSearchReq) throws Exception {
-		if (StringUtils.isEmpty(idSearchReq.getId()))
+		if (StringUtils.isEmpty(idSearchReq.getId())) {
 			throw new Exception("Xoá thất bại, không tìm thấy dữ liệu");
-
+		}
 		Optional<HhDxKhLcntThopHdr> optional = hhDxKhLcntThopHdrRepository.findById(idSearchReq.getId());
-		if (!optional.isPresent())
+		if (!optional.isPresent()) {
 			throw new Exception("Không tìm thấy dữ liệu cần xoá");
+		}
+		if (optional.get().getTrangThai().equals(Contains.DABANHANH_QD)) {
+			throw new Exception("Xóa thất bại, quyết định đã được ban hành.");
+		}
 		List<HhDxKhLcntThopDtl> listDls= hhDxKhLcntThopDtlRepository.findByIdThopHdr(optional.get().getId());
 		if(!CollectionUtils.isEmpty(listDls)){
 			List<Long> idDxList = listDls.stream().map(HhDxKhLcntThopDtl::getIdDxHdr).collect(Collectors.toList());
@@ -292,6 +310,24 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 				}).collect(Collectors.toList());
 			}
 			hhDxuatKhLcntHdrRepository.saveAll(listDxHdr);
+		}
+ 		if (optional.get().getTrangThai().equals(Contains.DADUTHAO_QD)) {
+			Optional<HhQdKhlcntHdr> qdKhlcntHdr = hhQdKhlcntHdrRepository.findByIdThHdrAndLastest(optional.get().getId(), false);
+			if (!qdKhlcntHdr.isPresent() || qdKhlcntHdr.get().getTrangThai().equals(Contains.BAN_HANH)){
+				throw new Exception("Không tìm thấy bản ghi quyết định hoặc quyết định đã được ban hành");
+			}
+			List<HhQdKhlcntDtl> hhQdKhlcntDtl = hhQdKhlcntDtlRepository.findAllByIdQdHdr(optional.get().getId());
+			if(!CollectionUtils.isEmpty(hhQdKhlcntDtl)){
+				for (HhQdKhlcntDtl dtl:hhQdKhlcntDtl) {
+					List<HhQdKhlcntDsgthau> byIdQdDtl = hhQdKhlcntDsgthauRepository.findByIdQdDtl(dtl.getId());
+					for (HhQdKhlcntDsgthau gThau :byIdQdDtl) {
+						hhQdKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(gThau.getId());
+					}
+					hhQdKhlcntDsgthauRepository.deleteByIdQdDtl(dtl.getId());
+				}
+				hhQdKhlcntDtlRepository.deleteAll(hhQdKhlcntDtl);
+			}
+			hhQdKhlcntHdrRepository.delete(qdKhlcntHdr.get());
 		}
 		hhDxKhLcntThopDtlRepository.deleteAll(listDls);
 		hhDxKhLcntThopHdrRepository.delete(optional.get());
