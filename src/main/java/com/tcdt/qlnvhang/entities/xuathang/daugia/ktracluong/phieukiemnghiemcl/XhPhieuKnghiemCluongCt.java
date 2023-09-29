@@ -23,4 +23,5 @@ public class XhPhieuKnghiemCluongCt implements Serializable {
     private String phuongPhap;
     private String danhGia;
     private String trangThai;
+    private String maChiTieu;
 }
