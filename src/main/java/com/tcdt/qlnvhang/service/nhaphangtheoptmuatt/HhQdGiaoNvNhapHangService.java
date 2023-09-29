@@ -293,9 +293,9 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
             dDiem.setHhPhieuNhapKhoHdr(hhPhieuNhapKhoHdrRepository.findAllByIdDdiemGiaoNvNh(dDiem.getId()));
             List<HhPhieuKiemTraChatLuong> phieuKiemTraChatLuongList = hhPhieuKiemTraChatLuongService.findAllByIdDdiemGiaoNvNh(dDiem.getId());
             for (HhPhieuKiemTraChatLuong Cl : phieuKiemTraChatLuongList){
-                HhPhieuNhapKhoHdr phieuNhapKhoHdr = hhPhieuNhapKhoHdrRepository.findBySoPhieuKtraCluong(Cl.getSoPhieu());
+                List<HhPhieuNhapKhoHdr> phieuNhapKhoHdr = hhPhieuNhapKhoHdrRepository.findAllBySoPhieuKtraCluong(Cl.getSoPhieu());
                 Cl.setPhieuNhapKhoHdr(phieuNhapKhoHdr);
-                HhBcanKeHangHdr bcanKeHangHdr = hhBcanKeHangHdrRepository.findBySoPhieuKtraCluong(Cl.getSoPhieu());
+                List<HhBcanKeHangHdr> bcanKeHangHdr = hhBcanKeHangHdrRepository.findAllBySoPhieuKtraCluong(Cl.getSoPhieu());
                 Cl.setBcanKeHangHdr(bcanKeHangHdr);
             }
             dDiem.setListPhieuKtraCl(phieuKiemTraChatLuongList);
