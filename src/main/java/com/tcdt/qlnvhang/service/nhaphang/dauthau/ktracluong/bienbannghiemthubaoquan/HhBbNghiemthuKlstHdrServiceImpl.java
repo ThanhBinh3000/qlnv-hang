@@ -438,10 +438,10 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
                             objsc[7] = qd.getDtlList().get(0).getChildren().get(j).getListPhieuKtraCl().get(t).getSoPhieu();
                             objsc[8] = qd.getDtlList().get(0).getChildren().get(j).getListPhieuKtraCl().get(t).getNgayGdinh();
                             objsc[9] = qd.getDtlList().get(0).getChildren().get(j).getListPhieuKtraCl().get(t).getKqDanhGia();
-                            if(!StringUtils.isEmpty(qd.getDtlList().get(0).getChildren().get(j).getListPhieuKtraCl().get(t).getPhieuNhapKho())){
-                                objsc[10] = qd.getDtlList().get(0).getChildren().get(j).getListPhieuKtraCl().get(t).getPhieuNhapKho().getSoPhieuNhapKho();
-                                objsc[11] = qd.getDtlList().get(0).getChildren().get(j).getListPhieuKtraCl().get(t).getPhieuNhapKho().getNgayNhapKho();
-                            }
+//                            if(!StringUtils.isEmpty(qd.getDtlList().get(0).getChildren().get(j).getListPhieuKtraCl().get(t).getPhieuNhapKho())){
+//                                objsc[10] = qd.getDtlList().get(0).getChildren().get(j).getListPhieuKtraCl().get(t).getPhieuNhapKho().getSoPhieuNhapKho();
+//                                objsc[11] = qd.getDtlList().get(0).getChildren().get(j).getListPhieuKtraCl().get(t).getPhieuNhapKho().getNgayNhapKho();
+//                            }
                             objsc[12] = qd.getDtlList().get(0).getChildren().get(j).getListPhieuKtraCl().get(t).getTenTrangThai();
                             dataList.add(objsc);
                         }
