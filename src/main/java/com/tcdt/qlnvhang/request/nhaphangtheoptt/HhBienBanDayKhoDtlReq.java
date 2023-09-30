@@ -5,8 +5,10 @@ import com.tcdt.qlnvhang.util.Contains;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class HhBienBanDayKhoDtlReq {
@@ -33,4 +35,7 @@ public class HhBienBanDayKhoDtlReq {
     private Date ngayNkho;
 
     private BigDecimal soLuong;
+
+    @Transient
+    private List<HhBcanKeHangHdrReq> bcanKeHangHdr;
 }
