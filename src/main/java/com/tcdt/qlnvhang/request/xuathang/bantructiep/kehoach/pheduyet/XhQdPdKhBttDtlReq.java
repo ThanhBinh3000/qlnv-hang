@@ -45,8 +45,8 @@ public class XhQdPdKhBttDtlReq {
     private String ghiChuChaoGia;
     private BigDecimal tongGiaTriHdong;
     private LocalDate thoiHanBan;
-    private Boolean isDieuChinh;
-    private Boolean lastest;
+    private Integer lastest;
+    private Integer isDieuChinh;
     private String soQdDc;
     private List<FileDinhKemReq> fileUyQuyen = new ArrayList<>();
     private List<FileDinhKemReq> fileBanLe = new ArrayList<>();

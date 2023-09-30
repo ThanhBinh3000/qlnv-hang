@@ -46,7 +46,7 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl {
     private UserInfoRepository userInfoRepository;
 
     public Page<XhPhieuKnghiemCluong> searchPage(CustomUserDetails currentUser, XhPhieuKnghiemCluongReq req) throws Exception {
-        req.setDvql(currentUser.getDvql());
+//        req.setDvql(currentUser.getDvql());
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhPhieuKnghiemCluong> search = xhPhieuKnghiemCluongRepository.searchPage(req, pageable);
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
