@@ -37,6 +37,7 @@ public interface DcnbBcKqDcHdrRepository extends JpaRepository<DcnbBcKqDcHdr, Lo
             "AND (:#{#param.soQdinhCuc} IS NULL OR LOWER(c.soQdDcCuc) LIKE CONCAT('%',LOWER(:#{#param.soQdinhCuc}),'%')) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR c.ngayBc >= :#{#param.tuNgay})" +
             "AND (:#{#param.denNgay}  IS NULL OR c.ngayBc <= :#{#param.denNgay}) ) " +
+            "AND c.id not in (select tt.bcKetQuaDcId from DcnbBbThuaThieuHdr tt where 1 =1 AND (:#{#param.bbThuaThieuHdrId}  IS NULL OR tt.id != :#{#param.bbThuaThieuHdrId}) )  " +
             "ORDER BY c.soQdDcCuc desc , c.nam desc, c.id desc")
     List<DcnbBcKqDcHdr> searchList(@Param("param")DcnbBbKqDcSearch req);
 
