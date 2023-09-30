@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly.impl;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.*;
+import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlBangKeHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlPhieuXuatKhoDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlPhieuXuatKhoHdrRepository;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlPhieuXuatKhoReq;
@@ -14,6 +15,7 @@ import com.tcdt.qlnvhang.service.suachuahang.impl.ScDanhSachServiceImpl;
 import com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly.XhTlPhieuXuatKhoService;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.*;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlBangKeHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlPhieuXuatKhoDtl;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlPhieuXuatKhoHdr;
 import com.tcdt.qlnvhang.util.Contains;
@@ -50,7 +52,7 @@ public class XhTlPhieuXuatKhoServiceImpl extends BaseServiceImpl implements XhTl
     private ScQuyetDinhScService scQuyetDinhScService;
 
     @Autowired
-    private ScBangKeXuatVatTuHdrRepository scBangKeXuatVatTuHdrRepository;
+    private XhTlBangKeHdrRepository xhTlBangKeHdrRepository;
 
     @Autowired
     private ScDanhSachRepository scDanhSachRepository;
@@ -64,7 +66,6 @@ public class XhTlPhieuXuatKhoServiceImpl extends BaseServiceImpl implements XhTl
     public Page<XhTlPhieuXuatKhoHdr> searchPage(XhTlPhieuXuatKhoReq req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhTlPhieuXuatKhoHdr> searchPage = hdrRepository.searchPage(req, pageable);
-
         return searchPage;
     }
 
@@ -80,7 +81,7 @@ public class XhTlPhieuXuatKhoServiceImpl extends BaseServiceImpl implements XhTl
         XhTlPhieuXuatKhoHdr data = new XhTlPhieuXuatKhoHdr();
         BeanUtils.copyProperties(req, data);
         data.setMaDvi(currentUser.getDvql());
-//        data.setId(Long.parseLong(req.getSoPhieuXuatKho().split("/")[0]));
+        data.setId(Long.parseLong(req.getSoPhieuXuatKho().split("/")[0]));
         data.setIdThuKho(currentUser.getId());
         XhTlPhieuXuatKhoHdr created = hdrRepository.save(data);
         saveFileDinhKem(req.getFileDinhKemReq(), created.getId(), XhTlPhieuXuatKhoHdr.TABLE_NAME);
@@ -126,7 +127,7 @@ public class XhTlPhieuXuatKhoServiceImpl extends BaseServiceImpl implements XhTl
         }
         XhTlPhieuXuatKhoHdr data = optional.get();
         data.setFileDinhKem(fileDinhKemService.search(id, Collections.singleton(XhTlPhieuXuatKhoHdr.TABLE_NAME)));
-//        data.setChildren(dtlRepository.findByIdHdr(id));
+        data.setChildren(dtlRepository.findByIdHdr(id));
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         //set label
@@ -135,6 +136,9 @@ public class XhTlPhieuXuatKhoServiceImpl extends BaseServiceImpl implements XhTl
         data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
         if(!Objects.isNull(data.getIdThuKho())){
             data.setTenThuKho(userInfoRepository.findById(data.getIdThuKho()).get().getFullName());
+        }
+        if(!Objects.isNull(data.getIdKtv())){
+            data.setTenKtv(userInfoRepository.findById(data.getIdKtv()).get().getFullName());
         }
         if(!Objects.isNull(data.getIdLanhDaoCc())){
             data.setTenLanhDaoCc(userInfoRepository.findById(data.getIdLanhDaoCc()).get().getFullName());
@@ -156,16 +160,16 @@ public class XhTlPhieuXuatKhoServiceImpl extends BaseServiceImpl implements XhTl
         XhTlPhieuXuatKhoHdr hdr = optional.get();
 
         if(Objects.isNull(hdr.getIdBangKeCanHang())){
-            throw new Exception("Phiếu xuất kho đang chưa khởi tạo bảng kê xuất vật tư. Vui lòng tạo bảng kê xuất vật tư");
+            throw new Exception("Phiếu xuất kho đang chưa khởi tạo bảng kê cân hàng. Vui lòng tạo bảng kê cân hàng");
         } else {
-            Optional<ScBangKeXuatVatTuHdr> bkOp = scBangKeXuatVatTuHdrRepository.findById(hdr.getIdBangKeCanHang());
+            Optional<XhTlBangKeHdr> bkOp = xhTlBangKeHdrRepository.findById(hdr.getIdBangKeCanHang());
             if(bkOp.isPresent()){
-                ScBangKeXuatVatTuHdr bk = bkOp.get();
+                XhTlBangKeHdr bk = bkOp.get();
                 if(!bk.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())){
                     throw new Exception("Số bảng kê " +bk.getSoBangKe()+" chưa đc phê duyệt. Vui lòng phê duyệt bảng kê");
                 }
             }else{
-                throw new Exception("Phiếu xuất kho không tìm thấy bảng kê xuất vật tư. Vui lòng tạo bảng kê xuất vật tư");
+                throw new Exception("Phiếu xuất kho không tìm thấy bảng kê cân hàng. Vui lòng tạo bảng kê cân hàng");
             }
         }
 
@@ -224,6 +228,19 @@ public class XhTlPhieuXuatKhoServiceImpl extends BaseServiceImpl implements XhTl
     @Override
     public void export(XhTlPhieuXuatKhoReq req, HttpServletResponse response) throws Exception {
 
+    }
+
+    @Override
+    public List<XhTlPhieuXuatKhoHdr> searchDanhSachTaoBangKe(XhTlPhieuXuatKhoReq req) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        req.setMaDviSr(userInfo.getDvql());
+        if(req.getPhanLoai().equals("LT")){
+            req.setTypeLt("1");
+        }else{
+            req.setTypeVt("1");
+        }
+        List<XhTlPhieuXuatKhoHdr> scPhieuXuatKhoHdrs = hdrRepository.searchListTaoBangKe(req);
+        return scPhieuXuatKhoHdrs;
     }
 
 //    @Override

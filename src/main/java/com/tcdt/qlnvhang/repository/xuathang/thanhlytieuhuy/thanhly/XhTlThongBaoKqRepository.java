@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly;
 
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.SearchXhTlQuyetDinh;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlThongBaoKq;
 import feign.Param;
 import org.springframework.data.domain.Page;
@@ -34,4 +35,6 @@ public interface XhTlThongBaoKqRepository extends JpaRepository<XhTlThongBaoKq, 
   List<XhTlThongBaoKq> findAllByIdIn(List<Long> listId);
 
   Optional<XhTlThongBaoKq> findBySoThongBao(String soQd);
+
+  Optional<XhTlThongBaoKq> findByIdHoSo(Long idHoSo);
 }

@@ -27,6 +27,7 @@ public class XhTlPhieuXuatKhoDtl extends BaseEntity implements Serializable {
     private String maSo;
     private String donViTinh;
     private BigDecimal slXuatThucTe;
+    private BigDecimal duToanKinhPhi;
     private BigDecimal kinhPhiThucTe;
 
 }

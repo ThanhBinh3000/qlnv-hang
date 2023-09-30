@@ -78,6 +78,15 @@ public class XhTlHoSoHdr extends BaseEntity implements Serializable {
   private String maDvql;
   @Transient
   private String tenDvql;
+  @Transient
+  private String soQdTl;
+  @Transient
+  private Long idQdTl;
+  @Transient
+  private String soThongBaoKq;
+  @Transient
+  private Long idThongBaoKq;
+
 
   @Transient
   private List<XhTlHoSoDtl> children = new ArrayList<>();

@@ -29,10 +29,9 @@ import java.util.stream.Collectors;
 public class XhTlPhieuXuatKhoHdr extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_TL_PHIEU_XUAT_KHO_HDR";
-
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlPhieuXuatKhoHdr.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = XhTlPhieuXuatKhoHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlPhieuXuatKhoHdr.TABLE_NAME + "_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlPhieuXuatKhoHdr.TABLE_NAME + "_SEQ")
+//    @SequenceGenerator(sequenceName = XhTlPhieuXuatKhoHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlPhieuXuatKhoHdr.TABLE_NAME + "_SEQ")
     private Long id;
     private Integer nam;
     private String maDvi;
@@ -52,7 +51,7 @@ public class XhTlPhieuXuatKhoHdr extends BaseEntity implements Serializable {
     private String cloaiVthh;
     private Long idThuKho;
     private Long idLanhDaoCc;
-    private Long idKTv;
+    private Long idKtv;
     private String keToanTruong;
     private String nguoiGiaoHang;
     private String soCmt;
@@ -102,6 +101,8 @@ public class XhTlPhieuXuatKhoHdr extends BaseEntity implements Serializable {
     private String tenLoKho;
     @Transient
     private String tenThuKho;
+    @Transient
+    private String tenKtv;
     @Transient
     private String tenLanhDaoCc;
     @Transient

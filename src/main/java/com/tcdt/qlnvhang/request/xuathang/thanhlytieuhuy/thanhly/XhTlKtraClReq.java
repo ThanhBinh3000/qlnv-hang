@@ -23,10 +23,7 @@ public class XhTlKtraClReq extends BaseRequest {
   private String maDiaDiem;
   private Long idDiaDiemXh;
   private LocalDate ngayKnghiem;
-  private Long idNguoiKnghiem;
   private Long idThuKho;
-  private Long idTruongPhongKtvq;
-  private Long idLdc;
   private String loaiVthh;
   private String cloaiVthh;
   private String dviTinh;

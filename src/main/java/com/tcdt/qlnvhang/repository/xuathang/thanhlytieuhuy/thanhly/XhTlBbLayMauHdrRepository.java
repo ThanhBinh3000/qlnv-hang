@@ -1,10 +1,6 @@
 package com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly;
 
-import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.SearchKhCnCtrinhNcReq;
-import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlBangKeHdrReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlBbLayMauReq;
-import com.tcdt.qlnvhang.table.khoahoccongnghebaoquan.KhCnCongTrinhNghienCuu;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlBangKeHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlBbLayMauHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,8 +28,8 @@ public interface XhTlBbLayMauHdrRepository extends JpaRepository<XhTlBbLayMauHdr
     @Query("SELECT c FROM XhTlBbLayMauHdr c " +
             " left join XhTlKtraClHdr ktra on ktra.idBbLayMau = c.id " +
             " WHERE ktra.id is null "+
-            "AND (:#{#param.typeLt} IS NULL OR c.loaiVthh NOT LIKE CONCAT('02','%')) " +
-            "AND (:#{#param.typeVt} IS NULL OR c.loaiVthh LIKE CONCAT('02','%')) " +
+            " AND (:#{#param.typeLt} IS NULL OR c.loaiVthh NOT LIKE CONCAT('02','%')) " +
+            " AND (:#{#param.typeVt} IS NULL OR c.loaiVthh LIKE CONCAT('02','%')) " +
             " AND (:#{#param.maDviSr} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDviSr},'%'))" +
             " AND (:#{#param.trangThai} IS NULL OR c.trangThai =:#{#param.trangThai})" +
             " AND (:#{#param.idQdXh} IS NULL OR c.idQdXh =:#{#param.idQdXh})" +

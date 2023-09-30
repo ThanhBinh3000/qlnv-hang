@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlKtraClDtl;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlPhieuXuatKhoDtl;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,26 +14,41 @@ import java.util.List;
 public class XhTlPhieuXuatKhoReq extends BaseRequest {
   private Long id;
   private Integer nam;
-  private String maDvi;
   private String maQhns;
-  private String soPhieuKtcl;
-  private LocalDate ngayLap;
-  private Long idQdXh;
+  private String soPhieuXuatKho;
+  private LocalDate ngayXuatKho;
+  private Integer soNo;
+  private Integer soCo;
   private String soQdXh;
-  private Long idBbLayMau;
-  private String soBbLayMau;
-  private LocalDate ngayLayMau;
+  private Long idQdXh;
+  private LocalDate ngayQdXh;
+  private Long idPhieuKtcl;
+  private String soPhieuKtcl;
+  private Long idDiaDiemXh;
   private String maDiaDiem;
-  private LocalDate ngayKnghiem;
-  private Long idNguoiKnghiem;
-  private Long idThuKho;
-  private Long idTruongPhongKtvq;
-  private Long idLdc;
   private String loaiVthh;
   private String cloaiVthh;
-  private String dviTinh;
-  private String hinhThucBaoQuan;
-  private String ketQua;
-  private String nhanXet;
+  private Long idKtv;
+  private String keToanTruong;
+  private String nguoiGiaoHang;
+  private String soCmt;
+  private String dviNguoiGiaoHang;
+  private String diaChi;
+  private LocalDate thoiGianGiaoNhan;
+  private String loaiHinhNx;
+  private String kieuNx;
+  private String soBangKeCanHang;
+  private Long idBangKeCanHang;
+  private BigDecimal tongSoLuong;
+  private String ghiChu;
+  private String trangThai;
+  private String donViTinh;
   private List<XhTlPhieuXuatKhoDtl> children = new ArrayList<>();
+
+  //
+
+  private String maDviSr;
+  private String phanLoai;
+  private String typeLt;
+  private String typeVt;
 }

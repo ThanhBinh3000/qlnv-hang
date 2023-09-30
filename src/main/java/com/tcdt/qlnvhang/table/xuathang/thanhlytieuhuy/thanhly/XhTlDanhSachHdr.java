@@ -40,6 +40,10 @@ public class XhTlDanhSachHdr extends BaseEntity implements Serializable {
   private String trangThai;
   private String type;
 
+  private BigDecimal donGiaDk;
+  private BigDecimal donGiaPd;
+  private String ketQua;
+
 
   @JsonIgnore
   @Transient

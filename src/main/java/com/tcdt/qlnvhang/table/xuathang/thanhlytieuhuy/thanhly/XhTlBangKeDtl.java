@@ -1,27 +1,29 @@
 package com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.io.Serializable;
+import java.math.BigDecimal;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = XhTlBangKeDtl.TABLE_NAME)
-@Data
-public class XhTlBangKeDtl implements Serializable {
+public class XhTlBangKeDtl {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_TL_BANG_KE_DTL";
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlBangKeDtl.TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = XhTlBangKeDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlBangKeDtl.TABLE_NAME + "_SEQ")
     private Long id;
+    private Long idHdr;
     private String maCan;
-    private Long soBaoBi;
-    private Long trongLuongBaoBi;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idHdr")
-    @JsonIgnore
-    private XhTlBangKeHdr bangKeHdr;
+    private BigDecimal soBaoBi;
+    private BigDecimal trongLuongCaBi;
 }
