@@ -87,6 +87,9 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl {
             BeanUtils.copyProperties(dtlReq, dtl, "id");
             dtl.setId(null);
             dtl.setIdHdr(idHdr);
+            dtl.setChiSoCl(dtlReq.getMucYeuCauXuat());
+            dtl.setChiTieuCl(dtlReq.getTenChiTieu());
+            dtl.setPhuongPhap(dtlReq.getPhuongPhapXd());
             xhPhieuKnghiemCluongCtRepository.save(dtl);
         }
     }
