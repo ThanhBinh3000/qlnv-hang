@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.Operator;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhBcanKeHangHdrRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhBienBanDayKhoDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhBienBanDayKhoHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -46,6 +47,9 @@ public class HhBienBanDayKhoService extends BaseServiceImpl {
 
     @Autowired
     private HhBienBanDayKhoDtlRepository hhBienBanDayKhoDtlRepository;
+
+    @Autowired
+    private HhBcanKeHangHdrRepository hhBcanKeHangHdrRepository;
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
@@ -113,6 +117,12 @@ public class HhBienBanDayKhoService extends BaseServiceImpl {
             BeanUtils.copyProperties(bienBanDayKhoDtlReq,bienBanDayKhoDtl,"id");
             bienBanDayKhoDtl.setIdHdr(idHdr);
             hhBienBanDayKhoDtlRepository.save(bienBanDayKhoDtl);
+//            for (HhBcanKeHangHdrReq hhBcanKeHangHdrReq : bienBanDayKhoDtlReq.getBcanKeHangHdr()) {
+//                HhBcanKeHangHdr hhBcanKeHangHdr = new HhBcanKeHangHdr();
+//                BeanUtils.copyProperties(hhBcanKeHangHdrReq,hhBcanKeHangHdr,"id");
+////                hhBcanKeHangHdrReq.setIdHdr(idHdr);
+//                hhBcanKeHangHdrRepository.save(hhBcanKeHangHdr);
+//            }
         }
     }
 
