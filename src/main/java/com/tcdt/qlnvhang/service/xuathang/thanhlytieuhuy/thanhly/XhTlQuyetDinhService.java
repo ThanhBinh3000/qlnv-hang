@@ -217,6 +217,7 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
             case Contains.DUTHAO + Contains.CHODUYET_LDV:
             case Contains.CHODUYET_LDV + Contains.CHODUYET_LDTC:
             case Contains.CHODUYET_LDTC + Contains.BAN_HANH:
+                hdr.setNgayKy(LocalDate.now());
                 break;
             case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
             case Contains.CHODUYET_LDTC + Contains.TUCHOI_LDTC:

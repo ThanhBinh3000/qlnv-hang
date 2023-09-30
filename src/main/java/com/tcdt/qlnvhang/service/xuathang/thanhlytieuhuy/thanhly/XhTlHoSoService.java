@@ -4,9 +4,7 @@ import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachRepository;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoDtlRepository;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -19,9 +17,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTrinhThamDinhDtl;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTrinhThamDinhHdr;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachHdr;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoDtl;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoHdr;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.*;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -61,6 +57,12 @@ public class XhTlHoSoService extends BaseServiceImpl {
   private XhTlDanhSachService xhTlDanhSachService;
 
   @Autowired
+  private XhTlQuyetDinhHdrRepository xhTlQuyetDinhHdrRepository;
+
+  @Autowired
+  private XhTlThongBaoKqRepository xhTlThongBaoKqRepository;
+
+  @Autowired
   private FileDinhKemService fileDinhKemService;
 
   public Page<XhTlHoSoHdr> searchPage(CustomUserDetails currentUser, XhTlHoSoReq req) throws Exception {
@@ -78,9 +80,23 @@ public class XhTlHoSoService extends BaseServiceImpl {
         Map<String, Object> objDonVi = mapDmucDvi.get(s.getMaDvi());
         s.setTenDvi(objDonVi.get("tenDvi").toString());
       }
+      setThongTinQdKq(s);
       s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
     });
     return search;
+  }
+
+  void setThongTinQdKq(XhTlHoSoHdr data){
+    Optional<XhTlQuyetDinhHdr> qdOpt = xhTlQuyetDinhHdrRepository.findByIdHoSo(data.getId());
+    if(qdOpt.isPresent()){
+      data.setIdQdTl(qdOpt.get().getId());
+      data.setSoQdTl(qdOpt.get().getSoQd());
+    }
+    Optional<XhTlThongBaoKq> tbOpt = xhTlThongBaoKqRepository.findByIdHoSo(data.getId());
+    if(tbOpt.isPresent()){
+      data.setIdTb(tbOpt.get().getId());
+      data.setSoThongBaoKq(tbOpt.get().getSoThongBao());
+    }
   }
 
   public List<XhTlHoSoHdr> dsTaoQuyetDinhThanhLy(XhTlHoSoReq req) throws Exception {
@@ -149,9 +165,9 @@ public class XhTlHoSoService extends BaseServiceImpl {
       // Update lại data vào danh sách gốc
       Optional<XhTlDanhSachHdr> dsHdr = xhTlDanhSachRepository.findById(item.getId());
       if(dsHdr.isPresent()){
-//        dsHdr.get().setKetQua(item.getKetQua());
-//        dsHdr.get().setDonGiaDk(item.getDonGiaDk());
-//        dsHdr.get().setDonGiaPd(item.getDonGiaPd());
+        dsHdr.get().setKetQua(item.getKetQua());
+        dsHdr.get().setDonGiaDk(item.getDonGiaDk());
+        dsHdr.get().setDonGiaPd(item.getDonGiaPd());
         dsHdr.get().setSlDaDuyet(item.getSlDaDuyet());
         XhTlDanhSachHdr save = xhTlDanhSachRepository.save(dsHdr.get());
         dtl.setXhTlDanhSachHdr(save);
