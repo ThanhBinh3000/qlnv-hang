@@ -46,10 +46,13 @@ public class XhTlQuyetDinhHdr extends BaseEntity implements Serializable {
     private LocalDate ngayGduyet;
     private Long nguoiGduyetId;
     private String lyDoTuChoi;
+    private String trangThaiDg;
     @Transient
     private String tenDvi;
     @Transient
     private String tenTrangThai;
+    @Transient
+    private String tenTrangThaiGd;
     @Transient
     private List<FileDinhKem> fileDinhKem =new ArrayList<>();
     @Transient
@@ -57,6 +60,10 @@ public class XhTlQuyetDinhHdr extends BaseEntity implements Serializable {
 
     public String getTenTrangThai(){
         return TrangThaiAllEnum.getLabelById(getTrangThai());
+    }
+
+    public String getTenTrangThaiDg(){
+        return TrangThaiAllEnum.getLabelById(getTrangThaiDg());
     }
     @Transient
     private XhTlHoSoHdr xhTlHoSoHdr;
