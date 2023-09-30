@@ -43,6 +43,7 @@ public class XhCtvtTongHopDtl implements Serializable {
   private BigDecimal tonKhoLoaiVthh;
   private BigDecimal tonKhoCloaiVthh;
   private String donViTinh;
+  private LocalDate ngayKetThuc;
 
   @JsonIgnore
   @Transient
