@@ -369,7 +369,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
       Object children = body.get("children");
       HashMap<Object, Object> hashMap = new HashMap<>();
       hashMap.put("nam", detail.get(0).getNam());
-      hashMap.put("tenLoaiVthh", detail.get(0).getTenLoaiVthh());
+      hashMap.put("tenLoaiVthh", detail.get(0).getTenVthh());
       hashMap.put("children", children);
       return docxToPdfConverter.convertDocxToPdf(inputStream, hashMap);
     } catch (IOException e) {
