@@ -18,15 +18,11 @@ public class XhTlToChucNlq implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlToChucNlq.TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = XhTlToChucNlq.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlToChucNlq.TABLE_NAME + "_SEQ")
     private Long id;
+    private Long idHdr;
     private String hoVaTen;
     private String soCccd;
     private String chucVu;
     private String diaChi;
     private String loai;  //KM-khach moi    DGV-dau gia vien    NTG-nguoi tham gia
-    private BigDecimal idVirtual;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idHdr")
-    @JsonIgnore
-    private XhTlToChucHdr toChucHdr;
 }

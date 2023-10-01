@@ -5,7 +5,7 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlHopDongRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhQdPdRepository;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlToChucRepository;
+import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlToChucHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -42,7 +42,7 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
     private XhTlQuyetDinhQdPdRepository xhTlQuyetDinhQdPdRepository;
 
     @Autowired
-    private XhTlToChucRepository xhTlToChucRepository;
+    private XhTlToChucHdrRepository xhTlToChucHdrRepository;
 
     @Autowired
     private XhTlHopDongRepository xhTlHopDongRepository;
@@ -222,11 +222,11 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
             }
             data.setTrangThai(statusReq.getTrangThai());
             if (statusReq.getTrangThai().equals(Contains.BAN_HANH)) {
-                Optional<XhTlToChucHdr> xhTlToChucHdr = xhTlToChucRepository.findById(data.getIdThongBao());
+                Optional<XhTlToChucHdr> xhTlToChucHdr = xhTlToChucHdrRepository.findById(data.getIdThongBao());
                 if (xhTlToChucHdr.isPresent()) {
                     xhTlToChucHdr.get().setIdQdPdKq(data.getId());
                     xhTlToChucHdr.get().setSoQdPdKq(data.getSoQd());
-                    xhTlToChucRepository.save(xhTlToChucHdr.get());
+                    xhTlToChucHdrRepository.save(xhTlToChucHdr.get());
                 }
             }
         }

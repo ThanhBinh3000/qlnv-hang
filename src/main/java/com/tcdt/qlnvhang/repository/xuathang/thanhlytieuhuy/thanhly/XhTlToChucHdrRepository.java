@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface XhTlToChucRepository extends JpaRepository<XhTlToChucHdr, Long> {
+public interface XhTlToChucHdrRepository extends JpaRepository<XhTlToChucHdr, Long> {
 
     @Query("SELECT DISTINCT  TC FROM XhTlToChucHdr TC " +
             "LEFT JOIN XhTlQuyetDinhHdr QD on TC.idQdTl = QD.id WHERE 1=1 " +

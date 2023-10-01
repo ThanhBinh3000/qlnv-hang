@@ -26,9 +26,9 @@ public class XhTlToChucHdr extends BaseEntity implements Serializable {
     public static final String TABLE_NAME = "XH_TL_TO_CHUC_HDR";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlToChucHdr.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = XhTlToChucHdr.TABLE_NAME
-            + "_SEQ", allocationSize = 1, name = XhTlToChucHdr.TABLE_NAME + "_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlToChucHdr.TABLE_NAME + "_SEQ")
+//    @SequenceGenerator(sequenceName = XhTlToChucHdr.TABLE_NAME
+//            + "_SEQ", allocationSize = 1, name = XhTlToChucHdr.TABLE_NAME + "_SEQ")
     private Long id;
     private String maDvi;
     private Integer lanDauGia;
@@ -94,8 +94,6 @@ public class XhTlToChucHdr extends BaseEntity implements Serializable {
     private String soQdPdKq;
     private Long idHopDong;
     private String soHopDong;
-    private Long idQdGnv;
-    private String soQdGnv;
 
     //  @Transient
     @Transient
@@ -174,9 +172,9 @@ public class XhTlToChucHdr extends BaseEntity implements Serializable {
         }
     }
 
-    @OneToMany(mappedBy = "toChucHdr", cascade = CascadeType.ALL)
-    private List<XhTlToChucDtl> toChucDtl = new ArrayList<>();
+    @Transient
+    private List<XhTlToChucDtl> children = new ArrayList<>();
 
-    @OneToMany(mappedBy = "toChucHdr", cascade = CascadeType.ALL)
-    private List<XhTlToChucNlq> toChucNlq = new ArrayList<>();
+    @Transient
+    private List<XhTlToChucNlq> childrenNlq = new ArrayList<>();
 }
