@@ -245,8 +245,8 @@ public class XhDgBangKeService extends BaseServiceImpl {
         if (statusReq.getTrangThai().equals(Contains.DADUYET_LDCC)) {
             Optional<XhDgPhieuXuatKho> xhDgPhieuXuatKho = xhDgPhieuXuatKhoRepository.findById(optional.get().getIdPhieuXuatKho());
             if (xhDgPhieuXuatKho.isPresent()) {
-                xhDgPhieuXuatKho.get().setSoBangKeCh(optional.get().getSoBangKe());
-                xhDgPhieuXuatKho.get().setIdBangKeCh(optional.get().getId());
+                xhDgPhieuXuatKho.get().setSoBangKeHang(optional.get().getSoBangKe());
+                xhDgPhieuXuatKho.get().setIdBangKeHang(optional.get().getId());
                 xhDgPhieuXuatKhoRepository.save(xhDgPhieuXuatKho.get());
             }
         }

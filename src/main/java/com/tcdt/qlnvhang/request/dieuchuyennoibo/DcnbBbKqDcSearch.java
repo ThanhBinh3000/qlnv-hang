@@ -17,4 +17,5 @@ public class DcnbBbKqDcSearch extends BaseRequest {
     private String soQdinhCuc;
     private LocalDate tuNgay;
     private LocalDate denNgay;
+    private Long bbThuaThieuHdrId;
 }

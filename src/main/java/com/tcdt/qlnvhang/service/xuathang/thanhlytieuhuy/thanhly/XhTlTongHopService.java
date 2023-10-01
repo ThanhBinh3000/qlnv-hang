@@ -35,6 +35,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class XhTlTongHopService extends BaseServiceImpl {
@@ -67,13 +68,13 @@ public class XhTlTongHopService extends BaseServiceImpl {
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<XhTlTongHopHdr> search = xhTlTongHopHdrRepository.searchPage(req, pageable);
 
+    List<Long> idsList = search.getContent().stream().map(XhTlTongHopHdr::getId).collect(Collectors.toList());
+    HashMap<Long, List<XhTlTongHopDtl>> dataChilren = getDataChilren(idsList);
     //set label
-    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-    Map<String, String> mapVthh = getListDanhMucHangHoa();
     search.getContent().forEach(s -> {
-    s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
-    s.setTenDvi(mapDmucDvi.containsKey(s.getMaDvi()) ? mapDmucDvi.get(s.getMaDvi()) : null);
+      s.setChildren(dataChilren.get(s.getId()));
     });
+
     return search;
   }
 

@@ -28,14 +28,13 @@ public class XhQdPdKhBttHdrReq extends BaseRequest {
     private String loaiHinhNx;
     private String kieuNx;
     private String tchuanCluong;
-    private Boolean lastest;
+    private Integer lastest;
     private Integer slDviTsan;
-    private String slHdongDaKy;
     private String phanLoai;
     private String trangThai;
+    private List<XhQdPdKhBttDtlReq> children;
     private List<FileDinhKemReq> canCuPhapLy = new ArrayList<>();
     private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();
-    private List<XhQdPdKhBttDtlReq> children;
     private LocalDate ngayKyQdTu;
     private LocalDate ngayKyQdDen;
     private String dvql;

@@ -94,6 +94,10 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
         thopDtl.setDonViTinh(s1.getDonViTinh());
         thopDtl.setMapDmucDvi(mapDmucDvi);
         thopDtl.setMapVthh(mapVthh);
+        thopDtl.setSoLuongNhuCauXuat(s1.getSoLuongNhuCauXuat());
+        thopDtl.setSoLuongChuyenCapThoc(s1.getSoLuongChuyenCapThoc());
+        thopDtl.setSoLuongConThieu(s1.getSoLuongConThieu());
+        thopDtl.setNgayKetThuc(s.getNgayKetThuc());
         thopDtls.add(thopDtl);
       });
     });

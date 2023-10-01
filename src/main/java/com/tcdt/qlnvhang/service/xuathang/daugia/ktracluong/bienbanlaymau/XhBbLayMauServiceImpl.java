@@ -235,7 +235,7 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl {
         }
         data.setTrangThai(statusReq.getTrangThai());
         XhBbLayMau created = xhBbLayMauRepository.save(data);
-        return data;
+        return created;
     }
 
     public void export(CustomUserDetails currentUser, XhBbLayMauRequest req, HttpServletResponse response) throws Exception {
