@@ -218,6 +218,9 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
                 hdr.setNgayKy(LocalDate.now());
                 hdr.setTrangThaiDg(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
                 break;
+            case Contains.HOANTHANHCAPNHAT + Contains.BAN_HANH:
+                hdr.setTrangThaiDg(NhapXuatHangTrangThaiEnum.HOANTHANHCAPNHAT.getId());
+                break;
             case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
             case Contains.CHODUYET_LDTC + Contains.TUCHOI_LDTC:
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
