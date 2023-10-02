@@ -60,18 +60,19 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
     public Page<QuyChuanQuocGiaHdr> searchPage(SearchQuyChuanQgReq objReq) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         objReq.setMaDvi(userInfo.getDvql());
-        System.out.println(userInfo.getUserType() + "2322222222222222222");
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<QuyChuanQuocGiaHdr> data = quyChuanQuocGiaHdrRepository.search(objReq, pageable);
         Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
         List<Long> idsHdr = data.getContent().stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList());
         List<QuyChuanQuocGiaDtl> allByIdHdrIn = quyChuanQuocGiaDtlRepository.findAllByIdHdrIn(idsHdr);
+        Map<String, String> listDanhMucDvi = getListDanhMucDvi("0", null, "01");
         Map<Long, List<QuyChuanQuocGiaDtl>> mapDtl = allByIdHdrIn.stream()
                 .collect(Collectors.groupingBy(QuyChuanQuocGiaDtl::getIdHdr));
         data.getContent().forEach(f -> {
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
+            f.setTenBn(listDanhMucDvi.get(f.getMaBn()));
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenTrangThaiHl(f.getTrangThaiHl().equals(Contains.CON_HIEU_LUC) ? "Còn hiệu lực" : (f.getTrangThaiHl().equals(Contains.HET_HIEU_LUC) ? "Hết hiệu lực" : "Chưa có hiệu lực"));
             f.setTieuChuanKyThuat(mapDtl.get(f.getId()));
