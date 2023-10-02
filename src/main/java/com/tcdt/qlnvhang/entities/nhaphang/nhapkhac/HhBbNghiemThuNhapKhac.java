@@ -82,9 +82,9 @@ public class HhBbNghiemThuNhapKhac {
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     @Transient
-    private List<HhBbNghiemThuNhapKhacDtl> dviChuDongThucHien =new ArrayList<>();
-    @Transient
-    private List<HhBbNghiemThuNhapKhacDtl> dmTongCucPdTruocThucHien =new ArrayList<>();
+    private List<HhBbNghiemThuNhapKhacDtl> children =new ArrayList<>();
+//    @Transient
+//    private List<HhBbNghiemThuNhapKhacDtl> dmTongCucPdTruocThucHien =new ArrayList<>();
     @Transient
     private HhNkPhieuKtcl phieuKtcl;
 
