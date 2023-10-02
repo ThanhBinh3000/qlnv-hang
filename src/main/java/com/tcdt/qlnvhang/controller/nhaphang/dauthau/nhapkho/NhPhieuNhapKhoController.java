@@ -117,7 +117,7 @@ public class NhPhieuNhapKhoController {
     public ResponseEntity<BaseResponse> search(@Valid @RequestBody NhPhieuNhapKhoReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(nhPhieuNhapKhoService.searchPage(req));
+            resp.setData(nhPhieuNhapKhoService.timKiem(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -164,12 +164,11 @@ public class NhPhieuNhapKhoController {
     }
 
     @ApiOperation(value = "Export lương thực", response = List.class)
-    @PostMapping(value = "/export/list", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody NhPhieuNhapKhoSearchReq req) {
-
+    public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody NhPhieuNhapKhoReq req) {
         try {
-//            nhPhieuNhapKhoService.exportToExcel(req, response);
+            nhPhieuNhapKhoService.exportToExcel(req, response);
         } catch (Exception e) {
             log.error("Error can not export", e);
         }

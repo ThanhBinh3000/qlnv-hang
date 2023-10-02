@@ -161,4 +161,7 @@ public class NhQdGiaoNvuNhapxuatHdr implements Serializable {
 	private List<FileDinhKem> fileDinhKems;
 	@Transient
 	private List<FileDinhKem> fileCanCu;
+
+	@Transient
+	private NhQdGiaoNvuNhapxuatDtl detail;
 }

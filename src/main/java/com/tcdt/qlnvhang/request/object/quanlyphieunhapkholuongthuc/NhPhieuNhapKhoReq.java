@@ -34,9 +34,10 @@ public class NhPhieuNhapKhoReq extends BaseRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
     private Date thoiGianGiaoNhan;
 
-
-
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
+    Date tuNgayNk;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_FULL_STR)
+    Date denNgayNk;
     private Long qdgnvnxId;
 
     private List<NhPhieuNhapKhoCtReq> hangHoaList = new ArrayList<>();
