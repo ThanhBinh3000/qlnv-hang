@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface HhBbNghiemThuNhapKhacDtlRepository extends JpaRepository<HhBbNghiemThuNhapKhacDtl, Long> {
     List<HhBbNghiemThuNhapKhacDtl> findAllByIdHdr (Long ids);
+    void deleteAllByIdHdr (Long ids);
 }
