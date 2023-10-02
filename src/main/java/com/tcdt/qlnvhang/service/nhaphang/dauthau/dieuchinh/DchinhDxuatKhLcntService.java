@@ -387,7 +387,10 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 				throw new Exception("Phê duyệt không thành công");
 			}
 		} else {
-			if ((Contains.BAN_HANH + Contains.DA_LAP).equals(status)) {
+			if ((Contains.CHODUYET_LDV + Contains.DA_LAP).equals(status)) {
+				optional.get().setNguoiGuiDuyetId(getUser().getId());
+				optional.get().setNgayGuiDuyet(getDateTimeNow());
+			} else if ((Contains.BAN_HANH + Contains.CHODUYET_LDV).equals(status)) {
 				optional.get().setNguoiPduyetId(getUser().getId());
 				optional.get().setNgayPduyet(getDateTimeNow());
 			} else {
@@ -396,8 +399,8 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		}
 		optional.get().setTrangThai(stReq.getTrangThai());
 		hdrRepository.save(optional.get());
-		if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
-//			this.updateDataQdGoc(optional.get());
+		if (stReq.getTrangThai().equals(Contains.BAN_HANH) && !optional.get().getLoaiVthh().startsWith("02")) {
+			this.updateDataQdGoc(optional.get());
 		}
 		return optional.get();
 	}
@@ -405,49 +408,26 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 	private void updateDataQdGoc(HhDchinhDxKhLcntHdr qdDieuChinh) throws Exception {
 		HhQdKhlcntHdr hdr = hhQdKhlcntHdrService.detail(qdDieuChinh.getIdQdGoc().toString());
 		HhDchinhDxKhLcntHdr dchinh = detail(qdDieuChinh.getId().toString());
-		BeanUtils.copyProperties(dchinh,hdr,"id","soQd");
+		BeanUtils.copyProperties(dchinh, hdr, "id", "soQd");
 		hhQdKhlcntHdrRepository.save(hdr);
 		hhQdKhlcntDtlRepository.deleteAllByIdQdHdr(hdr.getId());
-		//Is vật tư
-		if(hdr.getLoaiVthh().startsWith("02")){
+		for (HhDchinhDxKhLcntDtl dtl : dchinh.getChildren()) {
 			HhQdKhlcntDtl qdDtl = new HhQdKhlcntDtl();
+			BeanUtils.copyProperties(dtl, qdDtl, "id");
 			qdDtl.setIdQdHdr(hdr.getId());
-			qdDtl.setMaDvi(getUser().getDvql());
 			hhQdKhlcntDtlRepository.save(qdDtl);
-			if (dchinh.getChildren().get(0).getChildren() != null && dchinh.getChildren().get(0).getChildren().size() > 0) {
-				for (HhDchinhDxKhLcntDsgthau dsgThau : dchinh.getChildren().get(0).getChildren()){
+			if (dtl.getChildren() != null && dtl.getChildren().size() > 0) {
+				for (HhDchinhDxKhLcntDsgthau dsgThau : dtl.getChildren()) {
 					HhQdKhlcntDsgthau gThau = new HhQdKhlcntDsgthau();
-					BeanUtils.copyProperties(dsgThau,gThau,"id");
+					BeanUtils.copyProperties(dsgThau, gThau, "id");
 					gThau.setIdQdDtl(qdDtl.getId());
 					gThau.setTrangThai(Contains.CHUATAO_QD);
 					hhQdKhlcntDsgthauRepository.save(gThau);
-					for (HhDchinhDxKhLcntDsgthauCtiet dsDdNhap : dsgThau.getChildren()){
+					for (HhDchinhDxKhLcntDsgthauCtiet dsDdNhap : dsgThau.getChildren()) {
 						HhQdKhlcntDsgthauCtiet ddNhap = new HhQdKhlcntDsgthauCtiet();
-						BeanUtils.copyProperties(dsDdNhap,ddNhap,"id");
+						BeanUtils.copyProperties(dsDdNhap, ddNhap, "id");
 						ddNhap.setIdGoiThau(gThau.getId());
 						hhQdKhlcntDsgthauCtietRepository.save(ddNhap);
-					}
-				}
-			}
-		}else{
-			for(HhDchinhDxKhLcntDtl dtl : dchinh.getChildren()){
-				HhQdKhlcntDtl qdDtl = new HhQdKhlcntDtl();
-				BeanUtils.copyProperties(dtl,qdDtl,"id");
-				qdDtl.setIdQdHdr(hdr.getId());
-				hhQdKhlcntDtlRepository.save(qdDtl);
-				if (dtl.getChildren() != null && dtl.getChildren().size() > 0) {
-					for (HhDchinhDxKhLcntDsgthau dsgThau : dtl.getChildren()){
-						HhQdKhlcntDsgthau gThau = new HhQdKhlcntDsgthau();
-						BeanUtils.copyProperties(dsgThau,gThau,"id");
-						gThau.setIdQdDtl(qdDtl.getId());
-						gThau.setTrangThai(Contains.CHUATAO_QD);
-						hhQdKhlcntDsgthauRepository.save(gThau);
-						for (HhDchinhDxKhLcntDsgthauCtiet dsDdNhap : dsgThau.getChildren()){
-							HhQdKhlcntDsgthauCtiet ddNhap = new HhQdKhlcntDsgthauCtiet();
-							BeanUtils.copyProperties(dsDdNhap,ddNhap,"id");
-							ddNhap.setIdGoiThau(gThau.getId());
-							hhQdKhlcntDsgthauCtietRepository.save(ddNhap);
-						}
 					}
 				}
 			}
