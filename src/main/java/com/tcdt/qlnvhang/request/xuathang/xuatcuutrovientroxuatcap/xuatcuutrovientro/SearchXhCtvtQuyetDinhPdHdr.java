@@ -26,6 +26,7 @@ public class SearchXhCtvtQuyetDinhPdHdr extends BaseRequest {
     private LocalDate ngayKetThucDxDen;
     private String trangThai;
     private String type;
+    private List<String> types = new ArrayList<>();
     private Boolean xuatCap;
 
     //dung cho chuc nang danh sach cua man hình chon
