@@ -140,6 +140,7 @@ public class HhDxuatKhLcntHdrReq {
 
 	String diaChiDvi;
 	BigDecimal donGiaVat;
+	BigDecimal thueVat;
 	String tenDviCha;
 	String maDviLapDx;
 	Integer quy;
