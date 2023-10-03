@@ -1,15 +1,23 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieunhapkho;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatDtl;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNxDdiem;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.repository.HhBbNghiemthuKlstRepository;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHangRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoCtRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoRepository;
+import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatDtlRepository;
+import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
+import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNxDdiemRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.nhapkho.NhPhieuNhapKhoPreview;
 import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCtReq;
 import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoReq;
@@ -17,6 +25,7 @@ import com.tcdt.qlnvhang.request.object.sokho.LkPhieuNhapKhoReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.phieukiemtracl.NhPhieuKtChatLuongService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.HhQdPduyetKqlcntHdr;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
@@ -24,6 +33,7 @@ import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
@@ -41,8 +51,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -61,10 +75,67 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
     private NhBangKeCanHangRepository nhBangKeCanHangRepository;
 
     @Autowired
+    private HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
+
+    @Autowired
+    private HhQdGiaoNvuNhapxuatDtlRepository hhQdGiaoNvuNhapxuatDtlRepository;
+
+    @Autowired
+    private HhQdGiaoNvuNxDdiemRepository hhQdGiaoNvuNxDdiemRepository;
+
+    @Autowired
+    private HhBbNghiemthuKlstRepository hhBbNghiemthuKlstRepository;
+
+    @Autowired
+    private NhPhieuKtChatLuongService nhPhieuKtChatLuongService;
+
+    @Autowired
     private FileDinhKemService fileDinhKemService;
 
     @Override
-    public Page<NhPhieuNhapKho> searchPage(NhPhieuNhapKhoReq req){
+    public Page<NhQdGiaoNvuNhapxuatHdr> timKiem(NhPhieuNhapKhoReq req) throws Exception {
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null) throw new Exception("Bad request.");
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
+                req.getPaggingReq().getLimit(), Sort.by("id").descending());
+        Page<NhQdGiaoNvuNhapxuatHdr> data = null;
+        req.setMaDvi(userInfo.getDvql());
+        if (userInfo.getCapDvi().equalsIgnoreCase(Contains.CAP_CHI_CUC)) {
+            data = hhQdGiaoNvuNhapxuatRepository.selectPnkChiCuc(req, pageable);
+        } else {
+            data = hhQdGiaoNvuNhapxuatRepository.selectPnkCuc(req, pageable);
+        }
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
+        data.getContent().forEach(f -> {
+            f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+            List<NhQdGiaoNvuNhapxuatDtl> nhQdGiaoNvuNhapxuatDtl = hhQdGiaoNvuNhapxuatDtlRepository.findAllByIdHdr(f.getId());
+            for (NhQdGiaoNvuNhapxuatDtl dtl : nhQdGiaoNvuNhapxuatDtl) {
+                dtl.setTenDvi(mapDmucDvi.get(dtl.getMaDvi()));
+                List<NhQdGiaoNvuNxDdiem> allByIdCt = hhQdGiaoNvuNxDdiemRepository.findAllByIdCt(dtl.getId());
+                allByIdCt.forEach(item->{
+                    item.setTenCuc(mapDmucDvi.get(item.getMaCuc()));
+                    item.setTenChiCuc(mapDmucDvi.get(item.getMaChiCuc()));
+                    item.setTenDiemKho(mapDmucDvi.get(item.getMaDiemKho()));
+                    item.setTenNhaKho(mapDmucDvi.get(item.getMaNhaKho()));
+                    item.setTenNganKho(mapDmucDvi.get(item.getMaNganKho()));
+                    item.setTenLoKho(mapDmucDvi.get(item.getMaLoKho()));
+                    item.setListPhieuNhapKho(findAllByIdDdiemGiaoNvNh(item.getId()));
+                    List<HhBbNghiemthuKlstHdr> hhBbNghiemthuKlstHdrList = hhBbNghiemthuKlstRepository.findByIdDdiemGiaoNvNh(item.getId());
+                    hhBbNghiemthuKlstHdrList.forEach(i -> {
+                        i.setTenThuKho(ObjectUtils.isEmpty(i.getIdThuKho()) ? null : userInfoRepository.findById(i.getIdThuKho()).get().getFullName());
+                    });
+                    item.setListBbNtbqld(hhBbNghiemthuKlstHdrList);
+                    item.setListPhieuKtraCl(nhPhieuKtChatLuongService.findAllByIdDdiemGiaoNvNh(item.getId()));
+                });
+                dtl.setChildren(allByIdCt);
+            }
+            f.setDtlList(nhQdGiaoNvuNhapxuatDtl);
+        });
+        return data;
+    }
+
+    @Override
+    public Page<NhPhieuNhapKho> searchPage(NhPhieuNhapKhoReq req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),req.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<NhPhieuNhapKho> pages = nhPhieuNhapKhoRepository.selectPage(req.getSoPhieu(),req.getNam(), req.getMaDvi(),req.getLoaiVthh(),req.getCloaiVthh(),req.getMaDiemKho(),req.getMaNhaKho(),req.getMaNganKho(),req.getMaLoKho(),pageable);
         Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
@@ -411,38 +482,93 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
 //        return true;
 //    }
 //
-//    @Override
-//    public boolean exportToExcel(NhPhieuNhapKhoSearchReq objReq, HttpServletResponse response) throws Exception {
-//        UserInfo userInfo = UserUtils.getUserInfo();
-//        this.prepareSearchReq(objReq, userInfo, objReq.getCapDvis(), objReq.getTrangThais());
-//        objReq.setPaggingReq(new PaggingReq(Integer.MAX_VALUE, 0));
-//        List<NhPhieuNhapKhoRes> list = this.search(objReq).get().collect(Collectors.toList());
-//
-//        if (CollectionUtils.isEmpty(list))
-//            return true;
-//
-//        String[] rowsName = new String[] { STT, SO_PHIEU, SO_QUYET_DINH_NHAP, NGAY_NHAP_KHO,
-//                DIEM_KHO, NHA_KHO, NGAN_KHO, NGAN_LO, TRANG_THAI};
-//        String filename = "Danh_sach_phieu_nhap_kho.xlsx";
-//
-//        List<Object[]> dataList = new ArrayList<Object[]>();
-//        Object[] objs = null;
-//
-//        try {
-//            for (int i = 0; i < list.size(); i++) {
-//                NhPhieuNhapKhoRes item = list.get(i);
-//                objs = new Object[rowsName.length];
-//                objs[0] = i;
-//                objs[1] = item.getSoPhieu();
-//                objs[2] = item.getSoQuyetDinhNhap();
-//                objs[3] = LocalDateTimeUtils.localDateToString(item.getNgayNhapKho());
-//                objs[4] = item.getTenDiemKho();
-//                objs[5] = item.getTenNhaKho();
-//                objs[6] = item.getTenNganKho();
-//                objs[7] = item.getTenNganLo();
-//                objs[8] = NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai());
-//                dataList.add(objs);
-//            }
+    @Override
+    public void exportToExcel(NhPhieuNhapKhoReq objReq, HttpServletResponse response) throws Exception {
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null) throw new Exception("Bad request.");
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        objReq.setPaggingReq(paggingReq);
+        Page<NhQdGiaoNvuNhapxuatHdr> page = timKiem(objReq);
+        List<NhQdGiaoNvuNhapxuatHdr> data = page.getContent();
+        data.forEach(item -> {
+            if (userInfo.getCapDvi().equalsIgnoreCase(Contains.CAP_CHI_CUC)) {
+                item.setDetail(item.getDtlList().stream().filter(i -> i.getMaDvi().equals(userInfo.getDvql())).findFirst().get());
+            } else {
+                NhQdGiaoNvuNhapxuatDtl dtl = new NhQdGiaoNvuNhapxuatDtl();
+                List<NhQdGiaoNvuNxDdiem> children = new ArrayList<>();
+                item.getDtlList().forEach(i -> {
+                    children.addAll(i.getChildren());
+                });
+                dtl.setChildren(children);
+                item.setDetail(dtl);
+            }
+        });
+        data.forEach(item -> {
+            item.getDetail().getChildren().forEach(diaDiem -> {
+                List<String> soBbNtbqld = new ArrayList<>();
+                diaDiem.getListBbNtbqld().forEach(z -> {
+                    soBbNtbqld.add(z.getSoBbNtBq());
+                });
+                diaDiem.setSoBbNtbqld(String.join(", ", soBbNtbqld));
+                diaDiem.getListPhieuNhapKho().forEach(k -> {
+                    k.setPhieuKiemTraCl(diaDiem.getListPhieuKtraCl().stream().filter(y -> y.getSoPhieu().equals(k.getSoPhieuKtraCl())).collect(Collectors.toList()).get(0));
+                });
+            });
+        });
+        String filename = "Danh_sach_phieu_nhap_kho.xlsx";
+        String title = "Danh sách phiếu nhập kho";
+        String[] rowsName;
+        if (objReq.getLoaiVthh().startsWith("02")) {
+            rowsName = new String[]{"STT", "Số kế hoạch/ tờ trình", "Năm kế hoạch", "Ngày lập KH", "Ngày duyệt KH", "Số QĐ giao chỉ tiêu", "Loại hàng hóa",
+                    "Tổng số gói thầu", "Số gói thầu đã trúng", "SL HĐ đã ký", "Số QĐ duyệt KHLCNT", "Thời hạn thực hiện dự án", "Trạng thái đề xuất"};
+        } else {
+            rowsName = new String[]{"STT", "Số QĐ giao NVNH", "Năm KH", "Thời hạn NH", "Điểm kho", "Ngăn/Lô kho", "BB NTBQLĐ",
+                    "Số phiếu nhập kho", "Ngày nhập kho", "Số phiếu KTCL", "Ngày giám định", "Trạng thái"};
+        }
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        Object[] objsb = null;
+        Object[] objsc = null;
+        for (int i = 0; i < data.size(); i++) {
+            NhQdGiaoNvuNhapxuatHdr qd = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = qd.getSoQd();
+            objs[2] = qd.getNamNhap();
+            objs[3] = convertDate(qd.getTgianNkho());
+            dataList.add(objs);
+            for (int j = 0; j < qd.getDetail().getChildren().size(); j++) {
+                objsb = new Object[rowsName.length];
+                objsb[4] = qd.getDetail().getChildren().get(j).getTenDiemKho();
+                objsb[5] = qd.getDetail().getChildren().get(j).getTenLoKho() != null ?
+                        qd.getDetail().getChildren().get(j).getTenLoKho() + " - " + qd.getDetail().getChildren().get(j).getTenNganKho()
+                        : qd.getDetail().getChildren().get(j).getTenNganKho();
+                if (!objReq.getLoaiVthh().startsWith("02")) {
+                    objsb[6] = qd.getDetail().getChildren().get(j).getSoBbNtbqld();
+                }
+                dataList.add(objsb);
+                for (int k = 0; k < qd.getDetail().getChildren().get(j).getListPhieuNhapKho().size(); k++) {
+                    objsc = new Object[rowsName.length];
+                    objsc[7] = qd.getDetail().getChildren().get(j).getListPhieuNhapKho().get(k).getSoPhieuNhapKho();
+                    objsc[8] = convertDate(qd.getDetail().getChildren().get(j).getListPhieuNhapKho().get(k).getNgayTao());
+                    if (objReq.getLoaiVthh().startsWith("02")) {
+                        objsc[9] = qd.getDetail().getChildren().get(j).getListPhieuNhapKho().get(k).getSoBienBanGuiHang();
+                        objsc[10] = qd.getDetail().getChildren().get(j).getBienBanGuiHang().getNgayTao();
+                    } else {
+                        objsc[9] = qd.getDetail().getChildren().get(j).getListPhieuNhapKho().get(k).getSoPhieuKtraCl();
+                        DateTimeFormatter df = DateTimeFormatter.ofPattern(Contains.FORMAT_DATE);
+                        objsc[10] = df.format(qd.getDetail().getChildren().get(j).getListPhieuNhapKho().get(k).getPhieuKiemTraCl().getNgayGdinh());
+                    }
+                    objsc[11] = qd.getDetail().getChildren().get(j).getListPhieuNhapKho().get(k).getTenTrangThai();
+                    dataList.add(objsc);
+                }
+            }
+        }
+        ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+        ex.export();
+    }
 //
 //            ExportExcel ex = new ExportExcel(SHEET_PHIEU_NHAP_KHO, filename, rowsName, dataList, response);
 //            ex.export();

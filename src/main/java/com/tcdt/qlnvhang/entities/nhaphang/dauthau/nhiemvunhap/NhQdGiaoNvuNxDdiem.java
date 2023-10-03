@@ -106,4 +106,7 @@ public class NhQdGiaoNvuNxDdiem implements Serializable {
 	List<NhBangKeVt> listBangKeVt;
 	@Transient
 	List<HhBbNghiemthuKlstHdr> listBbNtbqld;
+
+	@Transient
+	String soBbNtbqld;
 }

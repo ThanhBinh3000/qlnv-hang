@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.nhaphang.nhapkhac.impl;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstDtl;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhBbNghiemThuNhapKhac;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhBbNghiemThuNhapKhacDtl;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhNkPhieuKtcl;
@@ -15,6 +16,9 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhBbNghiemThuNhapKhacReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhBbNghiemThuNhapKhacSearch;
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhBbanNghiemThuDtlReq;
+import com.tcdt.qlnvhang.request.object.HhBbNghiemthuKlstDtlReq;
+import com.tcdt.qlnvhang.request.object.HhBbNghiemthuKlstHdrReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -23,6 +27,7 @@ import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.khotang.KtNganKho;
 import com.tcdt.qlnvhang.table.khotang.KtNganLo;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBbanNghiemThuDtl;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -163,8 +168,9 @@ public class HhBbNghiemThuNhapKhacServiceImpl extends BaseServiceImpl implements
         qOptional.get().setTenLoKho(StringUtils.isEmpty(qOptional.get().getMaLoKho()) ? null : mapDmucDvi.get(qOptional.get().getMaLoKho()));
         qOptional.get().setFileDinhKems(fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhBbNghiemThuNhapKhac.TABLE_NAME)));
         List<HhBbNghiemThuNhapKhacDtl> listDtl = hhBbNghiemThuNhapKhacDtlRepository.findAllByIdHdr(qOptional.get().getId());
-        qOptional.get().setDviChuDongThucHien(listDtl.stream().filter(item -> item.getType().equals(Contains.CHU_DONG)).collect(Collectors.toList()));
-        qOptional.get().setDmTongCucPdTruocThucHien(listDtl.stream().filter(item -> item.getType().equals(Contains.PHE_DUYET_TRUOC)).collect(Collectors.toList()));
+        qOptional.get().setChildren(hhBbNghiemThuNhapKhacDtlRepository.findAllByIdHdr(qOptional.get().getId()));
+//        qOptional.get().setDviChuDongThucHien(listDtl.stream().filter(item -> item.getType().equals(Contains.CHU_DONG)).collect(Collectors.toList()));
+//        qOptional.get().setDmTongCucPdTruocThucHien(listDtl.stream().filter(item -> item.getType().equals(Contains.PHE_DUYET_TRUOC)).collect(Collectors.toList()));
         return qOptional.get();
     }
 
@@ -342,27 +348,39 @@ public class HhBbNghiemThuNhapKhacServiceImpl extends BaseServiceImpl implements
     }
 
     private void luuChiTiet(HhBbNghiemThuNhapKhacReq objReq, HhBbNghiemThuNhapKhac created) {
-        if (objReq.getDviChuDongThucHien() != null) {
-            AtomicReference<BigDecimal> tongKinhPhiThucTe = new AtomicReference<>(BigDecimal.ZERO);
-            objReq.getDviChuDongThucHien().forEach(i -> {
-                HhBbNghiemThuNhapKhacDtl dtl = ObjectMapperUtils.map(i, HhBbNghiemThuNhapKhacDtl.class);
-                dtl.setIdHdr(created.getId());
-                dtl.setType(Contains.CHU_DONG);
-                tongKinhPhiThucTe.updateAndGet(v -> v.add(i.getTongGiaTri()));
-                hhBbNghiemThuNhapKhacDtlRepository.save(dtl);
-            });
-            created.setTongKinhPhiThucTe(tongKinhPhiThucTe.get());
-        }
-        if (objReq.getDmTongCucPdTruocThucHien() != null) {
-            AtomicReference<BigDecimal> tongKinhPhiThucTe = new AtomicReference<>(BigDecimal.ZERO);
-            objReq.getDmTongCucPdTruocThucHien().forEach(i -> {
-                HhBbNghiemThuNhapKhacDtl dtl = ObjectMapperUtils.map(i, HhBbNghiemThuNhapKhacDtl.class);
-                dtl.setIdHdr(created.getId());
-                dtl.setType(Contains.PHE_DUYET_TRUOC);
-                tongKinhPhiThucTe.updateAndGet(v -> v.add(i.getTongGiaTri()));
-                hhBbNghiemThuNhapKhacDtlRepository.save(dtl);
-            });
-            created.setTongKinhPhiGiao(tongKinhPhiThucTe.get());
+//        if (objReq.getDviChuDongThucHien() != null) {
+//            AtomicReference<BigDecimal> tongKinhPhiThucTe = new AtomicReference<>(BigDecimal.ZERO);
+//            objReq.getDviChuDongThucHien().forEach(i -> {
+//                HhBbNghiemThuNhapKhacDtl dtl = ObjectMapperUtils.map(i, HhBbNghiemThuNhapKhacDtl.class);
+//                dtl.setIdHdr(created.getId());
+//                dtl.setType(Contains.CHU_DONG);
+//                tongKinhPhiThucTe.updateAndGet(v -> v.add(i.getTongGiaTri()));
+//                hhBbNghiemThuNhapKhacDtlRepository.save(dtl);
+//            });
+//            created.setTongKinhPhiThucTe(tongKinhPhiThucTe.get());
+//        }
+//        if (objReq.getDmTongCucPdTruocThucHien() != null) {
+//            AtomicReference<BigDecimal> tongKinhPhiThucTe = new AtomicReference<>(BigDecimal.ZERO);
+//            objReq.getDmTongCucPdTruocThucHien().forEach(i -> {
+//                HhBbNghiemThuNhapKhacDtl dtl = ObjectMapperUtils.map(i, HhBbNghiemThuNhapKhacDtl.class);
+//                dtl.setIdHdr(created.getId());
+//                dtl.setType(Contains.PHE_DUYET_TRUOC);
+//                tongKinhPhiThucTe.updateAndGet(v -> v.add(i.getTongGiaTri()));
+//                hhBbNghiemThuNhapKhacDtlRepository.save(dtl);
+//            });
+//            created.setTongKinhPhiGiao(tongKinhPhiThucTe.get());
+//        }
+
+
+
+
+        hhBbNghiemThuNhapKhacDtlRepository.deleteAllByIdHdr(objReq.getId());
+        for (HhBbanNghiemThuDtlReq hhBbanNghiemThuDtlReq : objReq.getDetail()) {
+            HhBbNghiemThuNhapKhacDtl ct = new HhBbNghiemThuNhapKhacDtl();
+            BeanUtils.copyProperties(hhBbanNghiemThuDtlReq, ct,"id");
+            ct.setId(null);
+            ct.setIdHdr(created.getId());
+            hhBbNghiemThuNhapKhacDtlRepository.save(ct);
         }
         hhBbNghiemThuNhapKhacRepository.save(created);
     }
