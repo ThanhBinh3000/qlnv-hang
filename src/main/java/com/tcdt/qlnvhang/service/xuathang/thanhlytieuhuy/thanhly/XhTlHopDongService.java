@@ -6,7 +6,9 @@ import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlHopDongHdrReq;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBienBanDayKhoHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlHopDongDtl;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlHopDongHdr;
@@ -36,9 +38,10 @@ public class XhTlHopDongService extends BaseServiceImpl {
     private XhTlHopDongHdrRepository xhTlHopDongHdrRepository;
     @Autowired
     private XhTlQuyetDinhPdKqHdrRepository xhTlQuyetDinhPdKqHdrRepository;
-
     @Autowired
     private XhTlToChucDtlRepository xhTlToChucDtlRepository;
+    @Autowired
+    private XhTlDanhSachService xhTlDanhSachService;
 
     public Page<XhTlHopDongHdr> searchPage(CustomUserDetails currentUser, XhTlHopDongHdrReq req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -61,13 +64,13 @@ public class XhTlHopDongService extends BaseServiceImpl {
 
     public List<XhTlHopDongHdr> searchAll(XhTlHopDongHdrReq req) throws Exception {
         List<XhTlHopDongHdr> search = xhTlHopDongHdrRepository.searchAll(req);
-//        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-//        Map<String, String> mapVthh = getListDanhMucHangHoa();
-//        search.forEach(f -> {
-//            f.setMapDmucDvi(mapDmucDvi);
-//            f.setMapVthh(mapVthh);
-//            f.setTrangThai(f.getTrangThai());
-//        });
+        return search;
+    }
+
+    public List<XhTlHopDongHdr> dsTaoQdGiaoNvxh(XhTlHopDongHdrReq req) throws Exception {
+        UserInfo userInfo = SecurityContextService.getUser();
+        req.setMaDvi(userInfo.getDvql());
+        List<XhTlHopDongHdr> search = xhTlHopDongHdrRepository.dsTaoQdGiaoNvXh(req);
         return search;
     }
 
@@ -167,6 +170,15 @@ public class XhTlHopDongService extends BaseServiceImpl {
             data.setTrangThaiXh(data.getTrangThaiXh());
             data.setTenLoaiHinhNx(StringUtils.isEmpty(data.getLoaiHinhNx()) ? null : mapLoaiHinhNx.get(data.getLoaiHinhNx()));
             data.setTenKieuNx(StringUtils.isEmpty(data.getKieuNx()) ? null : mapKieuNx.get(data.getKieuNx()));
+            List<XhTlHopDongDtl> allByIdHdr = dtlRepository.findAllByIdHdr(data.getId());
+            allByIdHdr.forEach(item -> {
+                try {
+                    item.setXhTlDanhSachHdr(xhTlDanhSachService.detail(item.getIdDsHdr()));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            data.setChildren(allByIdHdr);
         });
         return allById;
     }
@@ -175,7 +187,18 @@ public class XhTlHopDongService extends BaseServiceImpl {
     public void delete(IdSearchReq idSearchReq) throws Exception {
         Optional<XhTlHopDongHdr> optional = xhTlHopDongHdrRepository.findById(idSearchReq.getId());
         if (!optional.isPresent()) throw new Exception("Bản ghi không tồn tại");
+
+        Optional<XhTlQuyetDinhPdKqHdr> byId = xhTlQuyetDinhPdKqHdrRepository.findById(optional.get().getIdQdKqTl());
+        List<XhTlToChucDtl> allByIdHdr = xhTlToChucDtlRepository.findAllByIdHdr(byId.get().getIdThongBao());
+        // Loop toàn bộ danh sách hợp đồng dtl trong DB với trường hợp là update
+        allByIdHdr.forEach( item -> {
+            // Find hợp đồng cũ và hợp đồng request save mới
+            item.setIdHopDongTl(null);
+            xhTlToChucDtlRepository.save(item);
+        });
+
         xhTlHopDongHdrRepository.delete(optional.get());
+        dtlRepository.deleteAllByIdHdr(optional.get().getId());
     }
 
     @Transactional

@@ -18,6 +18,7 @@ public class HhDcQdPduyetKhmttDxReq {
     private String soDxuat;
     private Long idDcHdr;
     private String maDvi;
+    private String namKh;
     @Transient
     private String tenDvi;
     private String diaChiDvi;
