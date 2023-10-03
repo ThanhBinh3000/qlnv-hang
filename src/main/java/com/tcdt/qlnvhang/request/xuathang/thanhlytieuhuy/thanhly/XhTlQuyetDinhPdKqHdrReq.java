@@ -47,4 +47,7 @@ public class XhTlQuyetDinhPdKqHdrReq extends BaseRequest {
     private List<FileDinhKemJoinTable> fileDinhKem;
     private List<FileDinhKemJoinTable> canCu;
     private String dvql;
+
+    //
+    private String maDviSr;
 }

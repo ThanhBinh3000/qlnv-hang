@@ -166,17 +166,7 @@ public class XhTlHopDongHdr extends BaseEntity implements Serializable {
         }
     }
 
-    @OneToMany(mappedBy = "hopDongHdr", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<XhTlHopDongDtl> hopDongDtl = new ArrayList<>();
+    @Transient
+    private List<XhTlHopDongDtl> children = new ArrayList<>();
 
-    public void setHopDongDtl(List<XhTlHopDongDtl> hopDongDtl) {
-        this.getHopDongDtl().clear();
-        if (!DataUtils.isNullOrEmpty(hopDongDtl)) {
-            hopDongDtl.forEach(f -> {
-                f.setId(null);
-                f.setHopDongHdr(this);
-            });
-            this.hopDongDtl.addAll(hopDongDtl);
-        }
-    }
 }

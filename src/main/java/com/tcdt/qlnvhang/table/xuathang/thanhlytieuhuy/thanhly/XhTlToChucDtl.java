@@ -33,6 +33,8 @@ public class XhTlToChucDtl implements Serializable {
 
     private String toChucCaNhan;
 
+    private Long idHopDongTl;
+
     @Transient
     private XhTlDanhSachHdr xhTlDanhSachHdr;
 
