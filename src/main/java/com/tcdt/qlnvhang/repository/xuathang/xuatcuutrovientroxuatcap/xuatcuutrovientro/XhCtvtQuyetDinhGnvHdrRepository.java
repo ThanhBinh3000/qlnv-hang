@@ -28,6 +28,7 @@ public interface XhCtvtQuyetDinhGnvHdrRepository extends JpaRepository<XhCtvtQuy
       "AND (:#{#param.ngayKyDen}  IS NULL OR c.ngayKy <= :#{#param.ngayKyDen}) ) " +
       "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
       "AND (:#{#param.listTrangThaiXh.size() }  = 0 OR c.trangThaiXh in :#{#param.listTrangThaiXh}) " +
+      "AND (:#{#param.types.size() } = 0 OR c.type in :#{#param.types}) " +
 //      "AND (:#{#param.listTrangThai.size() } = 0 OR c.trangThai in :#{#param.listTrangThai}) " +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )

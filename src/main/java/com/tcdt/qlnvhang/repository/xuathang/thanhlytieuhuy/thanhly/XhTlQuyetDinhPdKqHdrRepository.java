@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface XhTlQuyetDinhQdPdRepository extends JpaRepository<XhTlQuyetDinhPdKqHdr, Long> {
+public interface XhTlQuyetDinhPdKqHdrRepository extends JpaRepository<XhTlQuyetDinhPdKqHdr, Long> {
 
     @Query("SELECT c FROM XhTlQuyetDinhPdKqHdr c " +
             " WHERE 1=1 " +
@@ -27,6 +27,23 @@ public interface XhTlQuyetDinhQdPdRepository extends JpaRepository<XhTlQuyetDinh
             "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
     )
     Page<XhTlQuyetDinhPdKqHdr> search(@Param("param") XhTlQuyetDinhPdKqHdrReq param, Pageable pageable);
+
+//    @Query("SELECT qd FROM XhTlQuyetDinhPdKqHdr qd " +
+//            " LEFT JOIN XhTlHopDongHdr hd on qd.id = hd.idQdKqTl " +
+//            " WHERE 1 = 1 " +
+//            " AND qd.id is null " +
+//            " AND (:#{#param.trangThai} IS NULL OR qd.trangThai = :#{#param.trangThai}) " +
+//            " AND (:#{#param.maDviSr} IS NULL OR qd.maDvi = :#{#param.maDviSr}) " +
+//            "ORDER BY qd.ngaySua desc , qd.ngayTao desc, qd.id desc"
+//    )
+//    List<XhTlQuyetDinhPdKqHdr> searchListTaoHopDong(@Param("param") XhTlQuyetDinhPdKqHdrReq req);
+
+    @Query("SELECT c FROM XhTlQuyetDinhPdKqHdr c " +
+            " WHERE 1=1 " +
+            " AND (:#{#param.maDviSr} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDviSr},'%')) " +
+            " AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) "
+    )
+    List<XhTlQuyetDinhPdKqHdr> searchListTaoHopDong(@Param("param") XhTlQuyetDinhPdKqHdrReq param);
 
 
     void deleteAllByIdIn(List<Long> listId);

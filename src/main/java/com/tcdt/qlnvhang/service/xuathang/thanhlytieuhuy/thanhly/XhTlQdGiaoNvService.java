@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly;
 
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlHopDongRepository;
+import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlHopDongHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlQdGiaoNvRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -31,7 +31,7 @@ public class XhTlQdGiaoNvService extends BaseServiceImpl {
     @Autowired
     private XhTlQdGiaoNvRepository xhTlQdGiaoNvRepository;
     @Autowired
-    private XhTlHopDongRepository xhTlHopDongRepository;
+    private XhTlHopDongHdrRepository xhTlHopDongHdrRepository;
 
     public Page<XhTlQdGiaoNvHdr> searchPage(CustomUserDetails currentUser, XhTlQdGiaoNvHdrReq req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -160,11 +160,11 @@ public class XhTlQdGiaoNvService extends BaseServiceImpl {
         }
         data.setTrangThai(statusReq.getTrangThai());
         if (statusReq.getTrangThai().equals(Contains.BAN_HANH)) {
-            Optional<XhTlHopDongHdr> hopDongHdr = xhTlHopDongRepository.findById(data.getIdHopDong());
+            Optional<XhTlHopDongHdr> hopDongHdr = xhTlHopDongHdrRepository.findById(data.getIdHopDong());
             if (hopDongHdr.isPresent()) {
                 hopDongHdr.get().setIdQdNv(data.getId());
                 hopDongHdr.get().setSoQdNv(data.getSoBbQd());
-                xhTlHopDongRepository.save(hopDongHdr.get());
+                xhTlHopDongHdrRepository.save(hopDongHdr.get());
             }
         }
         XhTlQdGiaoNvHdr created = xhTlQdGiaoNvRepository.save(data);

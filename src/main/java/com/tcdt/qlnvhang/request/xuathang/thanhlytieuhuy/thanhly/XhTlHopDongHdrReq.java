@@ -62,5 +62,5 @@ public class XhTlHopDongHdrReq extends BaseRequest {
     private String trangThaiXh;
     private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
     private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
-    private List<XhTlHopDongDtl> hopDongDtl = new ArrayList<>();
+    private List<XhTlHopDongDtl> children = new ArrayList<>();
 }

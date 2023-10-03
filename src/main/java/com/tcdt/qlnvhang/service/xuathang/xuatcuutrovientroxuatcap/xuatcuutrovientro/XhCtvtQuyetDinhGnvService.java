@@ -56,6 +56,9 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
     } else {
       objReq.setMaDviGiao(currentUser.getDvql());
     }
+    if(objReq.getType() != null){
+      objReq.getTypes().add(objReq.getType());
+    }
 
     Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
     Page<XhCtvtQuyetDinhGnvHdr> data = xhCtvtQuyetDinhGnvHdrRepository.search(objReq, pageable);
