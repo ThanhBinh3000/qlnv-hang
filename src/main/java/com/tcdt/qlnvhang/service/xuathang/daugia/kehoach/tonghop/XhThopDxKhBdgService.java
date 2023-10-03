@@ -79,8 +79,10 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
             if (objDonVi != null) {
                 thopDtl.setTenDvi(objDonVi.get("tenDvi").toString());
             }
+            thopDtl.setDiaChi(dxuat.getDiaChi());
             thopDtl.setIdDxHdr(dxuat.getId());
             thopDtl.setSoDxuat(dxuat.getSoDxuat());
+            thopDtl.setNgayTao(dxuat.getNgayTao());
             thopDtl.setNgayPduyet(dxuat.getNgayPduyet());
             thopDtl.setTrichYeu(dxuat.getTrichYeu());
             thopDtl.setSlDviTsan(dxuat.getSlDviTsan());
