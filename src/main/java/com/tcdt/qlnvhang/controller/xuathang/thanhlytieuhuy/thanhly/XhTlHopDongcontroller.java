@@ -67,6 +67,24 @@ public class XhTlHopDongcontroller {
         return ResponseEntity.ok(resp);
     }
 
+    @ApiOperation(value = "Tra cứu", response = List.class)
+    @PostMapping(value = "/ds-tao-qd-giao-nvxh", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> dsTaoQdGiaoNvxh(@RequestBody XhTlHopDongHdrReq req) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(xhTlHopDongService.dsTaoQdGiaoNvxh(req));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu thông tin : {}", e);
+        }
+
+        return ResponseEntity.ok(resp);
+    }
+
     @ApiOperation(value = "Tạo mới", response = List.class)
     @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
