@@ -75,7 +75,32 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             f.setTenBn(listDanhMucDvi.get(f.getMaBn()));
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenTrangThaiHl(f.getTrangThaiHl().equals(Contains.CON_HIEU_LUC) ? "Còn hiệu lực" : (f.getTrangThaiHl().equals(Contains.HET_HIEU_LUC) ? "Hết hiệu lực" : "Chưa có hiệu lực"));
-            f.setTieuChuanKyThuat(mapDtl.get(f.getId()));
+            if (!mapDtl.get(f.getId()).isEmpty()) {
+                Map<String, String> mapTenChiTieu = getListDanhMucChung("CHI_TIEU_CL");
+                if (f.getApDungCloaiVthh() == false) {
+                    for (QuyChuanQuocGiaDtl dtl : mapDtl.get(f.getId())) {
+                        dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh()) ? null : hashMapDmHh.get(dtl.getLoaiVthh()));
+                        dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh()) ? null : hashMapDmHh.get(dtl.getCloaiVthh()));
+                        dtl.setTenChiTieu(mapTenChiTieu.get(dtl.getMaChiTieu()));
+                    }
+                    f.setTieuChuanKyThuat(mapDtl.get(f.getId()));
+                } else {
+                    List<QuyChuanQuocGiaDtl> listQuyChuan = new ArrayList<>();
+                    List<String> listTenChiTieu = mapDtl.get(f.getId()).stream().map(QuyChuanQuocGiaDtl::getTenChiTieu).collect(Collectors.toList());
+                    if (!listTenChiTieu.isEmpty()) {
+                        mapDtl.get(f.getId()).forEach(item -> {
+                            item.setTenChiTieu(mapTenChiTieu.get(item.getMaChiTieu()));
+                            List<String> listStringCompare = listQuyChuan.stream().map(QuyChuanQuocGiaDtl::getTenChiTieu).collect(Collectors.toList());
+                            if (!listStringCompare.contains(item.getTenChiTieu())) {
+                                item.setLoaiVthh(null);
+                                item.setCloaiVthh(null);
+                                listQuyChuan.add(item);
+                            }
+                        });
+                    }
+                    f.setTieuChuanKyThuat(listQuyChuan);
+                }
+            }
         });
         return data;
     }
