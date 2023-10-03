@@ -38,9 +38,10 @@ public class XhTlHopDongService extends BaseServiceImpl {
     private XhTlHopDongHdrRepository xhTlHopDongHdrRepository;
     @Autowired
     private XhTlQuyetDinhPdKqHdrRepository xhTlQuyetDinhPdKqHdrRepository;
-
     @Autowired
     private XhTlToChucDtlRepository xhTlToChucDtlRepository;
+    @Autowired
+    private XhTlDanhSachService xhTlDanhSachService;
 
     public Page<XhTlHopDongHdr> searchPage(CustomUserDetails currentUser, XhTlHopDongHdrReq req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -169,7 +170,15 @@ public class XhTlHopDongService extends BaseServiceImpl {
             data.setTrangThaiXh(data.getTrangThaiXh());
             data.setTenLoaiHinhNx(StringUtils.isEmpty(data.getLoaiHinhNx()) ? null : mapLoaiHinhNx.get(data.getLoaiHinhNx()));
             data.setTenKieuNx(StringUtils.isEmpty(data.getKieuNx()) ? null : mapKieuNx.get(data.getKieuNx()));
-            data.setChildren(dtlRepository.findAllByIdHdr(data.getId()));
+            List<XhTlHopDongDtl> allByIdHdr = dtlRepository.findAllByIdHdr(data.getId());
+            allByIdHdr.forEach(item -> {
+                try {
+                    item.setXhTlDanhSachHdr(xhTlDanhSachService.detail(item.getIdDsHdr()));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            data.setChildren(allByIdHdr);
         });
         return allById;
     }
