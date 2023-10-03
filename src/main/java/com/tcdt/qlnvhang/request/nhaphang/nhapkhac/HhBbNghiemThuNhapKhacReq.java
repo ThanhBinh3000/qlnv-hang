@@ -37,8 +37,7 @@ public class HhBbNghiemThuNhapKhacReq {
     private BigDecimal dinhMucGiao;
     private BigDecimal dinhMucThucTe;
     private List<FileDinhKemReq> fileDinhKems;
-    private List<HhBbanNghiemThuDtlReq> dviChuDongThucHien;
-    private List<HhBbanNghiemThuDtlReq> dmTongCucPdTruocThucHien;
+    private List<HhBbanNghiemThuDtlReq> detail;
 
     private ReportTemplateRequest reportTemplateRequest;
 }
