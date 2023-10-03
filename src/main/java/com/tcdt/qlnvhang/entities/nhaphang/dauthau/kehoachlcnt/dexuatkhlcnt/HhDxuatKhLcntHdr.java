@@ -113,6 +113,7 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String tenHthucLcnt;
 	String diaChiDvi;
 	BigDecimal donGiaVat;
+	BigDecimal thueVat;
 	String dienGiaiTongMucDt;
 	String quyMo;
 	String cviecDaTh;

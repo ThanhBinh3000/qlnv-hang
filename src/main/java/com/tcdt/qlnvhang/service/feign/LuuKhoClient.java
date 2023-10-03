@@ -14,7 +14,7 @@ public interface LuuKhoClient {
 
 	@PostMapping("/hang-trong-kho/synchronizeData")
 	@Headers({ "Accept: application/json; charset=utf-8", "Content-Type: application/x-www-form-urlencoded" })
-	public ResponseEntity<String> synchronizeData(@RequestBody PhieuNhapXuatHistory objReq);
+	public String synchronizeData(@RequestBody PhieuNhapXuatHistory objReq);
 
 	@PostMapping("/hang-trong-kho/trang-thai-ht")
 	@Headers({ "Accept: application/json; charset=utf-8", "Content-Type: application/x-www-form-urlencoded" })

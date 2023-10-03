@@ -67,7 +67,9 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
       req.setMaDviDx(currentUser.getDvql());
     }
-
+    if(req.getType() != null){
+      req.getTypes().add(req.getType());
+    }
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     System.out.println(req);
     Page<XhCtvtQuyetDinhPdHdr> search = xhCtvtQdPdHdrRepository.search(req, pageable);
