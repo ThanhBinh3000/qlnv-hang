@@ -10,4 +10,6 @@ public class SearchXhTlToChuc extends BaseRequest {
     private Integer nam;
 
     private Long idQdTl;
+
+    private Integer ketQua;
 }

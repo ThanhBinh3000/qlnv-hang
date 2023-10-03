@@ -36,7 +36,8 @@ public interface XhTlToChucHdrRepository extends JpaRepository<XhTlToChucHdr, Lo
             " 1=1 " +
             " AND QD.id is null" +
             " AND (:#{#param.dvql} IS NULL OR TC.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
-            " AND (:#{#param.trangThai} IS NULL OR TC.trangThai = :#{#param.trangThai}) "
+            " AND (:#{#param.trangThai} IS NULL OR TC.trangThai = :#{#param.trangThai}) " +
+            " AND (:#{#param.ketQua} IS NULL OR TC.ketQua = :#{#param.ketQua}) "
     )
     List<XhTlToChucHdr> dsTaoQdPdKq(@Param("param") SearchXhTlToChuc param);
 
