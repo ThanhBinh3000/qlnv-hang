@@ -1,7 +1,10 @@
 package com.tcdt.qlnvhang.repository.xuathang.daugia.xuatkho;
 
 import com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho.XhDgBangKeHdr;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho.XhDgPhieuXuatKho;
 import com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho.SearchXhDgBangKeReq;
+import com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho.XhDgBangKeReq;
+import com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho.XhDgPhieuXuatKhoReq;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,22 +18,26 @@ import java.util.Optional;
 @Repository
 public interface XhDgBangKeHdrRepository extends JpaRepository<XhDgBangKeHdr, Long> {
 
-  @Query("SELECT c FROM XhDgBangKeHdr c WHERE 1=1 " +
-      "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
-      "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
-      "AND (:#{#param.loaiVthh} IS NULL OR c.loaiVthh = :#{#param.loaiVthh}) " +
-      "AND (:#{#param.soQdGiaoNvXh} IS NULL OR LOWER(c.soQdGiaoNvXh) LIKE CONCAT('%',LOWER(:#{#param.soQdGiaoNvXh}),'%')) " +
-      "AND (:#{#param.soPhieuXuatKho} IS NULL OR LOWER(c.soPhieuXuatKho) LIKE CONCAT('%',LOWER(:#{#param.soPhieuXuatKho}),'%')) " +
-      "AND ((:#{#param.ngayXuatTu}  IS NULL OR c.ngayXuat >= :#{#param.ngayXuatTu})" +
-      "AND (:#{#param.ngayXuatDen}  IS NULL OR c.ngayXuat <= :#{#param.ngayXuatDen}) ) " +
-      "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
-      "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
-  )
-  Page<XhDgBangKeHdr> search(@Param("param") SearchXhDgBangKeReq param, Pageable pageable);
 
-  Optional<XhDgBangKeHdr> findBySoBangKe(String str);
 
-  List<XhDgBangKeHdr> findByIdIn(List<Long> ids);
+  @Query("SELECT DISTINCT XK FROM XhDgBangKeHdr XK " +
+          "WHERE (:#{#param.dvql} IS NULL OR XK.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
+          "AND (:#{#param.nam} IS NULL OR XK.nam = :#{#param.nam}) " +
+          "AND (:#{#param.soBangKeHang} IS NULL OR XK.soBangKeHang = :#{#param.soBangKeHang}) " +
+          "AND (:#{#param.soPhieuXuatKho} IS NULL OR XK.soPhieuXuatKho = :#{#param.soPhieuXuatKho}) " +
+          "AND (:#{#param.soQdNv} IS NULL OR XK.soQdNv = :#{#param.soQdNv}) " +
+          "AND (:#{#param.loaiVthh} IS NULL OR XK.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
+          "AND (:#{#param.ngayLapBangKeTu} IS NULL OR XK.ngayLapBangKe >= :#{#param.ngayLapBangKeTu}) " +
+          "AND (:#{#param.ngayLapBangKeDen} IS NULL OR XK.ngayLapBangKe <= :#{#param.ngayLapBangKeDen}) " +
+          "AND (:#{#param.trangThai} IS NULL OR XK.trangThai = :#{#param.trangThai}) " +
+          "ORDER BY XK.ngaySua DESC, XK.ngayTao DESC, XK.id DESC")
+  Page<XhDgBangKeHdr> searchPage(@Param("param") XhDgBangKeReq param, Pageable pageable);
 
-  List<XhDgBangKeHdr> findAllByIdIn(List<Long> idList);
+  boolean existsBySoBangKeHang(String soBangKeHang);
+
+  boolean existsBySoBangKeHangAndIdNot(String soBangKeHang, Long id);
+
+  List<XhDgBangKeHdr> findByIdIn(List<Long> idList);
+
+  List<XhDgBangKeHdr> findAllByIdIn(List<Long> listId);
 }

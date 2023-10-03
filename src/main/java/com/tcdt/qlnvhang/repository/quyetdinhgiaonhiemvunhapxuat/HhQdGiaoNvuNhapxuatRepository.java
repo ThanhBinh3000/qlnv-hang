@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.tcdt.qlnvhang.repository.BaseRepository;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
+import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoReq;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
@@ -157,4 +158,38 @@ public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<NhQdGiaoNv
 	Page<NhQdGiaoNvuNhapxuatHdr> selectPageChiCuc(Long namNhap, String soQd, String loaiVthh, String trichYeu, String tuNgayLP, String denNgayLP, String tuNgayKT, String denNgayKT, String maDvi, String soBbNtBq, String trangThai, String tuNgayGD, String denNgayGD, String kqDanhGia, Pageable pageable);
 
 	List<NhQdGiaoNvuNhapxuatHdr> findAllByLoaiVthhStartsWithAndTrangThaiAndMaDviStartsWith (String loaiVthh, String trangThai, String maDvi);
+
+
+	String SEARCH_PNK = " SELECT NX.ID,NX.SO_QD,NX.MA_DVI,NX.LOAI_QD,NX.TRANG_THAI,NX.NGAY_TAO,NX.NGUOI_TAO,NX.NGAY_SUA,NX.NGUOI_SUA,NX.NGAY_GUI_DUYET,NX.NGUOI_GUI_DUYET,NX.LDO_TUCHOI,NX.NGAY_PDUYET,NX.NGUOI_PDUYET,NX.GHI_CHU,NX.CAP_DVI,NX.NAM_NHAP,NX.NGAY_QDINH,NX.LOAI_VTHH,NX.TRICH_YEU,NX.ID_HD,NX.SO_HD,NX.CLOAI_VTHH,NX.DON_VI_TINH,NX.SO_LUONG, NX.TGIAN_NKHO, NX.TEN_GOI_THAU, NX.MO_TA_HANG_HOA  " +
+			" FROM NH_QD_GIAO_NVU_NHAPXUAT NX " +
+			" LEFT JOIN NH_QD_GIAO_NVU_NHAPXUAT_CT NX_DTL ON NX.ID = NX_DTL.ID_HDR " +
+			" LEFT JOIN NH_PHIEU_NHAP_KHO PNK ON NX_DTL.ID = PNK.ID_DDIEM_GIAO_NV_NH " +
+			" WHERE (:#{#req.nam} IS NULL OR NX.NAM_NHAP = TO_NUMBER(:#{#req.nam})) " +
+			"  AND (:#{#req.tuNgayNk} IS NULL OR PNK.NGAY_NHAP_KHO >= TO_DATE(:#{#req.tuNgayNk}, 'yyyy-MM-dd')) " +
+			"  AND (:#{#req.denNgayNk} IS NULL OR PNK.NGAY_NHAP_KHO <= TO_DATE(:#{#req.denNgayNk}, 'yyyy-MM-dd')) " +
+			"  AND (:#{#req.trangThai} IS NULL OR NX.TRANG_THAI = TO_NUMBER(:#{#req.trangThai})) " +
+			"  AND (:#{#req.soQdGiaoNvNh} IS NULL OR LOWER(NX.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.soQdGiaoNvNh}),'%'))) " +
+			"  AND (:#{#req.soPhieu} IS NULL OR LOWER(PNK.SO_PHIEU_NHAP_KHO) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.soPhieu}),'%'))) " +
+			"  AND (:#{#req.loaiVthh} IS NULL OR NX.LOAI_VTHH LIKE CONCAT(:#{#req.loaiVthh},'%')) " ;
+	@Query(
+			value = SEARCH_PNK +
+					"  AND ( NX_DTL.MA_DVI = :#{#req.maDvi}) " +
+					"  GROUP BY NX.ID,NX.SO_QD,NX.MA_DVI,NX.LOAI_QD,NX.TRANG_THAI,NX.NGAY_TAO,NX.NGUOI_TAO,NX.NGAY_SUA,NX.NGUOI_SUA,NX.NGAY_GUI_DUYET,NX.NGUOI_GUI_DUYET,NX.LDO_TUCHOI,NX.NGAY_PDUYET,NX.NGUOI_PDUYET,NX.GHI_CHU,NX.CAP_DVI,NX.NAM_NHAP,NX.NGAY_QDINH,NX.LOAI_VTHH,NX.TRICH_YEU,NX.ID_HD,NX.SO_HD,NX.CLOAI_VTHH,NX.DON_VI_TINH,NX.SO_LUONG, NX.TGIAN_NKHO, NX.TEN_GOI_THAU, NX.MO_TA_HANG_HOA "
+			,
+			countQuery = SEARCH_PNK +
+					"  AND ( NX_DTL.MA_DVI = :#{#req.maDvi}) " +
+					"  GROUP BY NX.ID,NX.SO_QD,NX.MA_DVI,NX.LOAI_QD,NX.TRANG_THAI,NX.NGAY_TAO,NX.NGUOI_TAO,NX.NGAY_SUA,NX.NGUOI_SUA,NX.NGAY_GUI_DUYET,NX.NGUOI_GUI_DUYET,NX.LDO_TUCHOI,NX.NGAY_PDUYET,NX.NGUOI_PDUYET,NX.GHI_CHU,NX.CAP_DVI,NX.NAM_NHAP,NX.NGAY_QDINH,NX.LOAI_VTHH,NX.TRICH_YEU,NX.ID_HD,NX.SO_HD,NX.CLOAI_VTHH,NX.DON_VI_TINH,NX.SO_LUONG, NX.TGIAN_NKHO, NX.TEN_GOI_THAU, NX.MO_TA_HANG_HOA "
+			, nativeQuery = true)
+	Page<NhQdGiaoNvuNhapxuatHdr> selectPnkChiCuc(NhPhieuNhapKhoReq req, Pageable pageable);
+
+	@Query(
+			value = SEARCH_PNK +
+					"  AND ( NX.MA_DVI LIKE CONCAT(:#{#req.maDvi}, '%')) " +
+					"  GROUP BY NX.ID,NX.SO_QD,NX.MA_DVI,NX.LOAI_QD,NX.TRANG_THAI,NX.NGAY_TAO,NX.NGUOI_TAO,NX.NGAY_SUA,NX.NGUOI_SUA,NX.NGAY_GUI_DUYET,NX.NGUOI_GUI_DUYET,NX.LDO_TUCHOI,NX.NGAY_PDUYET,NX.NGUOI_PDUYET,NX.GHI_CHU,NX.CAP_DVI,NX.NAM_NHAP,NX.NGAY_QDINH,NX.LOAI_VTHH,NX.TRICH_YEU,NX.ID_HD,NX.SO_HD,NX.CLOAI_VTHH,NX.DON_VI_TINH,NX.SO_LUONG, NX.TGIAN_NKHO, NX.TEN_GOI_THAU, NX.MO_TA_HANG_HOA "
+			,
+			countQuery = SEARCH_PNK +
+					"  AND ( NX_DTL.MA_DVI = :#{#req.maDvi}) " +
+					"  GROUP BY NX.ID,NX.SO_QD,NX.MA_DVI,NX.LOAI_QD,NX.TRANG_THAI,NX.NGAY_TAO,NX.NGUOI_TAO,NX.NGAY_SUA,NX.NGUOI_SUA,NX.NGAY_GUI_DUYET,NX.NGUOI_GUI_DUYET,NX.LDO_TUCHOI,NX.NGAY_PDUYET,NX.NGUOI_PDUYET,NX.GHI_CHU,NX.CAP_DVI,NX.NAM_NHAP,NX.NGAY_QDINH,NX.LOAI_VTHH,NX.TRICH_YEU,NX.ID_HD,NX.SO_HD,NX.CLOAI_VTHH,NX.DON_VI_TINH,NX.SO_LUONG, NX.TGIAN_NKHO, NX.TEN_GOI_THAU, NX.MO_TA_HANG_HOA "
+			, nativeQuery = true)
+	Page<NhQdGiaoNvuNhapxuatHdr> selectPnkCuc(NhPhieuNhapKhoReq req, Pageable pageable);
 }

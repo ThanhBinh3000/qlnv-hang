@@ -20,7 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -28,7 +27,6 @@ import java.util.*;
 
 @Service
 public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
-
 
     @Autowired
     private XhDgPhieuXuatKhoRepository xhDgPhieuXuatKhoRepository;
@@ -146,7 +144,6 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
     }
 
 
-    @Transient
     public XhDgPhieuXuatKho approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
         if (currentUser == null || StringUtils.isEmpty(statusReq.getId())) {
             throw new Exception("Bad request.");
