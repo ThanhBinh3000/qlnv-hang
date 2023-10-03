@@ -13,17 +13,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface XhTlQdGiaoNvRepository extends JpaRepository<XhTlQdGiaoNvHdr, Long> {
+public interface XhTlQdGiaoNvHdrRepository extends JpaRepository<XhTlQdGiaoNvHdr, Long> {
 
     @Query("SELECT c FROM XhTlQdGiaoNvHdr c " +
             " WHERE 1=1 " +
             "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
             "AND (:#{#param.soBbQd} IS NULL OR LOWER(c.soBbQd) LIKE CONCAT('%',LOWER(:#{#param.soBbQd}),'%')) " +
-            "AND (:#{#param.loaiVthh} IS NULL OR LOWER(c.loaiVthh) LIKE CONCAT('%',LOWER(:#{#param.loaiVthh}),'%')) " +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(c.trichYeu) LIKE CONCAT('%',LOWER(:#{#param.trichYeu}),'%')) " +
-            "AND ((:#{#param.ngayKyQdTu}  IS NULL OR c.ngayKyQd >= :#{#param.ngayKyQdTu})" +
-            "AND (:#{#param.ngayKyQdDen}  IS NULL OR c.ngayKyQd <= :#{#param.ngayKyQdDen}) ) " +
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
             "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
     )

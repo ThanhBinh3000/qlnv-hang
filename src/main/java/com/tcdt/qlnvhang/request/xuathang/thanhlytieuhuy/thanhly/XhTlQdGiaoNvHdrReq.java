@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly;
 
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlQdGiaoNvDtl;
 import lombok.Data;
 
@@ -33,10 +34,11 @@ public class XhTlQdGiaoNvHdrReq extends BaseRequest {
     private String kieuNx;
     private String trichYeu;
     private String trangThaiXh;
-    private List<XhTlQdGiaoNvDtl> quyetDinhDtl = new ArrayList<>();
-    private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
-    private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
+    private List<XhTlQdGiaoNvDtl> children = new ArrayList<>();
+    private List<FileDinhKemReq> fileCanCuReq = new ArrayList<>();
+    private List<FileDinhKemReq> fileDinhKemReq = new ArrayList<>();
     private String dvql;
     private LocalDate ngayKyQdTu;
     private LocalDate ngayKyQdDen;
+    private String phanLoai;
 }
