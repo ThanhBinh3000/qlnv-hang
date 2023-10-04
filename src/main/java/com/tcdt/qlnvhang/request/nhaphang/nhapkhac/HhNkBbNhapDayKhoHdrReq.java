@@ -1,12 +1,15 @@
 package com.tcdt.qlnvhang.request.nhaphang.nhapkhac;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhNkBbNhapDayKhoDtl;
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data

@@ -231,7 +231,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         HhDcQdPduyetKhmttHdrReq hhDcQdPduyetKhmttHdrReq = new HhDcQdPduyetKhmttHdrReq();
         List<HhDcQdPduyetKhmttHdr> listCheckQd = hhDcQdPduyetKhMttRepository.findAllByIdQdGocOrderByIdDesc(data.getIdQdGoc());
         if(listCheckQd.size() == 1){
-            hhDcQdPduyetKhmttHdrReq.setIsChange(false);
+            hhDcQdPduyetKhmttHdrReq.setIsChange(null);
             updateQdPduyet(data, hhDcQdPduyetKhmttHdrReq);
         }
 
