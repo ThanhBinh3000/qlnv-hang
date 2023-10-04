@@ -36,5 +36,21 @@ public interface XhCtvtTongHopHdrRepository extends JpaRepository<XhCtvtTongHopH
 
   List<XhCtvtTongHopHdr> findAllByIdIn(List<Long> listId);
 
-
+  @Query("SELECT DISTINCT  c FROM XhCtvtTongHopHdr c left join c.deXuatCuuTro e" +
+          " WHERE 1=1 " +
+          "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
+          "AND (:#{#param.maDviDx} IS NULL OR e.maDvi LIKE CONCAT(:#{#param.maDviDx},'%')) " +
+          "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
+          "AND (:#{#param.soDx} IS NULL OR LOWER(e.soDx) LIKE CONCAT('%',LOWER(:#{#param.soDx}),'%')) " +
+          "AND ((:#{#param.ngayTaoTu}  IS NULL OR c.ngayTao >= :#{#param.ngayTaoTu})" +
+          "AND (:#{#param.ngayTaoDen}  IS NULL OR c.ngayTao <= :#{#param.ngayTaoDen}) ) " +
+          "AND (c.id not in (select pd.idTongHop from XhCtvtQuyetDinhPdHdr pd) ) " +
+    /*  "AND ((:#{#param.ngayKetThucDxTu}  IS NULL OR e.ngayKetThucDx >= :#{#param.ngayKetThucDxTu})" +
+      "AND (:#{#param.ngayKetThucDxDen}  IS NULL OR e.ngayKetThucDx <= :#{#param.ngayKetThucDxDen}) ) " +
+      "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
+      "AND (:#{#param.idQdPdList.isEmpty() } = true OR c.idQdPd IN :#{#param.idQdPdList}) " +
+      "AND (:#{#param.idQdPdNull } = false OR (:#{#param.idQdPdNull } = true AND c.idQdPd IS NULL)) " +*/
+          "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
+  )
+  List<XhCtvtTongHopHdr> searchList(@Param("param") SearchXhCtvtTongHopHdr param);
 }
