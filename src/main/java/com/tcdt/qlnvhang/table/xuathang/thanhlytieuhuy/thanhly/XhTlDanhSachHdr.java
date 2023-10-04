@@ -116,7 +116,10 @@ public class XhTlDanhSachHdr extends BaseEntity implements Serializable {
   }
 
   @Transient
-  private XhTlKtraClHdr xhTlKtraClHdr = new XhTlKtraClHdr();
+  private XhTlKtraClHdr xhTlKtraClHdr;
+
+  @Transient
+  private XhTlTinhKhoHdr xhTlTinhKhoHdr;
 
   @Transient
   private List<XhTlPhieuXuatKhoHdr> listXhTlPhieuXuatKhoHdr = new ArrayList<>();

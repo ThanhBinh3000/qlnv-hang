@@ -47,6 +47,10 @@ public interface XhTlPhieuXuatKhoHdrRepository extends JpaRepository<XhTlPhieuXu
             " AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " )
     List<XhTlPhieuXuatKhoHdr> findAllByIdQdXhAndIdDsHdr(@Param("param") XhTlPhieuXuatKhoReq req);
 
+
+    List<XhTlPhieuXuatKhoHdr> findAllByIdDsHdr(Long idDsHdr);
+
+
 //    @Query("SELECT c FROM XhTlKtraClHdr c " +
 //            " WHERE 1 = 1 "+
 //            " AND (:#{#param.typeLt} IS NULL OR c.loaiVthh NOT LIKE CONCAT('02','%')) " +

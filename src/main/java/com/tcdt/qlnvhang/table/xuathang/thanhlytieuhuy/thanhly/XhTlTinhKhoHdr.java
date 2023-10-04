@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 import org.hibernate.annotations.Fetch;
@@ -26,27 +27,29 @@ public class XhTlTinhKhoHdr extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_TL_TINH_KHO_HDR";
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlTinhKhoHdr.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = XhTlTinhKhoHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlTinhKhoHdr.TABLE_NAME + "_SEQ")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlTinhKhoHdr.TABLE_NAME + "_SEQ")
+//    @SequenceGenerator(sequenceName = XhTlTinhKhoHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlTinhKhoHdr.TABLE_NAME + "_SEQ")
     private Long id;
     private Integer nam;
     private String maDvi;
-    private String maQhNs;
+    private String maQhns;
     private String soBbTinhKho;
     private LocalDate ngayLapBienBan;
-    private Long idBbQd;
-    private String soBbQd;
-    private LocalDate ngayKyBbQd;
-    private Long idHopDong;
-    private String soHopDong;
-    private LocalDate ngayKyHopDong;
+    private Long idQdXh;
+    private String soQdXh;
+    private LocalDate ngayQdXh;
     private String maDiaDiem;
+    private Long idDsHdr;
+    private String loaiVthh;
+    private String cloaiVthh;
     private LocalDate ngayBatDauXuat;
     private LocalDate ngayKetThucXuat;
-    private BigDecimal tongSlNhap;
-    private BigDecimal tongSlXuat;
-    private BigDecimal slConLai;
+    private Long idPhieuKtcl;
+    private String soPhieuKtcl;
+    private BigDecimal slQuyetDinh;
     private BigDecimal slThucTe;
+    private BigDecimal slConLai;
+    private BigDecimal slTteConLaiKhiXk;
     private BigDecimal slThua;
     private BigDecimal slThieu;
     private String nguyenNhan;
@@ -55,10 +58,11 @@ public class XhTlTinhKhoHdr extends BaseEntity implements Serializable {
     private String donViTinh;
     private String trangThai;
     private String lyDoTuChoi;
-    private String thuKho;
-    private Long idKtvBaoQuan;
+    private Long idThuKho;
+    private Long idKtv;
+    private Long idKt;
+    private Long idLdcc;
     private LocalDate ngayPduyetKtvBq;
-    private Long idKeToan;
     private LocalDate ngayPduyetKt;
     private LocalDate ngayGduyet;
     private Long nguoiGduyetId;
@@ -80,6 +84,10 @@ public class XhTlTinhKhoHdr extends BaseEntity implements Serializable {
     private String tenNganKho;
     @Transient
     private String tenLoKho;
+    @Transient
+    private String tenLoaiVthh;
+    @Transient
+    private String tenCloaiVthh;
     @JsonIgnore
     @Transient
     private Map<String, String> mapDmucDvi = new ArrayMap<>();
@@ -110,6 +118,20 @@ public class XhTlTinhKhoHdr extends BaseEntity implements Serializable {
         }
     }
 
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapVthh;
+
+    public void setMapVthh(Map<String, String> mapVthh) {
+        this.mapVthh = mapVthh;
+        if (!DataUtils.isNullObject(getLoaiVthh())) {
+            setTenLoaiVthh(mapVthh.containsKey(getLoaiVthh()) ? mapVthh.get(getLoaiVthh()) : null);
+        }
+        if (!DataUtils.isNullObject(getCloaiVthh())) {
+            setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
+        }
+    }
+
     @Transient
     private String tenKtvBaoQuan;
     @Transient
@@ -125,34 +147,11 @@ public class XhTlTinhKhoHdr extends BaseEntity implements Serializable {
         return trangThai;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @Fetch(value = FetchMode.SUBSELECT)
-    @JoinColumn(name = "dataId")
-    @Where(clause = "data_type='" + XhTlTinhKhoHdr.TABLE_NAME + "_DINH_KEM'")
-    private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
+    @Transient
+    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
 
-    public void setFileDinhKem(List<FileDinhKemJoinTable> fileDinhKem) {
-        this.fileDinhKem.clear();
-        if (!DataUtils.isNullObject(fileDinhKem)) {
-            fileDinhKem.forEach(s -> {
-                s.setDataType(XhTlTinhKhoHdr.TABLE_NAME + "_DINH_KEM");
-                s.setXhTlTinhKhoHdr(this);
-            });
-            this.fileDinhKem.addAll(fileDinhKem);
-        }
-    }
+    @Transient
+    private List<XhTlTinhKhoDtl> children = new ArrayList<>();
 
-    @OneToMany(mappedBy = "tinhKhoHdr", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<XhTlTinhKhoDtl> tinhKhoDtl = new ArrayList<>();
 
-    public void setTinhKhoDtl(List<XhTlTinhKhoDtl> tinhKhoDtl) {
-        this.getTinhKhoDtl().clear();
-        if (!DataUtils.isNullObject(tinhKhoDtl)) {
-            tinhKhoDtl.forEach(f -> {
-                f.setId(null);
-                f.setTinhKhoHdr(this);
-            });
-            this.tinhKhoDtl.addAll(tinhKhoDtl);
-        }
-    }
 }
