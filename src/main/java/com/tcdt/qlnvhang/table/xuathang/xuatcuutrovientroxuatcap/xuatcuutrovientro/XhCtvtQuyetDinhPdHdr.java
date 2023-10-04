@@ -71,7 +71,7 @@ public class XhCtvtQuyetDinhPdHdr extends BaseEntity implements Serializable {
     private String qdPaXuatCap;
     private Long idQdGiaoNv;
     private String soQdGiaoNv;
-
+    private LocalDate ngayKetThuc;
 
     @Transient
     private String tenDvi;

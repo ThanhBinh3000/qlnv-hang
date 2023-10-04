@@ -44,6 +44,7 @@ public class XhCtvtQuyetDinhPdHdrReq {
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
   private String donViTinh;
+  private LocalDate ngayKetThuc;
 
   private Long idQdGiaoNv;
   private String soQdGiaoNv;
