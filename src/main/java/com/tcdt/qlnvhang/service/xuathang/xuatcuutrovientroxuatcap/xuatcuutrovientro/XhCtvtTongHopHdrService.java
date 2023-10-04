@@ -315,4 +315,10 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
     }
     return null;
   }
+  public List<XhCtvtTongHopHdr> searchList(CustomUserDetails currentUser, SearchXhCtvtTongHopHdr objReq) throws Exception {
+    objReq.setDvql(currentUser.getDvql());
+    List<XhCtvtTongHopHdr> data = xhCtvtTongHopHdrRepository.searchList(objReq);
+    return data;
+  }
+
 }
