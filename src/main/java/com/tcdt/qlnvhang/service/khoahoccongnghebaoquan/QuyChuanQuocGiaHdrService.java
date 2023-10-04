@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.khoahoccongnghebaoquan;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdg;
 import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaDtl;
 import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
@@ -19,6 +20,7 @@ import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.DmVattuDTO;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.THKeHoachDieuChuyenCucHdr;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -203,6 +205,11 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         QuyChuanQuocGiaHdr data = optional.get();
         BeanUtils.copyProperties(objReq, data, "id", "maDvi");
         QuyChuanQuocGiaHdr created = quyChuanQuocGiaHdrRepository.save(data);
+        List<Long> ids = new ArrayList<>();
+        ids.add(created.getId());
+        fileDinhKemService.deleteMultiple(ids, Lists.newArrayList("KHCN_QUY_CHUAN_QG_HDR"));
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), data.getId(), "KHCN_QUY_CHUAN_QG_HDR");
+        created.setFileDinhKems(fileDinhKems);
         List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
         quyChuanQuocGiaDtlRepository.deleteAll(dtlList);
         this.saveCtiet(data, objReq);
@@ -276,9 +283,11 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         QuyChuanQuocGiaHdr data = optional.get();
+        List<Long> ids = new ArrayList<>();
+        ids.add(data.getId());
+        fileDinhKemService.deleteMultiple(ids, Collections.singleton(BhQdPheDuyetKhbdg.TABLE_NAME));
         List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
         quyChuanQuocGiaDtlRepository.deleteAll(dtlList);
-        fileDinhKemService.delete(data.getId(), Lists.newArrayList("KHCN_QUY_CHUAN_QG_HDR"));
         quyChuanQuocGiaHdrRepository.delete(data);
 
     }
