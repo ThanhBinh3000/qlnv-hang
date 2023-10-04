@@ -3,21 +3,19 @@ package com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly.impl;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.*;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlBangKeHdrRepository;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlPhieuXuatKhoDtlRepository;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlPhieuXuatKhoHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.*;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlPhieuXuatKhoReq;
+import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlQdGiaoNvHdrReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.suachuahang.ScQuyetDinhScService;
 import com.tcdt.qlnvhang.service.suachuahang.impl.ScDanhSachServiceImpl;
+import com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachService;
 import com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly.XhTlPhieuXuatKhoService;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.*;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlBangKeHdr;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlPhieuXuatKhoDtl;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlPhieuXuatKhoHdr;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
@@ -46,21 +44,19 @@ public class XhTlPhieuXuatKhoServiceImpl extends BaseServiceImpl implements XhTl
     private UserInfoRepository userInfoRepository;
 
     @Autowired
-    private ScQuyetDinhXuatHangRepository scQuyetDinhXuatHangRepository;
-
-    @Autowired
-    private ScQuyetDinhScService scQuyetDinhScService;
-
-    @Autowired
     private XhTlBangKeHdrRepository xhTlBangKeHdrRepository;
 
     @Autowired
-    private ScDanhSachRepository scDanhSachRepository;
+    private XhTlQdGiaoNvHdrRepository xhTlQdGiaoNvHdrRepository;
 
     @Autowired
-    private ScDanhSachServiceImpl scDanhSachServiceImpl;
+    private XhTlQdGiaoNvDtlRepository xhTlQdGiaoNvDtlRepository;
+
     @Autowired
-    private ScBangKeNhapVtHdrRepository scBangKeNhapVtHdrRepository;
+    private XhTlDanhSachService xhTlDanhSachService;
+    @Autowired
+    private XhTlKtraClHdrRepository xhTlKtraClHdrRepository;
+
 
     @Override
     public Page<XhTlPhieuXuatKhoHdr> searchPage(XhTlPhieuXuatKhoReq req) throws Exception {
@@ -234,13 +230,60 @@ public class XhTlPhieuXuatKhoServiceImpl extends BaseServiceImpl implements XhTl
     public List<XhTlPhieuXuatKhoHdr> searchDanhSachTaoBangKe(XhTlPhieuXuatKhoReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         req.setMaDviSr(userInfo.getDvql());
-        if(req.getPhanLoai().equals("LT")){
-            req.setTypeLt("1");
-        }else{
-            req.setTypeVt("1");
-        }
         List<XhTlPhieuXuatKhoHdr> scPhieuXuatKhoHdrs = hdrRepository.searchListTaoBangKe(req);
         return scPhieuXuatKhoHdrs;
+    }
+
+    @Override
+    public Page<XhTlQdGiaoNvHdr> searchPhieuXuatKho(XhTlPhieuXuatKhoReq req) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+        XhTlQdGiaoNvHdrReq reqQd = new XhTlQdGiaoNvHdrReq();
+        reqQd.setNam(req.getNam());
+        reqQd.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
+        reqQd.setPhanLoai(req.getPhanLoai());
+        if(userInfo.getCapDvi().equals(Contains.CAP_CUC)){
+            reqQd.setMaDviSr(userInfo.getDvql());
+            req.setMaDviSr(userInfo.getDvql());
+        }
+        if(userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+            reqQd.setMaDviSr(userInfo.getDvql().substring(0, 6));
+            req.setMaDviSr(userInfo.getDvql().substring(0, 6));
+        }
+        Page<XhTlQdGiaoNvHdr> search = xhTlQdGiaoNvHdrRepository.searchPageViewFromAnother(reqQd, pageable);
+        search.getContent().forEach(item -> {
+            try {
+                // Lấy toàn bộ địa điểm kho trong dtl
+                List<XhTlQdGiaoNvDtl> byIdHdr = xhTlQdGiaoNvDtlRepository.findAllByIdHdrAndPhanLoai(item.getId(),req.getPhanLoai());
+                byIdHdr.forEach( x -> {
+                    try {
+                        // Lấy danh sách gốc
+                        XhTlDanhSachHdr dsHdr = xhTlDanhSachService.detail(x.getIdDsHdr());
+                        Optional<XhTlKtraClHdr> byIdDsHdr = xhTlKtraClHdrRepository.findByIdDsHdr(x.getIdDsHdr());
+                        byIdDsHdr.ifPresent(dsHdr::setXhTlKtraClHdr);
+                        req.setIdDsHdr(x.getIdDsHdr());
+                        req.setIdQdXh(item.getId());
+                        // Lấy toàn bộ pxk theo địa điểm danh sách
+                        List<XhTlPhieuXuatKhoHdr> allByIdQdXhAndIdDsHdr = hdrRepository.findAllByIdQdXhAndIdDsHdr(req);
+                        allByIdQdXhAndIdDsHdr.forEach( pxk -> {
+                            // Lấy toàn bộ biên bản cân hàng theo địa điểm danh sách
+                            if(!Objects.isNull(pxk.getIdBangKeCanHang())){
+                                Optional<XhTlBangKeHdr> byId = xhTlBangKeHdrRepository.findById(pxk.getIdBangKeCanHang());
+                                byId.ifPresent(pxk::setXhTlBangKeHdr);
+                            }
+                        });
+                        dsHdr.setListXhTlPhieuXuatKhoHdr(allByIdQdXhAndIdDsHdr);
+                        x.setXhTlDanhSachHdr(dsHdr);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                item.setChildren(byIdHdr);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        return search;
     }
 
 //    @Override

@@ -28,4 +28,5 @@ public class XhTlQdGiaoNvDtl implements Serializable {
 
     @Transient
     private XhTlDanhSachHdr xhTlDanhSachHdr;
+
 }

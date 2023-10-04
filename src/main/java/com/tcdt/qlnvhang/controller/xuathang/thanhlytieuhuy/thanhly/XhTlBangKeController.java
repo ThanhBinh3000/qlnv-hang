@@ -36,7 +36,8 @@ public class XhTlBangKeController {
     public ResponseEntity<BaseResponse> colection(@RequestBody XhTlBangKeReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-//            resp.setData(service.searchKiemTraChatLuong(objReq));
+            // Search chung với màn phiếu xuât kho
+//            resp.setData(service.searchBangKeCanHang(objReq));
             resp.setData(service.searchPage(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());

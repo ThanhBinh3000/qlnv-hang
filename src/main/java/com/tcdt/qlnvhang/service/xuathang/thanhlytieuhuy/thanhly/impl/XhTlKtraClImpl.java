@@ -5,11 +5,13 @@ import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.*;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlKtraClDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlKtraClHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlQdGiaoNvHdrRepository;
 import com.tcdt.qlnvhang.request.suachua.ScKiemTraChatLuongReq;
 import com.tcdt.qlnvhang.request.suachua.ScPhieuXuatKhoReq;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhXuatHangReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlBbLayMauReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlKtraClReq;
+import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlQdGiaoNvHdrReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -24,6 +26,7 @@ import com.tcdt.qlnvhang.table.xuathang.suachuahang.*;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlBbLayMauHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlKtraClDtl;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlKtraClHdr;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlQdGiaoNvHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
@@ -52,18 +55,7 @@ public class XhTlKtraClImpl extends BaseServiceImpl implements XhTlKtraClService
     private UserInfoRepository userInfoRepository;
 
     @Autowired
-    private ScQuyetDinhXuatHangRepository scQuyetDinhXuatHangRepository;
-
-    @Autowired
-    private ScQuyetDinhScService scQuyetDinhScService;
-
-    @Autowired
-    private ScPhieuXuatKhoHdrRepository scPhieuXuatKhoHdrRepository;
-
-    @Autowired
-    private ScQuyetDinhNhapHangRepository scQuyetDinhNhapHangRepository;
-    @Autowired
-    private ScPhieuXuatKhoService scPhieuXuatKhoService;
+    private XhTlQdGiaoNvHdrRepository xhTlQdGiaoNvHdrRepository;
 
     @Override
     public Page<XhTlKtraClHdr> searchPage(XhTlKtraClReq req) throws Exception {
@@ -219,13 +211,42 @@ public class XhTlKtraClImpl extends BaseServiceImpl implements XhTlKtraClService
         if (userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             req.setMaDviSr(userInfo.getDvql().substring(0,6));
         }
-        if(req.getPhanLoai().equals("LT")){
-            req.setTypeLt("1");
-        }else{
-            req.setTypeVt("1");
-        }
         List<XhTlKtraClHdr> list = hdrRepository.searchDsTaoPhieuXuatKho(req);
         return list;
+    }
+
+    @Override
+    public Page<XhTlQdGiaoNvHdr> searchXhTlKtraCl(XhTlKtraClReq req) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+        XhTlQdGiaoNvHdrReq reqQd = new XhTlQdGiaoNvHdrReq();
+        reqQd.setNam(req.getNam());
+        reqQd.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
+        reqQd.setPhanLoai(req.getPhanLoai());
+        if(userInfo.getCapDvi().equals(Contains.CAP_CUC)){
+            reqQd.setMaDviSr(userInfo.getDvql());
+        }
+        if(userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+            reqQd.setMaDviSr(userInfo.getDvql().substring(0, 6));
+        }
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        Map<String, String> mapVthh = getListDanhMucHangHoa();
+        Page<XhTlQdGiaoNvHdr> search = xhTlQdGiaoNvHdrRepository.searchPageViewFromAnother(reqQd, pageable);
+        search.getContent().forEach(item -> {
+            try {
+                req.setIdQdXh(item.getId());
+                List<XhTlKtraClHdr> hdrList  = hdrRepository.findAllByIdQdXh(req);
+                hdrList.forEach(hdr -> {
+                    hdr.setTenDvi(mapDmucDvi.getOrDefault(hdr.getMaDvi(),null));
+                    hdr.setMapDmucDvi(mapDmucDvi);
+                    hdr.setMapVthh(mapVthh);
+                });
+                item.setListXhTlKtraClHdr(hdrList);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        return search;
     }
 
 //    @Override

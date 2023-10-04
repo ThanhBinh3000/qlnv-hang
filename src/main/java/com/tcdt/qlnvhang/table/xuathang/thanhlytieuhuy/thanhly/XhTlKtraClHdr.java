@@ -41,7 +41,7 @@ public class XhTlKtraClHdr extends BaseEntity implements Serializable {
     private Long idBbLayMau;
     private String soBbLayMau;
     private LocalDate ngayLayMau;
-    private String idDiaDiemXh;
+    private Long idDsHdr;
     private String maDiaDiem;
     private LocalDate ngayKnghiem;
     private Long idNguoiKnghiem;

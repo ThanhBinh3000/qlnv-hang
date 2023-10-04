@@ -19,4 +19,6 @@ public interface XhTlQdGiaoNvDtlRepository extends JpaRepository<XhTlQdGiaoNvDtl
     void deleteAllByIdHdr(Long idHdr);
 
     List<XhTlQdGiaoNvDtl> findAllByIdHdr(Long idHdr);
+
+    List<XhTlQdGiaoNvDtl> findAllByIdHdrAndPhanLoai(Long idHdr,String phanLoai);
 }

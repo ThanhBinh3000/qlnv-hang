@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 public class XhTlBangKeReq extends BaseRequest {
@@ -23,6 +24,8 @@ public class XhTlBangKeReq extends BaseRequest {
     private String soPhieuXuatKho;
     private Long idPhieuXuatKho;
     private String diaDiemKho;
+    private String maDiaDiem;
+    private Long idDsHdr;
     private String nguoiGiamSat;
     private String lyDoTuChoi;
     private String trangThai;
@@ -30,5 +33,24 @@ public class XhTlBangKeReq extends BaseRequest {
     private String cloaiVthh;
     private BigDecimal tongTrongLuong;
     private List<XhTlBangKeDtl> children = new ArrayList<>();
+
+    private String maDviSr;
+    private String phanLoai;
+    private String typeLt;
+    private String typeVt;
+
+    public String getTypeLt() {
+        if(Objects.equals(phanLoai, "LT")){
+            return "1";
+        }
+        return typeLt;
+    }
+
+    public String getTypeVt() {
+        if(Objects.equals(phanLoai, "VT")){
+            return "1";
+        }
+        return typeLt;
+    }
 
 }

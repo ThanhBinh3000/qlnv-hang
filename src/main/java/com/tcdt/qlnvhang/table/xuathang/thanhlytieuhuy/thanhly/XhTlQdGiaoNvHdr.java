@@ -98,4 +98,10 @@ public class XhTlQdGiaoNvHdr extends BaseEntity implements Serializable {
     @Transient
     private List<XhTlQdGiaoNvDtl> children = new ArrayList<>();
 
+    @Transient
+    private List<XhTlBbLayMauHdr> listXhTlBbLayMauHdr = new ArrayList<>();
+
+    @Transient
+    private List<XhTlKtraClHdr> listXhTlKtraClHdr = new ArrayList<>();
+
 }

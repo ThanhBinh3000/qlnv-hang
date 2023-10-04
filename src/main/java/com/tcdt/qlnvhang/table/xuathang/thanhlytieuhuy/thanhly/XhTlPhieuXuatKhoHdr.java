@@ -45,7 +45,7 @@ public class XhTlPhieuXuatKhoHdr extends BaseEntity implements Serializable {
     private LocalDate ngayQdXh;
     private Long idPhieuKtcl;
     private String soPhieuKtcl;
-    private Long idDiaDiemXh;
+    private Long idDsHdr;
     private String maDiaDiem;
     private String loaiVthh;
     private String cloaiVthh;
@@ -184,5 +184,8 @@ public class XhTlPhieuXuatKhoHdr extends BaseEntity implements Serializable {
         }
         return canCuPhapLy;
     }
+
+    @Transient
+    private XhTlBangKeHdr xhTlBangKeHdr;
 
 }

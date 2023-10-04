@@ -28,18 +28,16 @@ public interface XhTlQuyetDinhPdKqHdrRepository extends JpaRepository<XhTlQuyetD
     )
     Page<XhTlQuyetDinhPdKqHdr> search(@Param("param") XhTlQuyetDinhPdKqHdrReq param, Pageable pageable);
 
-//    @Query("SELECT qd FROM XhTlQuyetDinhPdKqHdr qd " +
-//            " LEFT JOIN XhTlHopDongHdr hd on qd.id = hd.idQdKqTl " +
-//            " WHERE 1 = 1 " +
-//            " AND qd.id is null " +
-//            " AND (:#{#param.trangThai} IS NULL OR qd.trangThai = :#{#param.trangThai}) " +
-//            " AND (:#{#param.maDviSr} IS NULL OR qd.maDvi = :#{#param.maDviSr}) " +
-//            "ORDER BY qd.ngaySua desc , qd.ngayTao desc, qd.id desc"
-//    )
-//    List<XhTlQuyetDinhPdKqHdr> searchListTaoHopDong(@Param("param") XhTlQuyetDinhPdKqHdrReq req);
+    @Query("SELECT c FROM XhTlQuyetDinhPdKqHdr c " +
+            " WHERE 1=1 " +
+            " AND (:#{#param.maDviSr} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDviSr},'%')) " +
+            " AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) "
+    )
+    List<XhTlQuyetDinhPdKqHdr> searchAll(@Param("param") XhTlQuyetDinhPdKqHdrReq param);
 
     @Query("SELECT c FROM XhTlQuyetDinhPdKqHdr c " +
             " WHERE 1=1 " +
+            "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
             " AND (:#{#param.maDviSr} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDviSr},'%')) " +
             " AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) "
     )

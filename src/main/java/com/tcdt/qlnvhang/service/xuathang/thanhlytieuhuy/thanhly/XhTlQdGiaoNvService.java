@@ -65,6 +65,18 @@ public class XhTlQdGiaoNvService extends BaseServiceImpl {
         return search;
     }
 
+    public List<XhTlQdGiaoNvHdr> searchAll(CustomUserDetails currentUser, XhTlQdGiaoNvHdrReq req) throws Exception {
+        String dvql = currentUser.getDvql();
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            req.setDvql(dvql.substring(0, 6));
+            req.setTrangThai(Contains.BAN_HANH);
+        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
+            req.setDvql(dvql);
+        }
+        List<XhTlQdGiaoNvHdr> search = hdrRepository.search(req);
+        return search;
+    }
+
     @Transactional
     public XhTlQdGiaoNvHdr create(CustomUserDetails currentUser, XhTlQdGiaoNvHdrReq req) throws Exception {
         if (currentUser == null) throw new Exception("Bad request.");

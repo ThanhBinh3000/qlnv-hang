@@ -35,8 +35,7 @@ public class XhTlBbLayMauController {
     public ResponseEntity<BaseResponse> colection(@RequestBody XhTlBbLayMauReq objReq) {
         BaseResponse resp = new BaseResponse();
         try {
-//            resp.setData(service.searchKiemTraChatLuong(objReq));
-            resp.setData(service.searchPage(objReq));
+            resp.setData(service.searchBbLm(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch ( Exception e) {
