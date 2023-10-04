@@ -53,7 +53,7 @@ public class XhQdGiaoNvXh implements Serializable {
     private String BienBanHaoDoi;
     private String trangThai;
     private String trangThaiXh;
-    private String LyDoTuChoi;
+    private String lyDoTuChoi;
     private LocalDate ngayTao;
     private Long nguoiTaoId;
     private LocalDate ngaySua;

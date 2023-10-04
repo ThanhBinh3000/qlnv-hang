@@ -44,7 +44,14 @@ public class XhDgBangKeService extends BaseServiceImpl {
     private UserInfoRepository userInfoRepository;
 
     public Page<XhDgBangKeHdr> searchPage(CustomUserDetails currentUser, XhDgBangKeReq req) throws Exception {
-        req.setDvql(currentUser.getDvql());
+        String dvql = currentUser.getDvql();
+        String userCapDvi = currentUser.getUser().getCapDvi();
+        if (userCapDvi.equals(Contains.CAP_CUC)) {
+            req.setTrangThai(Contains.DADUYET_LDCC);
+            req.setMaDviCha(dvql);
+        } else if (userCapDvi.equals(Contains.CAP_CHI_CUC)) {
+            req.setDvql(dvql);
+        }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhDgBangKeHdr> search = xhDgBangKeHdrRepository.searchPage(req, pageable);
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();

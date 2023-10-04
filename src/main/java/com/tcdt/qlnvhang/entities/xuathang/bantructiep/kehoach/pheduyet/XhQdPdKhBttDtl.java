@@ -32,6 +32,7 @@ public class XhQdPdKhBttDtl implements Serializable {
     private String trichYeu;
     private Integer slDviTsan;
     private BigDecimal tongSoLuong;
+    private BigDecimal tongTien;
     private String donViTinh;
     private LocalDate tgianDkienTu;
     private LocalDate tgianDkienDen;

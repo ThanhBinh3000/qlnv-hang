@@ -60,4 +60,5 @@ public class XhBbLayMauRequest extends BaseRequest {
     private LocalDate ngayLayMauDen;
     private String chiTieuChatLuong;
     private String phuongPhapLayMau;
+    private String maDviCha;
 }
