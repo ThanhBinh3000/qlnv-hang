@@ -32,6 +32,7 @@ public class QuyChuanQuocGiaDtl extends BaseEntity {
   private String phuongPhapXd;
   private String loaiVthh;
   private String cloaiVthh;
+  private String ghiChu;
 
   @Transient
   private String tenDvi;

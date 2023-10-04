@@ -24,6 +24,7 @@ public class QuyChuanQuocGiaDtlReq {
     private String loaiVthh;
     private String cloaiVthh;
     private String tenCloaiVthh;
+    private String ghiChu;
 
     public String getStt() {
         return ObjectUtils.isEmpty(stt) ? "" : stt;
