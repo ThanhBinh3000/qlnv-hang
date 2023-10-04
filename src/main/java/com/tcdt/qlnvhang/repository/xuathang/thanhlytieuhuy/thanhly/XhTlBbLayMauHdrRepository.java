@@ -37,4 +37,17 @@ public interface XhTlBbLayMauHdrRepository extends JpaRepository<XhTlBbLayMauHdr
     )
     List<XhTlBbLayMauHdr> searchDsTaoKtraCl(@Param("param") XhTlBbLayMauReq param);
 
+
+    @Query("SELECT c FROM XhTlBbLayMauHdr c " +
+            " WHERE 1 = 1 "+
+            " AND (:#{#param.typeLt} IS NULL OR c.loaiVthh NOT LIKE CONCAT('02','%')) " +
+            " AND (:#{#param.typeVt} IS NULL OR c.loaiVthh LIKE CONCAT('02','%')) " +
+            " AND (:#{#param.maDviSr} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDviSr},'%'))" +
+            " AND (:#{#param.trangThai} IS NULL OR c.trangThai =:#{#param.trangThai})" +
+            " AND (:#{#param.idQdXh} IS NULL OR c.idQdXh =:#{#param.idQdXh})" +
+            " ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
+    )
+    List<XhTlBbLayMauHdr> findAllByIdQdXh(@Param("param") XhTlBbLayMauReq param);
+
+
 }

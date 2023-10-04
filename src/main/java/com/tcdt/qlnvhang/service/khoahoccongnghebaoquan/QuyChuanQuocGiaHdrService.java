@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.khoahoccongnghebaoquan;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.BhQdPheDuyetKhbdg;
 import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaDtl;
 import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
@@ -19,6 +20,7 @@ import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.catalog.DmVattuDTO;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.THKeHoachDieuChuyenCucHdr;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -59,7 +61,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
 
     public Page<QuyChuanQuocGiaHdr> searchPage(SearchQuyChuanQgReq objReq) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
-        objReq.setMaDvi(userInfo.getDvql());
+//        objReq.setMaDvi(!ObjectUtils.isEmpty(objReq.getMaDvi()) ? objReq.getMaDvi() : userInfo.getDvql());
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<QuyChuanQuocGiaHdr> data = quyChuanQuocGiaHdrRepository.search(objReq, pageable);
@@ -79,8 +81,8 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                 Map<String, String> mapTenChiTieu = getListDanhMucChung("CHI_TIEU_CL");
                 if (f.getApDungCloaiVthh() == false) {
                     for (QuyChuanQuocGiaDtl dtl : mapDtl.get(f.getId())) {
-                        dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh()) ? null : hashMapDmHh.get(dtl.getLoaiVthh()));
-                        dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh()) ? null : hashMapDmHh.get(dtl.getCloaiVthh()));
+                        dtl.setTenLoaiVthh(ObjectUtils.isEmpty(dtl.getLoaiVthh()) ? null : hashMapDmHh.get(dtl.getLoaiVthh()));
+                        dtl.setTenCloaiVthh(ObjectUtils.isEmpty(dtl.getCloaiVthh()) ? null : hashMapDmHh.get(dtl.getCloaiVthh()));
                         dtl.setTenChiTieu(mapTenChiTieu.get(dtl.getMaChiTieu()));
                     }
                     f.setTieuChuanKyThuat(mapDtl.get(f.getId()));
@@ -203,6 +205,11 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         QuyChuanQuocGiaHdr data = optional.get();
         BeanUtils.copyProperties(objReq, data, "id", "maDvi");
         QuyChuanQuocGiaHdr created = quyChuanQuocGiaHdrRepository.save(data);
+        List<Long> ids = new ArrayList<>();
+        ids.add(created.getId());
+        fileDinhKemService.deleteMultiple(ids, Lists.newArrayList("KHCN_QUY_CHUAN_QG_HDR"));
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), data.getId(), "KHCN_QUY_CHUAN_QG_HDR");
+        created.setFileDinhKems(fileDinhKems);
         List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
         quyChuanQuocGiaDtlRepository.deleteAll(dtlList);
         this.saveCtiet(data, objReq);
@@ -233,7 +240,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         QuyChuanQuocGiaHdr data = optional.get();
-        Map<String, DmVattuDTO> mapVthh = getListObjectDanhMucHangHoa(ObjectUtils.isEmpty(optional.get().getMaBn()) ? null : optional.get().getMaBn().startsWith("01") ? "0101" : optional.get().getMaBn());
+        Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
         data.setTenDvi(StringUtils.isEmpty(data.getMaDvi()) ? null : hashMapDvi.get(data.getMaDvi()));
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
@@ -244,8 +251,8 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             Map<String, String> mapTenChiTieu = getListDanhMucChung("CHI_TIEU_CL");
             if (data.getApDungCloaiVthh() == false) {
                 for (QuyChuanQuocGiaDtl dtl : dtlList) {
-                    dtl.setTenLoaiVthh(StringUtils.isEmpty(dtl.getLoaiVthh()) ? null : mapVthh.get(dtl.getLoaiVthh()).getTen());
-                    dtl.setTenCloaiVthh(StringUtils.isEmpty(dtl.getCloaiVthh()) ? null : mapVthh.get(dtl.getCloaiVthh()).getTen());
+                    dtl.setTenLoaiVthh(ObjectUtils.isEmpty(dtl.getLoaiVthh()) ? null : hashMapDmHh.get(dtl.getLoaiVthh()));
+                    dtl.setTenCloaiVthh(ObjectUtils.isEmpty(dtl.getCloaiVthh()) ? null : hashMapDmHh.get(dtl.getCloaiVthh()));
                     dtl.setTenChiTieu(mapTenChiTieu.get(dtl.getMaChiTieu()));
                 }
                 data.setTieuChuanKyThuat(dtlList);
@@ -276,9 +283,11 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         QuyChuanQuocGiaHdr data = optional.get();
+        List<Long> ids = new ArrayList<>();
+        ids.add(data.getId());
+        fileDinhKemService.deleteMultiple(ids, Collections.singleton(BhQdPheDuyetKhbdg.TABLE_NAME));
         List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
         quyChuanQuocGiaDtlRepository.deleteAll(dtlList);
-        fileDinhKemService.delete(data.getId(), Lists.newArrayList("KHCN_QUY_CHUAN_QG_HDR"));
         quyChuanQuocGiaHdrRepository.delete(data);
 
     }

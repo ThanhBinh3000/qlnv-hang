@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 public class XhTlPhieuXuatKhoReq extends BaseRequest {
@@ -24,7 +25,7 @@ public class XhTlPhieuXuatKhoReq extends BaseRequest {
   private LocalDate ngayQdXh;
   private Long idPhieuKtcl;
   private String soPhieuKtcl;
-  private Long idDiaDiemXh;
+  private Long idDsHdr;
   private String maDiaDiem;
   private String loaiVthh;
   private String cloaiVthh;
@@ -38,7 +39,6 @@ public class XhTlPhieuXuatKhoReq extends BaseRequest {
   private String loaiHinhNx;
   private String kieuNx;
   private String soBangKeCanHang;
-  private Long idBangKeCanHang;
   private BigDecimal tongSoLuong;
   private String ghiChu;
   private String trangThai;
@@ -51,4 +51,18 @@ public class XhTlPhieuXuatKhoReq extends BaseRequest {
   private String phanLoai;
   private String typeLt;
   private String typeVt;
+
+  public String getTypeLt() {
+    if(Objects.equals(phanLoai, "LT")){
+      return "1";
+    }
+    return typeLt;
+  }
+
+  public String getTypeVt() {
+    if(Objects.equals(phanLoai, "VT")){
+      return "1";
+    }
+    return typeLt;
+  }
 }

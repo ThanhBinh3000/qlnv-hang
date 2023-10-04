@@ -383,6 +383,10 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 				}
 				qdKhlcntHdr.get().setDieuChinh(Boolean.TRUE);
 				hhQdKhlcntHdrRepository.save(qdKhlcntHdr.get());
+			} else if ((Contains.TUCHOI_LDV + Contains.CHODUYET_LDV).equals(status)) {
+				optional.get().setNguoiPduyetId(getUser().getId());
+				optional.get().setNgayPduyet(getDateTimeNow());
+				optional.get().setLyDoTuChoi(stReq.getLyDo());
 			} else {
 				throw new Exception("Phê duyệt không thành công");
 			}
@@ -393,6 +397,10 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 			} else if ((Contains.BAN_HANH + Contains.CHODUYET_LDV).equals(status)) {
 				optional.get().setNguoiPduyetId(getUser().getId());
 				optional.get().setNgayPduyet(getDateTimeNow());
+			} else if ((Contains.TUCHOI_LDV + Contains.CHODUYET_LDV).equals(status)) {
+				optional.get().setNguoiPduyetId(getUser().getId());
+				optional.get().setNgayPduyet(getDateTimeNow());
+				optional.get().setLyDoTuChoi(stReq.getLyDo());
 			} else {
 				throw new Exception("Phê duyệt không thành công");
 			}

@@ -13,23 +13,21 @@ import java.time.LocalDate;
 @Table(name = XhThopDxKhBdgDtl.TABLE_NAME)
 @Data
 public class XhThopDxKhBdgDtl implements Serializable {
-
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_THOP_DX_KH_BDG_DTL";
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhThopDxKhBdgDtl.TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = XhThopDxKhBdgDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhThopDxKhBdgDtl.TABLE_NAME + "_SEQ")
-
     private Long id;
-    private Long idDxHdr;
     private String maDvi;
+    private String diaChi;
+    private Long idDxHdr;
     private String soDxuat;
+    private LocalDate ngayTao;
     private LocalDate ngayPduyet;
     private String trichYeu;
     private Integer slDviTsan;
     private BigDecimal tongSoLuong;
-    private BigDecimal donGiaDeXuat;
     private BigDecimal tongTienKhoiDiemDx;
     private BigDecimal khoanTienDatTruoc;
     private BigDecimal tongTienDatTruocDx;

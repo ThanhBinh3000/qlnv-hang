@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 public class XhTlBbLayMauReq extends BaseRequest {
@@ -22,6 +23,7 @@ public class XhTlBbLayMauReq extends BaseRequest {
   private String dviKnghiem;
   private String diaDiemLayMau;
   private String maDiaDiem;
+  private Long idDsHdr;
   private String loaiVthh;
   private String cloaiVthh;
   private String truongBpKtbq;
@@ -35,4 +37,18 @@ public class XhTlBbLayMauReq extends BaseRequest {
   private String phanLoai;
   private String typeLt;
   private String typeVt;
+
+  public String getTypeLt() {
+    if(Objects.equals(phanLoai, "LT")){
+      return "1";
+    }
+    return typeLt;
+  }
+
+  public String getTypeVt() {
+    if(Objects.equals(phanLoai, "VT")){
+      return "1";
+    }
+    return typeLt;
+  }
 }

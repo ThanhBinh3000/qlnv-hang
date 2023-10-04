@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachRepository;
+import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlKtraClHdrRepository;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachRequest;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -26,6 +27,9 @@ public class XhTlDanhSachService extends BaseServiceImpl {
 
   @Autowired
   private XhTlDanhSachRepository xhTlDanhSachRepository;
+
+  @Autowired
+  private XhTlKtraClHdrRepository xhTlKtraClHdrRepository;
 
   @Autowired
   private FileDinhKemService fileDinhKemService;
@@ -60,7 +64,6 @@ public class XhTlDanhSachService extends BaseServiceImpl {
     data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
     data.setMapDmucDvi(mapDmucDvi);
     data.setMapVthh(mapVthh);
-
     return data;
   }
 }

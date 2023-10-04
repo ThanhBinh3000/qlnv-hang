@@ -14,6 +14,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface XhTlKtraClHdrRepository extends JpaRepository<XhTlKtraClHdr, Long> {
@@ -30,8 +31,7 @@ public interface XhTlKtraClHdrRepository extends JpaRepository<XhTlKtraClHdr, Lo
 //    Page<XhTlBbLayMauHdr> searchPage(@Param("param") XhTlBbLayMauReq param, Pageable pageable);
 
     @Query("SELECT c FROM XhTlKtraClHdr c " +
-            " left join XhTlPhieuXuatKhoHdr pxk on pxk.idPhieuKtcl = c.id " +
-            " WHERE pxk.id is null "+
+            " WHERE 1 = 1 "+
             "AND (:#{#param.typeLt} IS NULL OR c.loaiVthh NOT LIKE CONCAT('02','%')) " +
             "AND (:#{#param.typeVt} IS NULL OR c.loaiVthh LIKE CONCAT('02','%')) " +
             " AND (:#{#param.maDviSr} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDviSr},'%'))" +
@@ -40,4 +40,18 @@ public interface XhTlKtraClHdrRepository extends JpaRepository<XhTlKtraClHdr, Lo
             " ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
     )
     List<XhTlKtraClHdr> searchDsTaoPhieuXuatKho(@Param("param") XhTlKtraClReq param);
+
+    @Query("SELECT c FROM XhTlKtraClHdr c " +
+            " WHERE 1 = 1 "+
+            " AND (:#{#param.typeLt} IS NULL OR c.loaiVthh NOT LIKE CONCAT('02','%')) " +
+            " AND (:#{#param.typeVt} IS NULL OR c.loaiVthh LIKE CONCAT('02','%')) " +
+            " AND (:#{#param.maDviSr} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDviSr},'%'))" +
+            " AND (:#{#param.trangThai} IS NULL OR c.trangThai =:#{#param.trangThai})" +
+            " AND (:#{#param.idQdXh} IS NULL OR c.idQdXh =:#{#param.idQdXh})" +
+            " ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
+    )
+    List<XhTlKtraClHdr> findAllByIdQdXh(@Param("param") XhTlKtraClReq param);
+
+    Optional<XhTlKtraClHdr> findByIdDsHdr(Long idDsHdr);
+
 }

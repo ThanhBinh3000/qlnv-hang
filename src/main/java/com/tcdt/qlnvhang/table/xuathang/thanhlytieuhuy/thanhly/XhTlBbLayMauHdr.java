@@ -35,7 +35,7 @@ public class XhTlBbLayMauHdr extends BaseEntity implements Serializable {
     private String soQdXh;
     private String dviKnghiem;
     private String diaDiemLayMau;
-    private String idDiaDiemXh;
+    private Long idDsHdr;
     private String maDiaDiem;
     private String loaiVthh;
     private String cloaiVthh;

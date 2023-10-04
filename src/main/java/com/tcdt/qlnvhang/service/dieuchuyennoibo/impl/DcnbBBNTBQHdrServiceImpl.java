@@ -515,7 +515,7 @@ public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBN
                         .donGiaTrongNam(BigDecimal.valueOf(res.getDonGia()))
                         .thanhTienTrongNam(BigDecimal.valueOf(res.getThanhTienTrongNam()))
                         .soLuongNamTruoc(res.getSoLuongNamTruoc())
-                        .thanhTienNamTruoc(BigDecimal.valueOf(res.getThanhTienNamTruoc()))
+                        .thanhTienNamTruoc(BigDecimal.valueOf(res.getThanhTienNamTruoc() == null ? 0.0 : res.getThanhTienNamTruoc()))
                         .tongGiaTri(BigDecimal.valueOf(res.getTongGiaTri()))
                         .build();
                 dcnbBBNTBQDtlPheDuyetDtos.add(dcnbBBNTBQDtlPheDuyetDto);
@@ -537,7 +537,7 @@ public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBN
                         .donGiaTrongNam(BigDecimal.valueOf(res.getDonGia()))
                         .thanhTienTrongNam(BigDecimal.valueOf(res.getThanhTienTrongNam()))
                         .soLuongNamTruoc(res.getSoLuongNamTruoc())
-                        .thanhTienNamTruoc(BigDecimal.valueOf(res.getThanhTienNamTruoc()))
+                        .thanhTienNamTruoc(BigDecimal.valueOf(res.getThanhTienNamTruoc() == null ? 0.0 : res.getThanhTienNamTruoc()))
                         .tongGiaTri(BigDecimal.valueOf(res.getTongGiaTri()))
                         .build();
                 DcnbBBNTBQDtlThucHienDtos.add(dcnbBBNTBQDtlThucHienDto);

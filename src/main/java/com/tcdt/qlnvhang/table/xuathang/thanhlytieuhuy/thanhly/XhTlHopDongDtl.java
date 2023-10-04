@@ -24,5 +24,7 @@ public class XhTlHopDongDtl implements Serializable {
     private Long idHdr;
     private String maDviTsan;
     private Long idDsHdr;
+    @Transient
+    private XhTlDanhSachHdr xhTlDanhSachHdr;
 
 }

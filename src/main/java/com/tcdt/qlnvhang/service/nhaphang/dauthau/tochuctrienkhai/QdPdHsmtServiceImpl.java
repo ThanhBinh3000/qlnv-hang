@@ -162,7 +162,7 @@ public class QdPdHsmtServiceImpl extends BaseServiceImpl implements QdPdHsmtServ
         qdKhlcntHdr.get().setTenLoaiVthh(StringUtils.isEmpty(qdKhlcntHdr.get().getLoaiVthh()) ? null : hashMapDmHh.get(qdKhlcntHdr.get().getLoaiVthh()));
         qdKhlcntHdr.get().setTenCloaiVthh(StringUtils.isEmpty(qdKhlcntHdr.get().getCloaiVthh()) ? null : hashMapDmHh.get(qdKhlcntHdr.get().getCloaiVthh()));
         qdKhlcntHdr.get().setTenDvi(mapDmucDvi.get(qdKhlcntHdr.get().getMaDvi()));
-        List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdHdr(qdKhlcntHdr.get().getId());
+        List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdHdrOrderByGoiThauAsc(qdKhlcntHdr.get().getId());
         for(HhQdKhlcntDsgthau dsg : hhQdKhlcntDsgthauData){
             List<HhQdKhlcntDsgthauCtiet> listGtCtiet = hhQdKhlcntDsgthauCtietRepository.findByIdGoiThau(dsg.getId());
             listGtCtiet.forEach(f -> {

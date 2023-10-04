@@ -10,6 +10,7 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhPdKqHdrReq;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.UserInfo;
@@ -83,6 +84,16 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
             s.setTenPthucDgia(StringUtils.isEmpty(s.getPthucDgia()) ? null : mapPhuongThucDg.get(s.getPthucDgia()));
         });
         return search;
+    }
+
+    public List<XhTlQuyetDinhPdKqHdr> searchAll(XhTlQuyetDinhPdKqHdrReq req) throws Exception {
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+            req.setDvql(userInfo.getDvql().substring(0, 6));
+        } else if (userInfo.getCapDvi().equals(Contains.CAP_CUC)) {
+            req.setDvql(userInfo.getDvql());
+        }
+        return xhTlQuyetDinhPdKqHdrRepository.searchAll(req);
     }
 
     public List<XhTlQuyetDinhPdKqHdr> getListTaoHopDong(XhTlQuyetDinhPdKqHdrReq req) throws Exception {

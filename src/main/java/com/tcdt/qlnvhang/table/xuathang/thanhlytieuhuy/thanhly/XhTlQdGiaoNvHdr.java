@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,17 +35,11 @@ public class XhTlQdGiaoNvHdr extends BaseEntity implements Serializable {
     private String maDvi;
     private String soBbQd;
     private LocalDate ngayKy;
-    private LocalDate ngayKyQd;
     private Long idHopDong;
     private String soHopDong;
-    private LocalDate ngayKyHopDong;
+    private String phanLoai;
     private String maDviTsan;
     private String toChucCaNhan;
-    private String loaiVthh;
-    private String cloaiVthh;
-    private String tenVthh;
-    private BigDecimal soLuong;
-    private String donViTinh;
     private LocalDate thoiGianGiaoNhan;
     private String loaiHinhNx;
     private String kieuNx;
@@ -52,10 +47,6 @@ public class XhTlQdGiaoNvHdr extends BaseEntity implements Serializable {
     private String lyDoTuChoi;
     private String trangThai;
     private String trangThaiXh;
-    private Long idBbTinhKho;
-    private String soBbTinhKho;
-    private Long idBbHaoDoi;
-    private String soBbHaoDoi;
     private LocalDate ngayGduyet;
     private Long nguoiGduyetId;
     private LocalDate ngayPduyet;
@@ -86,19 +77,6 @@ public class XhTlQdGiaoNvHdr extends BaseEntity implements Serializable {
         }
     }
 
-    @JsonIgnore
-    @Transient
-    private Map<String, String> mapVthh;
-
-    public void setMapVthh(Map<String, String> mapVthh) {
-        this.mapVthh = mapVthh;
-        if (!DataUtils.isNullObject(getLoaiVthh())) {
-            setTenLoaiVthh(mapVthh.containsKey(getLoaiVthh()) ? mapVthh.get(getLoaiVthh()) : null);
-        }
-        if (!DataUtils.isNullObject(getCloaiVthh())) {
-            setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
-        }
-    }
 
     public String getTrangThai() {
         setTenTrangThai(TrangThaiAllEnum.getLabelById(trangThai));
@@ -110,51 +88,20 @@ public class XhTlQdGiaoNvHdr extends BaseEntity implements Serializable {
         return trangThaiXh;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @Fetch(value = FetchMode.SUBSELECT)
-    @JoinColumn(name = "dataId")
-    @Where(clause = "data_type='" + XhTlQdGiaoNvHdr.TABLE_NAME + "_CAN_CU'")
-    private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
+    @Transient
+    private List<FileDinhKem> fileCanCu = new ArrayList<>();
 
-    public void setFileCanCu(List<FileDinhKemJoinTable> fileCanCu) {
-        this.fileCanCu.clear();
-        if (!DataUtils.isNullObject(fileCanCu)) {
-            fileCanCu.forEach(f -> {
-                f.setDataType(XhTlQdGiaoNvHdr.TABLE_NAME + "_CAN_CU");
-                f.setXhTlQdGiaoNvHdr(this);
-            });
-            this.fileCanCu.addAll(fileCanCu);
-        }
-    }
+    @Transient
+    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @Fetch(value = FetchMode.SUBSELECT)
-    @JoinColumn(name = "dataId")
-    @Where(clause = "data_type='" + XhTlQdGiaoNvHdr.TABLE_NAME + "_DINH_KEM'")
-    private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
 
-    public void setFileDinhKem(List<FileDinhKemJoinTable> fileDinhKem) {
-        this.fileDinhKem.clear();
-        if (!DataUtils.isNullObject(fileDinhKem)) {
-            fileDinhKem.forEach(s -> {
-                s.setDataType(XhTlQdGiaoNvHdr.TABLE_NAME + "_DINH_KEM");
-                s.setXhTlQdGiaoNvHdr(this);
-            });
-            this.fileDinhKem.addAll(fileDinhKem);
-        }
-    }
+    @Transient
+    private List<XhTlQdGiaoNvDtl> children = new ArrayList<>();
 
-    @OneToMany(mappedBy = "quyetDinhHdr", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<XhTlQdGiaoNvDtl> quyetDinhDtl = new ArrayList<>();
+    @Transient
+    private List<XhTlBbLayMauHdr> listXhTlBbLayMauHdr = new ArrayList<>();
 
-    public void setQuyetDinhDtl(List<XhTlQdGiaoNvDtl> quyetDinhDtl) {
-        this.getQuyetDinhDtl().clear();
-        if (!DataUtils.isNullOrEmpty(quyetDinhDtl)) {
-            quyetDinhDtl.forEach(f -> {
-                f.setId(null);
-                f.setQuyetDinhHdr(this);
-            });
-            this.quyetDinhDtl.addAll(quyetDinhDtl);
-        }
-    }
+    @Transient
+    private List<XhTlKtraClHdr> listXhTlKtraClHdr = new ArrayList<>();
+
 }

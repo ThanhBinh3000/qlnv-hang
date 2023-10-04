@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlKtraClHdrRepository;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
@@ -9,6 +10,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -111,4 +114,10 @@ public class XhTlDanhSachHdr extends BaseEntity implements Serializable {
       setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
     }
   }
+
+  @Transient
+  private XhTlKtraClHdr xhTlKtraClHdr = new XhTlKtraClHdr();
+
+  @Transient
+  private List<XhTlPhieuXuatKhoHdr> listXhTlPhieuXuatKhoHdr = new ArrayList<>();
 }
