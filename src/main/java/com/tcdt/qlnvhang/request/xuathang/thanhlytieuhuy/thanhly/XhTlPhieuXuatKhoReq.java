@@ -39,7 +39,6 @@ public class XhTlPhieuXuatKhoReq extends BaseRequest {
   private String loaiHinhNx;
   private String kieuNx;
   private String soBangKeCanHang;
-  private Long idBangKeCanHang;
   private BigDecimal tongSoLuong;
   private String ghiChu;
   private String trangThai;
