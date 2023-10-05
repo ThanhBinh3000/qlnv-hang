@@ -44,7 +44,7 @@ public interface XhCtvtTongHopHdrRepository extends JpaRepository<XhCtvtTongHopH
           "AND (:#{#param.soDx} IS NULL OR LOWER(e.soDx) LIKE CONCAT('%',LOWER(:#{#param.soDx}),'%')) " +
           "AND ((:#{#param.ngayTaoTu}  IS NULL OR c.ngayTao >= :#{#param.ngayTaoTu})" +
           "AND (:#{#param.ngayTaoDen}  IS NULL OR c.ngayTao <= :#{#param.ngayTaoDen}) ) " +
-          "AND (c.id not in (select pd.idTongHop from XhCtvtQuyetDinhPdHdr pd) ) " +
+          "AND (c.id not in (select DISTINCT pd.idTongHop from XhCtvtQuyetDinhPdHdr pd where pd.idTongHop is not null) ) " +
     /*  "AND ((:#{#param.ngayKetThucDxTu}  IS NULL OR e.ngayKetThucDx >= :#{#param.ngayKetThucDxTu})" +
       "AND (:#{#param.ngayKetThucDxDen}  IS NULL OR e.ngayKetThucDx <= :#{#param.ngayKetThucDxDen}) ) " +
       "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
