@@ -1,9 +1,9 @@
 # Spring
 spring:
   application:
-    name: qlnv-hang-dev
+    name: qlnv-hang
   profiles:
-    active: dev
+    active: prod
   cloud:
     config:
       uri: http://192.168.1.62:30004
