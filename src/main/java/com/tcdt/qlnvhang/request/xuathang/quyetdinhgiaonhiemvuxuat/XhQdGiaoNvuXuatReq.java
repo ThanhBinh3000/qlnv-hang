@@ -44,4 +44,5 @@ public class XhQdGiaoNvuXuatReq extends BaseRequest {
     private String dvql;
     private LocalDate ngayKyTu;
     private LocalDate ngayKyDen;
+    private String maDviCon;
 }

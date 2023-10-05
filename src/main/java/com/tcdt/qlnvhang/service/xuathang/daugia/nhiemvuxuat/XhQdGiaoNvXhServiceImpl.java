@@ -61,6 +61,7 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl {
             req.setDvql(dvql);
         } else if (userCapDvi.equals(Contains.CAP_CHI_CUC)) {
             req.setTrangThai(Contains.BAN_HANH);
+            req.setMaDviCon(dvql);
         }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhQdGiaoNvXh> search = xhQdGiaoNvXhRepository.searchPage(req, pageable);
@@ -248,7 +249,6 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl {
             case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
                 data.setNguoiGuiDuyetId(currentUser.getUser().getId());
                 data.setNgayGuiDuyet(LocalDate.now());
-                data.setIdTruongPhong(currentUser.getUser().getId());
                 break;
             case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
             case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
@@ -259,6 +259,7 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl {
             case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
                 data.setNguoiPduyetId(currentUser.getUser().getId());
                 data.setNgayPduyet(LocalDate.now());
+                data.setIdTruongPhong(currentUser.getUser().getId());
                 break;
             case Contains.BAN_HANH + Contains.CHODUYET_LDC:
                 data.setNguoiPduyetId(currentUser.getUser().getId());

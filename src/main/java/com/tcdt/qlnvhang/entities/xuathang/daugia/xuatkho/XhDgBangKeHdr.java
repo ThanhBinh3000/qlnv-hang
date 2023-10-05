@@ -53,6 +53,7 @@ public class XhDgBangKeHdr implements Serializable {
     private Long idLanhDaoChiCuc;
     private Long idPhieuXuatKho;
     private String soPhieuXuatKho;
+    private LocalDate ngayXuatKho;
     private Long idPhieuKiemNghiem;
     private String soPhieuKiemNghiem;
     private LocalDate ngayKiemNghiemMau;
@@ -73,7 +74,7 @@ public class XhDgBangKeHdr implements Serializable {
     private BigDecimal soLuong;
     private BigDecimal donGia;
     private String trangThai;
-    private String LyDoTuChoi;
+    private String lyDoTuChoi;
     private LocalDate ngayTao;
     private Long nguoiTaoId;
     private LocalDate ngaySua;
@@ -93,6 +94,8 @@ public class XhDgBangKeHdr implements Serializable {
     @Transient
     private String tenLoKho;
     @Transient
+    private String tenNganLoKho;
+    @Transient
     private String tenThuKho;
     @Transient
     private String tenLanhDaoChiCuc;
@@ -106,6 +109,10 @@ public class XhDgBangKeHdr implements Serializable {
     private String tenKieuNhapXuat;
     @Transient
     private String tenTrangThai;
+    @Transient
+    private String maDviCha;
+    @Transient
+    private String tenDviCha;
 
     @JsonIgnore
     @Transient
@@ -124,9 +131,15 @@ public class XhDgBangKeHdr implements Serializable {
         }
         if (!DataUtils.isNullObject(getMaNganKho())) {
             setTenNganKho(mapDmucDvi.containsKey(getMaNganKho()) ? mapDmucDvi.get(getMaNganKho()) : null);
+            if(getTenNganKho() != null){
+                setTenNganLoKho(getTenNganKho());
+            }
         }
         if (!DataUtils.isNullObject(getMaLoKho())) {
             setTenLoKho(mapDmucDvi.containsKey(getMaLoKho()) ? mapDmucDvi.get(getMaLoKho()) : null);
+            if(getTenLoKho() != null) {
+                setTenNganLoKho(getTenLoKho() + " - " + getTenNganKho());
+            }
         }
     }
 

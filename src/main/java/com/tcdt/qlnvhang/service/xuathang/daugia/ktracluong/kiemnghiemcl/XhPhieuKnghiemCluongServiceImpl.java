@@ -46,7 +46,14 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl {
     private UserInfoRepository userInfoRepository;
 
     public Page<XhPhieuKnghiemCluong> searchPage(CustomUserDetails currentUser, XhPhieuKnghiemCluongReq req) throws Exception {
-//        req.setDvql(currentUser.getDvql());
+        String dvql = currentUser.getDvql();
+        String userCapDvi = currentUser.getUser().getCapDvi();
+        if (userCapDvi.equals(Contains.CAP_CUC)) {
+            req.setDvql(dvql);
+        } else if (userCapDvi.equals(Contains.CAP_CHI_CUC)) {
+            req.setTrangThai(Contains.DADUYET_LDC);
+            req.setMaDviCon(dvql);
+        }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhPhieuKnghiemCluong> search = xhPhieuKnghiemCluongRepository.searchPage(req, pageable);
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
@@ -87,9 +94,6 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl {
             BeanUtils.copyProperties(dtlReq, dtl, "id");
             dtl.setId(null);
             dtl.setIdHdr(idHdr);
-            dtl.setChiSoCl(dtlReq.getMucYeuCauXuat());
-            dtl.setChiTieuCl(dtlReq.getTenChiTieu());
-            dtl.setPhuongPhap(dtlReq.getPhuongPhapXd());
             xhPhieuKnghiemCluongCtRepository.save(dtl);
         }
     }
@@ -214,6 +218,10 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl {
                 data.setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+                data.setNguoiPduyetId(currentUser.getUser().getId());
+                data.setNgayPduyet(LocalDate.now());
+                data.setIdTruongPhongKtvbq(currentUser.getUser().getId());
+                break;
             case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
                 data.setNguoiPduyetId(currentUser.getUser().getId());
                 data.setNgayPduyet(LocalDate.now());
@@ -224,7 +232,7 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl {
         }
         data.setTrangThai(statusReq.getTrangThai());
         XhPhieuKnghiemCluong created = xhPhieuKnghiemCluongRepository.save(data);
-        return data;
+        return created;
     }
 
     public void export(CustomUserDetails currentUser, XhPhieuKnghiemCluongReq req, HttpServletResponse response) throws Exception {
@@ -275,13 +283,8 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl {
             Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
             xhBbLayMauRepository.findById(detail.getIdBbLayMau())
                     .ifPresent(xhBbLayMau -> {
-                        detail.setMaDviCon(xhBbLayMau.getMaDvi());
                         detail.setSoLuongHangbaoQuan(xhBbLayMau.getSoLuongKiemTra());
                     });
-            if (mapDmucDvi.containsKey((detail.getMaDviCon()))) {
-                Map<String, Object> objDonVi = mapDmucDvi.get(detail.getMaDviCon());
-                detail.setTenDviCon(objDonVi.get("tenDvi").toString());
-            }
             FileInputStream inputStream = new FileInputStream(templatePath);
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
         } catch (IOException e) {

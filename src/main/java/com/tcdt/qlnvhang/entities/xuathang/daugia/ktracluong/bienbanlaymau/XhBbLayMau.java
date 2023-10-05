@@ -58,7 +58,7 @@ public class XhBbLayMau implements Serializable {
     private String donViTinh;
     private Boolean ketQuaNiemPhong;
     private String trangThai;
-    private String LyDoTuChoi;
+    private String lyDoTuChoi;
     private LocalDate ngayTao;
     private Long nguoiTaoId;
     private LocalDate ngaySua;
@@ -82,6 +82,8 @@ public class XhBbLayMau implements Serializable {
     private String tenNganKho;
     @Transient
     private String tenLoKho;
+    @Transient
+    private String tenNganLoKho;
     @Transient
     private String tenKtvBaoQuan;
     @Transient
@@ -124,9 +126,15 @@ public class XhBbLayMau implements Serializable {
         }
         if (!DataUtils.isNullObject(getMaNganKho())) {
             setTenNganKho(mapDmucDvi.containsKey(getMaNganKho()) ? mapDmucDvi.get(getMaNganKho()) : null);
+            if (getTenNganKho() != null) {
+                setTenNganLoKho(getTenNganKho());
+            }
         }
         if (!DataUtils.isNullObject(getMaLoKho())) {
             setTenLoKho(mapDmucDvi.containsKey(getMaLoKho()) ? mapDmucDvi.get(getMaLoKho()) : null);
+            if (getTenLoKho() != null) {
+                setTenNganLoKho(getTenLoKho() + " - " + getTenNganKho());
+            }
         }
     }
 

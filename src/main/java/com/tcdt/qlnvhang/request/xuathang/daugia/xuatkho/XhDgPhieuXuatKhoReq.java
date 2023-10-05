@@ -56,10 +56,12 @@ public class XhDgPhieuXuatKhoReq extends BaseRequest {
     private BigDecimal thucXuat;
     private BigDecimal donGia;
     private BigDecimal thanhTien;
+    private String ghiChu;
     private String trangThai;
     private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
     private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
     private String dvql;
     private LocalDate ngayLapPhieuTu;
     private LocalDate ngayLapPhieuDen;
+    private String maDviCha;
 }
