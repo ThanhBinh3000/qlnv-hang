@@ -46,6 +46,10 @@ public class XhTlDanhSachService extends BaseServiceImpl {
   @Autowired
   private XhTlTinhKhoDtlRepository xhTlTinhKhoDtlRepository;
 
+  @Autowired
+  private XhTlHaoDoiHdrRepository xhTlHaoDoiHdrRepository;
+
+
   public Page<XhTlDanhSachHdr> searchPage(CustomUserDetails currentUser, XhTlDanhSachRequest req) throws Exception {
     String dvql = currentUser.getDvql();
     if (!currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
@@ -92,6 +96,11 @@ public class XhTlDanhSachService extends BaseServiceImpl {
     if(bbTinhKhoOpt.isPresent()){
       XhTlTinhKhoHdr xhTlTinhKhoHdr = bbTinhKhoOpt.get();
       xhTlTinhKhoHdr.setChildren(xhTlTinhKhoDtlRepository.findAllByIdHdr(xhTlTinhKhoHdr.getId()));
+
+      Optional<XhTlHaoDoiHdr> byIdBbTinhKho = xhTlHaoDoiHdrRepository.findByIdBbTinhKho(xhTlTinhKhoHdr.getId());
+      if(byIdBbTinhKho.isPresent()){
+        xhTlTinhKhoHdr.setXhTlHaoDoiHdr(byIdBbTinhKho.get());
+      }
       data.setXhTlTinhKhoHdr(xhTlTinhKhoHdr);
     }
     return data;

@@ -3,6 +3,8 @@ package com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly;
 
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlHaoDoiDtl;
 import lombok.Data;
 
@@ -15,17 +17,16 @@ import java.util.List;
 public class XhTlHaoDoiHdrReq extends BaseRequest {
     private Long id;
     private Integer nam;
-    private String maDvi;
-    private String maQhNs;
+    private String maQhns;
     private String soBbHaoDoi;
     private LocalDate ngayLapBienBan;
-    private Long idBbQd;
-    private String soBbQd;
-    private LocalDate ngayKyBbQd;
-    private Long idHopDong;
-    private String soHopDong;
-    private LocalDate ngayKyHopDong;
+    private Long idQdXh;
+    private String soQdXh;
+    private LocalDate ngayQdXh;
+    private Long idDsHdr;
     private String maDiaDiem;
+    private String loaiVthh;
+    private String cloaiVthh;
     private Long idBbTinhKho;
     private String soBbTinhKho;
     private BigDecimal tongSlNhap;
@@ -46,8 +47,5 @@ public class XhTlHaoDoiHdrReq extends BaseRequest {
     private String donViTinh;
     private String trangThai;
     private String lyDoTuChoi;
-    private String thuKho;
-    private List<XhTlHaoDoiDtl> haoDoiDtl = new ArrayList<>();
-    private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
-    private String dvql;
+    private List<FileDinhKemReq> fileDinhKemReq;
 }
