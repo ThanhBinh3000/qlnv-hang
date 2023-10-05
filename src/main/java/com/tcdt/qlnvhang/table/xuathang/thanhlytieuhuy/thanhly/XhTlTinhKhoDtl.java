@@ -18,8 +18,7 @@ public class XhTlTinhKhoDtl implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlTinhKhoDtl.TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = XhTlTinhKhoDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlTinhKhoDtl.TABLE_NAME + "_SEQ")
     private Long id;
-    private Long idPhieuKnCl;
-    private String soPhieuKnCl;
+    private Long idHdr;
     private Long idPhieuXuatKho;
     private String soPhieuXuatKho;
     private Long idBangKe;
@@ -27,8 +26,4 @@ public class XhTlTinhKhoDtl implements Serializable {
     private LocalDate ngayXuatKho;
     private BigDecimal slXuat;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idHdr")
-    @JsonIgnore
-    private XhTlTinhKhoHdr tinhKhoHdr;
 }
