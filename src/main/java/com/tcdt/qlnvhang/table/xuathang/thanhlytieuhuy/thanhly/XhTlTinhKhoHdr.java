@@ -27,8 +27,8 @@ public class XhTlTinhKhoHdr extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_TL_TINH_KHO_HDR";
     @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlTinhKhoHdr.TABLE_NAME + "_SEQ")
-//    @SequenceGenerator(sequenceName = XhTlTinhKhoHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlTinhKhoHdr.TABLE_NAME + "_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlTinhKhoHdr.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = XhTlTinhKhoHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlTinhKhoHdr.TABLE_NAME + "_SEQ")
     private Long id;
     private Integer nam;
     private String maDvi;
@@ -152,6 +152,9 @@ public class XhTlTinhKhoHdr extends BaseEntity implements Serializable {
 
     @Transient
     private List<XhTlTinhKhoDtl> children = new ArrayList<>();
+
+    @Transient
+    private XhTlHaoDoiHdr xhTlHaoDoiHdr;
 
 
 }

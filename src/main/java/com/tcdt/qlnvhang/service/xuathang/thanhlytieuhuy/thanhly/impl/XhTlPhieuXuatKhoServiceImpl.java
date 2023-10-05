@@ -172,7 +172,7 @@ public class XhTlPhieuXuatKhoServiceImpl extends BaseServiceImpl implements XhTl
         String status = hdr.getTrangThai() + req.getTrangThai();
         switch (status) {
             // Re approve : gửi lại duyệt
-            case Contains.TUCHOI_LDCC + Contains.DUTHAO:
+            case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
                 break;
             // Arena các cấp duuyệt
             case Contains.DUTHAO + Contains.CHODUYET_LDCC:

@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 public class XhTlTinhKhoReq extends BaseRequest {
@@ -46,4 +47,20 @@ public class XhTlTinhKhoReq extends BaseRequest {
 
     private String phanLoai;
     private String maDviSr;
+    private String typeLt;
+    private String typeVt;
+
+    public String getTypeLt() {
+        if(Objects.equals(phanLoai, "LT")){
+            return "1";
+        }
+        return typeLt;
+    }
+
+    public String getTypeVt() {
+        if(Objects.equals(phanLoai, "VT")){
+            return "1";
+        }
+        return typeLt;
+    }
 }

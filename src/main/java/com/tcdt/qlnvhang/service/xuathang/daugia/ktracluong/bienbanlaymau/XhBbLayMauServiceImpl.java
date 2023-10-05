@@ -49,7 +49,14 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl {
     private UserInfoRepository userInfoRepository;
 
     public Page<XhBbLayMau> searchPage(CustomUserDetails currentUser, XhBbLayMauRequest req) throws Exception {
-        req.setDvql(currentUser.getDvql());
+        String dvql = currentUser.getDvql();
+        String userCapDvi = currentUser.getUser().getCapDvi();
+        if (userCapDvi.equals(Contains.CAP_CUC)) {
+            req.setTrangThai(Contains.DADUYET_LDCC);
+            req.setMaDviCha(dvql);
+        } else if (userCapDvi.equals(Contains.CAP_CHI_CUC)) {
+            req.setDvql(dvql);
+        }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhBbLayMau> search = xhBbLayMauRepository.searchPage(req, pageable);
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
@@ -79,12 +86,6 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl {
         data.setId(Long.parseLong(data.getSoBbLayMau().split("/")[0]));
         data.setTrangThai(Contains.DU_THAO);
         XhBbLayMau created = xhBbLayMauRepository.save(data);
-        if (created.getIdQdNv() != null) {
-            xhQdGiaoNvXhRepository.findById(created.getIdQdNv()).ifPresent(quyetDinh -> {
-                quyetDinh.setTrangThaiXh(Contains.DANG_THUC_HIEN);
-                xhQdGiaoNvXhRepository.save(quyetDinh);
-            });
-        }
         this.saveDetail(req, created.getId());
         return created;
     }
@@ -142,7 +143,7 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl {
                     data.setTenThuKho(userInfo.getFullName());
                 });
             }
-            if (data.getIdKtvBaoQuan() != null){
+            if (data.getIdKtvBaoQuan() != null) {
                 userInfoRepository.findById(data.getIdKtvBaoQuan()).ifPresent(userInfo -> {
                     data.setTenKtvBaoQuan(userInfo.getFullName());
                 });
@@ -176,12 +177,6 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl {
         }
         xhBbLayMauCtRepository.deleteAllByIdHdr(data.getId());
         xhBbLayMauRepository.delete(data);
-        if (data.getIdQdNv() != null) {
-            xhQdGiaoNvXhRepository.findById(data.getIdQdNv()).ifPresent(quyetDinh -> {
-                quyetDinh.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
-                xhQdGiaoNvXhRepository.save(quyetDinh);
-            });
-        }
     }
 
     @Transactional
@@ -199,12 +194,6 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl {
         List<XhBbLayMauCt> listDtl = xhBbLayMauCtRepository.findByIdHdrIn(idHdr);
         xhBbLayMauCtRepository.deleteAll(listDtl);
         xhBbLayMauRepository.deleteAll(list);
-        List<Long> listIdQdNv = list.stream().map(XhBbLayMau::getIdQdNv).collect(Collectors.toList());
-        if (!CollectionUtils.isEmpty(listIdQdNv)) {
-            List<XhQdGiaoNvXh> quyetDinh = xhQdGiaoNvXhRepository.findByIdIn(listIdQdNv);
-            quyetDinh.forEach(item -> item.setTrangThaiXh(Contains.CHUA_THUC_HIEN));
-            xhQdGiaoNvXhRepository.saveAll(quyetDinh);
-        }
     }
 
     public XhBbLayMau approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
