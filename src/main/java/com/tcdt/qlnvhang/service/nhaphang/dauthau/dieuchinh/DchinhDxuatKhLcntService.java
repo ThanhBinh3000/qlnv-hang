@@ -129,17 +129,9 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		dataMap.setNam(LocalDate.now().getYear());
 		dataMap.setTrangThai(Contains.DA_LAP);
 		dataMap.setNguoiTaoId(getUser().getId());
-		if (!DataUtils.isNullOrEmpty(objReq.getListCcPhapLy())) {
-			fileDinhKemService.saveListFileDinhKem(objReq.getListCcPhapLy(), dataMap.getId(), "HH_DC_DX_LCNT_HDR" + "_CAN_CU");
-		}
-		if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKems())) {
-			fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), dataMap.getId(), "HH_DC_DX_LCNT_HDR");
-		}
-		if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKemsTtr())) {
-			fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemsTtr(), dataMap.getId(), "HH_DC_DX_LCNT_HDR" + "_TTR");
-		}
 		hdrRepository.save(dataMap);
-		this.saveDetail(dataMap.getId(),objReq);
+		updateFile(objReq, dataMap);
+		saveDetail(dataMap.getId(),objReq);
 		return dataMap;
 	}
 
@@ -147,23 +139,13 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 
 		this.validateCreate(objReq);
 
-		// Add danh sach file dinh kem o Master
-		List<FileDKemJoinHhDchinhDxKhLcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinHhDchinhDxKhLcntHdr>();
-		if (objReq.getFileDinhKem() != null) {
-			fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKem(), FileDKemJoinHhDchinhDxKhLcntHdr.class);
-			fileDinhKemList.forEach(f -> {
-				f.setDataType("HH_DC_DX_LCNT_HDR");
-				f.setCreateDate(new Date());
-			});
-		}
-
 		HhDchinhDxKhLcntHdr dataMap = new ModelMapper().map(objReq, HhDchinhDxKhLcntHdr.class);
 		dataMap.setNgayTao(getDateTimeNow());
 		dataMap.setTrangThai(Contains.DA_LAP);
 		dataMap.setNguoiTaoId(getUser().getId());
-		dataMap.setFileDinhKem(fileDinhKemList);
 
 		hdrRepository.save(dataMap);
+		updateFile(objReq, dataMap);
 		List<HhQdKhlcntDtl> hhQdKhlcntDtl =  hhQdKhlcntDtlRepository.findByIdQdHdr(dataMap.getIdQdGoc());
 		hhQdKhlcntDtl.forEach(item -> {
 			item.setIdDcDxHdr(dataMap.getId());
@@ -202,29 +184,13 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 	}
 
 	private HhDchinhDxKhLcntHdr updateVatTu (DchinhDxKhLcntHdrReq objReq) throws Exception {
-
 		HhDchinhDxKhLcntHdr hdrData = this.validateUpdate(objReq);
-
 		HhDchinhDxKhLcntHdr dataDB = hdrData;
 		HhDchinhDxKhLcntHdr dataMap = ObjectMapperUtils.map(objReq, HhDchinhDxKhLcntHdr.class);
-
 		updateObjectToObject(dataDB, dataMap);
-
 		dataDB.setNgaySua(getDateTimeNow());
 		dataDB.setNguoiSuaId(getUser().getId());
-		fileDinhKemService.delete(objReq.getId(), Lists.newArrayList("HH_DC_DX_LCNT_HDR" + "_CAN_CU"));
-		if (!DataUtils.isNullOrEmpty(objReq.getListCcPhapLy())) {
-			fileDinhKemService.saveListFileDinhKem(objReq.getListCcPhapLy(), dataMap.getId(), "HH_DC_DX_LCNT_HDR" + "_CAN_CU");
-		}
-		fileDinhKemService.delete(objReq.getId(), Lists.newArrayList("HH_DC_DX_LCNT_HDR"));
-		if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKems())) {
-			fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), dataMap.getId(), "HH_DC_DX_LCNT_HDR");
-		}
-		fileDinhKemService.delete(objReq.getId(), Lists.newArrayList("HH_DC_DX_LCNT_HDR" + "_TTR"));
-		if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKemsTtr())) {
-			fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemsTtr(), dataMap.getId(), "HH_DC_DX_LCNT_HDR" + "_TTR");
-		}
-
+		updateFile(objReq, dataMap);
 		hdrRepository.save(dataDB);
 //		this.deleteDataOld(objReq);
 		this.saveDetail(dataMap.getId(),objReq);
@@ -232,29 +198,14 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 	}
 
 	private HhDchinhDxKhLcntHdr updateLuongThuc (DchinhDxKhLcntHdrReq objReq) throws Exception {
-
 		HhDchinhDxKhLcntHdr hdrData = this.validateUpdate(objReq);
-
-		// Add danh sach file dinh kem o Master
-		List<FileDKemJoinHhDchinhDxKhLcntHdr> fileDinhKemList = new ArrayList<FileDKemJoinHhDchinhDxKhLcntHdr>();
-		if (objReq.getFileDinhKem() != null) {
-			fileDinhKemList = ObjectMapperUtils.mapAll(objReq.getFileDinhKem(), FileDKemJoinHhDchinhDxKhLcntHdr.class);
-			fileDinhKemList.forEach(f -> {
-				f.setDataType("HH_DC_DX_LCNT_HDR");
-				f.setCreateDate(new Date());
-			});
-		}
-
 		HhDchinhDxKhLcntHdr dataDB = hdrData;
 		HhDchinhDxKhLcntHdr dataMap = ObjectMapperUtils.map(objReq, HhDchinhDxKhLcntHdr.class);
-
 		updateObjectToObject(dataDB, dataMap);
-
 		dataDB.setNgaySua(getDateTimeNow());
 		dataDB.setNguoiSuaId(getUser().getId());
-		dataDB.setFileDinhKem(fileDinhKemList);
-
 		hdrRepository.save(dataDB);
+		updateFile(objReq, dataMap);
 		this.deleteDataOld(objReq);
 		this.saveCtietLT(dataMap.getId(),objReq);
 		return dataMap;
@@ -456,7 +407,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
 		Map<String,String> hashMapNguonVon = getListDanhMucChung("NGUON_VON");
 		Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
-		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
+		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("HINH_THUC_HOP_DONG");
 
 		qOptional.get().setTenLoaiVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getCloaiVthh()));
@@ -503,6 +454,12 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 			dtlList.add(dtl);
 		}
 		data.setChildren(dtlList);
+		List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Collections.singletonList("HH_DC_DX_LCNT_HDR"  + "_CAN_CU"));
+		data.setListCcPhapLy(canCu);
+		List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Collections.singletonList("HH_DC_DX_LCNT_HDR"));
+		data.setFileDinhKems(fileDinhKems);
+		List<FileDinhKem> fileDinhKemsTtr = fileDinhKemService.search(data.getId(), Collections.singletonList("HH_DC_DX_LCNT_HDR" + "_TTR"));
+		data.setFileDinhKemsTtr(fileDinhKemsTtr);
 	}
 
 	private void getDetailVt(HhDchinhDxKhLcntHdr data) {
@@ -678,6 +635,19 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		return qOptional.get();
 	}
 
-
+	private void updateFile (DchinhDxKhLcntHdrReq objReq, HhDchinhDxKhLcntHdr dataMap){
+		fileDinhKemService.delete(objReq.getId(), Lists.newArrayList("HH_DC_DX_LCNT_HDR" + "_CAN_CU"));
+		if (!DataUtils.isNullOrEmpty(objReq.getListCcPhapLy())) {
+			fileDinhKemService.saveListFileDinhKem(objReq.getListCcPhapLy(), dataMap.getId(), "HH_DC_DX_LCNT_HDR" + "_CAN_CU");
+		}
+		fileDinhKemService.delete(objReq.getId(), Lists.newArrayList("HH_DC_DX_LCNT_HDR"));
+		if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKems())) {
+			fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), dataMap.getId(), "HH_DC_DX_LCNT_HDR");
+		}
+		fileDinhKemService.delete(objReq.getId(), Lists.newArrayList("HH_DC_DX_LCNT_HDR" + "_TTR"));
+		if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKemsTtr())) {
+			fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemsTtr(), dataMap.getId(), "HH_DC_DX_LCNT_HDR" + "_TTR");
+		}
+	}
 
 }
