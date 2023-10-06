@@ -322,15 +322,13 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
         var xhCtvtDeXuatHdr = xhCtvtDeXuatHdrRepository.findById(objReq.getId());
         var fileTemplate = "";
         if (!xhCtvtDeXuatHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
-        var qlnvDmVattu = new QlnvDmVattu();
-        if (!StringUtils.isEmpty(xhCtvtDeXuatHdr.get().getCloaiVthh())) {
-             qlnvDmVattu = qlnvDmVattuRepository.findByMa(xhCtvtDeXuatHdr.get().getCloaiVthh());
-        }
-        if (Objects.isNull(qlnvDmVattu)) throw new Exception("Không tồn tại bản ghi");
+        if (StringUtils.isEmpty(xhCtvtDeXuatHdr.get().getLoaiVthh())) throw new Exception("Không tồn tại loại vật tư hàng hoá");
+        var qlnvDmVattu = qlnvDmVattuRepository.findByMa(xhCtvtDeXuatHdr.get().getLoaiVthh());
+        if (qlnvDmVattu == null) throw new Exception("Không tồn tại bản ghi vật tư");
         if (!StringUtils.isEmpty(qlnvDmVattu.getLoaiHang())) {
             if (qlnvDmVattu.getLoaiHang().equals("VT")) {
                 fileTemplate = "xuatcuutrovientro/" + "Đề xuất PA Cứu trợ-Vụ tạo-Vật tư-Cấp Tổng cục.docx";
-            } else if (qlnvDmVattu.getLoaiHang().equals("LT")) {
+            } else {
                 fileTemplate = "xuatcuutrovientro/" + "Đề xuất PA Cứu trợ-Vụ tạo-Lương thực-Cấp Tổng cục.docx";
             }
         }

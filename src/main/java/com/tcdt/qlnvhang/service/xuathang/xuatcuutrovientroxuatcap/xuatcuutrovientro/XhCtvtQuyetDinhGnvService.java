@@ -244,9 +244,9 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
       if (xhCtvtQuyetDinhGnvHdr.get().getIdLanhDao() != null) {
         userInfo = userInfoRepository.findById(xhCtvtQuyetDinhGnvHdr.get().getIdLanhDao());
       }
-      if (StringUtils.isEmpty(xhCtvtQuyetDinhGnvHdr.get().getCloaiVthh())) throw new Exception("Không tồn tại bản ghi");
-      var qlnvDmVattu = qlnvDmVattuRepository.findByMa(xhCtvtQuyetDinhGnvHdr.get().getCloaiVthh());
-      if (Objects.isNull(qlnvDmVattu)) throw new Exception("Không tồn tại bản ghi");
+      if (StringUtils.isEmpty(xhCtvtQuyetDinhGnvHdr.get().getLoaiVthh())) throw new Exception("Không tồn tại loại hàng vật tư hoá");
+      var qlnvDmVattu = qlnvDmVattuRepository.findByMa(xhCtvtQuyetDinhGnvHdr.get().getLoaiVthh());
+      if (qlnvDmVattu == null) throw new Exception("Không tồn tại bản ghi vật tư");
       if (!StringUtils.isEmpty(qlnvDmVattu.getLoaiHang())) {
         if (qlnvDmVattu.getLoaiHang().equals("VT")) {
           fileTemplate = "xuatcuutrovientro/" + "QĐ giao nhiệm vụ xuất hàng_Xuất cứu trợ, viện trợ-VT.docx";
