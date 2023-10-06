@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovi
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQdPdHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatPaRepository;
@@ -10,10 +11,14 @@ import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutro
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.object.xuatcuutrovientro.XhCtvtDeXuatHdrPreview;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtDeXuatHdrReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdrReq;
+import com.tcdt.qlnvhang.response.xuatcuutrovientro.XhCtvtDeXuatHdrDto;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbNhapDayKhoDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdr;
@@ -22,6 +27,7 @@ import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovient
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import lombok.var;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,12 +39,10 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.tcdt.qlnvhang.util.Contains.CAP_CUC;
@@ -57,6 +61,8 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     private XhCtvtDeXuatPaRepository xhCtvtDeXuatPaRepository;
     @Autowired
     private FileDinhKemService fileDinhKemService;
+    @Autowired
+    private QlnvDmVattuRepository qlnvDmVattuRepository;
 
     public Page<XhCtvtDeXuatHdr> searchPage(CustomUserDetails currentUser, SearchXhCtvtDeXuatHdrReq req) throws Exception {
 //    req.setDvql(currentUser.getDvql());
@@ -310,5 +316,100 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
+    }
+
+    public ReportTemplateResponse preview(XhCtvtDeXuatHdrReq objReq) throws Exception {
+        var xhCtvtDeXuatHdr = xhCtvtDeXuatHdrRepository.findById(objReq.getId());
+        var fileTemplate = "";
+        if (!xhCtvtDeXuatHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
+        if (StringUtils.isEmpty(xhCtvtDeXuatHdr.get().getLoaiVthh())) throw new Exception("Không tồn tại loại vật tư hàng hoá");
+        var qlnvDmVattu = qlnvDmVattuRepository.findByMa(xhCtvtDeXuatHdr.get().getLoaiVthh());
+        if (qlnvDmVattu == null) throw new Exception("Không tồn tại bản ghi vật tư");
+        if (!StringUtils.isEmpty(qlnvDmVattu.getLoaiHang())) {
+            if (qlnvDmVattu.getLoaiHang().equals("VT")) {
+                fileTemplate = "xuatcuutrovientro/" + "Đề xuất PA Cứu trợ-Vụ tạo-Vật tư-Cấp Tổng cục.docx";
+            } else {
+                fileTemplate = "xuatcuutrovientro/" + "Đề xuất PA Cứu trợ-Vụ tạo-Lương thực-Cấp Tổng cục.docx";
+            }
+        }
+        FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
+        var xhCtvtDeXuatHdrPreview = setDataToPreview(xhCtvtDeXuatHdr, qlnvDmVattu);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, xhCtvtDeXuatHdrPreview);
+    }
+
+    private XhCtvtDeXuatHdrPreview setDataToPreview(Optional<XhCtvtDeXuatHdr> xhCtvtDeXuatHdr, QlnvDmVattu qlnvDmVattu) throws Exception {
+        var xhCtvtDeXuatHdrPreview = new XhCtvtDeXuatHdrPreview();
+        xhCtvtDeXuatHdrPreview.setChungLoaiHangHoa(xhCtvtDeXuatHdr.get().getCloaiVthh());
+        xhCtvtDeXuatHdrPreview.setNamKeHoach(xhCtvtDeXuatHdr.get().getNam());
+        xhCtvtDeXuatHdrPreview.setTongSoLuongXuatCap(String.valueOf(xhCtvtDeXuatHdr.get().getTongSoLuongDeXuat()));
+        if (qlnvDmVattu.getLoaiHang().equals("VT")) {
+            xhCtvtDeXuatHdrPreview.setXhCtvtDeXuatHdrDto(convertXhCtvtDeXuatHdrToDtoVT(xhCtvtDeXuatHdr));
+        } else if (qlnvDmVattu.getLoaiHang().equals("LT")) {
+            xhCtvtDeXuatHdrPreview.setXhCtvtDeXuatHdrDto(convertXhCtvtDeXuatHdrToDtoLT(xhCtvtDeXuatHdr));
+        }
+        return xhCtvtDeXuatHdrPreview;
+    }
+    private List<XhCtvtDeXuatHdrDto> convertXhCtvtDeXuatHdrToDtoVT(Optional<XhCtvtDeXuatHdr> xhCtvtDeXuatHdr) {
+        List<XhCtvtDeXuatHdrDto> xhCtvtDeXuatHdrDtos = new ArrayList<>();
+        Map<String, List<XhCtvtDeXuatPa>> xhCtvtDeXuatPas = xhCtvtDeXuatHdr.get().getDeXuatPhuongAn()
+                .stream().collect(Collectors.groupingBy(XhCtvtDeXuatPa::getNoiDung));
+        int stt = 1;
+        for (var key : xhCtvtDeXuatPas.entrySet()) {
+            var xhCtvtDeXuatHdrDtoLvOne = new XhCtvtDeXuatHdrDto();
+            xhCtvtDeXuatHdrDtoLvOne.setStt(String.valueOf(stt++));
+            xhCtvtDeXuatHdrDtoLvOne.setDonViNhanCuuTro(key.getKey());
+            xhCtvtDeXuatHdrDtoLvOne.setMucDichXuat(xhCtvtDeXuatHdr.get().getMucDichXuat());
+            xhCtvtDeXuatHdrDtoLvOne.setNgayKetThuc(Contains.convertDateToString(xhCtvtDeXuatHdr.get().getNgayKetThuc()));
+            xhCtvtDeXuatHdrDtos.add(xhCtvtDeXuatHdrDtoLvOne);
+            convertXhCtvtDeXuatHdrToDtoLvTwo(xhCtvtDeXuatHdrDtos, key);
+        }
+        return xhCtvtDeXuatHdrDtos;
+    }
+
+    private List<XhCtvtDeXuatHdrDto> convertXhCtvtDeXuatHdrToDtoLT(Optional<XhCtvtDeXuatHdr> xhCtvtDeXuatHdr) {
+        List<XhCtvtDeXuatHdrDto> xhCtvtDeXuatHdrDtos = new ArrayList<>();
+        var xhCtvtDeXuatPas = xhCtvtDeXuatHdr.get().getDeXuatPhuongAn()
+                .stream().collect(Collectors.groupingBy(XhCtvtDeXuatPa::getNoiDung));
+        int stt = 1;
+        for (var key : xhCtvtDeXuatPas.entrySet()) {
+            var xhCtvtDeXuatHdrDto = new XhCtvtDeXuatHdrDto();
+            xhCtvtDeXuatHdrDto.setStt(String.valueOf(stt++));
+            xhCtvtDeXuatHdrDto.setDonViNhanCuuTro(key.getKey());
+            xhCtvtDeXuatHdrDto.setMucDichXuat(xhCtvtDeXuatHdr.get().getMucDichXuat());
+            xhCtvtDeXuatHdrDto.setNgayKetThuc(Contains.convertDateToString(xhCtvtDeXuatHdr.get().getNgayKetThuc()));
+            xhCtvtDeXuatHdrDtos.add(xhCtvtDeXuatHdrDto);
+                for (var valueLt : key.getValue()) {
+                    var xhCtvtDeXuatPaDto = new  XhCtvtDeXuatHdrDto();
+                    xhCtvtDeXuatPaDto.setTenDvi(valueLt.getTenDvi());
+                    xhCtvtDeXuatPaDto.setSoLuong(String.valueOf(valueLt.getSoLuong()));
+                    xhCtvtDeXuatHdrDtos.add(xhCtvtDeXuatPaDto);
+                }
+            }
+        return xhCtvtDeXuatHdrDtos;
+    }
+
+    private void convertXhCtvtDeXuatHdrToDtoLvTwo(List<XhCtvtDeXuatHdrDto> xhCtvtDeXuatHdrDtos, Map.Entry<String, List<XhCtvtDeXuatPa>> key) {
+        var xhCtvtDeXuatPaVt = key.getValue()
+                .stream().collect(Collectors.groupingBy(XhCtvtDeXuatPa::getLoaiVthh));
+        for (var res : xhCtvtDeXuatPaVt.entrySet()) {
+            var xhCtvtDeXuatPaDtoLvTwo = new  XhCtvtDeXuatHdrDto();
+            xhCtvtDeXuatPaDtoLvTwo.setLoaiVthh(res.getValue().stream().findAny().get().getTenLoaiVthh());
+            xhCtvtDeXuatPaDtoLvTwo.setSoLuong(String.valueOf(res.getValue()
+                    .stream().map(XhCtvtDeXuatPa::getSoLuong).reduce(BigDecimal.ZERO, BigDecimal::add)));
+            xhCtvtDeXuatPaDtoLvTwo.setDonViTinh(res.getValue().stream().findAny().get().getDonViTinh());
+            xhCtvtDeXuatHdrDtos.add(xhCtvtDeXuatPaDtoLvTwo);
+            convertXhCtvtDeXuatHdrToDtoLvThree(xhCtvtDeXuatHdrDtos, res);
+        }
+    }
+
+    private void convertXhCtvtDeXuatHdrToDtoLvThree(List<XhCtvtDeXuatHdrDto> xhCtvtDeXuatHdrDtos, Map.Entry<String, List<XhCtvtDeXuatPa>> res) {
+        for (var value : res.getValue()) {
+            XhCtvtDeXuatHdrDto xhCtvtDeXuatPaDtoLvThree = new XhCtvtDeXuatHdrDto();
+            xhCtvtDeXuatPaDtoLvThree.setCloaiVthh(value.getTenCloaiVthh());
+            xhCtvtDeXuatPaDtoLvThree.setTenDvi(value.getTenDvi());
+            xhCtvtDeXuatPaDtoLvThree.setSoLuong(String.valueOf(value.getSoLuong()));
+            xhCtvtDeXuatPaDtoLvThree.setDonViTinh(value.getDonViTinh());
+            xhCtvtDeXuatHdrDtos.add(xhCtvtDeXuatPaDtoLvThree);
+        }
     }
 }
