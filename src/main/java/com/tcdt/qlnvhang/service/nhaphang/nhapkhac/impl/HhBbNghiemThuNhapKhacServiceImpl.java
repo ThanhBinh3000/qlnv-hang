@@ -186,37 +186,64 @@ public class HhBbNghiemThuNhapKhacServiceImpl extends BaseServiceImpl implements
             throw new Exception("Không tìm thấy dữ liệu.");
         }
         String status = stReq.getTrangThai() + qOptional.get().getTrangThai();
-        switch (status) {
-            case Contains.CHODUYET_TK + Contains.DUTHAO:
-            case Contains.CHODUYET_TK + Contains.TUCHOI_TK:
-            case Contains.CHODUYET_TK + Contains.TUCHOI_KT:
-            case Contains.CHODUYET_TK + Contains.TUCHOI_LDCC:
-                qOptional.get().setNguoiGuiDuyet(userInfo.getUsername());
-                qOptional.get().setNgayGuiDuyet(new Date());
-                break;
-            case Contains.CHODUYET_KT + Contains.CHODUYET_TK:
-            case Contains.TUCHOI_TK + Contains.CHODUYET_TK:
-                qOptional.get().setThuKho(userInfo.getUsername());
-                qOptional.get().setTenThuKho(userInfo.getFullName());
-                qOptional.get().setLdoTuChoi(stReq.getLyDoTuChoi());
-                qOptional.get().setNgayPduyet(new Date());
-                break;
-            case Contains.CHODUYET_LDCC + Contains.CHODUYET_KT:
-            case Contains.TUCHOI_KT + Contains.CHODUYET_KT:
-                qOptional.get().setKeToan(userInfo.getUsername());
-                qOptional.get().setTenKeToan(userInfo.getFullName());
-                qOptional.get().setLdoTuChoi(stReq.getLyDoTuChoi());
-                qOptional.get().setNgayPduyet(new Date());
-                break;
-            case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
-            case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
-                qOptional.get().setNguoiPduyet(userInfo.getUsername());
-                qOptional.get().setTenNguoiPduyet(userInfo.getFullName());
-                qOptional.get().setLdoTuChoi(stReq.getLyDoTuChoi());
-                qOptional.get().setNgayPduyet(new Date());
-                break;
-            default:
-                throw new Exception("Phê duyệt không thành công");
+        if (!qOptional.get().getLoaiVthh().startsWith("02")) {
+            switch (status) {
+                case Contains.CHODUYET_TK + Contains.DUTHAO:
+                case Contains.CHODUYET_TK + Contains.TUCHOI_TK:
+                case Contains.CHODUYET_TK + Contains.TUCHOI_KT:
+                case Contains.CHODUYET_TK + Contains.TUCHOI_LDCC:
+                    qOptional.get().setNguoiGuiDuyet(userInfo.getUsername());
+                    qOptional.get().setNgayGuiDuyet(new Date());
+                    break;
+                case Contains.CHODUYET_KT + Contains.CHODUYET_TK:
+                case Contains.TUCHOI_TK + Contains.CHODUYET_TK:
+                    qOptional.get().setThuKho(userInfo.getUsername());
+                    qOptional.get().setTenThuKho(userInfo.getFullName());
+                    qOptional.get().setLdoTuChoi(stReq.getLyDoTuChoi());
+                    qOptional.get().setNgayPduyet(new Date());
+                    break;
+                case Contains.CHODUYET_LDCC + Contains.CHODUYET_KT:
+                case Contains.TUCHOI_KT + Contains.CHODUYET_KT:
+                    qOptional.get().setKeToan(userInfo.getUsername());
+                    qOptional.get().setTenKeToan(userInfo.getFullName());
+                    qOptional.get().setLdoTuChoi(stReq.getLyDoTuChoi());
+                    qOptional.get().setNgayPduyet(new Date());
+                    break;
+                case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
+                case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
+                    qOptional.get().setNguoiPduyet(userInfo.getUsername());
+                    qOptional.get().setTenNguoiPduyet(userInfo.getFullName());
+                    qOptional.get().setLdoTuChoi(stReq.getLyDoTuChoi());
+                    qOptional.get().setNgayPduyet(new Date());
+                    break;
+                default:
+                    throw new Exception("Phê duyệt không thành công");
+            }
+        }else {
+            switch (status) {
+                case Contains.CHODUYET_TK + Contains.DUTHAO:
+                case Contains.CHODUYET_TK + Contains.TUCHOI_TK:
+                case Contains.CHODUYET_TK + Contains.TUCHOI_LDCC:
+                    qOptional.get().setNguoiGuiDuyet(userInfo.getUsername());
+                    qOptional.get().setNgayGuiDuyet(new Date());
+                    break;
+                case Contains.CHODUYET_LDCC + Contains.CHODUYET_TK:
+                case Contains.TUCHOI_TK + Contains.CHODUYET_TK:
+                    qOptional.get().setKeToan(userInfo.getUsername());
+                    qOptional.get().setTenKeToan(userInfo.getFullName());
+                    qOptional.get().setLdoTuChoi(stReq.getLyDoTuChoi());
+                    qOptional.get().setNgayPduyet(new Date());
+                    break;
+                case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
+                case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
+                    qOptional.get().setNguoiPduyet(userInfo.getUsername());
+                    qOptional.get().setTenNguoiPduyet(userInfo.getFullName());
+                    qOptional.get().setLdoTuChoi(stReq.getLyDoTuChoi());
+                    qOptional.get().setNgayPduyet(new Date());
+                    break;
+                default:
+                    throw new Exception("Phê duyệt không thành công");
+            }
         }
         qOptional.get().setTrangThai(stReq.getTrangThai());
         return hhBbNghiemThuNhapKhacRepository.save(qOptional.get());
