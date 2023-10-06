@@ -90,6 +90,13 @@ public class QdPdHsmtServiceImpl extends BaseServiceImpl implements QdPdHsmtServ
             Optional<HhQdKhlcntHdr> qdKhlcntHdr = hhQdKhlcntHdrRepository.findById(f.getIdQdPdKhlcnt());
             if (qdKhlcntHdr.isPresent()) {
                 qdKhlcntHdr.get().setTenLoaiVthh(StringUtils.isEmpty(qdKhlcntHdr.get().getLoaiVthh()) ? null : hashMapDmHh.get(qdKhlcntHdr.get().getLoaiVthh()));
+                if (req.getLoaiVthh().startsWith("02") && qdKhlcntHdr.get().getDieuChinh() != null && qdKhlcntHdr.get().getDieuChinh().equals(Boolean.TRUE)) {
+                    Optional<HhDchinhDxKhLcntHdr> dchinhDxKhLcntHdr = hhDchinhDxKhLcntHdrRepository.findByIdQdGocAndLastest(qdKhlcntHdr.get().getId(), Boolean.TRUE);
+                    if (dchinhDxKhLcntHdr.isPresent()) {
+                        qdKhlcntHdr.get().setDchinhDxKhLcntHdr(dchinhDxKhLcntHdr.get());
+                        qdKhlcntHdr.get().setSoQdDc(dchinhDxKhLcntHdr.get().getSoQdDc());
+                    }
+                }
                 f.setQdKhlcntHdr(qdKhlcntHdr.get());
             }
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));

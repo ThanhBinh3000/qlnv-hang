@@ -276,7 +276,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
         int page = req.getPaggingReq().getPage();
         int limit = req.getPaggingReq().getLimit();
         Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
-//        Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+        Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 //        Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
         Page<HhQdKhlcntHdr> data = hhQdKhlcntHdrRepository.selectPage(req.getNamKhoach(), req.getLoaiVthh(), req.getSoQd(), req.getTrichYeu(),
                 convertDateToString(req.getTuNgayQd()),
@@ -286,6 +286,17 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
                 req.getTrangThaiDtl(),
                 req.getTrangThaiDt(), req.getSoQdPdKhlcnt(), req.getSoQdPdKqlcnt(),
                 pageable);
+        data.getContent().forEach(f -> {
+            f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
+                if (f.getDieuChinh() != null && f.getDieuChinh().equals(Boolean.TRUE)) {
+                    Optional<HhDchinhDxKhLcntHdr> dchinhDxKhLcntHdr = hhDchinhDxKhLcntHdrRepository.findByIdQdGocAndLastest(f.getId(), Boolean.TRUE);
+                    if (dchinhDxKhLcntHdr.isPresent()) {
+                        f.setDchinhDxKhLcntHdr(dchinhDxKhLcntHdr.get());
+                        f.setSoQdDc(dchinhDxKhLcntHdr.get().getSoQdDc());
+                    }
+                }
+            f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+        });
         return data;
     }
 

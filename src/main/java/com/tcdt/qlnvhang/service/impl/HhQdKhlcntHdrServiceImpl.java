@@ -209,6 +209,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 					qd.setTgianNhang(hhDxuatKhLcntHdr.get().getTgianNhang());
 				}
 			}
+			BigDecimal tongSl = BigDecimal.ZERO;
 			hhQdKhlcntDtlRepository.save(qd);
 			for (HhQdKhlcntDsgthauReq gtList : ObjectUtils.isEmpty(dx.getDsGoiThau()) ? dx.getChildren() : dx.getDsGoiThau()){
 					HhQdKhlcntDsgthau gt = ObjectMapperUtils.map(gtList, HhQdKhlcntDsgthau.class);
@@ -223,6 +224,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 					gt.setLoaiVthh(hhDxuatKhLcntHdr.get().getLoaiVthh());
 					gt.setMaDvi(hhDxuatKhLcntHdr.get().getMaDvi());
 				}
+				tongSl = tongSl.add(gt.getSoLuong());
 				hhQdKhlcntDsgthauRepository.save(gt);
 				for (HhDxuatKhLcntDsgthauDtlCtietReq ddNhap : gtList.getChildren()){
 					HhQdKhlcntDsgthauCtiet dataDdNhap = new ModelMapper().map(ddNhap, HhQdKhlcntDsgthauCtiet.class);
@@ -242,6 +244,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 					}
 				}
 			}
+			qd.setSoLuong(tongSl);
+			hhQdKhlcntDtlRepository.save(qd);
 		}
 	}
 
@@ -478,8 +482,6 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi()) ? null : mapDmucDvi.get(dtl.getMaDvi()));
 			dtl.setChildren(hhQdKhlcntDsgthauList);
 			dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
-
-
 			hhQdKhlcntDtlList.add(dtl);
 		}
 		long countThanhCong = hhQdKhlcntDtlList.stream()
@@ -986,7 +988,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				f.setSoGthau((long) hhQdKhlcntDsgthauData.size());
 				int soGthauTrung = 0;
 				int soHdDaKy = 0;
-				if (f.getDieuChinh().equals(Boolean.TRUE)) {
+				if (f.getDieuChinh() != null && f.getDieuChinh().equals(Boolean.TRUE)) {
 					Optional<HhDchinhDxKhLcntHdr> dchinhDxKhLcntHdr = hhDchinhDxKhLcntHdrRepository.findByIdQdGocAndLastest(f.getId(), Boolean.TRUE);
 					if (dchinhDxKhLcntHdr.isPresent()) {
 						List<HhDchinhDxKhLcntDsgthau> gThauList = gThauRepository.findAllByIdDcDxHdr(dchinhDxKhLcntHdr.get().getId());
