@@ -20,6 +20,8 @@ public class HhQdPdNhapKhacHdrReq {
     private String maDvi;
     private String dvt;
     private String loaiHinhNx;
+    private BigDecimal tongSlNhap;
+    private String noiDung;
     private String kieuNx;
     private String soDxuat;
     private String trichYeu;
