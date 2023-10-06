@@ -151,7 +151,7 @@ public class XhPhieuKnclService extends BaseServiceImpl {
                     data.setNguoiGduyetId(currentUser.getUser().getId());
                     data.setNgayGduyet(LocalDate.now());
                     break;
-                case Contains.CHO_DUYET_TP + Contains.CHODUYET_LDCC:
+                case Contains.CHO_DUYET_TP + Contains.CHODUYET_LDC:
                     data.setNguoiPduyetTpId(currentUser.getUser().getId());
                     data.setNgayPduyetTp(LocalDate.now());
                     break;
@@ -159,6 +159,15 @@ public class XhPhieuKnclService extends BaseServiceImpl {
                     data.setNguoiPduyetTpId(currentUser.getUser().getId());
                     data.setNgayPduyetTp(LocalDate.now());
                     data.setLyDoTuChoi(statusReq.getLyDoTuChoi());
+                    break;
+                case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
+                    data.setNguoiPduyetId(currentUser.getUser().getId());
+                    data.setNgayPduyet(LocalDate.now());
+                    data.setLyDoTuChoi(statusReq.getLyDoTuChoi());
+                    break;
+                case Contains.CHODUYET_LDC + Contains.DADUYET_LDC:
+                    data.setNguoiPduyetId(currentUser.getUser().getId());
+                    data.setNgayPduyet(LocalDate.now());
                     break;
                 case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
                     data.setNguoiPduyetId(currentUser.getUser().getId());
