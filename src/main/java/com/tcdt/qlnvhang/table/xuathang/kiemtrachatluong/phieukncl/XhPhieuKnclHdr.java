@@ -47,6 +47,8 @@ public class XhPhieuKnclHdr extends BaseEntity implements Serializable {
   private Long nguoiGduyetId;
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
+  private LocalDate ngayPduyetTp;
+  private Long nguoiPduyetTpId;
   @JsonIgnore
   @Transient
   private Map<String, Map<String, Object>> mapVthh;
