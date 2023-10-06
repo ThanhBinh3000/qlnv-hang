@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
+import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
@@ -15,6 +16,7 @@ import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovie
 import com.tcdt.qlnvhang.response.xuatcuutrovientro.XhCtvtQuyetDinhGnvDtlDto;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdDtl;
@@ -218,6 +220,7 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
         data.setLyDoTuChoi(statusReq.getLyDoTuChoi());
       } else if (status.equals(TrangThaiAllEnum.CHO_DUYET_TP.getId() + TrangThaiAllEnum.CHO_DUYET_LDC.getId()) || status.equals(TrangThaiAllEnum.CHO_DUYET_LDC.getId() + TrangThaiAllEnum.BAN_HANH.getId())) {
         data.setNguoiPduyetId(currentUser.getUser().getId());
+        data.setIdLanhDao(currentUser.getUser().getId());
         data.setNgayPduyet(LocalDate.now());
       } else {
         throw new Exception("Phê duyệt không thành công");
@@ -243,23 +246,23 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
         }
       }
       FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
-      var xhCtvtQuyetDinhGnvHdrPreview = setDataToPreview(xhCtvtQuyetDinhGnvHdr);
+      var xhCtvtQuyetDinhGnvHdrPreview = setDataToPreview(xhCtvtQuyetDinhGnvHdr, qlnvDmVattu);
       return docxToPdfConverter.convertDocxToPdf(inputStream, xhCtvtQuyetDinhGnvHdrPreview);
     }
 
-  private XhCtvtQuyetDinhGnvHdrPreview setDataToPreview(Optional<XhCtvtQuyetDinhGnvHdr> xhCtvtQuyetDinhGnvHdr) {
+  private XhCtvtQuyetDinhGnvHdrPreview setDataToPreview(Optional<XhCtvtQuyetDinhGnvHdr> xhCtvtQuyetDinhGnvHdr, QlnvDmVattu qlnvDmVattu) {
     return XhCtvtQuyetDinhGnvHdrPreview.builder()
             .soBbQd(xhCtvtQuyetDinhGnvHdr.get().getSoBbQd())
             .ngayKy(xhCtvtQuyetDinhGnvHdr.get().getNgayKy().getDayOfMonth())
             .thangKy(xhCtvtQuyetDinhGnvHdr.get().getNgayKy().getMonth().getValue())
             .namKy(xhCtvtQuyetDinhGnvHdr.get().getNgayKy().getYear())
             .namKeHoach(xhCtvtQuyetDinhGnvHdr.get().getNam())
-            .canCuPhapLy("")
+            .canCuPhapLy(xhCtvtQuyetDinhGnvHdr.get().getFileDinhKem().stream().map(FileDinhKemJoinTable::getFileName).collect(Collectors.joining(" ,")))
             .tongSoLuong(xhCtvtQuyetDinhGnvHdr.get().getTongSoLuong())
-            .donViTinh("")
+            .donViTinh(qlnvDmVattu.getMaDviTinh())
             .loaiVthh(xhCtvtQuyetDinhGnvHdr.get().getLoaiVthh())
             .thoiGianGiaoNhan(xhCtvtQuyetDinhGnvHdr.get().getThoiGianGiaoNhan())
-            .lanhDaoCuc("")
+            .lanhDaoCuc(xhCtvtQuyetDinhGnvHdr.get().getIdLanhDao())
             .xhCtvtQuyetDinhGnvDtlDto(convertXhCtvtQuyetDinhGnvDtlDtoToDto(xhCtvtQuyetDinhGnvHdr.get().getDataDtl()))
             .build();
   }

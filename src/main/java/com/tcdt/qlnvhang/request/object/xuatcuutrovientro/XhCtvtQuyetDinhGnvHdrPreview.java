@@ -21,6 +21,6 @@ public class XhCtvtQuyetDinhGnvHdrPreview {
     private String donViTinh;
     private String loaiVthh;
     private LocalDate thoiGianGiaoNhan;
-    private String lanhDaoCuc;
+    private Long lanhDaoCuc;
     private List<XhCtvtQuyetDinhGnvDtlDto> xhCtvtQuyetDinhGnvDtlDto;
 }
