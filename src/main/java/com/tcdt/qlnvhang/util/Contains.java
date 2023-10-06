@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -369,6 +371,13 @@ public class Contains {
     }
     DateFormat df = new SimpleDateFormat(Contains.FORMAT_DATE_STR);
     return df.format(date);
+  }
+  public static String convertDateToString(LocalDate localDate) {
+    if (Objects.isNull(localDate)) {
+      return null;
+    }
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY");
+    return formatter.format(localDate);
   }
 
   public static Page<T> convertListToPage(List<T> list, Pageable pageable) {
