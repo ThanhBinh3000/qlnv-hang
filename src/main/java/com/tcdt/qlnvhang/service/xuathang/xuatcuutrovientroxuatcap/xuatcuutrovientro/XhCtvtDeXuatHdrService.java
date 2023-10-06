@@ -42,7 +42,6 @@ import javax.transaction.Transactional;
 import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -352,29 +351,28 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
         }
         return xhCtvtDeXuatHdrPreview;
     }
-    private List<XhCtvtDeXuatHdrDto> convertXhCtvtDeXuatHdrToDtoVT(Optional<XhCtvtDeXuatHdr> xhCtvtDeXuatHdr) throws Exception {
+    private List<XhCtvtDeXuatHdrDto> convertXhCtvtDeXuatHdrToDtoVT(Optional<XhCtvtDeXuatHdr> xhCtvtDeXuatHdr) {
         List<XhCtvtDeXuatHdrDto> xhCtvtDeXuatHdrDtos = new ArrayList<>();
         Map<String, List<XhCtvtDeXuatPa>> xhCtvtDeXuatPas = xhCtvtDeXuatHdr.get().getDeXuatPhuongAn()
                 .stream()
                 .collect(Collectors.groupingBy(XhCtvtDeXuatPa::getNoiDung));
         int stt = 1;
         for (var key : xhCtvtDeXuatPas.entrySet()) {
-            var xhCtvtDeXuatHdrDto = new XhCtvtDeXuatHdrDto();
-            xhCtvtDeXuatHdrDto.setStt(String.valueOf(stt++));
-            xhCtvtDeXuatHdrDto.setDonViNhanCuuTro(key.getKey());
-            xhCtvtDeXuatHdrDto.setMucDichXuat(xhCtvtDeXuatHdr.get().getMucDichXuat());
-            xhCtvtDeXuatHdrDto.setNgayKetThuc(Contains.convertDateToString(xhCtvtDeXuatHdr.get().getNgayKetThuc()));
-            xhCtvtDeXuatHdrDtos.add(xhCtvtDeXuatHdrDto);
-            extracted(xhCtvtDeXuatHdrDtos, key);
+            var xhCtvtDeXuatHdrDtoLvOne = new XhCtvtDeXuatHdrDto();
+            xhCtvtDeXuatHdrDtoLvOne.setStt(String.valueOf(stt++));
+            xhCtvtDeXuatHdrDtoLvOne.setDonViNhanCuuTro(key.getKey());
+            xhCtvtDeXuatHdrDtoLvOne.setMucDichXuat(xhCtvtDeXuatHdr.get().getMucDichXuat());
+            xhCtvtDeXuatHdrDtoLvOne.setNgayKetThuc(Contains.convertDateToString(xhCtvtDeXuatHdr.get().getNgayKetThuc()));
+            xhCtvtDeXuatHdrDtos.add(xhCtvtDeXuatHdrDtoLvOne);
+            convertXhCtvtDeXuatHdrToDto(xhCtvtDeXuatHdrDtos, key);
         }
         return xhCtvtDeXuatHdrDtos;
     }
 
-    private List<XhCtvtDeXuatHdrDto> convertXhCtvtDeXuatHdrToDtoLT(Optional<XhCtvtDeXuatHdr> xhCtvtDeXuatHdr) throws Exception {
+    private List<XhCtvtDeXuatHdrDto> convertXhCtvtDeXuatHdrToDtoLT(Optional<XhCtvtDeXuatHdr> xhCtvtDeXuatHdr) {
         List<XhCtvtDeXuatHdrDto> xhCtvtDeXuatHdrDtos = new ArrayList<>();
         var xhCtvtDeXuatPas = xhCtvtDeXuatHdr.get().getDeXuatPhuongAn()
-                .stream()
-                .collect(Collectors.groupingBy(XhCtvtDeXuatPa::getNoiDung));
+                .stream().collect(Collectors.groupingBy(XhCtvtDeXuatPa::getNoiDung));
         int stt = 1;
         for (var key : xhCtvtDeXuatPas.entrySet()) {
             var xhCtvtDeXuatHdrDto = new XhCtvtDeXuatHdrDto();
@@ -393,23 +391,24 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
         return xhCtvtDeXuatHdrDtos;
     }
 
-    private void extracted(List<XhCtvtDeXuatHdrDto> xhCtvtDeXuatHdrDtos, Map.Entry<String, List<XhCtvtDeXuatPa>> key) {
+    private void convertXhCtvtDeXuatHdrToDto(List<XhCtvtDeXuatHdrDto> xhCtvtDeXuatHdrDtos, Map.Entry<String, List<XhCtvtDeXuatPa>> key) {
         var XhCtvtDeXuatPaVt = key.getValue()
                 .stream()
                 .collect(Collectors.groupingBy(XhCtvtDeXuatPa::getLoaiVthh));
         for (var res : XhCtvtDeXuatPaVt.entrySet()) {
-            var xhCtvtDeXuatPaDto = new  XhCtvtDeXuatHdrDto();
-            xhCtvtDeXuatPaDto.setLoaiVthh(res.getValue().stream().findAny().get().getTenLoaiVthh());
-            xhCtvtDeXuatPaDto.setSoLuong(String.valueOf(res.getValue().stream().map(x -> x.getSoLuong()).reduce(BigDecimal.ZERO, BigDecimal::add)));
-            xhCtvtDeXuatPaDto.setDonViTinh(res.getValue().stream().findAny().get().getDonViTinh());
-            xhCtvtDeXuatHdrDtos.add(xhCtvtDeXuatPaDto);
+            var xhCtvtDeXuatPaDtoLvTwo = new  XhCtvtDeXuatHdrDto();
+            xhCtvtDeXuatPaDtoLvTwo.setLoaiVthh(res.getValue().stream().findAny().get().getTenLoaiVthh());
+            xhCtvtDeXuatPaDtoLvTwo.setSoLuong(String.valueOf(res.getValue()
+                    .stream().map(x -> x.getSoLuong()).reduce(BigDecimal.ZERO, BigDecimal::add)));
+            xhCtvtDeXuatPaDtoLvTwo.setDonViTinh(res.getValue().stream().findAny().get().getDonViTinh());
+            xhCtvtDeXuatHdrDtos.add(xhCtvtDeXuatPaDtoLvTwo);
             for (var value : res.getValue()) {
-                XhCtvtDeXuatHdrDto xhCtvtDeXuatPaDto1 = new  XhCtvtDeXuatHdrDto();
-                xhCtvtDeXuatPaDto1.setCloaiVthh(value.getTenCloaiVthh());
-                xhCtvtDeXuatPaDto1.setTenDvi(value.getTenDvi());
-                xhCtvtDeXuatPaDto1.setSoLuong(String.valueOf(value.getSoLuong()));
-                xhCtvtDeXuatPaDto1.setDonViTinh(value.getDonViTinh());
-                xhCtvtDeXuatHdrDtos.add(xhCtvtDeXuatPaDto1);
+                XhCtvtDeXuatHdrDto xhCtvtDeXuatPaDtoLvThree = new  XhCtvtDeXuatHdrDto();
+                xhCtvtDeXuatPaDtoLvThree.setCloaiVthh(value.getTenCloaiVthh());
+                xhCtvtDeXuatPaDtoLvThree.setTenDvi(value.getTenDvi());
+                xhCtvtDeXuatPaDtoLvThree.setSoLuong(String.valueOf(value.getSoLuong()));
+                xhCtvtDeXuatPaDtoLvThree.setDonViTinh(value.getDonViTinh());
+                xhCtvtDeXuatHdrDtos.add(xhCtvtDeXuatPaDtoLvThree);
             }
         }
     }
