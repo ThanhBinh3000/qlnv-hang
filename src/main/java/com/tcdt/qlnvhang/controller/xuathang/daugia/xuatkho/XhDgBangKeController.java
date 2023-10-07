@@ -7,9 +7,7 @@ import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho.SearchXhDgBangKeReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho.XhDgBangKeReq;
-import com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho.XhDgPhieuXuatKhoReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.xuathang.daugia.xuatkho.XhDgBangKeService;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -38,7 +36,6 @@ public class XhDgBangKeController extends BaseController {
 
     @Autowired
     XhDgBangKeService xhDgBangKeService;
-
 
     @ApiOperation(value = "Tra cứu", response = List.class)
     @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)

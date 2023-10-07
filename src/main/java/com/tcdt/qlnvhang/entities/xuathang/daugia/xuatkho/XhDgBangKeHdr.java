@@ -1,9 +1,7 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaDtl;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
@@ -18,13 +16,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = XhDgBangKeHdr.TABLE_NAME)
 @Data
 public class XhDgBangKeHdr implements Serializable {
-
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_DG_BANG_KE_HDR";
     @Id
@@ -131,13 +127,13 @@ public class XhDgBangKeHdr implements Serializable {
         }
         if (!DataUtils.isNullObject(getMaNganKho())) {
             setTenNganKho(mapDmucDvi.containsKey(getMaNganKho()) ? mapDmucDvi.get(getMaNganKho()) : null);
-            if(getTenNganKho() != null){
+            if (getTenNganKho() != null) {
                 setTenNganLoKho(getTenNganKho());
             }
         }
         if (!DataUtils.isNullObject(getMaLoKho())) {
             setTenLoKho(mapDmucDvi.containsKey(getMaLoKho()) ? mapDmucDvi.get(getMaLoKho()) : null);
-            if(getTenLoKho() != null) {
+            if (getTenLoKho() != null) {
                 setTenNganLoKho(getTenLoKho() + " - " + getTenNganKho());
             }
         }

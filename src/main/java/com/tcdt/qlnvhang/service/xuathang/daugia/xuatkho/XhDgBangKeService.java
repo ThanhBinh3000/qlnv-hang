@@ -241,17 +241,24 @@ public class XhDgBangKeService extends BaseServiceImpl {
     }
 
     public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {
-        if (currentUser == null) throw new Exception("Bad request.");
-        try {
-            FileInputStream inputStream = new FileInputStream(baseReportFolder + "/bandaugia/Bảng kê cân hàng bán đấu giá.docx");
-            List<XhDgBangKeHdr> listDetail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
-            XhDgBangKeHdr detail = listDetail.get(0);
-            return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XDocReportException e) {
-            e.printStackTrace();
+        if (currentUser == null) {
+            throw new Exception("Bad request.");
         }
+       try {
+           String templatePath = baseReportFolder + "/bandaugia/";
+           XhDgBangKeHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
+           if (detail.getLoaiVthh().startsWith("02")) {
+               templatePath += "Bảng kê cân hàng bán đấu giá vật tư.docx";
+           }else {
+               templatePath += "Bảng kê cân hàng bán đấu giá lương thực.docx";
+           }
+           FileInputStream inputStream = new FileInputStream(templatePath);
+           return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+       }catch (IOException e) {
+           e.printStackTrace();
+       } catch (XDocReportException e) {
+           e.printStackTrace();
+       }
         return null;
     }
 }
