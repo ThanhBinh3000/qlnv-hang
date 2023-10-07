@@ -7,8 +7,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface XhDgBbTinhKhoDtlRepository extends JpaRepository<XhDgBbTinhKhoDtl,Long> {
-  List<XhDgBbTinhKhoDtl> findAllByIdHdr (Long idHdr);
+public interface XhDgBbTinhKhoDtlRepository extends JpaRepository<XhDgBbTinhKhoDtl, Long> {
 
-  List<XhDgBbTinhKhoDtl> findAllByIdHdrIn(List<Long> listId);
+    void deleteAllByIdHdr(Long idHdr);
+
+    List<XhDgBbTinhKhoDtl> findAllByIdHdr(Long idHdr);
+
+    List<XhDgBbTinhKhoDtl> findByIdHdrIn(List<Long> listId);
 }

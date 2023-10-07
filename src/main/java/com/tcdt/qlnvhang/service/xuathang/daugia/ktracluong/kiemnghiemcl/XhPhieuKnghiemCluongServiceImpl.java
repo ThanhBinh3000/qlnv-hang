@@ -127,11 +127,11 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl {
         List<XhPhieuKnghiemCluong> allById = xhPhieuKnghiemCluongRepository.findAllById(ids);
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
-        Map<String, String> setMapHinhThucBaoQuan = getListDanhMucChung("HINH_THUC_BAO_QUAN");
+        Map<String, String> mapHinhThucBaoQuan = getListDanhMucChung("HINH_THUC_BAO_QUAN");
         allById.forEach(data -> {
             data.setMapDmucDvi(mapDmucDvi);
             data.setMapVthh(mapVthh);
-            data.setMapHinhThucBaoQuan(setMapHinhThucBaoQuan);
+            data.setMapHinhThucBaoQuan(mapHinhThucBaoQuan);
             data.setTrangThai(data.getTrangThai());
             if (data.getIdThuKho() != null) {
                 userInfoRepository.findById(data.getIdThuKho()).ifPresent(userInfo -> {
@@ -295,5 +295,3 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl {
         return null;
     }
 }
-
-
