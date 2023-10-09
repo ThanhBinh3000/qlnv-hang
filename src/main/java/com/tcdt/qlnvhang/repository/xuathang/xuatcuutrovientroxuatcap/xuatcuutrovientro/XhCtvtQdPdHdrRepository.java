@@ -58,4 +58,24 @@ public interface XhCtvtQdPdHdrRepository extends JpaRepository<XhCtvtQuyetDinhPd
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
   List<XhCtvtQuyetDinhPdHdr> searchQdPaXuatCap(@Param("param") SearchXhCtvtQuyetDinhPdHdr param);
+  @Query("SELECT DISTINCT  c FROM XhCtvtQuyetDinhPdHdr c left join c.quyetDinhPdDtl e" +
+          " WHERE 1=1 " +
+          "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%'))" +
+          "AND (:#{#param.maDviDx} IS NULL OR e.maDvi LIKE CONCAT(:#{#param.maDviDx},'%')) " +
+          "AND (:#{#param.type} IS NULL OR c.type = :#{#param.type}) " +
+          "AND (:#{#param.types.size() } = 0 OR c.type in :#{#param.types}) " +
+          "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
+          "AND (:#{#param.soDx} IS NULL OR LOWER(e.soDx) LIKE CONCAT('%',LOWER(:#{#param.soDx}),'%')) " +
+          "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
+          "AND (:#{#param.xuatCap} IS NULL OR c.xuatCap = :#{#param.xuatCap}) " +
+          "AND (:#{#param.soBbQd} IS NULL OR LOWER(c.soBbQd) LIKE CONCAT('%',LOWER(:#{#param.soBbQd}),'%')) " +
+          "AND (:#{#param.loaiVthh} IS NULL OR c.loaiVthh = :#{#param.loaiVthh}) " +
+          "AND (:#{#param.tenVthh} IS NULL OR c.tenVthh = :#{#param.tenVthh}) " +
+          "AND ((:#{#param.ngayKyTu}  IS NULL OR c.ngayKy >= :#{#param.ngayKyTu})" +
+          "AND (:#{#param.ngayKyDen}  IS NULL OR c.ngayKy <= :#{#param.ngayKyDen}) ) " +
+          "AND (:#{#param.idQdGnvNull } = false OR ((:#{#param.idQdGnvNull } = true AND e.idQdGnv IS NULL))) " +
+          "AND c.id not in (select distinct qdnv.idQdPd from XhCtvtQuyetDinhGnvHdr qdnv where qdnv.idQdPd is not null AND (:#{#param.idQdGnv} IS NULL OR qdnv.id = :#{#param.idQdGnv}) ) "+
+          "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
+  )
+  Page<XhCtvtQuyetDinhPdHdr> searchList(@Param("param") SearchXhCtvtQuyetDinhPdHdr param);
 }

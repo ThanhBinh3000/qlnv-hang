@@ -54,6 +54,24 @@ public class XhCtvtQdPdHdrController {
     return ResponseEntity.ok(resp);
   }
 
+  @ApiOperation(value = "Tra cứu thông tin đề xuất", response = List.class)
+  @PostMapping(value = PathContains.DANH_SACH, produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> list(@CurrentUser CustomUserDetails currentUser, @RequestBody SearchXhCtvtQuyetDinhPdHdr objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(xhCtvtQdPdHdrService.searchList(currentUser, objReq));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Tra cứu thông tin : {}", e);
+    }
+
+    return ResponseEntity.ok(resp);
+  }
+
   @ApiOperation(value = "Tạo mới thông tin đề xuất ", response = List.class)
   @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
