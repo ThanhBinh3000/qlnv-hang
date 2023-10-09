@@ -68,7 +68,7 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
     Page<XhCtvtQuyetDinhGnvHdr> data = xhCtvtQuyetDinhGnvHdrRepository.search(objReq, pageable);
     if (!currentUser.getUser().getCapDvi().equals(CAP_CHI_CUC)) {
       data.getContent().stream().map(s->{
-        List<XhCtvtQuyetDinhGnvDtl> quyetDinhGnvDtls = s.getDataDtl().stream().filter(s1 -> currentUser.getDvql().equals(s1.getMaDvi())).collect(Collectors.toList());
+        List<XhCtvtQuyetDinhGnvDtl> quyetDinhGnvDtls = s.getDataDtl().stream().filter(s1 -> s1.getMaDvi().contains(currentUser.getDvql())).collect(Collectors.toList());
         if(!quyetDinhGnvDtls.isEmpty()){
           s.setTrangThaiXh(quyetDinhGnvDtls.get(0).getTrangThai());
           s.setTenTrangThaiXh(TrangThaiAllEnum.getLabelById(quyetDinhGnvDtls.get(0).getTenTrangThai()));
@@ -135,7 +135,7 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
     XhCtvtQuyetDinhGnvHdr data = optional.get();
     BeanUtils.copyProperties(objReq, data, "id", "maDvi");
     if(3 == Integer.parseInt(currentUser.getUser().getCapDvi())){
-      List<XhCtvtQuyetDinhGnvDtl> quyetDinhGnvDtls = data.getDataDtl().stream().filter(s -> currentUser.getDvql().equals(s.getMaDvi())).collect(Collectors.toList());
+      List<XhCtvtQuyetDinhGnvDtl> quyetDinhGnvDtls = data.getDataDtl().stream().filter(s -> s.getMaDvi().contains(currentUser.getDvql())).collect(Collectors.toList());
       List<XhCtvtQuyetDinhGnvDtl> dinhGnvDtls = quyetDinhGnvDtls.stream().filter(s -> DataUtils.safeToString(s.getTrangThai()).equals(TrangThaiAllEnum.DA_HOAN_THANH.getId())).collect(Collectors.toList());
       if(!dinhGnvDtls.isEmpty()){
         data.setTrangThaiXh(TrangThaiAllEnum.DANG_THUC_HIEN.getId());
@@ -166,7 +166,7 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
     UserInfo user = getUser();
     if (!user.getCapDvi().equals(CAP_CHI_CUC)) {
       allById.stream().map(s->{
-        List<XhCtvtQuyetDinhGnvDtl> quyetDinhGnvDtls = s.getDataDtl().stream().filter(s1 -> user.getDvql().equals(s1.getMaDvi())).collect(Collectors.toList());
+        List<XhCtvtQuyetDinhGnvDtl> quyetDinhGnvDtls = s.getDataDtl().stream().filter(s1 -> s1.getMaDvi().contains(user.getDvql())).collect(Collectors.toList());
         if(!quyetDinhGnvDtls.isEmpty()){
           s.setTrangThaiXh(quyetDinhGnvDtls.get(0).getTrangThai());
           s.setTenTrangThaiXh(TrangThaiAllEnum.getLabelById(quyetDinhGnvDtls.get(0).getTenTrangThai()));
