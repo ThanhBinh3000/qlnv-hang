@@ -3,7 +3,6 @@ package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovi
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQdPdDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQdPdHdrRepository;
@@ -51,8 +50,6 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
 
   @Autowired
   private XhCtvtQdPdDtlRepository xhCtvtQdPdDtlRepository;
-  @Autowired
-  private QlnvDmVattuRepository qlnvDmVattuRepository;
   @Autowired
   private UserInfoRepository userInfoRepository;
 
