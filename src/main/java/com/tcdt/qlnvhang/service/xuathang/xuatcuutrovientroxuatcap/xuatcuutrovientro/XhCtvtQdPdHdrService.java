@@ -257,6 +257,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
           break;
         case Contains.CHODUYET_LDTC + Contains.CHODUYET_LDV:
         case Contains.DADUYET_LDTC + Contains.CHODUYET_LDTC:
+        case Contains.BAN_HANH + Contains.CHODUYET_LDTC:
           optional.get().setNguoiPduyetId(currentUser.getUser().getId());
           optional.get().setNgayPduyet(LocalDate.now());
           break;

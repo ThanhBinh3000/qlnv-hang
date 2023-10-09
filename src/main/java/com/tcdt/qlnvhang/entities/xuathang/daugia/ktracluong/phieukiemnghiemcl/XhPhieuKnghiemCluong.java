@@ -157,7 +157,7 @@ public class XhPhieuKnghiemCluong implements Serializable {
 
     public void setMapHinhThucBaoQuan(Map<String, String> mapHinhThucBaoQuan) {
         this.mapHinhThucBaoQuan = mapHinhThucBaoQuan;
-        if (!DataUtils.isNullObject(getKieuNhapXuat())) {
+        if (!DataUtils.isNullObject(getHinhThucBaoQuan())) {
             setTenHinhThucBaoQuan(mapHinhThucBaoQuan.containsKey(getHinhThucBaoQuan()) ? mapHinhThucBaoQuan.get(getHinhThucBaoQuan()) : null);
         }
     }
