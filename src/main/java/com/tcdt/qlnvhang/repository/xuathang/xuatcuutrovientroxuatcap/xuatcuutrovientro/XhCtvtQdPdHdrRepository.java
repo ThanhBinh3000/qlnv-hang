@@ -77,5 +77,5 @@ public interface XhCtvtQdPdHdrRepository extends JpaRepository<XhCtvtQuyetDinhPd
           "AND c.id not in (select distinct qdnv.idQdPd from XhCtvtQuyetDinhGnvHdr qdnv where qdnv.idQdPd is not null AND (:#{#param.idQdGnv} IS NULL OR qdnv.id = :#{#param.idQdGnv}) ) "+
           "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
-  Page<XhCtvtQuyetDinhPdHdr> searchList(@Param("param") SearchXhCtvtQuyetDinhPdHdr param);
+  List<XhCtvtQuyetDinhPdHdr> searchList(@Param("param") SearchXhCtvtQuyetDinhPdHdr param);
 }
