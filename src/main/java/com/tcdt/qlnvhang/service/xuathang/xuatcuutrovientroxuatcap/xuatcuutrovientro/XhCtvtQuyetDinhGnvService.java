@@ -123,11 +123,17 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
 
     XhCtvtQuyetDinhGnvHdr data = optional.get();
     BeanUtils.copyProperties(objReq, data, "id", "maDvi");
-    XhCtvtQuyetDinhGnvDtl checkTrangThai = data.getDataDtl().stream().filter(s -> DataUtils.safeToString(s.getTrangThai()).equals(TrangThaiAllEnum.DANG_THUC_HIEN.getId()) || DataUtils.safeToString(s.getTrangThai()).equals(TrangThaiAllEnum.CHUA_THUC_HIEN.getId()) || DataUtils.safeToString(s.getTrangThai()).equals("")).findFirst().orElse(null);
-    if (checkTrangThai == null) {
+    if(3 == Integer.parseInt(currentUser.getUser().getCapDvi())){
+      List<XhCtvtQuyetDinhGnvDtl> quyetDinhGnvDtls = data.getDataDtl().stream().filter(s -> currentUser.getDvql().equals(s.getMaDvi())).collect(Collectors.toList());
+      List<XhCtvtQuyetDinhGnvDtl> dinhGnvDtls = quyetDinhGnvDtls.stream().filter(s -> DataUtils.safeToString(s.getTrangThai()).equals(TrangThaiAllEnum.DA_HOAN_THANH.getId())).collect(Collectors.toList());
+      if(!dinhGnvDtls.isEmpty()){
+        data.setTrangThaiXh(TrangThaiAllEnum.DANG_THUC_HIEN.getId());
+      }
+    }
+
+    Boolean alledMatch = data.getDataDtl().stream().allMatch(s -> DataUtils.safeToString(s.getTrangThai()).equals(TrangThaiAllEnum.DA_HOAN_THANH.getId()));
+    if (alledMatch != null && alledMatch) {
       data.setTrangThaiXh(TrangThaiAllEnum.DA_HOAN_THANH.getId());
-    } else {
-      data.setTrangThaiXh(TrangThaiAllEnum.DANG_THUC_HIEN.getId());
     }
     XhCtvtQuyetDinhGnvHdr created = xhCtvtQuyetDinhGnvHdrRepository.save(data);
     return created;
