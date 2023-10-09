@@ -321,30 +321,30 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     public ReportTemplateResponse preview(XhCtvtDeXuatHdrReq objReq) throws Exception {
         var xhCtvtDeXuatHdr = xhCtvtDeXuatHdrRepository.findById(objReq.getId());
         var fileTemplate = "";
+        var checkTypeVT = false;
         if (!xhCtvtDeXuatHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
-        if (StringUtils.isEmpty(xhCtvtDeXuatHdr.get().getLoaiVthh())) throw new Exception("Không tồn tại loại vật tư hàng hoá");
-        var qlnvDmVattu = qlnvDmVattuRepository.findByMa(xhCtvtDeXuatHdr.get().getLoaiVthh());
-        if (qlnvDmVattu == null) throw new Exception("Không tồn tại bản ghi vật tư");
-        if (!StringUtils.isEmpty(qlnvDmVattu.getLoaiHang())) {
-            if (qlnvDmVattu.getLoaiHang().equals("VT")) {
+        if (StringUtils.isEmpty(xhCtvtDeXuatHdr.get().getTenVthh())) throw new Exception("Không tồn tại loại vật tư hàng hoá");
+        if (!StringUtils.isEmpty(xhCtvtDeXuatHdr.get().getTenVthh())) {
+            if (xhCtvtDeXuatHdr.get().getTenVthh().equals("Vật tư thiết bị")) {
                 fileTemplate = "xuatcuutrovientro/" + "Đề xuất PA Cứu trợ-Vụ tạo-Vật tư-Cấp Tổng cục.docx";
+                checkTypeVT = true;
             } else {
                 fileTemplate = "xuatcuutrovientro/" + "Đề xuất PA Cứu trợ-Vụ tạo-Lương thực-Cấp Tổng cục.docx";
             }
         }
         FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
-        var xhCtvtDeXuatHdrPreview = setDataToPreview(xhCtvtDeXuatHdr, qlnvDmVattu);
+        var xhCtvtDeXuatHdrPreview = setDataToPreview(xhCtvtDeXuatHdr, checkTypeVT);
         return docxToPdfConverter.convertDocxToPdf(inputStream, xhCtvtDeXuatHdrPreview);
     }
 
-    private XhCtvtDeXuatHdrPreview setDataToPreview(Optional<XhCtvtDeXuatHdr> xhCtvtDeXuatHdr, QlnvDmVattu qlnvDmVattu) throws Exception {
+    private XhCtvtDeXuatHdrPreview setDataToPreview(Optional<XhCtvtDeXuatHdr> xhCtvtDeXuatHdr, Boolean checkTypeVT) throws Exception {
         var xhCtvtDeXuatHdrPreview = new XhCtvtDeXuatHdrPreview();
         xhCtvtDeXuatHdrPreview.setChungLoaiHangHoa(xhCtvtDeXuatHdr.get().getCloaiVthh());
         xhCtvtDeXuatHdrPreview.setNamKeHoach(xhCtvtDeXuatHdr.get().getNam());
         xhCtvtDeXuatHdrPreview.setTongSoLuongXuatCap(String.valueOf(xhCtvtDeXuatHdr.get().getTongSoLuongDeXuat()));
-        if (qlnvDmVattu.getLoaiHang().equals("VT")) {
+        if (checkTypeVT) {
             xhCtvtDeXuatHdrPreview.setXhCtvtDeXuatHdrDto(convertXhCtvtDeXuatHdrToDtoVT(xhCtvtDeXuatHdr));
-        } else if (qlnvDmVattu.getLoaiHang().equals("LT")) {
+        } else {
             xhCtvtDeXuatHdrPreview.setXhCtvtDeXuatHdrDto(convertXhCtvtDeXuatHdrToDtoLT(xhCtvtDeXuatHdr));
         }
         return xhCtvtDeXuatHdrPreview;

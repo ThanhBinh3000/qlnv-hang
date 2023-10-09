@@ -18,7 +18,6 @@ import com.tcdt.qlnvhang.response.xuatcuutrovientro.XhCtvtQuyetDinhGnvDtlDto;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdDtl;
@@ -26,7 +25,6 @@ import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovient
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import lombok.var;
-import org.docx4j.wml.U;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -240,27 +238,27 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
       var xhCtvtQuyetDinhGnvHdr = xhCtvtQuyetDinhGnvHdrRepository.findById(objReq.getId());
       if (!xhCtvtQuyetDinhGnvHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
       var fileTemplate = "";
+      var checkTypeVT = false;
       Optional<UserInfo> userInfo = Optional.of(new UserInfo());
       if (xhCtvtQuyetDinhGnvHdr.get().getIdLanhDao() != null) {
         userInfo = userInfoRepository.findById(xhCtvtQuyetDinhGnvHdr.get().getIdLanhDao());
       }
       if (StringUtils.isEmpty(xhCtvtQuyetDinhGnvHdr.get().getLoaiVthh())) throw new Exception("Không tồn tại loại hàng vật tư hoá");
-      var qlnvDmVattu = qlnvDmVattuRepository.findByMa(xhCtvtQuyetDinhGnvHdr.get().getLoaiVthh());
-      if (qlnvDmVattu == null) throw new Exception("Không tồn tại bản ghi vật tư");
-      if (!StringUtils.isEmpty(qlnvDmVattu.getLoaiHang())) {
-        if (qlnvDmVattu.getLoaiHang().equals("VT")) {
+      if (!StringUtils.isEmpty(xhCtvtQuyetDinhGnvHdr.get().getTenVthh())) {
+        if (xhCtvtQuyetDinhGnvHdr.get().getTenVthh().equals("Vật tư thiết bị")) {
           fileTemplate = "xuatcuutrovientro/" + "QĐ giao nhiệm vụ xuất hàng_Xuất cứu trợ, viện trợ-VT.docx";
-        } else if (qlnvDmVattu.getLoaiHang().equals("LT")) {
+          checkTypeVT = true;
+        } else {
           fileTemplate = "xuatcuutrovientro/" + "QĐ giao nhiệm vụ xuất hàng_Xuất cứu trợ, viện trợ-LT.docx";
         }
       }
       FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
-      var xhCtvtQuyetDinhGnvHdrPreview = setDataToPreview(xhCtvtQuyetDinhGnvHdr, qlnvDmVattu, userInfo);
+      var xhCtvtQuyetDinhGnvHdrPreview = setDataToPreview(xhCtvtQuyetDinhGnvHdr, checkTypeVT, userInfo);
       return docxToPdfConverter.convertDocxToPdf(inputStream, xhCtvtQuyetDinhGnvHdrPreview);
     }
 
   private XhCtvtQuyetDinhGnvHdrPreview setDataToPreview(Optional<XhCtvtQuyetDinhGnvHdr> xhCtvtQuyetDinhGnvHdr,
-                                                        QlnvDmVattu qlnvDmVattu, Optional<UserInfo> userInfo) {
+                                                        Boolean checkTypeVT, Optional<UserInfo> userInfo) {
     return XhCtvtQuyetDinhGnvHdrPreview.builder()
             .soBbQd(xhCtvtQuyetDinhGnvHdr.get().getSoBbQd())
             .ngayKy(xhCtvtQuyetDinhGnvHdr.get().getNgayKy().getDayOfMonth())
@@ -270,8 +268,8 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
             .canCuPhapLy(xhCtvtQuyetDinhGnvHdr.get().getFileDinhKem()
                     .stream().map(FileDinhKemJoinTable::getFileName).collect(Collectors.joining(" ,")))
             .tongSoLuong(xhCtvtQuyetDinhGnvHdr.get().getTongSoLuong())
-            .donViTinh(qlnvDmVattu.getMaDviTinh())
-            .loaiVthh(xhCtvtQuyetDinhGnvHdr.get().getLoaiVthh())
+            .donViTinh(checkTypeVT.equals(Boolean.FALSE) ? "kg" : "")
+            .loaiVthh(xhCtvtQuyetDinhGnvHdr.get().getTenLoaiVthh())
             .thoiGianGiaoNhan(xhCtvtQuyetDinhGnvHdr.get().getThoiGianGiaoNhan())
             .lanhDaoCuc(userInfo.isPresent() ? userInfo.get().getFullName() : "")
             .xhCtvtQuyetDinhGnvDtlDto(convertXhCtvtQuyetDinhGnvDtlDtoToDto(xhCtvtQuyetDinhGnvHdr.get().getDataDtl()))
