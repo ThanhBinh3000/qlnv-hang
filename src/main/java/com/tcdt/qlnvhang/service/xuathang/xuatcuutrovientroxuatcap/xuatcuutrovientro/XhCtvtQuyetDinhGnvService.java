@@ -18,10 +18,7 @@ import com.tcdt.qlnvhang.response.xuatcuutrovientro.XhCtvtQuyetDinhGnvDtlDto;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvDtl;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvHdr;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdDtl;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.*;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import lombok.var;
@@ -243,7 +240,7 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
       if (xhCtvtQuyetDinhGnvHdr.get().getIdLanhDao() != null) {
         userInfo = userInfoRepository.findById(xhCtvtQuyetDinhGnvHdr.get().getIdLanhDao());
       }
-      if (StringUtils.isEmpty(xhCtvtQuyetDinhGnvHdr.get().getLoaiVthh())) throw new Exception("Không tồn tại loại hàng vật tư hoá");
+      if (StringUtils.isEmpty(xhCtvtQuyetDinhGnvHdr.get().getTenVthh())) throw new Exception("Không tồn tại loại hàng vật tư hàng hoá");
       if (!StringUtils.isEmpty(xhCtvtQuyetDinhGnvHdr.get().getTenVthh())) {
         if (xhCtvtQuyetDinhGnvHdr.get().getTenVthh().equals("Vật tư thiết bị")) {
           fileTemplate = "xuatcuutrovientro/" + "QĐ giao nhiệm vụ xuất hàng_Xuất cứu trợ, viện trợ-VT.docx";
@@ -252,6 +249,12 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
           fileTemplate = "xuatcuutrovientro/" + "QĐ giao nhiệm vụ xuất hàng_Xuất cứu trợ, viện trợ-LT.docx";
         }
       }
+      Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+      Map<String, String> mapVthh = getListDanhMucHangHoa();
+      xhCtvtQuyetDinhGnvHdr.get().getDataDtl().forEach(data -> {
+        data.setMapDmucDvi(mapDmucDvi);
+        data.setMapVthh(mapVthh);
+        });
       FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
       var xhCtvtQuyetDinhGnvHdrPreview = setDataToPreview(xhCtvtQuyetDinhGnvHdr, checkTypeVT, userInfo);
       return docxToPdfConverter.convertDocxToPdf(inputStream, xhCtvtQuyetDinhGnvHdrPreview);

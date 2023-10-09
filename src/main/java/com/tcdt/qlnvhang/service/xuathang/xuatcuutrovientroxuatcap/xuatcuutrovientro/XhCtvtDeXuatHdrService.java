@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovi
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQdPdHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdrRepository;
@@ -63,6 +64,8 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
     private FileDinhKemService fileDinhKemService;
     @Autowired
     private QlnvDmVattuRepository qlnvDmVattuRepository;
+    @Autowired
+    private QlnvDmDonviRepository qlnvDmDonviRepository;
 
     public Page<XhCtvtDeXuatHdr> searchPage(CustomUserDetails currentUser, SearchXhCtvtDeXuatHdrReq req) throws Exception {
 //    req.setDvql(currentUser.getDvql());
@@ -332,6 +335,12 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
                 fileTemplate = "xuatcuutrovientro/" + "Đề xuất PA Cứu trợ-Vụ tạo-Lương thực-Cấp Tổng cục.docx";
             }
         }
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        Map<String, String> mapVthh = getListDanhMucHangHoa();
+        xhCtvtDeXuatHdr.get().getDeXuatPhuongAn().forEach(data -> {
+            data.setMapDmucDvi(mapDmucDvi);
+            data.setMapVthh(mapVthh);
+            });
         FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
         var xhCtvtDeXuatHdrPreview = setDataToPreview(xhCtvtDeXuatHdr, checkTypeVT);
         return docxToPdfConverter.convertDocxToPdf(inputStream, xhCtvtDeXuatHdrPreview);
