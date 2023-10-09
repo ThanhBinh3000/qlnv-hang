@@ -16,12 +16,10 @@ public class XhPhieuKnghiemCluongCt implements Serializable {
     @SequenceGenerator(sequenceName = XhPhieuKnghiemCluongCt.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhPhieuKnghiemCluongCt.TABLE_NAME + "_SEQ")
     private Long id;
     private Long idHdr;
-    private Integer ma;
-    private String chiTieuCl;
-    private String chiSoCl;
-    private String ketQua;
-    private String phuongPhap;
-    private String danhGia;
-    private String trangThai;
     private String maChiTieu;
+    private String tenChiTieu;
+    private String mucYeuCauXuat;
+    private String ketQua;
+    private String phuongPhapXd;
+    private String danhGia;
 }

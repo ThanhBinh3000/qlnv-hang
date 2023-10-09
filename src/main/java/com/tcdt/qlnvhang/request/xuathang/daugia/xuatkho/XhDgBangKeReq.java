@@ -35,6 +35,7 @@ public class XhDgBangKeReq extends BaseRequest {
     private Long idLanhDaoChiCuc;
     private Long idPhieuXuatKho;
     private String soPhieuXuatKho;
+    private LocalDate ngayXuatKho;
     private Long idPhieuKiemNghiem;
     private String soPhieuKiemNghiem;
     private LocalDate ngayKiemNghiemMau;
@@ -60,4 +61,9 @@ public class XhDgBangKeReq extends BaseRequest {
     private String dvql;
     private LocalDate ngayLapBangKeTu;
     private LocalDate ngayLapBangKeDen;
+    private LocalDate thoiGianGiaoNhanTu;
+    private LocalDate thoiGianGiaoNhanDen;
+    private LocalDate ngayXuatKhoTu;
+    private LocalDate ngayXuatKhoDen;
+    private String maDviCha;
 }

@@ -15,6 +15,7 @@ import java.util.List;
 public interface XhDgPhieuXuatKhoRepository extends JpaRepository<XhDgPhieuXuatKho, Long> {
 
     @Query("SELECT DISTINCT XK FROM XhDgPhieuXuatKho XK " +
+            "LEFT JOIN XhQdGiaoNvXh QD ON QD.id = XK.idQdNv " +
             "WHERE (:#{#param.dvql} IS NULL OR XK.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
             "AND (:#{#param.nam} IS NULL OR XK.nam = :#{#param.nam}) " +
             "AND (:#{#param.soPhieuXuatKho} IS NULL OR XK.soPhieuXuatKho = :#{#param.soPhieuXuatKho}) " +
@@ -23,7 +24,8 @@ public interface XhDgPhieuXuatKhoRepository extends JpaRepository<XhDgPhieuXuatK
             "AND (:#{#param.ngayLapPhieuTu} IS NULL OR XK.ngayLapPhieu >= :#{#param.ngayLapPhieuTu}) " +
             "AND (:#{#param.ngayLapPhieuDen} IS NULL OR XK.ngayLapPhieu <= :#{#param.ngayLapPhieuDen}) " +
             "AND (:#{#param.trangThai} IS NULL OR XK.trangThai = :#{#param.trangThai}) " +
-            "ORDER BY XK.ngaySua DESC, XK.ngayTao DESC, XK.id DESC")
+            "AND (:#{#param.maDviCha} IS NULL OR QD.maDvi LIKE CONCAT(:#{#param.maDviCha}, '%')) " +
+            "ORDER BY XK.nam DESC, XK.ngaySua DESC, XK.ngayTao DESC, XK.id DESC")
     Page<XhDgPhieuXuatKho> searchPage(@Param("param") XhDgPhieuXuatKhoReq param, Pageable pageable);
 
     boolean existsBySoPhieuXuatKho(String soPhieuXuatKho);

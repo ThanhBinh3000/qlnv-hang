@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.phieukiemnghiemcl;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
-import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
@@ -63,7 +62,7 @@ public class XhPhieuKnghiemCluong implements Serializable {
     private String soBbTinhKho;
     private LocalDate ngayLapTinhKho;
     private String trangThai;
-    private String LyDoTuChoi;
+    private String lyDoTuChoi;
     private LocalDate ngayTao;
     private Long nguoiTaoId;
     private LocalDate ngaySua;
@@ -72,6 +71,7 @@ public class XhPhieuKnghiemCluong implements Serializable {
     private Long nguoiGuiDuyetId;
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
+    private String maDviCon;
     @Transient
     private String tenDvi;
     @Transient
@@ -82,6 +82,8 @@ public class XhPhieuKnghiemCluong implements Serializable {
     private String tenNganKho;
     @Transient
     private String tenLoKho;
+    @Transient
+    private String tenNganLoKho;
     @Transient
     private String tenLoaiVthh;
     @Transient
@@ -99,8 +101,6 @@ public class XhPhieuKnghiemCluong implements Serializable {
     @Transient
     private String tenTrangThai;
     @Transient
-    private String maDviCon;
-    @Transient
     private String tenDviCon;
     @Transient
     private BigDecimal soLuongHangbaoQuan;
@@ -114,6 +114,9 @@ public class XhPhieuKnghiemCluong implements Serializable {
         if (!DataUtils.isNullObject(getMaDvi())) {
             setTenDvi(mapDmucDvi.containsKey(getMaDvi()) ? mapDmucDvi.get(getMaDvi()) : null);
         }
+        if (!DataUtils.isNullObject(getMaDviCon())) {
+            setTenDviCon(mapDmucDvi.containsKey(getMaDviCon()) ? mapDmucDvi.get(getMaDviCon()) : null);
+        }
         if (!DataUtils.isNullObject(getMaDiemKho())) {
             setTenDiemKho(mapDmucDvi.containsKey(getMaDiemKho()) ? mapDmucDvi.get(getMaDiemKho()) : null);
         }
@@ -122,9 +125,15 @@ public class XhPhieuKnghiemCluong implements Serializable {
         }
         if (!DataUtils.isNullObject(getMaNganKho())) {
             setTenNganKho(mapDmucDvi.containsKey(getMaNganKho()) ? mapDmucDvi.get(getMaNganKho()) : null);
+            if (getTenNganKho() != null) {
+                setTenNganLoKho(getTenNganKho());
+            }
         }
         if (!DataUtils.isNullObject(getMaLoKho())) {
             setTenLoKho(mapDmucDvi.containsKey(getMaLoKho()) ? mapDmucDvi.get(getMaLoKho()) : null);
+            if (getTenLoKho() != null) {
+                setTenNganLoKho(getTenLoKho() + " - " + getTenNganKho());
+            }
         }
     }
 
@@ -148,7 +157,7 @@ public class XhPhieuKnghiemCluong implements Serializable {
 
     public void setMapHinhThucBaoQuan(Map<String, String> mapHinhThucBaoQuan) {
         this.mapHinhThucBaoQuan = mapHinhThucBaoQuan;
-        if (!DataUtils.isNullObject(getKieuNhapXuat())) {
+        if (!DataUtils.isNullObject(getHinhThucBaoQuan())) {
             setTenHinhThucBaoQuan(mapHinhThucBaoQuan.containsKey(getHinhThucBaoQuan()) ? mapHinhThucBaoQuan.get(getHinhThucBaoQuan()) : null);
         }
     }

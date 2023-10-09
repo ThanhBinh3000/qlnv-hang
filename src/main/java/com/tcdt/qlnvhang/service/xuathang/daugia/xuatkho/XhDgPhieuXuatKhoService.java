@@ -3,15 +3,17 @@ package com.tcdt.qlnvhang.service.xuathang.daugia.xuatkho;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho.XhDgPhieuXuatKho;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.xuatkho.XhDgPhieuXuatKhoRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.xuatkho.XhDgPhieuXuatKhoReq;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.service.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhServiceImpl;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,9 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -31,12 +36,19 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
     @Autowired
     private XhDgPhieuXuatKhoRepository xhDgPhieuXuatKhoRepository;
     @Autowired
-    private XhQdGiaoNvXhServiceImpl xhQdGiaoNvXhService;
+    private XhQdGiaoNvXhRepository xhQdGiaoNvXhRepository;
     @Autowired
     private UserInfoRepository userInfoRepository;
 
     public Page<XhDgPhieuXuatKho> searchPage(CustomUserDetails currentUser, XhDgPhieuXuatKhoReq req) throws Exception {
-        req.setDvql(currentUser.getDvql());
+        String dvql = currentUser.getDvql();
+        String userCapDvi = currentUser.getUser().getCapDvi();
+        if (userCapDvi.equals(Contains.CAP_CUC)) {
+            req.setTrangThai(Contains.DADUYET_LDCC);
+            req.setMaDviCha(dvql);
+        } else if (userCapDvi.equals(Contains.CAP_CHI_CUC)) {
+            req.setDvql(dvql);
+        }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhDgPhieuXuatKho> search = xhDgPhieuXuatKhoRepository.searchPage(req, pageable);
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
@@ -66,6 +78,12 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
         data.setId(Long.parseLong(data.getSoPhieuXuatKho().split("/")[0]));
         data.setTrangThai(Contains.DU_THAO);
         XhDgPhieuXuatKho created = xhDgPhieuXuatKhoRepository.save(data);
+        if (created.getIdQdNv() != null) {
+            xhQdGiaoNvXhRepository.findById(created.getIdQdNv()).ifPresent(quyetDinh -> {
+                quyetDinh.setTrangThaiXh(Contains.DANG_THUC_HIEN);
+                xhQdGiaoNvXhRepository.save(quyetDinh);
+            });
+        }
         return created;
     }
 
@@ -140,6 +158,12 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
         if (!allowedStatus.contains(data.getTrangThai())) {
             throw new Exception("Chỉ thực hiện xóa với phiếu xuất kho ở trạng thái bản nháp hoặc từ chối");
         }
+        if (data.getIdQdNv() != null) {
+            xhQdGiaoNvXhRepository.findById(data.getIdQdNv()).ifPresent(quyetDinh -> {
+                quyetDinh.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
+                xhQdGiaoNvXhRepository.save(quyetDinh);
+            });
+        }
         xhDgPhieuXuatKhoRepository.delete(data);
     }
 
@@ -171,6 +195,12 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
                 throw new Exception("Phê duyệt không thành công");
         }
         data.setTrangThai(statusReq.getTrangThai());
+        if (statusReq.getTrangThai().equals(Contains.DADUYET_LDCC)) {
+            xhQdGiaoNvXhRepository.findById(data.getIdQdNv()).ifPresent(quyetDinh -> {
+                quyetDinh.setTrangThaiXh(Contains.DA_HOAN_THANH);
+                xhQdGiaoNvXhRepository.save(quyetDinh);
+            });
+        }
         XhDgPhieuXuatKho created = xhDgPhieuXuatKhoRepository.save(data);
         return created;
     }
@@ -205,5 +235,34 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
+    }
+
+    public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {
+        if (currentUser == null) {
+            throw new Exception("Bad request.");
+        }
+        try {
+            String templatePath = baseReportFolder + "/bandaugia/";
+            XhDgPhieuXuatKho detail = this.detail(DataUtils.safeToLong(body.get("id")));
+            if (detail.getLoaiVthh().startsWith("02")) {
+                templatePath += "Phiếu xuất kho hế hoạch bán đấu giá vật tư.docx";
+            } else {
+                templatePath += "Phiếu xuất kho hế hoạch bán đấu giá lương thực.docx";
+            }
+            Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
+            xhQdGiaoNvXhRepository.findById(detail.getIdQdNv())
+                    .ifPresent(xhQdGiaoNvXh -> detail.setMaDviCha(xhQdGiaoNvXh.getMaDvi()));
+            if (mapDmucDvi.containsKey((detail.getMaDviCha()))) {
+                Map<String, Object> objDonVi = mapDmucDvi.get(detail.getMaDviCha());
+                detail.setTenDviCha(objDonVi.get("tenDvi").toString());
+            }
+            FileInputStream inputStream = new FileInputStream(templatePath);
+            return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

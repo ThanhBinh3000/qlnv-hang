@@ -33,9 +33,9 @@ public class XhQdGiaoNvuXuatReq extends BaseRequest {
     private Long idLanhDaoCuc;
     private String trichYeu;
     private Long idTinhKho;
-    private String BienBanTinhKho;
+    private String bienBanTinhKho;
     private Long idHaoDoi;
-    private String BienBanHaoDoi;
+    private String bienBanHaoDoi;
     private String trangThai;
     private String trangThaiXh;
     private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
@@ -44,4 +44,5 @@ public class XhQdGiaoNvuXuatReq extends BaseRequest {
     private String dvql;
     private LocalDate ngayKyTu;
     private LocalDate ngayKyDen;
+    private String maDviCon;
 }

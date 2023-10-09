@@ -14,18 +14,19 @@ import java.util.List;
 @Repository
 public interface XhPhieuKnghiemCluongRepository extends BaseRepository<XhPhieuKnghiemCluong, Long> {
 
-    @Query("SELECT DISTINCT QD FROM XhPhieuKnghiemCluong QD " +
-            "WHERE (:#{#param.dvql} IS NULL OR QD.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
-            "AND (:#{#param.nam} IS NULL OR QD.nam = :#{#param.nam}) " +
-            "AND (:#{#param.soQdNv} IS NULL OR QD.soQdNv = :#{#param.soQdNv}) " +
-            "AND (:#{#param.soPhieuKiemNghiem} IS NULL OR QD.soPhieuKiemNghiem = :#{#param.soPhieuKiemNghiem}) " +
-            "AND (:#{#param.ngayKiemNghiemMauTu} IS NULL OR QD.ngayKiemNghiemMau >= :#{#param.ngayKiemNghiemMauTu}) " +
-            "AND (:#{#param.ngayKiemNghiemMauDen} IS NULL OR QD.ngayKiemNghiemMau <= :#{#param.ngayKiemNghiemMauDen}) " +
-            "AND (:#{#param.soBbLayMau} IS NULL OR QD.soBbLayMau = :#{#param.soBbLayMau}) " +
-            "AND (:#{#param.soBbTinhKho} IS NULL OR QD.soBbTinhKho = :#{#param.soBbTinhKho}) " +
-            "AND (:#{#param.loaiVthh} IS NULL OR QD.loaiVthh = :#{#param.loaiVthh}) " +
-            "AND (:#{#param.trangThai} IS NULL OR QD.trangThai = :#{#param.trangThai}) " +
-            "ORDER BY QD.ngaySua DESC, QD.ngayTao DESC, QD.id DESC")
+    @Query("SELECT DISTINCT KN FROM XhPhieuKnghiemCluong KN " +
+            "WHERE (:#{#param.dvql} IS NULL OR KN.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
+            "AND (:#{#param.nam} IS NULL OR KN.nam = :#{#param.nam}) " +
+            "AND (:#{#param.soQdNv} IS NULL OR KN.soQdNv = :#{#param.soQdNv}) " +
+            "AND (:#{#param.soPhieuKiemNghiem} IS NULL OR KN.soPhieuKiemNghiem = :#{#param.soPhieuKiemNghiem}) " +
+            "AND (:#{#param.ngayKiemNghiemMauTu} IS NULL OR KN.ngayKiemNghiemMau >= :#{#param.ngayKiemNghiemMauTu}) " +
+            "AND (:#{#param.ngayKiemNghiemMauDen} IS NULL OR KN.ngayKiemNghiemMau <= :#{#param.ngayKiemNghiemMauDen}) " +
+            "AND (:#{#param.soBbLayMau} IS NULL OR KN.soBbLayMau = :#{#param.soBbLayMau}) " +
+            "AND (:#{#param.soBbTinhKho} IS NULL OR KN.soBbTinhKho = :#{#param.soBbTinhKho}) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR KN.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
+            "AND (:#{#param.trangThai} IS NULL OR KN.trangThai = :#{#param.trangThai}) " +
+            "AND (:#{#param.maDviCon} IS NULL OR KN.maDviCon LIKE CONCAT(:#{#param.maDviCon}, '%')) " +
+            "ORDER BY KN.nam DESC, KN.ngaySua DESC, KN.ngayTao DESC, KN.id DESC")
     Page<XhPhieuKnghiemCluong> searchPage(@Param("param") XhPhieuKnghiemCluongReq param, Pageable pageable);
 
     boolean existsBySoPhieuKiemNghiem(String soPhieuKiemNghiem);

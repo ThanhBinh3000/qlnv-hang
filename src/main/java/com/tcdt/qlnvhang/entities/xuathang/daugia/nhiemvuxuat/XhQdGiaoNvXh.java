@@ -48,12 +48,12 @@ public class XhQdGiaoNvXh implements Serializable {
     private Long idLanhDaoCuc;
     private String trichYeu;
     private Long idTinhKho;
-    private String BienBanTinhKho;
+    private String bienBanTinhKho;
     private Long idHaoDoi;
-    private String BienBanHaoDoi;
+    private String bienBanHaoDoi;
     private String trangThai;
     private String trangThaiXh;
-    private String LyDoTuChoi;
+    private String lyDoTuChoi;
     private LocalDate ngayTao;
     private Long nguoiTaoId;
     private LocalDate ngaySua;

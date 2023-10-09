@@ -69,6 +69,7 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	Integer namThuHoach;
 	String vu;
 	String thuHoachVu;
+	String quocGiaSx;
 	String ctietTccl;
 	String ghiChu;
 	String cloaiVthh;
@@ -78,6 +79,7 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String tenDuAn;
 	BigDecimal tongMucDt;
 	BigDecimal tongMucDtDx;
+	BigDecimal giaBanHoSo;
 	String loaiHdong;
 	String tchuanCluong;
 	String nguonVon;
@@ -91,6 +93,8 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	Date tgianMthau;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
 	Date tgianDthau;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
+	Date tgianMoHoSo;
 	Integer tgianThien;
 	Integer tgianThienHd;
 	@Temporal(TemporalType.DATE)

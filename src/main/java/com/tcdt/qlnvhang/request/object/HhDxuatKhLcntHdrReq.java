@@ -106,6 +106,9 @@ public class HhDxuatKhLcntHdrReq {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
 	Date tgianMthau;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
+	Date tgianMoHoSo;
+
 	@Size(max = 20, message = "Loại hợp đồng không được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "Loại hợp đồng")
 	String loaiHdong;
@@ -149,9 +152,11 @@ public class HhDxuatKhLcntHdrReq {
 	Integer namThuHoach;
 	String vu;
 	String thuHoachVu;
+	String quocGiaSx;
 	String ctietTccl;
 	String tenPthucLcnt;
 	String tenHthucLcnt;
+	BigDecimal giaBanHoSo;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayKyQdPdGiaCuThe;
 	private ReportTemplateRequest reportTemplateRequest;
