@@ -271,7 +271,7 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
                     .stream().map(FileDinhKemJoinTable::getFileName).collect(Collectors.joining(" ,")))
             .tongSoLuong(xhCtvtQuyetDinhGnvHdr.get().getTongSoLuong())
             .donViTinh(qlnvDmVattu.getMaDviTinh())
-            .loaiVthh(xhCtvtQuyetDinhGnvHdr.get().getLoaiVthh())
+            .loaiVthh(xhCtvtQuyetDinhGnvHdr.get().getTenLoaiVthh())
             .thoiGianGiaoNhan(xhCtvtQuyetDinhGnvHdr.get().getThoiGianGiaoNhan())
             .lanhDaoCuc(userInfo.isPresent() ? userInfo.get().getFullName() : "")
             .xhCtvtQuyetDinhGnvDtlDto(convertXhCtvtQuyetDinhGnvDtlDtoToDto(xhCtvtQuyetDinhGnvHdr.get().getDataDtl()))
