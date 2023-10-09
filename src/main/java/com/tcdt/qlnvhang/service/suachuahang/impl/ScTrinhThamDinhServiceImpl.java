@@ -199,11 +199,11 @@ public class ScTrinhThamDinhServiceImpl extends BaseServiceImpl implements ScTri
         String status = hdr.getTrangThai() + req.getTrangThai();
         switch (status) {
             // Re approve : gửi lại duyệt
-            case Contains.TUCHOI_TP + Contains.DUTHAO:
-            case Contains.TUCHOI_LDC + Contains.DUTHAO:
-            case Contains.TUCHOI_LDV + Contains.DUTHAO:
-            case Contains.TU_CHOI_CBV + Contains.DUTHAO:
-            case Contains.TUCHOI_LDTC + Contains.DUTHAO:
+            case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+            case Contains.TUCHOI_LDC + Contains.CHODUYET_TP:
+            case Contains.TUCHOI_LDV + Contains.CHODUYET_TP:
+            case Contains.TU_CHOI_CBV + Contains.CHODUYET_TP:
+            case Contains.TUCHOI_LDTC + Contains.CHODUYET_TP:
                 break;
             // Arena các cấp duuyệt
             case Contains.DUTHAO + Contains.CHODUYET_TP:
