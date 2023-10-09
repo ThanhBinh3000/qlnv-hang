@@ -67,13 +67,12 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
     Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
     Page<XhCtvtQuyetDinhGnvHdr> data = xhCtvtQuyetDinhGnvHdrRepository.search(objReq, pageable);
     if (currentUser.getUser().getCapDvi().equals(CAP_CHI_CUC)) {
-      data.getContent().stream().map(s->{
+      data.getContent().stream().forEach(s->{
         List<XhCtvtQuyetDinhGnvDtl> quyetDinhGnvDtls = s.getDataDtl().stream().filter(s1 -> s1.getMaDvi().contains(currentUser.getDvql())).collect(Collectors.toList());
         if(!quyetDinhGnvDtls.isEmpty()){
           s.setTrangThaiXh(quyetDinhGnvDtls.get(0).getTrangThai());
           s.setTenTrangThaiXh(TrangThaiAllEnum.getLabelById(quyetDinhGnvDtls.get(0).getTenTrangThai()));
         }
-        return s;
       });
     }
 
