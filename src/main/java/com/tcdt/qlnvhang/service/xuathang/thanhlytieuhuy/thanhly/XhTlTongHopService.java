@@ -168,9 +168,11 @@ public class XhTlTongHopService extends BaseServiceImpl {
       s.setIdTongHop(null);
       s.setMaTongHop(null);
       s.setNgayTongHop(null);
+      s.setTrangThai(TrangThaiAllEnum.CHUA_CHOT.getId());
     });
     xhTlDanhSachRepository.saveAll(listDanhSach);
     xhTlTongHopHdrRepository.delete(data);
+    dtlRepository.deleteAllByIdTongHop(data.getId());
   }
 
   @Transactional
