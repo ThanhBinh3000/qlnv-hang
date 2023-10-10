@@ -33,7 +33,7 @@ public interface XhDxKhBanTrucTiepHdrRepository extends JpaRepository<XhDxKhBanT
             "AND (:#{#param.loaiVthh} IS NULL OR DX.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
             "AND (:#{#param.trangThai} IS NULL OR DX.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.trangThaiTh} IS NULL OR DX.trangThaiTh = :#{#param.trangThaiTh}) " +
-            "ORDER BY DX.ngaySua DESC, DX.ngayTao DESC, DX.id DESC")
+            "ORDER BY DX.namKh DESC, DX.ngaySua DESC, DX.ngayTao DESC, DX.id DESC")
     Page<XhDxKhBanTrucTiepHdr> searchPage(@Param("param") XhDxKhBanTrucTiepHdrReq param, Pageable pageable);
 
     @Query(value = "SELECT COALESCE(SUM(DVI.SO_LUONG_CHI_CUC), 0) " +

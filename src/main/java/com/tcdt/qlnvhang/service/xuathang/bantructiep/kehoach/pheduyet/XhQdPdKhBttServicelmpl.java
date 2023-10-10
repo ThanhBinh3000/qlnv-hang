@@ -243,8 +243,8 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
                     dataDvi.setChildren(listDviDtl.stream().filter(type -> "QdKh".equals(type.getType())).collect(Collectors.toList()));
                 }
                 dataDtl.setTenDvi(mapDmucDvi.getOrDefault(dataDtl.getMaDvi(), null));
-                dataDtl.setTenLoaiVthh(mapDmucDvi.getOrDefault(dataDtl.getLoaiVthh(), null));
-                dataDtl.setTenCloaiVthh(mapDmucDvi.getOrDefault(dataDtl.getCloaiVthh(), null));
+                dataDtl.setTenLoaiVthh(mapVthh.getOrDefault(dataDtl.getLoaiVthh(), null));
+                dataDtl.setTenCloaiVthh(mapVthh.getOrDefault(dataDtl.getCloaiVthh(), null));
                 dataDtl.setTenPthucTtoan(mapPhuongThucTt.getOrDefault(dataDtl.getPthucTtoan(), null));
                 dataDtl.setChildren(listDvi.stream().filter(type -> "QdKh".equals(type.getType())).collect(Collectors.toList()));
             }
