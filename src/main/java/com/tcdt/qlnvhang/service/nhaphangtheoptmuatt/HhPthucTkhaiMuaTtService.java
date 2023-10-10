@@ -11,10 +11,8 @@ import com.tcdt.qlnvhang.request.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhChiTietTTinChaoGia;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
 
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDcQdPdKhmttSlddDtl;
-import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhQdPdKhMttSlddDtl;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -32,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
@@ -57,6 +56,12 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
 
     @Autowired
     private HhQdPheduyetKhMttHdrService hhQdPheduyetKhMttHdrService;
+    @Autowired
+    private HhDcQdPduyetKhMttRepository hhDcQdPduyetKhMttRepository;
+    @Autowired
+    private HhDcQdPduyetKhMttDxRepository hhDcQdPduyetKhMttDxRepository;
+    @Autowired
+    private HhDcQdPduyetKhmttSlddRepository hhDcQdPduyetKhmttSlddRepository;
 
 
     public Page<HhQdPheduyetKhMttDx> selectPage(SearchHhPthucTkhaiReq req) throws Exception {
@@ -71,6 +76,17 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
         dtl.getContent().forEach( f ->{
             try {
                 HhQdPheduyetKhMttHdr hdr = hhQdPheduyetKhMttHdrRepository.findById(f.getIdQdHdr()).get();
+                if(hdr.getIsChange() != null){
+                    List<HhDcQdPduyetKhmttHdr> hhDcQdPduyetKhmttHdr = hhDcQdPduyetKhMttRepository.findAllByIdQdGocOrderByIdDesc(hdr.getId());
+                    HhDcQdPduyetKhmttHdr data = hhDcQdPduyetKhmttHdr.get(0);
+                    List<HhDcQdPduyetKhmttDx> listdx = hhDcQdPduyetKhMttDxRepository.findAllByIdDcHdr(data.getId());
+                    List<Long> idDx = listdx.stream().map(HhDcQdPduyetKhmttDx::getId).collect(Collectors.toList());
+                    List<HhDcQdPduyetKhmttSldd> listSlDd = hhDcQdPduyetKhmttSlddRepository.findAllByIdDcKhmttIn(idDx);
+                    if(listSlDd.size() > 0){
+                        f.setTongSoLuong(listSlDd.stream().filter(x -> x.getMaDvi().equals(this.getUser().getDvql())).collect(Collectors.toList()).get(0).getTongSoLuong());
+                    }
+                    hdr.setSoQdDc(data.getSoQdDc());
+                }
                 hdr.setTenLoaiVthh(hashMapVthh.get(hdr.getLoaiVthh()));
                 hdr.setTenCloaiVthh(hashMapVthh.get(hdr.getCloaiVthh()));
                 f.setHhQdPheduyetKhMttHdr(hdr);
@@ -149,7 +165,7 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
                     hhDcQdPdKhmttSlddDtlRepository.save(hhDcQdPdKhmttSlddDtl);
                 }
             }else{
-                hhQdPdKhMttSlddDtlRepository.deleteAllByIdDiaDiem(sldd.getId());
+                hhQdPdKhMttSlddDtlRepository.deleteByIdDiaDiem(sldd.getId());
                 for (HhQdPdKhMttSlddDtlReq child : hhQdPheduyetKhMttSLDDReq.getChildren()) {
                     HhQdPdKhMttSlddDtl hhQdPdKhMttSlddDtl = new HhQdPdKhMttSlddDtl();
                     BeanUtils.copyProperties(child, hhQdPdKhMttSlddDtl);

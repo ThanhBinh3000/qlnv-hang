@@ -147,6 +147,7 @@ public class XhPhieuKnclService extends BaseServiceImpl {
                 case Contains.DU_THAO + Contains.CHO_DUYET_TP:
                 case Contains.TU_CHOI_TP + Contains.CHO_DUYET_TP:
                 case Contains.TUCHOI_LDCC + Contains.CHO_DUYET_TP:
+                case Contains.TUCHOI_LDC + Contains.CHO_DUYET_TP:
                 case Contains.DU_THAO + Contains.CHODUYET_LDCC:
                     data.setNguoiGduyetId(currentUser.getUser().getId());
                     data.setNgayGduyet(LocalDate.now());

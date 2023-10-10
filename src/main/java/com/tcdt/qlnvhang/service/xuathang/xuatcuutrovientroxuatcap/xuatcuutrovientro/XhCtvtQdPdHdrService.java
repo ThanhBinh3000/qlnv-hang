@@ -382,4 +382,32 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     }
     return null;
   }
+
+  public List<XhCtvtQuyetDinhPdHdr> searchList(CustomUserDetails currentUser, SearchXhCtvtQuyetDinhPdHdr req) {
+    if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
+      req.setMaDviDx(currentUser.getDvql());
+    }
+    if(req.getType() != null){
+      req.getTypes().add(req.getType());
+    }
+    System.out.println(req);
+    List<XhCtvtQuyetDinhPdHdr> search = xhCtvtQdPdHdrRepository.searchList(req);
+    Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
+
+    Map<String, String> mapVthh = getListDanhMucHangHoa();
+    search.forEach(s -> {
+      if (mapDmucDvi.containsKey((s.getMaDvi()))) {
+        Map<String, Object> objDonVi = mapDmucDvi.get(s.getMaDvi());
+        s.setTenDvi(objDonVi.get("tenDvi").toString());
+      }
+      if (mapVthh.get((s.getLoaiVthh())) != null) {
+        s.setTenLoaiVthh(mapVthh.get(s.getLoaiVthh()));
+      }
+      if (mapVthh.get((s.getCloaiVthh())) != null) {
+        s.setTenCloaiVthh(mapVthh.get(s.getCloaiVthh()));
+      }
+      s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
+    });
+    return search;
+  }
 }
