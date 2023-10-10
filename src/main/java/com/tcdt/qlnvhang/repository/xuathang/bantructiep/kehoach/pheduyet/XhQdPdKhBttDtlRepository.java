@@ -25,7 +25,9 @@ public interface XhQdPdKhBttDtlRepository extends JpaRepository<XhQdPdKhBttDtl, 
             " AND (:#{#param.trangThai} IS NULL OR DTL.trangThai = :#{#param.trangThai})" +
             " AND (:#{#param.lastest} IS NULL OR LOWER(DTL.lastest) LIKE LOWER(CONCAT('%', :#{#param.lastest}, '%')))" +
             " AND (:#{#param.loaiVthh} IS NULL OR LOWER(DTL.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh}, '%'))" +
-            " AND (:#{#param.pthucBanTrucTiep == null || #param.pthucBanTrucTiep.isEmpty()} = TRUE OR DTL.pthucBanTrucTiep IN :#{#param.pthucBanTrucTiep})")
+            " AND (:#{#param.pthucBanTrucTiep == null || #param.pthucBanTrucTiep.isEmpty()} = TRUE OR DTL.pthucBanTrucTiep IN :#{#param.pthucBanTrucTiep})" +
+            " AND (:#{#param.maChiCuc} IS NULL OR DVI.maDvi LIKE CONCAT(:#{#param.maChiCuc}, '%')) " +
+            " ORDER BY DTL.namKh DESC, DTL.ngayNhanCgia DESC, DTL.id DESC")
     Page<XhQdPdKhBttDtl> searchPage(@Param("param") SearchXhTcTtinBttReq param, Pageable pageable);
 
     void deleteAllByIdHdr(Long idHdr);
