@@ -47,7 +47,7 @@ public class XhCtvtQuyetDinhPdDtl implements Serializable {
   private String donViTinh;
   private Long idQdGnv;
   private String soQdGnv;
-
+  private LocalDate ngayKetThuc;
   @JsonIgnore
   @Transient
   private Map<String, String> mapVthh;
