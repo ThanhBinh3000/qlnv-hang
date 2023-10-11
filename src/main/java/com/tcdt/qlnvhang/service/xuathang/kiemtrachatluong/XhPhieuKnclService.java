@@ -2,22 +2,28 @@ package com.tcdt.qlnvhang.service.xuathang.kiemtrachatluong;
 
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.kiemtrachatluong.XhPhieuKnclRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.object.xuatcuutrovientro.XhPhieuKnclHdrPreview;
 import com.tcdt.qlnvhang.request.xuathang.kiemtrachatluong.SearchPhieuKnclReq;
 import com.tcdt.qlnvhang.request.xuathang.kiemtrachatluong.XhPhieuKnclReq;
+import com.tcdt.qlnvhang.response.xuatcuutrovientro.XhPhieuKnclDtlDto;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
+import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
+import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.phieukncl.XhPhieuKnclDtl;
 import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.phieukncl.XhPhieuKnclHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import fr.opensagres.xdocreport.core.XDocReportException;
+import lombok.var;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,6 +35,7 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
@@ -41,6 +48,8 @@ public class XhPhieuKnclService extends BaseServiceImpl {
 
     @Autowired
     private UserInfoRepository userInfoRepository;
+    @Autowired
+    private QlnvDmVattuRepository qlnvDmVattuRepository;
 
     public Page<XhPhieuKnclHdr> searchPage(CustomUserDetails currentUser, SearchPhieuKnclReq req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -147,6 +156,7 @@ public class XhPhieuKnclService extends BaseServiceImpl {
                 case Contains.DU_THAO + Contains.CHO_DUYET_TP:
                 case Contains.TU_CHOI_TP + Contains.CHO_DUYET_TP:
                 case Contains.TUCHOI_LDCC + Contains.CHO_DUYET_TP:
+                case Contains.TUCHOI_LDC + Contains.CHO_DUYET_TP:
                 case Contains.DU_THAO + Contains.CHODUYET_LDCC:
                     data.setNguoiGduyetId(currentUser.getUser().getId());
                     data.setNgayGduyet(LocalDate.now());
@@ -167,6 +177,7 @@ public class XhPhieuKnclService extends BaseServiceImpl {
                     break;
                 case Contains.CHODUYET_LDC + Contains.DADUYET_LDC:
                     data.setNguoiPduyetId(currentUser.getUser().getId());
+                    data.setIdLanhDao(currentUser.getUser().getId());
                     data.setNgayPduyet(LocalDate.now());
                     break;
                 case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
@@ -216,21 +227,77 @@ public class XhPhieuKnclService extends BaseServiceImpl {
         ex.export();
     }
 
-    public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
-        try {
-            ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
-            reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
-            ReportTemplate model = findByTenFile(reportTemplateRequest);
-            byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-            List<XhPhieuKnclHdr> detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
-            return docxToPdfConverter.convertDocxToPdf(inputStream, detail.get(0));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XDocReportException e) {
-            e.printStackTrace();
+    public ReportTemplateResponse preview(XhPhieuKnclReq objReq) throws Exception {
+        var xhPhieuKnclHdr = xhPhieuKnclRepository.findById(objReq.getId());
+        if (!xhPhieuKnclHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
+        var fileTemplate = "";
+        if (StringUtils.isEmpty(xhPhieuKnclHdr.get().getLoaiVthh())) throw new Exception("Không tồn tại loại vật tư hàng hoá");
+        var qlnvDmVattu = qlnvDmVattuRepository.findByMa(xhPhieuKnclHdr.get().getLoaiVthh());
+        if (Objects.isNull(qlnvDmVattu)) throw new Exception("Không tồn tại bản ghi");
+        if (!StringUtils.isEmpty(qlnvDmVattu.getLoaiHang())) {
+            if (qlnvDmVattu.getLoaiHang().equals("VT")) {
+                fileTemplate = "xuatcuutrovientro/" + "3.1.C84-HD_Phiếu kiểm nghiệm chất lượng_VT.docx";
+            } else {
+                fileTemplate = "xuatcuutrovientro/" + "3. C84-HD_Phiếu kiểm nghiệm chất lượng_LT.docx";
+            }
         }
-        return null;
+        Optional<UserInfo> userInfo = Optional.of(new UserInfo());
+        if (xhPhieuKnclHdr.get().getIdLanhDao() != null) {
+            userInfo = userInfoRepository.findById(xhPhieuKnclHdr.get().getIdLanhDao());
+        }
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        List<XhPhieuKnclHdr> xhPhieuKnclHdrs = new ArrayList<>();
+        xhPhieuKnclHdrs.add(xhPhieuKnclHdr.get());
+        xhPhieuKnclHdrs.forEach(data -> {
+            data.setMapDmucDvi(mapDmucDvi);
+        });
+        FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
+        var xhPhieuKnclHdrPreview = setDataToPreview(xhPhieuKnclHdr, userInfo);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, xhPhieuKnclHdrPreview);
     }
 
+    private XhPhieuKnclHdrPreview setDataToPreview(Optional<XhPhieuKnclHdr> xhPhieuKnclHdr, Optional<UserInfo> userInfo) throws Exception {
+        return XhPhieuKnclHdrPreview.builder()
+                .tenDvi(xhPhieuKnclHdr.get().getTenDvi())
+                .maQhns(xhPhieuKnclHdr.get().getMaQhns())
+                .loaiVthh(qlnvDmVattuRepository.findByMa(xhPhieuKnclHdr.get().getLoaiVthh()).getTen())
+                .soBbQd(xhPhieuKnclHdr.get().getSoBbQd())
+                .tenNganKho(xhPhieuKnclHdr.get().getTenNganKho())
+                .tenLoKho(xhPhieuKnclHdr.get().getTenLoKho())
+                .tenNhaKho(xhPhieuKnclHdr.get().getTenNhaKho())
+                .tenDiemKho(xhPhieuKnclHdr.get().getTenDiemKho())
+                .soLuongHangBaoQuan("")
+                .hinhThucKeLotBaoQuan("")
+                .tenThuKho("")
+                .ngayNhapDayKho("")
+                .ngayBbLayMau(xhPhieuKnclHdr.get().getSoBbLayMau())
+                .ngayKiemNghiem(xhPhieuKnclHdr.get().getNgayKiemNghiem() != null ? Contains.convertDateToString(xhPhieuKnclHdr.get().getNgayKiemNghiem()) : "")
+                .ketLuan(xhPhieuKnclHdr.get().getKetLuan())
+                .ketQua(xhPhieuKnclHdr.get().getKetQua())
+                .ngayNhap(xhPhieuKnclHdr.get().getNgayKiemNghiem() != null ? String.valueOf(xhPhieuKnclHdr.get().getNgayKiemNghiem().getDayOfMonth()) : "")
+                .thangNhap(xhPhieuKnclHdr.get().getNgayKiemNghiem() != null ? String.valueOf(xhPhieuKnclHdr.get().getNgayKiemNghiem().getMonth().getValue()) : "")
+                .namNhap(xhPhieuKnclHdr.get().getNgayKiemNghiem() != null ? String.valueOf(xhPhieuKnclHdr.get().getNgayKiemNghiem().getYear()) : "")
+                .nguoiLapPhieu(xhPhieuKnclHdr.get().getNguoiTaoId() != null ? userInfoRepository.findById(xhPhieuKnclHdr.get().getNguoiTaoId()).get().getFullName() : "")
+                .ktvBaoQuan(xhPhieuKnclHdr.get().getKtvBaoQuan())
+                .lanhDaoCuc(userInfo.isPresent() ? userInfo.get().getFullName() : "")
+                .xhPhieuKnclDtlDto(convertXhPhieuKnclDtlToDto(xhPhieuKnclHdr.get().getXhPhieuKnclDtl()))
+                .build();
+    }
+
+    private List<XhPhieuKnclDtlDto> convertXhPhieuKnclDtlToDto(List<XhPhieuKnclDtl> xhPhieuKnclDtl) {
+        List<XhPhieuKnclDtlDto> xhPhieuKnclDtlDtos = new ArrayList<>();
+        int stt = 1;
+        for (var res : xhPhieuKnclDtl) {
+            var xhPhieuKnclDtlDto = XhPhieuKnclDtlDto.builder()
+                    .stt(stt++)
+                    .chiTieuCl(res.getChiTieuCl())
+                    .chiSoCl(res.getChiSoCl())
+                    .ketQua(res.getKetQua())
+                    .phuongPhap(res.getPhuongPhap())
+                    .danhGia(res.getDanhGia())
+                    .build();
+            xhPhieuKnclDtlDtos.add(xhPhieuKnclDtlDto);
+        }
+        return xhPhieuKnclDtlDtos;
+    }
 }

@@ -28,7 +28,7 @@ public class SearchXhCtvtQuyetDinhPdHdr extends BaseRequest {
     private String type;
     private List<String> types = new ArrayList<>();
     private Boolean xuatCap;
-
+    private Long idQdGnv;
     //dung cho chuc nang danh sach cua man hình chon
     private List<Long> idQdPdList = new ArrayList<>();
     private Boolean idQdPdNull = false;

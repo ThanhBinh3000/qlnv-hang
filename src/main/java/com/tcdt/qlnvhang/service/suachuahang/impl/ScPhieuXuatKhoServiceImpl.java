@@ -174,7 +174,7 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
         String status = hdr.getTrangThai() + req.getTrangThai();
         switch (status) {
             // Re approve : gửi lại duyệt
-            case Contains.TUCHOI_LDCC + Contains.DUTHAO:
+            case Contains.TUCHOI_LDCC + Contains.TUCHOI_LDCC:
                 break;
             // Arena các cấp duuyệt
             case Contains.DUTHAO + Contains.CHODUYET_LDCC:

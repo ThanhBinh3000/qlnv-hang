@@ -32,6 +32,8 @@ public class HhQdPheduyetKhMttHdr extends TrangThaiBaseEntity implements Seriali
     private String tenDvi;
 
     private String soQd;
+    @Transient
+    private String soQdDc;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayQd;

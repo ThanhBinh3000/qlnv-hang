@@ -8,6 +8,6 @@ import java.util.List;
 public interface HhQdPdKhMttSlddDtlRepository extends JpaRepository<HhQdPdKhMttSlddDtl,Long> {
     List<HhQdPdKhMttSlddDtl> findAllByIdDiaDiem(Long idDiaDiem);
 
-    void deleteAllByIdDiaDiem(Long idDiaDiem);
+    void deleteByIdDiaDiem(Long idDiaDiem);
 
 }

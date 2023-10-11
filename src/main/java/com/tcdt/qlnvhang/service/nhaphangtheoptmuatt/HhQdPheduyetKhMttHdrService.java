@@ -98,7 +98,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         });
         return data;
     }
-
+    @Transactional
     public HhQdPheduyetKhMttHdr create (HhQdPheduyetKhMttHdrReq req) throws Exception{
 
         if(!StringUtils.isEmpty(req.getSoQd())){
@@ -177,7 +177,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
                     tTinChaoGia.setIdQdPdSldd(slddReq.getId());
                     hhCtietTtinCgiaRepository.save(tTinChaoGia);
                 }
-                hhQdPdKhMttSlddDtlRepository.deleteAllByIdDiaDiem(slddReq.getId());
+                hhQdPdKhMttSlddDtlRepository.deleteByIdDiaDiem(slddReq.getId());
                 for (HhQdPdKhMttSlddDtlReq slddDtlReq : slddReq.getChildren()){
                     HhQdPdKhMttSlddDtl slddDtl = new HhQdPdKhMttSlddDtl();
                     BeanUtils.copyProperties(slddDtlReq, slddDtl, "id");
@@ -349,7 +349,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
             for (HhQdPheduyetKhMttDx dtl: hhQdPheduyetKhMttDx){
                 List<HhQdPheduyetKhMttSLDD> byIdQdDtl = hhQdPheduyetKhMttSLDDRepository.findAllByIdQdDtl(dtl.getId());
                 for (HhQdPheduyetKhMttSLDD sldd : byIdQdDtl){
-                    hhQdPdKhMttSlddDtlRepository.deleteAllByIdDiaDiem(sldd.getId());
+                    hhQdPdKhMttSlddDtlRepository.deleteByIdDiaDiem(sldd.getId());
                 }
                 hhQdPheduyetKhMttSLDDRepository.deleteByIdQdDtl(dtl.getId());
             }
@@ -591,6 +591,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
     private List<HhDcQdPduyetKhmttSldd> detailDc(HhQdPheduyetKhMttHdr hhQdPheduyetKhMttDx) {
         List<HhDcQdPduyetKhmttHdr> hhDcQdPduyetKhmttHdr = hhDcQdPduyetKhMttRepository.findAllByIdQdGocOrderByIdDesc(hhQdPheduyetKhMttDx.getId());
         HhDcQdPduyetKhmttHdr data = hhDcQdPduyetKhmttHdr.get(0);
+        hhQdPheduyetKhMttDx.setSoQdDc(data.getSoQdDc());
         List<HhDcQdPduyetKhmttSldd> children = new ArrayList<>();
         Map<String, String> hashMapDmdv = getListDanhMucDvi(null, null, "01");
         List<HhDcQdPduyetKhmttDx> listdx = hhDcQdPduyetKhMttDxRepository.findAllByIdDcHdr(data.getId());

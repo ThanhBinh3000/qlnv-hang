@@ -184,10 +184,10 @@ public class XhPhieuKnclController extends BaseController {
   @ApiOperation(value = "Xem truoc", response = List.class)
   @PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<BaseResponse> preview(@RequestBody HashMap<String, Object> body) {
+  public ResponseEntity<BaseResponse> preview(@RequestBody XhPhieuKnclReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhPhieuKnclService.preview(body));
+      resp.setData(xhPhieuKnclService.preview(objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {

@@ -151,9 +151,9 @@ public class ScBienBanKtServiceImpl extends BaseServiceImpl implements ScBienBan
     String status = hdr.getTrangThai() + req.getTrangThai();
     switch (status) {
       // Re approve : gửi lại duyệt
-      case Contains.TUCHOI_KTVBQ + Contains.DUTHAO:
-      case Contains.TUCHOI_KT + Contains.DUTHAO:
-      case Contains.TUCHOI_LDCC + Contains.DUTHAO:
+      case Contains.TUCHOI_KTVBQ + Contains.CHODUYET_KTVBQ:
+      case Contains.TUCHOI_KT + Contains.CHODUYET_KTVBQ:
+      case Contains.TUCHOI_LDCC + Contains.CHODUYET_KTVBQ:
         break;
       // Arena các cấp duuyệt
       case Contains.DUTHAO + Contains.CHODUYET_KTVBQ:

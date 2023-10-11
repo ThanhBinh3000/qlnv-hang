@@ -171,8 +171,8 @@ public class ScQuyetDinhXuatHangServiceImpl extends BaseServiceImpl implements S
         String status = hdr.getTrangThai() + req.getTrangThai();
         switch (status) {
             // Re approve : gửi lại duyệt
-            case Contains.TUCHOI_TP + Contains.DUTHAO:
-            case Contains.TUCHOI_LDC + Contains.DUTHAO:
+            case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+            case Contains.TUCHOI_LDC + Contains.CHODUYET_TP:
                 break;
             // Arena các cấp duuyệt
             case Contains.DUTHAO + Contains.CHODUYET_TP:
