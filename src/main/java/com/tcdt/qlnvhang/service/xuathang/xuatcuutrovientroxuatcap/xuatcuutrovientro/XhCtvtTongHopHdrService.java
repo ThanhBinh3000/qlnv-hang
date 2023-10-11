@@ -9,9 +9,11 @@ import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutro
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.object.xuatcuutrovientro.XhCtvtTongHopHdrPreview;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtDeXuatHdrReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.SearchXhCtvtTongHopHdr;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtTongHopHdrReq;
+import com.tcdt.qlnvhang.response.xuatcuutrovientro.XhCtvtTongHopDto;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdr;
@@ -21,6 +23,7 @@ import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import fr.opensagres.xdocreport.core.XDocReportException;
+import lombok.var;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,6 +37,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -296,29 +300,145 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
     return created;
   }
 
-  public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
-    try {
-      String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
-      String fileTemplate = "xuatcuutrovientro/" + fileName;
-      FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
-      List<XhCtvtTongHopHdr> detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
-      Object children = body.get("children");
-      HashMap<Object, Object> hashMap = new HashMap<>();
-      hashMap.put("nam", detail.get(0).getNam());
-      hashMap.put("tenLoaiVthh", detail.get(0).getTenLoaiVthh());
-      hashMap.put("children", children);
-      return docxToPdfConverter.convertDocxToPdf(inputStream, hashMap);
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (XDocReportException e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
   public List<XhCtvtTongHopHdr> searchList(CustomUserDetails currentUser, SearchXhCtvtTongHopHdr objReq) throws Exception {
     objReq.setDvql(currentUser.getDvql());
     List<XhCtvtTongHopHdr> data = xhCtvtTongHopHdrRepository.searchList(objReq);
     return data;
+  }
+
+  public ReportTemplateResponse preview(XhCtvtTongHopHdrReq obj) throws Exception {
+      var xhCtvtTongHopHdr = xhCtvtTongHopHdrRepository.findById(obj.getId());
+      if (!xhCtvtTongHopHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
+      var fileTemplate = "";
+      var checkTypeVT = false;
+      if (StringUtils.isEmpty(xhCtvtTongHopHdr.get().getTenVthh())) throw new Exception("Không tồn tại loại hàng vật tư hàng hoá");
+      if (!StringUtils.isEmpty(xhCtvtTongHopHdr.get().getTenVthh())) {
+        if (xhCtvtTongHopHdr.get().getTenVthh().equals("Vật tư thiết bị")) {
+          fileTemplate = "xuatcuutrovientro/" + "27.2.Tổng hợp PA Cứu trợ-Vật tư.docx";
+          checkTypeVT = true;
+        } else {
+          fileTemplate = "xuatcuutrovientro/" + "27.1.Tổng hợp PA Cứu trợ-Lương thực.docx";
+        }
+      }
+      if (Objects.isNull(xhCtvtTongHopHdr.get().getId())) throw new Exception("Không tồn tại bản ghi");
+      var xhCtvtDeXuatHdr = xhCtvtDeXuatHdrRepository.findAllByIdThop(xhCtvtTongHopHdr.get().getId());
+      Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+      Map<String, String> mapVthh = getListDanhMucHangHoa();
+      xhCtvtTongHopHdr.get().getDeXuatCuuTro().forEach(data -> {
+        data.setMapDmucDvi(mapDmucDvi);
+        data.setMapVthh(mapVthh);
+      });
+      FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
+      var xhCtvtTongHopHdrPreview = setDataToPreview(xhCtvtTongHopHdr, checkTypeVT, xhCtvtDeXuatHdr);
+      return docxToPdfConverter.convertDocxToPdf(inputStream, xhCtvtTongHopHdrPreview);
+  }
+
+  private XhCtvtTongHopHdrPreview setDataToPreview(Optional<XhCtvtTongHopHdr> xhCtvtTongHopHdr, boolean checkTypeVT,
+                                                   List<XhCtvtDeXuatHdr> xhCtvtDeXuatHdr) {
+    var xhCtvtTongHopHdrPreview =  new XhCtvtTongHopHdrPreview();
+    xhCtvtTongHopHdrPreview.setNamKeHoach(xhCtvtTongHopHdr.get().getNam());
+    if (checkTypeVT) {
+      xhCtvtTongHopHdrPreview.setXhCtvtTongHopDto(convertXhCtvtTongHopDtlToDtoVT(xhCtvtTongHopHdr, xhCtvtDeXuatHdr));
+    } else {
+      xhCtvtTongHopHdrPreview.setXhCtvtTongHopDto(convertXhCtvtTongHopDtlToDtoLT(xhCtvtTongHopHdr, xhCtvtDeXuatHdr));
+      xhCtvtTongHopHdrPreview.setLoaiVthh(xhCtvtTongHopHdr.get().getTenLoaiVthh());
+      xhCtvtTongHopHdrPreview.setTongSoLuong(getTongSoLuong(xhCtvtTongHopHdrPreview.getXhCtvtTongHopDto()));
+    }
+    return xhCtvtTongHopHdrPreview;
+  }
+
+  private String getTongSoLuong(List<XhCtvtTongHopDto> xhCtvtTongHopDto) {
+    BigDecimal tongSoLuong = BigDecimal.ZERO;
+    for (var res : xhCtvtTongHopDto) {
+      if (!StringUtils.isEmpty(res.getTenDvi())) {
+        tongSoLuong = tongSoLuong.add(BigDecimal.valueOf(Long.parseLong(res.getSoLuong())));
+      }
+    }
+    return tongSoLuong.toString();
+  }
+
+  private List<XhCtvtTongHopDto> convertXhCtvtTongHopDtlToDtoLT(Optional<XhCtvtTongHopHdr> xhCtvtTongHopHdr,
+                                                                List<XhCtvtDeXuatHdr> xhCtvtDeXuatHdr) {
+    List<XhCtvtTongHopDto> xhCtvtTongHopDtos = new ArrayList<>();
+    var xhCtvtTongHopDtl = xhCtvtTongHopHdr.get().getDeXuatCuuTro()
+            .stream().collect(Collectors.groupingBy(XhCtvtTongHopDtl::getTenDvi));
+    int stt = 1;
+    for (var key : xhCtvtTongHopDtl.entrySet()) {
+      var xhCtvtTongHopDtoLvOne = new XhCtvtTongHopDto();
+      xhCtvtTongHopDtoLvOne.setStt(String.valueOf(stt++));
+      xhCtvtTongHopDtoLvOne.setTenDvi(key.getKey());
+      xhCtvtTongHopDtoLvOne.setSoLuong(String.valueOf(key.getValue()
+              .stream().map(XhCtvtTongHopDtl::getSoLuong).reduce(BigDecimal.ZERO, BigDecimal::add)));
+      xhCtvtTongHopDtoLvOne.setMucDichXuat(xhCtvtTongHopHdr.get().getLoaiNhapXuat());
+      xhCtvtTongHopDtoLvOne.setNgayKetThuc(Contains.convertDateToString(xhCtvtDeXuatHdr.stream().findAny().get().getNgayKetThuc()));
+      xhCtvtTongHopDtos.add(xhCtvtTongHopDtoLvOne);
+      convertXhCtvtTongHopDtlToDtoLtTwo(xhCtvtTongHopDtos, key);
+    }
+    return xhCtvtTongHopDtos;
+  }
+
+  private void convertXhCtvtTongHopDtlToDtoLtTwo(List<XhCtvtTongHopDto> xhCtvtTongHopDtos, Map.Entry<String, List<XhCtvtTongHopDtl>> value) {
+    var xhCtvtTongHopDtoVt = value.getValue()
+            .stream().collect(Collectors.groupingBy(XhCtvtTongHopDtl::getNoiDungDx));
+    for (var res : xhCtvtTongHopDtoVt.entrySet()) {
+      var xhCtvtTongHopDtoLvTwo = new  XhCtvtTongHopDto();
+      xhCtvtTongHopDtoLvTwo.setDonViNhanCuuTro(res.getKey());
+      xhCtvtTongHopDtoLvTwo.setSoLuong(String.valueOf(res.getValue()
+              .stream().map(XhCtvtTongHopDtl::getSoLuong).reduce(BigDecimal.ZERO, BigDecimal::add)));
+      xhCtvtTongHopDtos.add(xhCtvtTongHopDtoLvTwo);
+      convertXhCtvtTongHopDtlToDtoLtThree(xhCtvtTongHopDtos, res);
+    }
+  }
+
+  private void convertXhCtvtTongHopDtlToDtoLtThree(List<XhCtvtTongHopDto> xhCtvtTongHopDtos, Map.Entry<String, List<XhCtvtTongHopDtl>> res) {
+    for (var value : res.getValue()) {
+      var xhCtvtTongHopDtoLvThree = new XhCtvtTongHopDto();
+      xhCtvtTongHopDtoLvThree.setCloaiVthh(value.getTenCloaiVthh());
+      xhCtvtTongHopDtoLvThree.setSoLuong(String.valueOf(value.getSoLuong()));
+      xhCtvtTongHopDtos.add(xhCtvtTongHopDtoLvThree);
+    }
+  }
+
+  private List<XhCtvtTongHopDto> convertXhCtvtTongHopDtlToDtoVT(Optional<XhCtvtTongHopHdr> xhCtvtTongHopHdr,
+                                                                List<XhCtvtDeXuatHdr> xhCtvtDeXuatHdr) {
+    List<XhCtvtTongHopDto> xhCtvtTongHopDtos = new ArrayList<>();
+    Map<String, List<XhCtvtTongHopDtl>> xhCtvtTongHopDtl = xhCtvtTongHopHdr.get().getDeXuatCuuTro()
+            .stream().collect(Collectors.groupingBy(XhCtvtTongHopDtl::getNoiDungDx));
+    int stt = 1;
+    for (var key : xhCtvtTongHopDtl.entrySet()) {
+      var xhCtvtTongHopDtoLvOne = new XhCtvtTongHopDto();
+      xhCtvtTongHopDtoLvOne.setStt(String.valueOf(stt++));
+      xhCtvtTongHopDtoLvOne.setDonViNhanCuuTro(key.getKey());
+      xhCtvtTongHopDtoLvOne.setMucDichXuat(xhCtvtTongHopHdr.get().getLoaiNhapXuat());
+      xhCtvtTongHopDtoLvOne.setNgayKetThuc(Contains.convertDateToString(xhCtvtDeXuatHdr.stream().findAny().get().getNgayKetThuc()));
+      xhCtvtTongHopDtos.add(xhCtvtTongHopDtoLvOne);
+      convertXhCtvtTongHopDtlToDtoVtTwo(xhCtvtTongHopDtos, key);
+    }
+    return xhCtvtTongHopDtos;
+  }
+
+  private void convertXhCtvtTongHopDtlToDtoVtTwo(List<XhCtvtTongHopDto> xhCtvtTongHopDtos, Map.Entry<String, List<XhCtvtTongHopDtl>> key) {
+    var xhCtvtTongHopDtoVt = key.getValue()
+            .stream().collect(Collectors.groupingBy(XhCtvtTongHopDtl::getLoaiVthh));
+    for (var res : xhCtvtTongHopDtoVt.entrySet()) {
+      var xhCtvtTongHopDtoLvTwo = new  XhCtvtTongHopDto();
+      xhCtvtTongHopDtoLvTwo.setLoaiVthh(res.getValue().stream().findAny().get().getTenLoaiVthh());
+      xhCtvtTongHopDtoLvTwo.setSoLuong(String.valueOf(res.getValue()
+              .stream().map(XhCtvtTongHopDtl::getSoLuong).reduce(BigDecimal.ZERO, BigDecimal::add)));
+      xhCtvtTongHopDtoLvTwo.setDonViTinh(res.getValue().stream().findAny().get().getDonViTinh());
+      xhCtvtTongHopDtos.add(xhCtvtTongHopDtoLvTwo);
+      convertXhCtvtTongHopDtlToDtoVtThree(xhCtvtTongHopDtos, res);
+    }
+  }
+  private void convertXhCtvtTongHopDtlToDtoVtThree(List<XhCtvtTongHopDto> xhCtvtTongHopDtos, Map.Entry<String, List<XhCtvtTongHopDtl>> res) {
+    for (var value : res.getValue()) {
+      var xhCtvtTongHopDtoLvThree = new XhCtvtTongHopDto();
+      xhCtvtTongHopDtoLvThree.setCloaiVthh(value.getTenCloaiVthh());
+      xhCtvtTongHopDtoLvThree.setTenDvi(value.getTenDvi());
+      xhCtvtTongHopDtoLvThree.setSoLuong(String.valueOf(value.getSoLuong()));
+      xhCtvtTongHopDtoLvThree.setDonViTinh(value.getDonViTinh());
+      xhCtvtTongHopDtos.add(xhCtvtTongHopDtoLvThree);
+    }
   }
 
 }

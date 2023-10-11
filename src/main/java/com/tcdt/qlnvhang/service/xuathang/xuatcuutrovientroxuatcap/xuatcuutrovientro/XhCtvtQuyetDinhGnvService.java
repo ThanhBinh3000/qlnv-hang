@@ -3,7 +3,7 @@ package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovi
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
+import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQdPdDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQdPdHdrRepository;
@@ -18,10 +18,7 @@ import com.tcdt.qlnvhang.response.xuatcuutrovientro.XhCtvtQuyetDinhGnvDtlDto;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvDtl;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvHdr;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdDtl;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.*;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import lombok.var;
@@ -55,9 +52,9 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
   @Autowired
   private XhCtvtQdPdDtlRepository xhCtvtQdPdDtlRepository;
   @Autowired
-  private QlnvDmVattuRepository qlnvDmVattuRepository;
-  @Autowired
   private UserInfoRepository userInfoRepository;
+  @Autowired
+  private QlnvDmDonviRepository qlnvDmDonviRepository;
 
 
   public Page<XhCtvtQuyetDinhGnvHdr> searchPage(CustomUserDetails currentUser, SearchXhCtvtQuyetDinhGnv objReq) throws Exception {
@@ -72,6 +69,16 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
 
     Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
     Page<XhCtvtQuyetDinhGnvHdr> data = xhCtvtQuyetDinhGnvHdrRepository.search(objReq, pageable);
+    if (currentUser.getUser().getCapDvi().equals(CAP_CHI_CUC)) {
+      data.getContent().stream().forEach(s->{
+        List<XhCtvtQuyetDinhGnvDtl> quyetDinhGnvDtls = s.getDataDtl().stream().filter(s1 -> s1.getMaDvi().contains(currentUser.getDvql())).collect(Collectors.toList());
+        if(!quyetDinhGnvDtls.isEmpty()){
+          s.setTrangThaiXh(quyetDinhGnvDtls.get(0).getTrangThai());
+          s.setTenTrangThaiXh(TrangThaiAllEnum.getLabelById(quyetDinhGnvDtls.get(0).getTenTrangThai()));
+        }
+      });
+    }
+
     return data;
   }
 
@@ -129,11 +136,17 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
 
     XhCtvtQuyetDinhGnvHdr data = optional.get();
     BeanUtils.copyProperties(objReq, data, "id", "maDvi");
-    XhCtvtQuyetDinhGnvDtl checkTrangThai = data.getDataDtl().stream().filter(s -> DataUtils.safeToString(s.getTrangThai()).equals(TrangThaiAllEnum.DANG_THUC_HIEN.getId()) || DataUtils.safeToString(s.getTrangThai()).equals(TrangThaiAllEnum.CHUA_THUC_HIEN.getId()) || DataUtils.safeToString(s.getTrangThai()).equals("")).findFirst().orElse(null);
-    if (checkTrangThai == null) {
+    if(3 == Integer.parseInt(currentUser.getUser().getCapDvi())){
+      List<XhCtvtQuyetDinhGnvDtl> quyetDinhGnvDtls = data.getDataDtl().stream().filter(s -> s.getMaDvi().contains(currentUser.getDvql())).collect(Collectors.toList());
+      List<XhCtvtQuyetDinhGnvDtl> dinhGnvDtls = quyetDinhGnvDtls.stream().filter(s -> DataUtils.safeToString(s.getTrangThai()).equals(TrangThaiAllEnum.DA_HOAN_THANH.getId())).collect(Collectors.toList());
+      if(!dinhGnvDtls.isEmpty()){
+        data.setTrangThaiXh(TrangThaiAllEnum.DANG_THUC_HIEN.getId());
+      }
+    }
+
+    Boolean alledMatch = data.getDataDtl().stream().allMatch(s -> DataUtils.safeToString(s.getTrangThai()).equals(TrangThaiAllEnum.DA_HOAN_THANH.getId()));
+    if (alledMatch != null && alledMatch) {
       data.setTrangThaiXh(TrangThaiAllEnum.DA_HOAN_THANH.getId());
-    } else {
-      data.setTrangThaiXh(TrangThaiAllEnum.DANG_THUC_HIEN.getId());
     }
     XhCtvtQuyetDinhGnvHdr created = xhCtvtQuyetDinhGnvHdrRepository.save(data);
     return created;
@@ -152,6 +165,16 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
         s.setMapVthh(mapVthh);
       });
     });
+    UserInfo user = getUser();
+    if (user.getCapDvi().equals(CAP_CHI_CUC)) {
+      allById.stream().forEach(s->{
+        List<XhCtvtQuyetDinhGnvDtl> quyetDinhGnvDtls = s.getDataDtl().stream().filter(s1 -> s1.getMaDvi().contains(user.getDvql())).collect(Collectors.toList());
+        if(!quyetDinhGnvDtls.isEmpty()){
+          s.setTrangThaiXh(quyetDinhGnvDtls.get(0).getTrangThai());
+          s.setTenTrangThaiXh(TrangThaiAllEnum.getLabelById(quyetDinhGnvDtls.get(0).getTenTrangThai()));
+        }
+      });
+    }
     return allById;
   }
 
@@ -243,7 +266,7 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
       if (xhCtvtQuyetDinhGnvHdr.get().getIdLanhDao() != null) {
         userInfo = userInfoRepository.findById(xhCtvtQuyetDinhGnvHdr.get().getIdLanhDao());
       }
-      if (StringUtils.isEmpty(xhCtvtQuyetDinhGnvHdr.get().getLoaiVthh())) throw new Exception("Không tồn tại loại hàng vật tư hoá");
+      if (StringUtils.isEmpty(xhCtvtQuyetDinhGnvHdr.get().getTenVthh())) throw new Exception("Không tồn tại loại hàng vật tư hàng hoá");
       if (!StringUtils.isEmpty(xhCtvtQuyetDinhGnvHdr.get().getTenVthh())) {
         if (xhCtvtQuyetDinhGnvHdr.get().getTenVthh().equals("Vật tư thiết bị")) {
           fileTemplate = "xuatcuutrovientro/" + "QĐ giao nhiệm vụ xuất hàng_Xuất cứu trợ, viện trợ-VT.docx";
@@ -252,6 +275,12 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
           fileTemplate = "xuatcuutrovientro/" + "QĐ giao nhiệm vụ xuất hàng_Xuất cứu trợ, viện trợ-LT.docx";
         }
       }
+      Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+      Map<String, String> mapVthh = getListDanhMucHangHoa();
+      xhCtvtQuyetDinhGnvHdr.get().getDataDtl().forEach(data -> {
+        data.setMapDmucDvi(mapDmucDvi);
+        data.setMapVthh(mapVthh);
+        });
       FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
       var xhCtvtQuyetDinhGnvHdrPreview = setDataToPreview(xhCtvtQuyetDinhGnvHdr, checkTypeVT, userInfo);
       return docxToPdfConverter.convertDocxToPdf(inputStream, xhCtvtQuyetDinhGnvHdrPreview);
@@ -260,6 +289,7 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
   private XhCtvtQuyetDinhGnvHdrPreview setDataToPreview(Optional<XhCtvtQuyetDinhGnvHdr> xhCtvtQuyetDinhGnvHdr,
                                                         Boolean checkTypeVT, Optional<UserInfo> userInfo) {
     return XhCtvtQuyetDinhGnvHdrPreview.builder()
+            .tenDonvi(qlnvDmDonviRepository.findByMaDvi(xhCtvtQuyetDinhGnvHdr.get().getMaDvi()).getTenDvi())
             .soBbQd(xhCtvtQuyetDinhGnvHdr.get().getSoBbQd())
             .ngayKy(xhCtvtQuyetDinhGnvHdr.get().getNgayKy().getDayOfMonth())
             .thangKy(xhCtvtQuyetDinhGnvHdr.get().getNgayKy().getMonth().getValue())

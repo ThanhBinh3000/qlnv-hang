@@ -51,7 +51,11 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
     public Page<XhDxKhBanDauGia> searchPage(CustomUserDetails currentUser, XhDxKhBanDauGiaReq req) throws Exception {
         String dvql = currentUser.getDvql();
         String userCapDvi = currentUser.getUser().getCapDvi();
-        req.setDvql(userCapDvi.equals(Contains.CAP_CUC) ? dvql : userCapDvi.equals(Contains.CAP_TONG_CUC) ? dvql.substring(0, 4) : null);
+        if (userCapDvi.equals(Contains.CAP_TONG_CUC)) {
+            req.setDvql(dvql.substring(0, 4));
+        } else if (userCapDvi.equals(Contains.CAP_CUC)) {
+            req.setDvql(dvql);
+        }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhDxKhBanDauGia> search = xhDxKhBanDauGiaRepository.searchPage(req, pageable);
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
@@ -110,11 +114,11 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
 
     @Transactional
     public XhDxKhBanDauGia update(CustomUserDetails currentUser, XhDxKhBanDauGiaReq req) throws Exception {
-        if (currentUser == null) {
+        if (currentUser == null || req == null || req.getId() == null) {
             throw new Exception("Bad request.");
         }
-        Optional<XhDxKhBanDauGia> optional = xhDxKhBanDauGiaRepository.findById(req.getId());
-        XhDxKhBanDauGia data = optional.orElseThrow(() -> new Exception("Không tìm thấy dữ liệu cần sửa"));
+        XhDxKhBanDauGia data = xhDxKhBanDauGiaRepository.findById(req.getId())
+                .orElseThrow(() -> new Exception("Không tìm thấy dữ liệu cần sửa"));
         if (xhDxKhBanDauGiaRepository.existsBySoDxuatAndIdNot(req.getSoDxuat(), req.getId())) {
             throw new Exception("Số đề xuất " + req.getSoDxuat() + " đã tồn tại");
         }
@@ -151,14 +155,14 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
             for (XhDxKhBanDauGiaDtl dataDtl : dauGiaDtl) {
                 List<XhDxKhBanDauGiaPhanLo> dauGiaPhanLo = xhDxKhBanDauGiaPhanLoRepository.findAllByIdDtl(dataDtl.getId());
                 dauGiaPhanLo.forEach(dataPhanLo -> {
-                    dataPhanLo.setTenDiemKho(StringUtils.isEmpty(dataPhanLo.getMaDiemKho()) ? null : mapDmucDvi.get(dataPhanLo.getMaDiemKho()));
-                    dataPhanLo.setTenNhaKho(StringUtils.isEmpty(dataPhanLo.getMaNhaKho()) ? null : mapDmucDvi.get(dataPhanLo.getMaNhaKho()));
-                    dataPhanLo.setTenNganKho(StringUtils.isEmpty(dataPhanLo.getMaNganKho()) ? null : mapDmucDvi.get(dataPhanLo.getMaNganKho()));
-                    dataPhanLo.setTenLoKho(StringUtils.isEmpty(dataPhanLo.getMaLoKho()) ? null : mapDmucDvi.get(dataPhanLo.getMaLoKho()));
-                    dataPhanLo.setTenLoaiVthh(StringUtils.isEmpty(dataPhanLo.getLoaiVthh()) ? null : mapVthh.get(dataPhanLo.getLoaiVthh()));
-                    dataPhanLo.setTenCloaiVthh(StringUtils.isEmpty(dataPhanLo.getCloaiVthh()) ? null : mapVthh.get(dataPhanLo.getCloaiVthh()));
+                    dataPhanLo.setTenDiemKho(mapDmucDvi.getOrDefault(dataPhanLo.getMaDiemKho(), null));
+                    dataPhanLo.setTenNhaKho(mapDmucDvi.getOrDefault(dataPhanLo.getMaNhaKho(), null));
+                    dataPhanLo.setTenNganKho(mapDmucDvi.getOrDefault(dataPhanLo.getMaNganKho(), null));
+                    dataPhanLo.setTenLoKho(mapDmucDvi.getOrDefault(dataPhanLo.getMaLoKho(), null));
+                    dataPhanLo.setTenLoaiVthh(mapVthh.getOrDefault(dataPhanLo.getLoaiVthh(), null));
+                    dataPhanLo.setTenCloaiVthh(mapVthh.getOrDefault(dataPhanLo.getCloaiVthh(), null));
                 });
-                dataDtl.setTenDvi(StringUtils.isEmpty(dataDtl.getMaDvi()) ? null : mapDmucDvi.get(dataDtl.getMaDvi()));
+                dataDtl.setTenDvi(mapDmucDvi.getOrDefault(dataDtl.getMaDvi(), null));
                 dataDtl.setChildren(dauGiaPhanLo);
             }
             data.setMapDmucDvi(mapDmucDvi);
@@ -174,14 +178,11 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
 
     @Transactional
     public void delete(IdSearchReq idSearchReq) throws Exception {
-        Optional<XhDxKhBanDauGia> optional = xhDxKhBanDauGiaRepository.findById(idSearchReq.getId());
-        if (!optional.isPresent()) throw new Exception("Bản ghi không tồn tại");
-        XhDxKhBanDauGia data = optional.get();
-        if (!data.getTrangThai().equals(Contains.DUTHAO)
-                && !data.getTrangThai().equals(Contains.TU_CHOI_TP)
-                && !data.getTrangThai().equals(Contains.TUCHOI_LDC)
-                && !data.getTrangThai().equals(Contains.TU_CHOI_CBV)) {
-            throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp hoặc từ chối");
+        XhDxKhBanDauGia data = xhDxKhBanDauGiaRepository.findById(idSearchReq.getId())
+                .orElseThrow(() -> new Exception("Bản ghi không tồn tại"));
+        List<String> allowedStatus = Arrays.asList(Contains.DUTHAO, Contains.TU_CHOI_TP, Contains.TUCHOI_LDC, Contains.TU_CHOI_CBV);
+        if (!allowedStatus.contains(data.getTrangThai())) {
+            throw new Exception("Chỉ thực hiện xóa với đề xuất ở trạng thái bản nháp hoặc từ chối");
         }
         List<XhDxKhBanDauGiaDtl> dauGiaDtl = xhDxKhBanDauGiaDtlRepository.findAllByIdHdr(data.getId());
         for (XhDxKhBanDauGiaDtl dtl : dauGiaDtl) {
@@ -193,17 +194,17 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
 
     @Transactional
     public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
-        UserInfo userInfo = SecurityContextService.getUser();
-        if (userInfo == null) throw new Exception("Bad request.");
         List<XhDxKhBanDauGia> list = xhDxKhBanDauGiaRepository.findAllByIdIn(idSearchReq.getIdList());
-        if (list.isEmpty()) throw new Exception("Bản ghi không tồn tại");
-        for (XhDxKhBanDauGia xhDxKhBanDauGia : list) {
-            if (!xhDxKhBanDauGia.getTrangThai().equals(Contains.DUTHAO)
-                    && !xhDxKhBanDauGia.getTrangThai().equals(Contains.TU_CHOI_TP)
-                    && !xhDxKhBanDauGia.getTrangThai().equals(Contains.TUCHOI_LDC)
-                    && !xhDxKhBanDauGia.getTrangThai().equals(Contains.TU_CHOI_CBV)) {
-                throw new Exception("Chỉ thực hiện xóa với kế hoạch ở trạng thái bản nháp hoặc từ chối");
-            }
+        if (list.isEmpty()) {
+            throw new Exception("Bản ghi không tồn tại");
+        }
+        boolean isValidToDelete = list.stream().allMatch(hdr ->
+                hdr.getTrangThai().equals(Contains.DUTHAO) ||
+                        hdr.getTrangThai().equals(Contains.TU_CHOI_TP) ||
+                        hdr.getTrangThai().equals(Contains.TUCHOI_LDC) ||
+                        hdr.getTrangThai().equals(Contains.TU_CHOI_CBV));
+        if (!isValidToDelete) {
+            throw new Exception("Chỉ thực hiện xóa với đề xuất ở trạng thái bản nháp hoặc từ chối.");
         }
         List<Long> idHdr = list.stream().map(XhDxKhBanDauGia::getId).collect(Collectors.toList());
         List<XhDxKhBanDauGiaDtl> listDtl = xhDxKhBanDauGiaDtlRepository.findByIdHdrIn(idHdr);
@@ -218,12 +219,8 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
         if (currentUser == null || StringUtils.isEmpty(statusReq.getId())) {
             throw new Exception("Bad request.");
         }
-        Long requestId = Long.valueOf(statusReq.getId());
-        Optional<XhDxKhBanDauGia> optional = xhDxKhBanDauGiaRepository.findById(requestId);
-        if (!optional.isPresent()) {
-            throw new Exception("Không tìm thấy dữ liệu");
-        }
-        XhDxKhBanDauGia data = optional.get();
+        XhDxKhBanDauGia data = xhDxKhBanDauGiaRepository.findById(Long.valueOf(statusReq.getId()))
+                .orElseThrow(() -> new Exception("Không tìm thấy dữ liệu"));
         String status = statusReq.getTrangThai() + data.getTrangThai();
         switch (status) {
             case Contains.CHODUYET_TP + Contains.DUTHAO:

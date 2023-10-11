@@ -18,4 +18,7 @@ public interface XhTlTongHopDtlRepository extends JpaRepository<XhTlTongHopDtl, 
     List<XhTlTongHopDtl> findAllByIdTongHop(Long idTongHop);
 
 
+    void deleteAllByIdTongHop(Long idTongHop);
+
+
 }

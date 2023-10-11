@@ -47,8 +47,6 @@ public class XhTlTongHopService extends BaseServiceImpl {
   private XhTlTongHopDtlRepository dtlRepository;
 
   @Autowired
-  private XhTlTongHopHdrRepository xhTlTongHopHdrRepository;
-  @Autowired
   private XhTlDanhSachRepository xhTlDanhSachRepository;
 
   @Autowired
@@ -66,7 +64,7 @@ public class XhTlTongHopService extends BaseServiceImpl {
       req.setNgayTaoDen(req.getNgayTaoTu().toLocalDate().atTime(LocalTime.MIN));
     }
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-    Page<XhTlTongHopHdr> search = xhTlTongHopHdrRepository.searchPage(req, pageable);
+    Page<XhTlTongHopHdr> search = hdrRepository.searchPage(req, pageable);
 
     List<Long> idsList = search.getContent().stream().map(XhTlTongHopHdr::getId).collect(Collectors.toList());
     HashMap<Long, List<XhTlTongHopDtl>> dataChilren = getDataChilren(idsList);
@@ -112,10 +110,12 @@ public class XhTlTongHopService extends BaseServiceImpl {
     hdr.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
     hdr.setId(Long.parseLong(req.getMaDanhSach().split("-")[1]));
     XhTlTongHopHdr save = hdrRepository.save(hdr);
-
+    saveFileDinhKem(req.getFileDinhKemReq(),save.getId(),XhTlTongHopHdr.TABLE_NAME);
     List<XhTlTongHopDtl> listDtl = new ArrayList<>();
     listTh.forEach(item -> {
       item.setTrangThai(TrangThaiAllEnum.DA_CHOT.getId());
+      item.setIdTongHop(hdr.getId());
+      item.setNgayTongHop(LocalDate.now());
       XhTlTongHopDtl dtl = new XhTlTongHopDtl();
       dtl.setIdTongHop(hdr.getId());
       dtl.setIdDsHdr(item.getId());
@@ -137,6 +137,7 @@ public class XhTlTongHopService extends BaseServiceImpl {
     HashMap<Long, List<XhTlTongHopDtl>> dataChilren = getDataChilren(Collections.singletonList(optional.get().getId()));
     optional.get().setChildren(dataChilren.get(optional.get().getId()));
     optional.get().setTenDvi(mapDmucDvi.get(optional.get().getMaDvi()));
+    optional.get().setFileDinhKem(fileDinhKemService.search(optional.get().getId(), XhTlTongHopHdr.TABLE_NAME));
     return optional.get();
   }
 
@@ -158,7 +159,7 @@ public class XhTlTongHopService extends BaseServiceImpl {
 
   @Transactional
   public void delete(IdSearchReq idSearchReq) throws Exception {
-    Optional<XhTlTongHopHdr> optional = xhTlTongHopHdrRepository.findById(idSearchReq.getId());
+    Optional<XhTlTongHopHdr> optional = hdrRepository.findById(idSearchReq.getId());
     if (!optional.isPresent()) {
       throw new Exception("Bản ghi không tồn tại");
     }
@@ -168,20 +169,21 @@ public class XhTlTongHopService extends BaseServiceImpl {
       s.setIdTongHop(null);
       s.setMaTongHop(null);
       s.setNgayTongHop(null);
+      s.setTrangThai(TrangThaiAllEnum.CHUA_CHOT.getId());
     });
     xhTlDanhSachRepository.saveAll(listDanhSach);
-    xhTlTongHopHdrRepository.delete(data);
+    hdrRepository.delete(data);
+    dtlRepository.deleteAllByIdTongHop(data.getId());
   }
 
   @Transactional
   public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
-    List<XhTlTongHopHdr> list = xhTlTongHopHdrRepository.findByIdIn(idSearchReq.getIdList());
+    List<XhTlTongHopHdr> list = hdrRepository.findByIdIn(idSearchReq.getIdList());
 
     if (list.isEmpty()) {
       throw new Exception("Bản ghi không tồn tại");
     }
-    xhTlTongHopHdrRepository.deleteAll(list);
-
+    hdrRepository.deleteAll(list);
   }
 
   public XhTlTongHopHdr approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
@@ -189,7 +191,7 @@ public class XhTlTongHopService extends BaseServiceImpl {
     if (StringUtils.isEmpty(statusReq.getId())) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
-    Optional<XhTlTongHopHdr> optional = xhTlTongHopHdrRepository.findById(Long.valueOf(statusReq.getId()));
+    Optional<XhTlTongHopHdr> optional = hdrRepository.findById(Long.valueOf(statusReq.getId()));
     if (!optional.isPresent()) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
@@ -202,7 +204,7 @@ public class XhTlTongHopService extends BaseServiceImpl {
       throw new Exception("Phê duyệt không thành công");
     }
     optional.get().setTrangThai(statusReq.getTrangThai());
-    XhTlTongHopHdr created = xhTlTongHopHdrRepository.save(optional.get());
+    XhTlTongHopHdr created = hdrRepository.save(optional.get());
     return created;
   }
 
