@@ -31,7 +31,8 @@ public class XhQdPdKhBttDviDtl implements Serializable {
     private String donViTinh;
     private BigDecimal donGiaDeXuat;
     private BigDecimal donGiaDuocDuyet;
-    private BigDecimal thanhTien;
+    private BigDecimal thanhTienDeXuat;
+    private BigDecimal thanhTienDuocDuyet;
     private String loaiVthh;
     private String cloaiVthh;
     private String type;

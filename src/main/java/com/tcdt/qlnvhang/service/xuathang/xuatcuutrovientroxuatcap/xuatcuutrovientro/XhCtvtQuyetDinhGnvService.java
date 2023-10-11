@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovi
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQdPdDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQdPdHdrRepository;
@@ -52,6 +53,8 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
   private XhCtvtQdPdDtlRepository xhCtvtQdPdDtlRepository;
   @Autowired
   private UserInfoRepository userInfoRepository;
+  @Autowired
+  private QlnvDmDonviRepository qlnvDmDonviRepository;
 
 
   public Page<XhCtvtQuyetDinhGnvHdr> searchPage(CustomUserDetails currentUser, SearchXhCtvtQuyetDinhGnv objReq) throws Exception {
@@ -286,6 +289,7 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
   private XhCtvtQuyetDinhGnvHdrPreview setDataToPreview(Optional<XhCtvtQuyetDinhGnvHdr> xhCtvtQuyetDinhGnvHdr,
                                                         Boolean checkTypeVT, Optional<UserInfo> userInfo) {
     return XhCtvtQuyetDinhGnvHdrPreview.builder()
+            .tenDonvi(qlnvDmDonviRepository.findByMaDvi(xhCtvtQuyetDinhGnvHdr.get().getMaDvi()).getTenDvi())
             .soBbQd(xhCtvtQuyetDinhGnvHdr.get().getSoBbQd())
             .ngayKy(xhCtvtQuyetDinhGnvHdr.get().getNgayKy().getDayOfMonth())
             .thangKy(xhCtvtQuyetDinhGnvHdr.get().getNgayKy().getMonth().getValue())

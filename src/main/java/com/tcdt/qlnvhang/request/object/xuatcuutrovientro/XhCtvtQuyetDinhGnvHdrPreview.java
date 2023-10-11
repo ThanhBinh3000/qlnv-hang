@@ -11,6 +11,7 @@ import java.util.List;
 @Data
 @Builder
 public class XhCtvtQuyetDinhGnvHdrPreview {
+    private String tenDonvi;
     private String soBbQd;
     private int ngayKy;
     private int thangKy;

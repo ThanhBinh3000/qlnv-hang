@@ -118,7 +118,7 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
     }
 
     @Transactional
-    public List<XhTcTtinBtt> create(CustomUserDetails currentUser, XhQdPdKhBttDtlReq req) throws Exception {
+    public XhQdPdKhBttDtl create(CustomUserDetails currentUser, XhQdPdKhBttDtlReq req) throws Exception {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
@@ -140,8 +140,14 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
             List<FileDinhKem> fileBanLe = fileDinhKemService.saveListFileDinhKem(req.getFileBanLe(), data.getId(), XhQdPdKhBttDtl.TABLE_NAME + "_BAN_LE");
             data.setFileBanLe(fileBanLe);
         }
-        xhQdPdKhBttDtlRepository.save(data);
-        List<XhTcTtinBtt> list = new ArrayList<>();
+        if (data.getPthucBanTrucTiep().equals(Contains.CHAO_GIA)) {
+            this.processChaoGiaData(req, data);
+        }
+        XhQdPdKhBttDtl created = xhQdPdKhBttDtlRepository.save(data);
+        return created;
+    }
+
+    private void processChaoGiaData(XhQdPdKhBttDtlReq req, XhQdPdKhBttDtl data) {
         for (XhQdPdKhBttDviReq dviReq : req.getChildren()) {
             for (XhQdPdKhBttDviDtlReq dviDtlReq : dviReq.getChildren()) {
                 xhTcTtinBttRepository.deleteAllByIdDviDtl(dviDtlReq.getId());
@@ -150,7 +156,7 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
                     XhTcTtinBtt chaoGia = new XhTcTtinBtt();
                     BeanUtils.copyProperties(chaoGiaReq, chaoGia, "id");
                     chaoGia.setId(null);
-                    chaoGia.setIdQdPdDtl(req.getIdDtl());
+                    chaoGia.setIdQdPdDtl(data.getId());
                     chaoGia.setType(type);
                     XhTcTtinBtt create = xhTcTtinBttRepository.save(chaoGia);
                     fileDinhKemService.delete(create.getId(), Collections.singleton(XhTcTtinBtt.TABLE_NAME));
@@ -158,11 +164,9 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
                         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(Collections.singletonList(chaoGiaReq.getFileDinhKems()), create.getId(), XhTcTtinBtt.TABLE_NAME);
                         chaoGia.setFileDinhKems(fileDinhKems.get(0));
                     }
-                    list.add(chaoGia);
                 }
             }
         }
-        return list;
     }
 
     public List<XhQdPdKhBttDtl> detail(List<Long> ids) throws Exception {
