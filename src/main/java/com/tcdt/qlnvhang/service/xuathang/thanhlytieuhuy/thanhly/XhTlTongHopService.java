@@ -110,7 +110,7 @@ public class XhTlTongHopService extends BaseServiceImpl {
     hdr.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
     hdr.setId(Long.parseLong(req.getMaDanhSach().split("-")[1]));
     XhTlTongHopHdr save = hdrRepository.save(hdr);
-
+    saveFileDinhKem(req.getFileDinhKemReq(),save.getId(),XhTlTongHopHdr.TABLE_NAME);
     List<XhTlTongHopDtl> listDtl = new ArrayList<>();
     listTh.forEach(item -> {
       item.setTrangThai(TrangThaiAllEnum.DA_CHOT.getId());
@@ -137,6 +137,7 @@ public class XhTlTongHopService extends BaseServiceImpl {
     HashMap<Long, List<XhTlTongHopDtl>> dataChilren = getDataChilren(Collections.singletonList(optional.get().getId()));
     optional.get().setChildren(dataChilren.get(optional.get().getId()));
     optional.get().setTenDvi(mapDmucDvi.get(optional.get().getMaDvi()));
+    optional.get().setFileDinhKem(fileDinhKemService.search(optional.get().getId(), XhTlTongHopHdr.TABLE_NAME));
     return optional.get();
   }
 
