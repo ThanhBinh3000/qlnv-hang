@@ -230,7 +230,6 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 					HhQdKhlcntDsgthauCtiet dataDdNhap = new ModelMapper().map(ddNhap, HhQdKhlcntDsgthauCtiet.class);
 					dataDdNhap.setId(null);
 					dataDdNhap.setIdGoiThau(gt.getId());
-					dataDdNhap.setDonGia(ddNhap.getDonGiaTamTinh() != null ? ddNhap.getDonGiaTamTinh() : ddNhap.getDonGia());
 					dataDdNhap.setSoLuongTheoChiTieu(ddNhap.getSoLuongTheoChiTieu());
 					dataDdNhap.setSoLuongDaMua(ddNhap.getSoLuongDaMua());
 					hhQdKhlcntDsgthauCtietRepository.save(dataDdNhap);
@@ -433,10 +432,13 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		List<HhQdKhlcntDtl> hhQdKhlcntDtlList = new ArrayList<>();
 		List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauData = new ArrayList<>();
 		Long countSlGThau = 0L;
-		for(HhQdKhlcntDtl dtl : hhQdKhlcntDtlRepository.findAllByIdQdHdr(data.getId())){
+		for(HhQdKhlcntDtl dtl : hhQdKhlcntDtlRepository.findAllByIdQdHdrOrderByMaDvi(data.getId())){
 			if (dtl.getIdDxHdr() != null) {
 				Optional<HhDxuatKhLcntHdr> dxuatKhLcntHdr = hhDxuatKhLcntHdrRepository.findById(dtl.getIdDxHdr());
 				if (dxuatKhLcntHdr.isPresent()) {
+					dxuatKhLcntHdr.get().setTenPthucLcnt(hashMapPthucDthau.get(dxuatKhLcntHdr.get().getPthucLcnt()));
+					dxuatKhLcntHdr.get().setTenHthucLcnt(hashMapHtLcnt.get(dxuatKhLcntHdr.get().getHthucLcnt()));
+					dxuatKhLcntHdr.get().setTenNguonVon(hashMapNguonVon.get(dxuatKhLcntHdr.get().getNguonVon()));
 					dxuatKhLcntHdr.get().setTenLoaiHdong(hashMapLoaiHdong.get(dxuatKhLcntHdr.get().getLoaiHdong()));
 					dtl.setDxuatKhLcntHdr(dxuatKhLcntHdr.get());
 				}
@@ -1031,7 +1033,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			Map<String,String> soGthau3 = new HashMap<>();
 			for (HhQdKhlcntHdr f : data.getContent()) {
 				if(f.getIdTrHdr() == null){
-					List<HhQdKhlcntDtl> hhQdKhlcntDtl = hhQdKhlcntDtlRepository.findAllByIdQdHdr(f.getId());
+					List<HhQdKhlcntDtl> hhQdKhlcntDtl = hhQdKhlcntDtlRepository.findAllByIdQdHdrOrderByMaDvi(f.getId());
 					hhQdKhlcntDtl.forEach(item ->{
 						f.setSoTrHdr(item.getSoDxuat());
 					});
@@ -1140,7 +1142,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauData = new ArrayList<>();
 			BigDecimal tongSoLuong = BigDecimal.ZERO;
 			BigDecimal tongThanhTien = BigDecimal.ZERO;
-			for(HhQdKhlcntDtl dtl : hhQdKhlcntDtlRepository.findAllByIdQdHdr(objReq.getId())){
+			for(HhQdKhlcntDtl dtl : hhQdKhlcntDtlRepository.findAllByIdQdHdrOrderByMaDvi(objReq.getId())){
 				dtl.setTenDvi(mapDmucDvi.get(dtl.getMaDvi()));
 				hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdDtl(dtl.getId());
 				for(HhQdKhlcntDsgthau dsg : hhQdKhlcntDsgthauData){

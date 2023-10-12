@@ -428,7 +428,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 							  Map<String,String> hashMapLoaiHdong, Map<String,String> hashMapNguonVon, Map<String,String> hashMapPthucDthau,
 							  Map<String,String> hashMapHtLcnt) {
 		List<HhDchinhDxKhLcntDtl> dtlList = new ArrayList<>();
-		for(HhDchinhDxKhLcntDtl dtl : dtlRepository.findAllByIdDxDcHdr(data.getId())){
+		for(HhDchinhDxKhLcntDtl dtl : dtlRepository.findAllByIdDxDcHdrOrderByMaDvi(data.getId())){
 			List<HhDchinhDxKhLcntDsgthau> gThauList = new ArrayList<>();
 			for(HhDchinhDxKhLcntDsgthau gThau : gThauRepository.findAllByIdDcDxDtl(dtl.getId())){
 				List<HhDchinhDxKhLcntDsgthauCtiet> gthauCtietList = gThauCietRepository.findAllByIdGoiThau(gThau.getId());
@@ -607,7 +607,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getCloaiVthh()));
 		qOptional.get().setTenTrangThai(TrangThaiAllEnum.getLabelById(qOptional.get().getTrangThai()));
 		List<HhDchinhDxKhLcntDtl> dtlList = new ArrayList<>();
-		for(HhDchinhDxKhLcntDtl dtl : dtlRepository.findAllByIdDxDcHdr(qOptional.get().getId())){
+		for(HhDchinhDxKhLcntDtl dtl : dtlRepository.findAllByIdDxDcHdrOrderByMaDvi(qOptional.get().getId())){
 			List<HhDchinhDxKhLcntDsgthau> gThauList = new ArrayList<>();
 			for(HhDchinhDxKhLcntDsgthau gThau : gThauRepository.findAllByIdDcDxDtl(dtl.getId())){
 				List<HhDchinhDxKhLcntDsgthauCtiet> gthauCtietList = gThauCietRepository.findAllByIdGoiThau(gThau.getId());

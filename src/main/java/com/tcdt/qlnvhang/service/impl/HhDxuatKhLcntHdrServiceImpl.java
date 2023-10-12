@@ -191,7 +191,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             listData.forEach(cuc -> {
                 for (HhDxuatKhLcntDsgthauDtlCtietReq child : cuc.getChildren()) {
                     soLuong.updateAndGet(v -> v + child.getSoLuong().longValue());
-                    HhDxKhlcntDsgthauCtiet dsgthauCtiet = setDsgthauCtiet(child, gthau.getId());
+                    HhDxKhlcntDsgthauCtiet dsgthauCtiet = new ModelMapper().map(child, HhDxKhlcntDsgthauCtiet.class);
+                    dsgthauCtiet.setIdGoiThau(gthau.getId());
                     hhDxKhlcntDsgthauCtietRepository.save(dsgthauCtiet);
                     hhDxKhlcntDsgthauCtietVtRepository.deleteAllByIdGoiThauCtiet(dsgthauCtiet.getId());
                     for (HhDxuatKhLcntDsgthauDtlCtietVtReq vt : child.getChildren()) {
@@ -212,8 +213,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
     HhDxKhlcntDsgthau setGoiThau (List<HhDxuatKhLcntDsgtDtlReq> listData, HhDxuatKhLcntHdrReq objReq, Long idHdr) {
         HhDxKhlcntDsgthau gthau = new HhDxKhlcntDsgthau();
         gthau.setGoiThau(listData.get(0).getGoiThau());
-        gthau.setDonGiaVat(listData.get(0).getDonGiaVat());
-        gthau.setDonGiaTamTinh(listData.get(0).getDonGiaTamTinh());
+//        gthau.setDonGiaVat(listData.get(0).getDonGiaVat());
+//        gthau.setDonGiaTamTinh(listData.get(0).getDonGiaTamTinh());
         gthau.setMaDvi(objReq.getMaDvi());
         gthau.setLoaiVthh(objReq.getLoaiVthh());
         gthau.setCloaiVthh(objReq.getCloaiVthh());
@@ -374,8 +375,6 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             }
             List<HhDxKhlcntDsgthauCtiet> listDdNhap = hhDxKhlcntDsgthauCtietRepository.findByIdGoiThau(dsG.getId());
             listDdNhap.forEach(f -> {
-                f.setDonGiaTamTinh(dsG.getDonGiaTamTinh());
-                f.setDonGiaVat(dsG.getDonGiaVat());
                 f.setGoiThau(dsG.getGoiThau());
                 f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
                 f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho()) ? null : mapDmucDvi.get(f.getMaDiemKho()));

@@ -14,6 +14,7 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
     void deleteAllByIdQdHdr(Long idQdHdr);
 
     List<HhQdKhlcntDtl> findAllByIdQdHdr (Long idQdHdr);
+    List<HhQdKhlcntDtl> findAllByIdQdHdrOrderByMaDvi (Long idQdHdr);
     List<HhQdKhlcntDtl> findAllByIdQdHdrIn (List<Long> ids);
 
     List<HhQdKhlcntDtl> findByIdQdHdr(Long idQdHdr);
