@@ -15,6 +15,8 @@ public interface FileDinhKemRepository extends CrudRepository<FileDinhKem, Long>
 
 	List<FileDinhKem> findByDataIdAndDataTypeIn(Long dataId, Collection<String> dataTypes);
 
+	List<FileDinhKem> findByDataIdAndDataType(Long dataId, String dataTypes);
+
 	@Transactional
 	@Modifying
 	@Query(value = "DELETE FROM FILE_DINH_KEM u WHERE u.ID in ?1", nativeQuery = true)

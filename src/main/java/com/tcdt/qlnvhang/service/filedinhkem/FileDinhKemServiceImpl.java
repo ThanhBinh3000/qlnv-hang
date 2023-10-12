@@ -47,6 +47,11 @@ public class FileDinhKemServiceImpl implements FileDinhKemService {
     }
 
     @Override
+    public List<FileDinhKem> search(Long dataId, String dataTypes) {
+        return fileDinhKemRepository.findByDataIdAndDataType(dataId, dataTypes);
+    }
+
+    @Override
     public void delete(Long dataId, Collection<String> dataTypes) {
         fileDinhKemRepository.deleteByDataIdAndDataTypeIn(dataId, dataTypes);
     }

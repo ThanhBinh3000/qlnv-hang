@@ -160,6 +160,8 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     List<XhCtvtQuyetDinhGnvHdr> allById = xhCtvtQuyetDinhGnvHdrRepository.findAllById(ids);
     allById.forEach(data -> {
+      String tenDvi = mapDmucDvi.containsKey(data.getMaDvi()) ? mapDmucDvi.get(data.getMaDvi()) : null;
+      data.setTenDvi(tenDvi);
       data.getDataDtl().forEach(s -> {
         s.setMapDmucDvi(mapDmucDvi);
         s.setMapVthh(mapVthh);

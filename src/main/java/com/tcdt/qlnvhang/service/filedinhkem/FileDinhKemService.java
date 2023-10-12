@@ -16,6 +16,7 @@ public interface FileDinhKemService {
                                           String dataType);
 
     List<FileDinhKem> search(Long dataId, Collection<String> dataTypes);
+    List<FileDinhKem> search(Long dataId, String dataTypes);
 
     void delete(Long dataId, Collection<String> dataTypes);
 
