@@ -34,6 +34,7 @@ public class HhDxKhlcntDsgthauCtiet {
 	private BigDecimal soLuong;
 
 	private BigDecimal donGia;
+	private BigDecimal donGiaTamTinh;
 
 	private BigDecimal thanhTien;
 
@@ -42,10 +43,6 @@ public class HhDxKhlcntDsgthauCtiet {
 	@Transient
 	private List<HhDxKhlcntDsgthauCtietVt> children;
 
-	@Transient
-	private BigDecimal donGiaTamTinh;
-	@Transient
-	private BigDecimal donGiaVat;
 	private BigDecimal soLuongTheoChiTieu;
 	private BigDecimal soLuongDaMua;
 	@Transient

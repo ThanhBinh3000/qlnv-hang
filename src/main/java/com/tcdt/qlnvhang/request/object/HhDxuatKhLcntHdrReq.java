@@ -101,13 +101,19 @@ public class HhDxuatKhLcntHdrReq {
 	//	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
 	Date tgianDthau;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
+	Date tgianDthauTime;
 
 	//	@NotNull(message = "Không được để trống")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
 	Date tgianMthau;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
+	Date tgianMthauTime;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
 	Date tgianMoHoSo;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
+	Date tgianMoHoSoTime;
 
 	@Size(max = 20, message = "Loại hợp đồng không được vượt quá 20 ký tự")
 	@ApiModelProperty(example = "Loại hợp đồng")
