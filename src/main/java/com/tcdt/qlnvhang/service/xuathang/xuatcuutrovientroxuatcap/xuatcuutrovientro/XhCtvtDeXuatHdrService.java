@@ -116,7 +116,7 @@ public class XhCtvtDeXuatHdrService extends BaseServiceImpl {
             }
         }
         data.setTongSoLuongXuatCap(new BigDecimal(tongSoLuongXuatCap));
-        data.setMaDvi(currentUser.getUser().getDvql());
+        data.setMaDvi(currentUser.getUser().getDepartment());
         data.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
         XhCtvtDeXuatHdr created = xhCtvtDeXuatHdrRepository.save(data);
         xhCtvtDeXuatHdrRepository.save(created);
