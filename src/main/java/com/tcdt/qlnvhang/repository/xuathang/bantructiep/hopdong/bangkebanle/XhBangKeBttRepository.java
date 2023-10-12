@@ -19,7 +19,7 @@ public interface XhBangKeBttRepository extends JpaRepository<XhBangKeBtt, Long> 
             "AND (:#{#param.namKh} IS NULL OR BK.namKh = :#{#param.namKh}) " +
             "AND (:#{#param.soBangKe} IS NULL OR LOWER(BK.soBangKe) LIKE CONCAT('%', LOWER(:#{#param.soBangKe}),'%' ) ) " +
             "AND (:#{#param.soQdNv} IS NULL OR LOWER(BK.soQdNv) LIKE CONCAT('%', LOWER(:#{#param.soQdNv}),'%')) " +
-            "AND (:#{#param.tenNguoiMua} IS NULL OR LOWER(BK.tenNguoiMua) LIKE CONCAT('%', LOWER(:#{#param.tenNguoiMua}),'%' ) ) " +
+            "AND (:#{#param.tenBenMua} IS NULL OR LOWER(BK.tenBenMua) LIKE CONCAT('%', LOWER(:#{#param.tenBenMua}),'%' ) ) " +
             "AND (:#{#param.ngayBanHangTu} IS NULL OR BK.ngayBanHang >= :#{#param.ngayBanHangTu}) " +
             "AND (:#{#param.ngayBanHangDen} IS NULL OR BK.ngayBanHang <= :#{#param.ngayBanHangDen}) " +
             "AND (:#{#param.loaiVthh} IS NULL OR BK.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +

@@ -25,11 +25,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -75,8 +73,8 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
         }
         String capDvi = currentUser.getUser().getCapDvi();
         boolean isCapCuc = Contains.CAP_CUC.equals(capDvi);
-        if (!StringUtils.isEmpty(req.getSoHd()) && DataUtils.isNullObject(req.getIdHd()) && xhHopDongBttHdrRepository.existsBySoHd(req.getSoHd())) {
-            throw new Exception("Số hợp đồng " + req.getSoHd() + " đã tồn tại");
+        if (!StringUtils.isEmpty(req.getSoHopDong()) && DataUtils.isNullObject(req.getIdHd()) && xhHopDongBttHdrRepository.existsBySoHopDong(req.getSoHopDong())) {
+            throw new Exception("Số hợp đồng " + req.getSoHopDong() + " đã tồn tại");
         }
         if (!StringUtils.isEmpty(req.getSoPhuLuc()) && !DataUtils.isNullObject(req.getIdHd()) && xhHopDongBttHdrRepository.existsBySoPhuLuc(req.getSoPhuLuc())) {
             throw new Exception("Số phụ lục " + req.getSoPhuLuc() + " đã tồn tại");
@@ -212,8 +210,8 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
         XhHopDongBttHdr data = xhHopDongBttHdrRepository.findById(req.getId())
                 .orElseThrow(() -> new Exception("Không tìm thấy dữ liệu cần sửa"));
 
-        if (DataUtils.isNullObject(req.getIdHd()) && !StringUtils.isEmpty(req.getSoHd())) {
-            boolean soHdExists = xhHopDongBttHdrRepository.existsBySoHdAndIdNot(req.getSoHd(), req.getId());
+        if (DataUtils.isNullObject(req.getIdHd()) && !StringUtils.isEmpty(req.getSoHopDong())) {
+            boolean soHdExists = xhHopDongBttHdrRepository.existsBySoHopDongAndIdNot(req.getSoHopDong(), req.getId());
             if (soHdExists) {
                 throw new Exception("Số hợp đồng đã tồn tại");
             }
