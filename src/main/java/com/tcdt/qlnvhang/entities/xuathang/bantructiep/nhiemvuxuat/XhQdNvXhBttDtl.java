@@ -19,7 +19,7 @@ public class XhQdNvXhBttDtl {
     private Long id;
     private Long idHdr;
     private String maDvi;
-    private BigDecimal soLuongChiCuc;
+    private BigDecimal soLuong;
     @Transient
     private String tenDvi;
     @Transient
