@@ -113,6 +113,7 @@ public class XhTlQdGiaoNvService extends BaseServiceImpl {
                 if(!phanLoai.toString().equals("VT")){
                     phanLoai.append("VT");
                 }
+                dtlReq.setPhanLoai("VT");
             }else{
                 if(!phanLoai.toString().equals("LT")){
                     phanLoai.append("LT");
