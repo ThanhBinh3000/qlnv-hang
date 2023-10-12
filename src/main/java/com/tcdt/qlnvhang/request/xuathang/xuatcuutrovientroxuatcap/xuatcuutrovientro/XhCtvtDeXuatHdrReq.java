@@ -43,6 +43,7 @@ public class XhCtvtDeXuatHdrReq {
     private String lyDoTuChoi;
     private String type;
     private BigDecimal thanhTien;
+    private BigDecimal tonKhoDvi;
 
     private List<FileDinhKemJoinTable> canCu = new ArrayList<>();
 
