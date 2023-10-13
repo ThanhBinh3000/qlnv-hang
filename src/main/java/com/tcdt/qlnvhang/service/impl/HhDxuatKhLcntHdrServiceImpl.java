@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 
-import com.lowagie.text.Font;
-import com.lowagie.text.pdf.BaseFont;
 import com.tcdt.qlnvhang.common.DocxToPdfConverter;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.*;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
@@ -25,23 +23,9 @@ import com.tcdt.qlnvhang.service.feign.BaoCaoClient;
 import com.tcdt.qlnvhang.table.DmDonViDTO;
 import com.tcdt.qlnvhang.table.HhDxKhLcntThopDtl;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
-import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.report.HhDxKhlcntDsgthauReport;
-import com.tcdt.qlnvhang.table.report.ListDsGthauDTO;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.*;
-import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
-import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
-import fr.opensagres.xdocreport.converter.ConverterTypeTo;
-import fr.opensagres.xdocreport.converter.ConverterTypeVia;
-import fr.opensagres.xdocreport.converter.Options;
-import fr.opensagres.xdocreport.document.IXDocReport;
-import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
-import fr.opensagres.xdocreport.template.IContext;
-import fr.opensagres.xdocreport.template.TemplateEngineKind;
-import org.apache.velocity.tools.generic.DateTool;
-import org.apache.velocity.tools.generic.NumberTool;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -187,10 +171,14 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             HhDxKhlcntDsgthau gthau = setGoiThau(listData, objReq, idHdr);
             hhDxuatKhLcntDsgtDtlRepository.save(gthau);
             hhDxKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(gthau.getId());
-            AtomicReference<Long> soLuong = new AtomicReference<>(0L);
+            AtomicReference<BigDecimal> soLuong = new AtomicReference<>(BigDecimal.ZERO);
+            AtomicReference<BigDecimal> thanhTienDx = new AtomicReference<>(BigDecimal.ZERO);
+            AtomicReference<BigDecimal> thanhTien = new AtomicReference<>(BigDecimal.ZERO);
             listData.forEach(cuc -> {
                 for (HhDxuatKhLcntDsgthauDtlCtietReq child : cuc.getChildren()) {
-                    soLuong.updateAndGet(v -> v + child.getSoLuong().longValue());
+                    soLuong.updateAndGet(v -> v.add(child.getSoLuong()));
+                    thanhTienDx.updateAndGet(v -> v.add(child.getSoLuong().multiply(child.getDonGiaTamTinh())));
+                    thanhTien.updateAndGet(v -> v.add(child.getSoLuong().multiply(child.getDonGia())));
                     HhDxKhlcntDsgthauCtiet dsgthauCtiet = new ModelMapper().map(child, HhDxKhlcntDsgthauCtiet.class);
                     dsgthauCtiet.setIdGoiThau(gthau.getId());
                     hhDxKhlcntDsgthauCtietRepository.save(dsgthauCtiet);
@@ -204,7 +192,9 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
                     }
                 }
             });
-            gthau.setSoLuong(new BigDecimal(soLuong.toString()));
+            gthau.setSoLuong(soLuong.get());
+            gthau.setThanhTien(thanhTien.get());
+            gthau.setThanhTienDx(thanhTienDx.get());
             hhDxuatKhLcntDsgtDtlRepository.save(gthau);
 
         }
@@ -221,16 +211,6 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         gthau.setDviTinh("kg");
         gthau.setIdDxKhlcnt(idHdr);
         return gthau;
-    }
-    HhDxKhlcntDsgthauCtiet setDsgthauCtiet (HhDxuatKhLcntDsgthauDtlCtietReq child, Long goiThauId) {
-        HhDxKhlcntDsgthauCtiet dsgthauCtiet = new HhDxKhlcntDsgthauCtiet();
-        dsgthauCtiet.setMaDvi(child.getMaDvi());
-        dsgthauCtiet.setSoLuong(new BigDecimal(child.getSoLuong()));
-        dsgthauCtiet.setDiaDiemNhap(child.getDiaDiemNhap());
-        dsgthauCtiet.setIdGoiThau(goiThauId);
-        dsgthauCtiet.setSoLuongTheoChiTieu(child.getSoLuongTheoChiTieu());
-        dsgthauCtiet.setSoLuongDaMua(child.getSoLuongDaMua());
-        return dsgthauCtiet;
     }
 
 
