@@ -210,25 +210,28 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
             // Re approve : gửi lại duyệt
             case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
             case Contains.TUCHOI_LDTC + Contains.CHODUYET_LDV:
+                hdr.setTrangThai(req.getTrangThai());
                 break;
             // Arena các cấp duuyệt
             case Contains.DUTHAO + Contains.CHODUYET_LDV:
             case Contains.CHODUYET_LDV + Contains.CHODUYET_LDTC:
             case Contains.CHODUYET_LDTC + Contains.BAN_HANH:
                 hdr.setNgayKy(LocalDate.now());
+                hdr.setTrangThai(req.getTrangThai());
                 hdr.setTrangThaiDg(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
                 break;
             case Contains.BAN_HANH + Contains.HOANTHANHCAPNHAT:
                 hdr.setTrangThaiDg(NhapXuatHangTrangThaiEnum.HOANTHANHCAPNHAT.getId());
+                hdr.setTrangThai(req.getTrangThai());
                 break;
             case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
             case Contains.CHODUYET_LDTC + Contains.TUCHOI_LDTC:
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                hdr.setTrangThai(req.getTrangThai());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
         }
-        hdr.setTrangThai(req.getTrangThai());
         XhTlQuyetDinhHdr save = hdrRepository.save(hdr);
         return save;
     }
