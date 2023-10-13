@@ -192,8 +192,8 @@ public class XhBkeCanHangBttServiceImpl extends BaseServiceImpl implements XhBke
         if(req.getTrangThai().equals(Contains.DADUYET_LDCC)) {
             Optional<XhPhieuXkhoBtt> xhPhieuXkhoBtt = xhPhieuXkhoBttReposytory.findById(data.getIdPhieuXuat());
             if (xhPhieuXkhoBtt.isPresent()){
-                xhPhieuXkhoBtt.get().setSoBangKe(data.getSoBangKe());
-                xhPhieuXkhoBtt.get().setIdBangKe(data.getId());
+//                xhPhieuXkhoBtt.get().setSoBangKe(data.getSoBangKe());
+//                xhPhieuXkhoBtt.get().setIdBangKe(data.getId());
                 xhPhieuXkhoBttReposytory.save(xhPhieuXkhoBtt.get());
             }
         }

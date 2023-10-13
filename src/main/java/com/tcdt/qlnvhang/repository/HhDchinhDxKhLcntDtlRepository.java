@@ -11,6 +11,7 @@ import java.util.List;
 public interface HhDchinhDxKhLcntDtlRepository extends CrudRepository<HhDchinhDxKhLcntDtl, Long> {
 
     List<HhDchinhDxKhLcntDtl> findAllByIdDxDcHdr (Long idDxDcHdr);
+    List<HhDchinhDxKhLcntDtl> findAllByIdDxDcHdrOrderByMaDvi (Long idDxDcHdr);
 
     void deleteAllByIdDxDcHdr(Long IdDxDcHdr);
 

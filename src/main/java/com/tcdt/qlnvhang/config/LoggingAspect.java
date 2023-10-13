@@ -226,12 +226,12 @@ public class LoggingAspect {
           if (rowData.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
             PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
             phieuNhapXuatHistory.setMaKho(rowData.getMaLoKho() == null ? rowData.getMaNganKho() : rowData.getMaLoKho());
-            phieuNhapXuatHistory.setSoLuong(DataUtils.safeToLong(rowData.getSoLuongThucXuat()));
+            phieuNhapXuatHistory.setSoLuong(DataUtils.safeToLong(rowData.getThucXuat()));
             phieuNhapXuatHistory.setDonGia(DataUtils.safeToLong(rowData.getDonGia()));
-            phieuNhapXuatHistory.setThanhTien(DataUtils.safeToLong(rowData.getDonGia()) * DataUtils.safeToLong(rowData.getSoLuongThucXuat()));
-            phieuNhapXuatHistory.setSoLuongChungTu(rowData.getSoLuongChungTu());
+            phieuNhapXuatHistory.setThanhTien(DataUtils.safeToLong(rowData.getDonGia()) * DataUtils.safeToLong(rowData.getThucXuat()));
+            phieuNhapXuatHistory.setSoLuongChungTu(rowData.getTheoChungTu());
             phieuNhapXuatHistory.setIdPhieu(rowData.getId());
-            phieuNhapXuatHistory.setSoPhieu(rowData.getSoPhieu());
+            phieuNhapXuatHistory.setSoPhieu(rowData.getSoPhieuXuatKho());
             phieuNhapXuatHistory.setLoaiNhapXuat(-1);
             phieuNhapXuatHistory.setLoaiVthh(rowData.getLoaiVthh());
             phieuNhapXuatHistory.setCloaiVthh(rowData.getCloaiVthh());

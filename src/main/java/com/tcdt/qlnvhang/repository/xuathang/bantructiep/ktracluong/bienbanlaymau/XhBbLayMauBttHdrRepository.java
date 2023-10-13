@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.repository.xuathang.bantructiep.ktracluong.bienbanlaymau;
 
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttHdr;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMau;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttHdrReq;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,19 +16,26 @@ import java.util.Optional;
 @Repository
 public interface XhBbLayMauBttHdrRepository extends JpaRepository<XhBbLayMauBttHdr, Long> {
 
-    @Query("SELECT LM from XhBbLayMauBttHdr LM WHERE 1 = 1 " +
+    @Query("SELECT DISTINCT LM FROM XhBbLayMauBttHdr LM " +
+            "LEFT JOIN XhQdNvXhBttHdr QD ON QD.id = LM.idQdNv " +
+            "WHERE (:#{#param.dvql} IS NULL OR LM.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
             "AND (:#{#param.namKh} IS NULL OR LM.namKh = :#{#param.namKh}) " +
-            "AND (:#{#param.soBienBan} IS NULL OR LOWER(LM.soBienBan) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soBienBan}),'%' ) ) )" +
-            "AND (:#{#param.soQdNv} IS NULL OR LOWER(LM.soQdNv) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdNv}),'%' ) ) )" +
-            "AND (:#{#param.dviKnghiem} IS NULL OR LOWER(LM.dviKnghiem) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.dviKnghiem}),'%'))) " +
+            "AND (:#{#param.soBbLayMau} IS NULL OR LM.soBbLayMau = :#{#param.soBbLayMau}) " +
+            "AND (:#{#param.soQdNv} IS NULL OR LM.soQdNv = :#{#param.soQdNv}) " +
+            "AND (:#{#param.donViKnghiem} IS NULL OR LOWER(LM.donViKnghiem) LIKE LOWER(CONCAT('%', :#{#param.donViKnghiem}, '%'))) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR LM.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
             "AND (:#{#param.ngayLayMauTu} IS NULL OR LM.ngayLayMau >= :#{#param.ngayLayMauTu}) " +
             "AND (:#{#param.ngayLayMauDen} IS NULL OR LM.ngayLayMau <= :#{#param.ngayLayMauDen}) " +
-            "AND (:#{#param.loaiVthh} IS NULL OR LM.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
             "AND (:#{#param.trangThai} IS NULL OR LM.trangThai = :#{#param.trangThai}) " +
-            "AND (:#{#param.maDvi} IS NULL OR LM.maDvi = :#{#param.maDvi})")
+            "AND (:#{#param.maDviCha} IS NULL OR QD.maDvi LIKE CONCAT(:#{#param.maDviCha}, '%')) " +
+            "ORDER BY LM.namKh DESC, LM.ngaySua DESC, LM.ngayTao DESC, LM.id DESC")
     Page<XhBbLayMauBttHdr> searchPage(@Param("param") XhBbLayMauBttHdrReq param, Pageable pageable);
+
+    boolean existsBySoBbLayMau(String soBbLayMau);
+
+    boolean existsBySoBbLayMauAndIdNot(String soBbLayMau, Long id);
 
     List<XhBbLayMauBttHdr> findByIdIn(List<Long> idList);
 
-    Optional<XhBbLayMauBttHdr> findBySoBienBan(String soBienBan);
+    List<XhBbLayMauBttHdr> findAllByIdIn(List<Long> listId);
 }

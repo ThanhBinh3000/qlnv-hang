@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.service.xuathang.daugia.ktracluong.bienbanlaymau;
 
 import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMau;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMauCt;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXh;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMauCtRepository;
@@ -173,7 +172,7 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl {
                 .orElseThrow(() -> new Exception("Bản ghi không tồn tại"));
         List<String> allowedStatus = Arrays.asList(Contains.DUTHAO, Contains.TUCHOI_LDCC);
         if (!allowedStatus.contains(data.getTrangThai())) {
-            throw new Exception("Chỉ thực hiện xóa với phiếu xuất kho ở trạng thái bản nháp hoặc từ chối");
+            throw new Exception("Chỉ thực hiện xóa với biên bản lấy mẫu ở trạng thái bản nháp hoặc từ chối");
         }
         xhBbLayMauCtRepository.deleteAllByIdHdr(data.getId());
         xhBbLayMauRepository.delete(data);
@@ -188,7 +187,7 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl {
         boolean isValidToDelete = list.stream().allMatch(hdr -> hdr.getTrangThai().equals(Contains.DUTHAO) ||
                 hdr.getTrangThai().equals(Contains.TUCHOI_LDCC));
         if (!isValidToDelete) {
-            throw new Exception("Chỉ thực hiện xóa với phiếu xuất kho ở trạng thái bản nháp hoặc từ chối.");
+            throw new Exception("Chỉ thực hiện xóa với biên bản lấy mẫu ở trạng thái bản nháp hoặc từ chối.");
         }
         List<Long> idHdr = list.stream().map(XhBbLayMau::getId).collect(Collectors.toList());
         List<XhBbLayMauCt> listDtl = xhBbLayMauCtRepository.findByIdHdrIn(idHdr);

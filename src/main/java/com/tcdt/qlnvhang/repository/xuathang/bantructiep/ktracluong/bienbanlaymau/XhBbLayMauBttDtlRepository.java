@@ -11,5 +11,7 @@ public interface XhBbLayMauBttDtlRepository extends JpaRepository<XhBbLayMauBttD
 
     void deleteAllByIdHdr(Long idHdr);
 
-    List<XhBbLayMauBttDtl> findAllByIdHdr (Long idHdr);
+    List<XhBbLayMauBttDtl> findAllByIdHdr(Long idHdr);
+
+    List<XhBbLayMauBttDtl> findByIdHdrIn(List<Long> listId);
 }
