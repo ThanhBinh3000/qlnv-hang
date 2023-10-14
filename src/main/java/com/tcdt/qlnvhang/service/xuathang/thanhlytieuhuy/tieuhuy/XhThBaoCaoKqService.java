@@ -88,17 +88,17 @@ public class XhThBaoCaoKqService extends BaseServiceImpl {
 
     XhThBaoCaoKqHdr created = xhThBaoCaoKqRepository.save(data);
 
-    if (!DataUtils.isNullObject(data.getIdQd())) {
-      xhThQuyetDinhRepository.findById(data.getIdQd())
-          .ifPresent(item -> {
-            item.setIdKq(data.getId());
-            item.setSoKq(data.getSoBaoCao());
-            xhThQuyetDinhRepository.save(item);
-          });
-    }
-    if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
-      fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(), XhThBaoCaoKqHdr.TABLE_NAME);
-    }
+//    if (!DataUtils.isNullObject(data.getIdQd())) {
+//      xhThQuyetDinhRepository.findById(data.getIdQd())
+//          .ifPresent(item -> {
+//            item.setIdKq(data.getId());
+//            item.setSoKq(data.getSoBaoCao());
+//            xhThQuyetDinhRepository.save(item);
+//          });
+//    }
+//    if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
+//      fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(), XhThBaoCaoKqHdr.TABLE_NAME);
+//    }
 
     return created;
   }
@@ -129,14 +129,14 @@ public class XhThBaoCaoKqService extends BaseServiceImpl {
     });
     XhThBaoCaoKqHdr created = xhThBaoCaoKqRepository.save(data);
 
-    if (!DataUtils.isNullObject(data.getIdQd())) {
-      xhThQuyetDinhRepository.findById(data.getIdQd())
-          .ifPresent(item -> {
-            item.setIdKq(data.getId());
-            item.setSoKq(data.getSoBaoCao());
-            xhThQuyetDinhRepository.save(item);
-          });
-    }
+//    if (!DataUtils.isNullObject(data.getIdQd())) {
+//      xhThQuyetDinhRepository.findById(data.getIdQd())
+//          .ifPresent(item -> {
+//            item.setIdKq(data.getId());
+//            item.setSoKq(data.getSoBaoCao());
+//            xhThQuyetDinhRepository.save(item);
+//          });
+//    }
 
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhThBaoCaoKqHdr.TABLE_NAME + "_CAN_CU"));
 
@@ -186,14 +186,14 @@ public class XhThBaoCaoKqService extends BaseServiceImpl {
     }
     XhThBaoCaoKqHdr data = optional.get();
 
-    if (!DataUtils.isNullObject(data.getIdQd())) {
-      xhThQuyetDinhRepository.findById(data.getIdQd())
-          .ifPresent(item -> {
-            item.setIdKq(null);
-            item.setSoKq(null);
-            xhThQuyetDinhRepository.save(item);
-          });
-    }
+//    if (!DataUtils.isNullObject(data.getIdQd())) {
+//      xhThQuyetDinhRepository.findById(data.getIdQd())
+//          .ifPresent(item -> {
+//            item.setIdKq(null);
+//            item.setSoKq(null);
+//            xhThQuyetDinhRepository.save(item);
+//          });
+//    }
 
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhThBaoCaoKqHdr.TABLE_NAME));
     xhThBaoCaoKqRepository.delete(data);
@@ -208,16 +208,16 @@ public class XhThBaoCaoKqService extends BaseServiceImpl {
       throw new Exception("Bản ghi không tồn tại");
     }
 
-    list.forEach(f -> {
-      if (!DataUtils.isNullObject(f.getIdQd())) {
-        xhThQuyetDinhRepository.findById(f.getIdQd())
-            .ifPresent(item -> {
-              item.setIdKq(null);
-              item.setSoKq(null);
-              xhThQuyetDinhRepository.save(item);
-            });
-      }
-    });
+//    list.forEach(f -> {
+//      if (!DataUtils.isNullObject(f.getIdQd())) {
+//        xhThQuyetDinhRepository.findById(f.getIdQd())
+//            .ifPresent(item -> {
+//              item.setIdKq(null);
+//              item.setSoKq(null);
+//              xhThQuyetDinhRepository.save(item);
+//            });
+//      }
+//    });
 
     fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhThBaoCaoKqHdr.TABLE_NAME));
     xhThBaoCaoKqRepository.deleteAll(list);

@@ -58,10 +58,10 @@ public class XhThThongBaoKqService extends BaseServiceImpl {
 
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     search.getContent().forEach(s -> {
-      if (mapDmucDvi.containsKey((s.getMaDvi()))) {
-        Map<String, Object> objDonVi = mapDmucDvi.get(s.getMaDvi());
-        s.setTenDvi(objDonVi.get("tenDvi").toString());
-      }
+//      if (mapDmucDvi.containsKey((s.getMaDvi()))) {
+//        Map<String, Object> objDonVi = mapDmucDvi.get(s.getMaDvi());
+//        s.setTenDvi(objDonVi.get("tenDvi").toString());
+//      }
       s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
     });
     return search;
@@ -150,9 +150,9 @@ public class XhThThongBaoKqService extends BaseServiceImpl {
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     List<XhThThongBaoKq> allById = xhThThongBaoKqRepository.findAllById(ids);
     allById.forEach(data -> {
-      if (mapDmucDvi.containsKey(data.getMaDvi())) {
-        data.setTenDvi(mapDmucDvi.get(data.getMaDvi()).get("tenDvi").toString());
-      }
+//      if (mapDmucDvi.containsKey(data.getMaDvi())) {
+//        data.setTenDvi(mapDmucDvi.get(data.getMaDvi()).get("tenDvi").toString());
+//      }
       data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
 
       List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhThThongBaoKq.TABLE_NAME));
@@ -217,8 +217,8 @@ public class XhThThongBaoKqService extends BaseServiceImpl {
     String status = statusReq.getTrangThai() + optional.get().getTrangThai();
     switch (status) {
       case Contains.DA_HOAN_THANH + Contains.DUTHAO:
-        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
-        optional.get().setNgayPduyet(LocalDate.now());
+//        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+//        optional.get().setNgayPduyet(LocalDate.now());
         break;
       default:
         throw new Exception("Phê duyệt không thành công");

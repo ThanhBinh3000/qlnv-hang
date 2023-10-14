@@ -12,6 +12,7 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoRequest;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -141,6 +142,24 @@ public class XhThHoSoService extends BaseServiceImpl {
     return listDtl;
   }
 
+  public List<XhThHoSoHdr> dsTaoQuyetDinhTieuHuy(XhThHoSoRequest req) throws Exception {
+    UserInfo currentUser = SecurityContextService.getUser();
+    if (currentUser == null){
+      throw new Exception("Access denied.");
+    }
+    req.setTrangThai(TrangThaiAllEnum.DA_DUYET_BTC.getId());
+    return hdrRepository.listTaoQuyetDinhTieuHuy(req);
+  }
+
+  public List<XhThHoSoHdr> dsTaoThongBaoTieuHuy(XhThHoSoRequest req) throws Exception {
+    UserInfo currentUser = SecurityContextService.getUser();
+    if (currentUser == null){
+      throw new Exception("Access denied.");
+    }
+    req.setTrangThai(TrangThaiAllEnum.TU_CHOI_BTC.getId());
+    return hdrRepository.listTaoThongBaoTieuHuy(req);
+  }
+
   @Transactional
   public XhThHoSoHdr update(XhThHoSoRequest req) throws Exception {
     UserInfo userInfo = UserUtils.getUserInfo();
@@ -256,6 +275,7 @@ public class XhThHoSoService extends BaseServiceImpl {
         // Arena các cấp duuyệt
         case Contains.DUTHAO + Contains.CHODUYET_TP:
         case Contains.CHODUYET_TP + Contains.CHODUYET_LDC:
+          break;
         case Contains.CHODUYET_LDC + Contains.DADUYET_LDC:
           hdr.setIdLdc(currentUser.getUser().getId());
           hdr.setNgayDuyetLdc(LocalDate.now());
@@ -289,6 +309,7 @@ public class XhThHoSoService extends BaseServiceImpl {
         case Contains.DADUYET_LDTC + Contains.CHO_DUYET_BTC:
         case Contains.CHO_DUYET_BTC + Contains.DA_DUYET_BTC:
           break;
+        case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
         case Contains.DA_DUYET_LDC + Contains.TU_CHOI_CBV:
         case Contains.DANG_DUYET_CB_VU + Contains.TU_CHOI_CBV:
         case Contains.CHO_DUYET_BTC + Contains.TU_CHOI_BTC:

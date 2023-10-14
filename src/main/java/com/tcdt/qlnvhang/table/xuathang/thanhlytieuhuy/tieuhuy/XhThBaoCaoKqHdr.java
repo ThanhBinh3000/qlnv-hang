@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 
@@ -51,4 +52,8 @@ public class XhThBaoCaoKqHdr extends BaseEntity implements Serializable {
 
   @OneToMany(mappedBy = "baoCaoKqHdr", cascade = CascadeType.ALL)
   private List<XhThBaoCaoKqDtl> baoCaoKqDtl = new ArrayList<>();
+
+  public String getTenTrangThai(){
+    return TrangThaiAllEnum.getLabelById(getTrangThai());
+  }
 }

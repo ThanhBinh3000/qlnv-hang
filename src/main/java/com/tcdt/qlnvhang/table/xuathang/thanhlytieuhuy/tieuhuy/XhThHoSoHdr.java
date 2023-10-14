@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Getter;
 import lombok.Setter;
@@ -66,5 +67,13 @@ public class XhThHoSoHdr extends BaseEntity implements Serializable {
 
   @Transient
   private String tenDvi;
+
+  public String getTenTrangThai(){
+    return TrangThaiAllEnum.getLabelById(getTrangThai());
+  }
+
+  public String getTenTrangThaiTc(){
+    return TrangThaiAllEnum.getLabelById(getTrangThaiTc());
+  }
 
 }

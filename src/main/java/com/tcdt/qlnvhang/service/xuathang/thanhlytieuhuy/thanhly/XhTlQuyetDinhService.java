@@ -93,30 +93,12 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
         hdr.setMaDvi(getUser().getDvql());
         hdr.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         XhTlQuyetDinhHdr created = hdrRepository.save(hdr);
-//        this.updateScTongHopHdr(created,false);
-        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), ScQuyetDinhSc.TABLE_NAME + "_CAN_CU");
+        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), XhTlQuyetDinhHdr.TABLE_NAME + "_CAN_CU");
         created.setFileCanCu(canCu);
-        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), ScQuyetDinhSc.TABLE_NAME + "_DINH_KEM");
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), XhTlQuyetDinhHdr.TABLE_NAME + "_DINH_KEM");
         created.setFileDinhKem(fileDinhKem);
         return created;
     }
-
-//    void updateScTongHopHdr(ScQuyetDinhSc sc,boolean isDelete) throws Exception {
-//        Optional<ScTrinhThamDinhHdr> byId = scTrinhThamDinhRepository.findById(sc.getIdTtr());
-//        if(byId.isPresent()){
-//            ScTrinhThamDinhHdr data = byId.get();
-//            if(isDelete){
-//                data.setIdQdSc(null);
-//                data.setSoQdSc(null);
-//            }else{
-//                data.setIdQdSc(sc.getId());
-//                data.setSoQdSc(sc.getSoQd());
-//            }
-//            scTrinhThamDinhRepository.save(data);
-//        }else{
-//            throw new Exception("Không tìm thấy số tờ trình cần sửa chữa");
-//        }
-//    }
 
     void validateData(XhTlQuyetDinhHdrReq req) throws Exception {
         Optional<XhTlQuyetDinhHdr> bySoQd = hdrRepository.findBySoQd(req.getSoQd());
@@ -141,7 +123,6 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
         XhTlQuyetDinhHdr hdr = optional.get();
         BeanUtils.copyProperties(req, hdr);
         XhTlQuyetDinhHdr created = hdrRepository.save(hdr);
-//        this.updateScTongHopHdr(created,false);
         fileDinhKemService.delete(req.getId(), Lists.newArrayList(XhTlQuyetDinhHdr.TABLE_NAME + "_CAN_CU"));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), XhTlQuyetDinhHdr.TABLE_NAME + "_CAN_CU");
         created.setFileCanCu(canCu);

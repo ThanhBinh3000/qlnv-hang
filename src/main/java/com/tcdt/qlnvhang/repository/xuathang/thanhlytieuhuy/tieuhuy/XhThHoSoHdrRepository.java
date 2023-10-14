@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy;
 
+import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoRequest;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoHdr;
 import feign.Param;
 import org.springframework.data.domain.Page;
@@ -24,6 +26,24 @@ public interface XhThHoSoHdrRepository extends JpaRepository<XhThHoSoHdr, Long> 
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
   Page<XhThHoSoHdr> searchPage(@Param("param") XhThHoSoRequest param, Pageable pageable);
+
+  @Query(value = "SELECT c FROM XhThHoSoHdr c " +
+          " LEFT JOIN XhThQuyetDinhHdr qd on c.id = qd.idHoSo " +
+          " WHERE 1 = 1 " +
+          " AND qd.id is null " +
+          " AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
+          " ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc "
+  )
+  List<XhThHoSoHdr> listTaoQuyetDinhTieuHuy(@Param("param") XhThHoSoRequest param);
+
+  @Query(value = "SELECT c FROM XhThHoSoHdr c " +
+          " LEFT JOIN XhThThongBaoKq qd on c.id = qd.idHoSo " +
+          " WHERE 1 = 1 " +
+          " AND qd.id is null " +
+          " AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
+          " ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc "
+  )
+  List<XhThHoSoHdr> listTaoThongBaoTieuHuy(@Param("param") XhThHoSoRequest param);
 
 
   void deleteAllByIdIn(List<Long> listId);
