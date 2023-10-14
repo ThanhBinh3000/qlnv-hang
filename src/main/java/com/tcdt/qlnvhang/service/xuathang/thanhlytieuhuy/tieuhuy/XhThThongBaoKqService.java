@@ -3,7 +3,7 @@ package com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.tieuhuy;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThThongBaoKqRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -26,7 +26,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -41,7 +40,7 @@ public class XhThThongBaoKqService extends BaseServiceImpl {
   private XhThThongBaoKqRepository xhThThongBaoKqRepository;
 
   @Autowired
-  private XhThHoSoRepository xhThHoSoRepository;
+  private XhThHoSoHdrRepository xhThHoSoHdrRepository;
 
   @Autowired
   private FileDinhKemService fileDinhKemService;
@@ -87,11 +86,11 @@ public class XhThThongBaoKqService extends BaseServiceImpl {
     XhThThongBaoKq created = xhThThongBaoKqRepository.save(data);
 
     if (!DataUtils.isNullObject(data.getIdHoSo())) {
-      Optional<XhThHoSoHdr> hoSo = xhThHoSoRepository.findById(data.getIdHoSo());
+      Optional<XhThHoSoHdr> hoSo = xhThHoSoHdrRepository.findById(data.getIdHoSo());
       if (hoSo.isPresent()) {
         hoSo.get().setIdTb(created.getId());
         hoSo.get().setSoTb(created.getSoThongBao());
-        xhThHoSoRepository.save(hoSo.get());
+        xhThHoSoHdrRepository.save(hoSo.get());
       }
     }
     if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
@@ -122,11 +121,11 @@ public class XhThThongBaoKqService extends BaseServiceImpl {
     XhThThongBaoKq created = xhThThongBaoKqRepository.save(data);
 
     if (!DataUtils.isNullObject(data.getIdHoSo())) {
-      Optional<XhThHoSoHdr> hoSo = xhThHoSoRepository.findById(data.getIdHoSo());
+      Optional<XhThHoSoHdr> hoSo = xhThHoSoHdrRepository.findById(data.getIdHoSo());
       if (hoSo.isPresent()) {
         hoSo.get().setIdTb(created.getId());
         hoSo.get().setSoTb(created.getSoThongBao());
-        xhThHoSoRepository.save(hoSo.get());
+        xhThHoSoHdrRepository.save(hoSo.get());
       }
     }
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhThThongBaoKq.TABLE_NAME + "_CAN_CU"));
@@ -172,11 +171,11 @@ public class XhThThongBaoKqService extends BaseServiceImpl {
     XhThThongBaoKq data = optional.get();
 
     if (!DataUtils.isNullObject(data.getIdHoSo())) {
-      Optional<XhThHoSoHdr> hoSo = xhThHoSoRepository.findById(data.getIdHoSo());
+      Optional<XhThHoSoHdr> hoSo = xhThHoSoHdrRepository.findById(data.getIdHoSo());
       if (hoSo.isPresent()) {
         hoSo.get().setIdTb(null);
         hoSo.get().setSoTb(null);
-        xhThHoSoRepository.save(hoSo.get());
+        xhThHoSoHdrRepository.save(hoSo.get());
       }
     }
 
@@ -194,12 +193,12 @@ public class XhThThongBaoKqService extends BaseServiceImpl {
     }
 
     List<Long> listHoSo = list.stream().map(XhThThongBaoKq::getIdHoSo).collect(Collectors.toList());
-    List<XhThHoSoHdr> listObjQdPd = xhThHoSoRepository.findByIdIn(listHoSo);
+    List<XhThHoSoHdr> listObjQdPd = xhThHoSoHdrRepository.findByIdIn(listHoSo);
     listObjQdPd.forEach(s -> {
       s.setIdTb(null);
       s.setSoTb(null);
     });
-    xhThHoSoRepository.saveAll(listObjQdPd);
+    xhThHoSoHdrRepository.saveAll(listObjQdPd);
     fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhThThongBaoKq.TABLE_NAME));
     xhThThongBaoKqRepository.deleteAll(list);
 

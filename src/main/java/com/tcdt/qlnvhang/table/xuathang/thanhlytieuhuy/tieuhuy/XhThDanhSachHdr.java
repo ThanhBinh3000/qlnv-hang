@@ -39,6 +39,9 @@ public class XhThDanhSachHdr extends BaseEntity implements Serializable {
   private String lyDo;
   private String trangThai;
   private String type;
+  private String ketQua;
+  private BigDecimal donGiaDk;
+  private BigDecimal donGiaPd;
 
 
   @JsonIgnore
