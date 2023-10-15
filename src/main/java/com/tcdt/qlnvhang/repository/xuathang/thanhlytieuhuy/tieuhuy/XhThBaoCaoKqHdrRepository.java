@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface XhThBaoCaoKqRepository extends JpaRepository<XhThBaoCaoKqHdr,Long> {
+public interface XhThBaoCaoKqHdrRepository extends JpaRepository<XhThBaoCaoKqHdr,Long> {
 
   @Query("SELECT DISTINCT  c FROM XhThBaoCaoKqHdr c " +
       " WHERE 1=1 " +
