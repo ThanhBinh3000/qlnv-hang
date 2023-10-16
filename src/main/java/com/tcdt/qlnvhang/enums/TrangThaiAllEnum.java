@@ -74,7 +74,7 @@ public enum TrangThaiAllEnum {
     DA_XUAT_KHO("74", "Đã xuất kho"),
     DA_TIEU_HUY("75", "Đã tiêu hủy"),
     GUI_DUYET("76", "Gửi duyệt"),
-    DANG_DUYET_CB_VU("77", "Đang duyệt cán bộ Vụ"),
+    DANG_DUYET_CB_VU("77", "Đang duyệt - CB Vụ"),
     DANG_NHAP_DU_LIEU("78", "Đang nhập dữ liệu"),
     TU_CHOI_BAN_HANH_QD("79", "Từ chối ban hành QĐ"),
     DA_LAP("80", "Đã lập"),
