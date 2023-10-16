@@ -176,9 +176,15 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             AtomicReference<BigDecimal> thanhTien = new AtomicReference<>(BigDecimal.ZERO);
             listData.forEach(cuc -> {
                 for (HhDxuatKhLcntDsgthauDtlCtietReq child : cuc.getChildren()) {
-                    soLuong.updateAndGet(v -> v.add(child.getSoLuong()));
-                    thanhTienDx.updateAndGet(v -> v.add(child.getSoLuong().multiply(child.getDonGiaTamTinh())));
-                    thanhTien.updateAndGet(v -> v.add(child.getSoLuong().multiply(child.getDonGia())));
+                    if (child.getSoLuong() != null) {
+                        soLuong.updateAndGet(v -> v.add(child.getSoLuong()));
+                        if (child.getDonGiaTamTinh() != null) {
+                            thanhTienDx.updateAndGet(v -> v.add(child.getSoLuong().multiply(child.getDonGiaTamTinh())));
+                        }
+                        if (child.getDonGia() != null) {
+                            thanhTien.updateAndGet(v -> v.add(child.getSoLuong().multiply(child.getDonGia())));
+                        }
+                    }
                     HhDxKhlcntDsgthauCtiet dsgthauCtiet = new ModelMapper().map(child, HhDxKhlcntDsgthauCtiet.class);
                     dsgthauCtiet.setIdGoiThau(gthau.getId());
                     hhDxKhlcntDsgthauCtietRepository.save(dsgthauCtiet);
