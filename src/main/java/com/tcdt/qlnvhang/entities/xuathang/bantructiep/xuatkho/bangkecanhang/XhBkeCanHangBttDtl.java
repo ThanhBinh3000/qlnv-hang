@@ -10,22 +10,14 @@ import java.math.BigDecimal;
 @Table(name = XhBkeCanHangBttDtl.TABLE_NAME)
 @Data
 public class XhBkeCanHangBttDtl implements Serializable {
-
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_BKE_CAN_HANG_BTT_DTL";
-
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator =TABLE_NAME +"_SEQ")
-    @SequenceGenerator(sequenceName = TABLE_NAME +"_SEQ", allocationSize = 1, name = TABLE_NAME +"_SEQ")
-
-    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = TABLE_NAME + "_SEQ", allocationSize = 1, name = TABLE_NAME + "_SEQ")
     private Long id;
-
     private Long idHdr;
-
     private String maCan;
-
-    private BigDecimal trongLuongBaoBi;
-
-    private BigDecimal trongLuongCaBaoBi;
+    private String soBaoBi;
+    private BigDecimal trongLuongCaBi;
 }
