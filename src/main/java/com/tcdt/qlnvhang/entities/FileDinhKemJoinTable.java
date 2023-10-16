@@ -10,6 +10,7 @@ import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.phieuktracluon
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bangkecanhang.XhBkeCanHangBttHdr;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bienbanhaodoi.XhBbHdoiBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBtt;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongHdr;
@@ -243,4 +244,9 @@ public class FileDinhKemJoinTable implements Serializable {
     @JoinColumn(name = "dataId", insertable = false, updatable = false)
     @JsonIgnore
     private XhBbTinhkBttHdr xhBbTinhkBttHdr;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "dataId", insertable = false, updatable = false)
+    @JsonIgnore
+    private XhBbHdoiBttHdr xhBbHdoiBttHdr;
 }
