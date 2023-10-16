@@ -282,6 +282,7 @@ public class XhThHoSoService extends BaseServiceImpl {
           break;
         // Arena từ chối
         case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+          hdr.setLyDoTuChoi(statusReq.getLyDoTuChoi());
           break;
         case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
           hdr.setIdLdc(currentUser.getUser().getId());

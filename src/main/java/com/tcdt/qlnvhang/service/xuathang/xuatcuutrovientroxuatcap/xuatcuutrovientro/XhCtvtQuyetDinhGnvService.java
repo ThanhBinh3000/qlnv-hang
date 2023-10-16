@@ -323,4 +323,28 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
     }
     return xhCtvtQuyetDinhGnvDtlDtos;
   }
+
+  public List<XhCtvtQuyetDinhGnvHdr> searchList(CustomUserDetails currentUser, SearchXhCtvtQuyetDinhGnv objReq) {
+    if (!currentUser.getUser().getCapDvi().equals(CAP_CHI_CUC)) {
+      objReq.setDvql(currentUser.getDvql());
+    } else {
+      objReq.setMaDviGiao(currentUser.getDvql());
+    }
+    if(objReq.getType() != null){
+      objReq.getTypes().add(objReq.getType());
+    }
+
+    List<XhCtvtQuyetDinhGnvHdr> data = xhCtvtQuyetDinhGnvHdrRepository.searchList(objReq);
+    if (currentUser.getUser().getCapDvi().equals(CAP_CHI_CUC)) {
+      data.stream().forEach(s->{
+        List<XhCtvtQuyetDinhGnvDtl> quyetDinhGnvDtls = s.getDataDtl().stream().filter(s1 -> s1.getMaDvi().contains(currentUser.getDvql())).collect(Collectors.toList());
+        if(!quyetDinhGnvDtls.isEmpty()){
+          s.setTrangThaiXh(quyetDinhGnvDtls.get(0).getTrangThai());
+          s.setTenTrangThaiXh(TrangThaiAllEnum.getLabelById(quyetDinhGnvDtls.get(0).getTenTrangThai()));
+        }
+      });
+    }
+
+    return data;
+  }
 }
