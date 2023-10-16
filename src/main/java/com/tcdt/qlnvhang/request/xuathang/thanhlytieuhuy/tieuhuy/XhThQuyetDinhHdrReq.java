@@ -12,29 +12,15 @@ import java.util.List;
 @Data
 public class XhThQuyetDinhHdrReq {
   private Long id;
-  private String maDvi;
   private Integer nam;
   private String soQd;
+  private String trichYeu;
   private LocalDate ngayKy;
   private Long idHoSo;
   private String soHoSo;
-  private Long idKq;
-  private String soKq;
-  private LocalDate thoiGianTlTu;
-  private LocalDate thoiGianTlDen;
-  private String trichYeu;
   private String trangThai;
-  private BigDecimal tongSoLuongTl;
-  private BigDecimal tongSoLuongCon;
-  private BigDecimal tongThanhTien;
-
-  private LocalDate ngayPduyet;
-  private Long nguoiPduyetId;
-  private LocalDate ngayGduyet;
-  private Long nguoiGduyetId;
   private String lyDoTuChoi;
 
-  private List<FileDinhKemReq> fileDinhKem;
-  private List<FileDinhKemReq> canCu = new ArrayList<>();
-  private List<XhThQuyetDinhDtl> quyetDinhDtl = new ArrayList<>();
+  private List<FileDinhKemReq> fileDinhKemReq;
+  private List<FileDinhKemReq> fileCanCuReq = new ArrayList<>();
 }

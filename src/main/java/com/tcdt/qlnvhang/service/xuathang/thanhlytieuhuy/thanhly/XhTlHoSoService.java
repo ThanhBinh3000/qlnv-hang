@@ -254,7 +254,7 @@ public class XhTlHoSoService extends BaseServiceImpl {
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhTlHoSoHdr.TABLE_NAME + "_CAN_CU"));
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhTlHoSoHdr.TABLE_NAME));
     xhTlHoSoHdrRepository.delete(data);
-
+    dtlRepository.deleteAllByIdHdr(data.getId());
   }
 
   @Transactional

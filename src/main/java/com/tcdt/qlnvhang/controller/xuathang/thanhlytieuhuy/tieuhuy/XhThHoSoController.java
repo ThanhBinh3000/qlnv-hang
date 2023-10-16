@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoRequest;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoService;
@@ -55,10 +56,10 @@ public class XhThHoSoController {
   @ApiOperation(value = "Tạo mới", response = List.class)
   @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhThHoSoRequest objReq) {
+  public ResponseEntity<BaseResponse> insert(@Valid @RequestBody XhThHoSoRequest objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhThHoSoService.save(currentUser, objReq));
+      resp.setData(xhThHoSoService.save(objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -69,13 +70,46 @@ public class XhThHoSoController {
     return ResponseEntity.ok(resp);
   }
 
+  @ApiOperation(value = "Danh sách tổng hợp để trình và thẩm định", response = List.class)
+  @PostMapping(value = "/ds-quyet-dinh", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> listTrinhThamDinh(@RequestBody XhThHoSoRequest objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(xhThHoSoService.dsTaoQuyetDinhTieuHuy(objReq));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Tra cứu thông tin : {}", e);
+    }
+    return ResponseEntity.ok(resp);
+  }
+
+  @ApiOperation(value = "Danh sách tổng hợp để trình và thẩm định", response = List.class)
+  @PostMapping(value = "/ds-thong-bao", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> listThongBao(@RequestBody XhThHoSoRequest objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(xhThHoSoService.dsTaoThongBaoTieuHuy(objReq));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Tra cứu thông tin : {}", e);
+    }
+    return ResponseEntity.ok(resp);
+  }
 
   @ApiOperation(value = "Cập nhật", response = List.class)
   @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhThHoSoRequest objReq) {
+  public ResponseEntity<BaseResponse> update(@Valid @RequestBody XhThHoSoRequest objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhThHoSoService.update(currentUser, objReq));
+      resp.setData(xhThHoSoService.update(objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -87,12 +121,12 @@ public class XhThHoSoController {
   }
 
   @ApiOperation(value = "Lấy chi tiết", response = List.class)
-  @GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<BaseResponse> detail(@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids") List<Long> ids) {
+  public ResponseEntity<BaseResponse> detail(@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("id") Long id) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhThHoSoService.detail(ids).get(0));
+      resp.setData(xhThHoSoService.detail(id));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {

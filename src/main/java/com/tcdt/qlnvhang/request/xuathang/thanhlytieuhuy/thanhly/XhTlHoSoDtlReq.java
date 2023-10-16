@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 @Data
 public class XhTlHoSoDtlReq extends BaseRequest {
   private Long id;
-
   private BigDecimal donGiaDk;
   private BigDecimal slDaDuyet;
   private BigDecimal donGiaPd;

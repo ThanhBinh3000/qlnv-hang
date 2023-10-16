@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,33 +28,36 @@ public class XhThHoSoHdr extends BaseEntity implements Serializable {
   private Integer nam;
   private String maDvi;
   private String soHoSo;
+  private LocalDate ngayTaoHs;
   private Long idDanhSach;
   private String maDanhSach;
   private Long idQd;
   private String soQd;
   private Long idTb;
   private String soTb;
-  private LocalDate ngayTaoHs;
-  private LocalDate thoiGianTlTu;
-  private LocalDate thoiGianTlDen;
+  private LocalDate thoiGianThTu;
+  private LocalDate thoiGianThDen;
+  private LocalDate thoiGianPdTu;
+  private LocalDate thoiGianPdDen;
   private String trangThai;
   private String trangThaiTc;
-  private LocalDate ngayDuyetLan1;
-  private LocalDate ngayDuyetLan2;
-  private LocalDate ngayDuyetLan3;
-  private LocalDate ketQua;
+  private String ketQua;
   private String trichYeu;
-  @Transient
-  private List<FileDinhKem> fileDinhKem=new ArrayList<>();;
-  @Transient
-  private List<FileDinhKem> canCu = new ArrayList<>();
-
   private LocalDate ngayKyQd;
-  private LocalDate ngayGduyet;
-  private Long nguoiGduyetId;
-  private LocalDate ngayPduyet;
-  private Long nguoiPduyetId;
+  private LocalDate ngayDuyetLdc;
+  private Long idLdc;
+  private LocalDate ngayDuyetLdv;
+  private Long idLdv;
+  private LocalDate ngayDuyetLdtc;
+  private Long idLdtc;
   private String lyDoTuChoi;
+  @Transient
+  private List<FileDinhKem> fileDinhKem = new ArrayList<>();;
+  @Transient
+  private List<FileDinhKem> fileCanCu = new ArrayList<>();
+  @Transient
+  private List<XhThHoSoDtl> children = new ArrayList<>();
+
 
   @Transient
   private String tenTrangThai;
@@ -64,11 +68,12 @@ public class XhThHoSoHdr extends BaseEntity implements Serializable {
   @Transient
   private String tenDvi;
 
-  @Transient
-  private String maDvql;
-  @Transient
-  private String tenDvql;
+  public String getTenTrangThai(){
+    return TrangThaiAllEnum.getLabelById(getTrangThai());
+  }
 
-  @OneToMany(mappedBy = "hoSoHdr", cascade = CascadeType.ALL)
-  private List<XhThHoSoDtl> hoSoDtl = new ArrayList<>();
+  public String getTenTrangThaiTc(){
+    return TrangThaiAllEnum.getLabelById(getTrangThaiTc());
+  }
+
 }
