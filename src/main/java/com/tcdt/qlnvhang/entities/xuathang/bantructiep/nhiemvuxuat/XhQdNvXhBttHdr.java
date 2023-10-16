@@ -80,6 +80,8 @@ public class XhQdNvXhBttHdr implements Serializable {
     @Transient
     private String tenTrangThaiXh;
     @Transient
+    private String tenLanhDaoCuc;
+    @Transient
     private List<String> listMaDviTsan = new ArrayList<>();
 
     @JsonIgnore

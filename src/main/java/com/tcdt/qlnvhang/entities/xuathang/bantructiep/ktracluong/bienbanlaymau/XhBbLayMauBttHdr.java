@@ -2,9 +2,7 @@ package com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.bienbanlaymau
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMau;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
-import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 import org.hibernate.annotations.Fetch;
@@ -101,6 +99,16 @@ public class XhBbLayMauBttHdr implements Serializable {
     private String tenKieuNx;
     @Transient
     private String tenTrangThai;
+    @Transient
+    private String tenBenMua;
+    @Transient
+    private String phuongPhapLayMau;
+    @Transient
+    private String chiTieuKiemTra;
+    @Transient
+    private String maDviCha;
+    @Transient
+    private String tenDviCha;
 
     @JsonIgnore
     @Transient
