@@ -25,12 +25,12 @@ public interface XhThDanhSachRepository extends JpaRepository<XhThDanhSachHdr, L
   Page<XhThDanhSachHdr> searchPage(@Param("param") XhThDanhSachReq param, Pageable pageable);
 
 
-  @Query("SELECT c FROM XhThDanhSachHdr c  " +
-          " LEFT JOIN XhTlTongHopDtl th on c.id = th.idDsHdr WHERE 1=1 " +
+  @Query(" SELECT c FROM XhThDanhSachHdr c  " +
+          " LEFT JOIN XhThTongHopDtl th on c.id = th.idDsHdr WHERE 1=1 " +
           " AND th.id is null " +
           " AND (:#{#param.maDviSr} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDviSr},'%')) " +
-          "AND ((:#{#param.thoiGianThTu}  IS NULL OR c.ngayDeXuat >= :#{#param.thoiGianThTu}) AND (:#{#param.thoiGianThDen}  IS NULL OR c.ngayDeXuat <= :#{#param.thoiGianThDen}) ) " +
-          "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
+          " AND ((:#{#param.thoiGianThTu}  IS NULL OR c.ngayDeXuat >= :#{#param.thoiGianThTu}) AND (:#{#param.thoiGianThDen}  IS NULL OR c.ngayDeXuat <= :#{#param.thoiGianThDen}) ) " +
+          " ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
   List<XhThDanhSachHdr> listTongHop(@Param("param") XhThDanhSachReq param);
 
