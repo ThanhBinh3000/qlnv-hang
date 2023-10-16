@@ -69,10 +69,10 @@ public class XhThTongHopController {
   @ApiOperation(value = "Tạo mới", response = List.class)
   @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhThTongHopRequest objReq) {
+  public ResponseEntity<BaseResponse> insert(@Valid @RequestBody XhThTongHopRequest objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhThTongHopService.save(currentUser, objReq));
+      resp.setData(xhThTongHopService.save(objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -84,29 +84,13 @@ public class XhThTongHopController {
   }
 
 
-  @ApiOperation(value = "Cập nhật", response = List.class)
-  @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhThTongHopRequest objReq) {
-    BaseResponse resp = new BaseResponse();
-    try {
-      resp.setData(xhThTongHopService.update(currentUser, objReq));
-      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-    } catch (Exception e) {
-      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-      resp.setMsg(e.getMessage());
-      log.error("Cập nhật thông tin : {}", e);
-    }
-    return ResponseEntity.ok(resp);
-  }
-
   @ApiOperation(value = "Lấy chi tiết", response = List.class)
-  @GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<BaseResponse> detail(@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids") List<Long> ids) {
+  public ResponseEntity<BaseResponse> detail(@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("id") Long id) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhThTongHopService.detail(ids).get(0));
+      resp.setData(xhThTongHopService.detail(id));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -122,7 +106,7 @@ public class XhThTongHopController {
   public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody StatusReq stReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      xhThTongHopService.approve(currentUser, stReq);
+      xhThTongHopService.approve(stReq);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -152,40 +136,4 @@ public class XhThTongHopController {
     return ResponseEntity.ok(resp);
   }
 
-  @ApiOperation(value = "Xoá danh sách thông tin", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
-  @PostMapping(value = PathContains.URL_XOA_MULTI, produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<BaseResponse> deleteMulti(@Valid @RequestBody IdSearchReq idSearchReq) {
-    BaseResponse resp = new BaseResponse();
-    try {
-      xhThTongHopService.deleteMulti(idSearchReq);
-      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-    } catch (Exception e) {
-      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-      resp.setMsg(e.getMessage());
-      log.error("Xoá thông tin : {}", e);
-    }
-    return ResponseEntity.ok(resp);
-  }
-
-  /*@ApiOperation(value = "Kết xuất danh sách", response = List.class)
-  @PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.OK)
-  public void exportList(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody SearchXhTlQuyetDinh objReq, HttpServletResponse response) throws Exception {
-    try {
-      xhThTongHopService.export(currentUser, objReq, response);
-
-    } catch (Exception e) {
-      log.error("Kết xuất danh sách dánh sách : {}", e);
-      final Map<String, Object> body = new HashMap<>();
-      body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      body.put("msg", e.getMessage());
-      response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-      response.setCharacterEncoding("UTF-8");
-      final ObjectMapper mapper = new ObjectMapper();
-      mapper.writeValue(response.getOutputStream(), body);
-
-    }
-  }*/
 }

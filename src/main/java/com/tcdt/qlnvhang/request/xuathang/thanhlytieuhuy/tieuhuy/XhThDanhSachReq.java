@@ -49,4 +49,8 @@ public class XhThDanhSachReq extends BaseRequest {
   private String type;
 
   private String dvql;
+
+  private String maDviSr;
+  private LocalDate thoiGianThTu;
+  private LocalDate thoiGianThDen;
 }

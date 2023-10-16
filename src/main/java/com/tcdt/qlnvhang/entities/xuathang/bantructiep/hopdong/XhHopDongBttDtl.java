@@ -19,10 +19,11 @@ public class XhHopDongBttDtl implements Serializable {
     @SequenceGenerator(sequenceName = TABLE_NAME + "_SEQ", allocationSize = 1, name = TABLE_NAME + "_SEQ")
     private Long id;
     private Long idHdr;
-    private BigDecimal soLuongChiCuc;
-    private BigDecimal soLuongBanTrucTiepHd;
     private String maDvi;
     private String diaChi;
+    private BigDecimal soLuongXuatBan;
+    private BigDecimal soLuongKyHopDong;
+
     @Transient
     private String tenDvi;
 

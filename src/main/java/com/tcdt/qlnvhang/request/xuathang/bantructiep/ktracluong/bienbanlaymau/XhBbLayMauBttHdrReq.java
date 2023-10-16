@@ -1,8 +1,9 @@
 package com.tcdt.qlnvhang.request.xuathang.bantructiep.ktracluong.bienbanlaymau;
+
+import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.request.BaseRequest;
-import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import lombok.Data;
-import javax.persistence.Transient;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,92 +11,52 @@ import java.util.List;
 
 @Data
 public class XhBbLayMauBttHdrReq extends BaseRequest {
-
     private Long id;
-
     private Integer namKh;
-
     private String maDvi;
-
-    private String maQhns;
-
-    private Long idQdNv;
-
-    private String soQdNv;
-
-    private LocalDate ngayQdNv;
-
-    private Long idHd;
-
-    private String soHd;
-
     private String loaiBienBan;
-
-    private LocalDate ngayKyHd;
-
-    private Long idKtv;
-
-    private String soBienBan;
-
+    private String maQhNs;
+    private String soBbLayMau;
     private LocalDate ngayLayMau;
-
-    private String dviKnghiem;
-
-    private String ddiemLayMau;
-
-    private String loaiVthh;
-
-    private String cloaiVthh;
-
-    private String moTaHangHoa;
-
-    private Long idDdiemXh;
-
-    private String maDiemKho;
-
-    private String maNhaKho;
-
-    private String maNganKho;
-
-    private String maLoKho;
-
-    private BigDecimal soLuongLayMau;
-
-    private String ppLayMau;
-
-    private String chiTieuKiemTra;
-
-    private Integer ketQuaNiemPhong;
-
-    private String soBbTinhKho;
-
-    private LocalDate ngayXuatDocKho;
-
-    private String soBbHaoDoi;
-
-    private String pthucBanTrucTiep;
-
-    private String phanLoai;
-
+    private Long idQdNv;
+    private String soQdNv;
+    private LocalDate ngayKyQdNv;
+    private Long idHopDong;
+    private String soHopDong;
+    private LocalDate ngayKyHopDong;
     private Long idBangKeBanLe;
-
     private String soBangKeBanLe;
-
-    private LocalDate ngayTaoBangKe;
-
-    @Transient
+    private LocalDate ngayTaoBkeBanLe;
+    private Long idKtvBaoQuan;
+    private String maDiemKho;
+    private String maNhaKho;
+    private String maNganKho;
+    private String maLoKho;
+    private String loaiVthh;
+    private String cloaiVthh;
+    private String tenHangHoa;
+    private String donViTinh;
+    private LocalDate tgianGiaoNhan;
+    private String donViKnghiem;
+    private String diaDiemLayMau;
+    private BigDecimal soLuongKiemTra;
+    private Boolean ketQuaNiemPhong;
+    private String pthucBanTrucTiep; // 01 : chào giá; 02 : Ủy quyền; 03 : Bán lẻ
+    private String phanLoai;
+    private String loaiHinhNx;
+    private String kieuNx;
+    private Long idHaoDoi;
+    private String soBbHaoDoi;
+    private Long idTinhKho;
+    private String soBbTinhKho;
+    private LocalDate ngayXuatDocKho;
+    private String trangThai;
+    private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
+    private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
+    private List<FileDinhKemJoinTable> fileNiemPhong = new ArrayList<>();
     private List<XhBbLayMauBttDtlReq> children = new ArrayList<>();
-
-    @Transient
-    private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
-
-    @Transient
-    private List<FileDinhKemReq> canCuPhapLy = new ArrayList<>();
-
-    @Transient
-    private List<FileDinhKemReq> fileNiemPhong = new ArrayList<>();
-
+    private String dvql;
     private LocalDate ngayLayMauTu;
-
     private LocalDate ngayLayMauDen;
+    private String maDviCha;
 }

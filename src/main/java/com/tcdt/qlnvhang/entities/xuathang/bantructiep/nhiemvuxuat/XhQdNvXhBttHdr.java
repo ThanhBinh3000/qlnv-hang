@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -31,28 +30,33 @@ public class XhQdNvXhBttHdr implements Serializable {
     private String maDvi;
     private Integer namKh;
     private String soQdNv;
-    private LocalDate ngayQdNv;
-    private Long idHd;
-    private String soHd;
-    private LocalDate ngayKyHd;
+    private LocalDate ngayKyQdNv;
+    private Long idHopDong;
+    private String soHopDong;
+    private LocalDate ngayKyHopDong;
     private Long idQdPd;
     private String soQdPd;
     private Long idChaoGia;
     private String maDviTsan;
-    private String tenTccn;
+    private String tenBenMua;
     private String loaiVthh;
     private String cloaiVthh;
-    private String moTaHangHoa;
-    private BigDecimal soLuongBanTrucTiep;
+    private String tenHangHoa;
     private String donViTinh;
-    private LocalDate tgianGnhan;
+    private BigDecimal soLuong;
+    private LocalDate tgianGiaoNhan;
     private String loaiHinhNx;
     private String kieuNx;
     private String trichYeu;
-    private String trangThaiXh;
     private String pthucBanTrucTiep; // 01 : chào giá; 02 : Ủy quyền; 03 : Bán lẻ
     private String phanLoai;
+    private Long idTinhKho;
+    private String soTinhKho;
+    private Long idHaoDoi;
+    private String soHaoDoi;
+    private String trangThaiXh;
     private String trangThai;
+    private String lyDoTuChoi;
     private LocalDate ngayTao;
     private Long nguoiTaoId;
     private LocalDate ngaySua;
@@ -61,7 +65,6 @@ public class XhQdNvXhBttHdr implements Serializable {
     private Long nguoiGuiDuyetId;
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
-    private String lyDoTuChoi;
     @Transient
     private String tenDvi;
     @Transient

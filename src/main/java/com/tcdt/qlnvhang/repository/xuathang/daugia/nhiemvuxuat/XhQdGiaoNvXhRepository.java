@@ -18,8 +18,8 @@ public interface XhQdGiaoNvXhRepository extends BaseRepository<XhQdGiaoNvXh, Lon
             "LEFT JOIN XhQdGiaoNvXhDtl DTL ON QD.id = DTL.idHdr " +
             "WHERE (:#{#param.dvql} IS NULL OR QD.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
             "AND (:#{#param.nam} IS NULL OR QD.nam = :#{#param.nam}) " +
-            "AND (:#{#param.soQdNv} IS NULL OR QD.soQdNv = :#{#param.soQdNv}) " +
-            "AND (:#{#param.loaiVthh} IS NULL OR QD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
+            "AND (:#{#param.soQdNv} IS NULL OR LOWER(QD.soQdNv) LIKE LOWER(CONCAT('%', :#{#param.soQdNv}, '%'))) " +
+            "AND (:#{#param.loaiVthh } IS NULL OR LOWER(QD.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(QD.trichYeu) LIKE LOWER(CONCAT('%', :#{#param.trichYeu}, '%'))) " +
             "AND (:#{#param.ngayKyTu} IS NULL OR QD.ngayKy >= :#{#param.ngayKyTu}) " +
             "AND (:#{#param.ngayKyDen} IS NULL OR QD.ngayKy <= :#{#param.ngayKyDen}) " +

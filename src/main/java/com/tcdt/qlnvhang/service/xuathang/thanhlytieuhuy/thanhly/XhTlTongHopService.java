@@ -99,6 +99,8 @@ public class XhTlTongHopService extends BaseServiceImpl {
     XhTlDanhSachRequest reqTh = new XhTlDanhSachRequest();
     reqTh.setDvql(userInfo.getDvql());
     reqTh.setTrangThai(TrangThaiAllEnum.CHUA_CHOT.getId());
+    reqTh.setThoiGianTlTu(req.getThoiGianTlTu());
+    reqTh.setThoiGianTlDen(req.getThoiGianTlDen());
     List<XhTlDanhSachHdr> listTh = xhTlDanhSachRepository.listTongHop(reqTh);
     if(listTh == null || listTh.isEmpty()){
       throw new Exception("Không có dữ liệu để tổng hợp");

@@ -17,9 +17,9 @@ public interface XhHopDongBttHdrRepository extends JpaRepository<XhHopDongBttHdr
     @Query("SELECT DISTINCT HD FROM XhHopDongBttHdr HD " +
             "WHERE (:#{#param.dvql} IS NULL OR HD.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
             "AND (:#{#param.namHd} IS NULL OR HD.namHd = :#{#param.namHd}) " +
-            "AND (:#{#param.soHd} IS NULL OR LOWER(HD.soHd) LIKE LOWER(CONCAT('%', :#{#param.soHd}, '%'))) " +
-            "AND (:#{#param.tenHd} IS NULL OR LOWER(HD.tenHd) LIKE LOWER(CONCAT('%', :#{#param.tenHd}, '%'))) " +
-            "AND (:#{#param.tenDviMua} IS NULL OR LOWER(HD.tenDviMua) LIKE LOWER(CONCAT('%', :#{#param.tenDviMua}, '%'))) " +
+            "AND (:#{#param.soHopDong} IS NULL OR LOWER(HD.soHopDong) LIKE LOWER(CONCAT('%', :#{#param.soHopDong}, '%'))) " +
+            "AND (:#{#param.tenHopDong} IS NULL OR LOWER(HD.tenHopDong) LIKE LOWER(CONCAT('%', :#{#param.tenHopDong}, '%'))) " +
+            "AND (:#{#param.tenBenMua} IS NULL OR LOWER(HD.tenBenMua) LIKE LOWER(CONCAT('%', :#{#param.tenBenMua}, '%'))) " +
             "AND (:#{#param.loaiVthh} IS NULL OR HD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
             "AND (:#{#param.soQdKq} IS NULL OR LOWER(HD.soQdKq) LIKE LOWER(CONCAT('%', :#{#param.soQdKq}, '%'))) " +
             "AND (:#{#param.soQdNv} IS NULL OR LOWER(HD.soQdNv) LIKE LOWER(CONCAT('%', :#{#param.soQdNv}, '%'))) " +
@@ -39,11 +39,11 @@ public interface XhHopDongBttHdrRepository extends JpaRepository<XhHopDongBttHdr
     @Query(value = "SELECT COUNT(*) FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '30' AND ID_CHAO_GIA = :idChaoGia", nativeQuery = true)
     Integer countSlHopDongDaKyChiCuc(@Param("idChaoGia") Long idChaoGia);
 
-    boolean existsBySoHd(String soHd);
+    boolean existsBySoHopDong(String soHopDong);
 
     boolean existsBySoPhuLuc(String soPhuLuc);
 
-    boolean existsBySoHdAndIdNot(String soHd, Long id);
+    boolean existsBySoHopDongAndIdNot(String oHopDong, Long id);
 
     boolean existsBySoPhuLucAndIdNot(String soPhuLuc, Long id);
 

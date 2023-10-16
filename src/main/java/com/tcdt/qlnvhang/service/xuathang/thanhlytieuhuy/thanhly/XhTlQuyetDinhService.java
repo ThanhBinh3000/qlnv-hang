@@ -93,30 +93,12 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
         hdr.setMaDvi(getUser().getDvql());
         hdr.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         XhTlQuyetDinhHdr created = hdrRepository.save(hdr);
-//        this.updateScTongHopHdr(created,false);
-        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), ScQuyetDinhSc.TABLE_NAME + "_CAN_CU");
+        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), XhTlQuyetDinhHdr.TABLE_NAME + "_CAN_CU");
         created.setFileCanCu(canCu);
-        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), ScQuyetDinhSc.TABLE_NAME + "_DINH_KEM");
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), XhTlQuyetDinhHdr.TABLE_NAME + "_DINH_KEM");
         created.setFileDinhKem(fileDinhKem);
         return created;
     }
-
-//    void updateScTongHopHdr(ScQuyetDinhSc sc,boolean isDelete) throws Exception {
-//        Optional<ScTrinhThamDinhHdr> byId = scTrinhThamDinhRepository.findById(sc.getIdTtr());
-//        if(byId.isPresent()){
-//            ScTrinhThamDinhHdr data = byId.get();
-//            if(isDelete){
-//                data.setIdQdSc(null);
-//                data.setSoQdSc(null);
-//            }else{
-//                data.setIdQdSc(sc.getId());
-//                data.setSoQdSc(sc.getSoQd());
-//            }
-//            scTrinhThamDinhRepository.save(data);
-//        }else{
-//            throw new Exception("Không tìm thấy số tờ trình cần sửa chữa");
-//        }
-//    }
 
     void validateData(XhTlQuyetDinhHdrReq req) throws Exception {
         Optional<XhTlQuyetDinhHdr> bySoQd = hdrRepository.findBySoQd(req.getSoQd());
@@ -141,7 +123,6 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
         XhTlQuyetDinhHdr hdr = optional.get();
         BeanUtils.copyProperties(req, hdr);
         XhTlQuyetDinhHdr created = hdrRepository.save(hdr);
-//        this.updateScTongHopHdr(created,false);
         fileDinhKemService.delete(req.getId(), Lists.newArrayList(XhTlQuyetDinhHdr.TABLE_NAME + "_CAN_CU"));
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), XhTlQuyetDinhHdr.TABLE_NAME + "_CAN_CU");
         created.setFileCanCu(canCu);
@@ -210,25 +191,28 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
             // Re approve : gửi lại duyệt
             case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
             case Contains.TUCHOI_LDTC + Contains.CHODUYET_LDV:
+                hdr.setTrangThai(req.getTrangThai());
                 break;
             // Arena các cấp duuyệt
             case Contains.DUTHAO + Contains.CHODUYET_LDV:
             case Contains.CHODUYET_LDV + Contains.CHODUYET_LDTC:
             case Contains.CHODUYET_LDTC + Contains.BAN_HANH:
                 hdr.setNgayKy(LocalDate.now());
+                hdr.setTrangThai(req.getTrangThai());
                 hdr.setTrangThaiDg(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
                 break;
             case Contains.BAN_HANH + Contains.HOANTHANHCAPNHAT:
                 hdr.setTrangThaiDg(NhapXuatHangTrangThaiEnum.HOANTHANHCAPNHAT.getId());
+                hdr.setTrangThai(req.getTrangThai());
                 break;
             case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
             case Contains.CHODUYET_LDTC + Contains.TUCHOI_LDTC:
                 hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+                hdr.setTrangThai(req.getTrangThai());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
         }
-        hdr.setTrangThai(req.getTrangThai());
         XhTlQuyetDinhHdr save = hdrRepository.save(hdr);
         return save;
     }

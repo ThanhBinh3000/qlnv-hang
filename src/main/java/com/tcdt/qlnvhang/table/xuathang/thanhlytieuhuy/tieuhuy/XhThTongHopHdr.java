@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,30 +31,17 @@ public class XhThTongHopHdr extends BaseEntity implements Serializable {
   public static final String TABLE_NAME = "XH_TH_TONG_HOP_HDR";
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhThTongHopHdr.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhThTongHopHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhThTongHopHdr.TABLE_NAME + "_SEQ")
+//  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhThTongHopHdr.TABLE_NAME + "_SEQ")
+//  @SequenceGenerator(sequenceName = XhThTongHopHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhThTongHopHdr.TABLE_NAME + "_SEQ")
   private Long id;
   private Integer nam;
   private String maDvi;
   private String maDanhSach;
   private String tenDanhSach;
-  private LocalDate thoiGianTlTu;
-  private LocalDate thoiGianTlDen;
+  private LocalDate thoiGianThTu;
+  private LocalDate thoiGianThDen;
   private String trangThai;
-  private String trangThaiTl;
-  private Long idHoSo;
-  private String soHoSo;
-  private Long idQdPd;
-  private String soQdPd;
-  private LocalDate ngayKyQd;
-  private LocalDate ngayGduyet;
-  private Long nguoiGduyetId;
-  private LocalDate ngayPduyet;
-  private Long nguoiPduyetId;
-  private String lyDoTuChoi;
-  private BigDecimal tongSlHienTai;
-  private BigDecimal tongSlDeXuat;
-  private BigDecimal tongSlDaDuyet;
+  private String trangThaiTh;
 
   @Transient
   private String tenTrangThai;
@@ -63,43 +52,15 @@ public class XhThTongHopHdr extends BaseEntity implements Serializable {
   private String tenDvi;
 
   @Transient
-  private String maDvql;
+  private List<XhThTongHopDtl> children = new ArrayList<>();
+
   @Transient
-  private String tenDvql;
+  private List<FileDinhKem> fileDinhKem = new ArrayList<>();
 
-  @OneToMany(mappedBy = "tongHopHdr", cascade = CascadeType.ALL)
-  private List<XhThTongHopDtl> tongHopDtl = new ArrayList<>();
-
-  @JsonIgnore
-  @Transient
-  private Map<String, String> mapDmucDvi;
-
-  public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
-    this.mapDmucDvi = mapDmucDvi;
-    if (!DataUtils.isNullObject(getMaDvi())) {
-      setTenDvi(mapDmucDvi.containsKey(getMaDvi()) ? mapDmucDvi.get(getMaDvi()) : null);
-    }
+  public String getTenTrangThai(){
+    return TrangThaiAllEnum.getLabelById(getTrangThai());
   }
-
-  public String getTrangThai() {
-    setTenTrangThai(TrangThaiAllEnum.getLabelById(trangThai));
-    return trangThai;
-  }
-
-  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-  @Fetch(value = FetchMode.SUBSELECT)
-  @JoinColumn(name = "dataId")
-  @Where(clause = "data_type='" + XhThTongHopHdr.TABLE_NAME + "_FILE_DINH_KEM'")
-  private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
-
-  public void setFileDinhKem(List<FileDinhKemJoinTable> fileDinhKem) {
-    this.fileDinhKem.clear();
-    if (!DataUtils.isNullObject(fileDinhKem)) {
-      fileDinhKem.forEach(s -> {
-        s.setDataType(XhThTongHopHdr.TABLE_NAME + "_FILE_DINH_KEM");
-        s.setXhThTongHopHdr(this);
-      });
-      this.fileDinhKem.addAll(fileDinhKem);
-    }
+  public String getTenTrangThaiTh(){
+    return TrangThaiAllEnum.getLabelById(getTrangThaiTh());
   }
 }

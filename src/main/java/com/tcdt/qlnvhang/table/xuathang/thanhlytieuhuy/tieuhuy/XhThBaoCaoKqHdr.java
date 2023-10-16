@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 
@@ -29,16 +30,13 @@ public class XhThBaoCaoKqHdr extends BaseEntity implements Serializable {
   private LocalDate ngayBaoCao;
   private Long idQd;
   private String soQd;
+  private LocalDate ngayQd;
   private String noiDung;
   private String trangThai;
-  private BigDecimal tongSoLuongTl;
-  private BigDecimal tongSoLuongCon;
-  private BigDecimal tongThanhTien;
-
-  private LocalDate ngayPduyet;
-  private Long nguoiPduyetId;
-  private LocalDate ngayGduyet;
-  private Long nguoiGduyetId;
+  private LocalDate ngayDuyetTp;
+  private Long idTp;
+  private LocalDate ngayDuyetLdc;
+  private Long idLdc;
   private String lyDoTuChoi;
 
   @Transient
@@ -49,6 +47,10 @@ public class XhThBaoCaoKqHdr extends BaseEntity implements Serializable {
   @Transient
   private List<FileDinhKem> fileDinhKem;
 
-  @OneToMany(mappedBy = "baoCaoKqHdr", cascade = CascadeType.ALL)
-  private List<XhThBaoCaoKqDtl> baoCaoKqDtl = new ArrayList<>();
+  @Transient
+  private List<XhThBaoCaoKqDtl> children = new ArrayList<>();
+
+  public String getTenTrangThai(){
+    return TrangThaiAllEnum.getLabelById(getTrangThai());
+  }
 }
