@@ -1,90 +1,71 @@
 package com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.bangkecanhang;
 
+import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import lombok.Data;
 
-import javax.persistence.Transient;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 public class XhBkeCanHangBttHdrReq extends BaseRequest {
-
     private Long id;
-
     private Integer namKh;
-
     private String maDvi;
-
-    private String maQhns;
-
-    private String soBangKe;
-
+    private String maQhNs;
+    private String soBangKeHang;
+    private LocalDate ngayLapBangKe;
     private Long idQdNv;
-
     private String soQdNv;
-
-    private LocalDate ngayQdNv;
-
-    private Long idHd;
-
-    private String soHd;
-
-    private LocalDate ngayKyHd;
-
-    private Long idDdiemXh;
-
+    private LocalDate ngayKyQdNv;
     private String maDiemKho;
-
-    private String maNhaKho;
-
-    private String maNganKho;
-
-    private String maLoKho;
-
-    private Long idPhieuXuat;
-
-    private String soPhieuXuat;
-
-    private LocalDate ngayXuatKho;
-
     private String diaDiemKho;
-
-    private Long idThuKho;
-
-    private String nguoiGiao;
-
-    private String cmtNguoiGiao;
-
-    private String ctyNguoiGiao;
-
-    private String diaChiNguoiGiao;
-
-    private LocalDate tgianGiaoNhan;
-
+    private String maNhaKho;
+    private String maNganKho;
+    private String maLoKho;
     private String loaiVthh;
-
     private String cloaiVthh;
-
-    private String moTaHangHoa;
-
+    private String tenHangHoa;
     private String donViTinh;
-
-    private LocalDate ngayXuatKhoTu;
-
-    private LocalDate ngayXuatKhoDen;
-
-    private String phanLoai;
-
-    private String pthucBanTrucTiep;
-
+    private Long idPhieuXuatKho;
+    private String soPhieuXuatKho;
+    private LocalDate ngayXuatKho;
+    private LocalDate tgianGiaoNhan;
+    private Long idThuKho;
+    private Long idLanhDaoChiCuc;
+    private Long idPhieuKiemNghiem;
+    private String soPhieuKiemNghiem;
+    private LocalDate ngayKiemNghiemMau;
+    private String tenNguoiGiao;
+    private String cmtNguoiGiao;
+    private String congTyNguoiGiao;
+    private String diaChiNguoiGiao;
+    private Long idHopDong;
+    private String soHopDong;
+    private LocalDate ngayKyHopDong;
+    private BigDecimal soLuongHopDong;
     private Long idBangKeBanLe;
-
     private String soBangKeBanLe;
-
-    private LocalDate ngayTaoBangKe;
-
-    @Transient
+    private LocalDate ngayTaoBkeBanLe;
+    private BigDecimal soLuongBkeBanLe;
+    private BigDecimal tongTrongLuongBi;
+    private BigDecimal tongTrongLuongCaBi;
+    private BigDecimal tongTrongTruBi;
+    private String loaiHinhNx;
+    private String kieuNx;
+    private String pthucBanTrucTiep;
+    private String phanLoai;
+    private String trangThai;
+    private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
     private List<XhBkeCanHangBttDtlReq> children = new ArrayList<>();
+    private String dvql;
+    private LocalDate ngayLapBangKeTu;
+    private LocalDate ngayLapBangKeDen;
+    private LocalDate tgianGiaoNhanTu;
+    private LocalDate tgianGiaoNhanDen;
+    private LocalDate ngayXuatKhoTu;
+    private LocalDate ngayXuatKhoDen;
+    private String maDviCha;
 }
