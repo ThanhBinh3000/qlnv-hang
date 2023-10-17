@@ -37,6 +37,7 @@ public class HhDchinhDxKhLcntDsgthauCtiet implements Serializable {
 	private BigDecimal soLuong;
 
 	private BigDecimal donGia;
+	private BigDecimal donGiaTamTinh;
 
 	private BigDecimal thanhTien;
 	private BigDecimal soLuongTheoChiTieu;

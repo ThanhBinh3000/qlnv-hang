@@ -8,7 +8,9 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
 @Entity
@@ -68,7 +70,23 @@ public class HhDchinhDxKhLcntDtl implements Serializable {
 	Long soGthau;
 
 	Long namKhoach;
-
+	@Temporal(TemporalType.DATE)
+	Date tgianBdauTchuc;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
+	Date tgianMthau;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
+	Date tgianDthau;
+	@Temporal(TemporalType.DATE)
+	Date tgianNhang;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
+	Date tgianDthauTime;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
+	Date tgianMthauTime;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
+	Date tgianMoHoSoTime;
+	BigDecimal giaBanHoSo;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
+	Date tgianMoHoSo;
 	@Transient
 	private HhQdKhlcntHdr hhQdKhlcntHdr;
 
