@@ -11,6 +11,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -107,6 +108,12 @@ public class XhPhieuKtraCluongBttHdr implements Serializable {
     private String tenTphongKtvBaoQuan;
     @Transient
     private String tenTrangThai;
+    @Transient
+    private String tenDviCon;
+    @Transient
+    private BigDecimal soLuongHangbaoQuan;
+    @Transient
+    private String tenThuTruongDonVi;
 
     @JsonIgnore
     @Transient
@@ -116,6 +123,9 @@ public class XhPhieuKtraCluongBttHdr implements Serializable {
         this.mapDmucDvi = mapDmucDvi;
         if (!DataUtils.isNullObject(getMaDvi())) {
             setTenDvi(mapDmucDvi.containsKey(getMaDvi()) ? mapDmucDvi.get(getMaDvi()) : null);
+        }
+        if (!DataUtils.isNullObject(getMaDviCon())) {
+            setTenDviCon(mapDmucDvi.containsKey(getMaDviCon()) ? mapDmucDvi.get(getMaDviCon()) : null);
         }
         if (!DataUtils.isNullObject(getMaDiemKho())) {
             setTenDiemKho(mapDmucDvi.containsKey(getMaDiemKho()) ? mapDmucDvi.get(getMaDiemKho()) : null);
