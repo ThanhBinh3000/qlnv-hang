@@ -150,7 +150,7 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
             xhTlHoSoHdr.getChildren().forEach( item -> {
                 tongDviTsan.set(tongDviTsan.get() + 1);
                 // Nếu có mã đơn vị tài sản != null thì bắt đầu tính
-                if(item.getXhTlDanhSachHdr().getToChucCaNhan() != null){
+                if(item.getXhTlDanhSachHdr().getMaDviTsan() != null){
                     if(!Objects.isNull(item.getXhTlDanhSachHdr().getKetQuaDauGia())){
                         //và kết quả = 1 ( Thành coong ) thì tính thành công
                         if(item.getXhTlDanhSachHdr().getKetQuaDauGia() == 1){

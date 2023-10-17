@@ -202,7 +202,22 @@ public class XhTlToChucService extends BaseServiceImpl {
         Optional<XhTlToChucHdr> optional = hdrRepository.findById(idSearchReq.getId());
         if (!optional.isPresent()) throw new Exception("Bản ghi không tồn tại");
         hdrRepository.delete(optional.get());
-        dtlRepository.deleteAllByIdHdr(optional.get().getId());
         nlqRepository.deleteAllByIdHdr(optional.get().getId());
+        List<XhTlToChucDtl> allByIdHdr = dtlRepository.findAllByIdHdr(idSearchReq.getId());
+        allByIdHdr.forEach( dtl -> {
+            Optional<XhTlDanhSachHdr> byId = xhTlDanhSachRepository.findById(dtl.getIdDsHdr());
+            if(byId.isPresent()) {
+                // Update lại các trường vào DS gốc
+                XhTlDanhSachHdr ds = byId.get();
+                ds.setMaDviTsan(null);
+                ds.setSoLanTraGia(null);
+                ds.setDonGiaCaoNhat(null);
+                ds.setToChucCaNhan(null);
+                ds.setKetQuaDauGia(null);
+                xhTlDanhSachRepository.save(ds);
+            }
+        });
+        dtlRepository.deleteAllByIdHdr(optional.get().getId());
     }
+
 }
