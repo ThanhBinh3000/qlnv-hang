@@ -34,9 +34,11 @@ import org.springframework.util.ObjectUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -147,6 +149,7 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
             AtomicInteger tongDviTsan = new AtomicInteger();
             AtomicInteger tongDviTsanThanhCong = new AtomicInteger();
             AtomicInteger tongDviTsanKhongThanhCong = new AtomicInteger();
+            AtomicReference<BigDecimal> total = new AtomicReference<>(new BigDecimal("0"));
             xhTlHoSoHdr.getChildren().forEach( item -> {
                 tongDviTsan.set(tongDviTsan.get() + 1);
                 // Nếu có mã đơn vị tài sản != null thì bắt đầu tính
@@ -160,10 +163,15 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
                         }
                     }
                 }
+                if(item.getXhTlDanhSachHdr().getDonGiaPd() != null && item.getXhTlDanhSachHdr().getSlDaDuyet() != null){
+                    total.set(total.get().add(item.getXhTlDanhSachHdr().getDonGiaPd().multiply(item.getXhTlDanhSachHdr().getSlDaDuyet())));
+                }
             });
+
             hdr.setTongDviTsan(tongDviTsan.get());
             hdr.setTongDviTsanThanhCong(tongDviTsanThanhCong.get());
             hdr.setTongDviTsanKhongThanhCong(tongDviTsanKhongThanhCong.get());
+            hdr.setTongGiaKhoiDiem(total.get());
         }
     }
 

@@ -77,4 +77,7 @@ public class XhTlQuyetDinhHdr extends BaseEntity implements Serializable {
     @Transient
     private int tongDviTsanKhongThanhCong;
 
+    @Transient
+    private BigDecimal tongGiaKhoiDiem;
+
 }
