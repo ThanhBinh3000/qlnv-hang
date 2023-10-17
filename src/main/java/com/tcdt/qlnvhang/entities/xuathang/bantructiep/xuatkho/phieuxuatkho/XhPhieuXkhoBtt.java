@@ -115,6 +115,12 @@ public class XhPhieuXkhoBtt implements Serializable {
     private String tenLanhDaoChiCuc;
     @Transient
     private String tenTrangThai;
+    @Transient
+    private String tenBenMua;
+    @Transient
+    private String maDviCha;
+    @Transient
+    private String tenDviCha;
 
     @JsonIgnore
     @Transient

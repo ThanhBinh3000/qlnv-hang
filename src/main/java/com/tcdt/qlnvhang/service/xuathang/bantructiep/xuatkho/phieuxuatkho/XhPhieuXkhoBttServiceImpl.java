@@ -3,15 +3,18 @@ package com.tcdt.qlnvhang.service.xuathang.bantructiep.xuatkho.phieuxuatkho;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBtt;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBttReposytory;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBttReq;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +25,8 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -32,6 +37,8 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl {
     private XhPhieuXkhoBttReposytory xhPhieuXkhoBttReposytory;
     @Autowired
     private XhQdNvXhBttHdrRepository xhQdNvXhBttHdrRepository;
+    @Autowired
+    private XhHopDongBttHdrRepository xhHopDongBttHdrRepository;
     @Autowired
     private UserInfoRepository userInfoRepository;
 
@@ -229,5 +236,43 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl {
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
+    }
+
+    public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {
+        if (currentUser == null) {
+            throw new Exception("Bad request.");
+        }
+        try {
+            String templatePath = baseReportFolder + "/bantructiep/";
+            XhPhieuXkhoBtt detail = this.detail(DataUtils.safeToLong(body.get("id")));
+            if (detail.getLoaiVthh().startsWith("02")) {
+                templatePath += "Phiếu xuất kho vật tư.docx";
+            } else {
+                templatePath += "Phiếu xuất kho lương thực.docx";
+            }
+            Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
+            xhQdNvXhBttHdrRepository.findById(detail.getIdQdNv())
+                    .ifPresent(quyetDinh ->{
+                        if (detail.getPthucBanTrucTiep().equals("01")) {
+                            detail.setTenBenMua(quyetDinh.getTenBenMua());
+                        }
+                        detail.setMaDviCha(quyetDinh.getMaDvi());
+                        if (mapDmucDvi.containsKey((detail.getMaDviCha()))) {
+                            Map<String, Object> objDonVi = mapDmucDvi.get(detail.getMaDviCha());
+                            detail.setTenDviCha(objDonVi.get("tenDvi").toString());
+                        }
+                    });
+            if (detail.getPthucBanTrucTiep().equals("02")) {
+                xhHopDongBttHdrRepository.findById(detail.getIdHopDong())
+                        .ifPresent(hopDong -> detail.setTenBenMua(hopDong.getTenBenMua()));
+            }
+            FileInputStream inputStream = new FileInputStream(templatePath);
+            return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

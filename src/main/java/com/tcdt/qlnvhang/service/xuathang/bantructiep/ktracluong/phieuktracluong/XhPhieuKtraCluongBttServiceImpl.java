@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.phieuktracluon
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.phieuktracluong.XhPhieuKtraCluongBttHdr;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.ktracluong.phieuktracluong.XhPhieuKtraCluongBttDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.ktracluong.phieuktracluong.XhPhieuKtraCluongBttHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -11,9 +12,11 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.ktracluong.phieuktracluong.XhPhieuKtraCluongBttDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.ktracluong.phieuktracluong.XhPhieuKtraCluongBttHdrReq;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +27,8 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -34,6 +39,8 @@ public class XhPhieuKtraCluongBttServiceImpl extends BaseServiceImpl {
     private XhPhieuKtraCluongBttHdrRepository xhPhieuKtraCluongBttHdrRepository;
     @Autowired
     private XhPhieuKtraCluongBttDtlRepository xhPhieuKtraCluongBttDtlRepository;
+    @Autowired
+    private XhBbLayMauBttHdrRepository xhBbLayMauBttHdrRepository;
     @Autowired
     private UserInfoRepository userInfoRepository;
 
@@ -144,6 +151,11 @@ public class XhPhieuKtraCluongBttServiceImpl extends BaseServiceImpl {
                     data.setTenTphongKtvBaoQuan(userInfo.getFullName());
                 });
             }
+            if (data.getNguoiPduyetId() != null) {
+                userInfoRepository.findById(data.getNguoiPduyetId()).ifPresent(userInfo -> {
+                    data.setTenThuTruongDonVi(userInfo.getFullName());
+                });
+            }
             List<XhPhieuKtraCluongBttDtl> listDtl = xhPhieuKtraCluongBttDtlRepository.findAllByIdHdr(data.getId());
             data.setChildren(listDtl);
         });
@@ -238,5 +250,23 @@ public class XhPhieuKtraCluongBttServiceImpl extends BaseServiceImpl {
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
+    }
+
+    public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {
+        if (currentUser == null) {
+            throw new Exception("Bad request.");
+        }
+        try {
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + "bantructiep/Phiếu kiểm nghiệm chất lượng.docx");
+            XhPhieuKtraCluongBttHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
+            xhBbLayMauBttHdrRepository.findById(detail.getIdBbLayMau())
+                    .ifPresent(layMau -> detail.setSoLuongHangbaoQuan(layMau.getSoLuongKiemTra()));
+            return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
