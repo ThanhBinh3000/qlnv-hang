@@ -9,23 +9,36 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface XhBbHdoiBttHdrRepository extends JpaRepository<XhBbHdoiBttHdr, Long> {
-    @Query("SELECT HD from XhBbHdoiBttHdr HD WHERE 1 = 1 " +
+
+    @Query("SELECT DISTINCT HD FROM XhBbHdoiBttHdr HD " +
+            "LEFT JOIN XhQdNvXhBttHdr QD ON QD.id = HD.idQdNv " +
+            "WHERE (:#{#param.dvql} IS NULL OR HD.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
             "AND (:#{#param.namKh} IS NULL OR HD.namKh = :#{#param.namKh}) " +
-            "AND (:#{#param.soBbHaoDoi} IS NULL OR LOWER(HD.soBbHaoDoi) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soBbHaoDoi}),'%' ) ) )" +
-            "AND (:#{#param.soQdNv} IS NULL OR LOWER(HD.soQdNv) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQdNv}),'%' ) ) )" +
-            "AND (:#{#param.ngayTaoTu} IS NULL OR HD.ngayTao >= :#{#param.ngayTaoTu}) " +
-            "AND (:#{#param.ngayTaoDen} IS NULL OR HD.ngayTao <= :#{#param.ngayTaoDen}) " +
-            "AND (:#{#param.ngayBdauXuatTu} IS NULL OR HD.ngayBdauXuat >= :#{#param.ngayBdauXuatTu}) " +
-            "AND (:#{#param.ngayBdauXuatDen} IS NULL OR HD.ngayBdauXuat <= :#{#param.ngayBdauXuatDen}) " +
-            "AND (:#{#param.ngayKthucXuatTu} IS NULL OR HD.ngayKthucXuat >= :#{#param.ngayKthucXuatTu}) " +
-            "AND (:#{#param.ngayKthucXuatDen} IS NULL OR HD.ngayKthucXuat <= :#{#param.ngayKthucXuatDen}) " +
-            "AND (:#{#param.ngayQdNvTu} IS NULL OR HD.ngayQdNv >= :#{#param.ngayQdNvTu}) " +
-            "AND (:#{#param.ngayQdNvDen} IS NULL OR HD.ngayQdNv <= :#{#param.ngayQdNvDen}) " +
+            "AND (:#{#param.soQdNv} IS NULL OR HD.soQdNv = :#{#param.soQdNv}) " +
+            "AND (:#{#param.soBbHaoDoi} IS NULL OR HD.soBbHaoDoi = :#{#param.soBbHaoDoi}) " +
+            "AND (:#{#param.ngayLapBienBanTu} IS NULL OR HD.ngayLapBienBan >= :#{#param.ngayLapBienBanTu}) " +
+            "AND (:#{#param.ngayLapBienBanDen} IS NULL OR HD.ngayLapBienBan <= :#{#param.ngayLapBienBanDen}) " +
+            "AND (:#{#param.ngayBatDauXuatTu} IS NULL OR HD.ngayBatDauXuat >= :#{#param.ngayBatDauXuatTu}) " +
+            "AND (:#{#param.ngayBatDauXuatDen} IS NULL OR HD.ngayBatDauXuat <= :#{#param.ngayBatDauXuatDen}) " +
+            "AND (:#{#param.ngayKetThucXuatTu} IS NULL OR HD.ngayKetThucXuat >= :#{#param.ngayKetThucXuatTu}) " +
+            "AND (:#{#param.ngayKetThucXuatDen} IS NULL OR HD.ngayKetThucXuat <= :#{#param.ngayKetThucXuatDen}) " +
+            "AND (:#{#param.tgianGiaoNhanTu} IS NULL OR HD.tgianGiaoNhan >= :#{#param.tgianGiaoNhanTu}) " +
+            "AND (:#{#param.tgianGiaoNhanDen} IS NULL OR HD.tgianGiaoNhan <= :#{#param.tgianGiaoNhanDen}) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR HD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
             "AND (:#{#param.trangThai} IS NULL OR HD.trangThai = :#{#param.trangThai}) " +
-            "AND (:#{#param.loaiVthh} IS NULL OR HD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
-            "AND (:#{#param.maDvi} IS NULL OR HD.maDvi = :#{#param.maDvi})")
+            "AND (:#{#param.maDviCha} IS NULL OR QD.maDvi LIKE CONCAT(:#{#param.maDviCha}, '%')) " +
+            "ORDER BY HD.namKh DESC, HD.ngaySua DESC, HD.ngayTao DESC, HD.id DESC")
     Page<XhBbHdoiBttHdr> searchPage(@Param("param") XhBbHdoiBttHdrReq param, Pageable pageable);
 
+    boolean existsBySoBbHaoDoi(String soBbHaoDoi);
+
+    boolean existsBySoBbHaoDoiAndIdNot(String soBbHaoDoi, Long id);
+
+    List<XhBbHdoiBttHdr> findByIdIn(List<Long> idList);
+
+    List<XhBbHdoiBttHdr> findAllByIdIn(List<Long> listId);
 }

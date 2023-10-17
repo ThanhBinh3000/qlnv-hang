@@ -11,5 +11,7 @@ public interface XhBkeCanHangBttDtlRepository extends JpaRepository<XhBkeCanHang
 
     void deleteAllByIdHdr(Long idHdr);
 
-    List<XhBkeCanHangBttDtl> findAllByIdHdr (Long idHdr);
+    List<XhBkeCanHangBttDtl> findAllByIdHdr(Long idHdr);
+
+    List<XhBkeCanHangBttDtl> findByIdHdrIn(List<Long> listId);
 }
