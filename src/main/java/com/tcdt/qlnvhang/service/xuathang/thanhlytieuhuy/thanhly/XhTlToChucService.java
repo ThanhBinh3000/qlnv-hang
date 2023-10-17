@@ -118,9 +118,19 @@ public class XhTlToChucService extends BaseServiceImpl {
                 ds.setSoLanTraGia(dtl.getSoLanTraGia());
                 ds.setDonGiaCaoNhat(dtl.getDonGiaCaoNhat());
                 ds.setToChucCaNhan(dtl.getToChucCaNhan());
-                if(!StringUtils.isEmpty(ds.getMaDviTsan())){
-                    ds.setKetQuaDauGia(req.getKetQua());
+                // Nêu dấu giá thành công
+                if(req.getKetQua() == 1){
+                    // Và có tổ chức cá nhân thì ms set kết quả
+                    if(!StringUtils.isEmpty(ds.getToChucCaNhan())){
+                        ds.setKetQuaDauGia(req.getKetQua());
+                    }
+                }else{
+                    // Nếu dấu giá không thành công thì có mã đơn vị tài sản thì ms set kết quả
+                    if(!StringUtils.isEmpty(ds.getMaDviTsan())){
+                        ds.setKetQuaDauGia(req.getKetQua());
+                    }
                 }
+
                 xhTlDanhSachRepository.save(ds);
 
             }else{
