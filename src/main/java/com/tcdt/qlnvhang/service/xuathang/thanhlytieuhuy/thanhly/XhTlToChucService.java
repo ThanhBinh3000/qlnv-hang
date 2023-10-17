@@ -25,6 +25,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class XhTlToChucService extends BaseServiceImpl {
@@ -47,9 +48,6 @@ public class XhTlToChucService extends BaseServiceImpl {
     @Autowired
     private XhTlDanhSachService xhTlDanhSachService;
 
-//    @Autowired
-//    private XhTlToChucNlqRepository xhTlQuyetDinhHdrRepository;
-
     public Page<XhTlToChucHdr> searchPage(CustomUserDetails currentUser, SearchXhTlToChuc req) throws Exception {
         String dvql = currentUser.getDvql();
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
@@ -60,7 +58,6 @@ public class XhTlToChucService extends BaseServiceImpl {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhTlToChucHdr> search = hdrRepository.search(req, pageable);
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-        Map<String, String> mapVthh = getListDanhMucHangHoa();
         search.getContent().forEach(f -> {
             f.setMapDmucDvi(mapDmucDvi);
             f.setTrangThai(f.getTrangThai());
@@ -70,6 +67,12 @@ public class XhTlToChucService extends BaseServiceImpl {
 
     public List<XhTlToChucHdr> searchAll( SearchXhTlToChuc req) throws Exception {
         List<XhTlToChucHdr> search = hdrRepository.searchAll(req);
+        search.forEach( item -> {
+            List<XhTlToChucDtl> allByIdHdr = dtlRepository.findAllByIdHdr(item.getId());
+            List<XhTlToChucDtl> collect = allByIdHdr.stream().filter(x -> x.getMaDviTsan() != null).collect(Collectors.toList());
+            item.setSoDviTs(collect.size());
+            item.setTongDviTs(allByIdHdr.size());
+        });
         return search;
     }
 
