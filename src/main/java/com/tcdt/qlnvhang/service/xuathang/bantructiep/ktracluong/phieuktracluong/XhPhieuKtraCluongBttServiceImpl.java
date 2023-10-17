@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.phieuktracluon
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.phieuktracluong.XhPhieuKtraCluongBttHdr;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.ktracluong.phieuktracluong.XhPhieuKtraCluongBttDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.ktracluong.phieuktracluong.XhPhieuKtraCluongBttHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -38,6 +39,8 @@ public class XhPhieuKtraCluongBttServiceImpl extends BaseServiceImpl {
     private XhPhieuKtraCluongBttHdrRepository xhPhieuKtraCluongBttHdrRepository;
     @Autowired
     private XhPhieuKtraCluongBttDtlRepository xhPhieuKtraCluongBttDtlRepository;
+    @Autowired
+    private XhBbLayMauBttHdrRepository xhBbLayMauBttHdrRepository;
     @Autowired
     private UserInfoRepository userInfoRepository;
 
@@ -148,6 +151,11 @@ public class XhPhieuKtraCluongBttServiceImpl extends BaseServiceImpl {
                     data.setTenTphongKtvBaoQuan(userInfo.getFullName());
                 });
             }
+            if (data.getNguoiPduyetId() != null) {
+                userInfoRepository.findById(data.getNguoiPduyetId()).ifPresent(userInfo -> {
+                    data.setTenThuTruongDonVi(userInfo.getFullName());
+                });
+            }
             List<XhPhieuKtraCluongBttDtl> listDtl = xhPhieuKtraCluongBttDtlRepository.findAllByIdHdr(data.getId());
             data.setChildren(listDtl);
         });
@@ -249,14 +257,10 @@ public class XhPhieuKtraCluongBttServiceImpl extends BaseServiceImpl {
             throw new Exception("Bad request.");
         }
         try {
-            String templatePath = baseReportFolder + "/bantructiep/";
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + "bantructiep/Phiếu kiểm nghiệm chất lượng.docx");
             XhPhieuKtraCluongBttHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
-            if (detail.getLoaiVthh().startsWith("02")) {
-                templatePath += "Phiếu kiểm tra chất lượng vật tư.docx";
-            } else {
-                templatePath += "Phiếu kiểm tra chất lượng lương thực.docx";
-            }
-            FileInputStream inputStream = new FileInputStream(templatePath);
+            xhBbLayMauBttHdrRepository.findById(detail.getIdBbLayMau())
+                    .ifPresent(layMau -> detail.setSoLuongHangbaoQuan(layMau.getSoLuongKiemTra()));
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
         } catch (IOException e) {
             e.printStackTrace();
