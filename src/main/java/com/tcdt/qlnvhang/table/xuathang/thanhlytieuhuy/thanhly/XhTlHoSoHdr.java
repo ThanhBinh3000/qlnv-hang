@@ -42,7 +42,7 @@ public class XhTlHoSoHdr extends BaseEntity implements Serializable {
   private LocalDate ngayDuyetLan1;
   private LocalDate ngayDuyetLan2;
   private LocalDate ngayDuyetLan3;
-  private LocalDate ketQua;
+  private String ketQua;
   private String trichYeu;
   @Transient
   private List<FileDinhKem> fileDinhKem =new ArrayList<>();;
