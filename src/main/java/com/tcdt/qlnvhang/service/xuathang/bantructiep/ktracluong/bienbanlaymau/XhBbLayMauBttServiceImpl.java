@@ -2,42 +2,28 @@ package com.tcdt.qlnvhang.service.xuathang.bantructiep.ktracluong.bienbanlaymau;
 
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttHdr;
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdr;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMau;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMauCt;
-import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.bandaugia.bienbanlaymau.XhBbLayMauCtRequest;
-import com.tcdt.qlnvhang.request.bandaugia.bienbanlaymau.XhBbLayMauRequest;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttHdrReq;
-import com.tcdt.qlnvhang.service.SecurityContextService;
-import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.service.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttServiceImpI;
-import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
-import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
-import com.tcdt.qlnvhang.util.UserUtils;
 import fr.opensagres.xdocreport.core.XDocReportException;
-import org.docx4j.wml.P;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -55,6 +41,10 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl {
     private XhBbLayMauBttHdrRepository xhBbLayMauBttHdrRepository;
     @Autowired
     private XhBbLayMauBttDtlRepository xhBbLayMauBttDtlRepository;
+    @Autowired
+    private XhQdNvXhBttHdrRepository xhQdNvXhBttHdrRepository;
+    @Autowired
+    private XhHopDongBttHdrRepository xhHopDongBttHdrRepository;
     @Autowired
     private UserInfoRepository userInfoRepository;
 
@@ -256,5 +246,55 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl {
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
+    }
+
+    public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {
+        if (currentUser == null) {
+            throw new Exception("Bad request.");
+        }
+        try {
+            String templatePath = baseReportFolder + "/bantructiep/";
+            XhBbLayMauBttHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
+            if (detail.getLoaiVthh().startsWith("02")) {
+                templatePath += "Biên bản lấy mẫu bàn giao mẫu vật tư.docx";
+            } else {
+                templatePath += "Biên bản lấy mẫu bàn giao mẫu lương thực.docx";
+            }
+            Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
+            xhQdNvXhBttHdrRepository.findById(detail.getIdQdNv())
+                    .ifPresent(quyetDinh -> {
+                        if (detail.getPthucBanTrucTiep().equals("01")) {
+                            detail.setTenBenMua(quyetDinh.getTenBenMua());
+                        }
+                        detail.setMaDviCha(quyetDinh.getMaDvi());
+                        if (mapDmucDvi.containsKey((detail.getMaDviCha()))) {
+                            Map<String, Object> objDonVi = mapDmucDvi.get(detail.getMaDviCha());
+                            detail.setTenDviCha(objDonVi.get("tenDvi").toString());
+                        }
+                    });
+            if (detail.getPthucBanTrucTiep().equals("02")) {
+                xhHopDongBttHdrRepository.findById(detail.getIdHopDong())
+                        .ifPresent(hopDong -> detail.setTenBenMua(hopDong.getTenBenMua()));
+            }
+            List<XhBbLayMauBttDtl> listDtl = xhBbLayMauBttDtlRepository.findAllByIdHdr(detail.getId());
+            if (listDtl != null || !listDtl.isEmpty()) {
+                List<XhBbLayMauBttDtl> filteredPhuongPhapLayMau = listDtl.stream().filter(type -> "PPLM".equals(type.getType()) && type.getChecked()).collect(Collectors.toList());
+                List<XhBbLayMauBttDtl> filteredChiTieuKiemTra = listDtl.stream().filter(type -> "CTCL".equals(type.getType()) && type.getChecked()).collect(Collectors.toList());
+                if (!filteredPhuongPhapLayMau.isEmpty()) {
+                    detail.setPhuongPhapLayMau(filteredPhuongPhapLayMau.get(0).getTen());
+                }
+                if (!filteredChiTieuKiemTra.isEmpty()) {
+                    detail.setChiTieuKiemTra(String.join(",", filteredChiTieuKiemTra.stream().map(XhBbLayMauBttDtl::getTen).collect(Collectors.toList())));
+                }
+                detail.setChildren(listDtl.stream().filter(type -> "NLQ".equals(type.getType())).collect(Collectors.toList()));
+            }
+            FileInputStream inputStream = new FileInputStream(templatePath);
+            return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
