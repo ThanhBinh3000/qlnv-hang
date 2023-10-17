@@ -50,8 +50,10 @@ public class XhTlHoSoReq extends BaseRequest {
   private LocalDate ngayTongHop;
   private String lyDo;
   private String type;
-  BigDecimal soLuong;
-  BigDecimal donGia;
-  String ketQuaDanhGia;
+  private BigDecimal soLuong;
+  private BigDecimal donGia;
+  private String ketQuaDanhGia;
+
+  private String ketQua;
 
 }

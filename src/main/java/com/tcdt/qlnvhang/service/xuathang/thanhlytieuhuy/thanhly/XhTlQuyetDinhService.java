@@ -5,7 +5,6 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoHdrRepository;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlToChucHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -19,9 +18,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhSc;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoHdr;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhDtl;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -49,8 +46,6 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
     private XhTlQuyetDinhHdrRepository xhTlQuyetDinhHdrRepository;
     @Autowired
     private XhTlQuyetDinhHdrRepository hdrRepository;
-    @Autowired
-    private XhTlQuyetDinhDtlRepository xhTlQuyetDinhDtlRepository;
     @Autowired
     private XhTlHoSoHdrRepository xhTlHoSoHdrRepository;
     @Autowired
@@ -196,6 +191,8 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
             // Arena các cấp duuyệt
             case Contains.DUTHAO + Contains.CHODUYET_LDV:
             case Contains.CHODUYET_LDV + Contains.CHODUYET_LDTC:
+                hdr.setTrangThai(req.getTrangThai());
+                break;
             case Contains.CHODUYET_LDTC + Contains.BAN_HANH:
                 hdr.setNgayKy(LocalDate.now());
                 hdr.setTrangThai(req.getTrangThai());
@@ -243,22 +240,6 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
-    }
-
-    public XhTlQuyetDinhDtl approveDtl(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
-        if (StringUtils.isEmpty(statusReq.getId())) throw new Exception("Không tìm thấy dữ liệu");
-        Optional<XhTlQuyetDinhDtl> optional = xhTlQuyetDinhDtlRepository.findById(Long.valueOf(statusReq.getId()));
-        if (!optional.isPresent()) throw new Exception("Không tìm thấy dữ liệu");
-        String status = statusReq.getTrangThai() + optional.get().getTrangThaiThucHien();
-        switch (status) {
-            case Contains.HOANTHANHCAPNHAT + Contains.DANGCAPNHAT:
-                break;
-            default:
-                throw new Exception("Phê duyệt không thành công");
-        }
-        optional.get().setTrangThaiThucHien(statusReq.getTrangThai());
-        xhTlQuyetDinhDtlRepository.save(optional.get());
-        return optional.get();
     }
 
     public List<XhTlQuyetDinhHdr> dsTaoBaoCaoThanhLy(XhTlHoSoReq req) throws Exception {
