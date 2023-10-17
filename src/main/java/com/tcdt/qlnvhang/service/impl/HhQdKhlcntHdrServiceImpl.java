@@ -216,9 +216,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				hhQdKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(gt.getId());
 				gt.setId(null);
 				gt.setIdQdDtl(qd.getId());
+				gt.setIdGthauDx(gtList.getId());
 				gt.setTrangThai(Contains.CHUACAPNHAT);
-				gt.setSoLuongTheoChiTieu(gtList.getSoLuongTheoChiTieu());
-				gt.setSoLuongDaMua(gtList.getSoLuongDaMua());
+//				gt.setSoLuongTheoChiTieu(gtList.getSoLuongTheoChiTieu());
+//				gt.setSoLuongDaMua(gtList.getSoLuongDaMua());
 				if (hhDxuatKhLcntHdr.isPresent()) {
 					gt.setCloaiVthh(hhDxuatKhLcntHdr.get().getCloaiVthh());
 					gt.setLoaiVthh(hhDxuatKhLcntHdr.get().getLoaiVthh());

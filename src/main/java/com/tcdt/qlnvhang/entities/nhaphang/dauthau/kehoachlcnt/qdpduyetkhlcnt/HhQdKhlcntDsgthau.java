@@ -27,6 +27,7 @@ public class HhQdKhlcntDsgthau implements Serializable {
 	private Long id;
 	private Long idQdDtl;
 	private Long idQdHdr;
+	private Long idGthauDx;
 	String goiThau;
 	BigDecimal soLuong;
 	String maDvi;
