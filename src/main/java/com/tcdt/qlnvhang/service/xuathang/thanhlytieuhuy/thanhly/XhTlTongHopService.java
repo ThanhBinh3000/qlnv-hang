@@ -117,6 +117,7 @@ public class XhTlTongHopService extends BaseServiceImpl {
     listTh.forEach(item -> {
       item.setTrangThai(TrangThaiAllEnum.DA_CHOT.getId());
       item.setIdTongHop(hdr.getId());
+      item.setMaTongHop(hdr.getMaDanhSach());
       item.setNgayTongHop(LocalDate.now());
       XhTlTongHopDtl dtl = new XhTlTongHopDtl();
       dtl.setIdTongHop(hdr.getId());
