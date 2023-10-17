@@ -30,13 +30,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,17 +66,14 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
         }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhTlQuyetDinhHdr> search = xhTlQuyetDinhHdrRepository.search(req, pageable);
-        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-        Map<String, String> mapVthh = getListDanhMucHangHoa();
-//        search.getContent().forEach(s -> {
-//            s.getQuyetDinhDtl().forEach(f -> {
-//                f.setMapDmucDvi(mapDmucDvi);
-//                f.setMapVthh(mapVthh);
-//                f.setTrangThaiThucHien(f.getTrangThaiThucHien());
-//            });
-//            s.setMapDmucDvi(mapDmucDvi);
-//            s.setTrangThai(s.getTrangThai());
-//        });
+        search.getContent().forEach(s -> {
+            try {
+                s.setXhTlHoSoHdr(xhTlHoSoService.detail(s.getIdHoSo()));
+                setThongTinDauGia(s);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
         return search;
     }
 
@@ -132,8 +129,6 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
         if (!optional.isPresent()){
             throw new Exception("Không tìm thấy dữ liệu");
         }
-        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-        Map<String, String> mapVthh = getListDanhMucHangHoa();
         XhTlQuyetDinhHdr data = optional.get();
         List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Collections.singleton(XhTlQuyetDinhHdr.TABLE_NAME + "_CAN_CU"));
         data.setFileCanCu(canCu);
@@ -142,7 +137,34 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
         data.setFileDinhKem(fileDinhKemList);
 
         data.setXhTlHoSoHdr(xhTlHoSoService.detail(data.getIdHoSo()));
+        setThongTinDauGia(data);
         return data;
+    }
+
+    void setThongTinDauGia(XhTlQuyetDinhHdr hdr){
+        if(hdr.getXhTlHoSoHdr() != null){
+            XhTlHoSoHdr xhTlHoSoHdr = hdr.getXhTlHoSoHdr();
+            AtomicInteger tongDviTsan = new AtomicInteger();
+            AtomicInteger tongDviTsanThanhCong = new AtomicInteger();
+            AtomicInteger tongDviTsanKhongThanhCong = new AtomicInteger();
+            xhTlHoSoHdr.getChildren().forEach( item -> {
+                tongDviTsan.set(tongDviTsan.get() + 1);
+                // Nếu có mã đơn vị tài sản != null thì bắt đầu tính
+                if(item.getXhTlDanhSachHdr().getToChucCaNhan() != null){
+                    if(!Objects.isNull(item.getXhTlDanhSachHdr().getKetQuaDauGia())){
+                        //và kết quả = 1 ( Thành coong ) thì tính thành công
+                        if(item.getXhTlDanhSachHdr().getKetQuaDauGia() == 1){
+                            tongDviTsanThanhCong.set(tongDviTsanThanhCong.get() + 1);
+                        }else{
+                            tongDviTsanKhongThanhCong.set(tongDviTsanKhongThanhCong.get() + 1);
+                        }
+                    }
+                }
+            });
+            hdr.setTongDviTsan(tongDviTsan.get());
+            hdr.setTongDviTsanThanhCong(tongDviTsanThanhCong.get());
+            hdr.setTongDviTsanKhongThanhCong(tongDviTsanKhongThanhCong.get());
+        }
     }
 
     @Transactional

@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -117,6 +118,9 @@ public class XhTlToChucService extends BaseServiceImpl {
                 ds.setSoLanTraGia(dtl.getSoLanTraGia());
                 ds.setDonGiaCaoNhat(dtl.getDonGiaCaoNhat());
                 ds.setToChucCaNhan(dtl.getToChucCaNhan());
+                if(!StringUtils.isEmpty(ds.getMaDviTsan())){
+                    ds.setKetQuaDauGia(req.getKetQua());
+                }
                 xhTlDanhSachRepository.save(ds);
 
             }else{
