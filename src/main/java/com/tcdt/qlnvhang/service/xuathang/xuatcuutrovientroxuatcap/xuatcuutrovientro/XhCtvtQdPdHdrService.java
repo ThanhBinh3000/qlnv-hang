@@ -107,7 +107,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     XhCtvtQuyetDinhPdHdr data = new XhCtvtQuyetDinhPdHdr();
     BeanUtils.copyProperties(objReq, data);
     data.setMaDvi(currentUser.getUser().getDepartment());
-    data.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
+    data.setTrangThai(TrangThaiAllEnum.DANG_NHAP_DU_LIEU.getId());
     XhCtvtQuyetDinhPdHdr created = xhCtvtQdPdHdrRepository.save(data);
 
     if (!DataUtils.isNullOrEmpty(created.getMaTongHop())) {
@@ -249,7 +249,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     String status = statusReq.getTrangThai() + optional.get().getTrangThai();
     if (optional.get().getType().equals("XC")) {
       switch (status) {
-        case Contains.CHODUYET_LDV + Contains.DUTHAO:
+        case Contains.CHODUYET_LDV + Contains.DANG_NHAP_DU_LIEU:
         case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
         case Contains.CHODUYET_LDV + Contains.TUCHOI_LDTC:
           optional.get().setNgayPduyet(LocalDate.now());
@@ -272,7 +272,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
       }
     } else {
       switch (status) {
-        case Contains.BAN_HANH + Contains.DUTHAO:
+        case Contains.BAN_HANH + Contains.DANG_NHAP_DU_LIEU:
           optional.get().setNgayPduyet(LocalDate.now());
           optional.get().setNguoiPduyetId(currentUser.getUser().getId());
           break;

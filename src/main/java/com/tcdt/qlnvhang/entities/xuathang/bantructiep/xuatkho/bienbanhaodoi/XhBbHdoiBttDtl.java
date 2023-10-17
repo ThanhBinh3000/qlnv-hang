@@ -11,31 +11,17 @@ import java.time.LocalDate;
 @Table(name = XhBbHdoiBttDtl.TABLE_NAME)
 @Data
 public class XhBbHdoiBttDtl implements Serializable {
-
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_BB_HDOI_BTT_DTL";
-
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator =TABLE_NAME +"_SEQ")
-    @SequenceGenerator(sequenceName = TABLE_NAME +"_SEQ", allocationSize = 1, name = TABLE_NAME +"_SEQ")
-
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = TABLE_NAME + "_SEQ", allocationSize = 1, name = TABLE_NAME + "_SEQ")
     private Long id;
-
     private Long idHdr;
-
-    private Long idPhieu;
-
-    private String soPhieu;
-
-    private Long idPhieuXuat;
-
-    private String soPhieuXuat;
-
-    private Long idBangKe;
-
-    private String soBangKe;
-
+    private Long idPhieuXuatKho;
+    private String soPhieuXuatKho;
     private LocalDate ngayXuatKho;
-
-    private BigDecimal soLuongThucXuat;
+    private Long idBangKeHang;
+    private String soBangKeHang;
+    private BigDecimal soLuongXuat;
 }
