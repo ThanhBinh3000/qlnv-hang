@@ -71,8 +71,7 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
         Page<XhTlQuyetDinhPdKqHdr> search = xhTlQuyetDinhPdKqHdrRepository.search(req, pageable);
         Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
         Map<String, String> mapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
-        Map<String, String> mapHinhThuDg = getListDanhMucChung("HINH_THUC_DG");
-        Map<String, String> mapPhuongThucDg = getListDanhMucChung("PHUONG_THUC_DG");
+
         search.getContent().forEach(s -> {
             s.setTrangThai(s.getTrangThai());
             s.setTenTrangThaiHd(s.getTrangThaiHd());

@@ -189,9 +189,13 @@ public class XhTlToChucService extends BaseServiceImpl {
             throw new Exception("Không tìm thấy dữ liệu.");
         }
         Map<String, String> mapDmucDvi = getListDanhMucDvi("02", null, "01");
+        Map<String, String> mapHinhThuDg = getListDanhMucChung("HINH_THUC_DG");
+        Map<String, String> mapPhuongThucDg = getListDanhMucChung("PHUONG_THUC_DG");
         XhTlToChucHdr data = optById.get();
         data.setMapDmucDvi(mapDmucDvi);
         data.setTrangThai(data.getTrangThai());
+        data.setTenHthucDgia(mapHinhThuDg.getOrDefault(data.getHthucDgia(),null));
+        data.setTenPthucDgia(mapPhuongThucDg.getOrDefault(data.getPthucDgia(),null));
         data.setChildrenNlq(nlqRepository.findAllByIdHdr(data.getId()));
         List<XhTlToChucDtl> allByIdHdr = dtlRepository.findAllByIdHdr(data.getId());
         allByIdHdr.forEach(item -> {

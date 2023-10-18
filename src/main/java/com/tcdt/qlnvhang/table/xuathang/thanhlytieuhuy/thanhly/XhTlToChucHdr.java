@@ -103,6 +103,12 @@ public class XhTlToChucHdr extends BaseEntity implements Serializable {
     @Transient
     private Integer tongDviTs;
 
+    @Transient
+    private String tenHthucDgia;
+
+    @Transient
+    private String tenPthucDgia;
+
     @JsonIgnore
     @Transient
     private Map<String, String> mapDmucDvi;
