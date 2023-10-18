@@ -113,7 +113,7 @@ public class XhTlQuyetDinhPdKqHdr extends BaseEntity implements Serializable {
     private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
 
     @Transient
-    private List<XhTlHopDongHdr> listHopDong;
+    private List<XhTlHopDongHdr> listHopDong = new ArrayList<>();
 
     @Transient
     private XhTlToChucHdr xhTlToChucHdr;

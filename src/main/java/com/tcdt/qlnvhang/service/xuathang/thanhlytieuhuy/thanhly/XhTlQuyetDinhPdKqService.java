@@ -68,8 +68,10 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
         Page<XhTlQuyetDinhPdKqHdr> search = xhTlQuyetDinhPdKqHdrRepository.search(req, pageable);
         Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
         Map<String, String> mapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
+        Map<String, String> mapDmucDvi = getListDanhMucDvi("2", null, "01");
 
         search.getContent().forEach(s -> {
+            s.setTenDvi(mapDmucDvi.getOrDefault(s.getMaDvi(),null));
             s.setTrangThai(s.getTrangThai());
             s.setTenTrangThaiHd(s.getTrangThaiHd());
             s.setTenTrangThaiXh(s.getTrangThaiXh());
@@ -80,6 +82,7 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
                 if(s.getXhTlToChucHdr() != null){
                     s.setXhTlQuyetDinhHdr(xhTlQuyetDinhService.detail(s.getXhTlToChucHdr().getIdQdTl()));
                 }
+                s.setListHopDong(xhTlHopDongHdrRepository.findAllByIdQdKqTl(s.getId()));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
