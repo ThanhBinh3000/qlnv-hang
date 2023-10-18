@@ -32,10 +32,7 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
@@ -51,10 +48,10 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
     private XhTlHopDongHdrRepository xhTlHopDongHdrRepository;
 
     @Autowired
-    private XhTlHoSoHdrRepository xhTlHoSoHdrRepository;
+    private XhTlToChucService xhTlToChucService;
 
     @Autowired
-    private XhTlToChucService xhTlToChucService;
+    private XhTlQuyetDinhService xhTlQuyetDinhService;
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
@@ -80,6 +77,9 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
             s.setTenKieuNx(StringUtils.isEmpty(s.getKieuNhapXuat()) ? null : mapKieuNx.get(s.getKieuNhapXuat()));
             try {
                 s.setXhTlToChucHdr(xhTlToChucService.detail(s.getIdThongBao()));
+                if(s.getXhTlToChucHdr() != null){
+                    s.setXhTlQuyetDinhHdr(xhTlQuyetDinhService.detail(s.getXhTlToChucHdr().getIdQdTl()));
+                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -148,34 +148,39 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
     }
 
 
-    public List<XhTlQuyetDinhPdKqHdr> detail(List<Long> ids) throws Exception {
-        if (DataUtils.isNullOrEmpty(ids)) throw new Exception("Tham số không hợp lệ.");
-        List<XhTlQuyetDinhPdKqHdr> optional = xhTlQuyetDinhPdKqHdrRepository.findByIdIn(ids);
-        if (DataUtils.isNullOrEmpty(optional)) {
+    public XhTlQuyetDinhPdKqHdr detail(Long id) throws Exception {
+        if (Objects.isNull(id)){
+            throw new Exception("Tham số không hợp lệ.");
+        }
+        Optional<XhTlQuyetDinhPdKqHdr> optional = xhTlQuyetDinhPdKqHdrRepository.findById(id);
+        if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
         Map<String, String> mapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
-        List<XhTlQuyetDinhPdKqHdr> allById = xhTlQuyetDinhPdKqHdrRepository.findAllById(ids);
-        allById.forEach(data -> {
-            data.setTrangThai(data.getTrangThai());
-            data.setTrangThaiHd(data.getTrangThaiHd());
-            data.setTrangThaiXh(data.getTrangThaiXh());
-            data.setMapDmucDvi(mapDmucDvi);
-            data.setTenLoaiHinhNx(StringUtils.isEmpty(data.getLoaiHinhNhapXuat()) ? null : mapLoaiHinhNx.get(data.getLoaiHinhNhapXuat()));
-            data.setTenKieuNx(StringUtils.isEmpty(data.getKieuNhapXuat()) ? null : mapKieuNx.get(data.getKieuNhapXuat()));
-            List<XhTlHopDongHdr> hopDongTlHdr = xhTlHopDongHdrRepository.findAllByIdQdKqTl(data.getId());
-            hopDongTlHdr.forEach(f -> {
-                f.setMapVthh(mapVthh);
-                f.setMapDmucDvi(mapDmucDvi);
-                f.setTrangThai(f.getTrangThai());
-                f.setTrangThaiXh(f.getTrangThaiXh());
-            });
-            data.setListHopDong(hopDongTlHdr);
+
+        XhTlQuyetDinhPdKqHdr data = optional.get();
+        data.setTrangThai(data.getTrangThai());
+        data.setTrangThaiHd(data.getTrangThaiHd());
+        data.setTrangThaiXh(data.getTrangThaiXh());
+        data.setMapDmucDvi(mapDmucDvi);
+        data.setTenLoaiHinhNx(StringUtils.isEmpty(data.getLoaiHinhNhapXuat()) ? null : mapLoaiHinhNx.get(data.getLoaiHinhNhapXuat()));
+        data.setTenKieuNx(StringUtils.isEmpty(data.getKieuNhapXuat()) ? null : mapKieuNx.get(data.getKieuNhapXuat()));
+        List<XhTlHopDongHdr> hopDongTlHdr = xhTlHopDongHdrRepository.findAllByIdQdKqTl(data.getId());
+        hopDongTlHdr.forEach(f -> {
+            f.setMapVthh(mapVthh);
+            f.setMapDmucDvi(mapDmucDvi);
+            f.setTrangThai(f.getTrangThai());
+            f.setTrangThaiXh(f.getTrangThaiXh());
         });
-        return allById;
+        data.setXhTlToChucHdr(xhTlToChucService.detail(data.getIdThongBao()));
+        if(data.getXhTlToChucHdr() != null){
+            data.setXhTlQuyetDinhHdr(xhTlQuyetDinhService.detail(data.getXhTlToChucHdr().getIdQdTl()));
+        }
+        data.setListHopDong(hopDongTlHdr);
+        return data;
     }
 
     @Transactional

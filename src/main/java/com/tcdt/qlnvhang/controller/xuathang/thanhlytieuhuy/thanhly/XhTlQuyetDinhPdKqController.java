@@ -124,12 +124,12 @@ public class XhTlQuyetDinhPdKqController {
   }
 
   @ApiOperation(value = "Lấy chi tiết", response = List.class)
-  @GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(value = PathContains.URL_CHI_TIET + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<BaseResponse> detail(@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids") List<Long> ids) {
+  public ResponseEntity<BaseResponse> detail(@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("id") Long id) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhTlQuyetDinhPdKqService.detail(ids).get(0));
+      resp.setData(xhTlQuyetDinhPdKqService.detail(id));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
