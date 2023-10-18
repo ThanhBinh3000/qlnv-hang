@@ -23,6 +23,7 @@ public class XhQdDchinhKhBdgReq extends BaseRequest {
     private LocalDate ngayKyQd;
     private String soQdCc;
     private String soQdDc;
+    private Long idDcGoc;
     private LocalDate ngayKyDc;
     private LocalDate ngayHlucDc;
     private String noiDungDieuChinh;
