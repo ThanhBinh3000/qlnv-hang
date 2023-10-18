@@ -120,7 +120,7 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
         }
         XhTlQuyetDinhPdKqHdr data = new XhTlQuyetDinhPdKqHdr();
         BeanUtils.copyProperties(objReq, data);
-        data.setMaDvi(currentUser.getUser().getDepartment());
+        data.setMaDvi(currentUser.getUser().getDvql());
         data.setTrangThai(Contains.DUTHAO);
         data.setTrangThaiHd(Contains.CHUA_THUC_HIEN);
         data.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
