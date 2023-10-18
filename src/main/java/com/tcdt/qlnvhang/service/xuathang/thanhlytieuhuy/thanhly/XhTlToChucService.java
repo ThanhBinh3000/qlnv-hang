@@ -24,6 +24,7 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -179,35 +180,29 @@ public class XhTlToChucService extends BaseServiceImpl {
         return updated;
     }
 
-    public List<XhTlToChucHdr> detail(List<Long> ids) throws Exception {
-        if (DataUtils.isNullOrEmpty(ids)) throw new Exception("Tham số không hợp lệ.");
-        List<XhTlToChucHdr> listById = hdrRepository.findByIdIn(ids);
-        if (DataUtils.isNullOrEmpty(listById)) throw new Exception("Không tìm thấy dữ liệu.");
-        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-        Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
-        List<XhTlToChucHdr> allById = hdrRepository.findAllById(ids);
-        allById.forEach(data -> {
-//            data.getToChucDtl().forEach(f -> {
-//                f.setMapDmucDvi(mapDmucDvi);
-//                f.setMapVthh(mapDmucVthh);
-//            });
-            data.setMapDmucDvi(mapDmucDvi);
-            data.setTrangThai(data.getTrangThai());
-            data.setChildrenNlq(nlqRepository.findAllByIdHdr(data.getId()));
-
-            List<XhTlToChucDtl> allByIdHdr = dtlRepository.findAllByIdHdr(data.getId());
-            allByIdHdr.forEach(item -> {
-                try {
-                    item.setXhTlDanhSachHdr(xhTlDanhSachService.detail(item.getIdDsHdr()));
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            });
-
-            data.setChildren(dtlRepository.findAllByIdHdr(data.getId()));
+    public XhTlToChucHdr detail(Long id) throws Exception {
+        if (Objects.isNull(id)){
+            throw new Exception("Tham số không hợp lệ.");
+        }
+        Optional<XhTlToChucHdr> optById = hdrRepository.findById(id);
+        if(!optById.isPresent()){
+            throw new Exception("Không tìm thấy dữ liệu.");
+        }
+        Map<String, String> mapDmucDvi = getListDanhMucDvi("02", null, "01");
+        XhTlToChucHdr data = optById.get();
+        data.setMapDmucDvi(mapDmucDvi);
+        data.setTrangThai(data.getTrangThai());
+        data.setChildrenNlq(nlqRepository.findAllByIdHdr(data.getId()));
+        List<XhTlToChucDtl> allByIdHdr = dtlRepository.findAllByIdHdr(data.getId());
+        allByIdHdr.forEach(item -> {
+            try {
+                item.setXhTlDanhSachHdr(xhTlDanhSachService.detail(item.getIdDsHdr()));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
-
-        return allById;
+        data.setChildren(dtlRepository.findAllByIdHdr(data.getId()));
+        return data;
     }
 
     @Transactional

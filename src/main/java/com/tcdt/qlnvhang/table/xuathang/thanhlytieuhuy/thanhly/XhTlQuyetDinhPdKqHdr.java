@@ -43,8 +43,6 @@ public class XhTlQuyetDinhPdKqHdr extends BaseEntity implements Serializable {
     private String maThongBao;
     private String soBienBan;
     private String thongBaoKhongThanh;
-    private String loaiVthh;
-    private String cloaiVthh;
     private String pthucGnhan;
     private String thoiHanGiaoNhan;
     private String thoiHanGiaoNhanGhiChu;
@@ -57,16 +55,6 @@ public class XhTlQuyetDinhPdKqHdr extends BaseEntity implements Serializable {
     private Long nguoiGduyetId;
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
-    private String hthucDgia;
-    private String pthucDgia;
-
-    //  Hợp đồng
-    private Long idQdTl;
-    private String soQdTl;
-    private Integer tongSoDviTsan;
-    private Integer soDviTsanThanhCong;
-    private BigDecimal tongSlXuatBan;
-    private BigDecimal thanhTien;
     private String trangThaiHd;
     private String trangThaiXh;
 
@@ -102,19 +90,6 @@ public class XhTlQuyetDinhPdKqHdr extends BaseEntity implements Serializable {
         }
     }
 
-    @JsonIgnore
-    @Transient
-    private Map<String, String> mapVthh;
-
-    public void setMapVthh(Map<String, String> mapVthh) {
-        this.mapVthh = mapVthh;
-        if (!DataUtils.isNullObject(getLoaiVthh())) {
-            setTenLoaiVthh(mapVthh.containsKey(getLoaiVthh()) ? mapVthh.get(getLoaiVthh()) : null);
-        }
-        if (!DataUtils.isNullObject(getCloaiVthh())) {
-            setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
-        }
-    }
 
     public String getTrangThai() {
         setTenTrangThai(TrangThaiAllEnum.getLabelById(trangThai));
@@ -131,55 +106,15 @@ public class XhTlQuyetDinhPdKqHdr extends BaseEntity implements Serializable {
         return trangThaiXh;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @Fetch(value = FetchMode.SUBSELECT)
-    @JoinColumn(name = "dataId")
-    @Where(clause = "data_type='" + XhTlQuyetDinhPdKqHdr.TABLE_NAME + "_DINH_KEM'")
+    @Transient
     private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
 
-    public void setFileDinhKem(List<FileDinhKemJoinTable> fileDinhKem) {
-        this.fileDinhKem.clear();
-        if (!DataUtils.isNullObject(fileDinhKem)) {
-            fileDinhKem.forEach(s -> {
-                s.setDataType(XhTlQuyetDinhPdKqHdr.TABLE_NAME + "_DINH_KEM");
-                s.setXhTlQuyetDinhPdKqHdr(this);
-            });
-            this.fileDinhKem.addAll(fileDinhKem);
-        }
-    }
-
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @Fetch(value = FetchMode.SUBSELECT)
-    @JoinColumn(name = "dataId")
-    @Where(clause = "data_type='" + XhTlQuyetDinhPdKqHdr.TABLE_NAME + "_CAN_CU'")
-    private List<FileDinhKemJoinTable> canCu = new ArrayList<>();
-
-    public void setCanCu(List<FileDinhKemJoinTable> fileDinhKem) {
-        this.canCu.clear();
-        if (!DataUtils.isNullObject(fileDinhKem)) {
-            fileDinhKem.forEach(s -> {
-                s.setDataType(XhTlQuyetDinhPdKqHdr.TABLE_NAME + "_CAN_CU");
-                s.setXhTlQuyetDinhPdKqHdr(this);
-            });
-            this.canCu.addAll(fileDinhKem);
-        }
-    }
-
-    @OneToMany(mappedBy = "quyetDinhHdr", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<XhTlQuyetDinhPdKqDtl> quyetDinhDtl = new ArrayList<>();
-
-    public void setQuyetDinhDtl(List<XhTlQuyetDinhPdKqDtl> quyetDinhDtl) {
-        this.getQuyetDinhDtl().clear();
-        if (!DataUtils.isNullOrEmpty(quyetDinhDtl)) {
-            quyetDinhDtl.forEach(s -> {
-                s.setId(null);
-                s.setQuyetDinhHdr(this);
-            });
-            this.quyetDinhDtl.addAll(quyetDinhDtl);
-        }
-    }
+    @Transient
+    private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
 
     @Transient
     private List<XhTlHopDongHdr> listHopDong;
+
+    @Transient
+    private XhTlToChucHdr xhTlToChucHdr;
 }

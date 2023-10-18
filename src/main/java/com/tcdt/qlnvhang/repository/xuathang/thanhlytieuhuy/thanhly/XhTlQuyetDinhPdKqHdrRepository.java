@@ -17,7 +17,7 @@ public interface XhTlQuyetDinhPdKqHdrRepository extends JpaRepository<XhTlQuyetD
 
     @Query("SELECT c FROM XhTlQuyetDinhPdKqHdr c " +
             " WHERE 1=1 " +
-            "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
+            "AND (:#{#param.maDviSr} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDviSr},'%')) " +
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
             "AND (:#{#param.soQd} IS NULL OR LOWER(c.soQd) LIKE CONCAT('%',LOWER(:#{#param.soQd}),'%')) " +
 //      "AND (:#{#param.soHoSo} IS NULL OR LOWER(c.soHoSo) LIKE CONCAT('%',LOWER(:#{#param.soHoSo}),'%')) " +

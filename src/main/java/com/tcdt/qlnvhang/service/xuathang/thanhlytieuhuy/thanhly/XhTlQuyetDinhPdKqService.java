@@ -54,34 +54,36 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
     private XhTlHoSoHdrRepository xhTlHoSoHdrRepository;
 
     @Autowired
+    private XhTlToChucService xhTlToChucService;
+
+    @Autowired
     private FileDinhKemService fileDinhKemService;
 
     public Page<XhTlQuyetDinhPdKqHdr> searchPage(CustomUserDetails currentUser, XhTlQuyetDinhPdKqHdrReq req) throws Exception {
         String dvql = currentUser.getDvql();
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            req.setDvql(dvql.substring(0, 6));
+            req.setMaDviSr(dvql.substring(0, 6));
             req.setTrangThai(Contains.BAN_HANH);
         } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
-            req.setDvql(dvql);
+            req.setMaDviSr(dvql);
         }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhTlQuyetDinhPdKqHdr> search = xhTlQuyetDinhPdKqHdrRepository.search(req, pageable);
-        Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
-        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
         Map<String, String> mapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
         Map<String, String> mapHinhThuDg = getListDanhMucChung("HINH_THUC_DG");
         Map<String, String> mapPhuongThucDg = getListDanhMucChung("PHUONG_THUC_DG");
         search.getContent().forEach(s -> {
-            s.setMapVthh(mapDmucVthh);
-            s.setMapDmucDvi(mapDmucDvi);
             s.setTrangThai(s.getTrangThai());
             s.setTenTrangThaiHd(s.getTrangThaiHd());
             s.setTenTrangThaiXh(s.getTrangThaiXh());
             s.setTenLoaiHinhNx(StringUtils.isEmpty(s.getLoaiHinhNhapXuat()) ? null : mapLoaiHinhNx.get(s.getLoaiHinhNhapXuat()));
             s.setTenKieuNx(StringUtils.isEmpty(s.getKieuNhapXuat()) ? null : mapKieuNx.get(s.getKieuNhapXuat()));
-            s.setTenHthucDgia(StringUtils.isEmpty(s.getHthucDgia()) ? null : mapHinhThuDg.get(s.getHthucDgia()));
-            s.setTenPthucDgia(StringUtils.isEmpty(s.getPthucDgia()) ? null : mapPhuongThucDg.get(s.getPthucDgia()));
+            try {
+                s.setXhTlToChucHdr(xhTlToChucService.detail(s.getIdThongBao()));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
         return search;
     }
@@ -89,9 +91,9 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
     public List<XhTlQuyetDinhPdKqHdr> searchAll(XhTlQuyetDinhPdKqHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            req.setDvql(userInfo.getDvql().substring(0, 6));
+            req.setMaDviSr(userInfo.getDvql().substring(0, 6));
         } else if (userInfo.getCapDvi().equals(Contains.CAP_CUC)) {
-            req.setDvql(userInfo.getDvql());
+            req.setMaDviSr(userInfo.getDvql());
         }
         return xhTlQuyetDinhPdKqHdrRepository.searchAll(req);
     }
@@ -163,13 +165,8 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
             data.setTrangThaiHd(data.getTrangThaiHd());
             data.setTrangThaiXh(data.getTrangThaiXh());
             data.setMapDmucDvi(mapDmucDvi);
-            data.setMapVthh(mapVthh);
             data.setTenLoaiHinhNx(StringUtils.isEmpty(data.getLoaiHinhNhapXuat()) ? null : mapLoaiHinhNx.get(data.getLoaiHinhNhapXuat()));
             data.setTenKieuNx(StringUtils.isEmpty(data.getKieuNhapXuat()) ? null : mapKieuNx.get(data.getKieuNhapXuat()));
-            data.getQuyetDinhDtl().forEach(d1 -> {
-                d1.setMapDmucDvi(mapDmucDvi);
-                d1.setMapVthh(mapVthh);
-            });
             List<XhTlHopDongHdr> hopDongTlHdr = xhTlHopDongHdrRepository.findAllByIdQdKqTl(data.getId());
             hopDongTlHdr.forEach(f -> {
                 f.setMapVthh(mapVthh);
