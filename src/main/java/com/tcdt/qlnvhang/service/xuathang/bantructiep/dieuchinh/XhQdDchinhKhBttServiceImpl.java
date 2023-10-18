@@ -107,6 +107,19 @@ public class XhQdDchinhKhBttServiceImpl extends BaseServiceImpl {
             dtl.setTrangThai(Contains.CHUA_THUC_HIEN);
             dtl.setTrangThaiHd(Contains.CHUA_THUC_HIEN);
             dtl.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
+            dtl.setPthucBanTrucTiep(null);
+            dtl.setNgayNhanCgia(null);
+            dtl.setIdQdKq(null);
+            dtl.setSoQdKq(null);
+            dtl.setDiaDiemChaoGia(null);
+            dtl.setNgayMkho(null);
+            dtl.setNgayKthuc(null);
+            dtl.setGhiChuChaoGia(null);
+            dtl.setThoiHanBan(null);
+            dtl.setIdQdNv(null);
+            dtl.setSoQdNv(null);
+            dtl.setSlHdDaKy(null);
+            dtl.setSlHdChuaKy(null);
             xhQdPdKhBttDtlRepository.save(dtl);
             xhQdPdKhBttDviRepository.deleteAllByIdDtl(dtlReq.getId());
             for (XhQdPdKhBttDviReq dviReq : dtlReq.getChildren()) {
