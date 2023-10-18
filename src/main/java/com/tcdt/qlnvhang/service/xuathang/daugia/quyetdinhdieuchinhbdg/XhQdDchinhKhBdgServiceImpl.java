@@ -98,6 +98,12 @@ public class XhQdDchinhKhBdgServiceImpl extends BaseServiceImpl {
             dtl.setLastest(true);
             dtl.setSoQdDc(req.getSoQdDc());
             dtl.setTrangThai(Contains.CHUA_THUC_HIEN);
+            dtl.setIdQdPdKqBdg(null);
+            dtl.setSoQdPdKqBdg(null);
+            dtl.setNgayKyQdPdKqBdg(null);
+            dtl.setSoDviTsanThanhCong(null);
+            dtl.setSoDviTsanKhongThanh(null);
+            dtl.setKetQuaDauGia(null);
             xhQdPdKhBdgDtlRepository.save(dtl);
             xhQdPdKhBdgPlRepository.deleteAllByIdDtl(dtlReq.getId());
             for (XhQdPdKhBdgPlReq plReq : dtlReq.getChildren()) {
