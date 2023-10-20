@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly;
 
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.request.BaseRequest;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhPdKqDtl;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -43,10 +42,8 @@ public class XhTlQuyetDinhPdKqHdrReq extends BaseRequest {
     private BigDecimal thanhTien;
     private String trangThaiHd;
     private String trangThaiXh;
-    private List<XhTlQuyetDinhPdKqDtl> quyetDinhDtl = new ArrayList<>();
     private List<FileDinhKemJoinTable> fileDinhKem;
     private List<FileDinhKemJoinTable> canCu;
-    private String dvql;
 
     //
     private String maDviSr;
