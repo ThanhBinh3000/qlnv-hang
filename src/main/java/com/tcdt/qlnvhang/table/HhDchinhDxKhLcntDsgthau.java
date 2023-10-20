@@ -23,6 +23,7 @@ public class HhDchinhDxKhLcntDsgthau implements Serializable {
 	private Long id;
 	private Long idDcDxDtl;
 	private Long idDcDxHdr;
+	private Long idGthauDx;
 	String goiThau;
 	BigDecimal soLuong;
 	String maDvi;

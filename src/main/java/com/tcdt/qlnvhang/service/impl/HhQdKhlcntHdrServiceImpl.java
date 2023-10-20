@@ -216,7 +216,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				hhQdKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(gt.getId());
 				gt.setId(null);
 				gt.setIdQdDtl(qd.getId());
-				gt.setIdGthauDx(gtList.getId());
+//				gt.setIdGthauDx(gtList.getId());
 				gt.setTrangThai(Contains.CHUACAPNHAT);
 //				gt.setSoLuongTheoChiTieu(gtList.getSoLuongTheoChiTieu());
 //				gt.setSoLuongDaMua(gtList.getSoLuongDaMua());
@@ -441,15 +441,11 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 					dxuatKhLcntHdr.get().setTenHthucLcnt(hashMapHtLcnt.get(dxuatKhLcntHdr.get().getHthucLcnt()));
 					dxuatKhLcntHdr.get().setTenNguonVon(hashMapNguonVon.get(dxuatKhLcntHdr.get().getNguonVon()));
 					dxuatKhLcntHdr.get().setTenLoaiHdong(hashMapLoaiHdong.get(dxuatKhLcntHdr.get().getLoaiHdong()));
+					dxuatKhLcntHdr.get().setTenDvi(mapDmucDvi.get(dxuatKhLcntHdr.get().getMaDvi()));
 					dtl.setDxuatKhLcntHdr(dxuatKhLcntHdr.get());
 				}
 			}
 			List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauList = new ArrayList<>();
-			Optional<HhDxuatKhLcntHdr> hhDxuatKhLcntHdr = hhDxuatKhLcntHdrRepository.findById(dtl.getIdDxHdr());
-			if (hhDxuatKhLcntHdr.isPresent()) {
-				hhDxuatKhLcntHdr.get().setTenDvi(mapDmucDvi.get(hhDxuatKhLcntHdr.get().getMaDvi()));
-				dtl.setDxuatKhLcntHdr(hhDxuatKhLcntHdr.get());
-			}
 			hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdDtlOrderByGoiThauAsc(dtl.getId());
 			Set<Long> goiThauSet = new HashSet<>();
 			int count = 0;
@@ -502,6 +498,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
 		data.setTenTrangThaiDt(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiDt()));
 		data.setTenNguonVon(hashMapNguonVon.get(data.getNguonVon()));
+		Optional<QdPdHsmt> qOptional = qdPdHsmtRepository.findByIdQdPdKhlcntAndMaDvi(data.getId(), getUser().getDvql());
+		qOptional.ifPresent(data::setQdPdHsmt);
 	}
 
 	private void detailVt (HhQdKhlcntHdr data) {
@@ -1073,7 +1071,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 	@Override
 	public List<HhQdKhlcntHdr> getAll(HhQdKhlcntSearchReq req) throws Exception {
-		List<HhQdKhlcntHdr> listData =  hhQdKhlcntHdrRepository.selectAll(req.getNamKhoach(),req.getLoaiVthh(),req.getCloaiVthh(), req.getSoQd(), convertDateToString(req.getTuNgayQd()),convertDateToString(req.getDenNgayQd()),req.getTrangThai(), req.getLastest());
+		if (!req.getLoaiVthh().startsWith("02")) {
+			req.setMaDvi(getUser().getDvql());
+		}
+		List<HhQdKhlcntHdr> listData =  hhQdKhlcntHdrRepository.selectAll(req.getNamKhoach(),req.getLoaiVthh(),req.getCloaiVthh(), req.getSoQd(), convertDateToString(req.getTuNgayQd()),convertDateToString(req.getDenNgayQd()),req.getTrangThai(), req.getLastest(), req.getMaDvi());
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 		if (req.getLoaiVthh() != null && req.getLoaiVthh().startsWith("02")) {
 			listData.forEach(qd -> {
