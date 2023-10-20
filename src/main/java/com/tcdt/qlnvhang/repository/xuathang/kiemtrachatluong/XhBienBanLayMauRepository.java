@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.repository.xuathang.kiemtrachatluong;
 
 import com.tcdt.qlnvhang.request.xuathang.kiemtrachatluong.SearchBienBanLayMauReq;
-import com.tcdt.qlnvhang.request.xuathang.kiemtrachatluong.XhBienBanLayMauReq;
 import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.bienbanlaymau.XhBienBanLayMauHdr;
 import feign.Param;
 import org.springframework.data.domain.Page;
@@ -18,6 +17,7 @@ public interface XhBienBanLayMauRepository extends JpaRepository<XhBienBanLayMau
 
   @Query("SELECT c FROM XhBienBanLayMauHdr c " + " WHERE 1=1 " +
       "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
+      "AND (:#{#param.maDvi} IS NULL OR c.maDvi = :#{#param.maDvi}) " +
       "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
       "AND (:#{#param.soBbQd} IS NULL OR LOWER(c.soBbQd) LIKE CONCAT('%',LOWER(:#{#param.soBbQd}),'%')) " +
       "AND (:#{#param.loaiVthh} IS NULL OR LOWER(c.loaiVthh) LIKE CONCAT(LOWER(:#{#param.loaiVthh}),'%')) " +

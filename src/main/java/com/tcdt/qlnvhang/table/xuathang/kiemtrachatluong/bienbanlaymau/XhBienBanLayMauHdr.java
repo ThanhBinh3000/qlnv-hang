@@ -130,6 +130,14 @@ public class XhBienBanLayMauHdr extends BaseEntity implements Serializable {
   private LocalDate ngayXuatDocKho;
   private Long idBbHaoDoi;
   private String soBbHaoDoi;
+  private Long idQdPd;
+  private String soQdPd;
+  private LocalDate ngayKyQdPd;
+  private String truongBpBaoQuan;
+  private String lanhDaoChiCuc;
+  private String thuKho;
+  private String donViTinh;
+  private LocalDate ngayBbLayMau;
   private LocalDate ngayKy;
   private String ktvBaoQuan;
   private String dviKiemNghiem;
