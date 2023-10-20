@@ -120,4 +120,7 @@ public class XhTlQuyetDinhPdKqHdr extends BaseEntity implements Serializable {
 
     @Transient
     private XhTlQuyetDinhHdr xhTlQuyetDinhHdr;
+
+    @Transient
+    private int slHdDaKy = 0;
 }

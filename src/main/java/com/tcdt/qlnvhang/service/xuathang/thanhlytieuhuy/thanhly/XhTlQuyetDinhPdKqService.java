@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlHopDongHdrRepository;
@@ -33,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
@@ -83,6 +85,9 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
                     s.setXhTlQuyetDinhHdr(xhTlQuyetDinhService.detail(s.getXhTlToChucHdr().getIdQdTl()));
                 }
                 s.setListHopDong(xhTlHopDongHdrRepository.findAllByIdQdKqTl(s.getId()));
+                if(s.getListHopDong() != null){
+                    s.setSlHdDaKy((int) s.getListHopDong().stream().filter(x -> Objects.equals(x.getTrangThai(), TrangThaiAllEnum.DA_KY.getId())).count());
+                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
