@@ -54,6 +54,14 @@ public class XhBienBanLayMauReq {
   private String niemPhong;
   private String loaiBb;
   private String type;
+  private Long idQdPd;
+  private String soQdPd;
+  private LocalDate ngayKyQdPd;
+  private String truongBpBaoQuan;
+  private String lanhDaoChiCuc;
+  private String thuKho;
+  private String donViTinh;
+  private LocalDate ngayBbLayMau;
   private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
   private List<FileDinhKemJoinTable> canCu = new ArrayList<>();
   private List<FileDinhKemJoinTable> anhChupMauNiemPhong = new ArrayList<>();

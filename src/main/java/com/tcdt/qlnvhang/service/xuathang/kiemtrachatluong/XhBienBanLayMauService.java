@@ -61,12 +61,13 @@ public class XhBienBanLayMauService extends BaseServiceImpl {
 
   public Page<XhBienBanLayMauHdr> searchPage(CustomUserDetails currentUser, SearchBienBanLayMauReq req) throws Exception {
     String dvql = currentUser.getDvql();
-    if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+    req.setDvql(dvql);
+  /*  if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
       req.setDvql(dvql.substring(0, 6));
 //      req.setTrangThai(Contains.BAN_HANH);
     } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
       req.setDvql(dvql);
-    }
+    }*/
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<XhBienBanLayMauHdr> search = xhBienBanLayMauRepository.search(req, pageable);
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
