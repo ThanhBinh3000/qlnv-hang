@@ -87,6 +87,7 @@ public class HhDchinhDxKhLcntDtl implements Serializable {
 	BigDecimal giaBanHoSo;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
 	Date tgianMoHoSo;
+	Long idHhQdKhlcntDtl;
 	@Transient
 	private HhQdKhlcntHdr hhQdKhlcntHdr;
 

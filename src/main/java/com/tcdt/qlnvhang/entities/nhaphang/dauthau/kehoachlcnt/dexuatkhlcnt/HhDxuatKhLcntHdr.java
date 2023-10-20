@@ -163,7 +163,9 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	private List<HhDxuatKhLcntCcxdgDtl> ccXdgDtlList = new ArrayList<>();
 
 	@Transient
-	private Long maTh;
+	private String maTh;
+	@Transient
+	private Long idTh;
 	@Transient
 	private BigDecimal qdGiaoChiTieuId;
 	String ykienThamGia;
