@@ -34,7 +34,7 @@ public class XhCtvtQuyetDinhGnvDtl implements Serializable {
   private String kieuNhapXuat;
   private String mucDichXuat;
   private String noiDungDx;
-  private String maDonViNhan;
+  private String idDonViNhan;
   private String loaiVthh;
   private String cloaiVthh;
   private String maDvi;

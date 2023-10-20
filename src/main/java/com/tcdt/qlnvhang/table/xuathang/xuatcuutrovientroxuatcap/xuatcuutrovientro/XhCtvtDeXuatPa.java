@@ -25,7 +25,7 @@ public class XhCtvtDeXuatPa implements Serializable {
   @SequenceGenerator(sequenceName = XhCtvtDeXuatPa.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhCtvtDeXuatPa.TABLE_NAME + "_SEQ")
   private Long id;
   private String noiDung;
-  private String maDonViNhan;
+  private String idDonViNhan;
   private String loaiVthh;
   private String cloaiVthh;
   private String maDvi;
