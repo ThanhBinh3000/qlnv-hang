@@ -600,6 +600,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         for (HhDcQdPduyetKhmttSldd sldd : listSlDd) {
             List<HhChiTietTTinChaoGia> byIdQdDtl = hhCtietTtinCgiaRepository.findAllByIdQdPdSldd(sldd.getId());
             for (HhChiTietTTinChaoGia chaoGia : byIdQdDtl) {
+                chaoGia.setDonGiaVat(chaoGia.getDonGia());
                 List<FileDinhKem> fileDinhKems = fileDinhKemService.search(chaoGia.getId(), Arrays.asList(HhChiTietTTinChaoGia.TABLE_NAME));
                 if (!DataUtils.isNullOrEmpty(fileDinhKems)) {
                     chaoGia.setFileDinhKems(fileDinhKems.get(0));
