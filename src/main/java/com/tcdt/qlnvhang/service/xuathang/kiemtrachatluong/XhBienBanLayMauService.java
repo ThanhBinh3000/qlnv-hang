@@ -168,9 +168,11 @@ public class XhBienBanLayMauService extends BaseServiceImpl {
         data.setNguoiPduyetId(currentUser.getUser().getId());
         data.setNgayPduyet(LocalDate.now());
         data.setLyDoTuChoi(statusReq.getLyDoTuChoi());
+        data.setLanhDaoChiCuc(currentUser.getUser().getFullName());
       } else if (status.equals(TrangThaiAllEnum.CHO_DUYET_LDCC.getId() + TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
         data.setNguoiPduyetId(currentUser.getUser().getId());
         data.setNgayPduyet(LocalDate.now());
+        data.setLanhDaoChiCuc(currentUser.getUser().getFullName());
       } else {
         throw new Exception("Phê duyệt không thành công");
       }
