@@ -334,6 +334,11 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
     }
 
     @Override
+    public List<HhDthauNthauDuthau> getDanhSachNhaThau() throws Exception {
+        return nhaThauDuthauRepository.findAllByOrderByTenNhaThau();
+    }
+
+    @Override
     public void approve(HhDthauReq stReq) throws Exception {
         if(stReq.getLoaiVthh().startsWith("02")){
             approveVatTu(stReq);

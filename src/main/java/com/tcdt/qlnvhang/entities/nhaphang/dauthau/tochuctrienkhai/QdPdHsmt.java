@@ -35,6 +35,7 @@ public class QdPdHsmt implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date ngayHluc;
     private Long idQdPdKhlcnt;
+    private Long idQdPdKhlcntDtl;
     private String trichYeu;
     private String noiDungQd;
     private String ghiChu;
