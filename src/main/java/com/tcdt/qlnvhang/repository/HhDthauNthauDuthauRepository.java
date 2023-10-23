@@ -9,6 +9,7 @@ public interface HhDthauNthauDuthauRepository extends BaseRepository<HhDthauNtha
 //	Optional<HhDthauGthau> findBySoQd(String soQd);
 
 	List<HhDthauNthauDuthau> findByIdDtGtAndType (Long idGoiThau, String type);
+	List<HhDthauNthauDuthau> findAllByOrderByTenNhaThau ();
 
 	void deleteAllByIdDtGt(Long idGoiThau);
 

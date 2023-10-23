@@ -256,4 +256,22 @@ public class HhDauThauController {
 		return ResponseEntity.ok(resp);
 	}
 
+	@ApiOperation(value = "Lấy danh sách nhà thầu dự thầu", response = List.class)
+	@GetMapping(value = "ds-nha-thau" , produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> getDanhSachNhaThau() {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.getDanhSachNhaThau());
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Lấy danh sách nhà thầu dự thầu trace: {}", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
+
+
 }
