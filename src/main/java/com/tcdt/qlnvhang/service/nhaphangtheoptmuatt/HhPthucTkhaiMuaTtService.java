@@ -179,6 +179,7 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
             for (HhChiTietTTinChaoGiaReq child : hhQdPheduyetKhMttSLDDReq.getListChaoGia()) {
                 HhChiTietTTinChaoGia chaoGia = new HhChiTietTTinChaoGia();
                 BeanUtils.copyProperties(child, chaoGia, "id");
+                chaoGia.setDonGia(child.getDonGiaVat());
                 chaoGia.setId(null);
                 HhChiTietTTinChaoGia save = hhCtietTtinCgiaRepository.save(chaoGia);
                 if (!DataUtils.isNullObject(child.getFileDinhKems())) {
