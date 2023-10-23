@@ -372,6 +372,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
       xhCtvtTongHopDtos.add(xhCtvtTongHopDtoLvOne);
       for(var obj: key.getValue()){
         var xhCtvtTongHopDtoLv = new XhCtvtTongHopDto();
+        xhCtvtTongHopDtoLv.setDonViNhanCuuTro(obj.getNoiDungDx());
         xhCtvtTongHopDtoLv.setCloaiVthh(obj.getTenLoaiVthh());
         xhCtvtTongHopDtoLv.setSoLuong(String.valueOf(obj.getSoLuong()));
         xhCtvtTongHopDtos.add(xhCtvtTongHopDtoLv);
