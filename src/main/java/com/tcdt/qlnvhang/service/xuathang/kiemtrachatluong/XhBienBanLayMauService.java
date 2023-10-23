@@ -35,6 +35,7 @@ import javax.transaction.Transactional;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -95,6 +96,9 @@ public class XhBienBanLayMauService extends BaseServiceImpl {
     BeanUtils.copyProperties(objReq, data,"maDvi");
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
+    if(data.getNgayTao() == null){
+      data.setNgayTao(LocalDateTime.now());
+    }
     XhBienBanLayMauHdr created = xhBienBanLayMauRepository.save(data);
     return created;
   }
@@ -118,6 +122,9 @@ public class XhBienBanLayMauService extends BaseServiceImpl {
     }
 
     XhBienBanLayMauHdr data = optional.get();
+    if(objReq.getNgayTao() == null){
+      data.setNgayTao(data.getNgayTao());
+    }
     BeanUtils.copyProperties(objReq, data, "id", "maDvi");
     XhBienBanLayMauHdr updated = xhBienBanLayMauRepository.save(data);
     return updated;
