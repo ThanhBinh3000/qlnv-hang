@@ -367,27 +367,19 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
       var xhCtvtTongHopDtoLvOne = new XhCtvtTongHopDto();
       xhCtvtTongHopDtoLvOne.setStt(String.valueOf(stt++));
       xhCtvtTongHopDtoLvOne.setTenDvi(key.getKey());
-      xhCtvtTongHopDtoLvOne.setSoLuong(String.valueOf(key.getValue()
-              .stream().map(XhCtvtTongHopDtl::getSoLuong).reduce(BigDecimal.ZERO, BigDecimal::add)));
       xhCtvtTongHopDtoLvOne.setMucDichXuat(xhCtvtTongHopHdr.get().getLoaiNhapXuat());
       xhCtvtTongHopDtoLvOne.setNgayKetThuc(Contains.convertDateToString(xhCtvtDeXuatHdr.stream().findAny().get().getNgayKetThuc()));
       xhCtvtTongHopDtos.add(xhCtvtTongHopDtoLvOne);
-      convertXhCtvtTongHopDtlToDtoLtTwo(xhCtvtTongHopDtos, key);
+      for(var obj: key.getValue()){
+        var xhCtvtTongHopDtoLv = new XhCtvtTongHopDto();
+        xhCtvtTongHopDtoLv.setCloaiVthh(obj.getTenLoaiVthh());
+        xhCtvtTongHopDtoLv.setSoLuong(String.valueOf(obj.getSoLuong()));
+        xhCtvtTongHopDtos.add(xhCtvtTongHopDtoLv);
+      }
+      xhCtvtTongHopDtoLvOne.setSoLuong(String.valueOf(key.getValue()
+              .stream().map(XhCtvtTongHopDtl::getSoLuong).reduce(BigDecimal.ZERO, BigDecimal::add)));
     }
     return xhCtvtTongHopDtos;
-  }
-
-  private void convertXhCtvtTongHopDtlToDtoLtTwo(List<XhCtvtTongHopDto> xhCtvtTongHopDtos, Map.Entry<String, List<XhCtvtTongHopDtl>> value) {
-    var xhCtvtTongHopDtoVt = value.getValue()
-            .stream().collect(Collectors.groupingBy(XhCtvtTongHopDtl::getNoiDungDx));
-    for (var res : xhCtvtTongHopDtoVt.entrySet()) {
-      var xhCtvtTongHopDtoLvTwo = new  XhCtvtTongHopDto();
-      xhCtvtTongHopDtoLvTwo.setDonViNhanCuuTro(res.getKey());
-      xhCtvtTongHopDtoLvTwo.setSoLuong(String.valueOf(res.getValue()
-              .stream().map(XhCtvtTongHopDtl::getSoLuong).reduce(BigDecimal.ZERO, BigDecimal::add)));
-      xhCtvtTongHopDtos.add(xhCtvtTongHopDtoLvTwo);
-      convertXhCtvtTongHopDtlToDtoLtThree(xhCtvtTongHopDtos, res);
-    }
   }
 
   private void convertXhCtvtTongHopDtlToDtoLtThree(List<XhCtvtTongHopDto> xhCtvtTongHopDtos, Map.Entry<String, List<XhCtvtTongHopDtl>> res) {
@@ -412,7 +404,6 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
       xhCtvtTongHopDtoLvOne.setMucDichXuat(xhCtvtTongHopHdr.get().getLoaiNhapXuat());
       xhCtvtTongHopDtoLvOne.setNgayKetThuc(Contains.convertDateToString(xhCtvtDeXuatHdr.stream().findAny().get().getNgayKetThuc()));
       xhCtvtTongHopDtos.add(xhCtvtTongHopDtoLvOne);
-      convertXhCtvtTongHopDtlToDtoVtTwo(xhCtvtTongHopDtos, key);
     }
     return xhCtvtTongHopDtos;
   }
