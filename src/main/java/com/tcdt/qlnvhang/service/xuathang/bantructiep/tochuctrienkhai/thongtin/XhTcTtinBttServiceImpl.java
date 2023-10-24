@@ -31,6 +31,7 @@ import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -68,26 +69,38 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
         String dvql = currentUser.getDvql();
         Integer lastest = 1;
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
+            req.setDvql(dvql.substring(0, 4));
             req.setLastest(lastest);
-            req.setTrangThai(Contains.DA_HOAN_THANH);
         } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
             req.setDvql(dvql);
             req.setLastest(lastest);
         } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             req.setLastest(lastest);
-            req.setTrangThai(Contains.DA_HOAN_THANH);
         }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhQdPdKhBttDtl> search = xhQdPdKhBttDtlRepository.searchPage(req, pageable);
         Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
+        Map<String, XhQdPdKhBttDtl> recordMap = new HashMap<>();
         search.getContent().forEach(data -> {
-            try {
-                String maDvi = data.getMaDvi();
-                if (mapDmucDvi.containsKey(maDvi)) {
-                    Map<String, Object> objDonVi = mapDmucDvi.get(maDvi);
-                    data.setTenDvi(objDonVi.get("tenDvi").toString());
+            if (recordMap.containsKey(data.getSoDxuat())) {
+                XhQdPdKhBttDtl existingRecord = recordMap.get(data.getSoDxuat());
+                if (data.getIsDieuChinh() && data.getLanDieuChinh() > existingRecord.getLanDieuChinh()) {
+                    recordMap.put(data.getSoDxuat(), data);
+                } else if (!existingRecord.getIsDieuChinh()) {
+                    recordMap.put(data.getSoDxuat(), data);
                 }
+            } else {
+                recordMap.put(data.getSoDxuat(), data);
+            }
+        });
+        List<XhQdPdKhBttDtl> filteredRecords = new ArrayList<>(recordMap.values());
+        filteredRecords.forEach(data -> {
+            try {
+                mapDmucDvi.computeIfPresent(data.getMaDvi(), (key, objDonVi) -> {
+                    data.setTenDvi(objDonVi.get("tenDvi").toString());
+                    return objDonVi;
+                });
                 mapDmucVthh.computeIfPresent(data.getLoaiVthh(), (key, value) -> {
                     data.setTenLoaiVthh(value);
                     return value;
@@ -114,7 +127,7 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
                 throw new RuntimeException(e);
             }
         });
-        return search;
+        return new PageImpl<>(filteredRecords, pageable, search.getTotalElements());
     }
 
     @Transactional

@@ -58,9 +58,15 @@ public class XhQdDchinhKhBttServiceImpl extends BaseServiceImpl {
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         search.getContent().forEach(data -> {
-            data.setMapVthh(mapDmucVthh);
-            data.setMapDmucDvi(mapDmucDvi);
-            data.setTrangThai(data.getTrangThai());
+            try {
+                data.setMapVthh(mapDmucVthh);
+                data.setMapDmucDvi(mapDmucDvi);
+                data.setTrangThai(data.getTrangThai());
+                List<XhQdPdKhBttDtl> listDtl = xhQdPdKhBttDtlRepository.findAllByIdHdr(data.getId());
+                data.setChildren(listDtl != null && !listDtl.isEmpty() ? listDtl : Collections.emptyList());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
         return search;
     }
@@ -107,6 +113,7 @@ public class XhQdDchinhKhBttServiceImpl extends BaseServiceImpl {
             dtl.setTrangThai(Contains.CHUA_THUC_HIEN);
             dtl.setTrangThaiHd(Contains.CHUA_THUC_HIEN);
             dtl.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
+            dtl.setLanDieuChinh(req.getLanDieuChinh());
             dtl.setPthucBanTrucTiep(null);
             dtl.setNgayNhanCgia(null);
             dtl.setIdQdKq(null);
