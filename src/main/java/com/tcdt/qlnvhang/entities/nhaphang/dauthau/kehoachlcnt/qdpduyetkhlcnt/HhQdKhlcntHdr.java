@@ -202,6 +202,8 @@ public class HhQdKhlcntHdr implements Serializable {
 	private List<FileDinhKem> listCcPhapLy;
 	@Transient
 	private List<FileDinhKem> fileDinhKems;
+	@Transient
+	private Integer lanDieuChinh;
 
 	public String getTenTrangThai() {
 		return NhapXuatHangTrangThaiEnum.getTenById(this.getTrangThai());

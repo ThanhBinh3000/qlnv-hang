@@ -26,6 +26,10 @@ public interface HhDchinhDxKhLcntHdrRepository extends CrudRepository<HhDchinhDx
     @Modifying
     void deleteAllByIdIn(List<Long> ids);
 
+    @Query(value = " SELECT NVL(MAX(HDR.LAN_DIEU_CHINH),0) FROM HH_DC_DX_LCNT_HDR  HDR"+
+            " WHERE (:idQdGoc IS NULL OR HDR.ID_QD_GOC = :idQdGoc) ",
+            nativeQuery = true)
+    int findMaxLanDieuChinh (Long idQdGoc);
 
     @Query(value = " SELECT * FROM HH_DC_DX_LCNT_HDR  HDR"+
             " WHERE (:nam IS NULL OR HDR.NAM = TO_NUMBER(:nam)) "+
