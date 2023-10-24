@@ -91,7 +91,7 @@ public class HhQdKhlcntDtlReq {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
 	Date tgianMoHoSoTime;
 	BigDecimal giaBanHoSo;
-
+	Long idHhQdKhlcntDtl;
 
 	private List<HhQdKhlcntDsgthauReq> dsGoiThau = new ArrayList<>();
 

@@ -13,6 +13,7 @@ import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.bangkethumuale.BangKeMuaL
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -86,10 +87,11 @@ public class BangKeMuaLeService extends BaseServiceImpl {
                 throw new Exception("số hợp đồng đã tồn tại");
             }
         }
-        BangKeMuaLe data = optional.get();
-        BangKeMuaLe dataMap = new ModelMapper().map(objReq,BangKeMuaLe.class);
-        updateObjectToObject(data,dataMap);
-        BangKeMuaLe created=bangkethumualeRepository.save(data);
+//        BangKeMuaLe data = optional.get();
+        BangKeMuaLe dataMap = new BangKeMuaLe();
+//        updateObjectToObject(data,dataMap);
+        BeanUtils.copyProperties(objReq, dataMap);
+        BangKeMuaLe created=bangkethumualeRepository.save(dataMap);
         return created;
     }
 

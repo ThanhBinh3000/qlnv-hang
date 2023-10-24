@@ -199,7 +199,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		thopHdr.setTrangThai(Contains.CHUATAO_QD);
 		thopHdr.setNgayThop(new Date());
 		thopHdr.setGhiChu(objReq.getGhiChu());
-		thopHdr.setId(objReq.getId());
+		thopHdr.setMaTh(objReq.getMaTh());
 		thopHdr.setSoQdCc(objReq.getSoQdCc());
 		// Add danh sach file dinh kem o Master
 		List<FileDKemJoinDxKhlcntThopHdr> fileDinhKemList = new ArrayList<FileDKemJoinDxKhlcntThopHdr>();

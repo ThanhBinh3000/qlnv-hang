@@ -15,6 +15,7 @@ import com.tcdt.qlnvhang.common.DocxToPdfConverter;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.*;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhDxKhLcntThopDtlRepository;
+import com.tcdt.qlnvhang.repository.HhDxKhLcntThopHdrRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.*;
 import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -22,6 +23,7 @@ import com.tcdt.qlnvhang.request.object.*;
 import com.tcdt.qlnvhang.service.feign.BaoCaoClient;
 import com.tcdt.qlnvhang.table.DmDonViDTO;
 import com.tcdt.qlnvhang.table.HhDxKhLcntThopDtl;
+import com.tcdt.qlnvhang.table.HhDxKhLcntThopHdr;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.report.HhDxKhlcntDsgthauReport;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
@@ -70,6 +72,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
     @Autowired
     private HhDxKhLcntThopDtlRepository hhDxKhLcntThopDtlRepository;
+    @Autowired
+    private HhDxKhLcntThopHdrRepository hhDxKhLcntThopHdrRepository;
     @Autowired
     DocxToPdfConverter docxToPdfConverter;
     @Autowired
@@ -638,17 +642,17 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
                     break;
                 case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
                     optional.setNguoiPduyet(getUser().getUsername());
-                    optional.setNgayPduyet(getDateTimeNow());
+//                    optional.setNgayPduyet(getDateTimeNow());
                     optional.setLdoTuchoi(stReq.getLyDo());
                     break;
                 case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
                     optional.setNguoiPduyet(getUser().getUsername());
-                    optional.setNgayPduyet(getDateTimeNow());
+//                    optional.setNgayPduyet(getDateTimeNow());
                     optional.setLdoTuchoi(stReq.getLyDo());
                     break;
                 case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
                     this.validateData(optional, stReq.getTrangThai());
-                    optional.setNguoiPduyet(getUser().getUsername());
+//                    optional.setNguoiPduyet(getUser().getUsername());
                     optional.setNgayPduyet(getDateTimeNow());
                     break;
                 case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
@@ -926,7 +930,13 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         page.getContent().forEach(f -> {
             f.setQdGiaoChiTieuId(hhDxuatKhLcntHdrRepository.getIdByKhLcnt(f.getId(), f.getNamKhoach()));
             Optional<HhDxKhLcntThopDtl> thopDtl = hhDxKhLcntThopDtlRepository.findByIdDxHdr(f.getId());
-            thopDtl.ifPresent(hhDxKhLcntThopDtl -> f.setMaTh(hhDxKhLcntThopDtl.getIdThopHdr()));
+            if (thopDtl.isPresent()) {
+                Optional<HhDxKhLcntThopHdr> thopHdr = hhDxKhLcntThopHdrRepository.findById(thopDtl.get().getIdThopHdr());
+                if (thopHdr.isPresent()) {
+                    f.setMaTh(thopHdr.get().getMaTh());
+                    f.setIdTh(thopHdr.get().getId());
+                }
+            }
             f.setSoGoiThau(hhDxuatKhLcntDsgtDtlRepository.countByIdDxKhlcnt(f.getId()));
             f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapVthh.get(f.getLoaiVthh()));

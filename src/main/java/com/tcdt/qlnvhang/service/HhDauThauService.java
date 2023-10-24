@@ -35,6 +35,7 @@ public interface HhDauThauService {
 //	HhDthau update(HhDthauReq objReq) throws Exception;
 //
     List<HhDthauNthauDuthau> detail(String ids,String loaiVthh, String type) throws Exception;
+    List<HhDthauNthauDuthau> getDanhSachNhaThau() throws Exception;
 //
 ////	Page<HhDthau2> colection(HhDthauSearchReq objReq, HttpServletRequest req) throws Exception;
 //
@@ -46,4 +47,5 @@ public interface HhDauThauService {
 //
 	void exportList(@Valid @RequestBody HhQdKhlcntSearchReq objReq, HttpServletResponse response) throws  Exception;
 	ReportTemplateResponse preview(HhQdKhlcntHdrReq objReq) throws Exception;
+
 }

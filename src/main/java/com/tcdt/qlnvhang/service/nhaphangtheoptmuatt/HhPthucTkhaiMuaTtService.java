@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -82,8 +83,10 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
                     List<HhDcQdPduyetKhmttDx> listdx = hhDcQdPduyetKhMttDxRepository.findAllByIdDcHdr(data.getId());
                     List<Long> idDx = listdx.stream().map(HhDcQdPduyetKhmttDx::getId).collect(Collectors.toList());
                     List<HhDcQdPduyetKhmttSldd> listSlDd = hhDcQdPduyetKhmttSlddRepository.findAllByIdDcKhmttIn(idDx);
-                    if(listSlDd.size() > 0){
+                    if(listSlDd.size() > 0 && this.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)){
                         f.setTongSoLuong(listSlDd.stream().filter(x -> x.getMaDvi().equals(this.getUser().getDvql())).collect(Collectors.toList()).get(0).getTongSoLuong());
+                    }else{
+                        f.setTongSoLuong(listSlDd.stream().filter(x -> x.getMaDvi().contains(this.getUser().getDvql())).collect(Collectors.toList()).stream().map(item -> item.getTongSoLuong()).reduce(BigDecimal.ZERO, BigDecimal::add));
                     }
                     hdr.setSoQdDc(data.getSoQdDc());
                 }
@@ -176,6 +179,7 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
             for (HhChiTietTTinChaoGiaReq child : hhQdPheduyetKhMttSLDDReq.getListChaoGia()) {
                 HhChiTietTTinChaoGia chaoGia = new HhChiTietTTinChaoGia();
                 BeanUtils.copyProperties(child, chaoGia, "id");
+                chaoGia.setDonGia(child.getDonGiaVat());
                 chaoGia.setId(null);
                 HhChiTietTTinChaoGia save = hhCtietTtinCgiaRepository.save(chaoGia);
                 if (!DataUtils.isNullObject(child.getFileDinhKems())) {
