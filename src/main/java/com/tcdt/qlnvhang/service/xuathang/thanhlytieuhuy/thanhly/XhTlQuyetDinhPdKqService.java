@@ -233,7 +233,7 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
                 case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
                 case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
                 case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
-                    data.setNguoiGduyetId(currentUser.getUser().getId());
+                     data.setNguoiGduyetId(currentUser.getUser().getId());
                     data.setNgayGduyet(LocalDate.now());
                     break;
                 case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
