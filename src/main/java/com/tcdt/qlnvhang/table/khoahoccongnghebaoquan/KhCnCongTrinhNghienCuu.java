@@ -41,10 +41,15 @@ public class KhCnCongTrinhNghienCuu extends BaseEntity implements Serializable {
     private String dviThucHien;
     private String nguonVon;
     private String soQdPd;
+    @Lob
     private String suCanThiet;
+    @Lob
     private String mucTieu;
+    @Lob
     private String phamVi;
+    @Lob
     private String noiDung;
+    @Lob
     private String phuongPhap;
     private BigDecimal tongChiPhi;
     @Temporal(TemporalType.DATE)
@@ -62,6 +67,7 @@ public class KhCnCongTrinhNghienCuu extends BaseEntity implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date ngayNghiemThu;
     private String diaDiem;
+    @Lob
     private String danhGia;
     private Integer tongDiem;
     private String xepLoai;
