@@ -30,6 +30,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -50,7 +51,16 @@ public class QthtKetChuyenServiceImpl extends BaseServiceImpl implements QthtKet
     UserInfo userInfo = UserUtils.getUserInfo();
     req.setMaDviSr(userInfo.getDvql());
     Page<QthtKetChuyenHdr> search = hdrRepository.searchPage(req, pageable);
+    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    Map<String, String> mapVthh = getListDanhMucHangHoa();
     search.getContent().forEach( item -> {
+      item.setTenChiCuc(mapDmucDvi.getOrDefault(item.getMaDvi(),null));
+      List<QthtKetChuyenDtl> allByIdHdr = dtlRepository.findAllByIdHdr(item.getId());
+      allByIdHdr.forEach( dtl -> {
+        dtl.setMapDmucDvi(mapDmucDvi);
+        dtl.setMapVthh(mapVthh);
+      });
+      item.setChildren(allByIdHdr);
       item.setTenNguoiTao(userInfoRepository.findById(item.getNguoiTaoId()).get().getFullName());
     });
     return search;
