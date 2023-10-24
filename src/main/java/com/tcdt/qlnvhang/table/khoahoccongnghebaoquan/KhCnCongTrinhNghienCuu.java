@@ -8,6 +8,7 @@ import org.springframework.util.ObjectUtils;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Clob;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -40,11 +41,11 @@ public class KhCnCongTrinhNghienCuu extends BaseEntity implements Serializable {
     private String dviThucHien;
     private String nguonVon;
     private String soQdPd;
-    private String suCanThiet;
-    private String mucTieu;
-    private String phamVi;
-    private String noiDung;
-    private String phuongPhap;
+    private Clob suCanThiet;
+    private Clob mucTieu;
+    private Clob phamVi;
+    private Clob noiDung;
+    private Clob phuongPhap;
     private BigDecimal tongChiPhi;
     @Temporal(TemporalType.DATE)
     private Date ngayGduyet;
@@ -61,7 +62,7 @@ public class KhCnCongTrinhNghienCuu extends BaseEntity implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date ngayNghiemThu;
     private String diaDiem;
-    private String danhGia;
+    private Clob danhGia;
     private Integer tongDiem;
     private String xepLoai;
     private String ldoTuChoi;
