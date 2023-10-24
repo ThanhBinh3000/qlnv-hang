@@ -366,6 +366,9 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
             hhCtietKqTtinCgiaRepository.deleteAllByIdQdPdKqSldd(hhQdPheduyetKqMttSLDD.getId());
             hopDongMttHdrRepository.deleteAllByIdQdPdSldd(hhQdPheduyetKqMttSLDD.getId());
         }
+        HhQdPheduyetKhMttDx dx = hhQdPheduyetKhMttDxRepository.findBySoQdKq(optional.get().getSoQdKq());
+        dx.setSoQdKq(null);
+        hhQdPheduyetKhMttDxRepository.save(dx);
         hhQdPheduyetKqMttSLDDRepository.deleteByIdQdPdKq(optional.get().getId());
         hhQdPduyetKqcgRepository.delete(optional.get());
     }

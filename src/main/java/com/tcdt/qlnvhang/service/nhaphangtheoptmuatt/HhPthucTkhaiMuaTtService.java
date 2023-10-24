@@ -56,6 +56,9 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
     private HhDcQdPdKhmttSlddDtlRepository hhDcQdPdKhmttSlddDtlRepository;
 
     @Autowired
+    private HhTtChaoGiaKhmttSlddDtlRepository hhTtChaoGiaKhmttSlddDtlRepository;
+
+    @Autowired
     private HhQdPheduyetKhMttHdrService hhQdPheduyetKhMttHdrService;
     @Autowired
     private HhDcQdPduyetKhMttRepository hhDcQdPduyetKhMttRepository;
@@ -160,21 +163,21 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
             HhQdPheduyetKhMttSLDD sldd = new HhQdPheduyetKhMttSLDD();
             BeanUtils.copyProperties(hhQdPheduyetKhMttSLDDReq, sldd);
             hhQdPheduyetKhMttSLDDRepository.save(sldd);
-            if(hdr.get().getIsChange() != null){
-                hhDcQdPdKhmttSlddDtlRepository.deleteAllByIdDiaDiem(sldd.getId());
+//            if(hdr.get().getIsChange() != null){
+                hhTtChaoGiaKhmttSlddDtlRepository.deleteAllByIdDiaDiem(sldd.getId());
                 for (HhQdPdKhMttSlddDtlReq child : hhQdPheduyetKhMttSLDDReq.getChildren()) {
-                    HhDcQdPdKhmttSlddDtl hhDcQdPdKhmttSlddDtl = new HhDcQdPdKhmttSlddDtl();
-                    BeanUtils.copyProperties(child, hhDcQdPdKhmttSlddDtl);
-                    hhDcQdPdKhmttSlddDtlRepository.save(hhDcQdPdKhmttSlddDtl);
+                    HhTtChaoGiaSlddDtl hhTtChaoGiaSlddDtl = new HhTtChaoGiaSlddDtl();
+                    BeanUtils.copyProperties(child, hhTtChaoGiaSlddDtl);
+                    hhTtChaoGiaKhmttSlddDtlRepository.save(hhTtChaoGiaSlddDtl);
                 }
-            }else{
-                hhQdPdKhMttSlddDtlRepository.deleteByIdDiaDiem(sldd.getId());
-                for (HhQdPdKhMttSlddDtlReq child : hhQdPheduyetKhMttSLDDReq.getChildren()) {
-                    HhQdPdKhMttSlddDtl hhQdPdKhMttSlddDtl = new HhQdPdKhMttSlddDtl();
-                    BeanUtils.copyProperties(child, hhQdPdKhMttSlddDtl);
-                    hhQdPdKhMttSlddDtlRepository.save(hhQdPdKhMttSlddDtl);
-                }
-            }
+//            }else{
+//                hhQdPdKhMttSlddDtlRepository.deleteByIdDiaDiem(sldd.getId());
+//                for (HhQdPdKhMttSlddDtlReq child : hhQdPheduyetKhMttSLDDReq.getChildren()) {
+//                    HhQdPdKhMttSlddDtl hhQdPdKhMttSlddDtl = new HhQdPdKhMttSlddDtl();
+//                    BeanUtils.copyProperties(child, hhQdPdKhMttSlddDtl);
+//                    hhQdPdKhMttSlddDtlRepository.save(hhQdPdKhMttSlddDtl);
+//                }
+//            }
             hhCtietTtinCgiaRepository.deleteAllByIdQdPdSldd(hhQdPheduyetKhMttSLDDReq.getId());
             for (HhChiTietTTinChaoGiaReq child : hhQdPheduyetKhMttSLDDReq.getListChaoGia()) {
                 HhChiTietTTinChaoGia chaoGia = new HhChiTietTTinChaoGia();
