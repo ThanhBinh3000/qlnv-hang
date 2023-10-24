@@ -31,11 +31,11 @@ public class KhCnCongTrinhNghienCuuReq {
     private String dviThucHien;
     private String nguonVon;
     private String soQdPd;
-    private Clob suCanThiet;
-    private Clob mucTieu;
+    private String suCanThiet;
+    private String mucTieu;
     private String phamVi;
-    private Clob noiDung;
-    private Clob phuongPhap;
+    private String noiDung;
+    private String phuongPhap;
     private BigDecimal tongChiPhi;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayGduyet;
@@ -48,7 +48,7 @@ public class KhCnCongTrinhNghienCuuReq {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayNghiemThu;
     private String diaDiem;
-    private Clob danhGia;
+    private String danhGia;
     private Integer tongDiem;
     private String xepLoai;
     private String ldoTuChoi;
