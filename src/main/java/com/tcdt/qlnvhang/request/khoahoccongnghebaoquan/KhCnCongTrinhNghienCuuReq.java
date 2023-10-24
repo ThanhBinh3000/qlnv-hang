@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
+import javax.persistence.Lob;
 import java.math.BigDecimal;
 import java.sql.Clob;
 import java.util.ArrayList;
@@ -31,11 +32,16 @@ public class KhCnCongTrinhNghienCuuReq {
     private String dviThucHien;
     private String nguonVon;
     private String soQdPd;
-    private Clob suCanThiet;
-    private Clob mucTieu;
+    @Lob
+    private String suCanThiet;
+    @Lob
+    private String mucTieu;
+    @Lob
     private String phamVi;
-    private Clob noiDung;
-    private Clob phuongPhap;
+    @Lob
+    private String noiDung;
+    @Lob
+    private String phuongPhap;
     private BigDecimal tongChiPhi;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayGduyet;
@@ -48,7 +54,8 @@ public class KhCnCongTrinhNghienCuuReq {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayNghiemThu;
     private String diaDiem;
-    private Clob danhGia;
+    @Lob
+    private String danhGia;
     private Integer tongDiem;
     private String xepLoai;
     private String ldoTuChoi;
