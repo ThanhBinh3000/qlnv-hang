@@ -49,16 +49,11 @@ public class QthtKetChuyenServiceImpl extends BaseServiceImpl implements QthtKet
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     UserInfo userInfo = UserUtils.getUserInfo();
     req.setMaDviSr(userInfo.getDvql());
-//    if (userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-//    }
-//    if (userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-//      req.setMaDviSr(userInfo.getDvql().substring(0, 6));
-//    }
     Page<QthtKetChuyenHdr> search = hdrRepository.searchPage(req, pageable);
     search.getContent().forEach( item -> {
       item.setTenNguoiTao(userInfoRepository.findById(item.getNguoiTaoId()).get().getFullName());
     });
-    return null;
+    return search;
   }
 
   @Override
