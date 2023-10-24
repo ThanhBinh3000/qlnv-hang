@@ -95,6 +95,7 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 	String loaiVthh;
 
 	String cloaiVthh;
+	String noiDungQd;
 
 
 	public String getTenTrangThaiHd() {

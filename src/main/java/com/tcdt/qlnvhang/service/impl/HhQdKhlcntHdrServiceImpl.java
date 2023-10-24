@@ -442,6 +442,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 					dxuatKhLcntHdr.get().setTenNguonVon(hashMapNguonVon.get(dxuatKhLcntHdr.get().getNguonVon()));
 					dxuatKhLcntHdr.get().setTenLoaiHdong(hashMapLoaiHdong.get(dxuatKhLcntHdr.get().getLoaiHdong()));
 					dxuatKhLcntHdr.get().setTenDvi(mapDmucDvi.get(dxuatKhLcntHdr.get().getMaDvi()));
+					dxuatKhLcntHdr.get().setTenCloaiVthh(hashMapDmHh.get(dxuatKhLcntHdr.get().getCloaiVthh()));
 					dtl.setDxuatKhLcntHdr(dxuatKhLcntHdr.get());
 				}
 			}
@@ -498,6 +499,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
 		data.setTenTrangThaiDt(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiDt()));
 		data.setTenNguonVon(hashMapNguonVon.get(data.getNguonVon()));
+		data.setLanDieuChinh(hhDchinhDxKhLcntHdrRepository.findMaxLanDieuChinh(data.getId()));
 		Optional<QdPdHsmt> qOptional = qdPdHsmtRepository.findByIdQdPdKhlcntAndMaDvi(data.getId(), getUser().getDvql());
 		qOptional.ifPresent(data::setQdPdHsmt);
 	}

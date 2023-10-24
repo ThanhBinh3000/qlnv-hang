@@ -652,8 +652,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
                     break;
                 case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
                     this.validateData(optional, stReq.getTrangThai());
-//                    optional.setNguoiPduyet(getUser().getUsername());
-                    optional.setNgayPduyet(getDateTimeNow());
+                    optional.setNguoiPduyet(getUser().getUsername());
+//                    optional.setNgayPduyet(getDateTimeNow());
                     break;
                 case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
                     this.validateData(optional, stReq.getTrangThai());
