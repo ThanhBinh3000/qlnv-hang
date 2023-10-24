@@ -76,9 +76,15 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         search.getContent().forEach(data -> {
-            data.setMapVthh(mapDmucVthh);
-            data.setMapDmucDvi(mapDmucDvi);
-            data.setTrangThai(data.getTrangThai());
+            try {
+                data.setMapVthh(mapDmucVthh);
+                data.setMapDmucDvi(mapDmucDvi);
+                data.setTrangThai(data.getTrangThai());
+                List<XhQdPdKhBttDtl> listDtl = xhQdPdKhBttDtlRepository.findAllByIdHdr(data.getId());
+                data.setChildren(listDtl != null && !listDtl.isEmpty() ? listDtl : Collections.emptyList());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
         return search;
     }
