@@ -49,8 +49,8 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
 
     @Query(value = "SELECT COALESCE(SUM(DSG.TONG_SL_XUAT_BAN_DX), 0) " +
             "FROM XH_QD_PD_KH_BDG HDR " +
-            "INNER JOIN XH_QD_PD_KH_BDG_DTL DTL ON HDR.ID = DTL.ID_QD_HDR " +
-            "LEFT JOIN XH_QD_PD_KH_BDG_PL DSG ON DSG.ID_QD_DTL = DTL.ID " +
+            "INNER JOIN XH_QD_PD_KH_BDG_DTL DTL ON HDR.ID = DTL.ID_HDR " +
+            "LEFT JOIN XH_QD_PD_KH_BDG_PL DSG ON DSG.ID_DTL = DTL.ID " +
             "WHERE HDR.NAM = :namKh " +
             "  AND HDR.LOAI_VTHH = :loaiVthh " +
             "  AND DSG.MA_DVI = :maDvi " +

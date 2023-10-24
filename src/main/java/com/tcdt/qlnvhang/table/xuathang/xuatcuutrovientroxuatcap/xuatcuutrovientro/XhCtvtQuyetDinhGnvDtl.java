@@ -34,6 +34,7 @@ public class XhCtvtQuyetDinhGnvDtl implements Serializable {
   private String kieuNhapXuat;
   private String mucDichXuat;
   private String noiDungDx;
+  private String idDonViNhan;
   private String loaiVthh;
   private String cloaiVthh;
   private String maDvi;
@@ -43,6 +44,12 @@ public class XhCtvtQuyetDinhGnvDtl implements Serializable {
   private BigDecimal tonKhoCloaiVthh;
   private String donViTinh;
   private String trangThai;
+  @Column(name = "TY_LE_THU_HOI_SAU_XAY_XAT")
+  private BigDecimal tyLeThuHoiSauXayXat;
+  @Column(name = "SL_THU_HOI_SAU_XAY_XAT")
+  private BigDecimal slGaoThuHoiSauXayXat;
+  @Column(name = "SL_THOC_DE_XAY_XAT")
+  private BigDecimal slThocDeXayXat;
 
   @JsonIgnore
   @Transient

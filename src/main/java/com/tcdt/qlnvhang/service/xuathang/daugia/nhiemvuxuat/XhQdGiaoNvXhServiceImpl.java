@@ -96,6 +96,7 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl {
         data.setNgayTao(LocalDate.now());
         data.setNguoiTaoId(currentUser.getUser().getId());
         data.setIdCanBoPhong(currentUser.getUser().getId());
+        data.setTrangThai(Contains.DU_THAO);
         data.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
         XhQdGiaoNvXh created = xhQdGiaoNvXhRepository.save(data);
         this.saveDetail(req, created.getId());
@@ -201,9 +202,8 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl {
     public void delete(IdSearchReq idSearchReq) throws Exception {
         XhQdGiaoNvXh data = xhQdGiaoNvXhRepository.findById(idSearchReq.getId())
                 .orElseThrow(() -> new Exception("Bản ghi không tồn tại"));
-        if (!data.getTrangThai().equals(Contains.DUTHAO)
-                && !data.getTrangThai().equals(Contains.TU_CHOI_TP)
-                && !data.getTrangThai().equals(Contains.TUCHOI_LDC)) {
+        List<String> allowedStatus = Arrays.asList(Contains.DUTHAO, Contains.TU_CHOI_TP, Contains.TUCHOI_LDC);
+        if (!allowedStatus.contains(data.getTrangThai())) {
             throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
         }
         List<XhQdGiaoNvXhDtl> listDtl = xhQdGiaoNvXhDtlRepository.findAllByIdHdr(data.getId());
@@ -220,12 +220,11 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl {
         if (list.isEmpty()) {
             throw new Exception("Bản ghi không tồn tại");
         }
-        for (XhQdGiaoNvXh hdr : list) {
-            if (!hdr.getTrangThai().equals(Contains.DUTHAO)
-                    && !hdr.getTrangThai().equals(Contains.TU_CHOI_TP)
-                    && !hdr.getTrangThai().equals(Contains.TUCHOI_LDC)) {
-                throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
-            }
+        boolean isValidToDelete = list.stream().allMatch(hdr -> hdr.getTrangThai().equals(Contains.DUTHAO) ||
+                hdr.getTrangThai().equals(Contains.TU_CHOI_TP) ||
+                hdr.getTrangThai().equals(Contains.TUCHOI_LDC));
+        if (!isValidToDelete) {
+            throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
         }
         List<Long> idHdr = list.stream().map(XhQdGiaoNvXh::getId).collect(Collectors.toList());
         List<XhQdGiaoNvXhDtl> listDtl = xhQdGiaoNvXhDtlRepository.findByIdHdrIn(idHdr);

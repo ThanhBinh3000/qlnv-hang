@@ -11,12 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 
-import com.lowagie.text.Font;
-import com.lowagie.text.pdf.BaseFont;
 import com.tcdt.qlnvhang.common.DocxToPdfConverter;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.*;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhDxKhLcntThopDtlRepository;
+import com.tcdt.qlnvhang.repository.HhDxKhLcntThopHdrRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.*;
 import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -24,24 +23,11 @@ import com.tcdt.qlnvhang.request.object.*;
 import com.tcdt.qlnvhang.service.feign.BaoCaoClient;
 import com.tcdt.qlnvhang.table.DmDonViDTO;
 import com.tcdt.qlnvhang.table.HhDxKhLcntThopDtl;
+import com.tcdt.qlnvhang.table.HhDxKhLcntThopHdr;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
-import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.report.HhDxKhlcntDsgthauReport;
-import com.tcdt.qlnvhang.table.report.ListDsGthauDTO;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.*;
-import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
-import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
-import fr.opensagres.xdocreport.converter.ConverterTypeTo;
-import fr.opensagres.xdocreport.converter.ConverterTypeVia;
-import fr.opensagres.xdocreport.converter.Options;
-import fr.opensagres.xdocreport.document.IXDocReport;
-import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
-import fr.opensagres.xdocreport.template.IContext;
-import fr.opensagres.xdocreport.template.TemplateEngineKind;
-import org.apache.velocity.tools.generic.DateTool;
-import org.apache.velocity.tools.generic.NumberTool;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -86,6 +72,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
     @Autowired
     private HhDxKhLcntThopDtlRepository hhDxKhLcntThopDtlRepository;
+    @Autowired
+    private HhDxKhLcntThopHdrRepository hhDxKhLcntThopHdrRepository;
     @Autowired
     DocxToPdfConverter docxToPdfConverter;
     @Autowired
@@ -187,11 +175,22 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             HhDxKhlcntDsgthau gthau = setGoiThau(listData, objReq, idHdr);
             hhDxuatKhLcntDsgtDtlRepository.save(gthau);
             hhDxKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(gthau.getId());
-            AtomicReference<Long> soLuong = new AtomicReference<>(0L);
+            AtomicReference<BigDecimal> soLuong = new AtomicReference<>(BigDecimal.ZERO);
+            AtomicReference<BigDecimal> thanhTienDx = new AtomicReference<>(BigDecimal.ZERO);
+            AtomicReference<BigDecimal> thanhTien = new AtomicReference<>(BigDecimal.ZERO);
             listData.forEach(cuc -> {
                 for (HhDxuatKhLcntDsgthauDtlCtietReq child : cuc.getChildren()) {
-                    soLuong.updateAndGet(v -> v + child.getSoLuong().longValue());
-                    HhDxKhlcntDsgthauCtiet dsgthauCtiet = setDsgthauCtiet(child, gthau.getId());
+                    if (child.getSoLuong() != null) {
+                        soLuong.updateAndGet(v -> v.add(child.getSoLuong()));
+                        if (child.getDonGiaTamTinh() != null) {
+                            thanhTienDx.updateAndGet(v -> v.add(child.getSoLuong().multiply(child.getDonGiaTamTinh())));
+                        }
+                        if (child.getDonGia() != null) {
+                            thanhTien.updateAndGet(v -> v.add(child.getSoLuong().multiply(child.getDonGia())));
+                        }
+                    }
+                    HhDxKhlcntDsgthauCtiet dsgthauCtiet = new ModelMapper().map(child, HhDxKhlcntDsgthauCtiet.class);
+                    dsgthauCtiet.setIdGoiThau(gthau.getId());
                     hhDxKhlcntDsgthauCtietRepository.save(dsgthauCtiet);
                     hhDxKhlcntDsgthauCtietVtRepository.deleteAllByIdGoiThauCtiet(dsgthauCtiet.getId());
                     for (HhDxuatKhLcntDsgthauDtlCtietVtReq vt : child.getChildren()) {
@@ -203,7 +202,9 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
                     }
                 }
             });
-            gthau.setSoLuong(new BigDecimal(soLuong.toString()));
+            gthau.setSoLuong(soLuong.get());
+            gthau.setThanhTien(thanhTien.get());
+            gthau.setThanhTienDx(thanhTienDx.get());
             hhDxuatKhLcntDsgtDtlRepository.save(gthau);
 
         }
@@ -212,24 +213,14 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
     HhDxKhlcntDsgthau setGoiThau (List<HhDxuatKhLcntDsgtDtlReq> listData, HhDxuatKhLcntHdrReq objReq, Long idHdr) {
         HhDxKhlcntDsgthau gthau = new HhDxKhlcntDsgthau();
         gthau.setGoiThau(listData.get(0).getGoiThau());
-        gthau.setDonGiaVat(listData.get(0).getDonGiaVat());
-        gthau.setDonGiaTamTinh(listData.get(0).getDonGiaTamTinh());
+//        gthau.setDonGiaVat(listData.get(0).getDonGiaVat());
+//        gthau.setDonGiaTamTinh(listData.get(0).getDonGiaTamTinh());
         gthau.setMaDvi(objReq.getMaDvi());
         gthau.setLoaiVthh(objReq.getLoaiVthh());
         gthau.setCloaiVthh(objReq.getCloaiVthh());
         gthau.setDviTinh("kg");
         gthau.setIdDxKhlcnt(idHdr);
         return gthau;
-    }
-    HhDxKhlcntDsgthauCtiet setDsgthauCtiet (HhDxuatKhLcntDsgthauDtlCtietReq child, Long goiThauId) {
-        HhDxKhlcntDsgthauCtiet dsgthauCtiet = new HhDxKhlcntDsgthauCtiet();
-        dsgthauCtiet.setMaDvi(child.getMaDvi());
-        dsgthauCtiet.setSoLuong(new BigDecimal(child.getSoLuong()));
-        dsgthauCtiet.setDiaDiemNhap(child.getDiaDiemNhap());
-        dsgthauCtiet.setIdGoiThau(goiThauId);
-        dsgthauCtiet.setSoLuongTheoChiTieu(child.getSoLuongTheoChiTieu());
-        dsgthauCtiet.setSoLuongDaMua(child.getSoLuongDaMua());
-        return dsgthauCtiet;
     }
 
 
@@ -374,8 +365,6 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             }
             List<HhDxKhlcntDsgthauCtiet> listDdNhap = hhDxKhlcntDsgthauCtietRepository.findByIdGoiThau(dsG.getId());
             listDdNhap.forEach(f -> {
-                f.setDonGiaTamTinh(dsG.getDonGiaTamTinh());
-                f.setDonGiaVat(dsG.getDonGiaVat());
                 f.setGoiThau(dsG.getGoiThau());
                 f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
                 f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho()) ? null : mapDmucDvi.get(f.getMaDiemKho()));
@@ -653,18 +642,18 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
                     break;
                 case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
                     optional.setNguoiPduyet(getUser().getUsername());
-                    optional.setNgayPduyet(getDateTimeNow());
+//                    optional.setNgayPduyet(getDateTimeNow());
                     optional.setLdoTuchoi(stReq.getLyDo());
                     break;
                 case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
                     optional.setNguoiPduyet(getUser().getUsername());
-                    optional.setNgayPduyet(getDateTimeNow());
+//                    optional.setNgayPduyet(getDateTimeNow());
                     optional.setLdoTuchoi(stReq.getLyDo());
                     break;
                 case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
                     this.validateData(optional, stReq.getTrangThai());
                     optional.setNguoiPduyet(getUser().getUsername());
-                    optional.setNgayPduyet(getDateTimeNow());
+//                    optional.setNgayPduyet(getDateTimeNow());
                     break;
                 case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
                     this.validateData(optional, stReq.getTrangThai());
@@ -941,7 +930,13 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         page.getContent().forEach(f -> {
             f.setQdGiaoChiTieuId(hhDxuatKhLcntHdrRepository.getIdByKhLcnt(f.getId(), f.getNamKhoach()));
             Optional<HhDxKhLcntThopDtl> thopDtl = hhDxKhLcntThopDtlRepository.findByIdDxHdr(f.getId());
-            thopDtl.ifPresent(hhDxKhLcntThopDtl -> f.setMaTh(hhDxKhLcntThopDtl.getIdThopHdr()));
+            if (thopDtl.isPresent()) {
+                Optional<HhDxKhLcntThopHdr> thopHdr = hhDxKhLcntThopHdrRepository.findById(thopDtl.get().getIdThopHdr());
+                if (thopHdr.isPresent()) {
+                    f.setMaTh(thopHdr.get().getMaTh());
+                    f.setIdTh(thopHdr.get().getId());
+                }
+            }
             f.setSoGoiThau(hhDxuatKhLcntDsgtDtlRepository.countByIdDxKhlcnt(f.getId()));
             f.setTenDvi(StringUtils.isEmpty(f.getMaDvi()) ? null : mapDmucDvi.get(f.getMaDvi()));
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : mapVthh.get(f.getLoaiVthh()));

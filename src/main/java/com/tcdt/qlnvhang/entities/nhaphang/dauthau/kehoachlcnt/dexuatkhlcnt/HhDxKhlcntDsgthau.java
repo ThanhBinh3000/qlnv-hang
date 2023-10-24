@@ -45,6 +45,7 @@ public class HhDxKhlcntDsgthau implements Serializable {
 	private BigDecimal donGiaTamTinh;
 
 	private BigDecimal thanhTien;
+	private BigDecimal thanhTienDx;
 
 	private String loaiVthh;
 
@@ -85,6 +86,7 @@ public class HhDxKhlcntDsgthau implements Serializable {
 	private Integer tgianThienHd;
 
 	String diaDiemNhap;
+	private String trangThaiDt;
 
 	@Transient
 	private List<HhDxKhlcntDsgthauCtiet> children = new ArrayList<>();

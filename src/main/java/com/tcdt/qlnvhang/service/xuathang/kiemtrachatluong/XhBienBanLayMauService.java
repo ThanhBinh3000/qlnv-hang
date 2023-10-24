@@ -35,6 +35,7 @@ import javax.transaction.Transactional;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -61,12 +62,13 @@ public class XhBienBanLayMauService extends BaseServiceImpl {
 
   public Page<XhBienBanLayMauHdr> searchPage(CustomUserDetails currentUser, SearchBienBanLayMauReq req) throws Exception {
     String dvql = currentUser.getDvql();
-    if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+    req.setDvql(dvql);
+  /*  if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
       req.setDvql(dvql.substring(0, 6));
 //      req.setTrangThai(Contains.BAN_HANH);
     } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
       req.setDvql(dvql);
-    }
+    }*/
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<XhBienBanLayMauHdr> search = xhBienBanLayMauRepository.search(req, pageable);
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
@@ -94,6 +96,9 @@ public class XhBienBanLayMauService extends BaseServiceImpl {
     BeanUtils.copyProperties(objReq, data,"maDvi");
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
+    if(data.getNgayTao() == null){
+      data.setNgayTao(LocalDateTime.now());
+    }
     XhBienBanLayMauHdr created = xhBienBanLayMauRepository.save(data);
     return created;
   }
@@ -117,6 +122,9 @@ public class XhBienBanLayMauService extends BaseServiceImpl {
     }
 
     XhBienBanLayMauHdr data = optional.get();
+    if(objReq.getNgayTao() == null){
+      data.setNgayTao(data.getNgayTao());
+    }
     BeanUtils.copyProperties(objReq, data, "id", "maDvi");
     XhBienBanLayMauHdr updated = xhBienBanLayMauRepository.save(data);
     return updated;
@@ -167,9 +175,11 @@ public class XhBienBanLayMauService extends BaseServiceImpl {
         data.setNguoiPduyetId(currentUser.getUser().getId());
         data.setNgayPduyet(LocalDate.now());
         data.setLyDoTuChoi(statusReq.getLyDoTuChoi());
+        data.setLanhDaoChiCuc(currentUser.getUser().getFullName());
       } else if (status.equals(TrangThaiAllEnum.CHO_DUYET_LDCC.getId() + TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
         data.setNguoiPduyetId(currentUser.getUser().getId());
         data.setNgayPduyet(LocalDate.now());
+        data.setLanhDaoChiCuc(currentUser.getUser().getFullName());
       } else {
         throw new Exception("Phê duyệt không thành công");
       }

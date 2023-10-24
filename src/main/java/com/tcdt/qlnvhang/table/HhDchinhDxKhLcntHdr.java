@@ -109,8 +109,6 @@ public class HhDchinhDxKhLcntHdr extends TrangThaiBaseEntity implements Serializ
 	private List<HhDchinhDxKhLcntDtl> listDieuChinh = new ArrayList<>();
 	@Transient
 	private List<HhDchinhDxKhLcntDsgthau> dsGthau = new ArrayList<>();
-	@Transient
-	private List<FileDKemJoinHhDchinhDxKhLcntHdr> fileDinhKem = new ArrayList<>();
 
 	@Transient
 	private List<HhDchinhDxKhLcntDtl> children = new ArrayList<>();

@@ -95,6 +95,12 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	Date tgianDthau;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
 	Date tgianMoHoSo;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
+	Date tgianDthauTime;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
+	Date tgianMthauTime;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
+	Date tgianMoHoSoTime;
 	Integer tgianThien;
 	Integer tgianThienHd;
 	@Temporal(TemporalType.DATE)
@@ -157,7 +163,9 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	private List<HhDxuatKhLcntCcxdgDtl> ccXdgDtlList = new ArrayList<>();
 
 	@Transient
-	private Long maTh;
+	private String maTh;
+	@Transient
+	private Long idTh;
 	@Transient
 	private BigDecimal qdGiaoChiTieuId;
 	String ykienThamGia;

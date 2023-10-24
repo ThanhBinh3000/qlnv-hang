@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.thanhly;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.XhTlHopDongHdrRepository;
@@ -32,10 +33,8 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
@@ -51,7 +50,10 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
     private XhTlHopDongHdrRepository xhTlHopDongHdrRepository;
 
     @Autowired
-    private XhTlHoSoHdrRepository xhTlHoSoHdrRepository;
+    private XhTlToChucService xhTlToChucService;
+
+    @Autowired
+    private XhTlQuyetDinhService xhTlQuyetDinhService;
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
@@ -59,29 +61,36 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
     public Page<XhTlQuyetDinhPdKqHdr> searchPage(CustomUserDetails currentUser, XhTlQuyetDinhPdKqHdrReq req) throws Exception {
         String dvql = currentUser.getDvql();
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            req.setDvql(dvql.substring(0, 6));
+            req.setMaDviSr(dvql.substring(0, 6));
             req.setTrangThai(Contains.BAN_HANH);
         } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
-            req.setDvql(dvql);
+            req.setMaDviSr(dvql);
         }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhTlQuyetDinhPdKqHdr> search = xhTlQuyetDinhPdKqHdrRepository.search(req, pageable);
-        Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
-        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
         Map<String, String> mapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
-        Map<String, String> mapHinhThuDg = getListDanhMucChung("HINH_THUC_DG");
-        Map<String, String> mapPhuongThucDg = getListDanhMucChung("PHUONG_THUC_DG");
+        Map<String, String> mapDmucDvi = getListDanhMucDvi("2", null, "01");
+
         search.getContent().forEach(s -> {
-            s.setMapVthh(mapDmucVthh);
-            s.setMapDmucDvi(mapDmucDvi);
+            s.setTenDvi(mapDmucDvi.getOrDefault(s.getMaDvi(),null));
             s.setTrangThai(s.getTrangThai());
             s.setTenTrangThaiHd(s.getTrangThaiHd());
             s.setTenTrangThaiXh(s.getTrangThaiXh());
             s.setTenLoaiHinhNx(StringUtils.isEmpty(s.getLoaiHinhNhapXuat()) ? null : mapLoaiHinhNx.get(s.getLoaiHinhNhapXuat()));
             s.setTenKieuNx(StringUtils.isEmpty(s.getKieuNhapXuat()) ? null : mapKieuNx.get(s.getKieuNhapXuat()));
-            s.setTenHthucDgia(StringUtils.isEmpty(s.getHthucDgia()) ? null : mapHinhThuDg.get(s.getHthucDgia()));
-            s.setTenPthucDgia(StringUtils.isEmpty(s.getPthucDgia()) ? null : mapPhuongThucDg.get(s.getPthucDgia()));
+            try {
+                s.setXhTlToChucHdr(xhTlToChucService.detail(s.getIdThongBao()));
+                if(s.getXhTlToChucHdr() != null){
+                    s.setXhTlQuyetDinhHdr(xhTlQuyetDinhService.detail(s.getXhTlToChucHdr().getIdQdTl()));
+                }
+                s.setListHopDong(xhTlHopDongHdrRepository.findAllByIdQdKqTl(s.getId()));
+                if(s.getListHopDong() != null){
+                    s.setSlHdDaKy((int) s.getListHopDong().stream().filter(x -> Objects.equals(x.getTrangThai(), TrangThaiAllEnum.DA_KY.getId())).count());
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
         return search;
     }
@@ -89,9 +98,9 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
     public List<XhTlQuyetDinhPdKqHdr> searchAll(XhTlQuyetDinhPdKqHdrReq req) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            req.setDvql(userInfo.getDvql().substring(0, 6));
+            req.setMaDviSr(userInfo.getDvql().substring(0, 6));
         } else if (userInfo.getCapDvi().equals(Contains.CAP_CUC)) {
-            req.setDvql(userInfo.getDvql());
+            req.setMaDviSr(userInfo.getDvql());
         }
         return xhTlQuyetDinhPdKqHdrRepository.searchAll(req);
     }
@@ -116,7 +125,7 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
         }
         XhTlQuyetDinhPdKqHdr data = new XhTlQuyetDinhPdKqHdr();
         BeanUtils.copyProperties(objReq, data);
-        data.setMaDvi(currentUser.getUser().getDepartment());
+        data.setMaDvi(currentUser.getUser().getDvql());
         data.setTrangThai(Contains.DUTHAO);
         data.setTrangThaiHd(Contains.CHUA_THUC_HIEN);
         data.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
@@ -147,39 +156,39 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
     }
 
 
-    public List<XhTlQuyetDinhPdKqHdr> detail(List<Long> ids) throws Exception {
-        if (DataUtils.isNullOrEmpty(ids)) throw new Exception("Tham số không hợp lệ.");
-        List<XhTlQuyetDinhPdKqHdr> optional = xhTlQuyetDinhPdKqHdrRepository.findByIdIn(ids);
-        if (DataUtils.isNullOrEmpty(optional)) {
+    public XhTlQuyetDinhPdKqHdr detail(Long id) throws Exception {
+        if (Objects.isNull(id)){
+            throw new Exception("Tham số không hợp lệ.");
+        }
+        Optional<XhTlQuyetDinhPdKqHdr> optional = xhTlQuyetDinhPdKqHdrRepository.findById(id);
+        if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
         Map<String, String> mapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
-        List<XhTlQuyetDinhPdKqHdr> allById = xhTlQuyetDinhPdKqHdrRepository.findAllById(ids);
-        allById.forEach(data -> {
-            data.setTrangThai(data.getTrangThai());
-            data.setTrangThaiHd(data.getTrangThaiHd());
-            data.setTrangThaiXh(data.getTrangThaiXh());
-            data.setMapDmucDvi(mapDmucDvi);
-            data.setMapVthh(mapVthh);
-            data.setTenLoaiHinhNx(StringUtils.isEmpty(data.getLoaiHinhNhapXuat()) ? null : mapLoaiHinhNx.get(data.getLoaiHinhNhapXuat()));
-            data.setTenKieuNx(StringUtils.isEmpty(data.getKieuNhapXuat()) ? null : mapKieuNx.get(data.getKieuNhapXuat()));
-            data.getQuyetDinhDtl().forEach(d1 -> {
-                d1.setMapDmucDvi(mapDmucDvi);
-                d1.setMapVthh(mapVthh);
-            });
-            List<XhTlHopDongHdr> hopDongTlHdr = xhTlHopDongHdrRepository.findAllByIdQdKqTl(data.getId());
-            hopDongTlHdr.forEach(f -> {
-                f.setMapVthh(mapVthh);
-                f.setMapDmucDvi(mapDmucDvi);
-                f.setTrangThai(f.getTrangThai());
-                f.setTrangThaiXh(f.getTrangThaiXh());
-            });
-            data.setListHopDong(hopDongTlHdr);
+
+        XhTlQuyetDinhPdKqHdr data = optional.get();
+        data.setTrangThai(data.getTrangThai());
+        data.setTrangThaiHd(data.getTrangThaiHd());
+        data.setTrangThaiXh(data.getTrangThaiXh());
+        data.setMapDmucDvi(mapDmucDvi);
+        data.setTenLoaiHinhNx(StringUtils.isEmpty(data.getLoaiHinhNhapXuat()) ? null : mapLoaiHinhNx.get(data.getLoaiHinhNhapXuat()));
+        data.setTenKieuNx(StringUtils.isEmpty(data.getKieuNhapXuat()) ? null : mapKieuNx.get(data.getKieuNhapXuat()));
+        List<XhTlHopDongHdr> hopDongTlHdr = xhTlHopDongHdrRepository.findAllByIdQdKqTl(data.getId());
+        hopDongTlHdr.forEach(f -> {
+            f.setMapVthh(mapVthh);
+            f.setMapDmucDvi(mapDmucDvi);
+            f.setTrangThai(f.getTrangThai());
+            f.setTrangThaiXh(f.getTrangThaiXh());
         });
-        return allById;
+        data.setXhTlToChucHdr(xhTlToChucService.detail(data.getIdThongBao()));
+        if(data.getXhTlToChucHdr() != null){
+            data.setXhTlQuyetDinhHdr(xhTlQuyetDinhService.detail(data.getXhTlToChucHdr().getIdQdTl()));
+        }
+        data.setListHopDong(hopDongTlHdr);
+        return data;
     }
 
     @Transactional
@@ -224,7 +233,7 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
                 case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
                 case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
                 case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
-                    data.setNguoiGduyetId(currentUser.getUser().getId());
+                     data.setNguoiGduyetId(currentUser.getUser().getId());
                     data.setNgayGduyet(LocalDate.now());
                     break;
                 case Contains.TUCHOI_TP + Contains.CHODUYET_TP:

@@ -91,7 +91,7 @@ public class XhTlHopDongService extends BaseServiceImpl {
         }
         XhTlHopDongHdr data = new XhTlHopDongHdr();
         BeanUtils.copyProperties(req, data);
-        data.setMaDvi(currentUser.getUser().getDepartment());
+        data.setMaDvi(currentUser.getUser().getDvql());
         data.setTrangThai(Contains.DU_THAO);
         data.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
         XhTlHopDongHdr created = xhTlHopDongHdrRepository.save(data);

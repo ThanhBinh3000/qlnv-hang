@@ -18,12 +18,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class XhTlToChucService extends BaseServiceImpl {
@@ -46,9 +49,6 @@ public class XhTlToChucService extends BaseServiceImpl {
     @Autowired
     private XhTlDanhSachService xhTlDanhSachService;
 
-//    @Autowired
-//    private XhTlToChucNlqRepository xhTlQuyetDinhHdrRepository;
-
     public Page<XhTlToChucHdr> searchPage(CustomUserDetails currentUser, SearchXhTlToChuc req) throws Exception {
         String dvql = currentUser.getDvql();
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
@@ -59,7 +59,6 @@ public class XhTlToChucService extends BaseServiceImpl {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhTlToChucHdr> search = hdrRepository.search(req, pageable);
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-        Map<String, String> mapVthh = getListDanhMucHangHoa();
         search.getContent().forEach(f -> {
             f.setMapDmucDvi(mapDmucDvi);
             f.setTrangThai(f.getTrangThai());
@@ -69,6 +68,12 @@ public class XhTlToChucService extends BaseServiceImpl {
 
     public List<XhTlToChucHdr> searchAll( SearchXhTlToChuc req) throws Exception {
         List<XhTlToChucHdr> search = hdrRepository.searchAll(req);
+        search.forEach( item -> {
+            List<XhTlToChucDtl> allByIdHdr = dtlRepository.findAllByIdHdr(item.getId());
+            List<XhTlToChucDtl> collect = allByIdHdr.stream().filter(x -> x.getMaDviTsan() != null).collect(Collectors.toList());
+            item.setSoDviTs(collect.size());
+            item.setTongDviTs(allByIdHdr.size());
+        });
         return search;
     }
 
@@ -117,6 +122,19 @@ public class XhTlToChucService extends BaseServiceImpl {
                 ds.setSoLanTraGia(dtl.getSoLanTraGia());
                 ds.setDonGiaCaoNhat(dtl.getDonGiaCaoNhat());
                 ds.setToChucCaNhan(dtl.getToChucCaNhan());
+                // Nêu dấu giá thành công
+                if(req.getKetQua() == 1){
+                    // Và có tổ chức cá nhân thì ms set kết quả
+                    if(!StringUtils.isEmpty(ds.getToChucCaNhan())){
+                        ds.setKetQuaDauGia(req.getKetQua());
+                    }
+                }else{
+                    // Nếu dấu giá không thành công thì có mã đơn vị tài sản thì ms set kết quả
+                    if(!StringUtils.isEmpty(ds.getMaDviTsan())){
+                        ds.setKetQuaDauGia(req.getKetQua());
+                    }
+                }
+
                 xhTlDanhSachRepository.save(ds);
 
             }else{
@@ -162,35 +180,33 @@ public class XhTlToChucService extends BaseServiceImpl {
         return updated;
     }
 
-    public List<XhTlToChucHdr> detail(List<Long> ids) throws Exception {
-        if (DataUtils.isNullOrEmpty(ids)) throw new Exception("Tham số không hợp lệ.");
-        List<XhTlToChucHdr> listById = hdrRepository.findByIdIn(ids);
-        if (DataUtils.isNullOrEmpty(listById)) throw new Exception("Không tìm thấy dữ liệu.");
-        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-        Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
-        List<XhTlToChucHdr> allById = hdrRepository.findAllById(ids);
-        allById.forEach(data -> {
-//            data.getToChucDtl().forEach(f -> {
-//                f.setMapDmucDvi(mapDmucDvi);
-//                f.setMapVthh(mapDmucVthh);
-//            });
-            data.setMapDmucDvi(mapDmucDvi);
-            data.setTrangThai(data.getTrangThai());
-            data.setChildrenNlq(nlqRepository.findAllByIdHdr(data.getId()));
-
-            List<XhTlToChucDtl> allByIdHdr = dtlRepository.findAllByIdHdr(data.getId());
-            allByIdHdr.forEach(item -> {
-                try {
-                    item.setXhTlDanhSachHdr(xhTlDanhSachService.detail(item.getIdDsHdr()));
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            });
-
-            data.setChildren(dtlRepository.findAllByIdHdr(data.getId()));
+    public XhTlToChucHdr detail(Long id) throws Exception {
+        if (Objects.isNull(id)){
+            throw new Exception("Tham số không hợp lệ.");
+        }
+        Optional<XhTlToChucHdr> optById = hdrRepository.findById(id);
+        if(!optById.isPresent()){
+            throw new Exception("Không tìm thấy dữ liệu.");
+        }
+        Map<String, String> mapDmucDvi = getListDanhMucDvi("02", null, "01");
+        Map<String, String> mapHinhThuDg = getListDanhMucChung("HINH_THUC_DG");
+        Map<String, String> mapPhuongThucDg = getListDanhMucChung("PHUONG_THUC_DG");
+        XhTlToChucHdr data = optById.get();
+        data.setMapDmucDvi(mapDmucDvi);
+        data.setTrangThai(data.getTrangThai());
+        data.setTenHthucDgia(mapHinhThuDg.getOrDefault(data.getHthucDgia(),null));
+        data.setTenPthucDgia(mapPhuongThucDg.getOrDefault(data.getPthucDgia(),null));
+        data.setChildrenNlq(nlqRepository.findAllByIdHdr(data.getId()));
+        List<XhTlToChucDtl> allByIdHdr = dtlRepository.findAllByIdHdr(data.getId());
+        allByIdHdr.forEach(item -> {
+            try {
+                item.setXhTlDanhSachHdr(xhTlDanhSachService.detail(item.getIdDsHdr()));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
-
-        return allById;
+        data.setChildren(dtlRepository.findAllByIdHdr(data.getId()));
+        return data;
     }
 
     @Transactional
@@ -198,7 +214,22 @@ public class XhTlToChucService extends BaseServiceImpl {
         Optional<XhTlToChucHdr> optional = hdrRepository.findById(idSearchReq.getId());
         if (!optional.isPresent()) throw new Exception("Bản ghi không tồn tại");
         hdrRepository.delete(optional.get());
-        dtlRepository.deleteAllByIdHdr(optional.get().getId());
         nlqRepository.deleteAllByIdHdr(optional.get().getId());
+        List<XhTlToChucDtl> allByIdHdr = dtlRepository.findAllByIdHdr(idSearchReq.getId());
+        allByIdHdr.forEach( dtl -> {
+            Optional<XhTlDanhSachHdr> byId = xhTlDanhSachRepository.findById(dtl.getIdDsHdr());
+            if(byId.isPresent()) {
+                // Update lại các trường vào DS gốc
+                XhTlDanhSachHdr ds = byId.get();
+                ds.setMaDviTsan(null);
+                ds.setSoLanTraGia(null);
+                ds.setDonGiaCaoNhat(null);
+                ds.setToChucCaNhan(null);
+                ds.setKetQuaDauGia(null);
+                xhTlDanhSachRepository.save(ds);
+            }
+        });
+        dtlRepository.deleteAllByIdHdr(optional.get().getId());
     }
+
 }

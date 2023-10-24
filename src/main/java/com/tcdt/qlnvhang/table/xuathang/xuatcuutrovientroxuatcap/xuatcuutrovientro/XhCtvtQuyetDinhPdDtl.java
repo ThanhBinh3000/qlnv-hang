@@ -35,6 +35,7 @@ public class XhCtvtQuyetDinhPdDtl implements Serializable {
   private String kieuNhapXuat;
   private String mucDichXuat;
   private String noiDungDx;
+  private String idDonViNhan;
   private String loaiVthh;
   private String cloaiVthh;
   private String maDvi;
@@ -47,7 +48,7 @@ public class XhCtvtQuyetDinhPdDtl implements Serializable {
   private String donViTinh;
   private Long idQdGnv;
   private String soQdGnv;
-
+  private LocalDate ngayKetThuc;
   @JsonIgnore
   @Transient
   private Map<String, String> mapVthh;

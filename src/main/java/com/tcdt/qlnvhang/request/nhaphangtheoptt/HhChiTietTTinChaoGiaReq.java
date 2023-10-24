@@ -29,6 +29,7 @@ public class HhChiTietTTinChaoGiaReq {
     private BigDecimal soLuong;
 
     private BigDecimal donGia;
+    private BigDecimal donGiaVat;
 
     private BigDecimal thueGtgt;
 

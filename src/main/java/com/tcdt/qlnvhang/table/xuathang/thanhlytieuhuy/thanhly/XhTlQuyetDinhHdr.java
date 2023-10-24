@@ -68,5 +68,16 @@ public class XhTlQuyetDinhHdr extends BaseEntity implements Serializable {
     @Transient
     private XhTlHoSoHdr xhTlHoSoHdr;
 
+    @Transient
+    private int tongDviTsan;
+
+    @Transient
+    private int tongDviTsanThanhCong;
+
+    @Transient
+    private int tongDviTsanKhongThanhCong;
+
+    @Transient
+    private BigDecimal tongGiaKhoiDiem;
 
 }

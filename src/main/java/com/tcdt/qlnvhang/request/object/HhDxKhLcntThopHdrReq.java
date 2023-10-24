@@ -16,6 +16,7 @@ import java.util.List;
 public class HhDxKhLcntThopHdrReq extends HhDxKhLcntTChiThopReq {
 	@ApiModelProperty(notes = "Bắt buộc set đối với update")
 	private Long id;
+	String maTh;
 
 	@NotNull(message = "Không được để trống")
 	@Size(max = 250, message = "Về việc không được vượt quá 20 ký tự")

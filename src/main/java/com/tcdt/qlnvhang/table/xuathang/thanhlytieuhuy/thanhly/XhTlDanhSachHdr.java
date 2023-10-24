@@ -55,6 +55,7 @@ public class XhTlDanhSachHdr extends BaseEntity implements Serializable {
 
   private String toChucCaNhan;
 
+  private Integer ketQuaDauGia; // 0 : Trượt 1 Trúng
 
   @JsonIgnore
   @Transient

@@ -39,7 +39,16 @@ public class XhThDanhSachHdr extends BaseEntity implements Serializable {
   private String lyDo;
   private String trangThai;
   private String type;
-
+  // Thông tin đấu giá
+  private String ketQua;
+  private BigDecimal donGiaDk;
+  private BigDecimal donGiaPd;
+  // Báo cáo kết quả
+  private BigDecimal slThucTe;
+  private BigDecimal donGiaThucTe;
+  private String dviToChuc;
+  private String lyDoTieuHuy;
+  private String ketQuaTieuHuy;
 
   @JsonIgnore
   @Transient

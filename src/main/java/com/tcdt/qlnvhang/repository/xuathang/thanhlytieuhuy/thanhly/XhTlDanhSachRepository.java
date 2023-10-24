@@ -29,7 +29,7 @@ public interface XhTlDanhSachRepository extends JpaRepository<XhTlDanhSachHdr, L
           " LEFT JOIN XhTlTongHopDtl th on c.id = th.idDsHdr WHERE 1=1 " +
           " AND th.id is null " +
           " AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
-          "AND ((:#{#param.thoiGianTlTu}  IS NULL OR c.ngayDeXuat >= :#{#param.thoiGianTlTu}) AND (:#{#param.thoiGianTlDen}  IS NULL OR c.ngayDeXuat <= :#{#param.thoiGianTlDen}) ) " +
+          " AND ((:#{#param.thoiGianTlTu}  IS NULL OR c.ngayDeXuat >= :#{#param.thoiGianTlTu}) AND (:#{#param.thoiGianTlDen}  IS NULL OR c.ngayDeXuat <= :#{#param.thoiGianTlDen}) ) " +
           "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
   List<XhTlDanhSachHdr> listTongHop(@Param("param") XhTlDanhSachRequest param);

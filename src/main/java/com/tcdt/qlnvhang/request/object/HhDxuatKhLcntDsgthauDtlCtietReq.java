@@ -12,7 +12,7 @@ public class HhDxuatKhLcntDsgthauDtlCtietReq {
 //	@NotNull(message = "Không được để trống")
 	Long id;
 
-	Integer soLuong;
+	BigDecimal soLuong;
 	
 //	@NotNull(message = "Không được để trống")
 	@Size(max = 250, message = "Tên đơn vị không được vượt quá 250 ký tự")

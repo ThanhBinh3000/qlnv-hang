@@ -35,10 +35,18 @@ public class QdPdHsmt implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date ngayHluc;
     private Long idQdPdKhlcnt;
+    private Long idQdPdKhlcntDtl;
     private String trichYeu;
     private String noiDungQd;
     private String ghiChu;
     private String loaiVthh;
+    private String maDvi;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
+    Date tgianDthauTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
+    Date tgianMthauTime;
+    @Temporal(TemporalType.DATE)
+    Date tgianBdauTchuc;
     @Temporal(TemporalType.DATE)
     private Date tgianMthau;
     @Temporal(TemporalType.DATE)

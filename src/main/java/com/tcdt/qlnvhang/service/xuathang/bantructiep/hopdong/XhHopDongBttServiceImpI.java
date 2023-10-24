@@ -16,20 +16,22 @@ import com.tcdt.qlnvhang.request.xuathang.bantructiep.hopdong.XhHopDongBttDviReq
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.hopdong.XhHopDongBttHdrReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -75,8 +77,8 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
         }
         String capDvi = currentUser.getUser().getCapDvi();
         boolean isCapCuc = Contains.CAP_CUC.equals(capDvi);
-        if (!StringUtils.isEmpty(req.getSoHd()) && DataUtils.isNullObject(req.getIdHd()) && xhHopDongBttHdrRepository.existsBySoHd(req.getSoHd())) {
-            throw new Exception("Số hợp đồng " + req.getSoHd() + " đã tồn tại");
+        if (!StringUtils.isEmpty(req.getSoHopDong()) && DataUtils.isNullObject(req.getIdHd()) && xhHopDongBttHdrRepository.existsBySoHopDong(req.getSoHopDong())) {
+            throw new Exception("Số hợp đồng " + req.getSoHopDong() + " đã tồn tại");
         }
         if (!StringUtils.isEmpty(req.getSoPhuLuc()) && !DataUtils.isNullObject(req.getIdHd()) && xhHopDongBttHdrRepository.existsBySoPhuLuc(req.getSoPhuLuc())) {
             throw new Exception("Số phụ lục " + req.getSoPhuLuc() + " đã tồn tại");
@@ -212,8 +214,8 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
         XhHopDongBttHdr data = xhHopDongBttHdrRepository.findById(req.getId())
                 .orElseThrow(() -> new Exception("Không tìm thấy dữ liệu cần sửa"));
 
-        if (DataUtils.isNullObject(req.getIdHd()) && !StringUtils.isEmpty(req.getSoHd())) {
-            boolean soHdExists = xhHopDongBttHdrRepository.existsBySoHdAndIdNot(req.getSoHd(), req.getId());
+        if (DataUtils.isNullObject(req.getIdHd()) && !StringUtils.isEmpty(req.getSoHopDong())) {
+            boolean soHdExists = xhHopDongBttHdrRepository.existsBySoHopDongAndIdNot(req.getSoHopDong(), req.getId());
             if (soHdExists) {
                 throw new Exception("Số hợp đồng đã tồn tại");
             }
@@ -322,6 +324,14 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
         data.setXhHopDongBttDviList(listDvi);
     }
 
+    public XhHopDongBttHdr detail(Long id) throws Exception {
+        if (id == null) {
+            throw new Exception("Tham số không hợp lệ.");
+        }
+        List<XhHopDongBttHdr> details = detail(Collections.singletonList(id));
+        return details.isEmpty() ? null : details.get(0);
+    }
+
     @Transactional
     public void delete(IdSearchReq idSearchReq) throws Exception {
         XhHopDongBttHdr data = xhHopDongBttHdrRepository.findById(idSearchReq.getId())
@@ -403,5 +413,29 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
                 xhQdPdKhBttDtlRepository.save(relatedEntity);
             });
         }
+    }
+
+    public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {
+        if (currentUser == null) {
+            throw new Exception("Bad request.");
+        }
+        String capDvi = currentUser.getUser().getCapDvi();
+        boolean isCapCuc = Contains.CAP_CUC.equals(capDvi);
+        try {
+            String templatePath = baseReportFolder + "/bantructiep/";
+            if (isCapCuc) {
+                templatePath += "Hợp đồng bán trực tiếp cấp Cục.docx";
+            } else {
+                templatePath += "Hợp đồng bán trực tiếp cấp Chi cục.docx";
+            }
+            XhHopDongBttHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
+            FileInputStream inputStream = new FileInputStream(templatePath);
+            return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

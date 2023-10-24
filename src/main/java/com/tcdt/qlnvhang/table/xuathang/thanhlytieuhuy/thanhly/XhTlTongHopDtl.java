@@ -15,7 +15,7 @@ import java.util.Map;
 @Entity
 @Table(name = XhTlTongHopDtl.TABLE_NAME)
 @Data
-public class XhTlTongHopDtl extends BaseEntity implements Serializable {
+public class XhTlTongHopDtl implements Serializable {
   private static final long serialVersionUID = 1L;
   public static final String TABLE_NAME = "XH_TL_TONG_HOP_DTL";
 

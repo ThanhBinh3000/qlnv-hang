@@ -53,4 +53,8 @@ public class XhTlDanhSachRequest extends BaseRequest {
   private Long idDsHdr;
 
   private Long idQdNh;
+
+  private LocalDate thoiGianThTu;
+  private LocalDate thoiGianThDen;
+  private String maDviSr;
 }

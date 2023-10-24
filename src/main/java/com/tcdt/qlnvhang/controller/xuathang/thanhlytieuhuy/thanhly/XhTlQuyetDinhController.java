@@ -194,19 +194,4 @@ public class XhTlQuyetDinhController {
         }
     }
 
-    @ApiOperation(value = "Trình duyệt", response = List.class)
-    @PostMapping(value = "/dtl-chi-tiet" + PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BaseResponse> updateStatusDtl(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody StatusReq stReq) {
-        BaseResponse resp = new BaseResponse();
-        try {
-            xhTlQuyetDinhService.approveDtl(currentUser, stReq);
-            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (Exception e) {
-            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-            resp.setMsg(e.getMessage());
-            log.error("Phê duyệt thông tin : {}", e);
-        }
-        return ResponseEntity.ok(resp);
-    }
 }

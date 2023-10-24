@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoDtl;
 import lombok.Data;
 
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,46 +15,27 @@ import java.util.List;
 public class XhThHoSoRequest extends BaseRequest {
   private Long id;
   private Integer nam;
-  private String maDvi;
   private String soHoSo;
+  private LocalDate ngayTaoHs;
   private Long idDanhSach;
   private String maDanhSach;
-  private Long idQd;
-  private String soQd;
-  private Long idTb;
-  private String soTb;
-  private LocalDate ngayTaoHs;
-  private LocalDate thoiGianTlTu;
-  private LocalDate thoiGianTlDen;
+  private LocalDate thoiGianThTu;
+  private LocalDate thoiGianThDen;
+  private LocalDate thoiGianPdTu;
+  private LocalDate thoiGianPdDen;
   private String trangThai;
   private String trangThaiTc;
-  private LocalDate ngayDuyetLan1;
-  private LocalDate ngayDuyetLan2;
-  private LocalDate ngayDuyetLan3;
-  private String trichYeu;
-  private String dvql;
-  private List<FileDinhKemReq> fileDinhKem;
-  private List<FileDinhKemReq> canCu = new ArrayList<>();
-  private List<XhThHoSoDtl> hoSoDtl = new ArrayList<>();
 
-  private Long idTongHop;
-  private Long idDsHdr;
-  private String maTongHop;
-  private String maDiaDiem;
-  private String loaiVthh;
-  private String cloaiVthh;
-  private String donViTinh;
-  private BigDecimal slHienTai;
-  private BigDecimal slDeXuat;
-  private BigDecimal slDaDuyet;
-  private BigDecimal thanhTien;
-  private LocalDate ngayNhapKho;
-  private LocalDate ngayDeXuat;
-  private LocalDate ngayTongHop;
-  private String lyDo;
-  private String type;
-  BigDecimal soLuong;
-  BigDecimal donGia;
-  String ketQuaDanhGia;
+  private String trichYeu;
+  private List<FileDinhKemReq> fileDinhKemReq = new ArrayList<>();
+  private List<FileDinhKemReq> fileCanCuReq = new ArrayList<>();
+
+  private List<XhThHoSoDtl> children = new ArrayList<>();
+
+  private String ketQua;
+
+  private String maDviSr;
+
+  private String soQdSr;
 
 }

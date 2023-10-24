@@ -10,8 +10,8 @@ import java.util.List;
 public class XhHopDongBttDtlReq {
     private Long id;
     private Long idHdr;
-    private BigDecimal soLuongChiCuc;
-    private BigDecimal soLuongBanTrucTiepHd;
+    private BigDecimal soLuongXuatBan;
+    private BigDecimal soLuongKyHopDong;
     private String maDvi;
     private String diaChi;
 

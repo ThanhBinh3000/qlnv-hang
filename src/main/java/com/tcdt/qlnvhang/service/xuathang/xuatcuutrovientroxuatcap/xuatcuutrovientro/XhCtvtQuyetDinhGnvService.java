@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovi
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQdPdDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQdPdHdrRepository;
@@ -52,6 +53,8 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
   private XhCtvtQdPdDtlRepository xhCtvtQdPdDtlRepository;
   @Autowired
   private UserInfoRepository userInfoRepository;
+  @Autowired
+  private QlnvDmDonviRepository qlnvDmDonviRepository;
 
 
   public Page<XhCtvtQuyetDinhGnvHdr> searchPage(CustomUserDetails currentUser, SearchXhCtvtQuyetDinhGnv objReq) throws Exception {
@@ -157,6 +160,8 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     List<XhCtvtQuyetDinhGnvHdr> allById = xhCtvtQuyetDinhGnvHdrRepository.findAllById(ids);
     allById.forEach(data -> {
+      String tenDvi = mapDmucDvi.containsKey(data.getMaDvi()) ? mapDmucDvi.get(data.getMaDvi()) : null;
+      data.setTenDvi(tenDvi);
       data.getDataDtl().forEach(s -> {
         s.setMapDmucDvi(mapDmucDvi);
         s.setMapVthh(mapVthh);
@@ -286,6 +291,7 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
   private XhCtvtQuyetDinhGnvHdrPreview setDataToPreview(Optional<XhCtvtQuyetDinhGnvHdr> xhCtvtQuyetDinhGnvHdr,
                                                         Boolean checkTypeVT, Optional<UserInfo> userInfo) {
     return XhCtvtQuyetDinhGnvHdrPreview.builder()
+            .tenDonvi(qlnvDmDonviRepository.findByMaDvi(xhCtvtQuyetDinhGnvHdr.get().getMaDvi()).getTenDvi())
             .soBbQd(xhCtvtQuyetDinhGnvHdr.get().getSoBbQd())
             .ngayKy(xhCtvtQuyetDinhGnvHdr.get().getNgayKy().getDayOfMonth())
             .thangKy(xhCtvtQuyetDinhGnvHdr.get().getNgayKy().getMonth().getValue())
@@ -316,5 +322,29 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
       xhCtvtQuyetDinhGnvDtlDtos.add(xhCtvtQuyetDinhGnvDtlDto);
     }
     return xhCtvtQuyetDinhGnvDtlDtos;
+  }
+
+  public List<XhCtvtQuyetDinhGnvHdr> searchList(CustomUserDetails currentUser, SearchXhCtvtQuyetDinhGnv objReq) {
+    if (!currentUser.getUser().getCapDvi().equals(CAP_CHI_CUC)) {
+      objReq.setDvql(currentUser.getDvql());
+    } else {
+      objReq.setMaDviGiao(currentUser.getDvql());
+    }
+    if(objReq.getType() != null){
+      objReq.getTypes().add(objReq.getType());
+    }
+
+    List<XhCtvtQuyetDinhGnvHdr> data = xhCtvtQuyetDinhGnvHdrRepository.searchList(objReq);
+    if (currentUser.getUser().getCapDvi().equals(CAP_CHI_CUC)) {
+      data.stream().forEach(s->{
+        List<XhCtvtQuyetDinhGnvDtl> quyetDinhGnvDtls = s.getDataDtl().stream().filter(s1 -> s1.getMaDvi().contains(currentUser.getDvql())).collect(Collectors.toList());
+        if(!quyetDinhGnvDtls.isEmpty()){
+          s.setTrangThaiXh(quyetDinhGnvDtls.get(0).getTrangThai());
+          s.setTenTrangThaiXh(TrangThaiAllEnum.getLabelById(quyetDinhGnvDtls.get(0).getTenTrangThai()));
+        }
+      });
+    }
+
+    return data;
   }
 }
