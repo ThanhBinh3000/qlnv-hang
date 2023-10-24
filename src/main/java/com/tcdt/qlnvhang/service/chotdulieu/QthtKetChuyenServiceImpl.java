@@ -59,6 +59,7 @@ public class QthtKetChuyenServiceImpl extends BaseServiceImpl implements QthtKet
       allByIdHdr.forEach( dtl -> {
         dtl.setMapDmucDvi(mapDmucDvi);
         dtl.setMapVthh(mapVthh);
+        dtl.setNam(item.getNam());
       });
       item.setChildren(allByIdHdr);
       item.setTenNguoiTao(userInfoRepository.findById(item.getNguoiTaoId()).get().getFullName());

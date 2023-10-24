@@ -57,6 +57,8 @@ public class QthtKetChuyenDtl implements Serializable {
     private String tenLoaiVthh;
     @Transient
     private String tenCloaiVthh;
+    @Transient
+    private Integer nam;
 
     @JsonIgnore
     @Transient
