@@ -22,12 +22,14 @@ import com.tcdt.qlnvhang.table.khoahoccongnghebaoquan.KhCnTienDoThucHien;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuXuatKho;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktluongthuc.XhXkLtPhieuKnClHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtBckqKiemDinhMau;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import fr.opensagres.xdocreport.core.XDocReportException;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -84,7 +86,8 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
             throw new Exception("Mã đề tài đã tồn tại");
         }
         Map<String, String> hashMapDmdv = getListDanhMucDvi(null, null, "01");
-        KhCnCongTrinhNghienCuu data = new ModelMapper().map(objReq, KhCnCongTrinhNghienCuu.class);
+        KhCnCongTrinhNghienCuu data = new KhCnCongTrinhNghienCuu();
+        BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(userInfo.getDvql());
         data.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));
         KhCnCongTrinhNghienCuu created = khCnCongTrinhNghienCuuRepository.save(data);
@@ -112,8 +115,7 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
             }
         }
         KhCnCongTrinhNghienCuu data = optional.get();
-        KhCnCongTrinhNghienCuu dataMap = new ModelMapper().map(objReq, KhCnCongTrinhNghienCuu.class);
-        updateObjectToObject(data, dataMap);
+        BeanUtils.copyProperties(objReq, data, "id");
         KhCnCongTrinhNghienCuu created = khCnCongTrinhNghienCuuRepository.save(data);
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(KhCnCongTrinhNghienCuu.TABLE_NAME));
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(KhCnTienDoThucHien.TABLE_NAME));

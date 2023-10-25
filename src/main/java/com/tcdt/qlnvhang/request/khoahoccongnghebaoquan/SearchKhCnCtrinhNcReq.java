@@ -18,8 +18,11 @@ public class SearchKhCnCtrinhNcReq extends BaseRequest {
     private String maDvi;
     private String dvpl;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date thoiGianTu;
+    private Date thoiGianThTu;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date thoiGianDen;
-
+    private Date thoiGianThDen;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date thoiGianHtTu;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date thoiGianHtDen;
 }
