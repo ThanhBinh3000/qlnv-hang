@@ -218,7 +218,7 @@ public class XhTlHoSoService extends BaseServiceImpl {
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     XhTlHoSoHdr data = optional.get();
 
-    List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhTlHoSoHdr.TABLE_NAME));
+    List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhTlHoSoHdr.TABLE_NAME+"_DINH_KEM"));
     data.setFileDinhKem(fileDinhKem);
     List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(XhTlHoSoHdr.TABLE_NAME + "_CAN_CU"));
     data.setFileCanCu(canCu);
