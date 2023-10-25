@@ -197,10 +197,10 @@ public class XhTlHoSoService extends BaseServiceImpl {
     }
     XhTlHoSoHdr created = hdrRepository.save(hdr);
     fileDinhKemService.delete(req.getId(), Lists.newArrayList(XhTlHoSoHdr.TABLE_NAME + "_CAN_CU"));
-    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), ScTrinhThamDinhHdr.TABLE_NAME + "_CAN_CU");
+    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), XhTlHoSoHdr.TABLE_NAME + "_CAN_CU");
     created.setFileCanCu(canCu);
     fileDinhKemService.delete(req.getId(), Lists.newArrayList(XhTlHoSoHdr.TABLE_NAME + "_DINH_KEM"));
-    List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), ScTrinhThamDinhHdr.TABLE_NAME + "_DINH_KEM");
+    List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), XhTlHoSoHdr.TABLE_NAME + "_DINH_KEM");
     created.setFileDinhKem(fileDinhKemList);
     List<XhTlHoSoDtl> dtlList = this.saveDtl(req, created.getId());
     created.setChildren(dtlList);
