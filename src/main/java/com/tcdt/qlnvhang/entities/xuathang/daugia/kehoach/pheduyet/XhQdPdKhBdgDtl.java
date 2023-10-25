@@ -78,6 +78,7 @@ public class XhQdPdKhBdgDtl implements Serializable {
     private String soQdPd;
     private Boolean isDieuChinh;
     private Boolean lastest;
+    private Integer lanDieuChinh;
     @Transient
     private String tenPthucTtoan;
     @Transient

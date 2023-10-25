@@ -13,10 +13,12 @@ public class SearchXhTcTtinBttReq extends BaseRequest {
     private LocalDate ngayCgiaTu;
     private LocalDate  ngayCgiaDen;
     private String tochucCanhan;
-    private Integer lastest ;
+    private Integer lanDieuChinh;
+    private Integer lastest;
     private String loaiVthh;
     private String soDxuat;
     private List<String> pthucBanTrucTiep = new ArrayList<>();
     private String dvql;
     private String maChiCuc;
+    private String trangThaiDc;
 }

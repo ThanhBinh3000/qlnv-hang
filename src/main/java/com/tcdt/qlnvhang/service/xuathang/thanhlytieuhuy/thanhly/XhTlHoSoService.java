@@ -132,7 +132,7 @@ public class XhTlHoSoService extends BaseServiceImpl {
     hdr.setMaDvi(userInfo.getDvql());
     hdr.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
     XhTlHoSoHdr created = hdrRepository.save(hdr);
-    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), XhTlHoSoHdr.TABLE_NAME + "_CAN_CU");
+    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), XhTlHoSoHdr.TABLE_NAME + "_CAN_CU");
     created.setFileCanCu(canCu);
     List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), XhTlHoSoHdr.TABLE_NAME + "_DINH_KEM");
     created.setFileDinhKem(fileDinhKem);
@@ -197,10 +197,10 @@ public class XhTlHoSoService extends BaseServiceImpl {
     }
     XhTlHoSoHdr created = hdrRepository.save(hdr);
     fileDinhKemService.delete(req.getId(), Lists.newArrayList(XhTlHoSoHdr.TABLE_NAME + "_CAN_CU"));
-    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), ScTrinhThamDinhHdr.TABLE_NAME + "_CAN_CU");
+    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), XhTlHoSoHdr.TABLE_NAME + "_CAN_CU");
     created.setFileCanCu(canCu);
     fileDinhKemService.delete(req.getId(), Lists.newArrayList(XhTlHoSoHdr.TABLE_NAME + "_DINH_KEM"));
-    List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), ScTrinhThamDinhHdr.TABLE_NAME + "_DINH_KEM");
+    List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), XhTlHoSoHdr.TABLE_NAME + "_DINH_KEM");
     created.setFileDinhKem(fileDinhKemList);
     List<XhTlHoSoDtl> dtlList = this.saveDtl(req, created.getId());
     created.setChildren(dtlList);
@@ -218,7 +218,7 @@ public class XhTlHoSoService extends BaseServiceImpl {
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     XhTlHoSoHdr data = optional.get();
 
-    List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhTlHoSoHdr.TABLE_NAME));
+    List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhTlHoSoHdr.TABLE_NAME+"_DINH_KEM"));
     data.setFileDinhKem(fileDinhKem);
     List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(XhTlHoSoHdr.TABLE_NAME + "_CAN_CU"));
     data.setFileCanCu(canCu);
@@ -306,7 +306,11 @@ public class XhTlHoSoService extends BaseServiceImpl {
           break;
         // Arena từ chối
         case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+          hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+          break;
         case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
+          optional.get().setIdLdc(getUser().getId());
+          optional.get().setNgayDuyetLdc(LocalDate.now());
           hdr.setLyDoTuChoi(req.getLyDoTuChoi());
           break;
         default:

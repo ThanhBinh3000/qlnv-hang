@@ -36,6 +36,7 @@ public interface HhQdPheduyetKhMttDxRepository extends JpaRepository<HhQdPheduye
 
 
     List<HhQdPheduyetKhMttDx> findAllByIdQdHdr (Long idQdHdr);
+    HhQdPheduyetKhMttDx findBySoQdKq (String soQdKq);
 
     void deleteAllByIdQdHdr(Long idQdHdr);
 
