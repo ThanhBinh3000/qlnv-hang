@@ -94,7 +94,7 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), data.getId(), KhCnCongTrinhNghienCuu.TABLE_NAME);
         List<FileDinhKem> fileTienDoTh = fileDinhKemService.saveListFileDinhKem(objReq.getFileTienDoTh(), data.getId(), KhCnTienDoThucHien.TABLE_NAME);
         List<FileDinhKem> fileNghiemThu = fileDinhKemService.saveListFileDinhKem(objReq.getFileNghiemThu(), data.getId(), KhCnNghiemThuThanhLy.TABLE_NAME);
-        List<FileDinhKem> fileThanhLy = fileDinhKemService.saveListFileDinhKem(objReq.getFileNghiemThu(), data.getId(), KhCnNghiemThuThanhLy.TABLE_NAME + "_TL");
+        List<FileDinhKem> fileThanhLy = fileDinhKemService.saveListFileDinhKem(objReq.getFileThanhLy(), data.getId(), KhCnNghiemThuThanhLy.TABLE_NAME + "_TL");
         created.setFileDinhKem(fileDinhKem);
         created.setFileTienDoTh(fileTienDoTh);
         created.setFileNghiemThu(fileNghiemThu);
@@ -125,7 +125,7 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(), KhCnCongTrinhNghienCuu.TABLE_NAME);
         List<FileDinhKem> fileTienDoTh = fileDinhKemService.saveListFileDinhKem(objReq.getFileTienDoTh(), created.getId(), KhCnTienDoThucHien.TABLE_NAME);
         List<FileDinhKem> fileNghiemThu = fileDinhKemService.saveListFileDinhKem(objReq.getFileNghiemThu(), created.getId(), KhCnNghiemThuThanhLy.TABLE_NAME);
-        List<FileDinhKem> fileThanhLy = fileDinhKemService.saveListFileDinhKem(objReq.getFileNghiemThu(), data.getId(), KhCnNghiemThuThanhLy.TABLE_NAME + "_TL");
+        List<FileDinhKem> fileThanhLy = fileDinhKemService.saveListFileDinhKem(objReq.getFileThanhLy(), data.getId(), KhCnNghiemThuThanhLy.TABLE_NAME + "_TL");
         created.setFileDinhKem(fileDinhKem);
         created.setFileTienDoTh(fileTienDoTh);
         created.setFileNghiemThu(fileNghiemThu);
