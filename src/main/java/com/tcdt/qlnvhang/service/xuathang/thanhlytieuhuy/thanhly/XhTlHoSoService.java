@@ -306,7 +306,11 @@ public class XhTlHoSoService extends BaseServiceImpl {
           break;
         // Arena từ chối
         case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+          hdr.setLyDoTuChoi(req.getLyDoTuChoi());
+          break;
         case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
+          optional.get().setIdLdc(getUser().getId());
+          optional.get().setNgayDuyetLdc(LocalDate.now());
           hdr.setLyDoTuChoi(req.getLyDoTuChoi());
           break;
         default:
