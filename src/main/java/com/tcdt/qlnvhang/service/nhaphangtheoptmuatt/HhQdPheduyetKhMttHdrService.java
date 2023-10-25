@@ -76,6 +76,8 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
     private HhDcQdPduyetKhmttSlddRepository hhDcQdPduyetKhmttSlddRepository;
     @Autowired
     private HhDcQdPdKhmttSlddDtlRepository hhDcQdPdKhmttSlddDtlRepository;
+    @Autowired
+    private HhTtChaoGiaKhmttSlddDtlRepository hhTtChaoGiaKhmttSlddDtlRepository;
 
 
     @Autowired
@@ -549,11 +551,15 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         }else{
             List<HhQdPheduyetKhMttSLDD> byIdSldd = hhQdPheduyetKhMttSLDDRepository.findAllByIdQdDtl(dtl.getId());
             for (HhQdPheduyetKhMttSLDD sldd : byIdSldd){
-                List<HhQdPdKhMttSlddDtl> byIdSlddDtl = hhQdPdKhMttSlddDtlRepository.findAllByIdDiaDiem(sldd.getId());
-                byIdSlddDtl.forEach(f->{
-                    f.setTenDiemKho(hashMapDvi.get(f.getMaDiemKho()));
-                });
-                sldd.setChildren(byIdSlddDtl);
+                List<HhQdPdKhMttSlddDtl> listDcSlddDtl = new ArrayList<>();
+                List<HhTtChaoGiaSlddDtl> byIdSlddDtl = hhTtChaoGiaKhmttSlddDtlRepository.findAllByIdDiaDiem(sldd.getId());
+                for (HhTtChaoGiaSlddDtl hhTtChaoGiaSlddDtl : byIdSlddDtl) {
+                    HhQdPdKhMttSlddDtl dcSlddDtl = new HhQdPdKhMttSlddDtl();
+                    hhTtChaoGiaSlddDtl.setTenDiemKho(hashMapDvi.get(hhTtChaoGiaSlddDtl.getMaDiemKho()));
+                    BeanUtils.copyProperties(hhTtChaoGiaSlddDtl, dcSlddDtl);
+                    listDcSlddDtl.add(dcSlddDtl);
+                }
+                sldd.setChildren(listDcSlddDtl);
                 sldd.setTenDvi(hashMapDvi.get(sldd.getMaDvi()));
                 List<HhChiTietTTinChaoGia> byIdQdDtl = hhCtietTtinCgiaRepository.findAllByIdQdPdSldd(sldd.getId());
                 for (HhChiTietTTinChaoGia chaoGia : byIdQdDtl){
@@ -608,11 +614,15 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
             }
             sldd.setListChaoGia(byIdQdDtl);
             sldd.setTenDvi(StringUtils.isEmpty(sldd.getMaDvi()) ? null : hashMapDmdv.get(sldd.getMaDvi()));
-            List<HhDcQdPdKhmttSlddDtl> listSlddDtl = hhDcQdPdKhmttSlddDtlRepository.findAllByIdDiaDiem(sldd.getId());
-            for (HhDcQdPdKhmttSlddDtl slddDtl : listSlddDtl) {
+            List<HhTtChaoGiaSlddDtl> listSlddDtl = hhTtChaoGiaKhmttSlddDtlRepository.findAllByIdDiaDiem(sldd.getId());
+            List<HhDcQdPdKhmttSlddDtl> listDcSlddDtl = new ArrayList<>();
+            for (HhTtChaoGiaSlddDtl slddDtl : listSlddDtl) {
+                HhDcQdPdKhmttSlddDtl dcSlddDtl = new HhDcQdPdKhmttSlddDtl();
                 slddDtl.setTenDiemKho(StringUtils.isEmpty(slddDtl.getMaDiemKho()) ? null : hashMapDmdv.get(slddDtl.getMaDiemKho()));
-                sldd.setChildren(listSlddDtl);
+                BeanUtils.copyProperties(slddDtl, dcSlddDtl);
+                listDcSlddDtl.add(dcSlddDtl);
             }
+                sldd.setChildren(listDcSlddDtl);
             children.add(sldd);
         }
         return children;

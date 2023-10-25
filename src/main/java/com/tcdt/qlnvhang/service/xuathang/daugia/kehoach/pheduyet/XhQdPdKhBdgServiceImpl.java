@@ -36,6 +36,7 @@ import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -84,9 +85,15 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         search.getContent().forEach(data -> {
-            data.setMapVthh(mapDmucVthh);
-            data.setMapDmucDvi(mapDmucDvi);
-            data.setTrangThai(data.getTrangThai());
+            try {
+                data.setMapVthh(mapDmucVthh);
+                data.setMapDmucDvi(mapDmucDvi);
+                data.setTrangThai(data.getTrangThai());
+                List<XhQdPdKhBdgDtl> listDtl = xhQdPdKhBdgDtlRepository.findAllByIdHdr(data.getId());
+                data.setChildren(listDtl != null && !listDtl.isEmpty() ? listDtl : Collections.emptyList());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
         return search;
     }
@@ -471,6 +478,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
         Integer lastest = 1;
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
             req.setDvql(dvql.substring(0, 4));
+            req.setLastest(lastest);
         } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
             req.setDvql(dvql);
             req.setLastest(lastest);
@@ -479,7 +487,21 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
         Page<XhQdPdKhBdgDtl> search = xhQdPdKhBdgDtlRepository.searchDtl(req, pageable);
         Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
+        Map<String, XhQdPdKhBdgDtl> recordMap = new HashMap<>();
         search.getContent().forEach(data -> {
+            if (recordMap.containsKey(data.getSoDxuat())) {
+                XhQdPdKhBdgDtl existingRecord = recordMap.get(data.getSoDxuat());
+                if (data.getIsDieuChinh() && data.getLanDieuChinh() > existingRecord.getLanDieuChinh()) {
+                    recordMap.put(data.getSoDxuat(), data);
+                } else if (!existingRecord.getIsDieuChinh()) {
+                    recordMap.put(data.getSoDxuat(), data);
+                }
+            } else {
+                recordMap.put(data.getSoDxuat(), data);
+            }
+        });
+        List<XhQdPdKhBdgDtl> filteredRecords = new ArrayList<>(recordMap.values());
+        filteredRecords.forEach(data -> {
             try {
                 mapDmucDvi.computeIfPresent(data.getMaDvi(), (key, objDonVi) -> {
                     data.setTenDvi(objDonVi.get("tenDvi").toString());
@@ -505,7 +527,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
                 throw new RuntimeException(e);
             }
         });
-        return search;
+        return new PageImpl<>(filteredRecords, pageable, search.getTotalElements());
     }
 
     public List<XhQdPdKhBdgDtl> detailDtl(List<Long> ids) throws Exception {

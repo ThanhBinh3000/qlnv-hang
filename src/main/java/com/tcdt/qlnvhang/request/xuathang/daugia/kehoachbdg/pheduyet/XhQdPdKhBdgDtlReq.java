@@ -56,4 +56,5 @@ public class XhQdPdKhBdgDtlReq extends BaseRequest {
     private LocalDate ngayKyQdPdKqBdgDen;
     private Integer lastest;
     private Integer isDieuChinh;
+    private Integer lanDieuChinh;
 }
