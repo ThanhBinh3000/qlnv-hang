@@ -94,7 +94,7 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), data.getId(), KhCnCongTrinhNghienCuu.TABLE_NAME);
         List<FileDinhKem> fileTienDoTh = fileDinhKemService.saveListFileDinhKem(objReq.getFileTienDoTh(), data.getId(), KhCnTienDoThucHien.TABLE_NAME);
         List<FileDinhKem> fileNghiemThu = fileDinhKemService.saveListFileDinhKem(objReq.getFileNghiemThu(), data.getId(), KhCnNghiemThuThanhLy.TABLE_NAME);
-        List<FileDinhKem> fileThanhLy = fileDinhKemService.saveListFileDinhKem(objReq.getFileNghiemThu(), data.getId(), KhCnNghiemThuThanhLy.TABLE_NAME + "_TL");
+        List<FileDinhKem> fileThanhLy = fileDinhKemService.saveListFileDinhKem(objReq.getFileThanhLy(), data.getId(), KhCnNghiemThuThanhLy.TABLE_NAME + "_TL");
         created.setFileDinhKem(fileDinhKem);
         created.setFileTienDoTh(fileTienDoTh);
         created.setFileNghiemThu(fileNghiemThu);
@@ -125,7 +125,7 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(), KhCnCongTrinhNghienCuu.TABLE_NAME);
         List<FileDinhKem> fileTienDoTh = fileDinhKemService.saveListFileDinhKem(objReq.getFileTienDoTh(), created.getId(), KhCnTienDoThucHien.TABLE_NAME);
         List<FileDinhKem> fileNghiemThu = fileDinhKemService.saveListFileDinhKem(objReq.getFileNghiemThu(), created.getId(), KhCnNghiemThuThanhLy.TABLE_NAME);
-        List<FileDinhKem> fileThanhLy = fileDinhKemService.saveListFileDinhKem(objReq.getFileNghiemThu(), data.getId(), KhCnNghiemThuThanhLy.TABLE_NAME + "_TL");
+        List<FileDinhKem> fileThanhLy = fileDinhKemService.saveListFileDinhKem(objReq.getFileThanhLy(), data.getId(), KhCnNghiemThuThanhLy.TABLE_NAME + "_TL");
         created.setFileDinhKem(fileDinhKem);
         created.setFileTienDoTh(fileTienDoTh);
         created.setFileNghiemThu(fileNghiemThu);
@@ -234,7 +234,7 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         List<KhCnCongTrinhNghienCuu> data = page.getContent();
 
         String title = "Danh sách công trình nghiên cứu";
-        String[] rowsName = new String[]{"STT", "Mã đề tài", "Tên đề tài", "Cấp đề tài", "Từ năm", "Đến năm", "Trang Thái"};
+        String[] rowsName = new String[]{"STT", "Mã đề tài", "Tên đề tài", "Cấp đề tài", "Đơn vị chủ trì", "Chủ nhiệm đề tài", "Từ năm", "Đến năm", "Trang Thái"};
         String fileName = "danh-sach-cong-trinh-nghien-cuu.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
@@ -245,9 +245,11 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
             objs[1] = dx.getMaDeTai();
             objs[2] = dx.getTenDeTai();
             objs[3] = dx.getCapDeTai();
-            objs[4] = dx.getNgayKyTu();
-            objs[5] = dx.getNgayKyDen();
-            objs[6] = dx.getTenTrangThai();
+            objs[4] = dx.getTenDviChuTri();
+            objs[5] = dx.getChuNhiem();
+            objs[6] = dx.getNgayKyTu();
+            objs[7] = dx.getNgayKyDen();
+            objs[8] = dx.getTenTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
