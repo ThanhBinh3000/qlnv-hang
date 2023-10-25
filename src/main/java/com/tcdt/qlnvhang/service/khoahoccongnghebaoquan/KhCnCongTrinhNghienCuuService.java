@@ -64,9 +64,10 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
 //        UserInfo userInfo = SecurityContextService.getUser();
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
+        Map<String, String> mapTrangThai = getListDanhMucChung("TRANG_THAI_CTNC");
         Page<KhCnCongTrinhNghienCuu> data = khCnCongTrinhNghienCuuRepository.searchPage(objReq, pageable);
         data.getContent().forEach(f -> {
-            f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+            f.setTenTrangThai(mapTrangThai.get(f.getTrangThai()));
         });
 
         return data;
