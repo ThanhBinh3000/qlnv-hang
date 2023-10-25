@@ -64,9 +64,10 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
 //        UserInfo userInfo = SecurityContextService.getUser();
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
+        Map<String, String> mapTrangThai = getListDanhMucChung("TRANG_THAI_CTNC");
         Page<KhCnCongTrinhNghienCuu> data = khCnCongTrinhNghienCuuRepository.searchPage(objReq, pageable);
         data.getContent().forEach(f -> {
-            f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+            f.setTenTrangThai(mapTrangThai.get(f.getTrangThai()));
         });
 
         return data;
@@ -156,8 +157,9 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapCapDeTai = getListDanhMucChung("CAP_DE_TAI");
         Map<String, String> mapNguonVon = getListDanhMucChung("NGUON_VON");
+        Map<String, String> mapTrangThai = getListDanhMucChung("TRANG_THAI_CTNC");
         data.setTenDvi(StringUtils.isEmpty(data.getMaDvi()) ? null : hashMapDvi.get(data.getMaDvi()));
-        data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
+        data.setTenTrangThai(mapTrangThai.get(data.getTrangThai()));
         List<KhCnTienDoThucHien> tienDoThucHien = khCnTienDoThucHienRepository.findAllByIdHdr(data.getId());
         tienDoThucHien.forEach(item -> {
             item.setTenTrangThaiTd(TrangThaiAllEnum.getLabelById(item.getTrangThaiTd()));
