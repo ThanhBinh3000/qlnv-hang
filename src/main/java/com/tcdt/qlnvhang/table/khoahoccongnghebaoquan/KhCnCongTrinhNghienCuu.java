@@ -81,7 +81,9 @@ public class KhCnCongTrinhNghienCuu extends BaseEntity implements Serializable {
     @Transient
     private List<FileDinhKem> fileTienDoTh = new ArrayList<>();
     @Transient
-    private List<FileDinhKem> fileNghiemThuTl = new ArrayList<>();
+    private List<FileDinhKem> fileNghiemThu = new ArrayList<>();
+    @Transient
+    private List<FileDinhKem> fileThanhLy = new ArrayList<>();
     @Transient
     private List<KhCnTienDoThucHien> tienDoThucHien = new ArrayList<>();
     @Transient
@@ -112,4 +114,8 @@ public class KhCnCongTrinhNghienCuu extends BaseEntity implements Serializable {
     private String tenNguonVon;
     @Transient
     private String tongChiPhiStr;
+    // thêm mới sau UAT, thanh lý nv khcn
+    private String dkThanhLy;
+    private String hsThanhLy;
+    private String tnCnNvKhcn;
 }

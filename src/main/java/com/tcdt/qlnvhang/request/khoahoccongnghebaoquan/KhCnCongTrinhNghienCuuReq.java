@@ -66,10 +66,15 @@ public class KhCnCongTrinhNghienCuuReq {
 
     private List<FileDinhKemReq> fileTienDoTh = new ArrayList<>();
 
-    private List<FileDinhKemReq> fileNghiemThuTl = new ArrayList<>();
+    private List<FileDinhKemReq> fileNghiemThu = new ArrayList<>();
+
+    private List<FileDinhKemReq> fileThanhLy = new ArrayList<>();
 
     private List<KhCnTienDoThucHienReq> tienDoThucHien = new ArrayList<>();
 
     private List<KhCnNghiemThuThanhLyReq> children = new ArrayList<>();
-
+    // thêm mới sau UAT, thanh lý nv khcn
+    private String dkThanhLy;
+    private String hsThanhLy;
+    private String tnCnNvKhcn;
 }
