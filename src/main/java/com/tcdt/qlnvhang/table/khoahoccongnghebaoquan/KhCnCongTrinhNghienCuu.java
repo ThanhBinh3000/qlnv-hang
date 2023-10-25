@@ -39,6 +39,8 @@ public class KhCnCongTrinhNghienCuu extends BaseEntity implements Serializable {
     private String dviChuTri;
     private String dviPhoiHop;
     private String dviThucHien;
+    private String tenDviChuTri;
+    private String tenDviThucHien;
     private String nguonVon;
     private String soQdPd;
     @Lob
