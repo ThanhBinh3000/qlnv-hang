@@ -234,7 +234,7 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         List<KhCnCongTrinhNghienCuu> data = page.getContent();
 
         String title = "Danh sách công trình nghiên cứu";
-        String[] rowsName = new String[]{"STT", "Mã đề tài", "Tên đề tài", "Cấp đề tài", "Từ năm", "Đến năm", "Trang Thái"};
+        String[] rowsName = new String[]{"STT", "Mã đề tài", "Tên đề tài", "Cấp đề tài", "Đơn vị chủ trì", "Chủ nhiệm đề tài", "Từ năm", "Đến năm", "Trang Thái"};
         String fileName = "danh-sach-cong-trinh-nghien-cuu.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
@@ -245,9 +245,11 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
             objs[1] = dx.getMaDeTai();
             objs[2] = dx.getTenDeTai();
             objs[3] = dx.getCapDeTai();
-            objs[4] = dx.getNgayKyTu();
-            objs[5] = dx.getNgayKyDen();
-            objs[6] = dx.getTenTrangThai();
+            objs[4] = dx.getTenDviChuTri();
+            objs[5] = dx.getChuNhiem();
+            objs[6] = dx.getNgayKyTu();
+            objs[7] = dx.getNgayKyDen();
+            objs[8] = dx.getTenTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
