@@ -28,6 +28,8 @@ public class KhCnCongTrinhNghienCuuReq {
     private String email;
     private String sdt;
     private String dviChuTri;
+    private String tenDviChuTri;
+    private String tenDviThucHien;
     private String dviPhoiHop;
     private String dviThucHien;
     private String nguonVon;
@@ -66,7 +68,7 @@ public class KhCnCongTrinhNghienCuuReq {
 
     private List<FileDinhKemReq> fileNghiemThuTl = new ArrayList<>();
 
-    private List<KhCnTienDoThucHienReq> tienDoThucHien=new ArrayList<>();
+    private List<KhCnTienDoThucHienReq> tienDoThucHien = new ArrayList<>();
 
     private List<KhCnNghiemThuThanhLyReq> children = new ArrayList<>();
 
