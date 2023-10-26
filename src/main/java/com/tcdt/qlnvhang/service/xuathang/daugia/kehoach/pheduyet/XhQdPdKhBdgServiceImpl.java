@@ -519,9 +519,9 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
                     data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
                 }
                 if (data.getSoQdDc() != null) {
-                    data.setXhQdDchinhKhBdgHdr(xhQdDchinhKhBdgHdrRepository.findById(data.getIdHdr()).get());
+                    data.setXhQdDchinhKhBdgHdr(xhQdDchinhKhBdgHdrRepository.findById(data.getIdHdr()).orElse(null));
                 } else {
-                    data.setXhQdPdKhBdg(xhQdPdKhBdgRepository.findById(data.getIdHdr()).get());
+                    data.setXhQdPdKhBdg(xhQdPdKhBdgRepository.findById(data.getIdHdr()).orElse(null));
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
