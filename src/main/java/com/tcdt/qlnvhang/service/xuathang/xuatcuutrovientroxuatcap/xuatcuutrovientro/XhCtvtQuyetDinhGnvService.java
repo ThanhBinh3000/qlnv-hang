@@ -312,8 +312,10 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
 
   private List<XhCtvtQuyetDinhGnvDtlDto> convertXhCtvtQuyetDinhGnvDtlDtoToDto(List<XhCtvtQuyetDinhGnvDtl> dataDtl) {
     List<XhCtvtQuyetDinhGnvDtlDto> xhCtvtQuyetDinhGnvDtlDtos = new ArrayList<>();
+    UserInfo userInfo = getUser();
+    List<XhCtvtQuyetDinhGnvDtl> quyetDinhGnvDtls = dataDtl.stream().filter(item -> userInfo.getDvql().contentEquals(item.getMaDvi())).collect(Collectors.toList());
     int stt = 1;
-    for (var res : dataDtl) {
+    for (var res : quyetDinhGnvDtls) {
       var xhCtvtQuyetDinhGnvDtlDto = XhCtvtQuyetDinhGnvDtlDto.builder()
               .stt(stt++)
               .tenChiCuc(res.getTenChiCuc())
