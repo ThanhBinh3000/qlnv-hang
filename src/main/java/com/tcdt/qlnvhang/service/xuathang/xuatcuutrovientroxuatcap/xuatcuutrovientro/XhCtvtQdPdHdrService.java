@@ -95,6 +95,20 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
             }
             s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
         });
+
+        if (Objects.equals("XC",req.getType())) {
+            List<Long> ids = search.getContent().stream()
+                    .map(XhCtvtQuyetDinhPdHdr::getQdPaXuatCapId) // Extract the IDs
+                    .collect(Collectors.toList());
+            List<XhCtvtQuyetDinhPdHdr> quyetDinhPdHdrs = xhCtvtQdPdHdrRepository.findAllByIdIn(ids);
+            search.getContent().forEach(s -> {
+                Optional<XhCtvtQuyetDinhPdHdr> dinhPdHdr = quyetDinhPdHdrs.stream().filter(item1 -> Objects.equals(item1.getId(), s.getQdPaXuatCapId())).findFirst();
+                if(dinhPdHdr.isPresent()){
+                    s.setNgayHieuLucQdcxc(dinhPdHdr.get().getNgayHluc());
+                    s.setSlGaoChuyenXuatCap(dinhPdHdr.get().getSoLuongXuatCap());
+                }
+            });
+        }
         return search;
     }
 
