@@ -343,6 +343,9 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
         } else {
             xhCtvtTongHopHdrPreview.setXhCtvtTongHopDto(convertXhCtvtTongHopDtlToDtoLT(xhCtvtTongHopHdr, xhCtvtDeXuatHdr));
             xhCtvtTongHopHdrPreview.setLoaiVthh(StringUtils.isEmpty(xhCtvtTongHopHdr.get().getTenLoaiVthh()) ? xhCtvtTongHopHdr.get().getTenVthh() : xhCtvtTongHopHdr.get().getTenLoaiVthh());
+            if(!StringUtils.isEmpty(xhCtvtTongHopHdrPreview.getLoaiVthh())){
+                xhCtvtTongHopHdrPreview.setLoaiVthh(xhCtvtTongHopHdrPreview.getLoaiVthh().toUpperCase());
+            }
             xhCtvtTongHopHdrPreview.setTongSoLuong(getTongSoLuong(xhCtvtTongHopHdrPreview.getXhCtvtTongHopDto()));
         }
         return xhCtvtTongHopHdrPreview;
