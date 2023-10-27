@@ -44,6 +44,7 @@ public interface XhCtvtQdPdHdrRepository extends JpaRepository<XhCtvtQuyetDinhPd
   List<XhCtvtQuyetDinhPdHdr> findByIdIn(List<Long> ids);
 
   List<XhCtvtQuyetDinhPdHdr> findAllByIdIn(List<Long> listId);
+  List<XhCtvtQuyetDinhPdHdr> findAllByIdTongHopIn(List<Long> listId);
 
   Optional<XhCtvtQuyetDinhPdHdr> findBySoBbQd(String soBbQd);
 

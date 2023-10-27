@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQdPdHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtTongHopDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtTongHopHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -17,6 +18,7 @@ import com.tcdt.qlnvhang.response.xuatcuutrovientro.XhCtvtTongHopDto;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtTongHopDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtTongHopHdr;
 import com.tcdt.qlnvhang.util.Contains;
@@ -56,12 +58,24 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
 
     @Autowired
     private XhCtvtDeXuatHdrRepository xhCtvtDeXuatHdrRepository;
-
+    @Autowired
+    private XhCtvtQdPdHdrRepository xhCtvtQdPdHdrRepository;
 
     public Page<XhCtvtTongHopHdr> searchPage(CustomUserDetails currentUser, SearchXhCtvtTongHopHdr objReq) throws Exception {
         objReq.setDvql(currentUser.getDvql());
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
         Page<XhCtvtTongHopHdr> data = xhCtvtTongHopHdrRepository.search(objReq, pageable);
+        List<Long> ids = data.getContent().stream()
+                .map(XhCtvtTongHopHdr::getId) // Extract the IDs
+                .collect(Collectors.toList());
+        List<XhCtvtQuyetDinhPdHdr> quyetDinhPdHdrs = xhCtvtQdPdHdrRepository.findAllByIdTongHopIn(ids);
+        data.getContent().forEach(item ->{
+            Optional<XhCtvtQuyetDinhPdHdr> dinhPdHdr = quyetDinhPdHdrs.stream().filter(item1 -> Objects.equals(item1.getIdTongHop(), item.getId())).findFirst();
+            if(dinhPdHdr.isPresent()){
+                item.setSoQuyetDinh(dinhPdHdr.get().getSoBbQd());
+                item.setNgayKiQuyetDinh(dinhPdHdr.get().getNgayKy());
+            }
+        });
         return data;
     }
 
