@@ -317,7 +317,7 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
       var xhCtvtQuyetDinhGnvDtlDto = XhCtvtQuyetDinhGnvDtlDto.builder()
               .stt(stt++)
               .tenChiCuc(res.getTenChiCuc())
-              .soLuong(res.getSoLuong() == null ? new BigDecimal(0l): res.getSoLuong())
+              .soLuong(res.getSoLuongGiao() == null ? new BigDecimal(0l): res.getSoLuongGiao())
               .loaiVthh(res.getTenLoaiVthh())
               .cloaiVthh(res.getTenCloaiVthh())
               .build();

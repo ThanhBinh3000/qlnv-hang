@@ -342,7 +342,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
             xhCtvtTongHopHdrPreview.setXhCtvtTongHopDto(convertXhCtvtTongHopDtlToDtoVT(xhCtvtTongHopHdr, xhCtvtDeXuatHdr));
         } else {
             xhCtvtTongHopHdrPreview.setXhCtvtTongHopDto(convertXhCtvtTongHopDtlToDtoLT(xhCtvtTongHopHdr, xhCtvtDeXuatHdr));
-            xhCtvtTongHopHdrPreview.setLoaiVthh(xhCtvtTongHopHdr.get().getTenLoaiVthh() == null ? xhCtvtTongHopHdr.get().getTenVthh() : xhCtvtTongHopHdr.get().getTenLoaiVthh());
+            xhCtvtTongHopHdrPreview.setLoaiVthh(StringUtils.isEmpty(xhCtvtTongHopHdr.get().getTenLoaiVthh()) ? xhCtvtTongHopHdr.get().getTenVthh() : xhCtvtTongHopHdr.get().getTenLoaiVthh());
             xhCtvtTongHopHdrPreview.setTongSoLuong(getTongSoLuong(xhCtvtTongHopHdrPreview.getXhCtvtTongHopDto()));
         }
         return xhCtvtTongHopHdrPreview;
