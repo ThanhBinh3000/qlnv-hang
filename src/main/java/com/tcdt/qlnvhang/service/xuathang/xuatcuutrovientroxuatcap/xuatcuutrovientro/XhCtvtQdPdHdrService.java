@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -400,12 +401,13 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
                             d1.setSoLuongCucThucHien(dtlDTO1.getSoLuong());
                             listData.add(d);
                         }
-                    }else {
+                    } else {
                         d.setTenChungLoaiHang(dtlDTO.getTenLoaiVthh());
                         d.setSoLuongCucThucHien(dtlDTO.getSoLuong());
                     }
                 }
             }
+            hashMap.put("tongSlGiao", listData.stream().map(item -> item.getSoLuongCucThucHien() != null ? new BigDecimal(item.getSoLuongCucThucHien()) : new BigDecimal(0l)).mapToLong(BigDecimal::longValue).sum());
             hashMap.put("listData", listData);
             return docxToPdfConverter.convertDocxToPdf(inputStream, hashMap);
         } catch (IOException e) {
