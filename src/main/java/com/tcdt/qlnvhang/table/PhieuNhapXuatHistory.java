@@ -32,6 +32,7 @@ public class PhieuNhapXuatHistory implements Serializable {
   private String soPhieu;
   //nhap 1 xuat -1
   private Integer loaiNhapXuat;
+  private String loaiHinhNhapXuat;
   private String loaiVthh;
   private String cloaiVthh;
   private String maKho;
