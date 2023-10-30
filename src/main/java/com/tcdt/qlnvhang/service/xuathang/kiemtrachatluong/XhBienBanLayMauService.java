@@ -18,6 +18,7 @@ import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.hosokythuat.NhHoSoK
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.bienbanlaymau.XhBienBanLayMauDtl;
 import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.bienbanlaymau.XhBienBanLayMauHdr;
+import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.phieukncl.XhPhieuKnclHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -100,7 +101,10 @@ public class XhBienBanLayMauService extends BaseServiceImpl {
       data.setNgayTao(LocalDateTime.now());
     }
     XhBienBanLayMauHdr created = xhBienBanLayMauRepository.save(data);
-    return created;
+    String[] soBbQd = created.getSoBbQd().split("/");
+    created.setSoBbQd(created.getId() + "/" + soBbQd[1]);
+    XhBienBanLayMauHdr save = xhBienBanLayMauRepository.save(created);
+    return save;
   }
 
   @Transactional
