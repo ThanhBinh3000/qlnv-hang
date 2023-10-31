@@ -12,7 +12,6 @@ import java.util.List;
 @Data
 public class XhTlBaoCaoKqHdrReq {
   private Long id;
-  private String maDvi;
   private Integer nam;
   private String soBaoCao;
   private LocalDate ngayBaoCao;
@@ -20,18 +19,7 @@ public class XhTlBaoCaoKqHdrReq {
   private String soQd;
   private String noiDung;
   private String trangThai;
-  private BigDecimal tongSoLuongTl;
-  private BigDecimal tongSoLuongCon;
-  private BigDecimal tongThanhTien;
-
-  private LocalDate ngayPduyet;
-  private Long nguoiPduyetId;
-  private LocalDate ngayGduyet;
-  private Long nguoiGduyetId;
   private String lyDoTuChoi;
 
-
-
-  private List<FileDinhKemReq> fileDinhKem;
-  private List<XhTlBaoCaoKqDtl> baoCaoKqDtl = new ArrayList<>();
+  private List<FileDinhKemReq> fileDinhKemReq;
 }

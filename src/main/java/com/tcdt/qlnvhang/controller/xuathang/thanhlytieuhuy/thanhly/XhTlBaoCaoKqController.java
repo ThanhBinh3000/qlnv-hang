@@ -56,7 +56,7 @@ public class XhTlBaoCaoKqController {
   @ApiOperation(value = "Tạo mới", response = List.class)
   @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  public ResponseEntity<BaseResponse> insert(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhTlBaoCaoKqHdrReq objReq) {
+  public ResponseEntity<BaseResponse> insert(@Valid @RequestBody XhTlBaoCaoKqHdrReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
       resp.setData(xhTlBaoCaoKqService.save(objReq));
@@ -73,10 +73,10 @@ public class XhTlBaoCaoKqController {
 
   @ApiOperation(value = "Cập nhật", response = List.class)
   @PostMapping(value = PathContains.URL_CAP_NHAT, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<BaseResponse> update(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhTlBaoCaoKqHdrReq objReq) {
+  public ResponseEntity<BaseResponse> update(@Valid @RequestBody XhTlBaoCaoKqHdrReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(xhTlBaoCaoKqService.update(currentUser, objReq));
+      resp.setData(xhTlBaoCaoKqService.update(objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
@@ -106,10 +106,10 @@ public class XhTlBaoCaoKqController {
 
   @ApiOperation(value = "Trình duyệt", response = List.class)
   @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody StatusReq stReq) {
+  public ResponseEntity<BaseResponse> updateStatus(@Valid @RequestBody StatusReq stReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      xhTlBaoCaoKqService.approve(currentUser, stReq);
+      xhTlBaoCaoKqService.approve(stReq);
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
