@@ -10,6 +10,7 @@ import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthauRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdrRepository;
+import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.*;
@@ -531,5 +532,15 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
         hhQdKhlcntHdrRepository.save(optional.get());
     }
 
-
+    @Override
+    public void delete(IdSearchReq idSearchReq) throws Exception {
+        if (StringUtils.isEmpty(idSearchReq.getId())) {
+            throw new Exception("Xoá thất bại, không tìm thấy dữ liệu");
+        }
+        Optional<HhDthauNthauDuthau> nthauDuthau = nhaThauDuthauRepository.findById(idSearchReq.getId());
+        if (!nthauDuthau.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu cần xoá");
+        }
+        nhaThauDuthauRepository.delete(nthauDuthau.get());
+    }
 }

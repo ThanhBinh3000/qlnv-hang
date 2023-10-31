@@ -33,7 +33,9 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.FileInputStream;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -299,10 +301,10 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
             .namKeHoach(xhCtvtQuyetDinhGnvHdr.get().getNam())
             .canCuPhapLy(xhCtvtQuyetDinhGnvHdr.get().getFileDinhKem()
                     .stream().map(FileDinhKemJoinTable::getFileName).collect(Collectors.joining(" ,")))
-            .tongSoLuong(xhCtvtQuyetDinhGnvHdr.get().getTongSoLuong())
+            .tongSoLuong(xhCtvtQuyetDinhGnvHdr.get().getTongSoLuong() == null? new BigDecimal(0l) : xhCtvtQuyetDinhGnvHdr.get().getTongSoLuong())
             .donViTinh(checkTypeVT.equals(Boolean.FALSE) ? "kg" : "")
-            .loaiVthh(xhCtvtQuyetDinhGnvHdr.get().getTenLoaiVthh())
-            .thoiGianGiaoNhan(xhCtvtQuyetDinhGnvHdr.get().getThoiGianGiaoNhan())
+            .loaiVthh(xhCtvtQuyetDinhGnvHdr.get().getTenLoaiVthh() == null?xhCtvtQuyetDinhGnvHdr.get().getTenVthh(): xhCtvtQuyetDinhGnvHdr.get().getTenLoaiVthh())
+            .thoiGianGiaoNhan(xhCtvtQuyetDinhGnvHdr.get().getThoiGianGiaoNhan().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
             .lanhDaoCuc(userInfo.isPresent() ? userInfo.get().getFullName() : "")
             .xhCtvtQuyetDinhGnvDtlDto(convertXhCtvtQuyetDinhGnvDtlDtoToDto(xhCtvtQuyetDinhGnvHdr.get().getDataDtl()))
             .build();
@@ -310,12 +312,14 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
 
   private List<XhCtvtQuyetDinhGnvDtlDto> convertXhCtvtQuyetDinhGnvDtlDtoToDto(List<XhCtvtQuyetDinhGnvDtl> dataDtl) {
     List<XhCtvtQuyetDinhGnvDtlDto> xhCtvtQuyetDinhGnvDtlDtos = new ArrayList<>();
+    UserInfo userInfo = getUser();
+    List<XhCtvtQuyetDinhGnvDtl> quyetDinhGnvDtls = dataDtl.stream().filter(item -> userInfo.getDvql().contentEquals(item.getMaDvi())).collect(Collectors.toList());
     int stt = 1;
-    for (var res : dataDtl) {
+    for (var res : quyetDinhGnvDtls) {
       var xhCtvtQuyetDinhGnvDtlDto = XhCtvtQuyetDinhGnvDtlDto.builder()
               .stt(stt++)
               .tenChiCuc(res.getTenChiCuc())
-              .soLuong(res.getSoLuong())
+              .soLuong(res.getSoLuongGiao() == null ? new BigDecimal(0l): res.getSoLuongGiao())
               .loaiVthh(res.getTenLoaiVthh())
               .cloaiVthh(res.getTenCloaiVthh())
               .build();

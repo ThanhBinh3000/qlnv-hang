@@ -82,6 +82,12 @@ public class XhCtvtQuyetDinhPdHdr extends BaseEntity implements Serializable {
     @Transient
     private String tenTrangThai;
 
+    @Transient
+    private LocalDate ngayHieuLucQdcxc; //Ngày hiệu lực QĐ chuyển xuất cấp
+
+    @Transient
+    private Long slGaoChuyenXuatCap; // Số lượng gạo chuyển sang xuất cấp
+
     @OneToMany(mappedBy = "xhCtvtQuyetDinhPdHdr", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<XhCtvtQuyetDinhPdDtl> quyetDinhPdDtl = new ArrayList<>();
 

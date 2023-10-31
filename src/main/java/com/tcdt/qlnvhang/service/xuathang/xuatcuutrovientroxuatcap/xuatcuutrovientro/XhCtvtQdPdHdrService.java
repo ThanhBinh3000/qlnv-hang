@@ -1,5 +1,9 @@
 package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
+import com.tcdt.qlnvhang.dto.XhCtvtQuyetDinhPdDtlDTO;
+import com.tcdt.qlnvhang.dto.XhCtvtQuyetDinhPdHdrDTO;
+import com.tcdt.qlnvhang.dto.XhCtvtQuyetDinhPdHdrPreviewDTO;
+import com.tcdt.qlnvhang.dto.XhCtvtQuyetDinhPdHdrReqPreviewDTO;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
@@ -32,7 +36,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -89,6 +95,20 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
             }
             s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
         });
+
+        if (Objects.equals("XC",req.getType())) {
+            List<Long> ids = search.getContent().stream()
+                    .map(XhCtvtQuyetDinhPdHdr::getQdPaXuatCapId) // Extract the IDs
+                    .collect(Collectors.toList());
+            List<XhCtvtQuyetDinhPdHdr> quyetDinhPdHdrs = xhCtvtQdPdHdrRepository.findAllByIdIn(ids);
+            search.getContent().forEach(s -> {
+                Optional<XhCtvtQuyetDinhPdHdr> dinhPdHdr = quyetDinhPdHdrs.stream().filter(item1 -> Objects.equals(item1.getId(), s.getQdPaXuatCapId())).findFirst();
+                if(dinhPdHdr.isPresent()){
+                    s.setNgayHieuLucQdcxc(dinhPdHdr.get().getNgayHluc());
+                    s.setSlGaoChuyenXuatCap(dinhPdHdr.get().getSoLuongXuatCap());
+                }
+            });
+        }
         return search;
     }
 
@@ -365,19 +385,44 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
         return xhCtvtQdPdHdrRepository.searchQdPaXuatCap(req);
     }
 
-    public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
+    public ReportTemplateResponse preview(XhCtvtQuyetDinhPdHdrReqPreviewDTO body) throws Exception {
         try {
-            String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileName = DataUtils.safeToString(body.getTenBaoCao());
             String fileTemplate = "xuatcuutrovientro/" + fileName;
             FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
-            List<XhCtvtQuyetDinhPdHdr> detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
-            Object children = body.get("children");
+            List<XhCtvtQuyetDinhPdHdr> detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.getId())));
+            List<XhCtvtQuyetDinhPdHdrDTO> children = body.getChildren();
             HashMap<Object, Object> hashMap = new HashMap<>();
             hashMap.put("nam", detail.get(0).getNam());
             hashMap.put("tenLoaiVthh", detail.get(0).getTenVthh());
-            List listData = new ArrayList<>();
-
-            hashMap.put("listData", children);
+            List<XhCtvtQuyetDinhPdHdrPreviewDTO> listData = new ArrayList<>();
+            int index = 1;
+            for (XhCtvtQuyetDinhPdHdrDTO hdrDTO : children) {
+                XhCtvtQuyetDinhPdHdrPreviewDTO h = new XhCtvtQuyetDinhPdHdrPreviewDTO();
+                h.setStt("" + index++);
+                h.setTenCuc(hdrDTO.getTenDvi());
+                h.setMucDichXuatCucTro(hdrDTO.getMucDichXuat());
+                h.setThoiHanXuatCuuTro(hdrDTO.getNgayKetThuc().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                listData.add(h);
+                for (XhCtvtQuyetDinhPdDtlDTO dtlDTO : hdrDTO.getChildData()) {
+                    XhCtvtQuyetDinhPdHdrPreviewDTO d = new XhCtvtQuyetDinhPdHdrPreviewDTO();
+                    d.setTenNoiNhan(dtlDTO.getNoiDungDx());
+                    listData.add(d);
+                    if (dtlDTO.getChildData() != null && !dtlDTO.getChildData().isEmpty()) {
+                        for (XhCtvtQuyetDinhPdDtlDTO dtlDTO1 : dtlDTO.getChildData()) {
+                            XhCtvtQuyetDinhPdHdrPreviewDTO d1 = new XhCtvtQuyetDinhPdHdrPreviewDTO();
+                            d1.setTenChungLoaiHang(dtlDTO1.getTenCloaiVthh());
+                            d1.setSoLuongCucThucHien(dtlDTO1.getSoLuong());
+                            listData.add(d);
+                        }
+                    } else {
+                        d.setTenChungLoaiHang(dtlDTO.getTenLoaiVthh());
+                        d.setSoLuongCucThucHien(dtlDTO.getSoLuong());
+                    }
+                }
+            }
+            hashMap.put("tongSlGiao", listData.stream().map(item -> item.getSoLuongCucThucHien() != null ? new BigDecimal(item.getSoLuongCucThucHien()) : new BigDecimal(0l)).mapToLong(BigDecimal::longValue).sum());
+            hashMap.put("listData", listData);
             return docxToPdfConverter.convertDocxToPdf(inputStream, hashMap);
         } catch (IOException e) {
             e.printStackTrace();

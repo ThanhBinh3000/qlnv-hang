@@ -143,7 +143,7 @@ public class HhDauThauController {
 	public ResponseEntity<BaseResponse> delete(@Valid @RequestBody IdSearchReq idSearchReq) {
 		BaseResponse resp = new BaseResponse();
 		try {
-//			service.delete(idSearchReq);
+			service.delete(idSearchReq);
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {

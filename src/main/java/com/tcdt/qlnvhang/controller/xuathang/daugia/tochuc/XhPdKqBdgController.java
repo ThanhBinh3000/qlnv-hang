@@ -195,12 +195,6 @@ public class XhPdKqBdgController extends BaseController {
     public ResponseEntity<BaseResponse> preview(@RequestBody HashMap<String, Object> body) {
         BaseResponse resp = new BaseResponse();
         try {
-      /*ReportTemplateResponse preview = xhDxKhBanDauGiaService.preview(body);
-      Path destinationFile = Paths.get("src/main/resources", new Date().getTime()+".docx");
-      byte[] decodedImg = Base64.getDecoder()
-          .decode(preview.getWordSrc().getBytes(StandardCharsets.UTF_8));
-      Files.write(destinationFile, decodedImg);*/
-
             resp.setData(xhKqBdgHdrService.preview(body));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());

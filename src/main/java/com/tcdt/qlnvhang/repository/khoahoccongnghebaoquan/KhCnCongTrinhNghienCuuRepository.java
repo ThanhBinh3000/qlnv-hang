@@ -13,16 +13,18 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface KhCnCongTrinhNghienCuuRepository extends JpaRepository<KhCnCongTrinhNghienCuu,Long> {
+public interface KhCnCongTrinhNghienCuuRepository extends JpaRepository<KhCnCongTrinhNghienCuu, Long> {
 
-    @Query("SELECT c FROM KhCnCongTrinhNghienCuu c WHERE 1=1"+
-        " AND (:#{#param.dvpl} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvpl},'%'))" +
-        " AND (:#{#param.maDeTai} IS NULL OR c.maDeTai LIKE CONCAT(:#{#param.maDeTai},'%'))" +
-        " AND (:#{#param.tenDeTai} IS NULL OR c.tenDeTai LIKE CONCAT('%',CONCAT(:#{#param.tenDeTai},'%')))" +
-        " AND (:#{#param.capDeTai} IS NULL OR c.capDeTai =:#{#param.capDeTai})" +
-        " AND ((:#{#param.thoiGianTu}  IS NULL OR (c.ngayKyTu >= :#{#param.thoiGianTu} AND c.ngayKyDen >= :#{#param.thoiGianTu}))" +
-        " AND (:#{#param.thoiGianDen}  IS NULL OR (c.ngayKyTu <= :#{#param.thoiGianDen} AND c.ngayKyDen <= :#{#param.thoiGianDen})))" +
-        " ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
+    @Query("SELECT c FROM KhCnCongTrinhNghienCuu c WHERE 1=1" +
+            " AND (:#{#param.dvpl} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvpl},'%'))" +
+            " AND (:#{#param.maDeTai} IS NULL OR c.maDeTai LIKE CONCAT(:#{#param.maDeTai},'%'))" +
+            " AND (:#{#param.tenDeTai} IS NULL OR c.tenDeTai LIKE CONCAT('%',CONCAT(:#{#param.tenDeTai},'%')))" +
+            " AND (:#{#param.capDeTai} IS NULL OR c.capDeTai =:#{#param.capDeTai})" +
+            " AND ((:#{#param.thoiGianThTu}  IS NULL OR (c.ngayKyTu >= :#{#param.thoiGianThTu} AND c.ngayKyTu >= :#{#param.thoiGianThTu}))" +
+            " AND (:#{#param.thoiGianThDen}  IS NULL OR (c.ngayKyTu <= :#{#param.thoiGianThDen} AND c.ngayKyTu <= :#{#param.thoiGianThDen})))" +
+            " AND ((:#{#param.thoiGianHtTu}  IS NULL OR (c.ngayKyDen >= :#{#param.thoiGianHtTu} AND c.ngayKyDen >= :#{#param.thoiGianHtTu}))" +
+            " AND (:#{#param.thoiGianHtDen}  IS NULL OR (c.ngayKyDen <= :#{#param.thoiGianHtDen} AND c.ngayKyDen <= :#{#param.thoiGianHtDen})))" +
+            " ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
     )
     Page<KhCnCongTrinhNghienCuu> searchPage(@Param("param") SearchKhCnCtrinhNcReq param, Pageable pageable);
 

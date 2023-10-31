@@ -22,12 +22,14 @@ import com.tcdt.qlnvhang.table.khoahoccongnghebaoquan.KhCnTienDoThucHien;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuXuatKho;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktluongthuc.XhXkLtPhieuKnClHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtBckqKiemDinhMau;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import fr.opensagres.xdocreport.core.XDocReportException;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -84,16 +86,19 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
             throw new Exception("Mã đề tài đã tồn tại");
         }
         Map<String, String> hashMapDmdv = getListDanhMucDvi(null, null, "01");
-        KhCnCongTrinhNghienCuu data = new ModelMapper().map(objReq, KhCnCongTrinhNghienCuu.class);
+        KhCnCongTrinhNghienCuu data = new KhCnCongTrinhNghienCuu();
+        BeanUtils.copyProperties(objReq, data);
         data.setMaDvi(userInfo.getDvql());
         data.setTenDvi(StringUtils.isEmpty(userInfo.getDvql()) ? null : hashMapDmdv.get(userInfo.getDvql()));
         KhCnCongTrinhNghienCuu created = khCnCongTrinhNghienCuuRepository.save(data);
         List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), data.getId(), KhCnCongTrinhNghienCuu.TABLE_NAME);
         List<FileDinhKem> fileTienDoTh = fileDinhKemService.saveListFileDinhKem(objReq.getFileTienDoTh(), data.getId(), KhCnTienDoThucHien.TABLE_NAME);
-        List<FileDinhKem> fileNghiemThuTl = fileDinhKemService.saveListFileDinhKem(objReq.getFileNghiemThuTl(), data.getId(), KhCnNghiemThuThanhLy.TABLE_NAME);
+        List<FileDinhKem> fileNghiemThu = fileDinhKemService.saveListFileDinhKem(objReq.getFileNghiemThu(), data.getId(), KhCnNghiemThuThanhLy.TABLE_NAME);
+        List<FileDinhKem> fileThanhLy = fileDinhKemService.saveListFileDinhKem(objReq.getFileThanhLy(), data.getId(), KhCnNghiemThuThanhLy.TABLE_NAME + "_TL");
         created.setFileDinhKem(fileDinhKem);
         created.setFileTienDoTh(fileTienDoTh);
-        created.setFileNghiemThuTl(fileNghiemThuTl);
+        created.setFileNghiemThu(fileNghiemThu);
+        created.setFileThanhLy(fileThanhLy);
         this.saveCtiet(data, objReq);
         return created;
     }
@@ -112,18 +117,19 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
             }
         }
         KhCnCongTrinhNghienCuu data = optional.get();
-        KhCnCongTrinhNghienCuu dataMap = new ModelMapper().map(objReq, KhCnCongTrinhNghienCuu.class);
-        updateObjectToObject(data, dataMap);
+        BeanUtils.copyProperties(objReq, data, "id");
         KhCnCongTrinhNghienCuu created = khCnCongTrinhNghienCuuRepository.save(data);
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(KhCnCongTrinhNghienCuu.TABLE_NAME));
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(KhCnTienDoThucHien.TABLE_NAME));
         fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(KhCnCongTrinhNghienCuu.TABLE_NAME));
         List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(), KhCnCongTrinhNghienCuu.TABLE_NAME);
         List<FileDinhKem> fileTienDoTh = fileDinhKemService.saveListFileDinhKem(objReq.getFileTienDoTh(), created.getId(), KhCnTienDoThucHien.TABLE_NAME);
-        List<FileDinhKem> fileNghiemThuTl = fileDinhKemService.saveListFileDinhKem(objReq.getFileNghiemThuTl(), created.getId(), KhCnNghiemThuThanhLy.TABLE_NAME);
+        List<FileDinhKem> fileNghiemThu = fileDinhKemService.saveListFileDinhKem(objReq.getFileNghiemThu(), created.getId(), KhCnNghiemThuThanhLy.TABLE_NAME);
+        List<FileDinhKem> fileThanhLy = fileDinhKemService.saveListFileDinhKem(objReq.getFileThanhLy(), data.getId(), KhCnNghiemThuThanhLy.TABLE_NAME + "_TL");
         created.setFileDinhKem(fileDinhKem);
         created.setFileTienDoTh(fileTienDoTh);
-        created.setFileNghiemThuTl(fileNghiemThuTl);
+        created.setFileNghiemThu(fileNghiemThu);
+        created.setFileNghiemThu(fileThanhLy);
         List<KhCnTienDoThucHien> tienDoThucHien = khCnTienDoThucHienRepository.findAllByIdHdr(data.getId());
         khCnTienDoThucHienRepository.deleteAll(tienDoThucHien);
         List<KhCnNghiemThuThanhLy> nghiemThuThanhLy = khCnNghiemThuThanhLyRepository.findAllByIdHdr(data.getId());
@@ -174,8 +180,10 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         data.setFileDinhKem(fileDinhKem);
         List<FileDinhKem> fileTienDoTh = fileDinhKemService.search(data.getId(), Collections.singleton(KhCnTienDoThucHien.TABLE_NAME));
         data.setFileTienDoTh(fileTienDoTh);
-        List<FileDinhKem> fileNghiemThuTl = fileDinhKemService.search(data.getId(), Collections.singleton(KhCnNghiemThuThanhLy.TABLE_NAME));
-        data.setFileNghiemThuTl(fileNghiemThuTl);
+        List<FileDinhKem> fileNghiemThu = fileDinhKemService.search(data.getId(), Collections.singleton(KhCnNghiemThuThanhLy.TABLE_NAME));
+        data.setFileNghiemThu(fileNghiemThu);
+        List<FileDinhKem> fileThanhLy = fileDinhKemService.search(data.getId(), Collections.singleton(KhCnNghiemThuThanhLy.TABLE_NAME + "_TL"));
+        data.setFileThanhLy(fileThanhLy);
         return data;
     }
 
@@ -193,6 +201,7 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         fileDinhKemService.delete(data.getId(), Lists.newArrayList(KhCnCongTrinhNghienCuu.TABLE_NAME));
         fileDinhKemService.delete(data.getId(), Lists.newArrayList(KhCnTienDoThucHien.TABLE_NAME));
         fileDinhKemService.delete(data.getId(), Lists.newArrayList(KhCnNghiemThuThanhLy.TABLE_NAME));
+        fileDinhKemService.delete(data.getId(), Lists.newArrayList(KhCnNghiemThuThanhLy.TABLE_NAME + "_TL"));
         khCnCongTrinhNghienCuuRepository.delete(data);
 
     }
@@ -211,6 +220,7 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(KhCnCongTrinhNghienCuu.TABLE_NAME));
         fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(KhCnTienDoThucHien.TABLE_NAME));
         fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(KhCnNghiemThuThanhLy.TABLE_NAME));
+        fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(KhCnNghiemThuThanhLy.TABLE_NAME + "_TL"));
         khCnCongTrinhNghienCuuRepository.deleteAll(list);
 
     }
@@ -224,7 +234,7 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         List<KhCnCongTrinhNghienCuu> data = page.getContent();
 
         String title = "Danh sách công trình nghiên cứu";
-        String[] rowsName = new String[]{"STT", "Mã đề tài", "Tên đề tài", "Cấp đề tài", "Từ năm", "Đến năm", "Trang Thái"};
+        String[] rowsName = new String[]{"STT", "Mã đề tài", "Tên đề tài", "Cấp đề tài", "Đơn vị chủ trì", "Chủ nhiệm đề tài", "Từ năm", "Đến năm", "Trang Thái"};
         String fileName = "danh-sach-cong-trinh-nghien-cuu.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
@@ -235,9 +245,11 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
             objs[1] = dx.getMaDeTai();
             objs[2] = dx.getTenDeTai();
             objs[3] = dx.getCapDeTai();
-            objs[4] = dx.getNgayKyTu();
-            objs[5] = dx.getNgayKyDen();
-            objs[6] = dx.getTenTrangThai();
+            objs[4] = dx.getTenDviChuTri();
+            objs[5] = dx.getChuNhiem();
+            objs[6] = dx.getNgayKyTu();
+            objs[7] = dx.getNgayKyDen();
+            objs[8] = dx.getTenTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

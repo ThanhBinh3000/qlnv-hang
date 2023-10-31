@@ -203,8 +203,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
                 }
             });
             gthau.setSoLuong(soLuong.get());
-            gthau.setThanhTien(thanhTien.get());
-            gthau.setThanhTienDx(thanhTienDx.get());
+            gthau.setThanhTien(thanhTien.get().multiply(BigDecimal.valueOf(1000)));
+            gthau.setThanhTienDx(thanhTienDx.get().multiply(BigDecimal.valueOf(1000)));
             hhDxuatKhLcntDsgtDtlRepository.save(gthau);
 
         }

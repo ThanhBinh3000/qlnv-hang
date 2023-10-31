@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.controller.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tcdt.qlnvhang.dto.XhCtvtQuyetDinhPdHdrDTO;
+import com.tcdt.qlnvhang.dto.XhCtvtQuyetDinhPdHdrReqPreviewDTO;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
@@ -216,7 +218,7 @@ public class XhCtvtQdPdHdrController {
   @ApiOperation(value = "Xem truoc", response = List.class)
   @PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<BaseResponse> preview(@RequestBody HashMap<String, Object> body) {
+  public ResponseEntity<BaseResponse> preview(@RequestBody XhCtvtQuyetDinhPdHdrReqPreviewDTO body) {
     BaseResponse resp = new BaseResponse();
     try {
       resp.setData(xhCtvtQdPdHdrService.preview(body));

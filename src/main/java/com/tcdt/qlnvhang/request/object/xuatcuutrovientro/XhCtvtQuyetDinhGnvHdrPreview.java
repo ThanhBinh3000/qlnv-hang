@@ -21,7 +21,7 @@ public class XhCtvtQuyetDinhGnvHdrPreview {
     private BigDecimal tongSoLuong;
     private String donViTinh;
     private String loaiVthh;
-    private LocalDate thoiGianGiaoNhan;
+    private String thoiGianGiaoNhan;
     private String lanhDaoCuc;
     private List<XhCtvtQuyetDinhGnvDtlDto> xhCtvtQuyetDinhGnvDtlDto;
 }
