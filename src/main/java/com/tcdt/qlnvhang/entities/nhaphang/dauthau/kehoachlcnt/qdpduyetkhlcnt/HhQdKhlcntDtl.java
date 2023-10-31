@@ -95,6 +95,8 @@ public class HhQdKhlcntDtl implements Serializable {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_TIME_STR)
 	Date tgianMoHoSo;
 	@Transient
+	private String soQdDc;
+	@Transient
 	private HhQdKhlcntHdr hhQdKhlcntHdr;
 
 	@Transient

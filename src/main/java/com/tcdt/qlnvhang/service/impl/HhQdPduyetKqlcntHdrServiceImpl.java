@@ -158,7 +158,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			}
 		}
 		HhQdPduyetKqlcntHdr dataDB = qOptional.get();
-		BeanUtils.copyProperties(objReq,dataDB,"id");
+		BeanUtils.copyProperties(objReq,dataDB);
 
 		dataDB.setNgaySua(getDateTimeNow());
 		dataDB.setNguoiSua(getUser().getUsername());
