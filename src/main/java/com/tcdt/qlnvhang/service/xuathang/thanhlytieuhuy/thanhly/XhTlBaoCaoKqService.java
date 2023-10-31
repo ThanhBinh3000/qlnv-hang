@@ -85,7 +85,7 @@ public class XhTlBaoCaoKqService extends BaseServiceImpl {
     XhTlBaoCaoKqHdr created = hdrRepository.save(hdr);
     List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), XhTlBaoCaoKqHdr.FILE_DINH_KEM);
     created.setFileDinhKem(canCu);
-    return null;
+    return hdr;
   }
 
   void validateData(XhTlBaoCaoKqHdrReq req) throws Exception {
