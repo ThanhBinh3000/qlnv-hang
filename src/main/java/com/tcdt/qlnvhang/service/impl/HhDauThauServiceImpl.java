@@ -264,6 +264,8 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
                     Optional<HhQdPduyetKqlcntHdr> bySoQd = hhQdPduyetKqlcntHdrRepository.findBySoQd(item.getSoQdPdKqLcnt());
                     bySoQd.ifPresent(item::setHhQdPduyetKqlcntHdr);
                 }
+                Optional<HhDchinhDxKhLcntHdr> dchinh = hhDchinhDxKhLcntHdrRepository.findByIdQdGoc(item.getIdQdHdr());
+                dchinh.ifPresent(hhDchinhDxKhLcntHdr -> item.setSoQdDc(hhDchinhDxKhLcntHdr.getSoQdDc()));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
