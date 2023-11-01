@@ -618,7 +618,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				hhQdPduyetKqlcntHdr = hhQdPduyetKqlcntHdrOptional.get();
 			}
 		}
-		List<HhQdKhlcntDsgthau> byIdQdDtl = hhQdKhlcntDsgthauRepository.findByIdQdDtl(dtl.getId());
+		List<HhQdKhlcntDsgthau> byIdQdDtl = hhQdKhlcntDsgthauRepository.findByIdQdDtlOrderByGoiThauAsc(dtl.getId());
 		Long countSlGThau = 0L;
 		for (HhQdKhlcntDsgthau x : byIdQdDtl )  {
 			x.setTenDvi(hashMapDvi.get(x.getMaDvi()));
