@@ -162,7 +162,7 @@ public class XhHopDongHdr implements Serializable {
 
     public String getTrangThaiXh() {
         setTenTrangThaiXh(TrangThaiAllEnum.getLabelById(trangThaiXh));
-        return trangThai;
+        return trangThaiXh;
     }
 
     @Transient
