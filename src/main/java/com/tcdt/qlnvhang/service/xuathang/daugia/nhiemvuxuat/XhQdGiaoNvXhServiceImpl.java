@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongHdr;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXh;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhDdiem;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhDtl;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.hopdong.XhHopDongHdrRepository;
@@ -109,6 +110,7 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl {
             XhQdGiaoNvXhDtl dtl = new XhQdGiaoNvXhDtl();
             BeanUtils.copyProperties(dtlReq, dtl, "id");
             dtl.setIdHdr(idHdr);
+            dtl.setTrangThai(Contains.CHUA_THUC_HIEN);
             xhQdGiaoNvXhDtlRepository.save(dtl);
             xhQdGiaoNvXhDdiemRepository.deleteAllByIdDtl(dtlReq.getId());
             for (XhQdGiaoNvXhDdiemReq ddiemReq : dtlReq.getChildren()) {
@@ -163,6 +165,7 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl {
                     dataDdiem.setTenLoKho(mapDmucDvi.getOrDefault(dataDdiem.getMaLoKho(), null));
                 });
                 dataDtl.setTenDvi(mapDmucDvi.getOrDefault(dataDtl.getMaDvi(), null));
+                dataDtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dataDtl.getTrangThai()));
                 dataDtl.setChildren(listDdiem);
             }
             data.setMapDmucDvi(mapDmucDvi);
