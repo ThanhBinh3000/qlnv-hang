@@ -88,4 +88,7 @@ public class HhQdPheduyetKhMttHdr extends TrangThaiBaseEntity implements Seriali
     @Transient
     private List<HhQdPheduyetKhMttDx> children = new ArrayList<>();
 
+    @Transient
+    private Long soLanDieuChinh;
+
 }

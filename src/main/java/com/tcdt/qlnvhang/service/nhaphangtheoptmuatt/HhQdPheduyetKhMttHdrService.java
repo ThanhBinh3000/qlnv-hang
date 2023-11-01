@@ -14,6 +14,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtTongHopDtl;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -79,6 +80,9 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
     @Autowired
     private HhTtChaoGiaKhmttSlddDtlRepository hhTtChaoGiaKhmttSlddDtlRepository;
 
+    @Autowired
+    private HhQdPduyetKqcgRepository hhQdPduyetKqcgRepository;
+
 
     @Autowired
     private KeHoachService keHoachService;
@@ -93,6 +97,19 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
                 pageable);
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
         data.getContent().forEach(f->{
+            f.setTenPtMuaTrucTiep(Contains.getPthucMtt(f.getPtMuaTrucTiep()));
+            f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+            f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
+            f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
+        });
+        return data;
+    }
+
+    public List<HhQdPheduyetKhMttHdr> searchDsTaoQdDc(HhQdPheduyetKhMttHdrSearchReq req) throws Exception {
+        List<HhQdPheduyetKhMttHdr> data = hhQdPheduyetKhMttHdrRepository.searchDsTaoQdDc(
+                req);
+        Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
+        data.forEach(f -> {
             f.setTenPtMuaTrucTiep(Contains.getPthucMtt(f.getPtMuaTrucTiep()));
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
@@ -284,7 +301,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
             dx.setChildren(slddList);
             dxList.add(dx);
         }
-
+        data.setSoLanDieuChinh(Long.valueOf(hhDcQdPduyetKhMttRepository.findAllByIdQdGocOrderByIdDesc(data.getId()).size()));
         data.setChildren(dxList);
         return data;
     }
