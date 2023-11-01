@@ -72,6 +72,7 @@ public class XhCtvtTongHopHdrService extends BaseServiceImpl {
         data.getContent().forEach(item ->{
             Optional<XhCtvtQuyetDinhPdHdr> dinhPdHdr = quyetDinhPdHdrs.stream().filter(item1 -> Objects.equals(item1.getIdTongHop(), item.getId())).findFirst();
             if(dinhPdHdr.isPresent()){
+                item.setQuyetDinhId(dinhPdHdr.get().getId());
                 item.setSoQuyetDinh(dinhPdHdr.get().getSoBbQd());
                 item.setNgayKiQuyetDinh(dinhPdHdr.get().getNgayKy());
             }

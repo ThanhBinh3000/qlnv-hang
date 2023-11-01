@@ -13,6 +13,7 @@ import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoCtRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhPhieuNhapKhoCtRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvHdrRepository;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.UserActivityService;
 import com.tcdt.qlnvhang.service.feign.LuuKhoClient;
@@ -22,6 +23,7 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuXuatKhoHdr;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoCt;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuXuatKho;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvHdr;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.aspectj.lang.JoinPoint;
@@ -43,6 +45,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -65,6 +68,8 @@ public class LoggingAspect {
   private NhPhieuNhapKhoCtRepository nhPhieuNhapKhoCtRepository;
   @Autowired
   private HhPhieuNhapKhoCtRepository hhPhieuNhapKhoCtRepository;
+  @Autowired
+  private XhCtvtQuyetDinhGnvHdrRepository xhCtvtQuyetDinhGnvHdrRepository;
 
 
   @Pointcut("within(com.tcdt.qlnvhang..*) && bean(*Controller))")
@@ -191,6 +196,16 @@ public class LoggingAspect {
             phieuNhapXuatHistory.setBang(rowData.TABLE_NAME);
             phieuNhapXuatHistory.setNamNhap(rowData.getNam());
             phieuNhapXuatHistory.setNgayTao(LocalDate.now());
+            //xu ly loai hinh nhap xuat
+            Optional<XhCtvtQuyetDinhGnvHdr> gnvHdr = xhCtvtQuyetDinhGnvHdrRepository.findById(rowData.getIdQdGiaoNvXh());
+            if (gnvHdr.isPresent()) {
+              if (gnvHdr.get().getLoaiNhapXuat().equals("Xuất viện trợ")) {
+                phieuNhapXuatHistory.setLoaiHinhNhapXuat("92");
+              } else {
+                phieuNhapXuatHistory.setLoaiHinhNhapXuat("84");
+              }
+            }
+
             luuKhoClient.synchronizeData(phieuNhapXuatHistory);
             logger.info("Cập nhật kho theo Phiếu nhập kho XhCtvtPhieuXuatKhoController {}", rowData);
           }

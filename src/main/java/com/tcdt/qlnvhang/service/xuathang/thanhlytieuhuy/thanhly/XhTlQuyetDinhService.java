@@ -230,7 +230,6 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
                 break;
             case Contains.BAN_HANH + Contains.HOANTHANHCAPNHAT:
                 hdr.setTrangThaiDg(NhapXuatHangTrangThaiEnum.HOANTHANHCAPNHAT.getId());
-                hdr.setTrangThai(req.getTrangThai());
                 break;
             case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
             case Contains.CHODUYET_LDTC + Contains.TUCHOI_LDTC:
