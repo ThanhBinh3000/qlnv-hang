@@ -59,4 +59,18 @@ public interface HhQdPheduyetKhMttHdrRepository extends JpaRepository<HhQdPheduy
     Optional<HhQdPheduyetKhMttHdr> findBySoQdAndLastest(String soQd, Boolean lastest);
     Optional<HhQdPheduyetKhMttHdr> findByIdQdGnvu(Long idQdGnvu);
 
+    @Query("SELECT DISTINCT DX from HhQdPheduyetKhMttHdr DX" +
+            " WHERE 1 = 1 " +
+            "AND DX.id NOT IN (select KQCG.idPdKhHdr from HhQdPduyetKqcgHdr KQCG) " +
+            "AND (:#{#param.namKh} IS NULL OR DX.namKh = :#{#param.namKh}) " +
+            "AND (:#{#param.soQd} IS NULL OR LOWER(DX.soQd) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.soQd}),'%' ) ) )" +
+            "AND (:#{#param.trichYeu} IS NULL OR LOWER(DX.trichYeu) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.trichYeu}),'%'))) " +
+            "AND (:#{#param.ngayQdTu} IS NULL OR DX.ngayQd >= :#{#param.ngayQdTu}) " +
+            "AND (:#{#param.ngayQdDen} IS NULL OR DX.ngayQd <= :#{#param.ngayQdDen}) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR DX.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+            "AND (:#{#param.lastest} IS NULL OR LOWER(DX.lastest) LIKE LOWER(CONCAT(CONCAT('%',:#{#param.lastest}),'%'))) " +
+            "AND (:#{#param.trangThai} IS NULL OR DX.trangThai = :#{#param.trangThai}) "
+    )
+    List<HhQdPheduyetKhMttHdr> searchDsTaoQdDc(@Param("param") HhQdPheduyetKhMttHdrSearchReq param);
+
 }

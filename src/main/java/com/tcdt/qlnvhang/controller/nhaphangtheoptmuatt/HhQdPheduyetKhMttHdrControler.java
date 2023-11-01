@@ -54,6 +54,23 @@ public class HhQdPheduyetKhMttHdrControler {
     }
 
 
+    @ApiOperation(value = "Tra cứu Quyết định phê duyệt kế hoạch mua trực tiếp", response = List.class)
+    @PostMapping(value=  PathContains.QD_PD_MTT + PathContains.URL_TRA_CUU + "/ds-tao-qd-dc", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> searchDsTaoQdDc(@Valid @RequestBody HhQdPheduyetKhMttHdrSearchReq objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(hhQdPheduyetKhMttHdrService.searchDsTaoQdDc(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+
 
     @ApiOperation(value = "Tạo mới Quyết định phê duyệt kế hoạch mua trực tiếp ", response = List.class)
     @PostMapping(value=PathContains.QD_PD_MTT+ PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
