@@ -138,9 +138,19 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl {
             data.setMapLoaiHinhNx(mapLoaiHinhNx);
             data.setMapKieuNhapXuat(mapKieuNhapXuat);
             data.setTrangThai(data.getTrangThai());
+            if (data.getIdThuKho() != null) {
+                userInfoRepository.findById(data.getIdThuKho()).ifPresent(userInfo -> {
+                    data.setTenThuKho(userInfo.getFullName());
+                });
+            }
             if (data.getIdKtvBaoQuan() != null) {
                 userInfoRepository.findById(data.getIdKtvBaoQuan()).ifPresent(userInfo -> {
                     data.setTenKtvBaoQuan(userInfo.getFullName());
+                });
+            }
+            if (data.getIdLanhDaoChiCuc() != null) {
+                userInfoRepository.findById(data.getIdLanhDaoChiCuc()).ifPresent(userInfo -> {
+                    data.setTenLanhDaoChiCuc(userInfo.getFullName());
                 });
             }
             List<XhBbLayMauBttDtl> listDtl = xhBbLayMauBttDtlRepository.findAllByIdHdr(data.getId());
@@ -207,6 +217,7 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl {
             case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
                 data.setNguoiPduyetId(currentUser.getUser().getId());
                 data.setNgayPduyet(LocalDate.now());
+                data.setIdLanhDaoChiCuc(currentUser.getUser().getId());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");

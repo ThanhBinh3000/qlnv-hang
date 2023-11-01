@@ -22,8 +22,11 @@ public class XhQdGiaoNvXhDtl {
     private String diaChi;
     private BigDecimal tonKho;
     private BigDecimal soLuongXuatBan;
+    private String trangThai;
     @Transient
     private String tenDvi;
+    @Transient
+    private String tenTrangThai;
     @Transient
     private List<XhQdGiaoNvXhDdiem> children = new ArrayList<>();
 }

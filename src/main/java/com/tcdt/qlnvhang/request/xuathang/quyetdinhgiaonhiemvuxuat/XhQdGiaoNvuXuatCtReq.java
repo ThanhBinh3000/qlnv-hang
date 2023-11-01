@@ -14,5 +14,6 @@ public class XhQdGiaoNvuXuatCtReq {
     private String diaChi;
     private BigDecimal tonKho;
     private BigDecimal soLuongXuatBan;
+    private String trangThai;
     private List<XhQdGiaoNvXhDdiemReq> children = new ArrayList<>();
 }
