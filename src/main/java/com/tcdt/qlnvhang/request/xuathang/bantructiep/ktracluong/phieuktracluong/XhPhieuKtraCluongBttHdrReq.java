@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ public class XhPhieuKtraCluongBttHdrReq extends BaseRequest {
     private Long idQdNv;
     private String soQdNv;
     private LocalDate ngayKyQdNv;
+    private Long idQdNvDtl;
     private Long idHopDong;
     private String soHopDong;
     private LocalDate ngayKyHopDong;
@@ -29,10 +31,12 @@ public class XhPhieuKtraCluongBttHdrReq extends BaseRequest {
     private Long idBbLayMau;
     private String soBbLayMau;
     private LocalDate ngayLayMau;
+    private Long idKho;
     private String maDiemKho;
     private String maNhaKho;
     private String maNganKho;
     private String maLoKho;
+    private BigDecimal soLuong;
     private String loaiVthh;
     private String cloaiVthh;
     private String tenHangHoa;

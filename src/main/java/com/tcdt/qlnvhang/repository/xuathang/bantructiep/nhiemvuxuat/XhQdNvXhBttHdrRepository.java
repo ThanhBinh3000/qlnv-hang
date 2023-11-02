@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.request.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdr
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -36,4 +37,14 @@ public interface XhQdNvXhBttHdrRepository extends JpaRepository<XhQdNvXhBttHdr, 
     List<XhQdNvXhBttHdr> findByIdIn(List<Long> idQdList);
 
     List<XhQdNvXhBttHdr> findAllByIdIn(List<Long> listId);
+
+    @Modifying
+    @Query(value = "UPDATE XH_QD_NV_XH_BTT_HDR QD " +
+            "SET QD.SO_HOP_DONG = CONCAT(COALESCE(QD.SO_HOP_DONG, ''), :newSoHopDong) WHERE QD.ID = :idQdNv", nativeQuery = true)
+    void updateSoHopDong(@Param("newSoHopDong") String newSoHopDong, @Param("idQdNv") Long idQdNv);
+
+    @Modifying
+    @Query(value = "UPDATE XH_QD_NV_XH_BTT_HDR QD " +
+            "SET QD.SO_BANG_KE_BAN_LE = CONCAT(COALESCE(QD.SO_BANG_KE_BAN_LE, ''), :newBangKeBanLe) WHERE QD.ID = :idQdNv", nativeQuery = true)
+    void updateSoBangKeBanLe(@Param("newBangKeBanLe") String newBangKeBanLe, @Param("idQdNv") Long idQdNv);
 }

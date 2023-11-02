@@ -12,7 +12,7 @@ public class XhBangKeBttReq extends BaseRequest {
     private Integer namKh;
     private String maDvi;
     private String soBangKe;
-    private String idQdNv;
+    private Long idQdNv;
     private String soQdNv;
     private LocalDate ngayKyQdNv;
     private BigDecimal slXuatBanQdPd;
