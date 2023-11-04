@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.xuathang.daugia.xuatkho;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho.XhDgPhieuXuatKho;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.xuatkho.XhDgPhieuXuatKhoRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -26,7 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -37,6 +37,8 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
     private XhDgPhieuXuatKhoRepository xhDgPhieuXuatKhoRepository;
     @Autowired
     private XhQdGiaoNvXhRepository xhQdGiaoNvXhRepository;
+    @Autowired
+    private XhQdGiaoNvXhDtlRepository xhQdGiaoNvXhDtlRepository;
     @Autowired
     private UserInfoRepository userInfoRepository;
 
@@ -81,6 +83,10 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
         if (created.getIdQdNv() != null) {
             xhQdGiaoNvXhRepository.findById(created.getIdQdNv()).ifPresent(quyetDinh -> {
                 quyetDinh.setTrangThaiXh(Contains.DANG_THUC_HIEN);
+                xhQdGiaoNvXhDtlRepository.findById(created.getIdQdNvDtl()).ifPresent(quyetDinhDtl -> {
+                    quyetDinhDtl.setTrangThai(Contains.DANG_THUC_HIEN);
+                    xhQdGiaoNvXhDtlRepository.save(quyetDinhDtl);
+                });
                 xhQdGiaoNvXhRepository.save(quyetDinh);
             });
         }

@@ -69,6 +69,16 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
             data.setMapVthh(mapDmucVthh);
             data.setMapDmucDvi(mapDmucDvi);
             data.setTrangThai(data.getTrangThai());
+            if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+                List<XhHopDongBttDvi> listDiaDiemKho = xhHopDongBttDviRepository.findAllByIdHdr(data.getId());
+                for (XhHopDongBttDvi dataDvi : listDiaDiemKho) {
+                    dataDvi.setTenDiemKho(mapDmucDvi.getOrDefault(dataDvi.getMaDiemKho(), null));
+                    dataDvi.setTenNhaKho(mapDmucDvi.getOrDefault(dataDvi.getMaNhaKho(), null));
+                    dataDvi.setTenNganKho(mapDmucDvi.getOrDefault(dataDvi.getMaNganKho(), null));
+                    dataDvi.setTenLoKho(mapDmucDvi.getOrDefault(dataDvi.getMaLoKho(), null));
+                }
+                data.setXhHopDongBttDviList(listDiaDiemKho);
+            }
         });
         return search;
     }
