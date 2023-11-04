@@ -37,9 +37,11 @@ public class XhPhieuXkhoBtt implements Serializable {
     private Long idQdNv;
     private String soQdNv;
     private LocalDate ngayKyQdNv;
+    private Long idQdNvDtl;
     private Long idPhieuKiemNghiem;
     private String soPhieuKiemNghiem;
     private LocalDate ngayKiemNghiemMau;
+    private Long idKho;
     private String maDiemKho;
     private String maNhaKho;
     private String maNganKho;

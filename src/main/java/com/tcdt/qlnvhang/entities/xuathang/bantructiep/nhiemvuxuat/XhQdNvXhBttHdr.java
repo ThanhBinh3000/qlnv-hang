@@ -34,6 +34,7 @@ public class XhQdNvXhBttHdr implements Serializable {
     private Long idHopDong;
     private String soHopDong;
     private LocalDate ngayKyHopDong;
+    private String soBangKeBanLe;
     private Long idQdPd;
     private String soQdPd;
     private Long idQdDc;

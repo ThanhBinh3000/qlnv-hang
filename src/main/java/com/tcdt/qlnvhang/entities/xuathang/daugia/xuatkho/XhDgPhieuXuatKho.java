@@ -37,6 +37,7 @@ public class XhDgPhieuXuatKho implements Serializable {
     private Long idQdNv;
     private String soQdNv;
     private LocalDate ngayKyQdNv;
+    private Long idQdNvDtl;
     private String loaiHinhNx;
     private String kieuNhapXuat;
     private Long idHopDong;
@@ -46,6 +47,7 @@ public class XhDgPhieuXuatKho implements Serializable {
     private Long idPhieuKiemNghiem;
     private String soPhieuKiemNghiem;
     private LocalDate ngayKiemNghiemMau;
+    private Long idKho;
     private String maDiemKho;
     private String diaDiemKho;
     private String maNhaKho;

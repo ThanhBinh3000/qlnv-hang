@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.xuathang.bantructiep.hopdong.bangkebanle;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.bangkebanle.XhBangKeBtt;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.bangkebanle.XhBangKeBttRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.hopdong.bangkebanle.XhBangKeBttReq;
@@ -29,6 +30,8 @@ public class XhBangKeBttServiceImpl extends BaseServiceImpl {
 
     @Autowired
     private XhBangKeBttRepository xhBangKeBttRepository;
+    @Autowired
+    private XhQdNvXhBttHdrRepository xhQdNvXhBttHdrRepository;
 
     public Page<XhBangKeBtt> searchPage(CustomUserDetails currentUser, XhBangKeBttReq req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -57,6 +60,12 @@ public class XhBangKeBttServiceImpl extends BaseServiceImpl {
         data.setNgayTao(LocalDate.now());
         data.setNguoiTaoId(currentUser.getUser().getId());
         XhBangKeBtt created = xhBangKeBttRepository.save(data);
+        if (created.getIdQdNv() != null && created.getSoBangKe() != null) {
+            xhQdNvXhBttHdrRepository.findById(created.getIdQdNv()).ifPresent(nhiemVu -> {
+                String soBangKe = nhiemVu.getSoBangKeBanLe() != null ? (", " + created.getSoBangKe()) : data.getSoBangKe();
+                xhQdNvXhBttHdrRepository.updateSoBangKeBanLe(soBangKe, created.getIdQdNv());
+            });
+        }
         return created;
     }
 
