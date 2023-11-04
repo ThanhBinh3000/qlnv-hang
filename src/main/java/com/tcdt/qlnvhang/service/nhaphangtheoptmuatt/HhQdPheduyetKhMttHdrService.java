@@ -270,7 +270,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         if (!qOptional.isPresent()){
             throw new UnsupportedOperationException("Bản ghi không tồn tại");
         }
-
+        Map<String,String> hashMapNguonVon = getListDanhMucChung("NGUON_VON");
         Map<String, String> hashMapVthh = getListDanhMucHangHoa();
         Map<String, String> hashMapDvi = getListDanhMucDvi(null, null, "01");
 
@@ -295,6 +295,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
                 sldd.setChildren(slddDtlList);
                 slddList.add(sldd);
             }
+            dx.setTenNguonVon(hashMapNguonVon.get(dx.getNguonVon()));
             dx.setTenDvi(StringUtils.isEmpty(dx.getMaDvi()) ? null : hashMapDvi.get(dx.getMaDvi()));
             dx.setTenLoaiVthh(hashMapVthh.get(dx.getLoaiVthh()));
             dx.setTenCloaiVthh(hashMapVthh.get(dx.getCloaiVthh()));

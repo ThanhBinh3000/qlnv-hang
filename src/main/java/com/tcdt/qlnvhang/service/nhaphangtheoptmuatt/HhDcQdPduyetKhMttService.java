@@ -96,6 +96,9 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         if (!DataUtils.isNullOrEmpty(objReq.getCanCuPhapLy())) {
             fileDinhKemService.saveListFileDinhKem(objReq.getCanCuPhapLy(), created.getId(), HhDcQdPduyetKhmttHdr.TABLE_NAME + "_CAN_CU");
         }
+        if (!DataUtils.isNullOrEmpty(objReq.getCvanToTrinh())) {
+            fileDinhKemService.saveListFileDinhKem(objReq.getCvanToTrinh(), created.getId(), HhDcQdPduyetKhmttHdr.TABLE_NAME + "_CONG_VAN");
+        }
         if (!DataUtils.isNullObject(objReq.getFileDinhkems())) {
             fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(), created.getId(), HhDcQdPduyetKhmttHdr.TABLE_NAME);
         }
@@ -153,6 +156,9 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         if (!DataUtils.isNullOrEmpty(objReq.getCanCuPhapLy())) {
             fileDinhKemService.saveListFileDinhKem(objReq.getCanCuPhapLy(), cerated.getId(), HhDcQdPduyetKhmttHdr.TABLE_NAME + "_CAN_CU");
         }
+        if (!DataUtils.isNullOrEmpty(objReq.getCvanToTrinh())) {
+            fileDinhKemService.saveListFileDinhKem(objReq.getCvanToTrinh(), cerated.getId(), HhDcQdPduyetKhmttHdr.TABLE_NAME + "_CONG_VAN");
+        }
         if (!DataUtils.isNullObject(objReq.getFileDinhkems())) {
             fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(), cerated.getId(), HhDcQdPduyetKhmttHdr.TABLE_NAME);
         }
@@ -202,6 +208,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         HhDcQdPduyetKhmttHdr data = optional.get();
         Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
         Map<String, String> hashMapDmdv = getListDanhMucDvi(null, null, "01");
+        Map<String,String> hashMapNguonVon = getListDanhMucChung("NGUON_VON");
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : hashMapDmHh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh()) ? null : hashMapDmHh.get(data.getCloaiVthh()));
@@ -213,6 +220,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
             pduyetDx.setTenDvi(StringUtils.isEmpty(pduyetDx.getMaDvi()) ? null : hashMapDmdv.get(pduyetDx.getMaDvi()));
             List<Long> idDx=listdx.stream().map(HhDcQdPduyetKhmttDx::getId).collect(Collectors.toList());
             List<HhDcQdPduyetKhmttSldd> listSlDd =hhDcQdPduyetKhmttSlddRepository.findAllByIdDcKhmtt(pduyetDx.getId());
+            pduyetDx.setTenNguonVon(hashMapNguonVon.get(pduyetDx.getNguonVon()));
             pduyetDx.setChildren(listSlDd);
             for (HhDcQdPduyetKhmttSldd sldd:listSlDd){
                 sldd.setTenDvi(StringUtils.isEmpty(sldd.getMaDvi()) ? null : hashMapDmdv.get(sldd.getMaDvi()));
@@ -228,6 +236,8 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         data.setFileDinhKems(fileDinhKem);
         List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Collections.singletonList(HhDcQdPduyetKhmttHdr.TABLE_NAME + "_CAN_CU"));
         data.setCanCuPhapLy(canCu);
+        List<FileDinhKem> congVan = fileDinhKemService.search(data.getId(), Collections.singletonList(HhDcQdPduyetKhmttHdr.TABLE_NAME + "_CONG_VAN"));
+        data.setCvanToTrinh(congVan);
         
         return data;
     }

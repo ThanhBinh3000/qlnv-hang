@@ -29,11 +29,20 @@ public class HhDcQdPduyetKhmttHdrReq {
     private String trangThai;
     private Integer namKh;
     private String maDvi;
+    private Long soLanDieuChinh;
+    private Long idSoQdCc;
+    private String soQdCc;
+    private String soToTrinh;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayTaoCv;
+    private String loaiHinhNx;
+    private String kieuNx;
 
     private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
 
 
     private List<FileDinhKemReq> canCuPhapLy = new ArrayList<>();
+    private List<FileDinhKemReq> cvanToTrinh = new ArrayList<>();
 
     private List<HhDcQdPduyetKhmttDxReq> hhDcQdPduyetKhmttDxList=new ArrayList<>();
 
