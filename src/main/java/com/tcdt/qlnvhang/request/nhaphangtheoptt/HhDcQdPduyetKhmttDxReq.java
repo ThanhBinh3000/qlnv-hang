@@ -41,6 +41,7 @@ public class HhDcQdPduyetKhmttDxReq {
     private Date tgianKthuc;
     private String ghiChu;
     private BigDecimal tongMucDt;
+    private BigDecimal tongSl;
     private BigDecimal tongSoLuong;
     private String nguonVon;
     private String tenChuDt;
