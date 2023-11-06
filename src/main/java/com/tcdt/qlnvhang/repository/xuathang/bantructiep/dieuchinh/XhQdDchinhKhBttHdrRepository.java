@@ -14,16 +14,16 @@ import java.util.List;
 @Repository
 public interface XhQdDchinhKhBttHdrRepository extends JpaRepository<XhQdDchinhKhBttHdr, Long> {
 
-    @Query("SELECT DISTINCT DX FROM XhQdDchinhKhBttHdr DX " +
-            "WHERE (:#{#param.dvql} IS NULL OR DX.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
-            "AND (:#{#param.namKh} IS NULL OR DX.namKh = :#{#param.namKh}) " +
-            "AND (:#{#param.soQdDc} IS NULL OR DX.soQdDc = :#{#param.soQdDc}) " +
-            "AND (:#{#param.trichYeu} IS NULL OR LOWER(DX.trichYeu) LIKE LOWER(CONCAT('%', :#{#param.trichYeu}, '%'))) " +
-            "AND (:#{#param.ngayKyDcTu} IS NULL OR DX.ngayKyDc >= :#{#param.ngayKyDcTu}) " +
-            "AND (:#{#param.ngayKyDcDen} IS NULL OR DX.ngayKyDc <= :#{#param.ngayKyDcDen}) " +
-            "AND (:#{#param.loaiVthh} IS NULL OR DX.loaiVthh = :#{#param.loaiVthh}) " +
-            "AND (:#{#param.trangThai} IS NULL OR DX.trangThai = :#{#param.trangThai}) " +
-            "ORDER BY DX.ngaySua DESC, DX.ngayTao DESC, DX.id DESC")
+    @Query("SELECT DISTINCT DC FROM XhQdDchinhKhBttHdr DC " +
+            "WHERE (:#{#param.dvql} IS NULL OR DC.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
+            "AND (:#{#param.namKh} IS NULL OR DC.namKh = :#{#param.namKh}) " +
+            "AND (:#{#param.soQdDc} IS NULL OR DC.soQdDc = :#{#param.soQdDc}) " +
+            "AND (:#{#param.trichYeu} IS NULL OR LOWER(DC.trichYeu) LIKE LOWER(CONCAT('%', :#{#param.trichYeu}, '%'))) " +
+            "AND (:#{#param.ngayKyDcTu} IS NULL OR DC.ngayKyDc >= :#{#param.ngayKyDcTu}) " +
+            "AND (:#{#param.ngayKyDcDen} IS NULL OR DC.ngayKyDc <= :#{#param.ngayKyDcDen}) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR DC.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
+            "AND (:#{#param.trangThai} IS NULL OR DC.trangThai = :#{#param.trangThai}) " +
+            "ORDER BY DC.ngaySua DESC, DC.ngayTao DESC, DC.id DESC")
     Page<XhQdDchinhKhBttHdr> searchPage(@Param("param") XhQdDchinhKhBttHdrReq param, Pageable pageable);
 
     boolean existsBySoQdDc(String soQdDc);

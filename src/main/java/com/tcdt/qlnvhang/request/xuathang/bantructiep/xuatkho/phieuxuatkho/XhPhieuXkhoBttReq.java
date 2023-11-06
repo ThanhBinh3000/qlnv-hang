@@ -31,6 +31,8 @@ public class XhPhieuXkhoBttReq extends BaseRequest {
     private String maNhaKho;
     private String maNganKho;
     private String maLoKho;
+    private String loaiHinhKho;
+    private String hinhThucBaoQuan;
     private String loaiHinhNx;
     private String kieuNx;
     private String loaiVthh;
