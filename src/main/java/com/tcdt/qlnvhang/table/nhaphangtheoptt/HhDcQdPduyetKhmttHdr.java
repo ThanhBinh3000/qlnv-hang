@@ -24,11 +24,11 @@ public class HhDcQdPduyetKhmttHdr implements Serializable {
 
     private Long id;
     private String soQdDc;
-    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyDc;
-    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayHluc;
-    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyQdGoc;
     private String trichYeu;
     private Long idQdGoc;
