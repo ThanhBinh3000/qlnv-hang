@@ -28,7 +28,7 @@ public class HhDcQdPduyetKhmttDx implements Serializable {
     private String namKh;
     @Transient
     private String tenDvi;
-    private String diaChiDvi;
+    private String diaChi;
     private String loaiVthh;
     @Transient
     private String tenLoaiVthh;
