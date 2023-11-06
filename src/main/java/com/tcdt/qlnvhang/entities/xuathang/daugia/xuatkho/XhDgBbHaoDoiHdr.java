@@ -35,12 +35,15 @@ public class XhDgBbHaoDoiHdr implements Serializable {
     private Long idQdNv;
     private String soQdNv;
     private LocalDate ngayKyQdNv;
+    private LocalDate thoiGianGiaoNhan;
+    private Long idQdNvDtl;
     private Long idHopDong;
     private String soHopDong;
     private LocalDate ngayKyHopDong;
     private Long idBbTinhKho;
     private String soBbTinhKho;
     private LocalDate ngayLapBbTinhKho;
+    private Long idKho;
     private String maDiemKho;
     private String diaDiemKho;
     private String maNhaKho;
