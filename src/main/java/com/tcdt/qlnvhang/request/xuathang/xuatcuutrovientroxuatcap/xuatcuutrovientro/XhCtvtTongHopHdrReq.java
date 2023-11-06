@@ -42,5 +42,6 @@ public class XhCtvtTongHopHdrReq{
     private final BigDecimal tongSlCtVt;
     private final BigDecimal tongSlXuatCap;
     private final BigDecimal tongSlDeXuat;
+    private String mucDichXuat;
     private final List<XhCtvtTongHopDtl> deXuatCuuTro;
 }
