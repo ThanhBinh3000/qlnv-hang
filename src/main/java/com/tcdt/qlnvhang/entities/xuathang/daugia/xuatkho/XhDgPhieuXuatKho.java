@@ -53,6 +53,8 @@ public class XhDgPhieuXuatKho implements Serializable {
     private String maNhaKho;
     private String maNganKho;
     private String maLoKho;
+    private String loaiHinhKho;
+    private String hinhThucBaoQuan;
     private String loaiVthh;
     private String cloaiVthh;
     private String tenHangHoa;
@@ -90,6 +92,8 @@ public class XhDgPhieuXuatKho implements Serializable {
     private String tenLoaiHinhNx;
     @Transient
     private String tenKieuNhapXuat;
+    @Transient
+    private String tenHinhThucBaoQuan;
     @Transient
     private String tenDiemKho;
     @Transient
@@ -134,13 +138,13 @@ public class XhDgPhieuXuatKho implements Serializable {
         }
         if (!DataUtils.isNullObject(getMaNganKho())) {
             setTenNganKho(mapDmucDvi.containsKey(getMaNganKho()) ? mapDmucDvi.get(getMaNganKho()) : null);
-            if(getTenNganKho() != null){
+            if (getTenNganKho() != null) {
                 setTenNganLoKho(getTenNganKho());
             }
         }
         if (!DataUtils.isNullObject(getMaLoKho())) {
             setTenLoKho(mapDmucDvi.containsKey(getMaLoKho()) ? mapDmucDvi.get(getMaLoKho()) : null);
-            if(getTenLoKho() != null) {
+            if (getTenLoKho() != null) {
                 setTenNganLoKho(getTenLoKho() + " - " + getTenNganKho());
             }
         }
@@ -165,6 +169,17 @@ public class XhDgPhieuXuatKho implements Serializable {
         this.mapKieuNhapXuat = mapKieuNhapXuat;
         if (!DataUtils.isNullObject(getKieuNhapXuat())) {
             setTenKieuNhapXuat(mapKieuNhapXuat.containsKey(getKieuNhapXuat()) ? mapKieuNhapXuat.get(getKieuNhapXuat()) : null);
+        }
+    }
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapHinhThucBaoQuan;
+
+    public void setMapHinhThucBaoQuan(Map<String, String> mapHinhThucBaoQuan) {
+        this.mapHinhThucBaoQuan = mapHinhThucBaoQuan;
+        if (!DataUtils.isNullObject(getHinhThucBaoQuan())) {
+            setTenHinhThucBaoQuan(mapHinhThucBaoQuan.containsKey(getHinhThucBaoQuan()) ? mapHinhThucBaoQuan.get(getHinhThucBaoQuan()) : null);
         }
     }
 

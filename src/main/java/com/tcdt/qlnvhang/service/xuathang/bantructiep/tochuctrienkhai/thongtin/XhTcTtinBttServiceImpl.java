@@ -123,6 +123,8 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
                 } else {
                     data.setXhQdPdKhBttHdr(xhQdPdKhBttHdrRepository.findById(data.getIdHdr()).orElse(null));
                 }
+                List<XhQdPdKhBttDvi> listDvi = xhQdPdKhBttDviRepository.findAllByIdDtl(data.getId());
+                data.setChildren(listDvi != null && !listDvi.isEmpty() ? listDvi : Collections.emptyList());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

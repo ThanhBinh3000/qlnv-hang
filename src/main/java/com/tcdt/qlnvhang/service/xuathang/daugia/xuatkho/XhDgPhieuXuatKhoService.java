@@ -55,9 +55,11 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
         Page<XhDgPhieuXuatKho> search = xhDgPhieuXuatKhoRepository.searchPage(req, pageable);
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        Map<String, String> mapHinhThucBaoQuan = getListDanhMucChung("HINH_THUC_BAO_QUAN");
         search.getContent().forEach(data -> {
             data.setMapVthh(mapDmucVthh);
             data.setMapDmucDvi(mapDmucDvi);
+            data.setMapHinhThucBaoQuan(mapHinhThucBaoQuan);
             data.setTrangThai(data.getTrangThai());
         });
         return search;
@@ -123,11 +125,13 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
         Map<String, String> mapKieuNhapXuat = getListDanhMucChung("KIEU_NHAP_XUAT");
+        Map<String, String> mapHinhThucBaoQuan = getListDanhMucChung("HINH_THUC_BAO_QUAN");
         allById.forEach(data -> {
             data.setMapDmucDvi(mapDmucDvi);
             data.setMapVthh(mapVthh);
             data.setMapLoaiHinhNx(mapLoaiHinhNx);
             data.setMapKieuNhapXuat(mapKieuNhapXuat);
+            data.setMapHinhThucBaoQuan(mapHinhThucBaoQuan);
             data.setTrangThai(data.getTrangThai());
             if (data.getIdThuKho() != null) {
                 userInfoRepository.findById(data.getIdThuKho()).ifPresent(userInfo -> {
@@ -204,6 +208,10 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
         if (statusReq.getTrangThai().equals(Contains.DADUYET_LDCC)) {
             xhQdGiaoNvXhRepository.findById(data.getIdQdNv()).ifPresent(quyetDinh -> {
                 quyetDinh.setTrangThaiXh(Contains.DA_HOAN_THANH);
+                xhQdGiaoNvXhDtlRepository.findById(data.getIdQdNvDtl()).ifPresent(quyetDinhDtl -> {
+                    quyetDinhDtl.setTrangThai(Contains.DA_HOAN_THANH);
+                    xhQdGiaoNvXhDtlRepository.save(quyetDinhDtl);
+                });
                 xhQdGiaoNvXhRepository.save(quyetDinh);
             });
         }
