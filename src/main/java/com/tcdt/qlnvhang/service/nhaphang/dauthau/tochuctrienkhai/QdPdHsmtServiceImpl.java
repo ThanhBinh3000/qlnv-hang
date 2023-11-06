@@ -78,7 +78,7 @@ public class QdPdHsmtServiceImpl extends BaseServiceImpl implements QdPdHsmtServ
     @Override
     public Page<QdPdHsmt> timKiem(QdPdHsmtSearchReq req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
-        Page<QdPdHsmt> page = qdPdHsmtRepository.search(req.getNamKhoach(), req.getSoQd(), req.getSoQdPdKhlcnt(), convertFullDateToString(req.getTuNgayKy()), convertFullDateToString(req.getDenNgayKy()), req.getLoaiVthh(), req.getTrichYeu(), req.getTrangThai(), req.getMaDvi(), pageable);
+        Page<QdPdHsmt> page = qdPdHsmtRepository.search(req.getNamKhoach(), req.getSoQd(), req.getSoQdPdKhlcnt(), convertFullDateToString(req.getTuNgayKy()), convertFullDateToString(req.getDenNgayKy()), req.getLoaiVthh(), req.getCloaiVthh(), req.getTrichYeu(), req.getTrangThai(), req.getMaDvi(), pageable);
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
         page.getContent().forEach(f -> {
             Optional<HhQdKhlcntHdr> qdKhlcntHdr = hhQdKhlcntHdrRepository.findById(f.getIdQdPdKhlcnt());
@@ -191,7 +191,7 @@ public class QdPdHsmtServiceImpl extends BaseServiceImpl implements QdPdHsmtServ
             if (qdKhlcntHdr.get().getDieuChinh() != null && qdKhlcntHdr.get().getDieuChinh().equals(Boolean.TRUE)) {
                 Optional<HhDchinhDxKhLcntHdr> dchinhDxKhLcntHdr = hhDchinhDxKhLcntHdrRepository.findByIdQdGocAndLastest(qdKhlcntHdr.get().getId(), Boolean.TRUE);
                 if (dchinhDxKhLcntHdr.isPresent()) {
-                    List<HhDchinhDxKhLcntDsgthau> gThauList = gThauRepository.findAllByIdDcDxHdr(dchinhDxKhLcntHdr.get().getId());
+                    List<HhDchinhDxKhLcntDsgthau> gThauList = gThauRepository.findAllByIdDcDxHdrOrderByGoiThau(dchinhDxKhLcntHdr.get().getId());
                     for(HhDchinhDxKhLcntDsgthau gThau : gThauList){
                         List<HhDchinhDxKhLcntDsgthauCtiet> gthauCtietList = gThauCietRepository.findAllByIdGoiThau(gThau.getId());
                         gthauCtietList.forEach(f -> {
