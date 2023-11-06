@@ -19,6 +19,7 @@ public class QdPdHsmtSearchReq extends BaseRequest {
     private String soQd;
     private String soQdPdKhlcnt;
     private String loaiVthh;
+    private String cloaiVthh;
     private String trichYeu;
     private String maDvi;
 }
