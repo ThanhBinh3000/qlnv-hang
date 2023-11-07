@@ -13,6 +13,7 @@ import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.Hh
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.*;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.tochuctrienkhai.QdPdHsmtRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.dauthauvattu.QdPdHsmtReq;
 import com.tcdt.qlnvhang.request.search.QdPdHsmtSearchReq;
@@ -24,6 +25,7 @@ import com.tcdt.qlnvhang.table.HhDchinhDxKhLcntDsgthauCtietVt;
 import com.tcdt.qlnvhang.table.HhDchinhDxKhLcntHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 @Service
@@ -270,6 +273,46 @@ public class QdPdHsmtServiceImpl extends BaseServiceImpl implements QdPdHsmtServ
         }
         qOptional.get().setTrangThai(stReq.getTrangThai());
         return qdPdHsmtRepository.save(qOptional.get());
+    }
+
+    @Override
+    public void exportList(QdPdHsmtSearchReq req, HttpServletResponse response) throws Exception {
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        Page<QdPdHsmt> qdPdHsmtPage = timKiem(req);
+        List<QdPdHsmt> data = qdPdHsmtPage.getContent();
+        String filename = "danh-sach-quyet-dinh-pd-hsmt.xlsx";
+        String title = "Danh sách kế hoạch quyết định phê duyệt hồ sơ mời thầu";
+        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số QĐ PD HSMT", "Ngày ký QĐ PD HSMT",
+                "Trích yếu", "Số QĐ PD/ĐC KHLCNT", "Lần điều chỉnh", "Loại hàng DTQG", "Trạng thái"};
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        for (int i = 0; i < data.size(); i++) {
+            QdPdHsmt dx = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = dx.getNamKhoach();
+            objs[2] = dx.getSoQd();
+            objs[3] = convertDate(dx.getNgayQd());
+            objs[4] = dx.getTrichYeu();
+            if (dx.getQdKhlcntHdr() != null) {
+                if (dx.getQdKhlcntHdr().getSoQdDc() != null) {
+                    objs[5] = dx.getQdKhlcntHdr().getSoQdDc();
+                } else {
+                    objs[5] = dx.getQdKhlcntHdr().getSoQd();
+                }
+                if (dx.getQdKhlcntHdr().getDchinhDxKhLcntHdr() != null) {
+                    objs[6] = dx.getQdKhlcntHdr().getDchinhDxKhLcntHdr().getLanDieuChinh();
+                }
+                objs[7] = dx.getQdKhlcntHdr().getTenLoaiVthh();
+            }
+            objs[8] = dx.getTenTrangThai();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+        ex.export();
     }
 
     @Override

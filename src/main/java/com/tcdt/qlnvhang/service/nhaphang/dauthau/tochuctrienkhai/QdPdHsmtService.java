@@ -7,6 +7,8 @@ import com.tcdt.qlnvhang.request.object.dauthauvattu.QdPdHsmtReq;
 import com.tcdt.qlnvhang.request.search.QdPdHsmtSearchReq;
 import org.springframework.data.domain.Page;
 
+import javax.servlet.http.HttpServletResponse;
+
 public interface QdPdHsmtService {
     Page<QdPdHsmt> timKiem(QdPdHsmtSearchReq req) throws Exception;
 
@@ -18,6 +20,7 @@ public interface QdPdHsmtService {
 
     QdPdHsmt approve(StatusReq stReq) throws Exception;
 
+    void exportList(QdPdHsmtSearchReq req, HttpServletResponse response) throws Exception;
     void delete(IdSearchReq idSearchReq) throws Exception;
 
     void deleteMulti(IdSearchReq idSearchReq) throws Exception;
