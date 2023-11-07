@@ -344,6 +344,9 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 			if ((Contains.CHODUYET_LDV + Contains.DA_LAP).equals(status)) {
 				optional.get().setNguoiGuiDuyetId(getUser().getId());
 				optional.get().setNgayGuiDuyet(getDateTimeNow());
+			} else if ((Contains.CHODUYET_LDV + Contains.TUCHOI_LDV).equals(status)) {
+				optional.get().setNguoiGuiDuyetId(getUser().getId());
+				optional.get().setNgayGuiDuyet(getDateTimeNow());
 			} else if ((Contains.BAN_HANH + Contains.CHODUYET_LDV).equals(status)) {
 				optional.get().setNguoiPduyetId(getUser().getId());
 				optional.get().setNgayPduyet(getDateTimeNow());
