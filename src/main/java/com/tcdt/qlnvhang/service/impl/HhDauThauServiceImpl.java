@@ -413,7 +413,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
                 objs[2] = dx.getSoDxuat();
                 objs[3] = dx.getHhQdKhlcntHdr().getSoQd();
                 objs[4] = dx.getSoQdPdKqLcnt();
-                objs[5] = convertDate(dx.getHhQdPduyetKqlcntHdr().getNgayKy());
+                objs[5] = dx.getHhQdPduyetKqlcntHdr()!= null? convertDate(dx.getHhQdPduyetKqlcntHdr().getNgayKy()) : "";
                 objs[6] = dx.getSoGthau();
                 objs[7] = dx.getSoGthauTrung();
                 objs[8] = dx.getSoGthauTruot();
