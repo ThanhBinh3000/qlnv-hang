@@ -107,7 +107,7 @@ public class XhPhieuKtraCluongBttServiceImpl extends BaseServiceImpl {
         if (xhPhieuKtraCluongBttHdrRepository.existsBySoPhieuKiemNghiemAndIdNot(req.getSoPhieuKiemNghiem(), req.getId())) {
             throw new Exception("Số phiếu kiểm nghiệm chất lượng " + req.getSoPhieuKiemNghiem() + " đã tồn tại");
         }
-        BeanUtils.copyProperties(req, data, "id", "maDvi");
+        BeanUtils.copyProperties(req, data, "id", "maDvi", "idKtvBaoQuan");
         data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(currentUser.getUser().getId());
         XhPhieuKtraCluongBttHdr update = xhPhieuKtraCluongBttHdrRepository.save(data);

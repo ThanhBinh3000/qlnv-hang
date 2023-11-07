@@ -32,6 +32,11 @@ public class XhQdPdKhBttDtlReq {
     private String tgianGnhanGhiChu;
     private String pthucGnhan;
     private String thongBao;
+    private String loaiHinhNx;
+    private String kieuNx;
+    private String loaiVthh;
+    private String cloaiVthh;
+    private String moTaHangHoa;
     private List<XhQdPdKhBttDviReq> children;
 
     // thông tin chào giá
@@ -39,8 +44,6 @@ public class XhQdPdKhBttDtlReq {
     private String pthucBanTrucTiep;
     private LocalDate ngayNhanCgia;
     private String diaDiemChaoGia;
-    private String loaiHinhNx;
-    private String kieuNx;
     private LocalDate ngayMkho;
     private LocalDate ngayKthuc;
     private String ghiChuChaoGia;
