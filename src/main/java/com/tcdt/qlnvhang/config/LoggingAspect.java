@@ -42,8 +42,11 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -317,15 +320,16 @@ public class LoggingAspect {
 
   public String getBody(Object[] args) {
     try {
+      List<Object> lst = new ArrayList<>();
+      for (Object a : args) {
+        if (!(a instanceof HttpServletRequest) && !(a instanceof HttpServletResponse)) {
+          lst.add(a);
+        }
+      }
       ObjectMapper mapper = new ObjectMapper();
-      return mapper.writeValueAsString(args);
+      return mapper.writeValueAsString(lst);
     } catch (JsonProcessingException e) {
-//            throw new RuntimeException(e);
       return null;
     }
-  }
-
-  public <C> C test(Object data, Class<C> clazz) {
-    return objectMapper.convertValue(data, clazz);
   }
 }
