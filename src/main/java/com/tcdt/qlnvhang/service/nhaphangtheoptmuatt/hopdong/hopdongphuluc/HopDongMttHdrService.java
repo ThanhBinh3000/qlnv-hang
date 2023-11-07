@@ -237,11 +237,15 @@ public class HopDongMttHdrService extends BaseServiceImpl {
       BeanUtils.copyProperties(diaDiemReq, diaDiem, "id");
       diaDiem.setIdHdr(idHdr);
       DiaDiemGiaoNhanMtt create = diaDiemGiaoNhanRepository.save(diaDiem);
-      Optional<HhQdPheduyetKqMttSLDD> sldd = hhQdPheduyetKqMttSLDDRepository.findAllByIdQdPdKqAndMaDvi(req.getIdQdKq(), create.getMaDvi());
-      if(sldd.isPresent()){
-        sldd.get().setSoLuongHd(create.getSoLuongHd());
-        hhQdPheduyetKqMttSLDDRepository.save(sldd.get());
+      Optional<HhQdPheduyetKqMttSLDD> sldd = Optional.empty();
+      if(req.getIdQdKq() != null){
+        sldd = hhQdPheduyetKqMttSLDDRepository.findAllByIdQdPdKqAndMaDvi(req.getIdQdKq(), create.getMaDvi());
+        if(sldd.isPresent()){
+          sldd.get().setSoLuongHd(create.getSoLuongHd());
+          hhQdPheduyetKqMttSLDDRepository.save(sldd.get());
+        }
       }
+
       List<DiaDiemGiaoNhanMtt> phuLucDtl = diaDiemGiaoNhanRepository.findAllByIdHdDtl(diaDiemReq.getId());
       if (!DataUtils.isNullOrEmpty(phuLucDtl)) {
         phuLucDtl.forEach(s -> {
@@ -257,7 +261,10 @@ public class HopDongMttHdrService extends BaseServiceImpl {
         diaDiemCt.setId(null);
         diaDiemCt.setIdDiaDiem(diaDiem.getId());
         diaDiemGiaoNhanMttCtRepository.save(diaDiemCt);
-        Optional<HhQdPdKQMttSlddDtl> hhQdPdKQMttSlddDtl = hhQdPdKqMttSlddDtlRepository.findAllByIdDiaDiemAndMaDiemKho(sldd.get().getId(), diaDiemCt.getMaDiemKho());
+        Optional<HhQdPdKQMttSlddDtl> hhQdPdKQMttSlddDtl = Optional.empty();
+        if(sldd.isPresent()){
+          hhQdPdKQMttSlddDtl = hhQdPdKqMttSlddDtlRepository.findAllByIdDiaDiemAndMaDiemKho(sldd.get().getId(), diaDiemCt.getMaDiemKho());
+        }
         if(hhQdPdKQMttSlddDtl.isPresent()){
           hhQdPdKQMttSlddDtl.get().setSoLuongHd(diaDiemCt.getSoLuongHd());
           hhQdPdKqMttSlddDtlRepository.save(hhQdPdKQMttSlddDtl.get());
