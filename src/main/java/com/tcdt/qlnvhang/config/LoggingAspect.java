@@ -329,7 +329,7 @@ public class LoggingAspect {
     try {
       List<Object> lst = new ArrayList<>();
       for (Object a : args) {
-        if (!(a instanceof HttpServletRequest) && !(a instanceof HttpServletResponse)) {
+        if (!(a instanceof HttpServletRequest) && !(a instanceof HttpServletResponse) && !(a instanceof CustomUserDetails)) {
           lst.add(a);
         }
       }
