@@ -91,7 +91,7 @@ public class ScQuyetDinhNhapHang extends BaseEntity implements Serializable {
     }
 
     public String getTenLoaiVthh() {
-        if(this.children != null){
+        if(this.children != null && this.children.size() > 0){
             ScQuyetDinhNhapHangDtl scQuyetDinhNhapHangDtl = this.children.get(0);
             if(scQuyetDinhNhapHangDtl.getScDanhSachHdr() != null){
                 this.donViTinh = scQuyetDinhNhapHangDtl.getScDanhSachHdr().getDonViTinh();
