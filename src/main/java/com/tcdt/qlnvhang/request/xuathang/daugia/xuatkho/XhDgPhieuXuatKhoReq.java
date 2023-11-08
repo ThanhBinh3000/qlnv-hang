@@ -22,6 +22,7 @@ public class XhDgPhieuXuatKhoReq extends BaseRequest {
     private Long idQdNv;
     private String soQdNv;
     private LocalDate ngayKyQdNv;
+    private Long idQdNvDtl;
     private String loaiHinhNx;
     private String kieuNhapXuat;
     private Long idHopDong;
@@ -31,11 +32,14 @@ public class XhDgPhieuXuatKhoReq extends BaseRequest {
     private Long idPhieuKiemNghiem;
     private String soPhieuKiemNghiem;
     private LocalDate ngayKiemNghiemMau;
+    private Long idKho;
     private String maDiemKho;
     private String diaDiemKho;
     private String maNhaKho;
     private String maNganKho;
     private String maLoKho;
+    private String loaiHinhKho;
+    private String hinhThucBaoQuan;
     private String loaiVthh;
     private String cloaiVthh;
     private String tenHangHoa;

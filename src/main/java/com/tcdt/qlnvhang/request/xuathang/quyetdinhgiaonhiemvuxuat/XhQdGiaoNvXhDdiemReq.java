@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.request.xuathang.quyetdinhgiaonhiemvuxuat;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Data
 public class XhQdGiaoNvXhDdiemReq {
@@ -19,4 +20,7 @@ public class XhQdGiaoNvXhDdiemReq {
     private BigDecimal donGia;
     private BigDecimal thanhTien;
     private String donViTinh;
+    private Long idBbTinhKho;
+    private String soBbTinhKho;
+    private LocalDate ngayLapBbTinhKho;
 }

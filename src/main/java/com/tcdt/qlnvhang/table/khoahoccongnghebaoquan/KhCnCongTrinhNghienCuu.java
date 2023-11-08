@@ -76,6 +76,9 @@ public class KhCnCongTrinhNghienCuu extends BaseEntity implements Serializable {
     private String ldoTuChoi;
     @Transient
     private String tenXepLoai;
+    //xem trước
+    @Transient
+    private List<String> listDkThanhLy;
     @Transient
     private List<FileDinhKem> fileDinhKem = new ArrayList<>();
     @Transient

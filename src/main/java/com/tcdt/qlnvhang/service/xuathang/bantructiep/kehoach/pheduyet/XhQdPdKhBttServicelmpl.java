@@ -147,11 +147,6 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
             dtl.setIdHdr(idHdr);
             dtl.setNamKh(req.getNamKh());
             dtl.setSoQdPd(req.getSoQdPd());
-            dtl.setLoaiHinhNx(req.getLoaiHinhNx());
-            dtl.setKieuNx(req.getKieuNx());
-            dtl.setLoaiVthh(req.getLoaiVthh());
-            dtl.setCloaiVthh(req.getCloaiVthh());
-            dtl.setMoTaHangHoa(req.getMoTaHangHoa());
             dtl.setIsDieuChinh(false);
             dtl.setLastest(false);
             dtl.setTrangThai(Contains.CHUA_THUC_HIEN);

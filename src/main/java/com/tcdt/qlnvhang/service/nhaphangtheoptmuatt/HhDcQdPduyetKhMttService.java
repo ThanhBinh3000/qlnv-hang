@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -13,6 +14,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import org.modelmapper.ModelMapper;
@@ -86,13 +88,20 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         HhDcQdPduyetKhmttHdr data = new ModelMapper().map(objReq,HhDcQdPduyetKhmttHdr.class);
         data.setNgayTao(new Date());
         data.setNguoiTao(userInfo.getUsername());
-        data.setTrangThai(Contains.DUTHAO);
+        data.setTrangThai(Contains.DA_LAP);
         data.setMaDvi(userInfo.getDvql());
         HhDcQdPduyetKhmttHdr created=hhDcQdPduyetKhMttRepository.save(data);
 //        objReq.setIsChange(true);
 //        updateQdPduyet(created, objReq);
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(),data.getId(),"HH_DC_QD_PDUYET_KHMTT_HDR");
-        created.setFileDinhKems(fileDinhKems);
+        if (!DataUtils.isNullOrEmpty(objReq.getCanCuPhapLy())) {
+            fileDinhKemService.saveListFileDinhKem(objReq.getCanCuPhapLy(), created.getId(), HhDcQdPduyetKhmttHdr.TABLE_NAME + "_CAN_CU");
+        }
+        if (!DataUtils.isNullOrEmpty(objReq.getCvanToTrinh())) {
+            fileDinhKemService.saveListFileDinhKem(objReq.getCvanToTrinh(), created.getId(), HhDcQdPduyetKhmttHdr.TABLE_NAME + "_CONG_VAN");
+        }
+        if (!DataUtils.isNullObject(objReq.getFileDinhkems())) {
+            fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(), created.getId(), HhDcQdPduyetKhmttHdr.TABLE_NAME);
+        }
         for (HhDcQdPduyetKhmttDxReq listDx :objReq.getHhDcQdPduyetKhmttDxList()){
             HhDcQdPduyetKhmttDx dx = ObjectMapperUtils.map(listDx, HhDcQdPduyetKhmttDx.class);
             dx.setIdDxHdr(listDx.getIdDxHdr());
@@ -144,7 +153,15 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         data.setNguoiSua(userInfo.getUsername());
         data.setNgaySua(new Date());
         HhDcQdPduyetKhmttHdr cerated = hhDcQdPduyetKhMttRepository.save(data);
-
+        if (!DataUtils.isNullOrEmpty(objReq.getCanCuPhapLy())) {
+            fileDinhKemService.saveListFileDinhKem(objReq.getCanCuPhapLy(), cerated.getId(), HhDcQdPduyetKhmttHdr.TABLE_NAME + "_CAN_CU");
+        }
+        if (!DataUtils.isNullOrEmpty(objReq.getCvanToTrinh())) {
+            fileDinhKemService.saveListFileDinhKem(objReq.getCvanToTrinh(), cerated.getId(), HhDcQdPduyetKhmttHdr.TABLE_NAME + "_CONG_VAN");
+        }
+        if (!DataUtils.isNullObject(objReq.getFileDinhkems())) {
+            fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhkems(), cerated.getId(), HhDcQdPduyetKhmttHdr.TABLE_NAME);
+        }
         List<HhDcQdPduyetKhmttDx> dcQdPduyetKhmttDxList=hhDcQdPduyetKhMttDxRepository.findAllByIdDcHdr(data.getId());
         List<Long>  listIdDx=dcQdPduyetKhmttDxList.stream().map(HhDcQdPduyetKhmttDx::getId).collect(Collectors.toList());
         List<HhDcQdPduyetKhmttSldd> listSlDd=hhDcQdPduyetKhmttSlddRepository.findAllByIdDcKhmttIn(listIdDx);
@@ -191,6 +208,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         HhDcQdPduyetKhmttHdr data = optional.get();
         Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
         Map<String, String> hashMapDmdv = getListDanhMucDvi(null, null, "01");
+        Map<String,String> hashMapNguonVon = getListDanhMucChung("NGUON_VON");
         data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
         data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh()) ? null : hashMapDmHh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh()) ? null : hashMapDmHh.get(data.getCloaiVthh()));
@@ -202,6 +220,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
             pduyetDx.setTenDvi(StringUtils.isEmpty(pduyetDx.getMaDvi()) ? null : hashMapDmdv.get(pduyetDx.getMaDvi()));
             List<Long> idDx=listdx.stream().map(HhDcQdPduyetKhmttDx::getId).collect(Collectors.toList());
             List<HhDcQdPduyetKhmttSldd> listSlDd =hhDcQdPduyetKhmttSlddRepository.findAllByIdDcKhmtt(pduyetDx.getId());
+            pduyetDx.setTenNguonVon(hashMapNguonVon.get(pduyetDx.getNguonVon()));
             pduyetDx.setChildren(listSlDd);
             for (HhDcQdPduyetKhmttSldd sldd:listSlDd){
                 sldd.setTenDvi(StringUtils.isEmpty(sldd.getMaDvi()) ? null : hashMapDmdv.get(sldd.getMaDvi()));
@@ -213,6 +232,12 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
             }
         }
         data.setHhDcQdPduyetKhmttDxList(listdx);
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Collections.singletonList(HhDcQdPduyetKhmttHdr.TABLE_NAME));
+        data.setFileDinhKems(fileDinhKem);
+        List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Collections.singletonList(HhDcQdPduyetKhmttHdr.TABLE_NAME + "_CAN_CU"));
+        data.setCanCuPhapLy(canCu);
+        List<FileDinhKem> congVan = fileDinhKemService.search(data.getId(), Collections.singletonList(HhDcQdPduyetKhmttHdr.TABLE_NAME + "_CONG_VAN"));
+        data.setCvanToTrinh(congVan);
         
         return data;
     }
@@ -224,7 +249,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         if (!optional.isPresent()){
             throw new Exception("Không tồn tại bản ghi");
         }
-        if (!optional.get().getTrangThai().equals(Contains.DUTHAO)&& !optional.get().getTrangThai().equals(Contains.TU_CHOI_TP) && !optional.get().getTrangThai().equals(Contains.TUCHOI_LDC)){
+        if (!optional.get().getTrangThai().equals(Contains.DA_LAP)&& !optional.get().getTrangThai().equals(Contains.TU_CHOI_TP) && !optional.get().getTrangThai().equals(Contains.TUCHOI_LDC)){
             throw new Exception("Chỉ thực hiện xóa bản ghi ở trạng thái bản nháp hoặc từ chối");
         }
         HhDcQdPduyetKhmttHdr data = optional.get();
@@ -258,7 +283,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         for (HhDcQdPduyetKhmttHdr qdPheduyetKhMttHdr : list){
-            if (!qdPheduyetKhMttHdr.getTrangThai().equals(Contains.DUTHAO)){
+            if (!qdPheduyetKhMttHdr.getTrangThai().equals(Contains.DA_LAP)){
                 throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
             }
         }
@@ -321,7 +346,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
 
         String status= statusReq.getTrangThai()+optional.get().getTrangThai();
         switch (status){
-            case Contains.CHODUYET_LDV + Contains.DUTHAO:
+            case Contains.CHODUYET_LDV + Contains.DA_LAP:
             case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
                 optional.get().setNguoiGduyet(userInfo.getUsername());
                 optional.get().setNgayGduyet(getDateTimeNow());
@@ -331,8 +356,8 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
                 optional.get().setNgayGduyet(getDateTimeNow());
                 optional.get().setLdoTchoi(statusReq.getLyDo());
                 break;
-            case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
-            case Contains.BAN_HANH + Contains.DADUYET_LDV:
+//            case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
+            case Contains.BAN_HANH + Contains.CHODUYET_LDV:
                 optional.get().setNguoiPduyet(getUser().getUsername());
                 optional.get().setNgayPduyet(getDateTimeNow());
                 break;

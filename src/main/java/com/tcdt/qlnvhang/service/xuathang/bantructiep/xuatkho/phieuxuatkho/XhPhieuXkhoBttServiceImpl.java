@@ -55,9 +55,11 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl {
         Page<XhPhieuXkhoBtt> search = xhPhieuXkhoBttReposytory.searchPage(req, pageable);
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        Map<String, String> mapHinhThucBaoQuan = getListDanhMucChung("HINH_THUC_BAO_QUAN");
         search.getContent().forEach(data -> {
             data.setMapVthh(mapDmucVthh);
             data.setMapDmucDvi(mapDmucDvi);
+            data.setMapHinhThucBaoQuan(mapHinhThucBaoQuan);
             data.setTrangThai(data.getTrangThai());
         });
         return search;
@@ -119,11 +121,13 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl {
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
         Map<String, String> mapKieuNhapXuat = getListDanhMucChung("KIEU_NHAP_XUAT");
+        Map<String, String> mapHinhThucBaoQuan = getListDanhMucChung("HINH_THUC_BAO_QUAN");
         allById.forEach(data -> {
             data.setMapDmucDvi(mapDmucDvi);
             data.setMapVthh(mapVthh);
             data.setMapLoaiHinhNx(mapLoaiHinhNx);
             data.setMapKieuNhapXuat(mapKieuNhapXuat);
+            data.setMapHinhThucBaoQuan(mapHinhThucBaoQuan);
             data.setTrangThai(data.getTrangThai());
             if (data.getIdThuKho() != null) {
                 userInfoRepository.findById(data.getIdThuKho()).ifPresent(userInfo -> {
@@ -252,7 +256,7 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl {
             }
             Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
             xhQdNvXhBttHdrRepository.findById(detail.getIdQdNv())
-                    .ifPresent(quyetDinh ->{
+                    .ifPresent(quyetDinh -> {
                         if (detail.getPthucBanTrucTiep().equals("01")) {
                             detail.setTenBenMua(quyetDinh.getTenBenMua());
                         }

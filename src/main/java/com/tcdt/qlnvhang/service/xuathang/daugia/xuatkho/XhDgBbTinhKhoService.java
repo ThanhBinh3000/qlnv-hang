@@ -6,6 +6,8 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMauRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.ktracluong.kiemnghiemcl.XhPhieuKnghiemCluongRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhDdiemRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.xuatkho.XhDgBbTinhKhoDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.xuatkho.XhDgBbTinhKhoHdrRepository;
@@ -47,6 +49,10 @@ public class XhDgBbTinhKhoService extends BaseServiceImpl {
     @Autowired
     private XhQdGiaoNvXhRepository xhQdGiaoNvXhRepository;
     @Autowired
+    private XhQdGiaoNvXhDtlRepository xhQdGiaoNvXhDtlRepository;
+    @Autowired
+    private XhQdGiaoNvXhDdiemRepository xhQdGiaoNvXhDdiemRepository;
+    @Autowired
     private UserInfoRepository userInfoRepository;
 
     public Page<XhDgBbTinhKhoHdr> searchPage(CustomUserDetails currentUser, XhDgBbTinhKhoHdrReq req) throws Exception {
@@ -62,10 +68,12 @@ public class XhDgBbTinhKhoService extends BaseServiceImpl {
         Page<XhDgBbTinhKhoHdr> search = xhDgBbTinhKhoHdrRepository.searchPage(req, pageable);
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        Map<String, String> mapHinhThucBaoQuan = getListDanhMucChung("HINH_THUC_BAO_QUAN");
         search.getContent().forEach(data -> {
             try {
                 data.setMapVthh(mapDmucVthh);
                 data.setMapDmucDvi(mapDmucDvi);
+                data.setMapHinhThucBaoQuan(mapHinhThucBaoQuan);
                 data.setTrangThai(data.getTrangThai());
                 List<XhDgBbTinhKhoDtl> listDtl = xhDgBbTinhKhoDtlRepository.findAllByIdHdr(data.getId());
                 data.setChildren(listDtl != null && !listDtl.isEmpty() ? listDtl : Collections.emptyList());
@@ -245,10 +253,11 @@ public class XhDgBbTinhKhoService extends BaseServiceImpl {
             });
             xhPhieuKnghiemCluongRepository.save(kiemNghiem);
         });
-        xhQdGiaoNvXhRepository.findById(created.getIdQdNv()).ifPresent(quyetDinh -> {
-            quyetDinh.setIdTinhKho(created.getId());
-            quyetDinh.setBienBanTinhKho(created.getSoBbTinhKho());
-            xhQdGiaoNvXhRepository.save(quyetDinh);
+        xhQdGiaoNvXhDdiemRepository.findById(created.getIdKho()).ifPresent(quyetDinhDdiem -> {
+            quyetDinhDdiem.setIdBbTinhKho(created.getId());
+            quyetDinhDdiem.setSoBbTinhKho(created.getSoBbTinhKho());
+            quyetDinhDdiem.setNgayLapBbTinhKho(created.getNgayLapBienBan());
+            xhQdGiaoNvXhDdiemRepository.save(quyetDinhDdiem);
         });
     }
 

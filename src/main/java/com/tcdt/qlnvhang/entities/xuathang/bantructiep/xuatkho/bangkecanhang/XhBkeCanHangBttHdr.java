@@ -35,11 +35,15 @@ public class XhBkeCanHangBttHdr implements Serializable {
     private Long idQdNv;
     private String soQdNv;
     private LocalDate ngayKyQdNv;
+    private Long idQdNvDtl;
+    private Long idKho;
     private String maDiemKho;
     private String diaDiemKho;
     private String maNhaKho;
     private String maNganKho;
     private String maLoKho;
+    private String loaiHinhKho;
+    private String nguoiGiamSat;
     private String loaiVthh;
     private String cloaiVthh;
     private String tenHangHoa;

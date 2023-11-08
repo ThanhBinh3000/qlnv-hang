@@ -32,6 +32,7 @@ public class XhBbHdoiBttHdr implements Serializable {
     private String maQhNs;
     private String soBbHaoDoi;
     private LocalDate ngayLapBienBan;
+    private Long idQdNvDtl;
     private Long idQdNv;
     private String soQdNv;
     private LocalDate ngayKyQdNv;
@@ -41,10 +42,12 @@ public class XhBbHdoiBttHdr implements Serializable {
     private Long idPhieuKiemNghiem;
     private String soPhieuKiemNghiem;
     private LocalDate ngayKiemNghiemMau;
+    private Long idKho;
     private String maDiemKho;
     private String maNhaKho;
     private String maNganKho;
     private String maLoKho;
+    private String loaiHinhKho;
     private LocalDate tgianGiaoNhan;
     private String loaiVthh;
     private String cloaiVthh;

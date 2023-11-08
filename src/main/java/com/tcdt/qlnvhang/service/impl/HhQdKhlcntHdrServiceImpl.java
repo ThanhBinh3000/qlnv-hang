@@ -618,7 +618,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				hhQdPduyetKqlcntHdr = hhQdPduyetKqlcntHdrOptional.get();
 			}
 		}
-		List<HhQdKhlcntDsgthau> byIdQdDtl = hhQdKhlcntDsgthauRepository.findByIdQdDtl(dtl.getId());
+		List<HhQdKhlcntDsgthau> byIdQdDtl = hhQdKhlcntDsgthauRepository.findByIdQdDtlOrderByGoiThauAsc(dtl.getId());
 		Long countSlGThau = 0L;
 		for (HhQdKhlcntDsgthau x : byIdQdDtl )  {
 			x.setTenDvi(hashMapDvi.get(x.getMaDvi()));
@@ -660,9 +660,9 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		};
 		dtl.setChildren(byIdQdDtl);
 		dtl.setSoGthau(countSlGThau);
-		long countThanhCong = byIdQdDtl.stream().filter(x -> x.getTrangThai().equals(NhapXuatHangTrangThaiEnum.THANH_CONG.getId())).map(y -> y.getId())
+		long countThanhCong = byIdQdDtl.stream().filter(x -> x.getTrangThaiDt().equals(NhapXuatHangTrangThaiEnum.THANH_CONG.getId())).map(y -> y.getId())
 				.distinct().count();
-		long countThatBai = byIdQdDtl.stream().filter(x -> x.getTrangThai().equals(NhapXuatHangTrangThaiEnum.THAT_BAI.getId())).map(y -> y.getId())
+		long countThatBai = byIdQdDtl.stream().filter(x -> x.getTrangThaiDt().equals(NhapXuatHangTrangThaiEnum.THAT_BAI.getId())).map(y -> y.getId())
 				.distinct().count();
 		dtl.setSoGthauTrung(countThanhCong);
 		dtl.setSoGthauTruot(countThatBai);

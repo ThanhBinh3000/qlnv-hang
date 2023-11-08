@@ -36,17 +36,22 @@ public class XhBbLayMauBttHdr implements Serializable {
     private Long idQdNv;
     private String soQdNv;
     private LocalDate ngayKyQdNv;
+    private Long idQdNvDtl;
     private Long idHopDong;
     private String soHopDong;
     private LocalDate ngayKyHopDong;
     private Long idBangKeBanLe;
     private String soBangKeBanLe;
     private LocalDate ngayTaoBkeBanLe;
+    private Long idThuKho;
     private Long idKtvBaoQuan;
+    private Long idLanhDaoChiCuc;
+    private Long idKho;
     private String maDiemKho;
     private String maNhaKho;
     private String maNganKho;
     private String maLoKho;
+    private BigDecimal soLuong;
     private String loaiVthh;
     private String cloaiVthh;
     private String tenHangHoa;
@@ -88,7 +93,11 @@ public class XhBbLayMauBttHdr implements Serializable {
     @Transient
     private String tenNganLoKho;
     @Transient
+    private String tenThuKho;
+    @Transient
     private String tenKtvBaoQuan;
+    @Transient
+    private String tenLanhDaoChiCuc;
     @Transient
     private String tenLoaiVthh;
     @Transient

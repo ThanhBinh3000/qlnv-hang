@@ -24,9 +24,10 @@ public interface QdPdHsmtRepository extends BaseRepository<QdPdHsmt, Long> {
                     "  AND (:tuNgayKy IS NULL OR HSMT.NGAY_PDUYET >= TO_DATE(:tuNgayKy, 'YYYY-MM-DD HH24:MI:SS'))" +
                     "  AND (:denNgayKy IS NULL OR HSMT.NGAY_PDUYET <= TO_DATE(:denNgayKy, 'YYYY-MM-DD HH24:MI:SS'))" +
                     "  AND (:loaiVthh IS NULL OR QDKH.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
+                    "  AND (:cloaiVthh IS NULL OR QDKH.CLOAI_VTHH LIKE CONCAT(:cloaiVthh,'%')) " +
                     "  AND (:trichYeu IS NULL OR LOWER(HSMT.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%')))" +
                     "  AND (:trangThai IS NULL OR HSMT.TRANG_THAI = :trangThai) " +
                     "  AND (:maDvi IS NULL OR HSMT.MA_DVI = :maDvi) "
             ,nativeQuery = true)
-    Page<QdPdHsmt> search(String namKhoach, String soQd,String soQdPdkhlcnt, String tuNgayKy,String denNgayKy,String loaiVthh,String trichYeu,String trangThai, String maDvi, Pageable pageable);
+    Page<QdPdHsmt> search(String namKhoach, String soQd,String soQdPdkhlcnt, String tuNgayKy,String denNgayKy,String loaiVthh,String cloaiVthh,String trichYeu,String trangThai, String maDvi, Pageable pageable);
 }

@@ -36,6 +36,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Transient;
@@ -176,6 +177,7 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         List<KhCnNghiemThuThanhLy> nghiemThuThanhLy = khCnNghiemThuThanhLyRepository.findAllByIdHdr(data.getId());
         data.setChildren(nghiemThuThanhLy);
         data.setTienDoThucHien(tienDoThucHien);
+        data.setListDkThanhLy(!ObjectUtils.isEmpty(data.getDkThanhLy()) ? Arrays.asList(data.getDkThanhLy().split(",")) : new ArrayList<>());
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Collections.singleton(KhCnCongTrinhNghienCuu.TABLE_NAME));
         data.setFileDinhKem(fileDinhKem);
         List<FileDinhKem> fileTienDoTh = fileDinhKemService.search(data.getId(), Collections.singleton(KhCnTienDoThucHien.TABLE_NAME));

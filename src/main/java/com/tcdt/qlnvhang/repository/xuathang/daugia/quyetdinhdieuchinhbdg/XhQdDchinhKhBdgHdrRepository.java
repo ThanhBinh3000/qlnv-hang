@@ -19,7 +19,7 @@ public interface XhQdDchinhKhBdgHdrRepository extends JpaRepository<XhQdDchinhKh
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(DC.trichYeu) LIKE LOWER(CONCAT('%', :#{#param.trichYeu}, '%'))) " +
             "AND (:#{#param.ngayKyDcTu} IS NULL OR DC.ngayKyDc >= :#{#param.ngayKyDcTu}) " +
             "AND (:#{#param.ngayKyDcDen} IS NULL OR DC.ngayKyDc <= :#{#param.ngayKyDcDen}) " +
-            "AND (:#{#param.loaiVthh} IS NULL OR DC.loaiVthh = :#{#param.loaiVthh}) " +
+            "AND (:#{#param.loaiVthh} IS NULL OR DC.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
             "AND (:#{#param.trangThai} IS NULL OR DC.trangThai = :#{#param.trangThai}) " +
             "ORDER BY DC.nam DESC, DC.ngaySua DESC, DC.ngayTao DESC, DC.id DESC")
     Page<XhQdDchinhKhBdgHdr> searchPage(@Param("param") XhQdDchinhKhBdgReq param, Pageable pageable);

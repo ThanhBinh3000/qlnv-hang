@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -125,4 +126,5 @@ public class HhHopDongHdr extends BaseEntity implements Serializable  {
 	private List<FileDinhKem> listFileDinhKem;
 	@Transient
 	private List<FileDinhKem> listCcPhapLy;
+	BigDecimal soTienTinhPhat;
 }

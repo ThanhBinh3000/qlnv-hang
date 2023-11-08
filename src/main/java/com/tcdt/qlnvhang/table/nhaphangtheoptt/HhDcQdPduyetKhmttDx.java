@@ -28,7 +28,7 @@ public class HhDcQdPduyetKhmttDx implements Serializable {
     private String namKh;
     @Transient
     private String tenDvi;
-    private String diaChiDvi;
+    private String diaChi;
     private String loaiVthh;
     @Transient
     private String tenLoaiVthh;
@@ -48,8 +48,11 @@ public class HhDcQdPduyetKhmttDx implements Serializable {
     private Date tgianKthuc;
     private String ghiChu;
     private BigDecimal tongMucDt;
+    private BigDecimal tongSl;
     private BigDecimal tongSoLuong;
     private String nguonVon;
+    @Transient
+    private String tenNguonVon;
     private String tenChuDt;
     @Temporal(TemporalType.DATE)
     private Date ngayKy;

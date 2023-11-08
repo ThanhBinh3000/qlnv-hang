@@ -53,7 +53,7 @@ public class XhCtvtTongHopHdr extends BaseEntity implements Serializable {
   private BigDecimal tongSlCtVt;
   private BigDecimal tongSlXuatCap;
   private BigDecimal tongSlDeXuat;
-
+  private String mucDichXuat;
 
   @Transient
   private String tenLoaiVthh;

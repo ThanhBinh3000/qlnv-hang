@@ -109,7 +109,7 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl {
         data.setNgayTao(LocalDate.now());
         data.setNguoiTaoId(currentUser.getUser().getId());
         data.setTrangThai(Contains.DU_THAO);
-        data.setTrangThaiXh(Contains.DANG_THUC_HIEN);
+        data.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
         if (data.getPhanLoai().equals("UQBL")) {
             List<String> maDviTsanList = req.getListMaDviTsan();
             data.setMaDviTsan(maDviTsanList.isEmpty() ? null : String.join(",", maDviTsanList));

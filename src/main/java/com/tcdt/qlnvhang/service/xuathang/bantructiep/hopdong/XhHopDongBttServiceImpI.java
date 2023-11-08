@@ -8,6 +8,7 @@ import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttDtl
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttDviRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtlRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -48,6 +49,8 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
     private XhKqBttHdrRepository xhKqBttHdrRepository;
     @Autowired
     private XhQdPdKhBttDtlRepository xhQdPdKhBttDtlRepository;
+    @Autowired
+    private XhQdNvXhBttHdrRepository xhQdNvXhBttHdrRepository;
 
     public Page<XhHopDongBttHdr> searchPage(CustomUserDetails currentUser, XhHopDongBttHdrReq req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -66,6 +69,16 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
             data.setMapVthh(mapDmucVthh);
             data.setMapDmucDvi(mapDmucDvi);
             data.setTrangThai(data.getTrangThai());
+            if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+                List<XhHopDongBttDvi> listDiaDiemKho = xhHopDongBttDviRepository.findAllByIdHdr(data.getId());
+                for (XhHopDongBttDvi dataDvi : listDiaDiemKho) {
+                    dataDvi.setTenDiemKho(mapDmucDvi.getOrDefault(dataDvi.getMaDiemKho(), null));
+                    dataDvi.setTenNhaKho(mapDmucDvi.getOrDefault(dataDvi.getMaNhaKho(), null));
+                    dataDvi.setTenNganKho(mapDmucDvi.getOrDefault(dataDvi.getMaNganKho(), null));
+                    dataDvi.setTenLoKho(mapDmucDvi.getOrDefault(dataDvi.getMaLoKho(), null));
+                }
+                data.setXhHopDongBttDviList(listDiaDiemKho);
+            }
         });
         return search;
     }
@@ -360,6 +373,7 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
         }
     }
 
+    @Transactional
     public XhHopDongBttHdr approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
         if (currentUser == null || StringUtils.isEmpty(statusReq.getId())) {
             throw new Exception("Bad request.");
@@ -390,10 +404,12 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
                 this.updateRelatedEntityHdDaKyChiCuc(create.getIdChaoGia());
                 this.updateRelatedEntityHdChuaKyChiCuc(data.getIdChaoGia());
             }
+            if (create.getIdQdNv() != null && create.getSoHopDong() != null) {
+                this.updateRelatedEntitySoHopDong(create);
+            }
         }
         return create;
     }
-
 
     private void updateRelatedEntityHdDaKyCuc(Long id) {
         if (!DataUtils.isNullObject(id)) {
@@ -413,6 +429,13 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
                 xhQdPdKhBttDtlRepository.save(relatedEntity);
             });
         }
+    }
+
+    private void updateRelatedEntitySoHopDong(XhHopDongBttHdr data) {
+        xhQdNvXhBttHdrRepository.findById(data.getIdQdNv()).ifPresent(nhiemVu -> {
+            String soHopDong = nhiemVu.getSoHopDong() != null ? (", " + data.getSoHopDong()) : data.getSoHopDong();
+            xhQdNvXhBttHdrRepository.updateSoHopDong(soHopDong, data.getIdQdNv());
+        });
     }
 
     public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {

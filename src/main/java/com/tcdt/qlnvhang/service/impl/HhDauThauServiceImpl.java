@@ -124,17 +124,32 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
     @Override
     @Transactional
     public void updateGoiThau(HhDthauReq objReq) throws Exception {
-        Optional<HhQdKhlcntDsgthau> gthau = goiThauRepository.findById(objReq.getIdGoiThau());
-        if (!gthau.isPresent()) {
-            throw new Exception("Gói thầu không tồn tại");
-        }
-        gthau.get().setGhiChuTtdt(objReq.getGhiChuTtdt());
-        gthau.get().setTgianTrinhKqTcg(objReq.getTgianTrinhKqTcg());
-        gthau.get().setTgianTrinhTtd(objReq.getTgianTrinhTtd());
-        goiThauRepository.save(gthau.get());
-        fileDinhKemService.delete(gthau.get().getId(), Lists.newArrayList("HH_QD_KHLCNT_DSGTHAU"));
-        if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKems())) {
-            fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), gthau.get().getId(), "HH_QD_KHLCNT_DSGTHAU");
+        if(objReq.getLoaiVthh().startsWith("02") && objReq.getType().equals("DC")){
+            Optional<HhDchinhDxKhLcntDsgthau> gthau = dchinhDxKhLcntDsgthauRepository.findById(objReq.getIdGoiThau());
+            if(!gthau.isPresent()){
+                throw new Exception("Gói thầu không tồn tại");
+            }
+//            gthau.get().setGhiChuTtdt(objReq.getGhiChuTtdt());
+//            gthau.get().setTgianTrinhKqTcg(objReq.getTgianTrinhKqTcg());
+//            gthau.get().setTgianTrinhTtd(objReq.getTgianTrinhTtd());
+            dchinhDxKhLcntDsgthauRepository.save(gthau.get());
+            fileDinhKemService.delete(gthau.get().getId(), Lists.newArrayList("HH_DC_DX_LCNT_DSGTHAU"));
+            if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKems())) {
+                fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), gthau.get().getId(), "HH_DC_DX_LCNT_DSGTHAU");
+            }
+        }else{
+            Optional<HhQdKhlcntDsgthau> gthau = goiThauRepository.findById(objReq.getIdGoiThau());
+            if (!gthau.isPresent()) {
+                throw new Exception("Gói thầu không tồn tại");
+            }
+            gthau.get().setGhiChuTtdt(objReq.getGhiChuTtdt());
+            gthau.get().setTgianTrinhKqTcg(objReq.getTgianTrinhKqTcg());
+            gthau.get().setTgianTrinhTtd(objReq.getTgianTrinhTtd());
+            goiThauRepository.save(gthau.get());
+            fileDinhKemService.delete(gthau.get().getId(), Lists.newArrayList("HH_QD_KHLCNT_DSGTHAU"));
+            if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKems())) {
+                fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), gthau.get().getId(), "HH_QD_KHLCNT_DSGTHAU");
+            }
         }
     }
 
@@ -264,6 +279,8 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
                     Optional<HhQdPduyetKqlcntHdr> bySoQd = hhQdPduyetKqlcntHdrRepository.findBySoQd(item.getSoQdPdKqLcnt());
                     bySoQd.ifPresent(item::setHhQdPduyetKqlcntHdr);
                 }
+                Optional<HhDchinhDxKhLcntHdr> dchinh = hhDchinhDxKhLcntHdrRepository.findByIdQdGoc(item.getIdQdHdr());
+                dchinh.ifPresent(hhDchinhDxKhLcntHdr -> item.setSoQdDc(hhDchinhDxKhLcntHdr.getSoQdDc()));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -396,7 +413,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
                 objs[2] = dx.getSoDxuat();
                 objs[3] = dx.getHhQdKhlcntHdr().getSoQd();
                 objs[4] = dx.getSoQdPdKqLcnt();
-                objs[5] = convertDate(dx.getHhQdPduyetKqlcntHdr().getNgayKy());
+                objs[5] = dx.getHhQdPduyetKqlcntHdr()!= null? convertDate(dx.getHhQdPduyetKqlcntHdr().getNgayKy()) : "";
                 objs[6] = dx.getSoGthau();
                 objs[7] = dx.getSoGthauTrung();
                 objs[8] = dx.getSoGthauTruot();

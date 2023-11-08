@@ -16,14 +16,17 @@ import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhPhieuNhapKhoCtRepository
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvHdrRepository;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.UserActivityService;
+import com.tcdt.qlnvhang.service.UserActivitySettingService;
 import com.tcdt.qlnvhang.service.feign.LuuKhoClient;
 import com.tcdt.qlnvhang.table.PhieuNhapXuatHistory;
+import com.tcdt.qlnvhang.table.UserActivitySetting;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuXuatKhoHdr;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoCt;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuXuatKho;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvHdr;
+import com.tcdt.qlnvhang.util.BeanUtils;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.aspectj.lang.JoinPoint;
@@ -42,8 +45,11 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -70,7 +76,8 @@ public class LoggingAspect {
   private HhPhieuNhapKhoCtRepository hhPhieuNhapKhoCtRepository;
   @Autowired
   private XhCtvtQuyetDinhGnvHdrRepository xhCtvtQuyetDinhGnvHdrRepository;
-
+  @Autowired
+  private UserActivitySettingService userActivitySettingService;
 
   @Pointcut("within(com.tcdt.qlnvhang..*) && bean(*Controller))")
   public void v3Controller() {
@@ -99,21 +106,24 @@ public class LoggingAspect {
         userAgent = m.group(1);
       }
       if (!String.class.equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal().getClass())) {
-        CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserActivity entity = new UserActivity();
-        entity.setIp(UserUtils.getClientIpAddress(request));
-        entity.setRequestMethod(request.getMethod());
-        entity.setRequestUrl(request.getRequestURI());
-        entity.setUserId(user.getUser().getId());
-        entity.setSystem(SYSTEM);
-        entity.setUserAgent(userAgent);
-        entity.setRequestBody(getBody(joinPoint.getArgs()));
-        entity.setUserName(user.getUser().getUsername());
-        Map<String, String[]> parameterMap = request.getParameterMap();
-        if (parameterMap != null && !parameterMap.isEmpty()) {
-          entity.setRequestParameter(gson.toJson(parameterMap));
+        Boolean isAllow = getAllow(request);
+        if (isAllow) {
+          CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+          UserActivity entity = new UserActivity();
+          entity.setIp(BeanUtils.getClientIpAddress(request));
+          entity.setRequestMethod(request.getMethod());
+          entity.setRequestUrl(request.getRequestURI());
+          entity.setUserId(user.getUser().getId());
+          entity.setSystem(SYSTEM);
+          entity.setUserAgent(userAgent);
+          entity.setRequestBody(getBody(joinPoint.getArgs()));
+          entity.setUserName(user.getUser().getUsername());
+          Map<String, String[]> parameterMap = request.getParameterMap();
+          if (parameterMap != null && !parameterMap.isEmpty()) {
+            entity.setRequestParameter(gson.toJson(parameterMap));
+          }
+          userActivityService.log(entity);
         }
-        userActivityService.log(entity);
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -317,15 +327,42 @@ public class LoggingAspect {
 
   public String getBody(Object[] args) {
     try {
+      List<Object> lst = new ArrayList<>();
+      for (Object a : args) {
+        if (!(a instanceof HttpServletRequest) && !(a instanceof HttpServletResponse) && !(a instanceof CustomUserDetails)) {
+          lst.add(a);
+        }
+      }
       ObjectMapper mapper = new ObjectMapper();
-      return mapper.writeValueAsString(args);
+      return mapper.writeValueAsString(lst);
     } catch (JsonProcessingException e) {
-//            throw new RuntimeException(e);
       return null;
     }
   }
 
-  public <C> C test(Object data, Class<C> clazz) {
-    return objectMapper.convertValue(data, clazz);
+  public Boolean getAllow(HttpServletRequest request) throws Exception {
+    String type = "SERVICE";
+    if ("/login".equalsIgnoreCase(request.getRequestURI())) {
+      type = "LOGIN";
+    }
+    if ("/logout".equalsIgnoreCase(request.getRequestURI())) {
+      type = "LOGOUT";
+    }
+    Boolean isAllow = false;
+    UserActivitySetting setting = userActivitySettingService.getSetting();
+    switch (type) {
+      case "LOGIN":
+        isAllow = setting.getWriteLogLogin();
+        break;
+      case "LOGOUT":
+        isAllow = setting.getWriteLogLogout();
+        break;
+      case "SERVICE":
+        isAllow = setting.getWriteLogUserActivity();
+        break;
+      default:
+        break;
+    }
+    return isAllow;
   }
 }

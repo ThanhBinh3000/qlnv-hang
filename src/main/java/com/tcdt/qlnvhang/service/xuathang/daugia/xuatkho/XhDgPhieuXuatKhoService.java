@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.xuathang.daugia.xuatkho;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho.XhDgPhieuXuatKho;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.xuatkho.XhDgPhieuXuatKhoRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -26,7 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -37,6 +37,8 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
     private XhDgPhieuXuatKhoRepository xhDgPhieuXuatKhoRepository;
     @Autowired
     private XhQdGiaoNvXhRepository xhQdGiaoNvXhRepository;
+    @Autowired
+    private XhQdGiaoNvXhDtlRepository xhQdGiaoNvXhDtlRepository;
     @Autowired
     private UserInfoRepository userInfoRepository;
 
@@ -53,9 +55,11 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
         Page<XhDgPhieuXuatKho> search = xhDgPhieuXuatKhoRepository.searchPage(req, pageable);
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        Map<String, String> mapHinhThucBaoQuan = getListDanhMucChung("HINH_THUC_BAO_QUAN");
         search.getContent().forEach(data -> {
             data.setMapVthh(mapDmucVthh);
             data.setMapDmucDvi(mapDmucDvi);
+            data.setMapHinhThucBaoQuan(mapHinhThucBaoQuan);
             data.setTrangThai(data.getTrangThai());
         });
         return search;
@@ -81,6 +85,10 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
         if (created.getIdQdNv() != null) {
             xhQdGiaoNvXhRepository.findById(created.getIdQdNv()).ifPresent(quyetDinh -> {
                 quyetDinh.setTrangThaiXh(Contains.DANG_THUC_HIEN);
+                xhQdGiaoNvXhDtlRepository.findById(created.getIdQdNvDtl()).ifPresent(quyetDinhDtl -> {
+                    quyetDinhDtl.setTrangThai(Contains.DANG_THUC_HIEN);
+                    xhQdGiaoNvXhDtlRepository.save(quyetDinhDtl);
+                });
                 xhQdGiaoNvXhRepository.save(quyetDinh);
             });
         }
@@ -117,11 +125,13 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
         Map<String, String> mapKieuNhapXuat = getListDanhMucChung("KIEU_NHAP_XUAT");
+        Map<String, String> mapHinhThucBaoQuan = getListDanhMucChung("HINH_THUC_BAO_QUAN");
         allById.forEach(data -> {
             data.setMapDmucDvi(mapDmucDvi);
             data.setMapVthh(mapVthh);
             data.setMapLoaiHinhNx(mapLoaiHinhNx);
             data.setMapKieuNhapXuat(mapKieuNhapXuat);
+            data.setMapHinhThucBaoQuan(mapHinhThucBaoQuan);
             data.setTrangThai(data.getTrangThai());
             if (data.getIdThuKho() != null) {
                 userInfoRepository.findById(data.getIdThuKho()).ifPresent(userInfo -> {
@@ -198,6 +208,10 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
         if (statusReq.getTrangThai().equals(Contains.DADUYET_LDCC)) {
             xhQdGiaoNvXhRepository.findById(data.getIdQdNv()).ifPresent(quyetDinh -> {
                 quyetDinh.setTrangThaiXh(Contains.DA_HOAN_THANH);
+                xhQdGiaoNvXhDtlRepository.findById(data.getIdQdNvDtl()).ifPresent(quyetDinhDtl -> {
+                    quyetDinhDtl.setTrangThai(Contains.DA_HOAN_THANH);
+                    xhQdGiaoNvXhDtlRepository.save(quyetDinhDtl);
+                });
                 xhQdGiaoNvXhRepository.save(quyetDinh);
             });
         }

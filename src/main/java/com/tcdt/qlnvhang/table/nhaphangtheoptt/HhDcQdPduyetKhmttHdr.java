@@ -24,11 +24,11 @@ public class HhDcQdPduyetKhmttHdr implements Serializable {
 
     private Long id;
     private String soQdDc;
-    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyDc;
-    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayHluc;
-    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyQdGoc;
     private String trichYeu;
     private Long idQdGoc;
@@ -58,11 +58,21 @@ public class HhDcQdPduyetKhmttHdr implements Serializable {
     private Date ngayPduyet;
     private String nguoiPduyet;
     private String ldoTchoi;
+    private Long soLanDieuChinh;
+    private Long idSoQdCc;
+    private String soQdCc;
+    private String soToTrinh;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayTaoCv;
+    private String loaiHinhNx;
+    private String kieuNx;
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     @Transient
     private List<FileDinhKem> canCuPhapLy = new ArrayList<>();
+    @Transient
+    private List<FileDinhKem> cvanToTrinh = new ArrayList<>();
 
     @Transient
     private List<HhDcQdPduyetKhmttDx> hhDcQdPduyetKhmttDxList=new ArrayList<>();

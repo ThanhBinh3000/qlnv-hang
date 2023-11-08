@@ -180,6 +180,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl {
             data.setMapLoaiHinhNx(mapLoaiHinhNx);
             data.setMapKieuNhapXuat(mapKieuNhapXuat);
             data.setTrangThai(data.getTrangThai());
+            data.setTrangThaiXh(data.getTrangThaiXh());
             data.setChildren(listDtl);
             if (!DataUtils.isNullObject(data.getMaDviTsan())) {
                 data.setListMaDviTsan(Arrays.asList(data.getMaDviTsan().split(",")));
@@ -233,7 +234,7 @@ public class XhHopDongServiceImpl extends BaseServiceImpl {
         }
         data.setTrangThai(statusReq.getTrangThai());
         XhHopDongHdr created = xhHopDongHdrRepository.save(data);
-        xhKqBdgHdrRepository.findById(data.getIdQdKq()).ifPresent(ketQua ->{
+        xhKqBdgHdrRepository.findById(data.getIdQdKq()).ifPresent(ketQua -> {
             Integer slHdongDaKy = xhHopDongHdrRepository.countSlHopDongDaKy(data.getIdQdKq(), data.getLoaiVthh(), data.getMaDvi());
             ketQua.setSlHopDongDaKy(slHdongDaKy);
             xhKqBdgHdrRepository.save(ketQua);

@@ -19,6 +19,7 @@ public class XhQdNvXhBttHdrReq extends BaseRequest {
     private Long idHopDong;
     private String soHopDong;
     private LocalDate ngayKyHopDong;
+    private String soBangKeBanLe;
     private Long idQdPd;
     private String soQdPd;
     private Long idQdDc;

@@ -22,6 +22,7 @@ public class SearchXhCtvtDeXuatHdrReq extends BaseRequest {
   private LocalDate ngayKetThucDen;
   private String trangThai;
   private String type;
+  private String mucDichXuat;
 
   private String tenVthh;
   private String loaiVthh;

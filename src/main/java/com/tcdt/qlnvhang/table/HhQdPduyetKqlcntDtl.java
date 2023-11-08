@@ -29,6 +29,7 @@ public class HhQdPduyetKqlcntDtl implements Serializable {
     private String trangThai;
     private String type;
     private String tenNhaThau;
+    private String dienGiaiNhaThau;
     @Transient
     private String tenTrangThai;
     public String getTenTrangThai() {

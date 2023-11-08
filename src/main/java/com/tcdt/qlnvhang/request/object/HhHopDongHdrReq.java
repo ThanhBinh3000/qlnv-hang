@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.request.object;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -103,6 +104,7 @@ public class HhHopDongHdrReq extends BaseRequest {
 
 	String donViTinh;
 	Integer soNgayThienHd;
+	BigDecimal soTienTinhPhat;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	private Date tgianGiaoThucTe;

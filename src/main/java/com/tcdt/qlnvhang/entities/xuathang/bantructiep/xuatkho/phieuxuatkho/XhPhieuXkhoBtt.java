@@ -37,13 +37,17 @@ public class XhPhieuXkhoBtt implements Serializable {
     private Long idQdNv;
     private String soQdNv;
     private LocalDate ngayKyQdNv;
+    private Long idQdNvDtl;
     private Long idPhieuKiemNghiem;
     private String soPhieuKiemNghiem;
     private LocalDate ngayKiemNghiemMau;
+    private Long idKho;
     private String maDiemKho;
     private String maNhaKho;
     private String maNganKho;
     private String maLoKho;
+    private String loaiHinhKho;
+    private String hinhThucBaoQuan;
     private String loaiHinhNx;
     private String kieuNx;
     private String loaiVthh;
@@ -93,6 +97,8 @@ public class XhPhieuXkhoBtt implements Serializable {
     private String tenLoaiHinhNx;
     @Transient
     private String tenKieuNx;
+    @Transient
+    private String tenHinhThucBaoQuan;
     @Transient
     private String tenDiemKho;
     @Transient
@@ -170,6 +176,17 @@ public class XhPhieuXkhoBtt implements Serializable {
         this.mapKieuNhapXuat = mapKieuNhapXuat;
         if (!DataUtils.isNullObject(getKieuNx())) {
             setTenKieuNx(mapKieuNhapXuat.containsKey(getKieuNx()) ? mapKieuNhapXuat.get(getKieuNx()) : null);
+        }
+    }
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapHinhThucBaoQuan;
+
+    public void setMapHinhThucBaoQuan(Map<String, String> mapHinhThucBaoQuan) {
+        this.mapHinhThucBaoQuan = mapHinhThucBaoQuan;
+        if (!DataUtils.isNullObject(getHinhThucBaoQuan())) {
+            setTenHinhThucBaoQuan(mapHinhThucBaoQuan.containsKey(getHinhThucBaoQuan()) ? mapHinhThucBaoQuan.get(getHinhThucBaoQuan()) : null);
         }
     }
 
