@@ -12,6 +12,7 @@ import java.util.List;
 @Repository
 public interface HhQdGiaoNvNhangDtlRepository extends JpaRepository<HhQdGiaoNvNhangDtl,Long> {
     List<HhQdGiaoNvNhangDtl> findAllByIdQdHdr(Long ids);
+    HhQdGiaoNvNhangDtl findByIdQdHdrAndMaDvi(Long ids, String maDvi);
     List<HhQdGiaoNvNhangDtl> findAllByIdQdHdrIn(List<Long> ids);
 
     @Transactional()
