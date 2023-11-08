@@ -660,9 +660,9 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		};
 		dtl.setChildren(byIdQdDtl);
 		dtl.setSoGthau(countSlGThau);
-		long countThanhCong = byIdQdDtl.stream().filter(x -> x.getTrangThaiDt().equals(NhapXuatHangTrangThaiEnum.THANH_CONG.getId())).map(y -> y.getId())
+		long countThanhCong = byIdQdDtl.stream().filter(x -> x.getTrangThaiDt() != null && x.getTrangThaiDt().equals(NhapXuatHangTrangThaiEnum.THANH_CONG.getId())).map(HhQdKhlcntDsgthau::getId)
 				.distinct().count();
-		long countThatBai = byIdQdDtl.stream().filter(x -> x.getTrangThaiDt().equals(NhapXuatHangTrangThaiEnum.THAT_BAI.getId())).map(y -> y.getId())
+		long countThatBai = byIdQdDtl.stream().filter(x -> x.getTrangThaiDt() != null && x.getTrangThaiDt().equals(NhapXuatHangTrangThaiEnum.THAT_BAI.getId())).map(HhQdKhlcntDsgthau::getId)
 				.distinct().count();
 		dtl.setSoGthauTrung(countThanhCong);
 		dtl.setSoGthauTruot(countThatBai);
