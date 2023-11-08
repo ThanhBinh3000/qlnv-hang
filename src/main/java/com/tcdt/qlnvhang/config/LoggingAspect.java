@@ -345,7 +345,7 @@ public class LoggingAspect {
     if ("/login".equalsIgnoreCase(request.getRequestURI())) {
       type = "LOGIN";
     }
-    if ("/logout".equalsIgnoreCase(request.getRequestURI())) {
+    if ("/user-info/logout".equalsIgnoreCase(request.getRequestURI())) {
       type = "LOGOUT";
     }
     Boolean isAllow = false;
