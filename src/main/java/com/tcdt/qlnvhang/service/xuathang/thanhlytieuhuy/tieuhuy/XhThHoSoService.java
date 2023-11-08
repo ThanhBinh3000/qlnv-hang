@@ -94,10 +94,10 @@ public class XhThHoSoService extends BaseServiceImpl {
     hdr.setMaDvi(userInfo.getDvql());
     hdr.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
     XhThHoSoHdr created = hdrRepository.save(hdr);
-    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), XhThHoSoHdr.FILE_DK);
-    created.setFileCanCu(canCu);
-    List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), XhThHoSoHdr.FILE_CC);
+    List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), XhThHoSoHdr.FILE_DK);
     created.setFileDinhKem(fileDinhKem);
+    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), XhThHoSoHdr.FILE_CC);
+    created.setFileCanCu(canCu);
     List<XhThHoSoDtl> dtlList = this.saveDtl(req, created.getId());
     created.setChildren(dtlList);
 
@@ -178,7 +178,7 @@ public class XhThHoSoService extends BaseServiceImpl {
     }
     XhThHoSoHdr created = hdrRepository.save(hdr);
     fileDinhKemService.delete(req.getId(), Lists.newArrayList(XhThHoSoHdr.FILE_DK,XhThHoSoHdr.FILE_CC));
-    List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), XhThHoSoHdr.FILE_DK);
+    List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), XhThHoSoHdr.FILE_DK);
     created.setFileDinhKem(fileDinhKemList);
     List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), XhThHoSoHdr.FILE_CC);
     created.setFileCanCu(canCu);
