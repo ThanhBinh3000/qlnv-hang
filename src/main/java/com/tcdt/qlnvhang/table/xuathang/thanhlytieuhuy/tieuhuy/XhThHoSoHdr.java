@@ -20,6 +20,8 @@ public class XhThHoSoHdr extends BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
   public static final String TABLE_NAME = "XH_TH_HO_SO_HDR";
+  public static final String FILE_DK = "XH_TH_HO_SO_HDR_DK";
+  public static final String FILE_CC = "XH_TH_HO_SO_HDR_CC";
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhThHoSoHdr.TABLE_NAME + "_SEQ")

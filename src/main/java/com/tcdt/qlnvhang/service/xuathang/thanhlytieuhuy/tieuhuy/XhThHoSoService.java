@@ -94,9 +94,9 @@ public class XhThHoSoService extends BaseServiceImpl {
     hdr.setMaDvi(userInfo.getDvql());
     hdr.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
     XhThHoSoHdr created = hdrRepository.save(hdr);
-    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), XhThHoSoHdr.TABLE_NAME + "_CAN_CU");
+    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), XhThHoSoHdr.FILE_DK);
     created.setFileCanCu(canCu);
-    List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), XhThHoSoHdr.TABLE_NAME + "_DINH_KEM");
+    List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), XhThHoSoHdr.FILE_CC);
     created.setFileDinhKem(fileDinhKem);
     List<XhThHoSoDtl> dtlList = this.saveDtl(req, created.getId());
     created.setChildren(dtlList);
@@ -177,12 +177,12 @@ public class XhThHoSoService extends BaseServiceImpl {
       hdr.setTrangThai(TrangThaiAllEnum.DANG_DUYET_CB_VU.getId());
     }
     XhThHoSoHdr created = hdrRepository.save(hdr);
-    fileDinhKemService.delete(req.getId(), Lists.newArrayList(XhThHoSoHdr.TABLE_NAME + "_CAN_CU"));
-    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), ScTrinhThamDinhHdr.TABLE_NAME + "_CAN_CU");
-    created.setFileCanCu(canCu);
-    fileDinhKemService.delete(req.getId(), Lists.newArrayList(XhThHoSoHdr.TABLE_NAME + "_DINH_KEM"));
-    List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), ScTrinhThamDinhHdr.TABLE_NAME + "_DINH_KEM");
+    fileDinhKemService.delete(req.getId(), Lists.newArrayList(XhThHoSoHdr.FILE_DK,XhThHoSoHdr.FILE_CC));
+    List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), XhThHoSoHdr.FILE_DK);
     created.setFileDinhKem(fileDinhKemList);
+    List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), XhThHoSoHdr.FILE_CC);
+    created.setFileCanCu(canCu);
+
     List<XhThHoSoDtl> dtlList = this.saveDtl(req, created.getId());
     created.setChildren(dtlList);
     return created;
@@ -199,9 +199,9 @@ public class XhThHoSoService extends BaseServiceImpl {
     Map<String, String> mapVthh = getListDanhMucHangHoa();
     XhThHoSoHdr data = optional.get();
 
-    List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhThHoSoHdr.TABLE_NAME));
+    List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), XhThHoSoHdr.FILE_DK);
     data.setFileDinhKem(fileDinhKem);
-    List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Arrays.asList(XhThHoSoHdr.TABLE_NAME + "_CAN_CU"));
+    List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), XhThHoSoHdr.FILE_CC);
     data.setFileCanCu(canCu);
     HashMap<Long, List<XhThHoSoDtl>> dataChilren = getDataChilren(Collections.singletonList(data.getId()));
     data.setChildren(dataChilren.get(data.getId()));
@@ -231,9 +231,7 @@ public class XhThHoSoService extends BaseServiceImpl {
       throw new Exception("Bản ghi không tồn tại");
     }
     XhThHoSoHdr data = optional.get();
-
-    fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhThHoSoHdr.TABLE_NAME + "_CAN_CU"));
-    fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhThHoSoHdr.TABLE_NAME));
+    fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhThHoSoHdr.FILE_DK,XhThHoSoHdr.FILE_CC));
     hdrRepository.delete(data);
   }
 
@@ -245,8 +243,7 @@ public class XhThHoSoService extends BaseServiceImpl {
       throw new Exception("Bản ghi không tồn tại");
     }
 
-    fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhThHoSoHdr.TABLE_NAME));
-    fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhThHoSoHdr.TABLE_NAME + "_CAN_CU"));
+    fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhThHoSoHdr.FILE_DK,XhThHoSoHdr.FILE_CC));
     hdrRepository.deleteAll(list);
 
   }
