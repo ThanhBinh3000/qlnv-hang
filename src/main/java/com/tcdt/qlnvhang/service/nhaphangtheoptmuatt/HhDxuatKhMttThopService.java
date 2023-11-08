@@ -205,6 +205,10 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
             }
             hhDxuatKhMttRepository.saveAll(listDxHdr);
         }
+        Optional<HhQdPheduyetKhMttHdr> hhQdPheduyetKhMttHdr = hhQdPheduyetKhMttHdrRepository.findById(optional.get().getIdQdPduyet());
+        if(hhQdPheduyetKhMttHdr.isPresent() && optional.get().getTrangThai().equals(Contains.DADUTHAO_QD)){
+            hhQdPheduyetKhMttHdrRepository.delete(hhQdPheduyetKhMttHdr.get());
+        }
         hhDxuatKhMttThopDtlRepository.deleteAll(listDls);
         hhDxuatKhMttThopRepository.delete(optional.get());
     }

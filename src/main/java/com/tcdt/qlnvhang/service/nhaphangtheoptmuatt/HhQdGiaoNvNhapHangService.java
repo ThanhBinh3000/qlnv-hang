@@ -147,6 +147,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+            f.setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiHd()));
 
             // dtl
             List<HhQdGiaoNvNhangDtl> hhQdGiaoNvNhangDtl = hhQdGiaoNvNhangDtlRepository.findAllByIdQdHdr(f.getId());
@@ -498,6 +499,14 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         data.setHhQdGiaoNvNhangDtlList(listDtl);
 
         List<HopDongMttHdr> listHd = hopDongMttHdrRepository.findAllByIdQdGiaoNvNh(data.getId());
+        for (HopDongMttHdr hopDongMttHdr : listHd) {
+            HhQdGiaoNvNhangDtl hhQdGiaoNvNhangDtl = hhQdGiaoNvNhangDtlRepository.findByIdQdHdrAndMaDvi(hopDongMttHdr.getIdQdGiaoNvNh(), hopDongMttHdr.getMaDvi());
+            List<HhQdGiaoNvNhDdiem> hhQdGiaoNvNhDdiems = hhQdGiaoNvNhDdiemRepository.findAllByIdDtl(hhQdGiaoNvNhangDtl.getId());
+            hopDongMttHdr.setSoLuong(hhQdGiaoNvNhDdiems.stream().map(HhQdGiaoNvNhDdiem::getSoLuong).reduce(BigDecimal.ZERO, BigDecimal::add));
+            hopDongMttHdr.setDviCungCap(hashMapDmdv.get(hopDongMttHdr.getMaDvi()));
+            hopDongMttHdr.setDonGiaGomThue(hhQdGiaoNvNhangDtl.getDonGiaVat());
+            hopDongMttHdr.setTenTrangThaiNh(NhapXuatHangTrangThaiEnum.getTenById(hopDongMttHdr.getTrangThaiNh()));
+        }
         data.setHopDongMttHdrs(listHd);
 
         if(data.getIdQdPdKh() != null){
