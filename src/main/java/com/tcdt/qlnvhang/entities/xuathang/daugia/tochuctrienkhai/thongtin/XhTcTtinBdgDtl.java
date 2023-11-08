@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin;
 
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -26,5 +27,18 @@ public class XhTcTtinBdgDtl implements Serializable {
     @Transient
     private String tenDvi;
     @Transient
+    private BigDecimal donGiaDeXuat;
+    @Transient
+    private BigDecimal thanhTien;
+    @Transient
     List<XhTcTtinBdgPlo> children = new ArrayList<>();
+
+    public void setChildren(List<XhTcTtinBdgPlo> children) {
+        this.children = children;
+        if (!DataUtils.isNullOrEmpty(children)) {
+            this.donGiaDeXuat = children.stream().map(XhTcTtinBdgPlo::getDonGiaDeXuat).reduce(BigDecimal.ZERO, BigDecimal::add);
+            this.thanhTien = children.stream().map(XhTcTtinBdgPlo::getThanhTien).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        }
+    }
 }

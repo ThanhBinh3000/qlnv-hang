@@ -41,6 +41,8 @@ public class XhQdPdKhBdgPlDtl implements Serializable {
     @Transient
     private String tenLoKho;
     @Transient
+    private String tenNganLoKho;
+    @Transient
     private String tenLoaiVthh;
     @Transient
     private String tenCloaiVthh;
