@@ -122,7 +122,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 
 		HhDchinhDxKhLcntHdr dataMap = new ModelMapper().map(objReq, HhDchinhDxKhLcntHdr.class);
 		dataMap.setNgayTao(getDateTimeNow());
-		dataMap.setNam(LocalDate.now().getYear());
+//		dataMap.setNam(LocalDate.now().getYear());
 		dataMap.setTrangThai(Contains.DA_LAP);
 		dataMap.setNguoiTaoId(getUser().getId());
 		hdrRepository.save(dataMap);
@@ -327,12 +327,12 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 				optional.get().setNguoiPduyetId(getUser().getId());
 				optional.get().setNgayPduyet(getDateTimeNow());
 				optional.get().setLastest(Boolean.TRUE);
-				Optional<HhQdKhlcntHdr> qdKhlcntHdr = hhQdKhlcntHdrRepository.findById(optional.get().getIdQdGoc());
-				if (!qdKhlcntHdr.isPresent()){
-					throw new Exception("Quyết định gốc không tồn tại");
-				}
-				qdKhlcntHdr.get().setDieuChinh(Boolean.TRUE);
-				hhQdKhlcntHdrRepository.save(qdKhlcntHdr.get());
+//				Optional<HhQdKhlcntHdr> qdKhlcntHdr = hhQdKhlcntHdrRepository.findById(optional.get().getIdQdGoc());
+//				if (!qdKhlcntHdr.isPresent()){
+//					throw new Exception("Quyết định gốc không tồn tại");
+//				}
+//				qdKhlcntHdr.get().setDieuChinh(Boolean.TRUE);
+//				hhQdKhlcntHdrRepository.save(qdKhlcntHdr.get());
 			} else if ((Contains.TUCHOI_LDV + Contains.CHODUYET_LDV).equals(status)) {
 				optional.get().setNguoiPduyetId(getUser().getId());
 				optional.get().setNgayPduyet(getDateTimeNow());
@@ -488,7 +488,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		data.setTenCloaiVthh(StringUtils.isEmpty(data.getCloaiVthh()) ? null : hashMapDmHh.get(data.getCloaiVthh()));
 		data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
 		data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
-		List<HhDchinhDxKhLcntDsgthau> gThauList = gThauRepository.findAllByIdDcDxHdr(data.getId());
+		List<HhDchinhDxKhLcntDsgthau> gThauList = gThauRepository.findAllByIdDcDxHdrOrderByGoiThau(data.getId());
 		for(HhDchinhDxKhLcntDsgthau gThau : gThauList){
 			List<HhDchinhDxKhLcntDsgthauCtiet> gthauCtietList = gThauCietRepository.findAllByIdGoiThau(gThau.getId());
 			gthauCtietList.forEach(f -> {

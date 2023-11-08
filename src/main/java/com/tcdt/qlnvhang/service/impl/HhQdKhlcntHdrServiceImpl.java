@@ -1033,12 +1033,12 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			Map<String,String> soGthau2 = new HashMap<>();
 			Map<String,String> soGthau3 = new HashMap<>();
 			for (HhQdKhlcntHdr f : data.getContent()) {
-				if(f.getIdTrHdr() == null){
-					List<HhQdKhlcntDtl> hhQdKhlcntDtl = hhQdKhlcntDtlRepository.findAllByIdQdHdrOrderByMaDvi(f.getId());
-					hhQdKhlcntDtl.forEach(item ->{
-						f.setSoTrHdr(item.getSoDxuat());
-					});
-				}
+//				if(f.getIdTrHdr() == null){
+//					List<HhQdKhlcntDtl> hhQdKhlcntDtl = hhQdKhlcntDtlRepository.findAllByIdQdHdrOrderByMaDvi(f.getId());
+//					hhQdKhlcntDtl.forEach(item ->{
+//						f.setSoTrHdr(item.getSoDxuat());
+//					});
+//				}
 				f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
 				f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
 				f.setTongTien(StringUtils.isEmpty(hashMapSum.get(f.getId().toString())) ? BigDecimal.valueOf(0) : BigDecimal.valueOf(Long.parseLong(hashMapSum.get(f.getId().toString()))));
