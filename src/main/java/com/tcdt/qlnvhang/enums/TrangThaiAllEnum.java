@@ -56,7 +56,7 @@ public enum TrangThaiAllEnum {
     DA_DUYET_BTC("51", "Đã duyệt - BTC"),
     DA_TAO_CBV("52", "Đã tạo - CB Vụ"),
     DA_DUYET_CBV("53", "Đã duyệt - CB Vụ"),
-    TU_CHOI_CBV("54", "Từ chối - VB Vụ"),
+    TU_CHOI_CBV("54", "Từ chối - CB Vụ"),
     YC_CHICUC_PHANBO_DC("59", "Y/c Chi cục xác định điểm nhập ĐC"),
     DA_PHANBO_DC_CHODUYET_TBP_TVQT("60", "Đã xác định điểm nhập, chờ duyệt – TBP TVQT"),
     DA_PHANBO_DC_TUCHOI_TBP_TVQT("61", "Đã xác định điểm nhập, từ chối – TBP TVQT"),
