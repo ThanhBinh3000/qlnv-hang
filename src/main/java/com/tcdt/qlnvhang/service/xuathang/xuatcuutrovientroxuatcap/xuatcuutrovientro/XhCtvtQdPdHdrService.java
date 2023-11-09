@@ -402,7 +402,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
                 h.setStt("" + index++);
                 h.setTenCuc(hdrDTO.getTenDvi());
                 h.setMucDichXuatCucTro(hdrDTO.getMucDichXuat());
-                h.setThoiHanXuatCuuTro(hdrDTO.getNgayKetThuc().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                h.setThoiHanXuatCuuTro(hdrDTO.getNgayKetThuc() == null ? null: hdrDTO.getNgayKetThuc().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
                 listData.add(h);
                 for (XhCtvtQuyetDinhPdDtlDTO dtlDTO : hdrDTO.getChildData()) {
                     XhCtvtQuyetDinhPdHdrPreviewDTO d = new XhCtvtQuyetDinhPdHdrPreviewDTO();
