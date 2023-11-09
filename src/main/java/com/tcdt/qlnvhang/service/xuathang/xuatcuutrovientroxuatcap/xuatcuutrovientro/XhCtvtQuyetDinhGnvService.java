@@ -299,8 +299,8 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
             .thangKy(xhCtvtQuyetDinhGnvHdr.get().getNgayKy().getMonth().getValue())
             .namKy(xhCtvtQuyetDinhGnvHdr.get().getNgayKy().getYear())
             .namKeHoach(xhCtvtQuyetDinhGnvHdr.get().getNam())
-            .canCuPhapLy(xhCtvtQuyetDinhGnvHdr.get().getFileDinhKem()
-                    .stream().map(FileDinhKemJoinTable::getFileName).collect(Collectors.joining(" ,")))
+            .canCuPhapLy(xhCtvtQuyetDinhGnvHdr.get().getCanCu()
+                    .stream().map(FileDinhKemJoinTable::getNoiDung).collect(Collectors.joining(" ,")))
             .tongSoLuong(xhCtvtQuyetDinhGnvHdr.get().getTongSoLuong() == null? new BigDecimal(0l) : xhCtvtQuyetDinhGnvHdr.get().getTongSoLuong())
             .donViTinh(checkTypeVT.equals(Boolean.FALSE) ? "kg" : "")
             .loaiVthh(xhCtvtQuyetDinhGnvHdr.get().getTenLoaiVthh() == null?xhCtvtQuyetDinhGnvHdr.get().getTenVthh(): xhCtvtQuyetDinhGnvHdr.get().getTenLoaiVthh())
@@ -313,7 +313,7 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
   private List<XhCtvtQuyetDinhGnvDtlDto> convertXhCtvtQuyetDinhGnvDtlDtoToDto(List<XhCtvtQuyetDinhGnvDtl> dataDtl) {
     List<XhCtvtQuyetDinhGnvDtlDto> xhCtvtQuyetDinhGnvDtlDtos = new ArrayList<>();
     UserInfo userInfo = getUser();
-    List<XhCtvtQuyetDinhGnvDtl> quyetDinhGnvDtls = dataDtl.stream().filter(item -> userInfo.getDvql().contentEquals(item.getMaDvi())).collect(Collectors.toList());
+    List<XhCtvtQuyetDinhGnvDtl> quyetDinhGnvDtls = dataDtl.stream().filter(item -> !StringUtils.isEmpty(item.getMaDvi()) && item.getMaDvi().contains(userInfo.getDvql())).collect(Collectors.toList());
     int stt = 1;
     for (var res : quyetDinhGnvDtls) {
       var xhCtvtQuyetDinhGnvDtlDto = XhCtvtQuyetDinhGnvDtlDto.builder()
