@@ -123,7 +123,7 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
         if (!byId.isPresent()){
             throw new Exception("Bản ghi không tồn tại");
         }else {
-            dx.setTrangThai(NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId());
+//            dx.setTrangThai(NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId());
             dx.setPthucMuaTrucTiep(objReq.getPthucMuaTrucTiep());
             dx.setDiaDiemChaoGia(objReq.getDiaDiemChaoGia());
             dx.setNgayNhanCgia(getDateTimeNow());
@@ -144,6 +144,13 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
                 if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKemMuaLe())) {
                     List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemMuaLe(), dx.getId(), HhQdPheduyetKhMttDx.TABLE_NAME);
                     dx.setFileDinhKemMuaLe(fileDinhKemList);
+                }
+            }
+            if (objReq.getPthucMuaTrucTiep().equals(Contains.CHAO_GIA)) {
+                dx.setTrangThai(NhapXuatHangTrangThaiEnum.DANGCAPNHAT.getId());
+                if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKem())) {
+                    List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), dx.getId(), HhQdPheduyetKhMttDx.TABLE_NAME);
+                    dx.setFileDinhKem(fileDinhKemList);
                 }
             }
             hhQdPheduyetKhMttDxRepository.save(dx);

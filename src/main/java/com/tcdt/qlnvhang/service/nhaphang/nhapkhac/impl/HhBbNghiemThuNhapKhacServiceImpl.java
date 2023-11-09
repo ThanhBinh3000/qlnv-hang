@@ -88,12 +88,15 @@ public class HhBbNghiemThuNhapKhacServiceImpl extends BaseServiceImpl implements
         req.setTrangThaiQdnk(Contains.BAN_HANH);
         Page<HhQdGiaoNvuNhapHangKhacHdr> data = hhQdGiaoNvNhapKhacHdrRepository.searchBbNtBq(req, pageable);
         Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
+        Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
         data.forEach( f -> {
             List<HhQdPdNhapKhacDtl> listDiaDiem = hhQdPdNhapKhacDtlRepository.findAllByIdHdr(f.getIdQdPdNk());
             for (HhQdPdNhapKhacDtl dtl: listDiaDiem) {
                 dtl.setTenDiemKho(hashMapDmdv.get(dtl.getMaDiemKho()));
                 dtl.setTenNganKho(hashMapDmdv.get(dtl.getMaNganKho()));
                 dtl.setTenLoKho(hashMapDmdv.get(dtl.getMaLoKho()));
+                dtl.setTenNhaKho(hashMapDmdv.get(dtl.getMaNhaKho()));
+                dtl.setTenCloaiVthh(listDanhMucHangHoa.get(dtl.getCloaiVthh()));
                 List<HhBbNghiemThuNhapKhac> bbNghiemThuNhapKhacs = hhBbNghiemThuNhapKhacRepository.findByIdQdGiaoNvNhAndMaLoKhoAndMaNganKho(f.getId(), dtl.getMaLoKho(), dtl.getMaNganKho());
                 bbNghiemThuNhapKhacs.forEach( item ->  {
                     item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));

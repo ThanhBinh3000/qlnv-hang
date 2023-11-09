@@ -129,6 +129,8 @@ public class HhQdPheduyetKhMttDx implements Serializable {
 
     @Transient
     private List<FileDinhKem> fileDinhKemMuaLe = new ArrayList<>();
+    @Transient
+    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
 
     @Transient
     private List<HhChiTietTTinChaoGia> listChaoGia = new ArrayList<>();
