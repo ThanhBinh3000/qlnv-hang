@@ -168,6 +168,13 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         return allById;
     }
 
+    public XhThopDxKhBdg detail(Long id) throws Exception {
+        if (id == null) {
+            throw new Exception("Tham số không hợp lệ.");
+        }
+        List<XhThopDxKhBdg> details = detail(Collections.singletonList(id));
+        return details.isEmpty() ? null : details.get(0);
+    }
 
     @Transactional
     public void delete(IdSearchReq idSearchReq) throws Exception {
@@ -238,16 +245,17 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         ex.export();
     }
 
-    public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
+    public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {
+        if (currentUser == null) {
+            throw new Exception("Bad request.");
+        }
         try {
+            String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "bandaugia/" + templatePath;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
+            XhThopDxKhBdg detail = this.detail(DataUtils.safeToLong(body.get("id")));
             Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
-            FileInputStream inputStream = new FileInputStream(baseReportFolder + "bandaugia/Tổng hợp kế hoạch bán đấu giá.docx");
-            List<XhThopDxKhBdg> detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
-            if (detail.isEmpty()) {
-                throw new Exception("Không tìm thấy dữ liệu");
-            }
-            XhThopDxKhBdg xhThopDxKhBdg = detail.get(0);
-            List<Long> listIdChild = xhThopDxKhBdg.getChildren().stream().map(XhThopDxKhBdgDtl::getIdDxHdr).collect(Collectors.toList());
+            List<Long> listIdChild = detail.getChildren().stream().map(XhThopDxKhBdgDtl::getIdDxHdr).collect(Collectors.toList());
             List<XhDxKhBanDauGia> tableData = xhDxKhBanDauGiaServiceImpl.detail(listIdChild);
             tableData.forEach(s -> {
                 String maDviCuc = s.getMaDvi().substring(0, 6);
@@ -257,8 +265,8 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
                 }
             });
             Map<String, Object> hashMap = new HashMap<>();
-            hashMap.put("nam", xhThopDxKhBdg.getNamKh());
-            hashMap.put("tenCloaiVthh", xhThopDxKhBdg.getTenCloaiVthh().toUpperCase());
+            hashMap.put("nam", detail.getNamKh());
+            hashMap.put("tenCloaiVthh", detail.getTenCloaiVthh().toUpperCase());
             hashMap.put("table", tableData);
             return docxToPdfConverter.convertDocxToPdf(inputStream, hashMap);
         } catch (IOException e) {

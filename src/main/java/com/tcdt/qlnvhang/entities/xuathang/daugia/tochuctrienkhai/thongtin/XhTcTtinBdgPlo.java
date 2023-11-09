@@ -41,4 +41,6 @@ public class XhTcTtinBdgPlo implements Serializable {
     private String tenNganKho;
     @Transient
     private String tenLoKho;
+    @Transient
+    private BigDecimal thanhTien;
 }

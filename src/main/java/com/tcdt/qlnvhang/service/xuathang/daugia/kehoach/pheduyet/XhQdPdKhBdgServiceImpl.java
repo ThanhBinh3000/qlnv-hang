@@ -241,6 +241,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
                         dataPhanLoDtl.setTenNhaKho(StringUtils.isEmpty(dataPhanLoDtl.getMaNhaKho()) ? null : mapDmucDvi.get(dataPhanLoDtl.getMaNhaKho()));
                         dataPhanLoDtl.setTenNganKho(StringUtils.isEmpty(dataPhanLoDtl.getMaNganKho()) ? null : mapDmucDvi.get(dataPhanLoDtl.getMaNganKho()));
                         dataPhanLoDtl.setTenLoKho(StringUtils.isEmpty(dataPhanLoDtl.getMaLoKho()) ? null : mapDmucDvi.get(dataPhanLoDtl.getMaLoKho()));
+                        dataPhanLoDtl.setTenNganLoKho(StringUtils.isEmpty(dataPhanLoDtl.getMaLoKho()) ? mapDmucDvi.get(dataPhanLoDtl.getMaNganKho()) : mapDmucDvi.get(dataPhanLoDtl.getMaLoKho()));
                         dataPhanLoDtl.setTenLoaiVthh(StringUtils.isEmpty(dataPhanLoDtl.getLoaiVthh()) ? null : mapVthh.get(dataPhanLoDtl.getLoaiVthh()));
                         dataPhanLoDtl.setTenCloaiVthh(StringUtils.isEmpty(dataPhanLoDtl.getCloaiVthh()) ? null : mapVthh.get(dataPhanLoDtl.getCloaiVthh()));
                     }
@@ -268,7 +269,9 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
     }
 
     public XhQdPdKhBdg detail(Long id) throws Exception {
-        if (id == null) throw new Exception("Tham số không hợp lệ.");
+        if (id == null) {
+            throw new Exception("Tham số không hợp lệ.");
+        }
         List<XhQdPdKhBdg> details = detail(Collections.singletonList(id));
         return details.isEmpty() ? null : details.get(0);
     }
@@ -638,11 +641,23 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
         ex.export();
     }
 
-    public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
-        try (FileInputStream inputStream = new FileInputStream(baseReportFolder + "/bandaugia/Quyết định phê duyệt kế hoạch bán đấu giá.docx")) {
+    public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {
+        if (currentUser == null) {
+            throw new Exception("Bad request.");
+        }
+        try {
+            String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "bandaugia/" + templatePath;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
             XhQdPdKhBdg detail = this.detail(DataUtils.safeToLong(body.get("id")));
+            detail.setTenCloaiVthh(detail.getTenCloaiVthh().toUpperCase());
+            for (XhQdPdKhBdgDtl dtl : detail.getChildren()) {
+                dtl.setTenDvi(dtl.getTenDvi().toUpperCase());
+            }
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
-        } catch (IOException | XDocReportException e) {
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
             e.printStackTrace();
         }
         return null;
