@@ -606,6 +606,10 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
                     List<FileDinhKem> fileDinhKem = fileDinhKemService.search(id, Arrays.asList(HhQdPheduyetKhMttDx.TABLE_NAME));
                     dtl.setFileDinhKemMuaLe(fileDinhKem);
                 }
+                if (dtl.getPthucMuaTrucTiep().equals(Contains.CHAO_GIA)){
+                    List<FileDinhKem> fileDinhKem = fileDinhKemService.search(id, Arrays.asList(HhQdPheduyetKhMttDx.TABLE_NAME));
+                    dtl.setFileDinhKem(fileDinhKem);
+                }
             }
         }
         return dtl;
