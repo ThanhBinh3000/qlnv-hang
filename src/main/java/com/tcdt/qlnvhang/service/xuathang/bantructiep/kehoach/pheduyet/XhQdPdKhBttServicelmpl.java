@@ -22,6 +22,7 @@ import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhB
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdrReq;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.service.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBttServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.util.Contains;
@@ -41,6 +42,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -60,6 +62,8 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
     private XhThopDxKhBttRepository xhThopDxKhBttRepository;
     @Autowired
     private XhDxKhBanTrucTiepHdrRepository xhDxKhBanTrucTiepHdrRepository;
+    @Autowired
+    private XhTcTtinBttServiceImpl xhTcTtinBttServiceImpl;
     @Autowired
     private FileDinhKemService fileDinhKemService;
 
@@ -241,6 +245,8 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
                         dataDviDtl.setTenCloaiVthh(mapVthh.getOrDefault(dataDviDtl.getCloaiVthh(), null));
                     }
                     dataDvi.setTenDvi(mapDmucDvi.getOrDefault(dataDvi.getMaDvi(), null));
+                    BigDecimal sumThanhTien = listDviDtl.stream().map(XhQdPdKhBttDviDtl::getThanhTienDuocDuyet).filter(Objects::nonNull).reduce((a, b) -> a.add(b)).orElse(null);
+                    dataDvi.setThanhTien(sumThanhTien);
                     dataDvi.setChildren(listDviDtl.stream().filter(type -> "QdKh".equals(type.getType())).collect(Collectors.toList()));
                 }
                 dataDtl.setTenDvi(mapDmucDvi.getOrDefault(dataDtl.getMaDvi(), null));
@@ -254,6 +260,10 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
             data.setMapLoaiHinhNx(mapLoaiHinhNx);
             data.setMapKieuNx(mapKieuNx);
             data.setTrangThai(data.getTrangThai());
+            BigDecimal sumSoLuong = listDtl.stream().map(XhQdPdKhBttDtl::getTongSoLuong).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
+            BigDecimal sumTien = listDtl.stream().map(XhQdPdKhBttDtl::getThanhTien).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
+            data.setTongSoLuongCuc(sumSoLuong);
+            data.setTongTienCuc(sumTien);
             List<FileDinhKem> canCuPhapLy = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBttHdr.TABLE_NAME));
             data.setCanCuPhapLy(canCuPhapLy);
             List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBttHdr.TABLE_NAME + "_BAN_HANH"));
@@ -477,28 +487,33 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
             throw new Exception("Bad request.");
         }
         String capDvi = currentUser.getUser().getCapDvi();
-        String templatePath;
-        if (Contains.CAP_TONG_CUC.equals(capDvi)) {
-            templatePath = baseReportFolder + "/bantructiep/Quyết định phê duyệt kế hoạch bán trực tiếp Tổng Cục.docx";
-        } else {
-            templatePath = baseReportFolder + "/bantructiep/Quyết định phê duyệt kế hoạch bán trực tiếp Cục.docx";
-        }
+        boolean isTongCuc = Contains.CAP_TONG_CUC.equals(capDvi);
         try {
-            FileInputStream inputStream = new FileInputStream(templatePath);
+            String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "bantructiep/" + templatePath;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
             XhQdPdKhBttHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
-            List<XhQdPdKhBttDtl> listDtl = xhQdPdKhBttDtlRepository.findAllByIdHdr(detail.getId());
-            listDtl.forEach(dataDtl -> {
-                List<XhQdPdKhBttDvi> listDvi = xhQdPdKhBttDviRepository.findAllByIdDtl(dataDtl.getId());
-                listDvi.forEach(dataDvi -> {
-                    List<XhQdPdKhBttDviDtl> listDviDtl = xhQdPdKhBttDviDtlRepository.findAllByIdDvi(dataDvi.getId());
-                    dataDvi.setDonGiaDuocDuyet(listDviDtl.get(0).getDonGiaDuocDuyet());
-                });
-            });
-            return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+            if (isTongCuc) {
+                return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+            } else {
+                XhQdPdKhBttDtl detailDtl = null;
+                if (detail.getId() != null) {
+                    List<XhQdPdKhBttDtl> filteredChildren = detail.getChildren().stream()
+                            .filter(type -> type.getMaDvi().equals(currentUser.getDvql()))
+                            .collect(Collectors.toList());
+                    if (!filteredChildren.isEmpty()) {
+                        detailDtl = xhTcTtinBttServiceImpl.detail(filteredChildren.get(0).getId());
+                    }
+                }
+                if (detailDtl != null) {
+                    return docxToPdfConverter.convertDocxToPdf(inputStream, detailDtl);
+                }
+            }
         } catch (IOException e) {
-            throw new Exception("Error reading template file.", e);
+            e.printStackTrace();
         } catch (XDocReportException e) {
-            throw new Exception("Error converting template to PDF.", e);
+            e.printStackTrace();
         }
+        return null;
     }
 }

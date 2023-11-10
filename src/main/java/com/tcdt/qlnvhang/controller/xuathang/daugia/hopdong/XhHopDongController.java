@@ -136,7 +136,7 @@ public class XhHopDongController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xem trước", response = List.class)
+    @ApiOperation(value = "Xem truoc", response = List.class)
     @PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> preview(@RequestBody HashMap<String, Object> body, @CurrentUser CustomUserDetails currentUser) {

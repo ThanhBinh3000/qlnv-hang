@@ -88,6 +88,8 @@ public class XhDxKhBanDauGia implements Serializable {
     private String tenTrangThaiTh;
     @Transient
     private String tenTrangThai;
+    @Transient
+    private BigDecimal giaKhoiDiemDx;
 
     @JsonIgnore
     @Transient
@@ -175,15 +177,5 @@ public class XhDxKhBanDauGia implements Serializable {
     }
 
     @Transient
-    BigDecimal giaKhoiDiemDx;
-    @Transient
     private List<XhDxKhBanDauGiaDtl> children = new ArrayList<>();
-
-
-    public void setChildren(List<XhDxKhBanDauGiaDtl> children) {
-        this.children = children;
-        if (!DataUtils.isNullOrEmpty(children)) {
-            this.giaKhoiDiemDx = children.stream().map(XhDxKhBanDauGiaDtl::getGiaKhoiDiemDx).reduce(BigDecimal.ZERO, BigDecimal::add);
-        }
-    }
 }

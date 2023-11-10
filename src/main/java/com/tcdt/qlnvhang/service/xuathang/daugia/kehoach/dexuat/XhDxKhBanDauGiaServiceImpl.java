@@ -163,6 +163,8 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
                     dataPhanLo.setTenCloaiVthh(mapVthh.getOrDefault(dataPhanLo.getCloaiVthh(), null));
                 });
                 dataDtl.setTenDvi(mapDmucDvi.getOrDefault(dataDtl.getMaDvi(), null));
+                BigDecimal sumGiaKhoiDiemDeXuat = dauGiaPhanLo.stream().map(XhDxKhBanDauGiaPhanLo::getGiaKhoiDiemDx).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
+                dataDtl.setGiaKhoiDiemDx(sumGiaKhoiDiemDeXuat);
                 dataDtl.setChildren(dauGiaPhanLo);
             }
             data.setMapDmucDvi(mapDmucDvi);
@@ -171,6 +173,8 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
             data.setMapKieuNx(mapKieuNx);
             data.setMapPhuongThucTt(mapPhuongThucTt);
             data.setTrangThai(data.getTrangThai());
+            BigDecimal sumGiaKhoiDiemDx = dauGiaDtl.stream().map(XhDxKhBanDauGiaDtl::getGiaKhoiDiemDx).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
+            data.setGiaKhoiDiemDx(sumGiaKhoiDiemDx);
             data.setChildren(dauGiaDtl);
         }
         return allById;

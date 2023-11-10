@@ -256,6 +256,14 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
         return list;
     }
 
+    public XhQdPdKhBttDtl detail(Long id) throws Exception {
+        if (id == null) {
+            throw new Exception("Tham số không hợp lệ.");
+        }
+        List<XhQdPdKhBttDtl> details = detail(Collections.singletonList(id));
+        return details.isEmpty() ? null : details.get(0);
+    }
+
     public XhQdPdKhBttDtl approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
         if (currentUser == null || StringUtils.isEmpty(statusReq.getId())) {
             throw new Exception("Bad request.");
@@ -385,30 +393,26 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
             objs[10] = dtl.getTenTrangThaiXh();
             dataList.add(objs);
         }
-
-        // Xuất dữ liệu ra Excel
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
     }
 
     public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {
-        if (currentUser == null || body == null || body.get("id") == null) {
+        if (currentUser == null) {
             throw new Exception("Bad request.");
         }
-        Long id = DataUtils.safeToLong(body.get("id"));
-        if (id == null) {
-            throw new Exception("Invalid ID format.");
-        }
-        try (FileInputStream inputStream = new FileInputStream(baseReportFolder + "/bantructiep/Thông tin chào giá bán trực tiếp.docx")) {
-            List<XhQdPdKhBttDtl> listDetail = this.detail(Arrays.asList(id));
-            if (listDetail.isEmpty()) {
-                throw new Exception("Không tìm thấy dữ liệu.");
-            }
-            XhQdPdKhBttDtl detail = listDetail.get(0);
+        try {
+            String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "bantructiep/" + templatePath;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
+            XhQdPdKhBttDtl detail = this.detail(DataUtils.safeToLong(body.get("id")));
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
-        } catch (IOException | XDocReportException e) {
-            e.printStackTrace();
-            throw new Exception("Xảy ra lỗi khi xử lý tệp.");
         }
+        catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

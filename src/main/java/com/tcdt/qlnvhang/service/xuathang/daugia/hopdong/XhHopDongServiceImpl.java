@@ -32,6 +32,7 @@ import org.springframework.util.StringUtils;
 import javax.transaction.Transactional;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -173,6 +174,8 @@ public class XhHopDongServiceImpl extends BaseServiceImpl {
                     dataNhapKho.setTenLoKho(mapDmucDvi.getOrDefault(dataNhapKho.getMaLoKho(), null));
                 });
                 dataDtl.setTenDvi(mapDmucDvi.getOrDefault(dataDtl.getMaDvi(), null));
+                BigDecimal sumDonGia = listNhapKho.stream().map(XhHopDongDdiemNhapKho::getDonGiaTraGia).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
+                dataDtl.setTongDonGia(sumDonGia);
                 dataDtl.setChildren(listNhapKho);
             }
             data.setMapDmucDvi(mapDmucDvi);
@@ -247,11 +250,14 @@ public class XhHopDongServiceImpl extends BaseServiceImpl {
             throw new Exception("Bad request.");
         }
         try {
-            String reportFilePath = baseReportFolder + "bandaugia/Thông tin hợp đồng bán.docx";
-            FileInputStream inputStream = new FileInputStream(reportFilePath);
+            String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "bandaugia/" + templatePath;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
             XhHopDongHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
-        } catch (IOException | XDocReportException e) {
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
             e.printStackTrace();
         }
         return null;

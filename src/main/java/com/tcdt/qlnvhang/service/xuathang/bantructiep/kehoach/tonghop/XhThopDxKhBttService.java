@@ -46,13 +46,13 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
     @Autowired
     private XhThopDxKhBttRepository xhThopDxKhBttRepository;
     @Autowired
+    private XhDxKhBanTrucTiepServicelmpl xhDxKhBanTrucTiepServicelmpl;
+    @Autowired
     private XhDxKhBanTrucTiepHdrRepository xhDxKhBanTrucTiepHdrRepository;
     @Autowired
     private XhDxKhBanTrucTiepDtlRepository xhDxKhBanTrucTiepDtlRepository;
     @Autowired
     private XhDxKhBanTrucTiepDdiemRepository xhDxKhBanTrucTiepDdiemRepository;
-    @Autowired
-    private XhDxKhBanTrucTiepServicelmpl xhDxKhBanTrucTiepService;
 
     public Page<XhThopDxKhBttHdr> searchPage(CustomUserDetails currentUser, SearchXhThopDxKhBtt req) throws Exception {
         req.setDvql(currentUser.getDvql());
@@ -172,6 +172,14 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
         return allById;
     }
 
+    public XhThopDxKhBttHdr detail(Long id) throws Exception {
+        if (id == null) {
+            throw new Exception("Tham số không hợp lệ.");
+        }
+        List<XhThopDxKhBttHdr> details = detail(Collections.singletonList(id));
+        return details.isEmpty() ? null : details.get(0);
+    }
+
     @Transactional
     public void delete(IdSearchReq idSearchReq) throws Exception {
         Long id = idSearchReq.getId();
@@ -248,37 +256,23 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
             throw new Exception("Bad request.");
         }
         try {
+            String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "bantructiep/" + templatePath;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
+            XhThopDxKhBttHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
             Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
-            FileInputStream inputStream = new FileInputStream(baseReportFolder + "bantructiep/Tổng hợp kế hoạch bán trực tiếp.docx");
-            List<Long> idList = Arrays.asList(DataUtils.safeToLong(body.get("id")));
-            if (idList.isEmpty()) {
-                throw new Exception("ID không hợp lệ.");
-            }
-            List<XhThopDxKhBttHdr> detail = this.detail(idList);
-            if (detail.isEmpty()) {
-                throw new Exception("Không tìm thấy dữ liệu.");
-            }
-            XhThopDxKhBttHdr tongHop = detail.get(0);
-            List<Long> idDxHdr = tongHop.getChildren().stream().map(XhThopDxKhBttDtl::getIdDxHdr).collect(Collectors.toList());
-            List<XhDxKhBanTrucTiepHdr> tableData = xhDxKhBanTrucTiepService.detail(idDxHdr);
-            for (XhDxKhBanTrucTiepHdr dataDx : tableData) {
-                String maDviCuc = dataDx.getMaDvi().substring(0, 6);
+            List<Long> listIdChild = detail.getChildren().stream().map(XhThopDxKhBttDtl::getIdDxHdr).collect(Collectors.toList());
+            List<XhDxKhBanTrucTiepHdr> tableData = xhDxKhBanTrucTiepServicelmpl.detail(listIdChild);
+            tableData.forEach(s -> {
+                String maDviCuc = s.getMaDvi().substring(0, 6);
                 if (mapDmucDvi.containsKey(maDviCuc)) {
                     Map<String, Object> objDonVi = mapDmucDvi.get(maDviCuc);
-                    dataDx.setTenDvi(objDonVi.get("tenDvi").toString());
+                    s.setTenDvi(objDonVi.get("tenDvi").toString());
                 }
-                List<XhDxKhBanTrucTiepDtl> listDtl = xhDxKhBanTrucTiepDtlRepository.findAllByIdHdr(dataDx.getId());
-                for (XhDxKhBanTrucTiepDtl dataDtl : listDtl) {
-                    List<XhDxKhBanTrucTiepDdiem> listDdiem = xhDxKhBanTrucTiepDdiemRepository.findAllByIdDtl(dataDtl.getId());
-                    if (!listDdiem.isEmpty()) {
-                        dataDtl.setDonGiaDeXuat(listDdiem.get(0).getDonGiaDeXuat());
-                        dataDtl.setThanhTienDeXuat(listDdiem.stream().map(item -> item.getThanhTienDeXuat() != null ? item.getThanhTienDeXuat() : BigDecimal.ZERO).reduce(BigDecimal.ZERO, BigDecimal::add));
-                    }
-                }
-            }
-            HashMap<Object, Object> hashMap = new HashMap<>();
-            hashMap.put("nam", tongHop.getNamKh());
-            hashMap.put("tenCloaiVthh", tongHop.getTenCloaiVthh().toUpperCase());
+            });
+            Map<String, Object> hashMap = new HashMap<>();
+            hashMap.put("nam", detail.getNamKh());
+            hashMap.put("tenCloaiVthh", detail.getTenCloaiVthh().toUpperCase());
             hashMap.put("table", tableData);
             return docxToPdfConverter.convertDocxToPdf(inputStream, hashMap);
         } catch (IOException e) {
