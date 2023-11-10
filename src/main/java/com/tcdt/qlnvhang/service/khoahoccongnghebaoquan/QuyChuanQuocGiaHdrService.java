@@ -62,7 +62,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         UserInfo userInfo = SecurityContextService.getUser();
 //        objReq.setMaDvi(!ObjectUtils.isEmpty(objReq.getMaDvi()) ? objReq.getMaDvi() : userInfo.getDvql());
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
-                objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
+                objReq.getPaggingReq().getLimit(), Sort.by("loaiVthh", "maBn").ascending());
         Page<QuyChuanQuocGiaHdr> data = quyChuanQuocGiaHdrRepository.search(objReq, pageable);
         Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
         List<Long> idsHdr = data.getContent().stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList());
