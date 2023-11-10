@@ -1,12 +1,18 @@
 package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = HhSlNhapHang.TABLE_NAME)
 @Data
 public class HhSlNhapHang extends BaseEntity {
@@ -23,8 +29,7 @@ public class HhSlNhapHang extends BaseEntity {
     private String loaiVthh;
     private String cloaiVthh;
     private String kieuNhap;
-    private BigDecimal slDeXuat;
-    private BigDecimal slDaThucHien;
+    private BigDecimal soLuong;
 
     @Transient
     private String tenDvi;
