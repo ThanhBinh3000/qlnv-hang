@@ -12,10 +12,12 @@ import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 
 import com.tcdt.qlnvhang.common.DocxToPdfConverter;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.HhSlNhapHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.*;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.HhDxKhLcntThopDtlRepository;
 import com.tcdt.qlnvhang.repository.HhDxKhLcntThopHdrRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.HhSlNhapHangRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.*;
 import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -75,6 +77,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
     @Autowired
     private HhDxKhLcntThopHdrRepository hhDxKhLcntThopHdrRepository;
     @Autowired
+    private HhSlNhapHangRepository hhSlNhapHangRepository;
     DocxToPdfConverter docxToPdfConverter;
     @Autowired
     private BaoCaoClient baoCaoClient;
@@ -142,14 +145,26 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
                 if (!ObjectUtils.isEmpty(dXuat) && !dXuat.getId().equals(objHdr.getId())) {
                     throw new Exception("Chủng loại hàng hóa đã được tạo và gửi duyệt, xin vui lòng chọn lại chủng loại hàng hóa khác");
                 }
+                for (HhDxKhlcntDsgthau goiThau : objHdr.getDsGtDtlList()) {
+                    for (HhDxKhlcntDsgthauCtiet chiCuc: goiThau.getChildren()) {
+                        BigDecimal bLong = hhSlNhapHangRepository.countSLDalenKh(objHdr.getNamKhoach(), objHdr.getLoaiVthh(), chiCuc.getMaDvi());
+                        BigDecimal soLuongTheoDx = bLong.add(chiCuc.getSoLuong());
+                        if (soLuongTheoDx.compareTo(chiCuc.getSoLuongTheoChiTieu()) > 0) {
+                            throw new Exception(chiCuc.getTenDvi() + " đã nhập quá số lượng chỉ tiêu, vui lòng nhập lại");
+                        }
+                    }
+
+                }
             }
             if (trangThai.equals(NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId()) || trangThai.equals(NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId())) {
                 for (HhDxKhlcntDsgthau goiThau : objHdr.getDsGtDtlList()) {
                     for (HhDxKhlcntDsgthauCtiet chiCuc: goiThau.getChildren()) {
-                        BigDecimal aLong = hhDxuatKhLcntHdrRepository.countSLDalenKh(objHdr.getNamKhoach(), objHdr.getLoaiVthh(), chiCuc.getMaDvi(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+                        BigDecimal aLong = hhSlNhapHangRepository.countSLDalenQd(objHdr.getNamKhoach(), objHdr.getLoaiVthh(), chiCuc.getMaDvi());
+                        BigDecimal bLong = hhSlNhapHangRepository.countSLDalenKh(objHdr.getNamKhoach(), objHdr.getLoaiVthh(), chiCuc.getMaDvi());
                         BigDecimal soLuongTotal = aLong.add(chiCuc.getSoLuong());
-                        if (soLuongTotal.compareTo(chiCuc.getSoLuongTheoChiTieu()) > 0) {
-                            throw new Exception(chiCuc.getTenDvi() + " đã nhập quá số lượng chi tiêu, vui lòng nhập lại");
+                        BigDecimal soLuongTheoDx = bLong.add(chiCuc.getSoLuong());
+                        if (soLuongTotal.compareTo(chiCuc.getSoLuongTheoChiTieu()) > 0 || soLuongTheoDx.compareTo(chiCuc.getSoLuongTheoChiTieu()) > 0) {
+                            throw new Exception(chiCuc.getTenDvi() + " đã nhập quá số lượng chỉ tiêu, vui lòng nhập lại");
                         }
                     }
 
@@ -618,6 +633,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
                 case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
                     optional.setNguoiPduyet(getUser().getUsername());
                     optional.setNgayPduyet(getDateTimeNow());
+                    capNhatSoLuongNhap(optional);
                     break;
                 default:
                     throw new Exception("Phê duyệt không thành công");
@@ -626,30 +642,19 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             String status = stReq.getTrangThai() + optional.getTrangThai();
             switch (status) {
                 case Contains.CHODUYET_TP + Contains.DUTHAO:
-                    this.validateData(optional, Contains.CHODUYET_TP);
-                    optional.setNguoiGuiDuyet(getUser().getUsername());
-                    optional.setNgayGuiDuyet(getDateTimeNow());
-                    break;
                 case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
-                    this.validateData(optional, Contains.CHODUYET_TP);
-                    optional.setNguoiGuiDuyet(getUser().getUsername());
-                    optional.setNgayGuiDuyet(getDateTimeNow());
-                    break;
                 case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
                     this.validateData(optional, Contains.CHODUYET_TP);
                     optional.setNguoiGuiDuyet(getUser().getUsername());
                     optional.setNgayGuiDuyet(getDateTimeNow());
                     break;
                 case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
-                    optional.setNguoiPduyet(getUser().getUsername());
-//                    optional.setNgayPduyet(getDateTimeNow());
-                    optional.setLdoTuchoi(stReq.getLyDo());
-                    break;
                 case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
                     optional.setNguoiPduyet(getUser().getUsername());
 //                    optional.setNgayPduyet(getDateTimeNow());
                     optional.setLdoTuchoi(stReq.getLyDo());
                     break;
+//                    optional.setNgayPduyet(getDateTimeNow());
                 case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
                     this.validateData(optional, stReq.getTrangThai());
                     optional.setNguoiPduyet(getUser().getUsername());
@@ -659,6 +664,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
                     this.validateData(optional, stReq.getTrangThai());
                     optional.setNguoiPduyet(getUser().getUsername());
                     optional.setNgayPduyet(getDateTimeNow());
+                    capNhatSoLuongNhap(optional);
                     break;
                 default:
                     throw new Exception("Phê duyệt không thành công");
@@ -1154,5 +1160,24 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             return hhDxuatKhLcntHdrRepository.getGiaBanToiDaVt(cloaiVhtt, namKhoach);
         }
         return hhDxuatKhLcntHdrRepository.getGiaBanToiDaLt(cloaiVhtt, maDvi, namKhoach);
+    }
+
+    private void capNhatSoLuongNhap (HhDxuatKhLcntHdr dxuatKhLcntHdr) {
+        List<HhDxKhlcntDsgthau> dsGthauList = hhDxuatKhLcntDsgtDtlRepository.findByIdDxKhlcnt(dxuatKhLcntHdr.getId());
+        for (HhDxKhlcntDsgthau dsG : dsGthauList) {
+            List<HhDxKhlcntDsgthauCtiet> listDdNhap = hhDxKhlcntDsgthauCtietRepository.findByIdGoiThau(dsG.getId());
+            listDdNhap.forEach(f -> {
+                HhSlNhapHang slNhapHang = HhSlNhapHang.builder()
+                        .loaiVthh(dxuatKhLcntHdr.getLoaiVthh())
+                        .cloaiVthh(dxuatKhLcntHdr.getCloaiVthh())
+                        .idDxKhlcnt(dxuatKhLcntHdr.getId())
+                        .namKhoach(dxuatKhLcntHdr.getNamKhoach())
+                        .soLuong(f.getSoLuong())
+                        .maDvi(f.getMaDvi())
+                        .kieuNhap("NHAP_DAU_THAU")
+                        .build();
+                hhSlNhapHangRepository.save(slNhapHang);
+            });
+        }
     }
 }
