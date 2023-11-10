@@ -25,6 +25,7 @@ import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import org.graalvm.util.CollectionsUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,6 +103,11 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                     }
                     f.setTieuChuanKyThuat(listQuyChuan);
                 }
+            }
+            List<FileDinhKem> fileDinhKems = fileDinhKemService.search(f.getId(), Collections.singleton(QuyChuanQuocGiaHdr.TABLE_NAME));
+            if (!CollectionUtils.isEmpty(fileDinhKems)) {
+                fileDinhKems = fileDinhKems.stream().filter(item -> item.getFileType().equals("CAN_CU_PHAP_LY")).collect(Collectors.toList());
+                f.setFileDinhKems(fileDinhKems);
             }
         });
         return data;
