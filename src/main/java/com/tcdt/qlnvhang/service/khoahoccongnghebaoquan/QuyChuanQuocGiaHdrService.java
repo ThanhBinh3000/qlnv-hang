@@ -5,11 +5,14 @@ import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.Bh
 import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaDtl;
 import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan.*;
+import com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan.QuyChuanQuocGiaDtlRepository;
+import com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan.QuyChuanQuocGiaHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.*;
+import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.QuyChuanQuocGiaDtlReq;
+import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.QuyChuanQuocGiaHdrReq;
+import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.SearchQuyChuanQgReq;
 import com.tcdt.qlnvhang.response.khoahoccongnghebaoquan.KhCnBaoQuanPreviewRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -18,14 +21,9 @@ import com.tcdt.qlnvhang.table.DmDonViDTO;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.catalog.DmVattuDTO;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.THKeHoachDieuChuyenCucHdr;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
-import org.graalvm.util.CollectionsUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,7 +104,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             }
             List<FileDinhKem> fileDinhKems = fileDinhKemService.search(f.getId(), Collections.singleton(QuyChuanQuocGiaHdr.TABLE_NAME));
             if (!CollectionUtils.isEmpty(fileDinhKems)) {
-                fileDinhKems = fileDinhKems.stream().filter(item -> item.getFileType().equals("CAN_CU_PHAP_LY")).collect(Collectors.toList());
+                fileDinhKems = fileDinhKems.stream().filter(item -> String.valueOf(item.getFileType()).equals("CAN_CU_PHAP_LY")).collect(Collectors.toList());
                 f.setFileDinhKems(fileDinhKems);
             }
         });
