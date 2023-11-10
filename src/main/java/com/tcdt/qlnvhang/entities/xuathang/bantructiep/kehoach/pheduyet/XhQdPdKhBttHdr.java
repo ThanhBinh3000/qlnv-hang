@@ -9,6 +9,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +65,10 @@ public class XhQdPdKhBttHdr implements Serializable {
     private String tenCloaiVthh;
     @Transient
     private String tenTrangThai;
+    @Transient
+    private BigDecimal tongSoLuongCuc;
+    @Transient
+    private BigDecimal tongTienCuc;
 
     @JsonIgnore
     @Transient

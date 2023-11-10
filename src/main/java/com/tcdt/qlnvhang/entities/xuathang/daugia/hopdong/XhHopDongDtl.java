@@ -33,5 +33,7 @@ public class XhHopDongDtl implements Serializable {
     @Transient
     private String tenDvi;
     @Transient
+    private BigDecimal tongDonGia;
+    @Transient
     private List<XhHopDongDdiemNhapKho> children = new ArrayList<>();
 }

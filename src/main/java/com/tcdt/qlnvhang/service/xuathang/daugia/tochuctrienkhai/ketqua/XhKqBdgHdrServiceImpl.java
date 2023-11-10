@@ -10,6 +10,8 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.hopdong.XhHopDongHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgDtlRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgPloRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -34,6 +36,7 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
@@ -49,9 +52,11 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl {
     @Autowired
     private XhQdPdKhBdgDtlRepository xhQdPdKhBdgDtlRepository;
     @Autowired
-    private XhTcTtinBdgPloRepository xhTcTtinBdgPloRepository;
+    private XhTcTtinBdgHdrServiceImpl xhTcTtinBdgHdrServiceImpl;
     @Autowired
-    XhTcTtinBdgHdrServiceImpl xhTcTtinBdgHdrServiceImpl;
+    private XhTcTtinBdgDtlRepository xhTcTtinBdgDtlRepository;
+    @Autowired
+    private XhTcTtinBdgPloRepository xhTcTtinBdgPloRepository;
 
     public Page<XhKqBdgHdr> searchPage(CustomUserDetails currentUser, XhKqBdgHdrReq req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -146,6 +151,14 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl {
             data.setListHopDong(listHd);
         });
         return allById;
+    }
+
+    public XhKqBdgHdr detail(Long id) throws Exception {
+        if (id == null) {
+            throw new Exception("Tham số không hợp lệ.");
+        }
+        List<XhKqBdgHdr> details = detail(Collections.singletonList(id));
+        return details.isEmpty() ? null : details.get(0);
     }
 
     @Transactional
@@ -290,24 +303,34 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl {
         ex.export();
     }
 
-    public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
+    public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {
+        if (currentUser == null) {
+            throw new Exception("Bad request.");
+        }
         try {
-            ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
-            reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
-            ReportTemplate model = findByTenFile(reportTemplateRequest);
-            byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-            List<XhKqBdgHdr> detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
-            List<XhTcTtinBdgHdr> detail1 = xhTcTtinBdgHdrServiceImpl.detail(Arrays.asList(detail.get(0).getIdThongBao()));
-            for (XhTcTtinBdgDtl dataDtl : detail1.get(0).getChildren()) {
-                List<XhTcTtinBdgPlo> listPhanLo = xhTcTtinBdgPloRepository.findAllByIdDtl(dataDtl.getId());
-                List<XhTcTtinBdgPlo> filteredList = listPhanLo.stream()
-                        .filter(dataPhanLo -> dataPhanLo.getToChucCaNhan() != null)
-                        .collect(Collectors.toList());
-
-                dataDtl.setChildren(filteredList);
+            String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "bandaugia/" + templatePath;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
+            XhKqBdgHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
+            XhTcTtinBdgHdr thongTin = null;
+            if (detail.getIdThongBao() != null) {
+                thongTin = xhTcTtinBdgHdrServiceImpl.detail(detail.getIdThongBao());
+                if (thongTin != null) {
+                    thongTin.setTenDvi(thongTin.getTenDvi().toUpperCase());
+                    thongTin.setTenCloaiVthh(thongTin.getTenCloaiVthh().toUpperCase());
+                    List<XhTcTtinBdgDtl> thongTinDtl = xhTcTtinBdgDtlRepository.findAllByIdHdr(thongTin.getId());
+                    for (XhTcTtinBdgDtl dataThongTinDtl : thongTinDtl) {
+                        List<XhTcTtinBdgPlo> thongTinLo = xhTcTtinBdgPloRepository.findAllByIdDtl(dataThongTinDtl.getId());
+                        List<XhTcTtinBdgPlo> filteredLo = thongTinLo.stream().filter(type -> type.getToChucCaNhan() != null).collect(Collectors.toList());
+                        dataThongTinDtl.setChildren(filteredLo);
+                    }
+                    List<XhTcTtinBdgDtl> filteredThongTinDtl = thongTinDtl.stream().filter(type -> type.getChildren() != null && !type.getChildren().isEmpty()).collect(Collectors.toList());
+                    thongTin.setChildren(filteredThongTinDtl);
+                }
             }
-            return docxToPdfConverter.convertDocxToPdf(inputStream, detail1.get(0));
+            if (thongTin != null) {
+                return docxToPdfConverter.convertDocxToPdf(inputStream, thongTin);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (XDocReportException e) {

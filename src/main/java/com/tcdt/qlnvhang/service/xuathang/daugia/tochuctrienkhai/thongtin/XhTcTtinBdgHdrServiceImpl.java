@@ -168,10 +168,16 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl {
                     dataPhanLo.setThanhTien(donGiaOptional.flatMap(donGia -> soLuongOptional.map(soLuong -> donGia.multiply(soLuong))).orElse(null));
                 }
                 dataDtl.setTenDvi(mapDmucDvi.getOrDefault(dataDtl.getMaDvi(), null));
+                BigDecimal sumThanhTien = listPhanLo.stream().map(XhTcTtinBdgPlo::getThanhTien).filter(Objects::nonNull).reduce((a, b) -> a.add(b)).orElse(null);
+                BigDecimal sumDonGiaDeXuat = listPhanLo.stream().map(XhTcTtinBdgPlo::getDonGiaDeXuat).filter(Objects::nonNull).reduce((a, b) -> a.add(b)).orElse(null);
+                dataDtl.setThanhTien(sumThanhTien);
+                dataDtl.setDonGiaDeXuat(sumDonGiaDeXuat);
                 dataDtl.setChildren(listPhanLo);
             }
             data.setMapDmucDvi(mapDmucDvi);
             data.setMapVthh(mapDmucVthh);
+            BigDecimal sumTongTien = listDtl.stream().map(XhTcTtinBdgDtl::getThanhTien).filter(Objects::nonNull).reduce((a, b) -> a.add(b)).orElse(null);
+            data.setTongTien(sumTongTien);
             data.setChildren(listDtl);
             data.setListNguoiTgia(xhTcTtinBdgNlqRepository.findAllByIdHdr(data.getId()));
         }

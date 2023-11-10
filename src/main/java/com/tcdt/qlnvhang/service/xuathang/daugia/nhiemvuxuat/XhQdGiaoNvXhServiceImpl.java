@@ -315,10 +315,13 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl {
         ex.export();
     }
 
-    public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
+    public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {
+        if (currentUser == null) {
+            throw new Exception("Bad request.");
+        }
         try {
-            String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
-            String fileTemplate = "bandaugia/" + fileName;
+            String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "bandaugia/" + templatePath;
             FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
             XhQdGiaoNvXh detail = this.detail(DataUtils.safeToLong(body.get("id")));
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);

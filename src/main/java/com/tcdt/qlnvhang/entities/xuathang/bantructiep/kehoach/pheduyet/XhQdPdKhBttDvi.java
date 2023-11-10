@@ -29,6 +29,8 @@ public class XhQdPdKhBttDvi implements Serializable {
     private String type;
     @Transient
     private String tenDvi;
+    @Transient
+    private BigDecimal thanhTien;
 
     @Transient
     List<XhQdPdKhBttDviDtl> children = new ArrayList<>();
