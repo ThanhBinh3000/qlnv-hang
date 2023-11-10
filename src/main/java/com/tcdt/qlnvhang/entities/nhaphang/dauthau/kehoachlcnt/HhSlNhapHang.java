@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt;
 
+import com.tcdt.qlnvhang.entities.BaseEntity;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -8,7 +9,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = HhSlNhapHang.TABLE_NAME)
 @Data
-public class HhSlNhapHang {
+public class HhSlNhapHang extends BaseEntity {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "HH_SL_NHAP_HANG";
     @Id
@@ -24,4 +25,11 @@ public class HhSlNhapHang {
     private String kieuNhap;
     private BigDecimal slDeXuat;
     private BigDecimal slDaThucHien;
+
+    @Transient
+    private String tenDvi;
+    @Transient
+    private String tenLoaiVthh;
+    @Transient
+    private String tenCloaiVthh;
 }
