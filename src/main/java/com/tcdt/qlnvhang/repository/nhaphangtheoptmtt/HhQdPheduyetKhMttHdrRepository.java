@@ -49,6 +49,14 @@ public interface HhQdPheduyetKhMttHdrRepository extends JpaRepository<HhQdPheduy
             nativeQuery = true)
     BigDecimal countSLDalenKh(Integer namKh, String loaiVthh, String maDvi, String trangThai);
 
+    @Query(value = " SELECT NVL(SUM(SLDD.TONG_SO_LUONG),0) AS tongSoLuong from HH_QD_PHE_DUYET_KHMTT_HDR HDR " +
+            " JOIN HH_QD_PHE_DUYET_KHMTT_DX DX ON HDR.ID = DX.ID_QD_HDR " +
+            " JOIN HH_QD_PHE_DUYET_KHMTT_SLDD SLDD ON DX.ID = SLDD.ID_QD_DTL " +
+            " WHERE 1=1 " +
+            " AND HDR.ID = :idQd ",
+            nativeQuery = true)
+    BigDecimal countSLDalenQd(Long idQd);
+
 
     @Transactional()
     @Modifying

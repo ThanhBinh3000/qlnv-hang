@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhMttCcxdg;
 import com.tcdt.qlnvhang.entities.FileDKemJoinDxKhMttHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.HhSlNhapHangRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhDxuatKhMttCcxdgRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhDxuatKhMttRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhDxuatKhMttSlddDtlRepository;
@@ -11,6 +12,8 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.*;
+import com.tcdt.qlnvhang.request.object.HhSlNhapHangReq;
+import com.tcdt.qlnvhang.service.HhSlNhapHangService;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -36,6 +39,7 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,6 +47,9 @@ import java.util.stream.Collectors;
 public class HhDxuatKhMttService extends BaseServiceImpl {
     @Autowired
     private HhDxuatKhMttRepository hhDxuatKhMttRepository;
+
+    @Autowired
+    private HhSlNhapHangService hhSlNhapHangService;
 
     @Autowired
     private HhDxuatKhMttSlddRepository hhDxuatKhMttSlddRepository;
@@ -293,7 +300,22 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
         }
 
         optional.setTrangThai(stReq.getTrangThai());
-        return hhDxuatKhMttRepository.save(optional);
+        hhDxuatKhMttRepository.save(optional);
+        if(optional.getTrangThai().equals(Contains.DA_DUYET_LDC)){
+            HhSlNhapHangReq hhSlNhapHangReq = new HhSlNhapHangReq();
+            BeanUtils.copyProperties(optional, hhSlNhapHangReq, "id");
+            hhSlNhapHangReq.setKieuNhap(Contains.NHAP_TRUC_TIEP);
+            hhSlNhapHangReq.setIdDxKhlcnt(optional.getId());
+            hhSlNhapHangReq.setNamKhoach(optional.getNamKh());
+            List<HhDxuatKhMttSldd> slddList = hhDxuatKhMttSlddRepository.findAllByIdHdr(optional.getId());
+            for (HhDxuatKhMttSldd hhDxuatKhMttSldd : slddList) {
+                hhSlNhapHangReq.setSoLuong(hhDxuatKhMttSldd.getTongSoLuong());
+                hhSlNhapHangReq.setMaDvi(hhDxuatKhMttSldd.getMaDvi());
+                hhSlNhapHangReq.setNgayTao(LocalDateTime.now());
+                hhSlNhapHangService.create(hhSlNhapHangReq);
+            }
+        }
+        return optional;
     }
 
     public void export(SearchHhDxKhMttHdrReq req, HttpServletResponse response) throws Exception {
