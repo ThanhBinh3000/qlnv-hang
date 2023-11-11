@@ -76,7 +76,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             f.setTenBn(listDanhMucDvi.get(f.getMaBn()));
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenTrangThaiHl(f.getTrangThaiHl().equals(Contains.CON_HIEU_LUC) ? "Còn hiệu lực" : (f.getTrangThaiHl().equals(Contains.HET_HIEU_LUC) ? "Hết hiệu lực" : "Chưa có hiệu lực"));
-            if (!mapDtl.get(f.getId()).isEmpty()) {
+            if (!mapDtl.get(f.getId()).isEmpty() && ObjectUtils.isEmpty(objReq.getIsSearch())) {
                 Map<String, String> mapTenChiTieu = getListDanhMucChung("CHI_TIEU_CL");
                 if (f.getApDungCloaiVthh() == false) {
                     for (QuyChuanQuocGiaDtl dtl : mapDtl.get(f.getId())) {
