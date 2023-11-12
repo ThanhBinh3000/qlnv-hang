@@ -170,4 +170,5 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	private BigDecimal qdGiaoChiTieuId;
 	String ykienThamGia;
 	Integer quy;
+	Long idChiTieuKhNam;
 }
