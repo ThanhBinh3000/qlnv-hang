@@ -223,7 +223,6 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
         List<Long> idCtList = dtlList.stream().map(QuyChuanQuocGiaDtl::getId).collect(Collectors.toList());
         fileDinhKemService.deleteMultiple(idCtList, Lists.newArrayList(QuyChuanQuocGiaDtl.TABLE_NAME));
-        quyChuanQuocGiaDtlRepository.deleteAll(dtlList);
         this.saveCtiet(data, objReq);
         //Check bản ghi vừa thêm có hiệu lực và có văn bản thay thế ko , nếu có vb thay thế thì hết hiệu lực vb thay thế luôn
         if (created.getTrangThaiHl().equals("01") && listIdThayThe.size() > 0) {
@@ -240,7 +239,9 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
     public void saveCtiet(QuyChuanQuocGiaHdr data, QuyChuanQuocGiaHdrReq objReq) {
         for (QuyChuanQuocGiaDtlReq dtlReq : objReq.getTieuChuanKyThuat()) {
             QuyChuanQuocGiaDtl dtl = new ModelMapper().map(dtlReq, QuyChuanQuocGiaDtl.class);
-            dtl.setId(null);
+            if (ObjectUtils.isEmpty(objReq.getId())) {
+                dtl.setId(null);
+            }
             dtl.setIdHdr(data.getId());
             List<FileDinhKemReq> listFile = new ArrayList<>();
             if (!ObjectUtils.isEmpty(dtlReq.getFileDinhKem())) {
@@ -275,7 +276,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                     dtl.setTenCloaiVthh(ObjectUtils.isEmpty(dtl.getCloaiVthh()) ? null : hashMapDmHh.get(dtl.getCloaiVthh()));
                     dtl.setTenChiTieu(mapTenChiTieu.get(dtl.getMaChiTieu()));
                     dtl.setTenNhomCtieu(mapTenNhomChiTieu.get(dtl.getNhomCtieu()));
-                    dtl.setTenChiTieu(mapTenToanTu.get(dtl.getTenToanTu()));
+                    dtl.setTenToanTu(mapTenToanTu.get(dtl.getToanTu()));
                     List<FileDinhKem> fileDinhKemCt = fileDinhKemService.search(dtl.getId(), Collections.singleton(QuyChuanQuocGiaDtl.TABLE_NAME));
                     if (!CollectionUtils.isEmpty(fileDinhKemCt)) {
                         dtl.setFileDinhKem(fileDinhKemCt.get(0));
@@ -292,6 +293,8 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                             item.setFileDinhKem(fileDinhKemCt.get(0));
                         }
                         item.setTenChiTieu(mapTenChiTieu.get(item.getMaChiTieu()));
+                        item.setTenNhomCtieu(mapTenNhomChiTieu.get(item.getNhomCtieu()));
+                        item.setTenToanTu(mapTenToanTu.get(item.getToanTu()));
                         List<String> listStringCompare = listQuyChuan.stream().map(QuyChuanQuocGiaDtl::getTenChiTieu).collect(Collectors.toList());
                         if (!listStringCompare.contains(item.getTenChiTieu())) {
                             item.setLoaiVthh(null);
