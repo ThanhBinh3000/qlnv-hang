@@ -31,7 +31,9 @@ public class DcnbQuyetDinhDcTcDtl implements Serializable {
     private String maCucXuat;
     @NotNull
     private String tenCucXuat;
+    @NotNull
     private String maCucNhan;
+    @NotNull
     private String tenCucNhan;
     private String soDxuat;
     private LocalDate ngayTrinhTc;

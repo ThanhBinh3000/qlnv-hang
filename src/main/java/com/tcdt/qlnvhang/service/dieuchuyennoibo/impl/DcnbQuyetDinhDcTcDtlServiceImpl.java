@@ -168,8 +168,8 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
             qdtc.setHdrId(isUpdate ? qd.getHdrId() : null);
             qdtc.setMaCucXuat(qd.getMaCucDxuat() == null ? qd.getMaCucXuat() : qd.getMaCucDxuat());
             qdtc.setTenCucXuat(qd.getTenCucDxuat() == null ? qd.getTenCucXuat() : qd.getTenCucDxuat());
-            qdtc.setMaCucNhan(qd.getMaCucNhan());
-            qdtc.setTenCucNhan(qd.getTenCucNhan());
+            qdtc.setMaCucNhan("CHI_CUC".equals(objReq.getLoaiDc())? qdtc.getMaCucXuat(): qd.getMaCucNhan());
+            qdtc.setTenCucNhan("CHI_CUC".equals(objReq.getLoaiDc())? qdtc.getTenCucXuat(): qd.getTenCucNhan());
             qdtc.setSoDxuat(qd.getSoDxuat());
             qdtc.setNgayTrinhTc(qd.getThKeHoachDieuChuyenCucHdr() == null ? qd.getNgayTrinhTc() : qd.getThKeHoachDieuChuyenCucHdr().getNgayTrinhDuyetTc());
             qdtc.setTongDuToanKp(qd.getTongDuToanKp());
