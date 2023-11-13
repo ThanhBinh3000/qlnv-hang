@@ -163,6 +163,7 @@ public class HhDxuatKhLcntHdrReq {
 	String tenPthucLcnt;
 	String tenHthucLcnt;
 	BigDecimal giaBanHoSo;
+	Long idChiTieuKhNam;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayKyQdPdGiaCuThe;
 	private ReportTemplateRequest reportTemplateRequest;

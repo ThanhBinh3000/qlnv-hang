@@ -111,4 +111,14 @@ public class HhSlNhapHangServiceImpl extends BaseServiceImpl implements HhSlNhap
         return qOptional.get();
     }
 
+    @Override
+    public BigDecimal countSoLuongKeHoachNam(CountKhlcntSlReq objReq) throws Exception {
+        return hhSlNhapHangRepository.countSLDalenQd(objReq.getYear(), objReq.getLoaiVthh(), objReq.getMaDvi());
+    }
+
+    @Override
+    public BigDecimal countSoLuongKeHoachNamTheoKh(CountKhlcntSlReq objReq) throws Exception {
+        return hhSlNhapHangRepository.countSLDalenKh(objReq.getYear(), objReq.getLoaiVthh(), objReq.getMaDvi());
+    }
+
 }
