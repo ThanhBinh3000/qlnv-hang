@@ -78,7 +78,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
     private HhDxKhLcntThopHdrRepository hhDxKhLcntThopHdrRepository;
     @Autowired
     private HhSlNhapHangRepository hhSlNhapHangRepository;
-    DocxToPdfConverter docxToPdfConverter;
+    @Autowired
+    private DocxToPdfConverter docxToPdfConverter;
     @Autowired
     private BaoCaoClient baoCaoClient;
 
