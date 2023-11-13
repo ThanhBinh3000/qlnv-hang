@@ -77,7 +77,7 @@ public class XhTlKtraClImpl extends BaseServiceImpl implements XhTlKtraClService
         data.setId(Long.parseLong(req.getSoPhieuKtcl().split("/")[0]));
         data.setIdNguoiKnghiem(userInfo.getId());
         XhTlKtraClHdr created = hdrRepository.save(data);
-        saveFileDinhKem(req.getFileDinhKemReq(), created.getId(), ScPhieuXuatKhoHdr.TABLE_NAME);
+        saveFileDinhKem(req.getFileDinhKemReq(), created.getId(), XhTlKtraClHdr.TABLE_NAME);
         List<XhTlKtraClDtl> dtls = saveDtl(req, data.getId());
         created.setChildren(dtls);
         return created;
@@ -105,8 +105,8 @@ public class XhTlKtraClImpl extends BaseServiceImpl implements XhTlKtraClService
         }
         XhTlKtraClHdr data = optional.get();
         BeanUtils.copyProperties(req, data);
-        fileDinhKemService.delete(data.getId(), Collections.singleton(ScPhieuXuatKhoHdr.TABLE_NAME));
-        saveFileDinhKem(req.getFileDinhKemReq(), data.getId(), ScPhieuXuatKhoHdr.TABLE_NAME);
+        fileDinhKemService.delete(data.getId(), Collections.singleton(XhTlKtraClHdr.TABLE_NAME));
+        saveFileDinhKem(req.getFileDinhKemReq(), data.getId(), XhTlKtraClHdr.TABLE_NAME);
         List<XhTlKtraClDtl> dtls = saveDtl(req, data.getId());
         data.setChildren(dtls);
         return data;
@@ -119,7 +119,7 @@ public class XhTlKtraClImpl extends BaseServiceImpl implements XhTlKtraClService
             throw new Exception("Không tìm thấy dữ liệu");
         }
         XhTlKtraClHdr data = optional.get();
-        data.setFileDinhKem(fileDinhKemService.search(id, Collections.singleton(ScPhieuXuatKhoHdr.TABLE_NAME)));
+        data.setFileDinhKem(fileDinhKemService.search(id, Collections.singleton(XhTlKtraClHdr.TABLE_NAME)));
         data.setChildren(dtlRepository.findAllByIdHdrOrderByThuTuHt(id));
 //        if(!Objects.isNull(data.getIdPhieuXuatKho())){
 //            data.setScPhieuXuatKhoHdr(scPhieuXuatKhoService.detail(data.getIdPhieuXuatKho()));
