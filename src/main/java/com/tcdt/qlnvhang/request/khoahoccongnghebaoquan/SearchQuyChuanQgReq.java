@@ -23,4 +23,5 @@ public class SearchQuyChuanQgReq extends BaseRequest {
     private Integer isMat;
     private String maDvi;
     private String maBn;
+    private Boolean isSearch;
 }
