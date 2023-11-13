@@ -34,7 +34,8 @@ public class HhHopDongDtl implements Serializable {
 	String tenDvi;
 	String diaDiemNhap;
 	String trangThai;
-
+	@Transient
+	private String tongThanhTienStr;
 	@Transient
 	private List<HhHopDongDdiemNhapKho> children = new ArrayList<>();
 

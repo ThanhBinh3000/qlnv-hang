@@ -134,4 +134,8 @@ public class HhHopDongHdr extends BaseEntity implements Serializable  {
 	// preview
 	@Transient
 	private BigDecimal tongSoLuong;
+	@Transient
+	private String tongSoLuongStr;
+	@Transient
+	private String tongThanhTienStr;
 }
