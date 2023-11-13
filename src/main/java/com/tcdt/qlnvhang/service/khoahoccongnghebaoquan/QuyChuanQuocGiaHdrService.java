@@ -223,6 +223,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
         List<Long> idCtList = dtlList.stream().map(QuyChuanQuocGiaDtl::getId).collect(Collectors.toList());
         fileDinhKemService.deleteMultiple(idCtList, Lists.newArrayList(QuyChuanQuocGiaDtl.TABLE_NAME));
+        quyChuanQuocGiaDtlRepository.deleteAll(dtlList);
         this.saveCtiet(data, objReq);
         //Check bản ghi vừa thêm có hiệu lực và có văn bản thay thế ko , nếu có vb thay thế thì hết hiệu lực vb thay thế luôn
         if (created.getTrangThaiHl().equals("01") && listIdThayThe.size() > 0) {
@@ -239,17 +240,15 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
     public void saveCtiet(QuyChuanQuocGiaHdr data, QuyChuanQuocGiaHdrReq objReq) {
         for (QuyChuanQuocGiaDtlReq dtlReq : objReq.getTieuChuanKyThuat()) {
             QuyChuanQuocGiaDtl dtl = new ModelMapper().map(dtlReq, QuyChuanQuocGiaDtl.class);
-            if (ObjectUtils.isEmpty(objReq.getId())) {
-                dtl.setId(null);
-            }
+            dtl.setId(null);
             dtl.setIdHdr(data.getId());
+            QuyChuanQuocGiaDtl dtlSave = quyChuanQuocGiaDtlRepository.save(dtl);
             List<FileDinhKemReq> listFile = new ArrayList<>();
             if (!ObjectUtils.isEmpty(dtlReq.getFileDinhKem())) {
                 listFile.add(dtlReq.getFileDinhKem());
-                List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(listFile, dtlReq.getId(), QuyChuanQuocGiaDtl.TABLE_NAME);
+                List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(listFile, dtlSave.getId(), QuyChuanQuocGiaDtl.TABLE_NAME);
                 dtl.setFileDinhKem(fileDinhKems.get(0));
             }
-            quyChuanQuocGiaDtlRepository.save(dtl);
         }
     }
 
