@@ -301,8 +301,10 @@ public class XhThHoSoService extends BaseServiceImpl {
           hdr.setNgayDuyetLdv(LocalDate.now());
           break;
         case Contains.CHODUYET_LDTC + Contains.DADUYET_LDTC:
+        case Contains.CHODUYET_LDTC + Contains.TUCHOI_LDTC:
           hdr.setIdLdtc(currentUser.getUser().getId());
           hdr.setNgayDuyetLdtc(LocalDate.now());
+          hdr.setLyDoTuChoi(statusReq.getLyDoTuChoi());
           break;
         case Contains.DADUYET_LDTC + Contains.CHO_DUYET_BTC:
         case Contains.CHO_DUYET_BTC + Contains.DA_DUYET_BTC:
