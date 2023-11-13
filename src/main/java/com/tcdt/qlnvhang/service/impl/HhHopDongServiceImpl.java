@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.impl;
 
 import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -492,26 +493,36 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 
   @Override
   public ReportTemplateResponse preview(HhHopDongHdrReq req) throws Exception {
-    HhPreviewHopDongDTO hopDongDTO = new HhPreviewHopDongDTO();
-    HhHopDongHdr hhHopDongHdr = detail(req.getId().toString());
-    if(!hhHopDongHdr.getLoaiVthh().startsWith("02")){
+    try {
+      HhHopDongHdr hhHopDongHdr = detail(req.getId().toString());
+      if (!hhHopDongHdr.getLoaiVthh().startsWith("02")) {
 
-    }else{
-      BeanUtils.copyProperties(hhHopDongHdr, hopDongDTO);
-      for (HhHopDongDtl detail : hhHopDongHdr.getDetails()) {
-        BeanUtils.copyProperties(detail, hopDongDTO.getDetails());
-        for (HhHopDongDdiemNhapKho child : detail.getChildren()) {
-          for (HhPreviewHopDongDtlDTO hopDongDTODetail : hopDongDTO.getDetails()) {
-            BeanUtils.copyProperties(child, hopDongDTODetail);
+        for (HhHopDongDtl detail : hhHopDongHdr.getDetails()) {
+          BigDecimal sumTtChildChild = BigDecimal.ZERO;
+          BigDecimal sumSlChildChild = BigDecimal.ZERO;
+          for (HhHopDongDdiemNhapKho child : detail.getChildren()) {
+            for (HhHopDongDdiemNhapKhoVt childChild : child.getChildren()) {
+              childChild.setTongThanhTien(childChild.getSoLuong().multiply(BigDecimal.valueOf(hhHopDongHdr.getDonGia())));
+              childChild.setDonGia(hhHopDongHdr.getDonGia());
+              sumTtChildChild = sumTtChildChild.add(childChild.getTongThanhTien());
+              sumSlChildChild = sumSlChildChild.add(childChild.getSoLuong());
+            }
+            child.setTongThanhTien(sumTtChildChild);
+            child.setSoLuong(sumSlChildChild);
           }
+          hhHopDongHdr.setTongThanhTien(sumTtChildChild);
+          hhHopDongHdr.setTongSoLuong(sumSlChildChild);
         }
-      }
+      } else {
 
+      }
+      ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
+      byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+      ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+      return docxToPdfConverter.convertDocxToPdf(inputStream, hhHopDongHdr);
+    } catch (Exception e) {
+      e.printStackTrace();
     }
-    ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
-    byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-    ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-    HhHopDongPreview object = new HhHopDongPreview();
-    return docxToPdfConverter.convertDocxToPdf(inputStream, hopDongDTO);
+    return null;
   }
 }

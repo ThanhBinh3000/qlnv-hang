@@ -43,6 +43,10 @@ public class HhHopDongDdiemNhapKho implements Serializable {
   @Transient
   private List<HhHopDongDdiemNhapKhoVt> children;
 
+  // preview
+  @Transient
+  private BigDecimal tongThanhTien;
+
   public String getTenTrangThai() {
     return TrangThaiAllEnum.getLabelById(trangThai);
   }

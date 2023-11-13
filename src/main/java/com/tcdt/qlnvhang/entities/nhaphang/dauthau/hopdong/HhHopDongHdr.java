@@ -127,4 +127,11 @@ public class HhHopDongHdr extends BaseEntity implements Serializable  {
 	@Transient
 	private List<FileDinhKem> listCcPhapLy;
 	BigDecimal soTienTinhPhat;
+
+	// preview
+	@Transient
+	private BigDecimal tongThanhTien;
+	// preview
+	@Transient
+	private BigDecimal tongSoLuong;
 }
