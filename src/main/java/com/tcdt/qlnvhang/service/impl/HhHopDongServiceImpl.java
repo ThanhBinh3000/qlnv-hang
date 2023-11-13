@@ -494,7 +494,7 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
   public ReportTemplateResponse preview(HhHopDongHdrReq req) throws Exception {
     HhPreviewHopDongDTO hopDongDTO = new HhPreviewHopDongDTO();
     HhHopDongHdr hhHopDongHdr = detail(req.getId().toString());
-    if(!hhHopDongHdr.getLoaiVthh().equals("02")){
+    if(!hhHopDongHdr.getLoaiVthh().startsWith("02")){
 
     }else{
       BeanUtils.copyProperties(hhHopDongHdr, hopDongDTO);
