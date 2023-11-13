@@ -243,9 +243,9 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             dtl.setId(null);
             dtl.setIdHdr(data.getId());
             List<FileDinhKemReq> listFile = new ArrayList<>();
-            if (!CollectionUtils.isEmpty(listFile)) {
+            if (!ObjectUtils.isEmpty(dtlReq.getFileDinhKem())) {
                 listFile.add(dtlReq.getFileDinhKem());
-                List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(listFile, data.getId(), QuyChuanQuocGiaDtl.TABLE_NAME);
+                List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(listFile, dtlReq.getId(), QuyChuanQuocGiaDtl.TABLE_NAME);
                 dtl.setFileDinhKem(fileDinhKems.get(0));
             }
             quyChuanQuocGiaDtlRepository.save(dtl);
