@@ -276,6 +276,10 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                     dtl.setTenChiTieu(mapTenChiTieu.get(dtl.getMaChiTieu()));
                     dtl.setTenNhomCtieu(mapTenNhomChiTieu.get(dtl.getNhomCtieu()));
                     dtl.setTenChiTieu(mapTenToanTu.get(dtl.getTenToanTu()));
+                    List<FileDinhKem> fileDinhKemCt = fileDinhKemService.search(dtl.getId(), Collections.singleton(QuyChuanQuocGiaDtl.TABLE_NAME));
+                    if (!CollectionUtils.isEmpty(fileDinhKemCt)) {
+                        dtl.setFileDinhKem(fileDinhKemCt.get(0));
+                    }
                 }
                 data.setTieuChuanKyThuat(dtlList);
             } else {
@@ -283,6 +287,10 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                 List<String> listTenChiTieu = dtlList.stream().map(QuyChuanQuocGiaDtl::getTenChiTieu).collect(Collectors.toList());
                 if (!listTenChiTieu.isEmpty()) {
                     dtlList.forEach(item -> {
+                        List<FileDinhKem> fileDinhKemCt = fileDinhKemService.search(item.getId(), Collections.singleton(QuyChuanQuocGiaDtl.TABLE_NAME));
+                        if (!CollectionUtils.isEmpty(fileDinhKemCt)) {
+                            item.setFileDinhKem(fileDinhKemCt.get(0));
+                        }
                         item.setTenChiTieu(mapTenChiTieu.get(item.getMaChiTieu()));
                         List<String> listStringCompare = listQuyChuan.stream().map(QuyChuanQuocGiaDtl::getTenChiTieu).collect(Collectors.toList());
                         if (!listStringCompare.contains(item.getTenChiTieu())) {
