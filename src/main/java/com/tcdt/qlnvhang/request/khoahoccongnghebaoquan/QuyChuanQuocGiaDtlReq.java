@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.request.khoahoccongnghebaoquan;
 
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import lombok.Data;
 import org.springframework.util.ObjectUtils;
 
@@ -25,6 +26,9 @@ public class QuyChuanQuocGiaDtlReq {
     private String cloaiVthh;
     private String tenCloaiVthh;
     private String ghiChu;
+    private String nhomCtieu;
+    private String toanTu;
+    private FileDinhKemReq fileDinhKem;
 
     public String getStt() {
         return ObjectUtils.isEmpty(stt) ? "" : stt;

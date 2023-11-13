@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.Bh
 import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaDtl;
 import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan.QuyChuanQuocGiaDtlRepository;
 import com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan.QuyChuanQuocGiaHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -13,6 +14,7 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.QuyChuanQuocGiaDtlReq;
 import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.QuyChuanQuocGiaHdrReq;
 import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.SearchQuyChuanQgReq;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.response.khoahoccongnghebaoquan.KhCnBaoQuanPreviewRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -203,7 +205,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         List<String> listCloai = quyChuanQuocGiaDtlRepository.findAllByIdHdrIn(listHdrCoHieuLuc).stream().map(QuyChuanQuocGiaDtl::getCloaiVthh).collect(Collectors.toList());
         List<String> listCloaiReq = objReq.getTieuChuanKyThuat().stream().map(QuyChuanQuocGiaDtlReq::getCloaiVthh).distinct().collect(Collectors.toList());
         listCloai.retainAll(listCloaiReq);
-        if (!listCloai.isEmpty()) {
+        if (!listCloai.isEmpty() && objReq.getTrangThai().equals(TrangThaiAllEnum.DU_THAO.getId())) {
             throw new Exception("Có chủng loại hàng hóa đã được tạo tiêu chuẩn kỹ thuật ở bản ghi khác");
         }
         QuyChuanQuocGiaHdr data = optional.get();
@@ -215,6 +217,8 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), data.getId(), "KHCN_QUY_CHUAN_QG_HDR");
         created.setFileDinhKems(fileDinhKems);
         List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
+        List<Long> idCtList = dtlList.stream().map(QuyChuanQuocGiaDtl::getId).collect(Collectors.toList());
+        fileDinhKemService.deleteMultiple(idCtList, Lists.newArrayList(QuyChuanQuocGiaDtl.TABLE_NAME));
         quyChuanQuocGiaDtlRepository.deleteAll(dtlList);
         this.saveCtiet(data, objReq);
         //Check bản ghi vừa thêm có hiệu lực và có văn bản thay thế ko , nếu có vb thay thế thì hết hiệu lực vb thay thế luôn
@@ -234,6 +238,12 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             QuyChuanQuocGiaDtl dtl = new ModelMapper().map(dtlReq, QuyChuanQuocGiaDtl.class);
             dtl.setId(null);
             dtl.setIdHdr(data.getId());
+            List<FileDinhKemReq> listFile = new ArrayList<>();
+            if (!CollectionUtils.isEmpty(listFile)) {
+                listFile.add(dtlReq.getFileDinhKem());
+                List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(listFile, data.getId(), QuyChuanQuocGiaDtl.TABLE_NAME);
+                dtl.setFileDinhKem(fileDinhKems.get(0));
+            }
             quyChuanQuocGiaDtlRepository.save(dtl);
         }
     }
@@ -291,6 +301,8 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         ids.add(data.getId());
         fileDinhKemService.deleteMultiple(ids, Collections.singleton(BhQdPheDuyetKhbdg.TABLE_NAME));
         List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
+        List<Long> idCtList = dtlList.stream().map(QuyChuanQuocGiaDtl::getId).collect(Collectors.toList());
+        fileDinhKemService.deleteMultiple(idCtList, Lists.newArrayList(QuyChuanQuocGiaDtl.TABLE_NAME));
         quyChuanQuocGiaDtlRepository.deleteAll(dtlList);
         quyChuanQuocGiaHdrRepository.delete(data);
 
