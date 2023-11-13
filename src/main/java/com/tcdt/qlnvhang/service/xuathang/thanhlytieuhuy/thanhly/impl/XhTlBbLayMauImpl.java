@@ -86,7 +86,7 @@ public class XhTlBbLayMauImpl extends BaseServiceImpl implements XhTlBbLayMauSer
         data.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
         data.setId(Long.parseLong(req.getSoBienBan().split("/")[0]));
         XhTlBbLayMauHdr created = hdrRepository.save(data);
-        saveFileDinhKem(req.getFileDinhKemReq(), created.getId(), ScPhieuXuatKhoHdr.TABLE_NAME);
+        saveFileDinhKem(req.getFileDinhKemReq(), created.getId(), XhTlBbLayMauHdr.TABLE_NAME);
         List<XhTlBbLayMauDtl> dtls = saveDtl(req, data.getId());
         created.setChildren(dtls);
         return created;
@@ -114,8 +114,8 @@ public class XhTlBbLayMauImpl extends BaseServiceImpl implements XhTlBbLayMauSer
         }
         XhTlBbLayMauHdr data = optional.get();
         BeanUtils.copyProperties(req, data);
-        fileDinhKemService.delete(data.getId(), Collections.singleton(ScPhieuXuatKhoHdr.TABLE_NAME));
-        saveFileDinhKem(req.getFileDinhKemReq(), data.getId(), ScPhieuXuatKhoHdr.TABLE_NAME);
+        fileDinhKemService.delete(data.getId(), Collections.singleton(XhTlBbLayMauHdr.TABLE_NAME));
+        saveFileDinhKem(req.getFileDinhKemReq(), data.getId(), XhTlBbLayMauHdr.TABLE_NAME);
         List<XhTlBbLayMauDtl> dtls = saveDtl(req, data.getId());
         data.setChildren(dtls);
         return data;

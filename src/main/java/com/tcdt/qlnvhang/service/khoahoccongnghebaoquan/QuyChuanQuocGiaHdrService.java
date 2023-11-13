@@ -242,13 +242,13 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             QuyChuanQuocGiaDtl dtl = new ModelMapper().map(dtlReq, QuyChuanQuocGiaDtl.class);
             dtl.setId(null);
             dtl.setIdHdr(data.getId());
+            QuyChuanQuocGiaDtl dtlSave = quyChuanQuocGiaDtlRepository.save(dtl);
             List<FileDinhKemReq> listFile = new ArrayList<>();
             if (!ObjectUtils.isEmpty(dtlReq.getFileDinhKem())) {
                 listFile.add(dtlReq.getFileDinhKem());
-                List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(listFile, dtlReq.getId(), QuyChuanQuocGiaDtl.TABLE_NAME);
+                List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(listFile, dtlSave.getId(), QuyChuanQuocGiaDtl.TABLE_NAME);
                 dtl.setFileDinhKem(fileDinhKems.get(0));
             }
-            quyChuanQuocGiaDtlRepository.save(dtl);
         }
     }
 
@@ -275,7 +275,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                     dtl.setTenCloaiVthh(ObjectUtils.isEmpty(dtl.getCloaiVthh()) ? null : hashMapDmHh.get(dtl.getCloaiVthh()));
                     dtl.setTenChiTieu(mapTenChiTieu.get(dtl.getMaChiTieu()));
                     dtl.setTenNhomCtieu(mapTenNhomChiTieu.get(dtl.getNhomCtieu()));
-                    dtl.setTenChiTieu(mapTenToanTu.get(dtl.getTenToanTu()));
+                    dtl.setTenToanTu(mapTenToanTu.get(dtl.getToanTu()));
                     List<FileDinhKem> fileDinhKemCt = fileDinhKemService.search(dtl.getId(), Collections.singleton(QuyChuanQuocGiaDtl.TABLE_NAME));
                     if (!CollectionUtils.isEmpty(fileDinhKemCt)) {
                         dtl.setFileDinhKem(fileDinhKemCt.get(0));
@@ -292,6 +292,8 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                             item.setFileDinhKem(fileDinhKemCt.get(0));
                         }
                         item.setTenChiTieu(mapTenChiTieu.get(item.getMaChiTieu()));
+                        item.setTenNhomCtieu(mapTenNhomChiTieu.get(item.getNhomCtieu()));
+                        item.setTenToanTu(mapTenToanTu.get(item.getToanTu()));
                         List<String> listStringCompare = listQuyChuan.stream().map(QuyChuanQuocGiaDtl::getTenChiTieu).collect(Collectors.toList());
                         if (!listStringCompare.contains(item.getTenChiTieu())) {
                             item.setLoaiVthh(null);

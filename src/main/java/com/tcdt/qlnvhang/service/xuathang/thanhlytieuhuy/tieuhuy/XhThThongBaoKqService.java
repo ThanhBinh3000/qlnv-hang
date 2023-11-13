@@ -93,8 +93,8 @@ public class XhThThongBaoKqService extends BaseServiceImpl {
         xhThHoSoHdrRepository.save(hoSo.get());
       }
     }
-    if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
-      fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(), XhThThongBaoKq.TABLE_NAME);
+    if (!DataUtils.isNullObject(objReq.getFileDinhKemReq())) {
+      fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhThThongBaoKq.TABLE_NAME);
     }
 
     return created;
@@ -128,12 +128,11 @@ public class XhThThongBaoKqService extends BaseServiceImpl {
         xhThHoSoHdrRepository.save(hoSo.get());
       }
     }
-    fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhThThongBaoKq.TABLE_NAME + "_CAN_CU"));
 
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhThThongBaoKq.TABLE_NAME));
 
-    if (!DataUtils.isNullObject(objReq.getFileDinhKem())) {
-      fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKem(), created.getId(), XhThThongBaoKq.TABLE_NAME);
+    if (!DataUtils.isNullObject(objReq.getFileDinhKemReq())) {
+      fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhThThongBaoKq.TABLE_NAME);
     }
     return created;
   }
@@ -145,14 +144,8 @@ public class XhThThongBaoKqService extends BaseServiceImpl {
     if (DataUtils.isNullOrEmpty(optional)) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
-
-    Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
-    Map<String, String> mapVthh = getListDanhMucHangHoa();
     List<XhThThongBaoKq> allById = xhThThongBaoKqRepository.findAllById(ids);
     allById.forEach(data -> {
-//      if (mapDmucDvi.containsKey(data.getMaDvi())) {
-//        data.setTenDvi(mapDmucDvi.get(data.getMaDvi()).get("tenDvi").toString());
-//      }
       data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
 
       List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhThThongBaoKq.TABLE_NAME));

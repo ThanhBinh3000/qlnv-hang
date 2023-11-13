@@ -161,7 +161,7 @@ public class XhThBaoCaoKqService extends BaseServiceImpl {
     }
     XhThBaoCaoKqHdr created = hdrRepository.save(hdr);
     fileDinhKemService.delete(req.getId(), Lists.newArrayList(XhThBaoCaoKqHdr.TABLE_NAME + "_DINH_KEM"));
-    List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), ScTrinhThamDinhHdr.TABLE_NAME + "_DINH_KEM");
+    List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), XhThBaoCaoKqHdr.TABLE_NAME + "_DINH_KEM");
     created.setFileDinhKem(fileDinhKemList);
     List<XhThBaoCaoKqDtl> dtlList = this.saveDtl(req, created.getId());
     created.setChildren(dtlList);
@@ -177,7 +177,7 @@ public class XhThBaoCaoKqService extends BaseServiceImpl {
     Map<String, String> mapDmucDvi = getListDanhMucDvi("2", null, "01");
     XhThBaoCaoKqHdr data = optional.get();
     data.setTenDvi(mapDmucDvi.get(data.getMaDvi()));
-    List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhThHoSoHdr.TABLE_NAME + "_DINH_KEM"));
+    List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhThBaoCaoKqHdr.TABLE_NAME + "_DINH_KEM"));
     data.setFileDinhKem(fileDinhKem);
     HashMap<Long, List<XhThBaoCaoKqDtl>> dataChilren = getDataChilren(Collections.singletonList(data.getId()));
     data.setChildren(dataChilren.get(data.getId()));
@@ -218,7 +218,7 @@ public class XhThBaoCaoKqService extends BaseServiceImpl {
 //          });
 //    }
 
-    fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhThBaoCaoKqHdr.TABLE_NAME));
+    fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhThBaoCaoKqHdr.TABLE_NAME+"_DINH_KEM"));
     xhThBaoCaoKqHdrRepository.delete(data);
 
   }
@@ -242,7 +242,7 @@ public class XhThBaoCaoKqService extends BaseServiceImpl {
 //      }
 //    });
 
-    fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhThBaoCaoKqHdr.TABLE_NAME));
+    fileDinhKemService.deleteMultiple(idSearchReq.getIdList(), Lists.newArrayList(XhThBaoCaoKqHdr.TABLE_NAME+"_DINH_KEM"));
     xhThBaoCaoKqHdrRepository.deleteAll(list);
 
   }

@@ -28,5 +28,5 @@ public class XhThThongBaoKqReq {
   private Long nguoiGduyetId;
   private String lyDoTuChoi;
 
-  private List<FileDinhKemReq> fileDinhKem;
+  private List<FileDinhKemReq> fileDinhKemReq;
 }

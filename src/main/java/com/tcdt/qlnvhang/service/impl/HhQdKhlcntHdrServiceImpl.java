@@ -18,6 +18,7 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.*;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.HhSlNhapHangRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdrRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.*;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.tochuctrienkhai.QdPdHsmtRepository;
@@ -99,6 +100,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	private HhHopDongRepository hhHopDongRepository;
 	@Autowired
 	private HhQdPduyetKqlcntHdrRepository hhQdPduyetKqlcntHdrRepository;
+	@Autowired
+	private HhSlNhapHangRepository hhSlNhapHangRepository;
 	@Override
 	@Transactional
 	public HhQdKhlcntHdr create(HhQdKhlcntHdrReq objReq) throws Exception {
@@ -282,14 +285,37 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 	@Transactional(rollbackFor = {Exception.class, Throwable.class})
 	public void validateData(HhQdKhlcntHdr objHdr) throws Exception {
-		for(HhQdKhlcntDtl dtl : objHdr.getChildren()){
-			for(HhQdKhlcntDsgthau dsgthau : dtl.getChildren()){
-				BigDecimal aLong = hhDxuatKhLcntHdrRepository.countSLDalenKh(objHdr.getNamKhoach(), objHdr.getLoaiVthh(), dsgthau.getMaDvi(),NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
-				BigDecimal soLuongTotal = aLong.add(dsgthau.getSoLuong());
-				BigDecimal nhap = keHoachService.getChiTieuNhapXuat(objHdr.getNamKhoach(), objHdr.getLoaiVthh(), dsgthau.getMaDvi(), "NHAP");
-				if(soLuongTotal.compareTo(nhap) > 0){
-					throw new Exception(dsgthau.getTenDvi() + " đã nhập quá số lượng chi tiêu, vui lòng nhập lại");
+		for (HhQdKhlcntDtl dtl : objHdr.getChildren()) {
+			List<HhQdKhlcntDsgthauCtiet> result = dtl.getChildren().stream()
+					.flatMap(hhDxKhlcntDsgthau -> hhDxKhlcntDsgthau.getChildren().stream())
+					.collect(Collectors.groupingBy(HhQdKhlcntDsgthauCtiet::getMaDvi))
+					.entrySet().stream()
+					.map(entry -> {
+						String maDvi = entry.getKey();
+						List<HhQdKhlcntDsgthauCtiet> ctietList = entry.getValue();
+						BigDecimal sluong = BigDecimal.ZERO;
+						for (HhQdKhlcntDsgthauCtiet hhDxKhlcntDsgthauCtiet : ctietList) {
+							sluong = sluong.add(hhDxKhlcntDsgthauCtiet.getSoLuong());
+						}
+						HhQdKhlcntDsgthauCtiet data = new HhQdKhlcntDsgthauCtiet();
+						data.setMaDvi(maDvi);
+						data.setSoLuong(sluong);
+						data.setSoLuongTheoChiTieu(ctietList.get(0).getSoLuongTheoChiTieu());
+						data.setTenDvi(ctietList.get(0).getTenDvi());
+						return data;
+					})
+					.collect(Collectors.toList());
+			for (HhQdKhlcntDsgthauCtiet chiCuc : result) {
+				BigDecimal aLong = hhSlNhapHangRepository.countSLDalenQd(objHdr.getNamKhoach(), objHdr.getLoaiVthh(), chiCuc.getMaDvi());
+//				BigDecimal bLong = hhSlNhapHangRepository.countSLDalenKh(objHdr.getNamKhoach(), objHdr.getLoaiVthh(), chiCuc.getMaDvi());
+				BigDecimal soLuongTotal = aLong.add(chiCuc.getSoLuong());
+//				BigDecimal soLuongTheoDx = bLong.add(chiCuc.getSoLuong());
+				if (soLuongTotal.compareTo(chiCuc.getSoLuongTheoChiTieu()) > 0) {
+					throw new Exception(chiCuc.getTenDvi() + " đã nhập quá số lượng chỉ tiêu, vui lòng nhập lại");
 				}
+//				if (soLuongTheoDx.compareTo(chiCuc.getSoLuongTheoChiTieu()) > 0) {
+//					throw new Exception("Số lượng trong các bản đề xuất của " + chiCuc.getTenDvi() + " đã nhập quá số lượng chỉ tiêu, vui lòng nhập lại");
+//				}
 			}
 		}
 	}
@@ -782,16 +808,15 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 //			throw new Exception("Danh sách gói thầu không được để trống");
 //		}
 		String status = stReq.getTrangThai() + dataDB.getTrangThai();
-		switch (status) {
-			case Contains.BAN_HANH + Contains.DANG_NHAP_DU_LIEU:
-				dataDB.setNguoiPduyet(getUser().getUsername());
-				dataDB.setNgayPduyet(getDateTimeNow());
-				break;
-			default:
-				throw new Exception("Phê duyệt không thành công");
+		if ((Contains.BAN_HANH + Contains.DANG_NHAP_DU_LIEU).equals(status)) {
+			dataDB.setNguoiPduyet(getUser().getUsername());
+			dataDB.setNgayPduyet(getDateTimeNow());
+		} else {
+			throw new Exception("Phê duyệt không thành công");
 		}
 		dataDB.setTrangThai(stReq.getTrangThai());
 		if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
+			this.validateData(dataDB);
 			if(dataDB.getPhanLoai().equals("TH")){
 				Optional<HhDxKhLcntThopHdr> qOptional = hhDxKhLcntThopHdrRepository.findById(dataDB.getIdThHdr());
 				if(qOptional.isPresent()){
@@ -816,7 +841,6 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 					throw new Exception("Số tờ trình kế hoạch không được tìm thấy");
 				}
 			}
-//			this.validateData(dataDB);
 			this.cloneProject(dataDB.getId());
 		}
 		HhQdKhlcntHdr createCheck = hhQdKhlcntHdrRepository.save(dataDB);
@@ -1155,10 +1179,12 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdDtl(dtl.getId());
 				for(HhQdKhlcntDsgthau dsg : hhQdKhlcntDsgthauData){
 					List<HhQdKhlcntDsgthauCtiet> listGtCtiet = hhQdKhlcntDsgthauCtietRepository.findByIdGoiThau(dsg.getId());
-					listGtCtiet.forEach(chiCuc -> chiCuc.setTenDvi(mapDmucDvi.get(chiCuc.getMaDvi())));
-					if (dsg.getDonGiaTamTinh() != null && dsg.getSoLuong() != null) {
-						dsg.setThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(dsg.getDonGiaTamTinh().multiply(dsg.getSoLuong())));
-						tongThanhTien = tongThanhTien.add(dsg.getDonGiaTamTinh().multiply(dsg.getSoLuong()));
+					for (HhQdKhlcntDsgthauCtiet chiCuc : listGtCtiet) {
+						chiCuc.setTenDvi(mapDmucDvi.get(chiCuc.getMaDvi()));
+						if (chiCuc.getDonGiaTamTinh() != null && chiCuc.getSoLuong() != null) {
+							chiCuc.setThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(chiCuc.getDonGiaTamTinh().multiply(dsg.getSoLuong())));
+							tongThanhTien = tongThanhTien.add(chiCuc.getDonGiaTamTinh().multiply(chiCuc.getSoLuong()));
+						}
 					}
 					dsg.setChildren(listGtCtiet);
 					tongSoLuong = tongSoLuong.add(dsg.getSoLuong());
