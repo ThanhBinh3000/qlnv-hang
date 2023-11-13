@@ -80,7 +80,7 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
             throw new Exception("Mã tổng hợp đã được tạo Quyết định!");
         }
         DcnbQuyetDinhDcTcHdr data = new DcnbQuyetDinhDcTcHdr();
-        BeanUtils.copyProperties(objReq, data);
+        BeanUtils.copyProperties(objReq, data,"id");
         data.setMaDvi(currentUser.getDvql());
         data.setType(Contains.DIEU_CHUYEN);
         data.setTrangThai(Contains.DUTHAO);
