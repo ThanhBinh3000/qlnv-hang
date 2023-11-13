@@ -43,4 +43,6 @@ public class HhQdKhlcntDsgthauCtiet {
 
 	@Transient
 	private List<HhQdKhlcntDsgthauCtietVt> children;
+	@Transient
+	private String thanhTienStr;
 }

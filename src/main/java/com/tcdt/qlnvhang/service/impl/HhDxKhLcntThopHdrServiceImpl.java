@@ -523,7 +523,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 				List<HhDxKhlcntDsgthauCtiet> listDdNhap = hhDxKhlcntDsgthauCtietRepository.findByIdGoiThau(dsG.getId());
 				listDdNhap.forEach(ctiet -> {
 					DsChiCucPreview chiCuc = new DsChiCucPreview();
-					chiCuc.setDonGia(docxToPdfConverter.convertBigDecimalToStr(dsG.getDonGiaTamTinh()));
+					chiCuc.setDonGia(docxToPdfConverter.convertBigDecimalToStr(ctiet.getDonGiaTamTinh()));
 					chiCuc.setChiCuc(StringUtils.isEmpty(ctiet.getMaDvi()) ? null : mapDmucDvi.get(ctiet.getMaDvi()));
 					dsChiCuc.add(chiCuc);
 				});
