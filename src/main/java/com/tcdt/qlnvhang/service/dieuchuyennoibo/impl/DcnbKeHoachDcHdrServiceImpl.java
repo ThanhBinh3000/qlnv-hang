@@ -206,7 +206,7 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
                 hh.setCoLoKhoNhan(!StringUtils.isEmpty(hh.getMaLoKhoNhan()));
                 if(!StringUtils.isEmpty(hh.getMaNganKhoNhan())){
                     KtMlk tinKho = getThongTinKho(hh.getMaLoKhoNhan(),hh.getTenLoKhoNhan(), hh.getMaNganKhoNhan(),hh.getTenNganKhoNhan());
-                    if (!hh.getCloaiVthh().equals(tinKho.getObject().getCloaiVthh())) {
+                    if (!StringUtils.isEmpty(tinKho.getObject().getCloaiVthh()) && !hh.getCloaiVthh().equals(tinKho.getObject().getCloaiVthh())) {
                         throw new Exception("Chủng loại hàng hóa kho xuất và nhận không giống nhau!");
                     }
                 }
