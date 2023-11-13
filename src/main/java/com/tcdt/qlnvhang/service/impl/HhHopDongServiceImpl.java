@@ -18,8 +18,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.*;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.hopdong.HhHopDongPreview;
-import com.tcdt.qlnvhang.request.object.HhDdiemNhapKhoVtReq;
-import com.tcdt.qlnvhang.request.object.HhHopDongDtlReq;
+import com.tcdt.qlnvhang.request.object.*;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.*;
@@ -39,8 +38,6 @@ import com.tcdt.qlnvhang.entities.FileDKemJoinHopDong;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.StrSearchReq;
-import com.tcdt.qlnvhang.request.object.HhDdiemNhapKhoReq;
-import com.tcdt.qlnvhang.request.object.HhHopDongHdrReq;
 import com.tcdt.qlnvhang.request.search.HhHopDongSearchReq;
 import com.tcdt.qlnvhang.secification.HhHopDongSpecification;
 import com.tcdt.qlnvhang.service.HhHopDongService;
@@ -495,11 +492,26 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 
   @Override
   public ReportTemplateResponse preview(HhHopDongHdrReq req) throws Exception {
+    HhPreviewHopDongDTO hopDongDTO = new HhPreviewHopDongDTO();
     HhHopDongHdr hhHopDongHdr = detail(req.getId().toString());
+    if(!hhHopDongHdr.getLoaiVthh().equals("02")){
+
+    }else{
+      BeanUtils.copyProperties(hhHopDongHdr, hopDongDTO);
+      for (HhHopDongDtl detail : hhHopDongHdr.getDetails()) {
+        BeanUtils.copyProperties(detail, hopDongDTO.getDetails());
+        for (HhHopDongDdiemNhapKho child : detail.getChildren()) {
+          for (HhPreviewHopDongDtlDTO hopDongDTODetail : hopDongDTO.getDetails()) {
+            BeanUtils.copyProperties(child, hopDongDTODetail);
+          }
+        }
+      }
+
+    }
     ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
     byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
     ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
     HhHopDongPreview object = new HhHopDongPreview();
-    return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+    return docxToPdfConverter.convertDocxToPdf(inputStream, hopDongDTO);
   }
 }
