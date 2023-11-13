@@ -39,6 +39,8 @@ import com.tcdt.qlnvhang.entities.FileDKemJoinHopDong;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.StrSearchReq;
+import com.tcdt.qlnvhang.request.object.HhDdiemNhapKhoReq;
+import com.tcdt.qlnvhang.request.object.HhHopDongHdrReq;
 import com.tcdt.qlnvhang.request.search.HhHopDongSearchReq;
 import com.tcdt.qlnvhang.secification.HhHopDongSpecification;
 import com.tcdt.qlnvhang.service.HhHopDongService;
@@ -514,7 +516,16 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
           hhHopDongHdr.setTongSoLuong(sumSlChildChild);
         }
       } else {
-
+        BigDecimal tongSoLuong = BigDecimal.ZERO;
+        BigDecimal tongThanhTien = BigDecimal.ZERO;
+        for (HhHopDongDtl detail : hhHopDongHdr.getDetails()) {
+          detail.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(detail.getDonGiaVat().multiply(detail.getSoLuong())));
+          tongThanhTien = tongThanhTien.add(detail.getDonGiaVat().multiply(detail.getSoLuong()));
+          tongSoLuong = tongSoLuong.add(detail.getSoLuong());
+        }
+        hhHopDongHdr.setTongSoLuongStr(docxToPdfConverter.convertBigDecimalToStr(tongSoLuong));
+        hhHopDongHdr.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(tongThanhTien));
+        hhHopDongHdr.setTenLoaiVthh(hhHopDongHdr.getTenCloaiVthh().toUpperCase());
       }
       ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
       byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());

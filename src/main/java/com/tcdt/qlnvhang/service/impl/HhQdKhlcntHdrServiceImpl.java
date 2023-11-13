@@ -561,6 +561,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			dsg.setTenDvi(mapDmucDvi.get(dsg.getMaDvi()));
 			dsg.setTenCloaiVthh(hashMapDmHh.get(dsg.getCloaiVthh()));
 			dsg.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dsg.getTrangThai()));
+			dsg.setTenTrangThaiDt(NhapXuatHangTrangThaiEnum.getTenById(dsg.getTrangThaiDt()));
 			dsg.setChildren(listGtCtiet);
 			dsg.setKqlcntDtl(hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndType(dsg.getId(), "GOC"));
 			if (dsg.getTrangThaiDt() != null && dsg.getTrangThaiDt().equals(NhapXuatHangTrangThaiEnum.THANH_CONG.getId())) {
