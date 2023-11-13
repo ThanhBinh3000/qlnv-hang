@@ -7,6 +7,8 @@ import com.tcdt.qlnvhang.request.*;
 import com.tcdt.qlnvhang.request.nhaphang.nhaptructiep.HhQdPheduyetKhMttPreview;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhChiTietTTinChaoGiaReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhQdPdKhMttSlddDtlReq;
+import com.tcdt.qlnvhang.request.object.HhSlNhapHangReq;
+import com.tcdt.qlnvhang.service.HhSlNhapHangService;
 import com.tcdt.qlnvhang.service.UserService;
 import com.tcdt.qlnvhang.service.feign.KeHoachService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -33,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -42,6 +45,9 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
 
     @Autowired
     private HhQdPheduyetKhMttHdrRepository hhQdPheduyetKhMttHdrRepository;
+
+    @Autowired
+    private HhSlNhapHangService hhSlNhapHangService;
 
     @Autowired
     private HhQdPheduyetKhMttDxRepository hhQdPheduyetKhMttDxRepository;
@@ -381,7 +387,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         if (optional.get().getPhanLoai().equals("TH")){
             hhDxuatKhMttThopRepository.updateTrangThaiAndSoQd(optional.get().getIdThHdr(), NhapXuatHangTrangThaiEnum.CHUATAO_QD.getId());
         }else {
-            hhDxuatKhMttRepository.updateIdSoQdPd(optional.get().getIdTrHdr(), NhapXuatHangTrangThaiEnum.DA_DUYET_CBV.getId(), NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId());
+            hhDxuatKhMttRepository.updateIdSoQdPd(optional.get().getIdTrHdr(), NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId(), NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId());
         }
     }
 
@@ -457,6 +463,23 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         if(req.getTrangThai().equals(Contains.DA_HOAN_THANH)){
             dataDB.setTrangThaiHd(req.getTrangThai());
             createCheck = hhQdPheduyetKhMttHdrRepository.save(dataDB);
+        }
+        if(createCheck.getTrangThai().equals(Contains.BAN_HANH)){
+            HhSlNhapHangReq hhSlNhapHangReq = new HhSlNhapHangReq();
+            BeanUtils.copyProperties(createCheck, hhSlNhapHangReq, "id");
+            hhSlNhapHangReq.setKieuNhap(Contains.NHAP_TRUC_TIEP);
+            hhSlNhapHangReq.setIdQdKhlcnt(createCheck.getId());
+            hhSlNhapHangReq.setNamKhoach(createCheck.getNamKh());
+            List<HhQdPheduyetKhMttDx> dxList = hhQdPheduyetKhMttDxRepository.findAllByIdQdHdr(createCheck.getId());
+            for (HhQdPheduyetKhMttDx hhQdPheduyetKhMttDx : dxList) {
+                List<HhQdPheduyetKhMttSLDD> slddList = hhQdPheduyetKhMttSLDDRepository.findAllByIdQdDtl(hhQdPheduyetKhMttDx.getId());
+                for (HhQdPheduyetKhMttSLDD hhQdPheduyetKhMttSLDD : slddList) {
+                    hhSlNhapHangReq.setSoLuong(hhQdPheduyetKhMttSLDD.getTongSoLuong());
+                    hhSlNhapHangReq.setMaDvi(hhQdPheduyetKhMttSLDD.getMaDvi());
+                    hhSlNhapHangReq.setNgayTao(LocalDateTime.now());
+                    hhSlNhapHangService.create(hhSlNhapHangReq);
+                }
+            }
         }
 
         return createCheck;
@@ -605,6 +628,10 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
                 if (dtl.getPthucMuaTrucTiep().equals(Contains.MUA_LE)){
                     List<FileDinhKem> fileDinhKem = fileDinhKemService.search(id, Arrays.asList(HhQdPheduyetKhMttDx.TABLE_NAME));
                     dtl.setFileDinhKemMuaLe(fileDinhKem);
+                }
+                if (dtl.getPthucMuaTrucTiep().equals(Contains.CHAO_GIA)){
+                    List<FileDinhKem> fileDinhKem = fileDinhKemService.search(id, Arrays.asList(HhQdPheduyetKhMttDx.TABLE_NAME));
+                    dtl.setFileDinhKem(fileDinhKem);
                 }
             }
         }

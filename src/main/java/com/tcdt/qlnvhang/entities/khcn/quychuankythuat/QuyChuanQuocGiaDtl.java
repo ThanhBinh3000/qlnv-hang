@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.entities.khcn.quychuankythuat;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -33,6 +34,8 @@ public class QuyChuanQuocGiaDtl extends BaseEntity {
   private String loaiVthh;
   private String cloaiVthh;
   private String ghiChu;
+  private String nhomCtieu;
+  private String toanTu;
 
   @Transient
   private String tenDvi;
@@ -42,4 +45,10 @@ public class QuyChuanQuocGiaDtl extends BaseEntity {
   private String tenCloaiVthh;
   @Transient
   private String tenLoaiHinhNhapXuat;
+  @Transient
+  String tenToanTu;
+  @Transient
+  String tenNhomCtieu;
+  @Transient
+  private FileDinhKem fileDinhKem;
 }

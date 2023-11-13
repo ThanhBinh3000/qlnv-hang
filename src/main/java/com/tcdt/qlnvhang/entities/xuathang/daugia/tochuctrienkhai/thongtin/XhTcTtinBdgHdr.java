@@ -98,6 +98,8 @@ public class XhTcTtinBdgHdr  implements Serializable {
     private String tenCloaiVthh;
     @Transient
     private String tenTrangThai;
+    @Transient
+    private BigDecimal tongTien;
     @JsonIgnore
     @Transient
     private Map<String, String> mapDmucDvi;

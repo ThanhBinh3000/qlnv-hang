@@ -286,6 +286,10 @@ public class Contains {
   public static final String NHAP_MAU = "NHAP_MAU";
 
   public static final String QD_GNV = "QD_GNV";
+  // Kieu nhap hang
+  public static final String NHAP_DAU_THAU = "NHAP_DAU_THAU";
+  public static final String NHAP_TRUC_TIEP = "NHAP_TRUC_TIEP";
+  public static final String NHAP_KHAC = "NHAP_KHAC";
 
 
   public static final Map<String, String> mappingLoaiDx;

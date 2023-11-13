@@ -29,17 +29,9 @@ public class XhDxKhBanDauGiaDtl implements Serializable {
   private String donViTinh;
   private String diaChi;
   @Transient
-  BigDecimal giaKhoiDiemDx;
-
+  private BigDecimal giaKhoiDiemDx;
   @Transient
   private String tenDvi;
   @Transient
   private List<XhDxKhBanDauGiaPhanLo> children = new ArrayList<>();
-
-  public void setChildren(List<XhDxKhBanDauGiaPhanLo> children) {
-    this.children = children;
-    if (!DataUtils.isNullOrEmpty(children)) {
-      this.giaKhoiDiemDx = children.stream().map(XhDxKhBanDauGiaPhanLo::getGiaKhoiDiemDx).reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-  }
 }

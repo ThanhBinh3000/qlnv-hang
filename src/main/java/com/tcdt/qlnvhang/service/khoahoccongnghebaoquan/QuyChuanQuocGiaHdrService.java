@@ -5,11 +5,16 @@ import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.Bh
 import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaDtl;
 import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan.*;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan.QuyChuanQuocGiaDtlRepository;
+import com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan.QuyChuanQuocGiaHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.*;
+import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.QuyChuanQuocGiaDtlReq;
+import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.QuyChuanQuocGiaHdrReq;
+import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.SearchQuyChuanQgReq;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.response.khoahoccongnghebaoquan.KhCnBaoQuanPreviewRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -18,12 +23,8 @@ import com.tcdt.qlnvhang.table.DmDonViDTO;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.catalog.DmVattuDTO;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbKeHoachDcDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.THKeHoachDieuChuyenCucHdr;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
@@ -63,7 +64,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         UserInfo userInfo = SecurityContextService.getUser();
 //        objReq.setMaDvi(!ObjectUtils.isEmpty(objReq.getMaDvi()) ? objReq.getMaDvi() : userInfo.getDvql());
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
-                objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
+                objReq.getPaggingReq().getLimit(), Sort.by("loaiVthh", "maBn").ascending());
         Page<QuyChuanQuocGiaHdr> data = quyChuanQuocGiaHdrRepository.search(objReq, pageable);
         Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
         List<Long> idsHdr = data.getContent().stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList());
@@ -71,19 +72,23 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         Map<String, String> listDanhMucDvi = getListDanhMucDvi("0", null, "01");
         Map<Long, List<QuyChuanQuocGiaDtl>> mapDtl = allByIdHdrIn.stream()
                 .collect(Collectors.groupingBy(QuyChuanQuocGiaDtl::getIdHdr));
+        Map<String, String> mapTenChiTieu = getListDanhMucChung("CHI_TIEU_CL");
+        Map<String, String> mapTenNhomChiTieu = getListDanhMucChung("NHOM_CHI_TIEU_CL");
+        Map<String, String> mapTenToanTu = getListDanhMucChung("TOAN_TU");
         data.getContent().forEach(f -> {
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
             f.setTenBn(listDanhMucDvi.get(f.getMaBn()));
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenTrangThaiHl(f.getTrangThaiHl().equals(Contains.CON_HIEU_LUC) ? "Còn hiệu lực" : (f.getTrangThaiHl().equals(Contains.HET_HIEU_LUC) ? "Hết hiệu lực" : "Chưa có hiệu lực"));
-            if (!mapDtl.get(f.getId()).isEmpty()) {
-                Map<String, String> mapTenChiTieu = getListDanhMucChung("CHI_TIEU_CL");
+            if (!mapDtl.get(f.getId()).isEmpty() && ObjectUtils.isEmpty(objReq.getIsSearch())) {
                 if (f.getApDungCloaiVthh() == false) {
                     for (QuyChuanQuocGiaDtl dtl : mapDtl.get(f.getId())) {
                         dtl.setTenLoaiVthh(ObjectUtils.isEmpty(dtl.getLoaiVthh()) ? null : hashMapDmHh.get(dtl.getLoaiVthh()));
                         dtl.setTenCloaiVthh(ObjectUtils.isEmpty(dtl.getCloaiVthh()) ? null : hashMapDmHh.get(dtl.getCloaiVthh()));
                         dtl.setTenChiTieu(mapTenChiTieu.get(dtl.getMaChiTieu()));
+                        dtl.setTenNhomCtieu(mapTenNhomChiTieu.get(dtl.getNhomCtieu()));
+                        dtl.setTenChiTieu(mapTenToanTu.get(dtl.getTenToanTu()));
                     }
                     f.setTieuChuanKyThuat(mapDtl.get(f.getId()));
                 } else {
@@ -102,6 +107,11 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                     }
                     f.setTieuChuanKyThuat(listQuyChuan);
                 }
+            }
+            List<FileDinhKem> fileDinhKems = fileDinhKemService.search(f.getId(), Collections.singleton(QuyChuanQuocGiaHdr.TABLE_NAME));
+            if (!CollectionUtils.isEmpty(fileDinhKems)) {
+                fileDinhKems = fileDinhKems.stream().filter(item -> String.valueOf(item.getFileType()).equals("CAN_CU_PHAP_LY")).collect(Collectors.toList());
+                f.setFileDinhKems(fileDinhKems);
             }
         });
         return data;
@@ -199,7 +209,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         List<String> listCloai = quyChuanQuocGiaDtlRepository.findAllByIdHdrIn(listHdrCoHieuLuc).stream().map(QuyChuanQuocGiaDtl::getCloaiVthh).collect(Collectors.toList());
         List<String> listCloaiReq = objReq.getTieuChuanKyThuat().stream().map(QuyChuanQuocGiaDtlReq::getCloaiVthh).distinct().collect(Collectors.toList());
         listCloai.retainAll(listCloaiReq);
-        if (!listCloai.isEmpty()) {
+        if (!listCloai.isEmpty() && objReq.getTrangThai().equals(TrangThaiAllEnum.DU_THAO.getId())) {
             throw new Exception("Có chủng loại hàng hóa đã được tạo tiêu chuẩn kỹ thuật ở bản ghi khác");
         }
         QuyChuanQuocGiaHdr data = optional.get();
@@ -211,7 +221,8 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), data.getId(), "KHCN_QUY_CHUAN_QG_HDR");
         created.setFileDinhKems(fileDinhKems);
         List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
-        quyChuanQuocGiaDtlRepository.deleteAll(dtlList);
+        List<Long> idCtList = dtlList.stream().map(QuyChuanQuocGiaDtl::getId).collect(Collectors.toList());
+        fileDinhKemService.deleteMultiple(idCtList, Lists.newArrayList(QuyChuanQuocGiaDtl.TABLE_NAME));
         this.saveCtiet(data, objReq);
         //Check bản ghi vừa thêm có hiệu lực và có văn bản thay thế ko , nếu có vb thay thế thì hết hiệu lực vb thay thế luôn
         if (created.getTrangThaiHl().equals("01") && listIdThayThe.size() > 0) {
@@ -228,8 +239,16 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
     public void saveCtiet(QuyChuanQuocGiaHdr data, QuyChuanQuocGiaHdrReq objReq) {
         for (QuyChuanQuocGiaDtlReq dtlReq : objReq.getTieuChuanKyThuat()) {
             QuyChuanQuocGiaDtl dtl = new ModelMapper().map(dtlReq, QuyChuanQuocGiaDtl.class);
-            dtl.setId(null);
+            if (ObjectUtils.isEmpty(objReq.getId())) {
+                dtl.setId(null);
+            }
             dtl.setIdHdr(data.getId());
+            List<FileDinhKemReq> listFile = new ArrayList<>();
+            if (!ObjectUtils.isEmpty(dtlReq.getFileDinhKem())) {
+                listFile.add(dtlReq.getFileDinhKem());
+                List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(listFile, dtlReq.getId(), QuyChuanQuocGiaDtl.TABLE_NAME);
+                dtl.setFileDinhKem(fileDinhKems.get(0));
+            }
             quyChuanQuocGiaDtlRepository.save(dtl);
         }
     }
@@ -249,11 +268,19 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
         if (!dtlList.isEmpty()) {
             Map<String, String> mapTenChiTieu = getListDanhMucChung("CHI_TIEU_CL");
+            Map<String, String> mapTenNhomChiTieu = getListDanhMucChung("NHOM_CHI_TIEU_CL");
+            Map<String, String> mapTenToanTu = getListDanhMucChung("TOAN_TU");
             if (data.getApDungCloaiVthh() == false) {
                 for (QuyChuanQuocGiaDtl dtl : dtlList) {
                     dtl.setTenLoaiVthh(ObjectUtils.isEmpty(dtl.getLoaiVthh()) ? null : hashMapDmHh.get(dtl.getLoaiVthh()));
                     dtl.setTenCloaiVthh(ObjectUtils.isEmpty(dtl.getCloaiVthh()) ? null : hashMapDmHh.get(dtl.getCloaiVthh()));
                     dtl.setTenChiTieu(mapTenChiTieu.get(dtl.getMaChiTieu()));
+                    dtl.setTenNhomCtieu(mapTenNhomChiTieu.get(dtl.getNhomCtieu()));
+                    dtl.setTenToanTu(mapTenToanTu.get(dtl.getToanTu()));
+                    List<FileDinhKem> fileDinhKemCt = fileDinhKemService.search(dtl.getId(), Collections.singleton(QuyChuanQuocGiaDtl.TABLE_NAME));
+                    if (!CollectionUtils.isEmpty(fileDinhKemCt)) {
+                        dtl.setFileDinhKem(fileDinhKemCt.get(0));
+                    }
                 }
                 data.setTieuChuanKyThuat(dtlList);
             } else {
@@ -261,7 +288,13 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                 List<String> listTenChiTieu = dtlList.stream().map(QuyChuanQuocGiaDtl::getTenChiTieu).collect(Collectors.toList());
                 if (!listTenChiTieu.isEmpty()) {
                     dtlList.forEach(item -> {
+                        List<FileDinhKem> fileDinhKemCt = fileDinhKemService.search(item.getId(), Collections.singleton(QuyChuanQuocGiaDtl.TABLE_NAME));
+                        if (!CollectionUtils.isEmpty(fileDinhKemCt)) {
+                            item.setFileDinhKem(fileDinhKemCt.get(0));
+                        }
                         item.setTenChiTieu(mapTenChiTieu.get(item.getMaChiTieu()));
+                        item.setTenNhomCtieu(mapTenNhomChiTieu.get(item.getNhomCtieu()));
+                        item.setTenToanTu(mapTenToanTu.get(item.getToanTu()));
                         List<String> listStringCompare = listQuyChuan.stream().map(QuyChuanQuocGiaDtl::getTenChiTieu).collect(Collectors.toList());
                         if (!listStringCompare.contains(item.getTenChiTieu())) {
                             item.setLoaiVthh(null);
@@ -287,6 +320,8 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         ids.add(data.getId());
         fileDinhKemService.deleteMultiple(ids, Collections.singleton(BhQdPheDuyetKhbdg.TABLE_NAME));
         List<QuyChuanQuocGiaDtl> dtlList = quyChuanQuocGiaDtlRepository.findAllByIdHdr(data.getId());
+        List<Long> idCtList = dtlList.stream().map(QuyChuanQuocGiaDtl::getId).collect(Collectors.toList());
+        fileDinhKemService.deleteMultiple(idCtList, Lists.newArrayList(QuyChuanQuocGiaDtl.TABLE_NAME));
         quyChuanQuocGiaDtlRepository.deleteAll(dtlList);
         quyChuanQuocGiaHdrRepository.delete(data);
 

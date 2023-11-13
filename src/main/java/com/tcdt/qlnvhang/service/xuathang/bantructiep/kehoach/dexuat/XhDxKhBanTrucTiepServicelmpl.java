@@ -155,6 +155,9 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
                     dataDiaDiem.setTenCloaiVthh(mapVthh.getOrDefault(dataDiaDiem.getCloaiVthh(), null));
                 });
                 dataDtl.setTenDvi(mapDmucDvi.getOrDefault(dataDtl.getMaDvi(), null));
+                dataDtl.setDonGiaDeXuat(listDiaDiem.get(0).getDonGiaDeXuat());
+                BigDecimal sumThanhTien = listDiaDiem.stream().map(XhDxKhBanTrucTiepDdiem::getThanhTienDeXuat).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
+                dataDtl.setThanhTien(sumThanhTien);
                 dataDtl.setChildren(listDiaDiem);
             }
             data.setMapDmucDvi(mapDmucDvi);

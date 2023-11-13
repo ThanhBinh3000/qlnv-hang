@@ -21,6 +21,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,10 +35,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl {
@@ -165,16 +163,33 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl {
                     dataPhanLo.setTenNhaKho(mapDmucDvi.getOrDefault(dataPhanLo.getMaNhaKho(), null));
                     dataPhanLo.setTenNganKho(mapDmucDvi.getOrDefault(dataPhanLo.getMaNganKho(), null));
                     dataPhanLo.setTenLoKho(mapDmucDvi.getOrDefault(dataPhanLo.getMaLoKho(), null));
+                    Optional<BigDecimal> donGiaOptional = Optional.ofNullable(dataPhanLo.getDonGiaTraGia());
+                    Optional<BigDecimal> soLuongOptional = Optional.ofNullable(dataPhanLo.getSoLuongDeXuat());
+                    dataPhanLo.setThanhTien(donGiaOptional.flatMap(donGia -> soLuongOptional.map(soLuong -> donGia.multiply(soLuong))).orElse(null));
                 }
                 dataDtl.setTenDvi(mapDmucDvi.getOrDefault(dataDtl.getMaDvi(), null));
+                BigDecimal sumThanhTien = listPhanLo.stream().map(XhTcTtinBdgPlo::getThanhTien).filter(Objects::nonNull).reduce((a, b) -> a.add(b)).orElse(null);
+                BigDecimal sumDonGiaDeXuat = listPhanLo.stream().map(XhTcTtinBdgPlo::getDonGiaDeXuat).filter(Objects::nonNull).reduce((a, b) -> a.add(b)).orElse(null);
+                dataDtl.setThanhTien(sumThanhTien);
+                dataDtl.setDonGiaDeXuat(sumDonGiaDeXuat);
                 dataDtl.setChildren(listPhanLo);
             }
             data.setMapDmucDvi(mapDmucDvi);
             data.setMapVthh(mapDmucVthh);
+            BigDecimal sumTongTien = listDtl.stream().map(XhTcTtinBdgDtl::getThanhTien).filter(Objects::nonNull).reduce((a, b) -> a.add(b)).orElse(null);
+            data.setTongTien(sumTongTien);
             data.setChildren(listDtl);
             data.setListNguoiTgia(xhTcTtinBdgNlqRepository.findAllByIdHdr(data.getId()));
         }
         return list;
+    }
+
+    public XhTcTtinBdgHdr detail(Long id) throws Exception {
+        if (id == null) {
+            throw new Exception("Tham số không hợp lệ.");
+        }
+        List<XhTcTtinBdgHdr> details = detail(Collections.singletonList(id));
+        return details.isEmpty() ? null : details.get(0);
     }
 
     @Transactional
@@ -224,7 +239,7 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl {
         Optional<XhQdPdKhBdgDtl> dauGia = xhQdPdKhBdgDtlRepository.findById(data.getIdQdPdDtl());
         dauGia.ifPresent(dauGiaDtl -> {
             int slDviTsan = dauGiaDtl.getSlDviTsan();
-            BigDecimal soDviTsanThanhCong = xhQdPdKhBdgDtlRepository.countSlDviTsanThanhCong(data.getIdQdPdDtl(),data.getLoaiVthh(), data.getMaDvi());
+            BigDecimal soDviTsanThanhCong = xhQdPdKhBdgDtlRepository.countSlDviTsanThanhCong(data.getIdQdPdDtl(), data.getLoaiVthh(), data.getMaDvi());
             BigDecimal soDviTsanKhongThanh = new BigDecimal(slDviTsan).subtract(soDviTsanThanhCong);
             dauGiaDtl.setSoDviTsanThanhCong(soDviTsanThanhCong);
             dauGiaDtl.setSoDviTsanKhongThanh(soDviTsanKhongThanh);
@@ -233,22 +248,23 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl {
         });
     }
 
-    public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
-        try (FileInputStream inputStream = new FileInputStream(baseReportFolder + "/bandaugia/Thông tin đấu giá.docx")) {
-            Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
-            String maDviCuc = body.get("maDvi").toString().substring(0, 6);
-            if (mapDmucDvi.containsKey(maDviCuc)) {
-                Map<String, Object> objDonVi = mapDmucDvi.get(maDviCuc);
-                body.put("tenDvi", objDonVi.get("tenDvi").toString().toUpperCase());
-            }
-            return docxToPdfConverter.convertDocxToPdf(inputStream, body);
+    public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {
+        if (currentUser == null) {
+            throw new Exception("Bad request.");
+        }
+        try {
+            String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "bandaugia/" + templatePath;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
+            XhTcTtinBdgHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
+            detail.setTenDvi(detail.getTenDvi().toUpperCase());
+            detail.setTenCloaiVthh(detail.getTenCloaiVthh().toUpperCase());
+            return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new Exception("Lỗi khi đọc tệp hoặc đóng tệp.");
-        } catch (Exception e) {
+        } catch (XDocReportException e) {
             e.printStackTrace();
-            throw new Exception("Lỗi xử lý tài liệu.");
         }
+        return null;
     }
 }
-

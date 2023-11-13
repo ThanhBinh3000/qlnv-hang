@@ -38,6 +38,7 @@ public class HhCgiaReq extends BaseRequest {
     private List<FileDinhKemReq> fileDinhKemUyQuyen = new ArrayList<>();
 
     private List<FileDinhKemReq> fileDinhKemMuaLe = new ArrayList<>();
+    private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();
 
     private List<HhChiTietTTinChaoGiaReq> children = new ArrayList<>();
     private List<HhQdPheduyetKhMttSLDDReq> danhSachCtiet = new ArrayList<>();
