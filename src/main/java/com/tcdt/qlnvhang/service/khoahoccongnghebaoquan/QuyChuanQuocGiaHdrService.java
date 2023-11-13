@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.entities.bandaugia.quyetdinhpheduyetkehoachbandaugia.Bh
 import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaDtl;
 import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan.QuyChuanQuocGiaDtlRepository;
 import com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan.QuyChuanQuocGiaHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -203,7 +204,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         List<String> listCloai = quyChuanQuocGiaDtlRepository.findAllByIdHdrIn(listHdrCoHieuLuc).stream().map(QuyChuanQuocGiaDtl::getCloaiVthh).collect(Collectors.toList());
         List<String> listCloaiReq = objReq.getTieuChuanKyThuat().stream().map(QuyChuanQuocGiaDtlReq::getCloaiVthh).distinct().collect(Collectors.toList());
         listCloai.retainAll(listCloaiReq);
-        if (!listCloai.isEmpty()) {
+        if (!listCloai.isEmpty() && objReq.getTrangThai().equals(TrangThaiAllEnum.DU_THAO.getId())) {
             throw new Exception("Có chủng loại hàng hóa đã được tạo tiêu chuẩn kỹ thuật ở bản ghi khác");
         }
         QuyChuanQuocGiaHdr data = optional.get();
