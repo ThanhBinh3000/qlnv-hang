@@ -162,6 +162,7 @@ public class XhXkQdXuatHangKhoiDmService extends BaseServiceImpl {
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
             case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
+            case Contains.CHODUYET_LDTC + Contains.CHODUYET_LDV:
             case Contains.DADUYET_LDTC + Contains.CHODUYET_LDTC:
                 optional.get().setNguoiDuyetId(currentUser.getUser().getId());
                 optional.get().setNgayDuyet(LocalDate.now());
