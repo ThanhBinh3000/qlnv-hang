@@ -28,6 +28,9 @@ public class HhPreviewHopDongDTO extends BaseRequest {
 	private String moTaHangHoa;
 
 	String tgianNkho;
+	private Date tgianGiaoThucTe;
+	private String tongSoLuongStr;
+	private String tongThanhTienStr;
 
 	private List<HhPreviewHopDongDtlDTO> details;
 
