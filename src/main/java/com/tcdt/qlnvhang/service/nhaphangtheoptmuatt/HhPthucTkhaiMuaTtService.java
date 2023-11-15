@@ -190,6 +190,7 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
                 HhChiTietTTinChaoGia chaoGia = new HhChiTietTTinChaoGia();
                 BeanUtils.copyProperties(child, chaoGia, "id");
                 chaoGia.setDonGia(child.getDonGiaVat());
+                chaoGia.setThanhTien(chaoGia.getDonGia().multiply(chaoGia.getSoLuong()).multiply(BigDecimal.valueOf(1000)));
                 chaoGia.setId(null);
                 HhChiTietTTinChaoGia save = hhCtietTtinCgiaRepository.save(chaoGia);
                 if (!DataUtils.isNullObject(child.getFileDinhKems())) {
@@ -279,7 +280,14 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
         HhChiTietTTinChaoGiaPreview object = new HhChiTietTTinChaoGiaPreview();
-        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+        BigDecimal tongThanhTien = BigDecimal.ZERO;
+        for (HhQdPheduyetKhMttSLDD child : hhQdPheduyetKhMttDx.getChildren()) {
+            for (HhChiTietTTinChaoGia tTinChaoGia : child.getListChaoGia()) {
+                tongThanhTien = tongThanhTien.add(tTinChaoGia.getThanhTien());
+            }
+        }
+        hhQdPheduyetKhMttDx.setTongThanhTien(String.valueOf(tongThanhTien));
+        return docxToPdfConverter.convertDocxToPdf(inputStream, hhQdPheduyetKhMttDx);
     }
 }
 
