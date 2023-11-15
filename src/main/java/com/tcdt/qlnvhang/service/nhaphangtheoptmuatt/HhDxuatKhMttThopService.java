@@ -292,8 +292,8 @@ public class HhDxuatKhMttThopService extends BaseServiceImpl {
             List<HhDxuatKhMttSldd> dsSlDdList = hhDxuatKhMttSlddRepository.findAllByIdHdr(f.getIdDxHdr());
             for(HhDxuatKhMttSldd dsG : dsSlDdList){
                 dsG.setTenDvi(mapDmucDvi.get(dsG.getMaDvi()));
-                dsG.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(dsG.getDonGia().multiply(dsG.getSoLuong())));
-                tongThanhTien.updateAndGet(v -> v.add(dsG.getDonGia().multiply(dsG.getSoLuong())));
+                dsG.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(dsG.getDonGia().multiply(dsG.getTongSoLuong())));
+                tongThanhTien.updateAndGet(v -> v.add(dsG.getDonGia().multiply(dsG.getTongSoLuong())));
             }
             f.setDsChiCucPreviews(dsSlDdList);
             tongSl.updateAndGet(v -> v.add(f.getTongSoLuong()));
