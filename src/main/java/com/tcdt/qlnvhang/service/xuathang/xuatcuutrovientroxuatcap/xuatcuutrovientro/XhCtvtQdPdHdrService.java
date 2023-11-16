@@ -394,7 +394,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
             List<XhCtvtQuyetDinhPdHdrDTO> children = body.getChildren();
             HashMap<Object, Object> hashMap = new HashMap<>();
             hashMap.put("nam", detail.get(0).getNam());
-            hashMap.put("tenLoaiVthh", detail.get(0).getTenVthh());
+            hashMap.put("tenLoaiVthh", StringUtils.isEmpty(detail.get(0).getTenVthh()) ? "": detail.get(0).getTenVthh().toUpperCase());
             List<XhCtvtQuyetDinhPdHdrPreviewDTO> listData = new ArrayList<>();
             int index = 1;
             for (XhCtvtQuyetDinhPdHdrDTO hdrDTO : children) {
