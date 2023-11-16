@@ -66,8 +66,6 @@ public class HhSlNhapHangServiceImpl extends BaseServiceImpl implements HhSlNhap
     public HhSlNhapHang create(HhSlNhapHangReq objReq) throws Exception {
 
         HhSlNhapHang dataMap = new ModelMapper().map(objReq, HhSlNhapHang.class);
-        dataMap.setNgayTao(objReq.getNgayTao());
-        dataMap.setNguoiTaoId(getUser().getId());
         hhSlNhapHangRepository.save(dataMap);
         return dataMap;
     }
@@ -86,9 +84,6 @@ public class HhSlNhapHangServiceImpl extends BaseServiceImpl implements HhSlNhap
         HhSlNhapHang dataMap = ObjectMapperUtils.map(objReq, HhSlNhapHang.class);
 
         updateObjectToObject(dataDTB, dataMap);
-
-        dataDTB.setNgaySua(LocalDateTime.now());
-        dataDTB.setNguoiSuaId(getUser().getId());
 
         hhSlNhapHangRepository.save(dataDTB);
         return dataDTB;
@@ -119,6 +114,11 @@ public class HhSlNhapHangServiceImpl extends BaseServiceImpl implements HhSlNhap
     @Override
     public BigDecimal countSoLuongKeHoachNamTheoKh(CountKhlcntSlReq objReq) throws Exception {
         return hhSlNhapHangRepository.countSLDalenKh(objReq.getYear(), objReq.getLoaiVthh(), objReq.getMaDvi());
+    }
+
+    @Override
+    public List<HhSlNhapHang> findAllByIdQd(Long idQd) throws Exception {
+        return hhSlNhapHangRepository.findAllByIdQdKhlcnt(idQd);
     }
 
 }

@@ -327,7 +327,6 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
             for (HhDxuatKhMttSldd hhDxuatKhMttSldd : slddList) {
                 hhSlNhapHangReq.setSoLuong(hhDxuatKhMttSldd.getTongSoLuong());
                 hhSlNhapHangReq.setMaDvi(hhDxuatKhMttSldd.getMaDvi());
-                hhSlNhapHangReq.setNgayTao(LocalDateTime.now());
                 hhSlNhapHangService.create(hhSlNhapHangReq);
             }
         }

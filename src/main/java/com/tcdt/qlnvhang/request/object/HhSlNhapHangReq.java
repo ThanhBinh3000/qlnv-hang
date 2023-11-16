@@ -32,9 +32,5 @@ public class HhSlNhapHangReq {
 	private String cloaiVthh;
 	private String kieuNhap;
 	private BigDecimal soLuong;
-	private LocalDateTime ngayTao;
-	private Long nguoiTaoId;
-	private LocalDateTime ngaySua;
-	private Long nguoiSuaId;
 
 }

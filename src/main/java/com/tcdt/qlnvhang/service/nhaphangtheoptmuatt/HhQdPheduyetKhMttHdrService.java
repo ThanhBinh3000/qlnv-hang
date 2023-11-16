@@ -476,7 +476,6 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
                 for (HhQdPheduyetKhMttSLDD hhQdPheduyetKhMttSLDD : slddList) {
                     hhSlNhapHangReq.setSoLuong(hhQdPheduyetKhMttSLDD.getTongSoLuong());
                     hhSlNhapHangReq.setMaDvi(hhQdPheduyetKhMttSLDD.getMaDvi());
-                    hhSlNhapHangReq.setNgayTao(LocalDateTime.now());
                     hhSlNhapHangService.create(hhSlNhapHangReq);
                 }
             }
