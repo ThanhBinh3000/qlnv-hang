@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface HhSlNhapHangService {
 
@@ -28,4 +29,7 @@ public interface HhSlNhapHangService {
 
 	BigDecimal countSoLuongKeHoachNam(CountKhlcntSlReq objReq) throws Exception;
 	BigDecimal countSoLuongKeHoachNamTheoKh(CountKhlcntSlReq objReq) throws Exception;
+
+	@Transactional(rollbackOn = Exception.class)
+	List<HhSlNhapHang> findAllByIdQd(Long idQd) throws Exception;
 }
