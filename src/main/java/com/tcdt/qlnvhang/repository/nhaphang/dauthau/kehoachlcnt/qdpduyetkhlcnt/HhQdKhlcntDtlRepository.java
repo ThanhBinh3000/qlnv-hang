@@ -46,6 +46,7 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
 
     @Query(value = " SELECT * FROM HH_QD_KHLCNT_DTL DTL " +
             " LEFT JOIN HH_QD_KHLCNT_HDR HDR ON HDR.ID = DTL.ID_QD_HDR " +
+            " LEFT JOIN HH_QD_PD_HSMT HSMT ON DTL.ID = HSMT.ID_QD_PD_KHLCNT_DTL " +
             " LEFT JOIN HH_QD_PDUYET_KQLCNT_HDR PD_HDR ON PD_HDR.ID_QD_PD_KHLCNT_DTL = DTL.ID " +
             " WHERE (:namKh IS NULL OR HDR.NAM_KHOACH = TO_NUMBER(:namKh)) " +
             " AND (:soQd IS NULL OR LOWER(DTL.SO_DXUAT) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%')))" +
@@ -58,12 +59,13 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
             " AND (:trangThaiDt IS NULL OR HDR.TRANG_THAI_DT = :trangThaiDt )" +
             " AND (:tuNgayQd IS NULL OR PD_HDR.NGAY_KY >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) " +
             " AND (:denNgayQd IS NULL OR PD_HDR.NGAY_KY <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) " +
+            " AND HSMT.TRANG_THAI = '29' " +
             " AND HDR.LASTEST = 1 " ,
 //            " GROUP BY DTL.ID, DTL.ID_QD_HDR, DTL.MA_DVI, DTL.SO_DXUAT, DTL.NGAY_TAO, DTL.TEN_DU_AN, DTL.SO_LUONG, DTL.DON_GIA_VAT, DTL.SO_GTHAU, DTL.NAM_KHOACH, DTL.ID_DX_HDR, DTL.TRANG_THAI, DTL.NGAY_PDUYET, DTL.DIA_CHI_DVI, DTL.TRICH_YEU, DTL.SO_QD_PD_KQ_LCNT, DTL.DON_GIA_TAM_TINH, DTL.GOI_THAU, DTL.CLOAI_VTHH, DTL.LOAI_VTHH, DTL.TEN_NHA_THAU, DTL.DON_GIA_NHA_THAU, DTL.ID_NHA_THAU, DTL.ID_DC_DX_HDR",
             countQuery = "SELECT COUNT(*) FROM (" +
                     " SELECT * FROM HH_QD_KHLCNT_DTL DTL " +
                     " LEFT JOIN HH_QD_KHLCNT_HDR HDR ON HDR.ID = DTL.ID_QD_HDR " +
-                    " LEFT JOIN HH_QD_PD_HSMT HSMT ON DTL.ID = HSMT.ID_QD_PDKHLCNT_DTL " +
+                    " LEFT JOIN HH_QD_PD_HSMT HSMT ON DTL.ID = HSMT.ID_QD_PD_KHLCNT_DTL " +
                     " LEFT JOIN HH_QD_PDUYET_KQLCNT_HDR PD_HDR ON PD_HDR.ID_QD_PD_KHLCNT_DTL = DTL.ID " +
                     " WHERE (:namKh IS NULL OR HDR.NAM_KHOACH = TO_NUMBER(:namKh)) " +
                     " AND (:soQd IS NULL OR LOWER(DTL.SO_DXUAT) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%')))" +
