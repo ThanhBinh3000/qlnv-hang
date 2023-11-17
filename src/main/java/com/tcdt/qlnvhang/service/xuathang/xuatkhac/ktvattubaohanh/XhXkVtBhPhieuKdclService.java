@@ -254,21 +254,21 @@ public class XhXkVtBhPhieuKdclService extends BaseServiceImpl {
               f.setMauBiHuy(phieuKdcl.getMauBiHuy());
             }
           }
-          xhXkVtBhQdGiaonvXnRepository.save(item);
-          List<XhXkVtBhPhieuXuatNhapKho> allByIdCanCuIn = xhXkVtBhPhieuXuatNhapKhoRepository.findAllByIdCanCuIn(Arrays.asList(phieuKdcl.getIdQdGiaoNvXh()));
-          if (!allByIdCanCuIn.isEmpty()) {
-            allByIdCanCuIn.forEach(xuatNhapKho -> {
-              if (xoa) {
-                xuatNhapKho.setIdPhieuKdcl(null);
-                xuatNhapKho.setSoPhieuKdcl(null);
-              } else {
-                xuatNhapKho.setIdPhieuKdcl(phieuKdcl.getId());
-                xuatNhapKho.setSoPhieuKdcl(phieuKdcl.getSoPhieu());
-              }
-            });
-            xhXkVtBhPhieuXuatNhapKhoRepository.saveAll(allByIdCanCuIn);
-          }
         }
+        xhXkVtBhQdGiaonvXnRepository.save(item);
+      }
+      List<XhXkVtBhPhieuXuatNhapKho> allByIdCanCuIn = xhXkVtBhPhieuXuatNhapKhoRepository.findAllByIdCanCuIn(Arrays.asList(phieuKdcl.getIdQdGiaoNvXh()));
+      if (!allByIdCanCuIn.isEmpty()) {
+        allByIdCanCuIn.forEach(xuatNhapKho -> {
+          if (xoa) {
+            xuatNhapKho.setIdPhieuKdcl(null);
+            xuatNhapKho.setSoPhieuKdcl(null);
+          } else {
+            xuatNhapKho.setIdPhieuKdcl(phieuKdcl.getId());
+            xuatNhapKho.setSoPhieuKdcl(phieuKdcl.getSoPhieu());
+          }
+        });
+        xhXkVtBhPhieuXuatNhapKhoRepository.saveAll(allByIdCanCuIn);
       }
     }
   }
