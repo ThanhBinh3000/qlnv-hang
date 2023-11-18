@@ -476,7 +476,6 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
                 for (HhQdPheduyetKhMttSLDD hhQdPheduyetKhMttSLDD : slddList) {
                     hhSlNhapHangReq.setSoLuong(hhQdPheduyetKhMttSLDD.getTongSoLuong());
                     hhSlNhapHangReq.setMaDvi(hhQdPheduyetKhMttSLDD.getMaDvi());
-                    hhSlNhapHangReq.setNgayTao(LocalDateTime.now());
                     hhSlNhapHangService.create(hhSlNhapHangReq);
                 }
             }
@@ -684,7 +683,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         qdPheduyetKhMttHdr.getChildren().forEach(cuc -> {
             AtomicReference<BigDecimal> tongThanhTien = new AtomicReference<>(BigDecimal.ZERO);
             cuc.getChildren().forEach(chiCuc -> {
-                tongThanhTien.updateAndGet(v -> v.add(chiCuc.getDonGia().multiply(chiCuc.getSoLuong())));
+                tongThanhTien.updateAndGet(v -> v.add(chiCuc.getDonGiaVat().multiply(chiCuc.getTongSoLuong())));
             });
             cuc.setTongThanhTien(docxToPdfConverter.convertBigDecimalToStr(tongThanhTien.get()));
         });

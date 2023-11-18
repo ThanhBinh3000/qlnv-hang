@@ -81,8 +81,12 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 
 	@Override
 	public HhDxKhLcntThopHdr sumarryData(HhDxKhLcntTChiThopReq objReq) throws Exception {
+		int allDvi = 0;
+		if (objReq.getListMaDvi() == null || objReq.getListMaDvi().isEmpty()) {
+			allDvi = 1;
+		}
 		List<HhDxuatKhLcntHdr> dxuatList =
-				hhDxuatKhLcntHdrRepository.listTongHop(objReq.getLoaiVthh(),objReq.getCloaiVthh(),objReq.getNamKhoach(),objReq.getHthucLcnt(),objReq.getPthucLcnt(),objReq.getLoaiHdong(),objReq.getNguonVon());
+				hhDxuatKhLcntHdrRepository.listTongHop(objReq.getLoaiVthh(),objReq.getCloaiVthh(),objReq.getNamKhoach(),objReq.getHthucLcnt(),objReq.getPthucLcnt(),objReq.getLoaiHdong(),objReq.getNguonVon(), objReq.getListMaDvi(), allDvi);
 
 
 		if (dxuatList.isEmpty()){
@@ -523,7 +527,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 				List<HhDxKhlcntDsgthauCtiet> listDdNhap = hhDxKhlcntDsgthauCtietRepository.findByIdGoiThau(dsG.getId());
 				listDdNhap.forEach(ctiet -> {
 					DsChiCucPreview chiCuc = new DsChiCucPreview();
-					chiCuc.setDonGia(docxToPdfConverter.convertBigDecimalToStr(dsG.getDonGiaTamTinh()));
+					chiCuc.setDonGia(docxToPdfConverter.convertBigDecimalToStr(ctiet.getDonGiaTamTinh()));
 					chiCuc.setChiCuc(StringUtils.isEmpty(ctiet.getMaDvi()) ? null : mapDmucDvi.get(ctiet.getMaDvi()));
 					dsChiCuc.add(chiCuc);
 				});

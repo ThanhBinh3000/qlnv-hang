@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.HhSlNhapHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
@@ -8,6 +9,8 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.*;
+import com.tcdt.qlnvhang.request.object.HhSlNhapHangReq;
+import com.tcdt.qlnvhang.service.HhSlNhapHangService;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -18,6 +21,7 @@ import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +33,7 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.beans.Transient;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,6 +53,15 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
 
     @Autowired
     private HhQdPheduyetKhMttHdrRepository hhQdPheduyetKhMttHdrRepository;
+
+    @Autowired
+    private HhSlNhapHangService hhSlNhapHangService;
+
+    @Autowired
+    private HhQdPheduyetKhMttDxRepository hhQdPheduyetKhMttDxRepository;
+
+    @Autowired
+    private HhQdPheduyetKhMttSLDDRepository hhQdPheduyetKhMttSLDDRepository;
 
     @Autowired
     FileDinhKemService fileDinhKemService;
@@ -367,6 +381,21 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         optional.get().setTrangThai(statusReq.getTrangThai());
         HhDcQdPduyetKhmttHdr created = hhDcQdPduyetKhMttRepository.save(optional.get());
         updateQdPduyet(created, objReq);
+        if(created.getTrangThai().equals(Contains.BAN_HANH)){
+            List<HhSlNhapHang> hhSlNhapHangs = hhSlNhapHangService.findAllByIdQd(created.getIdQdGoc());
+            Optional<HhSlNhapHang> hhSlNhapHang = Optional.empty();
+            HhSlNhapHangReq hhSlNhapHangReq = new HhSlNhapHangReq();
+            List<HhDcQdPduyetKhmttDx> dxList = hhDcQdPduyetKhMttDxRepository.findAllByIdDcHdr(created.getId());
+            for (HhDcQdPduyetKhmttDx hhDcQdPduyetKhmttDx : dxList) {
+                List<HhDcQdPduyetKhmttSldd> slddList = hhDcQdPduyetKhmttSlddRepository.findAllByIdDcKhmtt(hhDcQdPduyetKhmttDx.getId());
+                for (HhDcQdPduyetKhmttSldd hhDcQdPduyetKhmttSldd : slddList) {
+                    hhSlNhapHang = hhSlNhapHangs.stream().filter(x -> x.getMaDvi().equals(hhDcQdPduyetKhmttSldd.getMaDvi())).findFirst();
+                    hhSlNhapHang.get().setSoLuong(hhDcQdPduyetKhmttSldd.getTongSoLuong());
+                    BeanUtils.copyProperties(hhSlNhapHang.get(), hhSlNhapHangReq);
+                    hhSlNhapHangService.update(hhSlNhapHangReq);
+                }
+            }
+        }
 
         return created;
     }

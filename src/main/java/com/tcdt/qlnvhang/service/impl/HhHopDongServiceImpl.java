@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.impl;
 
 import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -18,8 +19,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.*;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.hopdong.HhHopDongPreview;
-import com.tcdt.qlnvhang.request.object.HhDdiemNhapKhoVtReq;
-import com.tcdt.qlnvhang.request.object.HhHopDongDtlReq;
+import com.tcdt.qlnvhang.request.object.*;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.*;
@@ -495,11 +495,45 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
 
   @Override
   public ReportTemplateResponse preview(HhHopDongHdrReq req) throws Exception {
-    HhHopDongHdr hhHopDongHdr = detail(req.getId().toString());
-    ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
-    byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-    ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-    HhHopDongPreview object = new HhHopDongPreview();
-    return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+    try {
+      HhHopDongHdr hhHopDongHdr = detail(req.getId().toString());
+      if (!hhHopDongHdr.getLoaiVthh().startsWith("02")) {
+
+        for (HhHopDongDtl detail : hhHopDongHdr.getDetails()) {
+          BigDecimal sumTtChildChild = BigDecimal.ZERO;
+          BigDecimal sumSlChildChild = BigDecimal.ZERO;
+          for (HhHopDongDdiemNhapKho child : detail.getChildren()) {
+            for (HhHopDongDdiemNhapKhoVt childChild : child.getChildren()) {
+              childChild.setTongThanhTien(childChild.getSoLuong().multiply(BigDecimal.valueOf(hhHopDongHdr.getDonGia())));
+              childChild.setDonGia(hhHopDongHdr.getDonGia());
+              sumTtChildChild = sumTtChildChild.add(childChild.getTongThanhTien());
+              sumSlChildChild = sumSlChildChild.add(childChild.getSoLuong());
+            }
+            child.setTongThanhTien(sumTtChildChild);
+            child.setSoLuong(sumSlChildChild);
+          }
+          hhHopDongHdr.setTongThanhTien(sumTtChildChild);
+          hhHopDongHdr.setTongSoLuong(sumSlChildChild);
+        }
+      } else {
+        BigDecimal tongSoLuong = BigDecimal.ZERO;
+        BigDecimal tongThanhTien = BigDecimal.ZERO;
+        for (HhHopDongDtl detail : hhHopDongHdr.getDetails()) {
+          detail.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(detail.getDonGiaVat().multiply(detail.getSoLuong())));
+          tongThanhTien = tongThanhTien.add(detail.getDonGiaVat().multiply(detail.getSoLuong()));
+          tongSoLuong = tongSoLuong.add(detail.getSoLuong());
+        }
+        hhHopDongHdr.setTongSoLuongStr(docxToPdfConverter.convertBigDecimalToStr(tongSoLuong));
+        hhHopDongHdr.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(tongThanhTien));
+        hhHopDongHdr.setTenLoaiVthh(hhHopDongHdr.getTenCloaiVthh().toUpperCase());
+      }
+      ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
+      byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+      ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+      return docxToPdfConverter.convertDocxToPdf(inputStream, hhHopDongHdr);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }

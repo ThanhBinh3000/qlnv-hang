@@ -561,6 +561,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			dsg.setTenDvi(mapDmucDvi.get(dsg.getMaDvi()));
 			dsg.setTenCloaiVthh(hashMapDmHh.get(dsg.getCloaiVthh()));
 			dsg.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dsg.getTrangThai()));
+			dsg.setTenTrangThaiDt(NhapXuatHangTrangThaiEnum.getTenById(dsg.getTrangThaiDt()));
 			dsg.setChildren(listGtCtiet);
 			dsg.setKqlcntDtl(hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndType(dsg.getId(), "GOC"));
 			if (dsg.getTrangThaiDt() != null && dsg.getTrangThaiDt().equals(NhapXuatHangTrangThaiEnum.THANH_CONG.getId())) {
@@ -1179,10 +1180,12 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdDtl(dtl.getId());
 				for(HhQdKhlcntDsgthau dsg : hhQdKhlcntDsgthauData){
 					List<HhQdKhlcntDsgthauCtiet> listGtCtiet = hhQdKhlcntDsgthauCtietRepository.findByIdGoiThau(dsg.getId());
-					listGtCtiet.forEach(chiCuc -> chiCuc.setTenDvi(mapDmucDvi.get(chiCuc.getMaDvi())));
-					if (dsg.getDonGiaTamTinh() != null && dsg.getSoLuong() != null) {
-						dsg.setThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(dsg.getDonGiaTamTinh().multiply(dsg.getSoLuong())));
-						tongThanhTien = tongThanhTien.add(dsg.getDonGiaTamTinh().multiply(dsg.getSoLuong()));
+					for (HhQdKhlcntDsgthauCtiet chiCuc : listGtCtiet) {
+						chiCuc.setTenDvi(mapDmucDvi.get(chiCuc.getMaDvi()));
+						if (chiCuc.getDonGiaTamTinh() != null && chiCuc.getSoLuong() != null) {
+							chiCuc.setThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(chiCuc.getDonGiaTamTinh().multiply(dsg.getSoLuong())));
+							tongThanhTien = tongThanhTien.add(chiCuc.getDonGiaTamTinh().multiply(chiCuc.getSoLuong()));
+						}
 					}
 					dsg.setChildren(listGtCtiet);
 					tongSoLuong = tongSoLuong.add(dsg.getSoLuong());

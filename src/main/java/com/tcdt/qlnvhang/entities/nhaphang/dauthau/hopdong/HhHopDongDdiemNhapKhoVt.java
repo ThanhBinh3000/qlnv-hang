@@ -25,4 +25,10 @@ public class HhHopDongDdiemNhapKhoVt {
 	private BigDecimal soLuong;
 
 	private Long idHdongDdiemNkho;
+
+	// preview
+	@Transient
+	private BigDecimal tongThanhTien;
+	@Transient
+	private Double donGia;
 }

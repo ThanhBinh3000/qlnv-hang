@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Table(name = HhSlNhapHang.TABLE_NAME)
 @Data
-public class HhSlNhapHang extends BaseEntity {
+public class HhSlNhapHang {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "HH_SL_NHAP_HANG";
     @Id

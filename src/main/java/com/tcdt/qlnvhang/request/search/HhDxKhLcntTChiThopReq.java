@@ -8,6 +8,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class  HhDxKhLcntTChiThopReq {
@@ -34,4 +36,5 @@ public class  HhDxKhLcntTChiThopReq {
 
 	@ApiModelProperty(example = Contains.LOAI_VTHH_GAO)
 	String nguonVon;
+	List<String> listMaDvi;
 }
