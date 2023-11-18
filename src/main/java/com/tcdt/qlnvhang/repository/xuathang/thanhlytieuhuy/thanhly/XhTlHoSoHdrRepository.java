@@ -21,6 +21,11 @@ public interface XhTlHoSoHdrRepository extends JpaRepository<XhTlHoSoHdr, Long> 
       "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
       "AND (:#{#param.soQd} IS NULL OR LOWER(c.soQd) LIKE CONCAT('%',LOWER(:#{#param.soQd}),'%')) " +
       "AND (:#{#param.soHoSo} IS NULL OR LOWER(c.soHoSo) LIKE CONCAT('%',LOWER(:#{#param.soHoSo}),'%')) " +
+      "AND (:#{#param.soTb} IS NULL OR LOWER(c.soTb) LIKE CONCAT('%',LOWER(:#{#param.soTb}),'%')) " +
+      "AND ((:#{#param.ngayTuCuc}  IS NULL OR c.ngayDuyetLdc >= :#{#param.ngayTuCuc})" +
+      "AND (:#{#param.ngayDenCuc}  IS NULL OR c.ngayDuyetLdc <= :#{#param.ngayDenCuc}) ) " +
+      "AND ((:#{#param.ngayTuTc}  IS NULL OR c.ngayDuyetLdtc >= :#{#param.ngayTuTc})" +
+      "AND (:#{#param.ngayDenTc}  IS NULL OR c.ngayDuyetLdtc <= :#{#param.ngayDenTc}) ) " +
       "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )

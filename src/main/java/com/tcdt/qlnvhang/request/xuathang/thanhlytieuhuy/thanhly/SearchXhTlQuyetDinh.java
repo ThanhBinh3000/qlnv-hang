@@ -12,7 +12,9 @@ public class SearchXhTlQuyetDinh extends BaseRequest {
   private String soQd;
   private String soHoSo;
   private LocalDate ngayKyTu;
+  private LocalDate ngayTu;
   private LocalDate ngayKyDen;
+  private LocalDate ngayDen;
 
   private String soBaoCao;
   private LocalDate ngayBaoCaoTu;

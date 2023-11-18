@@ -20,8 +20,8 @@ public interface XhTlThongBaoKqRepository extends JpaRepository<XhTlThongBaoKq, 
       "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
       "AND (:#{#param.soThongBao} IS NULL OR LOWER(c.soThongBao) LIKE CONCAT('%',LOWER(:#{#param.soThongBao}),'%')) " +
       "AND (:#{#param.soHoSo} IS NULL OR LOWER(c.soHoSo) LIKE CONCAT('%',LOWER(:#{#param.soHoSo}),'%')) " +
-      "AND ((:#{#param.ngayPduyetTu}  IS NULL OR c.ngayPduyet >= :#{#param.ngayPduyetTu})" +
-      "AND (:#{#param.ngayPduyetDen}  IS NULL OR c.ngayPduyet <= :#{#param.ngayPduyetDen}) ) " +
+      "AND ((:#{#param.ngayTu}  IS NULL OR c.ngayThongBao >= :#{#param.ngayTu})" +
+      "AND (:#{#param.ngayDen}  IS NULL OR c.ngayThongBao <= :#{#param.ngayDen}) ) " +
       "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )

@@ -15,11 +15,13 @@ import java.util.Optional;
 public interface XhTlDanhSachRepository extends JpaRepository<XhTlDanhSachHdr, Long> {
   @Query("SELECT c FROM XhTlDanhSachHdr c WHERE 1=1 " +
       "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
-      "AND (:#{#param.maDviSr} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDviSr},'%')) " +
+      "AND (:#{#param.maDviSr} IS NULL OR c.maDiaDiem LIKE CONCAT(:#{#param.maDviSr},'%')) " +
       "AND (:#{#param.loaiVthh} IS NULL OR c.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
       "AND (:#{#param.cloaiVthh} IS NULL OR c.cloaiVthh LIKE CONCAT(:#{#param.cloaiVthh},'%')) " +
       "AND ((:#{#param.ngayDeXuatTu}  IS NULL OR c.ngayDeXuat >= :#{#param.ngayDeXuatTu})" +
       "AND (:#{#param.ngayDeXuatDen}  IS NULL OR c.ngayDeXuat <= :#{#param.ngayDeXuatDen}) ) " +
+      "AND ((:#{#param.ngayTongHopTu}  IS NULL OR c.ngayTongHop >= :#{#param.ngayTongHopTu})" +
+      "AND (:#{#param.ngayTongHopDen}  IS NULL OR c.ngayTongHop <= :#{#param.ngayTongHopDen}) ) " +
       "AND (:#{#param.type} IS NULL OR ('TH' = :#{#param.type} AND c.maTongHop IS NULL))" +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )

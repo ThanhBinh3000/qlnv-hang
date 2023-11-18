@@ -45,6 +45,8 @@ public class XhTlDanhSachRequest extends BaseRequest {
   private LocalDate ngayDeXuatTu;
   private LocalDate ngayDeXuatDen;
   private LocalDate ngayTongHop;
+  private LocalDate ngayTongHopTu;
+  private LocalDate ngayTongHopDen;
   private String lyDo;
   private String type;
 

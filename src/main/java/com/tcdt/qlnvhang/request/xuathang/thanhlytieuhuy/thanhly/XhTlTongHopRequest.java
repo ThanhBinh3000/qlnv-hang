@@ -15,6 +15,7 @@ public class XhTlTongHopRequest extends BaseRequest {
   private Long id;
   private Integer nam;
   private String maDvi;
+  private String maDviSr;
   private String maDanhSach;
   private String tenDanhSach;
   private LocalDate thoiGianTlTu;
