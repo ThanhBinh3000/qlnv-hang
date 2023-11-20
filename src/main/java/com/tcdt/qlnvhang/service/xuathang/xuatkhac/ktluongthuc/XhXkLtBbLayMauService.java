@@ -265,11 +265,13 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
               f.setSoBienBan(null);
               f.setNgayLayMau(null);
               f.setTrangThaiBienBan(null);
+              f.setIdNguoiTaoBb(null);
             } else {
               f.setIdBienBan(bienBan.getId());
               f.setSoBienBan(bienBan.getSoBienBan());
               f.setNgayLayMau(bienBan.getNgayLayMau());
               f.setTrangThaiBienBan(bienBan.getTrangThai());
+              f.setIdNguoiTaoBb(bienBan.getNguoiTaoId());
             }
 
           }
