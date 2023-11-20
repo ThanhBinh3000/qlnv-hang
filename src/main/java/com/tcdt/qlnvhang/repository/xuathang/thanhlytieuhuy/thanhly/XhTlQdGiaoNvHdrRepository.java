@@ -23,6 +23,8 @@ public interface XhTlQdGiaoNvHdrRepository extends JpaRepository<XhTlQdGiaoNvHdr
             "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
             "AND (:#{#param.soBbQd} IS NULL OR LOWER(c.soBbQd) LIKE CONCAT('%',LOWER(:#{#param.soBbQd}),'%')) " +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(c.trichYeu) LIKE CONCAT('%',LOWER(:#{#param.trichYeu}),'%')) " +
+            "AND ((:#{#param.ngayKyQdTu}  IS NULL OR c.ngayKy >= :#{#param.ngayKyQdTu})" +
+            "AND (:#{#param.ngayKyQdDen}  IS NULL OR c.ngayKy <= :#{#param.ngayKyQdDen})) " +
             "AND (:#{#param.trangThai} IS NULL OR c.trangThai = :#{#param.trangThai}) " +
             "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
     )
