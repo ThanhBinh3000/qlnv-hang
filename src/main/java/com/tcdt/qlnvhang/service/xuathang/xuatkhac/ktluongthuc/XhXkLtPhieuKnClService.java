@@ -254,12 +254,14 @@ public class XhXkLtPhieuKnClService extends BaseServiceImpl {
               f.setNgayLayMau(null);
               f.setTrangThaiKnCl(null);
               f.setKqThamDinh(null);
+              f.setIdNguoiTaoPhieu(null);
             } else {
               f.setIdPhieuKnCl(phieuKnCl.getId());
               f.setSoPhieuKnCl(phieuKnCl.getSoPhieu());
               f.setNgayKnMau(phieuKnCl.getNgayKnMau());
               f.setTrangThaiKnCl(phieuKnCl.getTrangThai());
               f.setKqThamDinh(phieuKnCl.getKqThamDinh());
+              f.setIdNguoiTaoPhieu(phieuKnCl.getNguoiTaoId());
             }
 
           }
