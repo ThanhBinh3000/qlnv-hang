@@ -11,6 +11,7 @@ import java.util.List;
 public class XhQdPdKhBdgDtlReq extends BaseRequest {
     private Long id;
     private Long idHdr;
+    private Integer nam;
     private Long idDxHdr;
     private String maDvi;
     private String diaChi;
@@ -20,8 +21,6 @@ public class XhQdPdKhBdgDtlReq extends BaseRequest {
     private String trichYeu;
     private Integer slDviTsan;
     private BigDecimal tongSoLuong;
-    private BigDecimal tongTienKhoiDiem;
-    private BigDecimal tongTienDatTruoc;
     private LocalDate tgianDkienTu;
     private LocalDate tgianDkienDen;
     private String loaiHopDong;
@@ -39,22 +38,25 @@ public class XhQdPdKhBdgDtlReq extends BaseRequest {
     private String loaiVthh;
     private String cloaiVthh;
     private String moTaHangHoa;
+    private BigDecimal tongTienKhoiDiemDx;
+    private BigDecimal tongTienDatTruocDx;
+    private BigDecimal tongTienDuocDuyet;
+    private BigDecimal tongKtienDtruocDduyet;
     private String trangThai;
     private List<XhQdPdKhBdgPlReq> children;
     //thông tin bán đấu giá
-    private Long idQdPdKqBdg;
-    private String soQdPdKqBdg;
-    private LocalDate ngayKyQdPdKqBdg;
-    private Integer soDviTsanThanhCong;
-    private Integer soDviTsanKhongThanh;
-    private String ketQuaDauGia;
+    private Long idQdKq;
+    private String soQdKq;
+    private LocalDate ngayKyQdKq;
     private String soQdDc;
-    private String dvql;
-    private Integer nam;
     private String soQdPd;
-    private LocalDate ngayKyQdPdKqBdgTu;
-    private LocalDate ngayKyQdPdKqBdgDen;
+    private BigDecimal soDviTsanThanhCong;
+    private BigDecimal soDviTsanKhongThanh;
+    private String ketQuaDauGia;
+    private String dvql;
+    private LocalDate ngayKyQdKqTu;
+    private LocalDate ngayKyQdKqDen;
     private Integer lastest;
-    private Integer isDieuChinh;
+    private String trangThaiHdr;
     private Integer lanDieuChinh;
 }

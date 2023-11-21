@@ -164,6 +164,9 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
             }
             data.setMapVthh(mapVthh);
             data.setTrangThai(data.getTrangThai());
+            List<Long> listIdChild = data.getChildren().stream().map(XhThopDxKhBdgDtl::getIdDxHdr).collect(Collectors.toList());
+            List<XhDxKhBanDauGia> listDx = xhDxKhBanDauGiaServiceImpl.detail(listIdChild);
+            data.setXhDxKhBanDauGia(listDx);
         }
         return allById;
     }
