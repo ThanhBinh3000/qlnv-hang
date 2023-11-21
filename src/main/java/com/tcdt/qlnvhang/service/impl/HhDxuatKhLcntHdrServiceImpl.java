@@ -931,8 +931,13 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
     @Override
     public Page<HhDxuatKhLcntHdr> timKiem(HhDxuatKhLcntSearchReq req) throws Exception {
-        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
-        Page<HhDxuatKhLcntHdr> page = hhDxuatKhLcntHdrRepository.select(req.getNamKh(), req.getSoTr(), req.getSoQd(), convertFullDateToString(req.getTuNgayKy()), convertFullDateToString(req.getDenNgayKy()), convertFullDateToString(req.getTuNgayTao()), convertFullDateToString(req.getDenNgayTao()), req.getLoaiVthh(), req.getTrichYeu(), req.getTrangThai(), req.getTrangThaiTh(), req.getMaDvi(), pageable);
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+        Page<HhDxuatKhLcntHdr> page = null;
+        if (req.getLoaiVthh() != null && req.getLoaiVthh().startsWith("02")) {
+            page = hhDxuatKhLcntHdrRepository.selectVt(req.getNamKh(), req.getSoTr(), req.getSoQd(), convertFullDateToString(req.getTuNgayKy()), convertFullDateToString(req.getDenNgayKy()), convertFullDateToString(req.getTuNgayTao()), convertFullDateToString(req.getDenNgayTao()), req.getLoaiVthh(), req.getTrichYeu(), req.getTrangThai(), req.getTrangThaiTh(), req.getMaDvi(), pageable);
+        } else {
+            page = hhDxuatKhLcntHdrRepository.select(req.getNamKh(), req.getSoTr(), req.getSoQd(), convertFullDateToString(req.getTuNgayKy()), convertFullDateToString(req.getDenNgayKy()), convertFullDateToString(req.getTuNgayTao()), convertFullDateToString(req.getDenNgayTao()), req.getLoaiVthh(), req.getTrichYeu(), req.getTrangThai(), req.getTrangThaiTh(), req.getMaDvi(), pageable);
+        }
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
         List<Long> ids = page.getContent().stream().map(HhDxuatKhLcntHdr::getId).collect(Collectors.toList());
