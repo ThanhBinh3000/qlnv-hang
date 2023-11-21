@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.dieuchinh.XhQdDchinhKhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttHdr;
@@ -237,4 +238,9 @@ public class FileDinhKemJoinTable implements Serializable {
     @JoinColumn(name = "dataId", insertable = false, updatable = false)
     @JsonIgnore
     private XhBbHdoiBttHdr xhBbHdoiBttHdr;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "dataId", insertable = false, updatable = false)
+    @JsonIgnore
+    private XhQdDchinhKhBttHdr xhQdDchinhKhBttHdr;
 }
