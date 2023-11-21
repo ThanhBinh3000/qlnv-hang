@@ -17,5 +17,7 @@ public class XhQdPdKhBdgPlReq {
     private BigDecimal tongTienDatTruocDx;
     private String donViTinh;
     private String diaChi;
+    private BigDecimal soTienDuocDuyet;
+    private BigDecimal soTienDtruocDduyet;
     List<XhQdPdKhBdgPlDtlReq> children = new ArrayList<>();
 }

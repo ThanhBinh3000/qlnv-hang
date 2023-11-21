@@ -22,4 +22,6 @@ public class XhQdPdKhBdgPlDtlReq {
     private String loaiVthh;
     private String cloaiVthh;
     private BigDecimal donGiaDuocDuyet;
+    private BigDecimal thanhTienDuocDuyet;
+    private BigDecimal tienDatTruocDuocDuyet;
 }

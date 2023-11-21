@@ -42,6 +42,7 @@ public class XhDxKhBanDauGia implements Serializable {
     private String tchuanCluong;
     private LocalDate tgianDkienTu;
     private LocalDate tgianDkienDen;
+    private String ghiChuTgianDkien;
     private Integer tgianTtoan;
     private Integer tgianGnhan;
     private String pthucTtoan;
@@ -71,7 +72,10 @@ public class XhDxKhBanDauGia implements Serializable {
     private Long nguoiGuiDuyetId;
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
-
+    @Transient
+    private BigDecimal tongTienDuocDuyet;
+    @Transient
+    private BigDecimal tongKtienDtruocDduyet;
     @Transient
     private String tenDvi;
     @Transient
@@ -88,8 +92,6 @@ public class XhDxKhBanDauGia implements Serializable {
     private String tenTrangThaiTh;
     @Transient
     private String tenTrangThai;
-    @Transient
-    private BigDecimal giaKhoiDiemDx;
 
     @JsonIgnore
     @Transient

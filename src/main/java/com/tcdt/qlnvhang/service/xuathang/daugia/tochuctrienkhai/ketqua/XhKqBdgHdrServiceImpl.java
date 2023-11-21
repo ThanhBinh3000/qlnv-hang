@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.service.xuathang.daugia.tochuctrienkhai.ketqua;
 
 import com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong.XhHopDongHdr;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgDtl;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdr;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgDtl;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdr;
@@ -11,7 +10,6 @@ import com.tcdt.qlnvhang.repository.xuathang.daugia.hopdong.XhHopDongHdrReposito
 import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgDtlRepository;
-import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgPloRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -19,8 +17,6 @@ import com.tcdt.qlnvhang.request.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgH
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdrServiceImpl;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
-import com.tcdt.qlnvhang.table.report.ReportTemplate;
-import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -35,7 +31,6 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -227,9 +222,9 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl {
             data.setTrangThai(statusReq.getTrangThai());
             if (statusReq.getTrangThai().equals(Contains.BAN_HANH)) {
                 xhQdPdKhBdgDtlRepository.findById(data.getIdQdPdDtl()).ifPresent(dauGiaDtl -> {
-                    dauGiaDtl.setSoQdPdKqBdg(data.getSoQdKq());
-                    dauGiaDtl.setNgayKyQdPdKqBdg(data.getNgayKy());
-                    dauGiaDtl.setIdQdPdKqBdg(data.getId());
+                    dauGiaDtl.setIdQdKq(data.getId());
+                    dauGiaDtl.setSoQdKq(data.getSoQdKq());
+                    dauGiaDtl.setNgayKyQdKq(data.getNgayKy());
                     xhQdPdKhBdgDtlRepository.save(dauGiaDtl);
                 });
             }
@@ -339,4 +334,3 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl {
         return null;
     }
 }
-
