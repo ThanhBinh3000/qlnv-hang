@@ -130,7 +130,7 @@ public class BienBanLayMau extends TrangThaiBaseEntity implements Serializable  
 	private String tenLoKho;
 
 	@Column(name = "SO_LUONG_MAU")
-	private Integer soLuongMau;
+	private String soLuongMau;
 
 	@Column(name = "PP_LAY_MAU")
 	private String ppLayMau;
