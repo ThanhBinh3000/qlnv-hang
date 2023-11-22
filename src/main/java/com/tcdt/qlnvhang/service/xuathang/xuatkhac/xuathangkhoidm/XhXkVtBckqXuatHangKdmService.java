@@ -151,7 +151,7 @@ public class XhXkVtBckqXuatHangKdmService extends BaseServiceImpl {
         model.setFileDinhKems(fileDinhKem);
         model.setTenDvi(mapDmucDvi.get(model.getMaDvi()));
         model.setTenTrangThai(TrangThaiAllEnum.getLabelById(model.getTrangThai()));
-        model.setXhXkThXuatHangKdmDtl(xhXkThXuatHangKdmDtlRepository.findAllByIAndIdBcKqXhKdm(model.getId()));
+        model.setXhXkThXuatHangKdmDtl(xhXkThXuatHangKdmDtlRepository.findAllByIdBcKqXhKdm(model.getId()));
         return model;
     }
 
