@@ -22,6 +22,7 @@ public class XhQdPdKhBttDtlReq {
     private Integer slDviTsan;
     private BigDecimal tongSoLuong;
     private BigDecimal thanhTien;
+    private BigDecimal thanhTienDuocDuyet;
     private String donViTinh;
     private LocalDate tgianDkienTu;
     private LocalDate tgianDkienDen;
@@ -32,26 +33,35 @@ public class XhQdPdKhBttDtlReq {
     private String tgianGnhanGhiChu;
     private String pthucGnhan;
     private String thongBao;
-    private String loaiHinhNx;
-    private String kieuNx;
-    private String loaiVthh;
-    private String cloaiVthh;
-    private String moTaHangHoa;
     private List<XhQdPdKhBttDviReq> children;
 
     // thông tin chào giá
-    private Long IdDtl;
+    private Long idDtl;
+    private String soQdPd;
+    private String soQdDc;
     private String pthucBanTrucTiep;
     private LocalDate ngayNhanCgia;
+    private Long idQdKq;
+    private String soQdKq;
     private String diaDiemChaoGia;
+    private String loaiHinhNx;
+    private String kieuNx;
     private LocalDate ngayMkho;
     private LocalDate ngayKthuc;
+    private String loaiVthh;
+    private String cloaiVthh;
+    private String moTaHangHoa;
     private String ghiChuChaoGia;
-    private BigDecimal tongGiaTriHdong;
     private LocalDate thoiHanBan;
-    private Integer lastest;
-    private Integer isDieuChinh;
-    private String soQdDc;
+    private String trangThai;
+    private Long idQdNv;
+    private String soQdNv;
+    private String trangThaiHd;
+    private String trangThaiXh;
+    private Integer slHdDaKy;
+    private Integer slHdChuaKy;
+    private BigDecimal tongSlDaKyHdong;
+    private BigDecimal tongSlChuaKyHdong;
     private List<FileDinhKemReq> fileUyQuyen = new ArrayList<>();
     private List<FileDinhKemReq> fileBanLe = new ArrayList<>();
 }

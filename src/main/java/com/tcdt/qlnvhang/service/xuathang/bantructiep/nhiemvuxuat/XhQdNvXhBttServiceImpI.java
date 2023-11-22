@@ -144,7 +144,7 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl {
         }
         XhQdNvXhBttHdr data = xhQdNvXhBttHdrRepository.findById(req.getId())
                 .orElseThrow(() -> new Exception("Không tìm thấy dữ liệu cần sửa"));
-        if (xhQdNvXhBttHdrRepository.existsBySoQdNvAndIdNot(req.getSoQdNv(), req.getId())) {
+        if (!StringUtils.isEmpty(req.getSoQdNv()) && xhQdNvXhBttHdrRepository.existsBySoQdNvAndIdNot(req.getSoQdNv(), req.getId())) {
             throw new Exception("Số quyết định nhiệm vụ " + req.getSoQdNv() + " đã tồn tại");
         }
         if (data.getPhanLoai().equals("CG")) {

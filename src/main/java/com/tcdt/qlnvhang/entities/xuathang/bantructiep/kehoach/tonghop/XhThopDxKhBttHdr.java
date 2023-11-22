@@ -1,7 +1,7 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdr;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
@@ -16,7 +16,7 @@ import java.util.Map;
 @Entity
 @Table(name = XhThopDxKhBttHdr.TABLE_NAME)
 @Data
-public class XhThopDxKhBttHdr  implements Serializable {
+public class XhThopDxKhBttHdr implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_THOP_DX_KH_BTT_HDR";
     @Id
@@ -81,4 +81,7 @@ public class XhThopDxKhBttHdr  implements Serializable {
             this.children.addAll(children);
         }
     }
+
+    @Transient
+    private List<XhDxKhBanTrucTiepHdr> xhDxKhBanTrucTiepHdr;
 }

@@ -1,7 +1,5 @@
 package com.tcdt.qlnvhang.service.xuathang.bantructiep.kehoach.tonghop;
 
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepDdiem;
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttHdr;
@@ -34,7 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -168,6 +165,9 @@ public class XhThopDxKhBttService extends BaseServiceImpl {
             }
             data.setMapVthh(mapVthh);
             data.setTrangThai(data.getTrangThai());
+            List<Long> listIdChild = data.getChildren().stream().map(XhThopDxKhBttDtl::getIdDxHdr).collect(Collectors.toList());
+            List<XhDxKhBanTrucTiepHdr> listDx = xhDxKhBanTrucTiepServicelmpl.detail(listIdChild);
+            data.setXhDxKhBanTrucTiepHdr(listDx);
         }
         return allById;
     }
