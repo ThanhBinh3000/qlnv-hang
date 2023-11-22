@@ -100,7 +100,7 @@ public class XhXkVtBckqXuatHangKdmService extends BaseServiceImpl {
         }
         XhXkVtBckqXuatHangKdm data = new XhXkVtBckqXuatHangKdm();
         BeanUtils.copyProperties(objReq, data);
-        data.setTrangThai(Contains.DUTHAO);
+        data.setTrangThai(Contains.DANG_NHAP_DU_LIEU);
         XhXkVtBckqXuatHangKdm created = xhXkVtBckqXuatHangKdmRepository.save(data);
         List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtBckqXuatHangKdm.TABLE_NAME);
         created.setFileDinhKems(fileDinhKems);
@@ -145,11 +145,13 @@ public class XhXkVtBckqXuatHangKdmService extends BaseServiceImpl {
             throw new Exception("Không tìm thấy dữ liệu");
         }
         XhXkVtBckqXuatHangKdm model = optional.get();
+
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(model.getId(), Arrays.asList(XhXkVtBckqXuatHangKdm.TABLE_NAME));
         model.setFileDinhKems(fileDinhKem);
         model.setTenDvi(mapDmucDvi.get(model.getMaDvi()));
         model.setTenTrangThai(TrangThaiAllEnum.getLabelById(model.getTrangThai()));
+        model.setXhXkThXuatHangKdmDtl(xhXkThXuatHangKdmDtlRepository.findAllByIAndIdBcKqXhKdm(model.getId()));
         return model;
     }
 
