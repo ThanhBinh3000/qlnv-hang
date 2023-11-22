@@ -20,7 +20,7 @@ public class DieuChuyenNoiBo {
         List<String> nds = new ArrayList<>();
         for (String res : list) {
             String[] nd = res.split("-");
-            nds.add(nd[1].trim());
+            nds.add(nd.length > 2 ? nd[1].trim() : "");
         }
         return String.join(", ", nds);
     }
