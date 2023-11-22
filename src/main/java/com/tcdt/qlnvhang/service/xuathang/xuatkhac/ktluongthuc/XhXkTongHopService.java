@@ -99,7 +99,10 @@ public class XhXkTongHopService extends BaseServiceImpl {
     BeanUtils.copyProperties(objReq, data);
     data.setMaDvi(currentUser.getUser().getDvql());
     data.setTrangThai(Contains.DUTHAO);
-    data.getTongHopDtl().forEach(s -> s.setTongHopHdr(data));
+    data.getTongHopDtl().forEach(s -> {
+      s.setTongHopHdr(data);
+      s.setTrangThaiKnCl(Contains.CHUA_THUC_HIEN);
+    });
     XhXkTongHopHdr created = xhXkTongHopRepository.save(data);
     created.setMaDanhSach(created.getMaDanhSach() +'-'+ created.getId());
     created = xhXkTongHopRepository.save(created);
