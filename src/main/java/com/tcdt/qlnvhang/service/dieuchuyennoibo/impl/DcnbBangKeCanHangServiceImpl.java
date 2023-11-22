@@ -146,7 +146,7 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
         if("00".equals(objReq.getType())){
             Optional<DcnbPhieuXuatKhoHdr> phieuXuatKhoHdr = dcnbPhieuXuatKhoHdrRepository.findById(objReq.getPhieuXuatKhoId());
             if(phieuXuatKhoHdr.isPresent()){
-                if(!objReq.getPhieuNhapKhoId().equals(optional.get().getPhieuNhapKhoId())){
+                if(!objReq.getPhieuXuatKhoId().equals(optional.get().getPhieuNhapKhoId())){
                     if(phieuXuatKhoHdr.get().getBangKeVtId()!= null){
                         throw new Exception("Phiếu nhập đã có bảng cân hàng!");
                     }
