@@ -1,13 +1,14 @@
 package com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
+import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Where;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -58,6 +59,10 @@ public class XhCtvtBangKeHdr extends BaseEntity implements Serializable {
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
   private String lyDoTuChoi;
+  private LocalDate ngayLapBangKe;
+  private String nguoiGiamSat;
+  private String idPhieuKnCl;
+  private String soPhieuKnCl;
   private String trangThai;
   private String type;
 
@@ -96,5 +101,22 @@ public class XhCtvtBangKeHdr extends BaseEntity implements Serializable {
 
   public String getTenKho() {
     return DataUtils.isNullOrEmpty(tenLoKho) ? tenNganKho : tenLoKho;
+  }
+
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @Fetch(value = FetchMode.SUBSELECT)
+  @JoinColumn(name = "dataId")
+  @Where(clause = "data_type='" + XhCtvtBangKeHdr.TABLE_NAME)
+  private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
+
+  public void setFileDinhKem(List<FileDinhKemJoinTable> fileDinhKem) {
+    this.fileDinhKem.clear();
+    if (!DataUtils.isNullObject(fileDinhKem)) {
+      fileDinhKem.forEach(s -> {
+        s.setDataType(XhCtvtBangKeHdr.TABLE_NAME);
+        s.setXhCtvtBangKeHdr(this);
+      });
+      this.fileDinhKem.addAll(fileDinhKem);
+    }
   }
 }
