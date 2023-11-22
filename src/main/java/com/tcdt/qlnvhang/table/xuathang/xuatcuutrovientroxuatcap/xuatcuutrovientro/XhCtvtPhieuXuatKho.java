@@ -61,8 +61,9 @@ public class XhCtvtPhieuXuatKho extends BaseEntity implements Serializable {
   private String donViTinh;
   private String theoChungTu;
   private BigDecimal thucXuat;
-  private String donGia;
-  private String thanhTien;
+  private BigDecimal donGia;
+  private BigDecimal thanhTien;
+  private String thanhTienBc;
   private String ghiChu;
   private String trangThai;
   private LocalDate ngayGduyet;
@@ -73,6 +74,7 @@ public class XhCtvtPhieuXuatKho extends BaseEntity implements Serializable {
   private String mucDichXuat;
   private String noiDungDx;
   private BigDecimal soLuong;
+  private String soLuongBc;
 
   private String type;
   @Transient

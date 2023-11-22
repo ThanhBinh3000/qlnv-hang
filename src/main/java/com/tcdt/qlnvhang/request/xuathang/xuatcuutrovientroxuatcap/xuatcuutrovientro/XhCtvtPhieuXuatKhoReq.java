@@ -46,8 +46,9 @@ public class XhCtvtPhieuXuatKhoReq {
   private String donViTinh;
   private String theoChungTu;
   private BigDecimal thucXuat;
-  private String donGia;
-  private String thanhTien;
+  private BigDecimal donGia;
+  private BigDecimal thanhTien;
+  private String thanhTienBc;
   private String ghiChu;
   private String trangThai;
   private LocalDate ngayGduyet;
@@ -59,5 +60,6 @@ public class XhCtvtPhieuXuatKhoReq {
   private String mucDichXuat;
   private String noiDungDx;
   private BigDecimal soLuong;
+  private String soLuongBc;
   private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
 }
