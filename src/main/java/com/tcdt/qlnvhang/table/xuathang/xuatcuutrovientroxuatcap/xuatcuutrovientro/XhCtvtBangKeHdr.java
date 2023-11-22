@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovien
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
+import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.phieukncl.XhPhieuKnclHdr;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 import org.hibernate.annotations.Fetch;
@@ -103,10 +104,10 @@ public class XhCtvtBangKeHdr extends BaseEntity implements Serializable {
     return DataUtils.isNullOrEmpty(tenLoKho) ? tenNganKho : tenLoKho;
   }
 
-  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @Fetch(value = FetchMode.SUBSELECT)
   @JoinColumn(name = "dataId")
-  @Where(clause = "data_type='" + XhCtvtBangKeHdr.TABLE_NAME)
+  @Where(clause = "data_type='" + XhCtvtBangKeHdr.TABLE_NAME+"'")
   private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
 
   public void setFileDinhKem(List<FileDinhKemJoinTable> fileDinhKem) {
