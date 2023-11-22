@@ -33,6 +33,7 @@ public class XhXkThXuatHangKdmDtl implements Serializable {
     private String loaiHinhXuat;
     private String soBcKqXhKdm;
     private Long idBcKqXhKdm;
+    private BigDecimal slDaXuat;
     @JsonIgnore
     @Transient
     private Map<String, String> mapVthh;
