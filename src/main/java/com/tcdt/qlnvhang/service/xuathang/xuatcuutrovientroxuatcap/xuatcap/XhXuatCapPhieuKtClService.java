@@ -327,7 +327,7 @@ public class XhXuatCapPhieuKtClService extends BaseServiceImpl {
     return XhPhieuKnclHdrPreview.builder()
             .tenDvi(xhPhieuKtclHdr.get().getTenDvi())
             .maQhns(xhPhieuKtclHdr.get().getMaQhNs())
-            .loaiVthh(qlnvDmVattuRepository.findByMa(xhPhieuKtclHdr.get().getLoaiVthh()).getTen())
+            .loaiVthh(qlnvDmVattuRepository.findByMa(xhPhieuKtclHdr.get().getLoaiVthh()).getTen().toUpperCase())
             .soBbQd(xhPhieuKtclHdr.get().getSoPhieuKtCl())
             .tenNganKho(xhPhieuKtclHdr.get().getTenNganKho())
             .tenLoKho(xhPhieuKtclHdr.get().getTenLoKho())
