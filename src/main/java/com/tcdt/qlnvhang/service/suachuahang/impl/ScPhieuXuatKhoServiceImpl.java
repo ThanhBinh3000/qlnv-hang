@@ -250,14 +250,17 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
                 // lấy Danh sách sửa chữa hdr
                 scQuyetDinhSc.getScTrinhThamDinhHdr().getChildren().forEach(( dsHdr)->{
                     ScDanhSachHdr scDanhSachHdr = dsHdr.getScDanhSachHdr();
-                    req.setIdScDanhSachHdr(scDanhSachHdr.getId());
-                    if(userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
-                        req.setMaDviSr(userInfo.getDvql());
+                    // Filter chi cục
+                    if(scDanhSachHdr.getMaDiaDiem().startsWith(userInfo.getDvql())){
+                        req.setIdScDanhSachHdr(scDanhSachHdr.getId());
+                        if(userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+                            req.setMaDviSr(userInfo.getDvql());
+                        }
+                        // Lấy phiếu xuất kho theo từng danh sách sửa chữa ( địa điểm )
+                        List<ScPhieuXuatKhoHdr> scPhieuXuatKhoHdrs = hdrRepository.searchList(req);
+                        scDanhSachHdr.setScPhieuXuatKhoList(scPhieuXuatKhoHdrs);
+                        scDanhSachHdrList.add(scDanhSachHdr);
                     }
-                    // Lấy phiếu xuất kho theo từng danh sách sửa chữa ( địa điểm )
-                    List<ScPhieuXuatKhoHdr> scPhieuXuatKhoHdrs = hdrRepository.searchList(req);
-                    scDanhSachHdr.setScPhieuXuatKhoList(scPhieuXuatKhoHdrs);
-                    scDanhSachHdrList.add(scDanhSachHdr);
                 });
                 item.setScQuyetDinhSc(scQuyetDinhScService.detail(item.getIdQdSc()));
                 item.setScDanhSachHdrList(scDanhSachHdrList);

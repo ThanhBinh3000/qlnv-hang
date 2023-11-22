@@ -53,4 +53,6 @@ public class XhThDanhSachReq extends BaseRequest {
   private String maDviSr;
   private LocalDate thoiGianThTu;
   private LocalDate thoiGianThDen;
+  private LocalDate ngayTongHopTu;
+  private LocalDate ngayTongHopDen;
 }
