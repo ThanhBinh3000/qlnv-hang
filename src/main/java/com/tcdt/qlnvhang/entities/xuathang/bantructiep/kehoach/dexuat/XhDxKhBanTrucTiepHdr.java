@@ -42,6 +42,7 @@ public class XhDxKhBanTrucTiepHdr implements Serializable {
     private String tchuanCluong;
     private LocalDate tgianDkienTu;
     private LocalDate tgianDkienDen;
+    private String ghiChuTgianDkien;
     private Integer tgianTtoan;
     private String tgianTtoanGhiChu;
     private String pthucTtoan;
@@ -69,7 +70,8 @@ public class XhDxKhBanTrucTiepHdr implements Serializable {
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
     private BigDecimal thanhTien;
-
+    @Transient
+    private BigDecimal thanhTienDuocDuyet;
     @Transient
     private String tenDvi;
     @Transient

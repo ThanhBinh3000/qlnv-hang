@@ -53,6 +53,16 @@ public class XhQdPdKhBdg implements Serializable {
     private Long nguoiGuiDuyetId;
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
+    private String soCongVan;
+    private LocalDate ngayTaoCongVan;
+    private Integer lanDieuChinh;
+    private String soQdCanDc;
+    private String soQdDc;
+    private LocalDate ngayKyDc;
+    private LocalDate ngayHlucDc;
+    private String noiDungDieuChinh;
+    private String type;
+    private Long idQdPd;
     @Transient
     private String tenDvi;
     @Transient
@@ -123,5 +133,7 @@ public class XhQdPdKhBdg implements Serializable {
     @Transient
     private List<FileDinhKem> fileDinhKem = new ArrayList<>();
     @Transient
-    List<XhQdPdKhBdgDtl> children = new ArrayList<>();
+    private List<FileDinhKem> fileDinhKemDc = new ArrayList<>();
+    @Transient
+    private List<XhQdPdKhBdgDtl> children = new ArrayList<>();
 }

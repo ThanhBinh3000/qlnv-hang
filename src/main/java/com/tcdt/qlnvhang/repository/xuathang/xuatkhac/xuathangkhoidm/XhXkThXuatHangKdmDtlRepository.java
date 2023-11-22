@@ -18,4 +18,7 @@ public interface XhXkThXuatHangKdmDtlRepository extends JpaRepository<XhXkThXuat
 
     List<XhXkThXuatHangKdmDtl> findByIdIn(List<Long> ids);
 
+
+    List<XhXkThXuatHangKdmDtl> findAllByIdBcKqXhKdm(Long idBcKqXhKdm);
+
 }

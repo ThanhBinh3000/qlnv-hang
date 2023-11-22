@@ -8,6 +8,7 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.getGiaDuocDuyet;
 import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.dexuat.XhDxKhBanDauGiaReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGiaServiceImpl;
@@ -175,10 +176,10 @@ public class XhKhBanDauGiaController extends BaseController {
     @PostMapping(value = "/count-sl-kh", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> getCountSl(HttpServletRequest request,
-                                                   @Valid @RequestBody CountKhlcntSlReq objReq) {
+                                                   @Valid @RequestBody CountKhlcntSlReq Req) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhDxKhBanDauGiaService.countSoLuongKeHoachNam(objReq));
+            resp.setData(xhDxKhBanDauGiaService.countSoLuongKeHoachNam(Req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
@@ -189,24 +190,20 @@ public class XhKhBanDauGiaController extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
-    @ApiOperation(value = "Xem truoc", response = List.class)
-    @PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Lấy đơn giá được duyệt trong năm theo đơn vị, loại vật tư  hàng hóa", response = List.class)
+    @PostMapping(value = "/gia-duoc-duyet", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> preview(@RequestBody HashMap<String, Object> body) {
+    public ResponseEntity<BaseResponse> getGiaDuocDuyet(HttpServletRequest request,
+                                                        @Valid @RequestBody getGiaDuocDuyet req) {
         BaseResponse resp = new BaseResponse();
         try {
-      /*ReportTemplateResponse preview = xhDxKhBanDauGiaService.preview(body);
-      Path destinationFile = Paths.get("src/main/resources", new Date().getTime()+".docx");
-      byte[] decodedImg = Base64.getDecoder()
-          .decode(preview.getWordSrc().getBytes(StandardCharsets.UTF_8));
-      Files.write(destinationFile, decodedImg);*/
-
-            resp.setData(xhDxKhBanDauGiaService.preview(body));
+            resp.setData(xhDxKhBanDauGiaService.getGiaDuocDuyet(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
+            log.error("Lấy đơn giá được duyệt trong năm theo đơn vị, loại vật tư  hàng hóa : {}", e);
         }
         return ResponseEntity.ok(resp);
     }

@@ -25,6 +25,8 @@ public class XhQdPdKhBdgPl implements Serializable {
     private BigDecimal tongTienDatTruocDx;
     private String donViTinh;
     private String diaChi;
+    private BigDecimal soTienDuocDuyet;
+    private BigDecimal soTienDtruocDduyet;
     @Transient
     private String tenDvi;
     @Transient

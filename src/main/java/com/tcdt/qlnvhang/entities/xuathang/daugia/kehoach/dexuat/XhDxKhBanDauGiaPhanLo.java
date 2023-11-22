@@ -44,4 +44,8 @@ public class XhDxKhBanDauGiaPhanLo implements Serializable {
     private String tenCloaiVthh;
     @Transient
     private BigDecimal donGiaDuocDuyet;
+    @Transient
+    private BigDecimal thanhTienDuocDuyet;
+    @Transient
+    private BigDecimal tienDatTruocDuocDuyet;
 }

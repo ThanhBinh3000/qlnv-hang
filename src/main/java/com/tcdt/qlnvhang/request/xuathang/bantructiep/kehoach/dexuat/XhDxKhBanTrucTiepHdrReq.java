@@ -28,6 +28,7 @@ public class XhDxKhBanTrucTiepHdrReq extends BaseRequest {
     private String tchuanCluong;
     private LocalDate tgianDkienTu;
     private LocalDate tgianDkienDen;
+    private String ghiChuTgianDkien;
     private Integer tgianTtoan;
     private String tgianTtoanGhiChu;
     private String pthucTtoan;

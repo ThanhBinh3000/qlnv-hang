@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet;
 
-import com.tcdt.qlnvhang.entities.xuathang.daugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgHdr;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdr;
 import lombok.Data;
 
@@ -23,6 +22,7 @@ public class XhQdPdKhBdgDtl implements Serializable {
     @SequenceGenerator(sequenceName = XhQdPdKhBdgDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhQdPdKhBdgDtl.TABLE_NAME + "_SEQ")
     private Long id;
     private Long idHdr;
+    private Integer nam;
     private String maDvi;
     private String diaChi;
     private Long idDxHdr;
@@ -32,8 +32,6 @@ public class XhQdPdKhBdgDtl implements Serializable {
     private String trichYeu;
     private Integer slDviTsan;
     private BigDecimal tongSoLuong;
-    private BigDecimal tongTienKhoiDiem;
-    private BigDecimal tongTienDatTruoc;
     private LocalDate tgianDkienTu;
     private LocalDate tgianDkienDen;
     private String loaiHopDong;
@@ -51,6 +49,10 @@ public class XhQdPdKhBdgDtl implements Serializable {
     private String loaiVthh;
     private String cloaiVthh;
     private String moTaHangHoa;
+    private BigDecimal tongTienKhoiDiemDx;
+    private BigDecimal tongTienDatTruocDx;
+    private BigDecimal tongTienDuocDuyet;
+    private BigDecimal tongKtienDtruocDduyet;
     private String trangThai;
     @Transient
     private String tenDvi;
@@ -64,27 +66,18 @@ public class XhQdPdKhBdgDtl implements Serializable {
     private List<XhQdPdKhBdgPl> children = new ArrayList<>();
 
     //    Thông tin đấu giá
-    @Column(name = "ID_QD_PD_KQ_BDG")
-    private Long idQdPdKqBdg;
-    @Column(name = "SO_QD_PD_KQ_BDG")
-    private String soQdPdKqBdg;
-    @Column(name = "NGAY_KY_QD_PD_KQ_BDG")
-    private LocalDate ngayKyQdPdKqBdg;
+    private Long idQdKq;
+    private String soQdKq;
+    private LocalDate ngayKyQdKq;
+    private String soQdDc;
+    private String soQdPd;
     private BigDecimal soDviTsanThanhCong;
     private BigDecimal soDviTsanKhongThanh;
     private String ketQuaDauGia;
-    private String soQdDc;
-    private Integer nam;
-    private String soQdPd;
-    private Boolean isDieuChinh;
-    private Boolean lastest;
-    private Integer lanDieuChinh;
     @Transient
     private String tenPthucTtoan;
     @Transient
     private XhQdPdKhBdg xhQdPdKhBdg;
-    @Transient
-    private XhQdDchinhKhBdgHdr xhQdDchinhKhBdgHdr;
     @Transient
     List<XhTcTtinBdgHdr> listTtinDg = new ArrayList<>();
 }

@@ -183,6 +183,7 @@ public class XhXkLtPhieuKnClService extends BaseServiceImpl {
       case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
         optional.get().setNguoiGduyetId(currentUser.getUser().getId());
         optional.get().setNgayGduyet(LocalDate.now());
+        optional.get().setTruongPhong(currentUser.getUser().getFullName());
         break;
       case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
       case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
@@ -193,6 +194,7 @@ public class XhXkLtPhieuKnClService extends BaseServiceImpl {
       case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
+        optional.get().setLanhDaoCuc(currentUser.getUser().getFullName());
         break;
       default:
         throw new Exception("Phê duyệt không thành công");
@@ -254,12 +256,14 @@ public class XhXkLtPhieuKnClService extends BaseServiceImpl {
               f.setNgayLayMau(null);
               f.setTrangThaiKnCl(null);
               f.setKqThamDinh(null);
+              f.setIdNguoiTaoPhieu(null);
             } else {
               f.setIdPhieuKnCl(phieuKnCl.getId());
               f.setSoPhieuKnCl(phieuKnCl.getSoPhieu());
               f.setNgayKnMau(phieuKnCl.getNgayKnMau());
               f.setTrangThaiKnCl(phieuKnCl.getTrangThai());
               f.setKqThamDinh(phieuKnCl.getKqThamDinh());
+              f.setIdNguoiTaoPhieu(phieuKnCl.getNguoiTaoId());
             }
 
           }

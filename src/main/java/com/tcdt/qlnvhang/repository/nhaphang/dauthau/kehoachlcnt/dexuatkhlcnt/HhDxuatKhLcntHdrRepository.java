@@ -155,4 +155,40 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 			" AND (:idThopHdr IS NULL OR HDR.ID = :idThopHdr) ",
 			nativeQuery = true)
 	List<HhDxuatKhLcntHdr> getAllByIdThopHrd(Long idThopHdr);
+
+	@Query(
+			value = " SELECT DISTINCT KHLCNT.* " +
+					" FROM HH_DX_KHLCNT_HDR KHLCNT " +
+					" LEFT JOIN HH_DX_KHLCNT_DSGTHAU GTHAU ON KHLCNT.ID = GTHAU.ID_DX_KHLCNT " +
+					" LEFT JOIN HH_DX_KHLCNT_DSGTHAU_CTIET CT ON GTHAU.ID = CT.ID_GOI_THAU " +
+					" WHERE (:namKh IS NULL OR KHLCNT.NAM_KHOACH = TO_NUMBER(:namKh)) " +
+					"  AND (:soTr IS NULL OR LOWER(KHLCNT.SO_DXUAT) LIKE LOWER(CONCAT(CONCAT('%', :soTr),'%'))) " +
+					"  AND (:soQd IS NULL OR LOWER(KHLCNT.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%')))" +
+					"  AND (:ngayKyTu IS NULL OR KHLCNT.NGAY_PDUYET >= TO_DATE(:ngayKyTu, 'YYYY-MM-DD HH24:MI:SS'))" +
+					"  AND (:ngayKyDen IS NULL OR KHLCNT.NGAY_PDUYET <= TO_DATE(:ngayKyDen, 'YYYY-MM-DD HH24:MI:SS'))" +
+					"  AND (:ngayTaoTu IS NULL OR KHLCNT.NGAY_TAO >= TO_DATE(:ngayTaoTu, 'YYYY-MM-DD HH24:MI:SS'))" +
+					"  AND (:ngayTaoDen IS NULL OR KHLCNT.NGAY_TAO <= TO_DATE(:ngayTaoDen, 'YYYY-MM-DD HH24:MI:SS'))" +
+					"  AND (:loaiVthh IS NULL OR KHLCNT.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
+					"  AND (:trichYeu IS NULL OR LOWER(KHLCNT.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%')))" +
+					"  AND (:trangThai IS NULL OR KHLCNT.TRANG_THAI = :trangThai) "+
+					"  AND (:trangThaiTh IS NULL OR KHLCNT.TRANG_THAI_TH = :trangThaiTh) " +
+					"  AND (:maDvi IS NULL OR CT.MA_DVI LIKE CONCAT(:maDvi,'%')) ",
+			countQuery = " SELECT COUNT(*) FROM (SELECT DISTINCT KHLCNT.* " +
+					" FROM HH_DX_KHLCNT_HDR KHLCNT " +
+					" LEFT JOIN HH_DX_KHLCNT_DSGTHAU GTHAU ON KHLCNT.ID = GTHAU.ID_DX_KHLCNT " +
+					" LEFT JOIN HH_DX_KHLCNT_DSGTHAU_CTIET CT ON GTHAU.ID = CT.ID_GOI_THAU " +
+					" WHERE (:namKh IS NULL OR KHLCNT.NAM_KHOACH = TO_NUMBER(:namKh)) " +
+					"  AND (:soTr IS NULL OR LOWER(KHLCNT.SO_DXUAT) LIKE LOWER(CONCAT(CONCAT('%', :soTr),'%'))) " +
+					"  AND (:soQd IS NULL OR LOWER(KHLCNT.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%')))" +
+					"  AND (:ngayKyTu IS NULL OR KHLCNT.NGAY_PDUYET >= TO_DATE(:ngayKyTu, 'YYYY-MM-DD HH24:MI:SS'))" +
+					"  AND (:ngayKyDen IS NULL OR KHLCNT.NGAY_PDUYET <= TO_DATE(:ngayKyDen, 'YYYY-MM-DD HH24:MI:SS'))" +
+					"  AND (:ngayTaoTu IS NULL OR KHLCNT.NGAY_TAO >= TO_DATE(:ngayTaoTu, 'YYYY-MM-DD HH24:MI:SS'))" +
+					"  AND (:ngayTaoDen IS NULL OR KHLCNT.NGAY_TAO <= TO_DATE(:ngayTaoDen, 'YYYY-MM-DD HH24:MI:SS'))" +
+					"  AND (:loaiVthh IS NULL OR KHLCNT.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
+					"  AND (:trichYeu IS NULL OR LOWER(KHLCNT.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%')))" +
+					"  AND (:trangThai IS NULL OR KHLCNT.TRANG_THAI = :trangThai) "+
+					"  AND (:trangThaiTh IS NULL OR KHLCNT.TRANG_THAI_TH = :trangThaiTh) " +
+					"  AND (:maDvi IS NULL OR CT.MA_DVI LIKE CONCAT(:maDvi,'%'))) "
+			,nativeQuery = true)
+	Page<HhDxuatKhLcntHdr> selectVt(String namKh, String soTr,String soQd, String ngayKyTu,String ngayKyDen, String ngayTaoTu,String ngayTaoDen,String loaiVthh,String trichYeu,String trangThai,String trangThaiTh,String maDvi, Pageable pageable);
 }

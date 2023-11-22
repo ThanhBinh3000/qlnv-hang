@@ -245,15 +245,27 @@ public class XhCtvtBbHaoDoiService extends BaseServiceImpl {
         optional.get().setNgayGduyet(LocalDate.now());
         break;
       case Contains.TUCHOI_KTVBQ + Contains.CHODUYET_KTVBQ:
+        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+        optional.get().setNgayPduyet(LocalDate.now());
+        optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
+        optional.get().setKtvBaoQuan(currentUser.getUser().getFullName());
+        break;
       case Contains.TUCHOI_KT + Contains.CHODUYET_KT:
+        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+        optional.get().setNgayPduyet(LocalDate.now());
+        optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
+        optional.get().setKeToan(currentUser.getUser().getFullName());
+        break;
       case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
         optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
+        optional.get().setLdChiCuc(currentUser.getUser().getFullName());
         break;
       case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
+        optional.get().setLdChiCuc(currentUser.getUser().getFullName());
         break;
       default:
         throw new Exception("Phê duyệt không thành công");

@@ -24,6 +24,7 @@ public interface XhQdPdKhBttHdrRepository extends JpaRepository<XhQdPdKhBttHdr, 
             "AND (:#{#param.ngayKyQdDen} IS NULL OR QD.ngayKyQd <= :#{#param.ngayKyQdDen}) " +
             "AND (:#{#param.soTrHdr} IS NULL OR LOWER(QD.soTrHdr) LIKE LOWER(CONCAT('%', :#{#param.soTrHdr}, '%'))) " +
             "AND (:#{#param.loaiVthh} IS NULL OR QD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
+            "AND (:#{#param.type} IS NULL OR LOWER(QD.type) LIKE LOWER(CONCAT('%', :#{#param.type}, '%'))) " +
             "AND (:#{#param.lastest} IS NULL OR LOWER(QD.lastest) LIKE LOWER(CONCAT('%', :#{#param.lastest}, '%'))) " +
             "AND (:#{#param.trangThai} IS NULL OR QD.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.maCuc} IS NULL OR DTL.maDvi LIKE CONCAT(:#{#param.maCuc}, '%')) " +
@@ -37,4 +38,10 @@ public interface XhQdPdKhBttHdrRepository extends JpaRepository<XhQdPdKhBttHdr, 
     List<XhQdPdKhBttHdr> findByIdIn(List<Long> idQdList);
 
     List<XhQdPdKhBttHdr> findAllByIdIn(List<Long> listId);
+
+    boolean existsBySoQdDc(String soQdDc);
+
+    boolean existsBySoQdDcAndIdNot(String soQdDc, Long id);
+
+    long countBySoQdPdAndType(String soQdPd, String type);
 }

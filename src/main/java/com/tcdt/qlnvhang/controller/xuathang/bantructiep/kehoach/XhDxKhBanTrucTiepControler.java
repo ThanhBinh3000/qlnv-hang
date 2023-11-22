@@ -8,6 +8,7 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.getGiaDuocDuyet;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdrReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepServicelmpl;
@@ -186,6 +187,24 @@ public class XhDxKhBanTrucTiepControler extends BaseController {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
             log.error("Lấy tổng số lượng đã lên kế hoạch trong năm theo đơn vị, loại vật tư  hàng hóa: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Lấy đơn giá được duyệt trong năm theo đơn vị, loại vật tư  hàng hóa", response = List.class)
+    @PostMapping(value = "/gia-duoc-duyet", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> getGiaDuocDuyet(HttpServletRequest request,
+                                                        @Valid @RequestBody getGiaDuocDuyet req) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(xhDxKhBanTrucTiepService.getGiaDuocDuyet(req));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Lấy đơn giá được duyệt trong năm theo đơn vị, loại vật tư  hàng hóa : {}", e);
         }
         return ResponseEntity.ok(resp);
     }

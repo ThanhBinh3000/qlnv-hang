@@ -288,7 +288,7 @@ public class XhPhieuKnclService extends BaseServiceImpl {
     for (var res : xhPhieuKnclDtl) {
       var xhPhieuKnclDtlDto = XhPhieuKnclDtlDto.builder()
           .stt(stt++)
-          .chiTieuCl(res.getChiTieuCl())
+          .chiTieuCl(StringUtils.isEmpty(res.getChiTieuCl()) ?res.getTen():res.getChiTieuCl() )
           .chiSoCl(res.getChiSoCl())
           .ketQua(res.getKetQua())
           .phuongPhap(res.getPhuongPhap())

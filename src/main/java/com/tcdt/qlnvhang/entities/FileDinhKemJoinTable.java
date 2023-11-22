@@ -2,7 +2,6 @@ package com.tcdt.qlnvhang.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.dieuchinh.XhQdDchinhKhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.ktracluong.bienbanlaymau.XhBbLayMauBttHdr;
@@ -18,7 +17,6 @@ import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia
 import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMau;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.phieukiemnghiemcl.XhPhieuKnghiemCluong;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXh;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.quyetdinhdieuchinhbdg.XhQdDchinhKhBdgHdr;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdr;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdr;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho.XhDgBangKeHdr;
@@ -30,6 +28,7 @@ import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.hosokythuat.XhHoSoKyThu
 import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.phieukncl.XhPhieuKnclHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.*;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThTongHopHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBangKeHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdHdr;
@@ -63,11 +62,6 @@ public class FileDinhKemJoinTable implements Serializable {
     @JoinColumn(name = "dataId", insertable = false, updatable = false)
     @JsonIgnore
     private XhDxKhBanDauGia xhDxKhBanDauGia;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dataId", insertable = false, updatable = false)
-    @JsonIgnore
-    private XhQdDchinhKhBdgHdr xhQdDchinhKhBdgHdr;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dataId", insertable = false, updatable = false)
@@ -144,11 +138,6 @@ public class FileDinhKemJoinTable implements Serializable {
     @JoinColumn(name = "dataId", insertable = false, updatable = false)
     @JsonIgnore
     private XhKqBttHdr xhKqBttHdr;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dataId", insertable = false, updatable = false)
-    @JsonIgnore
-    private XhQdDchinhKhBttHdr xhQdDchinhKhBttHdr;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dataId", insertable = false, updatable = false)
@@ -249,4 +238,9 @@ public class FileDinhKemJoinTable implements Serializable {
     @JoinColumn(name = "dataId", insertable = false, updatable = false)
     @JsonIgnore
     private XhBbHdoiBttHdr xhBbHdoiBttHdr;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "dataId", insertable = false, updatable = false)
+    @JsonIgnore
+    private XhCtvtBangKeHdr xhCtvtBangKeHdr;
 }

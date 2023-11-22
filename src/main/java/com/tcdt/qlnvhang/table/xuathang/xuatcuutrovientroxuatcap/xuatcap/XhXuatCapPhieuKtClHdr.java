@@ -3,7 +3,9 @@ package com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcap;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
+import org.olap4j.impl.ArrayMap;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,6 +13,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = XhXuatCapPhieuKtClHdr.TABLE_NAME)
@@ -68,6 +71,8 @@ public class XhXuatCapPhieuKtClHdr extends BaseEntity implements Serializable {
   @Transient
   private String tenChiCuc;
   @Transient
+  private String tenCuc;
+  @Transient
   private String tenDiemKho;
   @Transient
   private String tenNhaKho;
@@ -79,5 +84,30 @@ public class XhXuatCapPhieuKtClHdr extends BaseEntity implements Serializable {
   private List<FileDinhKem> fileDinhKems =new ArrayList<>();
   @Transient
   private List<XhXuatCapPhieuKtClDtl> ketQuaPhanTich= new ArrayList<>();
-
+  @Transient
+  private Map<String, String> mapDmucDvi = new ArrayMap<>();
+  public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+    this.mapDmucDvi = mapDmucDvi;
+    if (!DataUtils.isNullObject(getMaNganKho())) {
+      String maCuc = getMaNganKho().length() >= 6 ? getMaNganKho().substring(0, 6) : "";
+      String maChiCuc = getMaNganKho().length() >= 8 ? getMaNganKho().substring(0, 8) : "";
+      String maDiemKho = getMaNganKho().length() >= 10 ? getMaNganKho().substring(0, 10) : "";
+      String maNhaKho = getMaNganKho().length() >= 12 ? getMaNganKho().substring(0, 12) : "";
+      String maNganKho = getMaNganKho().length() >= 14 ? getMaNganKho().substring(0, 14) : "";
+      String tenCuc = mapDmucDvi.containsKey(maCuc) ? mapDmucDvi.get(maCuc) : null;
+      String tenChiCuc = mapDmucDvi.containsKey(maChiCuc) ? mapDmucDvi.get(maChiCuc) : null;
+      String tenDiemKho = mapDmucDvi.containsKey(maDiemKho) ? mapDmucDvi.get(maDiemKho) : null;
+      String tenNhaKho = mapDmucDvi.containsKey(maNhaKho) ? mapDmucDvi.get(maNhaKho) : null;
+      String tenNganKho = mapDmucDvi.containsKey(maNganKho) ? mapDmucDvi.get(maNganKho) : null;
+      String tenLoKho = mapDmucDvi.containsKey(maLoKho) ? mapDmucDvi.get(maLoKho) : null;
+      String tenDvi = mapDmucDvi.containsKey(maDvi) ? mapDmucDvi.get(maDvi) : null;
+      setTenCuc(tenCuc);
+      setTenChiCuc(tenChiCuc);
+      setTenDiemKho(tenDiemKho);
+      setTenNhaKho(tenNhaKho);
+      setTenNganKho(tenNganKho);
+      setTenLoKho(tenLoKho);
+      setTenDvi(tenDvi);
+    }
+  }
 }

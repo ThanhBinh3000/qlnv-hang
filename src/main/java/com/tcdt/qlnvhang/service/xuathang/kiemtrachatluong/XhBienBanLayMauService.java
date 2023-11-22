@@ -127,7 +127,7 @@ public class XhBienBanLayMauService extends BaseServiceImpl {
 
     XhBienBanLayMauHdr data = optional.get();
     if(objReq.getNgayTao() == null){
-      data.setNgayTao(data.getNgayTao());
+      objReq.setNgayTao(data.getNgayTao());
     }
     BeanUtils.copyProperties(objReq, data, "id", "maDvi");
     XhBienBanLayMauHdr updated = xhBienBanLayMauRepository.save(data);

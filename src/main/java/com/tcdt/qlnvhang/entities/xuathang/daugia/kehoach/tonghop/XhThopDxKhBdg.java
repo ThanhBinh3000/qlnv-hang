@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.tonghop;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.dexuat.XhDxKhBanDauGia;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
@@ -81,4 +82,7 @@ public class XhThopDxKhBdg implements Serializable {
             this.children.addAll(children);
         }
     }
+
+    @Transient
+    private List<XhDxKhBanDauGia> xhDxKhBanDauGia;
 }

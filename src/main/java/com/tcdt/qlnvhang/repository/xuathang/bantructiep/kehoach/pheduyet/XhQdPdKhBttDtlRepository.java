@@ -14,20 +14,25 @@ import java.util.List;
 @Repository
 public interface XhQdPdKhBttDtlRepository extends JpaRepository<XhQdPdKhBttDtl, Long> {
 
-    @Query("SELECT DISTINCT DTL FROM XhQdPdKhBttDtl DTL" +
-            " LEFT JOIN XhQdPdKhBttDvi DVI on DTL.id = DVI.idDtl" +
-            " LEFT JOIN XhTcTtinBtt TT on DTL.id = TT.idQdPdDtl WHERE" +
-            " (:#{#param.dvql} IS NULL OR DTL.maDvi LIKE CONCAT(:#{#param.dvql}, '%'))" +
-            " AND (:#{#param.namKh} IS NULL OR DTL.namKh = :#{#param.namKh})" +
-            " AND (:#{#param.ngayCgiaTu} IS NULL OR DTL.ngayNhanCgia >= :#{#param.ngayCgiaTu})" +
-            " AND (:#{#param.ngayCgiaDen} IS NULL OR DTL.ngayNhanCgia <= :#{#param.ngayCgiaDen})" +
-            " AND (:#{#param.tochucCanhan} IS NULL OR LOWER(TT.tochucCanhan) LIKE LOWER(CONCAT('%', :#{#param.tochucCanhan}, '%')))" +
-            " AND (:#{#param.trangThai} IS NULL OR DTL.trangThai = :#{#param.trangThai})" +
-            " AND (:#{#param.lastest} IS NULL OR LOWER(DTL.lastest) LIKE LOWER(CONCAT('%', :#{#param.lastest}, '%')))" +
-            " AND (:#{#param.loaiVthh} IS NULL OR LOWER(DTL.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh}, '%'))" +
-            " AND (:#{#param.pthucBanTrucTiep == null || #param.pthucBanTrucTiep.isEmpty()} = TRUE OR DTL.pthucBanTrucTiep IN :#{#param.pthucBanTrucTiep})" +
-            " AND (:#{#param.maChiCuc} IS NULL OR DVI.maDvi LIKE CONCAT(:#{#param.maChiCuc}, '%')) " +
-            " ORDER BY DTL.namKh DESC, DTL.ngayNhanCgia DESC, DTL.id DESC")
+    @Query("SELECT DISTINCT dtl FROM XhQdPdKhBttDtl dtl" +
+            " LEFT JOIN XhQdPdKhBttHdr hdr ON hdr.id = dtl.idHdr " +
+            " LEFT JOIN XhQdPdKhBttDvi dvi on dtl.id = dvi.idDtl" +
+            " LEFT JOIN XhTcTtinBtt tt on dtl.id = tt.idQdPdDtl WHERE" +
+            " (:#{#param.dvql} IS NULL OR dtl.maDvi LIKE CONCAT(:#{#param.dvql}, '%'))" +
+            " AND (:#{#param.namKh} IS NULL OR dtl.namKh = :#{#param.namKh})" +
+            " AND (:#{#param.soDxuat} IS NULL OR LOWER(dtl.soDxuat) LIKE LOWER(CONCAT(:#{#param.soDxuat},'%'))) " +
+            " AND (:#{#param.soQdPd} IS NULL OR LOWER(dtl.soQdPd) LIKE LOWER(CONCAT(:#{#param.soQdPd},'%'))) " +
+            " AND (:#{#param.soQdDc} IS NULL OR LOWER(dtl.soQdDc) LIKE LOWER(CONCAT(:#{#param.soQdDc},'%'))) " +
+            " AND (:#{#param.soQdKq} IS NULL OR LOWER(dtl.soQdKq) LIKE LOWER(CONCAT(:#{#param.soQdKq},'%'))) " +
+            " AND (:#{#param.ngayCgiaTu} IS NULL OR dtl.ngayNhanCgia >= :#{#param.ngayCgiaTu})" +
+            " AND (:#{#param.ngayCgiaDen} IS NULL OR dtl.ngayNhanCgia <= :#{#param.ngayCgiaDen})" +
+            " AND (:#{#param.tochucCanhan} IS NULL OR LOWER(tt.tochucCanhan) LIKE LOWER(CONCAT('%', :#{#param.tochucCanhan}, '%')))" +
+            " AND (:#{#param.trangThai} IS NULL OR dtl.trangThai = :#{#param.trangThai})" +
+            " AND (:#{#param.lastest} IS NULL OR LOWER(hdr.lastest) LIKE LOWER(CONCAT(:#{#param.lastest},'%'))) " +
+            " AND (:#{#param.loaiVthh} IS NULL OR LOWER(dtl.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh}, '%'))" +
+            " AND (:#{#param.pthucBanTrucTiep == null || #param.pthucBanTrucTiep.isEmpty()} = TRUE OR dtl.pthucBanTrucTiep IN :#{#param.pthucBanTrucTiep})" +
+            " AND (:#{#param.maChiCuc} IS NULL OR dvi.maDvi LIKE CONCAT(:#{#param.maChiCuc}, '%')) " +
+            " ORDER BY dtl.namKh DESC, dtl.ngayNhanCgia DESC, dtl.id DESC")
     Page<XhQdPdKhBttDtl> searchPage(@Param("param") SearchXhTcTtinBttReq param, Pageable pageable);
 
     void deleteAllByIdHdr(Long idHdr);
