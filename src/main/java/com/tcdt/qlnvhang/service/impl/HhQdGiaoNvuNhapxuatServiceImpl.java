@@ -868,7 +868,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 				ddNhap.setBienBanChuanBiKho(nhBienBanChuanBiKhoRepository.findByIdDdiemGiaoNvNh(ddNhap.getId()));
 			}
 			ddNhap.setListPhieuKtraCl(nhPhieuKtChatLuongService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
-			ddNhap.setListPhieuNhapKho(nhPhieuNhapKhoService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
+//			ddNhap.setListPhieuNhapKho(nhPhieuNhapKhoService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
 			ddNhap.setListBangKeCanHang(nhBangKeCanHangService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
 			ddNhap.setBienBanNhapDayKho(nhBbNhapDayKhoRepository.findByIdDdiemGiaoNvNh(ddNhap.getId()));
 			ddNhap.setPhieuNhapKhoTamGui(nhPhieuNhapKhoTamGuiRepository.findByIdDdiemGiaoNvNh(ddNhap.getId()));
