@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuong;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangke.NhBangKeVt;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
@@ -186,6 +187,8 @@ public class NhPhieuNhapKho extends TrangThaiBaseEntity implements Serializable 
 
     @Transient
     private NhBangKeCanHang bangKeCanHang;
+    @Transient
+    private NhBangKeVt bangKeVt;
 
     @Transient
     private BigDecimal soLuongNhapKho;

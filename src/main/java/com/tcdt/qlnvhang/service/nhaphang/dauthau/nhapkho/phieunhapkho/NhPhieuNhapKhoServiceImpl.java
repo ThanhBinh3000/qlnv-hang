@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieunhapkho;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangke.NhBangKeVt;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoCt;
@@ -17,6 +18,7 @@ import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhie
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatDtlRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNxDdiemRepository;
+import com.tcdt.qlnvhang.repository.vattu.bangke.NhBangKeVtRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.nhapkho.NhPhieuNhapKhoPreview;
 import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCtReq;
@@ -91,6 +93,9 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
+
+    @Autowired
+    private NhBangKeVtRepository bangKeVtRepository;
 
     @Override
     public Page<NhQdGiaoNvuNhapxuatHdr> timKiem(NhPhieuNhapKhoReq req) throws Exception {
@@ -261,6 +266,10 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
         NhBangKeCanHang bySoPhieuNhapKho = nhBangKeCanHangRepository.findBySoPhieuNhapKho(data.getSoPhieuNhapKho());
         if(!ObjectUtils.isEmpty(bySoPhieuNhapKho)){
             data.setBangKeCanHang(bySoPhieuNhapKho);
+        }
+        NhBangKeVt bangKeVt = bangKeVtRepository.findBySoPhieuNhapKho(data.getSoPhieuNhapKho());
+        if(!ObjectUtils.isEmpty(bangKeVt)){
+            data.setBangKeVt(bangKeVt);
         }
         return data;
     }
