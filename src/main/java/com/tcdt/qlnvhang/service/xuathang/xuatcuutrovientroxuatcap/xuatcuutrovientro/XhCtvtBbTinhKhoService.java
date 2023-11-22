@@ -233,13 +233,21 @@ public class XhCtvtBbTinhKhoService extends BaseServiceImpl {
     String status = statusReq.getTrangThai() + optional.get().getTrangThai();
     switch (status) {
       case Contains.CHODUYET_KTVBQ + Contains.DUTHAO:
-      case Contains.CHODUYET_KT + Contains.CHODUYET_KTVBQ:
-      case Contains.CHODUYET_LDCC + Contains.CHODUYET_KT:
       case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_KTVBQ:
       case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_KT:
       case Contains.CHODUYET_KTVBQ + Contains.TUCHOI_LDCC:
         optional.get().setNguoiGduyetId(currentUser.getUser().getId());
         optional.get().setNgayGduyet(LocalDate.now());
+        break;
+      case Contains.CHODUYET_KT + Contains.CHODUYET_KTVBQ:
+        optional.get().setNguoiGduyetId(currentUser.getUser().getId());
+        optional.get().setNgayGduyet(LocalDate.now());
+        optional.get().setKtvBaoQuan(currentUser.getUser().getFullName());
+        break;
+      case Contains.CHODUYET_LDCC + Contains.CHODUYET_KT:
+        optional.get().setNguoiGduyetId(currentUser.getUser().getId());
+        optional.get().setNgayGduyet(LocalDate.now());
+        optional.get().setKeToan(currentUser.getUser().getFullName());
         break;
       case Contains.TUCHOI_KTVBQ + Contains.CHODUYET_KTVBQ:
       case Contains.TUCHOI_KT + Contains.CHODUYET_KT:
@@ -251,18 +259,12 @@ public class XhCtvtBbTinhKhoService extends BaseServiceImpl {
       case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
+        optional.get().setLdChiCuc(currentUser.getUser().getFullName());
         break;
       default:
         throw new Exception("Phê duyệt không thành công");
     }
     optional.get().setTrangThai(statusReq.getTrangThai());
-    if (status.equals(Contains.CHODUYET_KT + Contains.CHODUYET_KTVBQ)) {
-      optional.get().setKtvBaoQuan(currentUser.getUser().getFullName());
-    } else if (status.equals(Contains.CHODUYET_LDCC + Contains.CHODUYET_KT)) {
-      optional.get().setKeToan(currentUser.getUser().getFullName());
-    } else if (status.equals(Contains.CHODUYET_LDCC + Contains.DADUYET_LDCC)) {
-      optional.get().setLdChiCuc(currentUser.getUser().getFullName());
-    }
     XhCtvtBbTinhKhoHdr created = xhCtvtBbTinhKhoHdrRepository.save(optional.get());
     return created;
   }
