@@ -43,6 +43,7 @@ public class XhXkLtPhieuKnClHdr extends BaseEntity implements Serializable {
   private String tenDanhSach;
   private String nguoiKn;
   private String truongPhong;
+  private String LanhDaoCuc;
   private String thuKho;
   private String loaiVthh;
   private String cloaiVthh;
