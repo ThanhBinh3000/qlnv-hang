@@ -206,6 +206,7 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
         break;
       case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+        optional.get().setLanhDaoChiCuc(currentUser.getUser().getFullName());
         optional.get().setNgayPduyet(LocalDate.now());
         break;
       default:

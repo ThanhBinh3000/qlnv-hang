@@ -82,7 +82,7 @@ public class XhXkLtPhieuKnClService extends BaseServiceImpl {
     data.setTrangThai(Contains.DUTHAO);
     data.getPhieuKnClDtl().forEach(s -> s.setPhieuKnClHdr(data));
     XhXkLtPhieuKnClHdr created = xhXkLtPhieuKnClRepository.save(data);
-    this.updateTongHopDtl(created, false);
+    this.updateTongHopDtl(created,Contains.DANG_THUC_HIEN, false);
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkLtPhieuKnClHdr.TABLE_NAME);
     created.setFileDinhKems(fileDinhKems);
     return created;
@@ -110,7 +110,7 @@ public class XhXkLtPhieuKnClService extends BaseServiceImpl {
       s.setPhieuKnClHdr(data);
     });
     XhXkLtPhieuKnClHdr created = xhXkLtPhieuKnClRepository.save(data);
-    this.updateTongHopDtl(created, false);
+    this.updateTongHopDtl(created,Contains.DANG_THUC_HIEN, false);
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhXkLtPhieuKnClHdr.TABLE_NAME));
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkLtPhieuKnClHdr.TABLE_NAME);
     created.setFileDinhKems(fileDinhKems);
@@ -149,7 +149,7 @@ public class XhXkLtPhieuKnClService extends BaseServiceImpl {
     }
     XhXkLtPhieuKnClHdr data = optional.get();
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhXkLtPhieuKnClHdr.TABLE_NAME));
-    this.updateTongHopDtl(data, true);
+    this.updateTongHopDtl(data,Contains.CHUA_THUC_HIEN, true);
     xhXkLtPhieuKnClRepository.delete(data);
   }
 
@@ -201,7 +201,7 @@ public class XhXkLtPhieuKnClService extends BaseServiceImpl {
     }
     optional.get().setTrangThai(statusReq.getTrangThai());
     XhXkLtPhieuKnClHdr created = xhXkLtPhieuKnClRepository.save(optional.get());
-    this.updateTongHopDtl(created, false);
+    this.updateTongHopDtl(created,Contains.DA_HOAN_THANH, false);
     return created;
   }
 
@@ -242,7 +242,7 @@ public class XhXkLtPhieuKnClService extends BaseServiceImpl {
     ex.export();
   }
 
-  public void updateTongHopDtl(XhXkLtPhieuKnClHdr phieuKnCl, boolean xoa) {
+  public void updateTongHopDtl(XhXkLtPhieuKnClHdr phieuKnCl,String trangThai, boolean xoa) {
     if (!DataUtils.isNullObject(phieuKnCl.getIdTongHop())) {
       Optional<XhXkTongHopHdr> listTongHop = xhXkTongHopRepository.findById(phieuKnCl.getIdTongHop());
       if (listTongHop.isPresent()) {
@@ -254,14 +254,14 @@ public class XhXkLtPhieuKnClService extends BaseServiceImpl {
               f.setIdPhieuKnCl(null);
               f.setSoPhieuKnCl(null);
               f.setNgayLayMau(null);
-              f.setTrangThaiKnCl(null);
+              f.setTrangThaiKnCl(trangThai);
               f.setKqThamDinh(null);
               f.setIdNguoiTaoPhieu(null);
             } else {
               f.setIdPhieuKnCl(phieuKnCl.getId());
               f.setSoPhieuKnCl(phieuKnCl.getSoPhieu());
               f.setNgayKnMau(phieuKnCl.getNgayKnMau());
-              f.setTrangThaiKnCl(phieuKnCl.getTrangThai());
+              f.setTrangThaiKnCl(trangThai);
               f.setKqThamDinh(phieuKnCl.getKqThamDinh());
               f.setIdNguoiTaoPhieu(phieuKnCl.getNguoiTaoId());
             }
