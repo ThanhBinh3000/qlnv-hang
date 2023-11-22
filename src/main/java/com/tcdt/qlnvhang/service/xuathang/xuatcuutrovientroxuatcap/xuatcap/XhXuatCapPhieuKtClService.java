@@ -300,6 +300,8 @@ public class XhXuatCapPhieuKtClService extends BaseServiceImpl {
 
   public ReportTemplateResponse preview(XhPhieuKtclReq objReq) throws Exception {
     var xhPhieuKtclHdr = xhCtvtPhieuKtClHdrRepository.findById(objReq.getId());
+    List<XhXuatCapPhieuKtClDtl> list = xhCtvtPhieuKtClDtlRepository.findByIdHdr(objReq.getId());
+    xhPhieuKtclHdr.get().setKetQuaPhanTich(list);
     if (!xhPhieuKtclHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
     var fileTemplate = "xuatcuutrovientro/" + "2.1.C77-HD_PhieuKiemTraChatLuong_LT.docx";
     if (StringUtils.isEmpty(xhPhieuKtclHdr.get().getLoaiVthh()))
