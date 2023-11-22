@@ -85,9 +85,12 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
             }
             List<NhHoSoBienBan> nhHoSoBienBanList = nhHoSoBienBanRepository.findAllBySoHoSoKyThuat(i.getSoHoSoKyThuat());
             if (!nhHoSoBienBanList.isEmpty()) {
-                i.setSoBbKtnq(nhHoSoBienBanList.stream().filter(item -> item.getLoaiBb().equals("BBKTNQ")).findFirst().get().getSoBienBan());
-                i.setSoBbKtvh(nhHoSoBienBanList.stream().filter(item -> item.getLoaiBb().equals("BBKTVH")).findFirst().get().getSoBienBan());
-                i.setSoBbKthskt(nhHoSoBienBanList.stream().filter(item -> item.getLoaiBb().equals("BBKTHSKT")).findFirst().get().getSoBienBan());
+                Optional<NhHoSoBienBan> data1 = nhHoSoBienBanList.stream().filter(item -> item.getLoaiBb().equals("BBKTNQ")).findFirst();
+                data1.ifPresent(nhHoSoBienBan -> i.setSoBbKtnq(nhHoSoBienBan.getSoBienBan()));
+                Optional<NhHoSoBienBan> data2 = nhHoSoBienBanList.stream().filter(item -> item.getLoaiBb().equals("BBKTVH")).findFirst();
+                data2.ifPresent(nhHoSoBienBan -> i.setSoBbKtvh(nhHoSoBienBan.getSoBienBan()));
+                Optional<NhHoSoBienBan> data3 = nhHoSoBienBanList.stream().filter(item -> item.getLoaiBb().equals("BBKTHSKT")).findFirst();
+                data3.ifPresent(nhHoSoBienBan -> i.setSoBbKthskt(nhHoSoBienBan.getSoBienBan()));
             }
         });
         return nhHoSoKyThuatPage;
