@@ -7,10 +7,7 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepDdiemRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdrRepository;
-import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
-import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.PaggingReq;
-import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.*;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdrReq;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.util.Contains;
@@ -77,11 +74,7 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
         data.setNguoiTaoId(currentUser.getUser().getId());
         data.setTrangThai(Contains.DUTHAO);
         data.setTrangThaiTh(Contains.CHUATONGHOP);
-        int slDviTsan = data.getChildren().stream()
-                .flatMap(item -> item.getChildren().stream())
-                .map(XhDxKhBanTrucTiepDdiem::getMaDviTsan)
-                .collect(Collectors.toSet())
-                .size();
+        int slDviTsan = data.getChildren().stream().flatMap(item -> item.getChildren().stream()).map(XhDxKhBanTrucTiepDdiem::getMaDviTsan).collect(Collectors.toSet()).size();
         data.setSlDviTsan(DataUtils.safeToInt(slDviTsan));
         XhDxKhBanTrucTiepHdr created = xhDxKhBanTrucTiepHdrRepository.save(data);
         this.saveDetail(req, created.getId());
@@ -118,11 +111,7 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
         BeanUtils.copyProperties(req, data, "id", "maDvi", "trangThaiTh");
         data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(currentUser.getUser().getId());
-        int slDviTsan = data.getChildren().stream()
-                .flatMap(item -> item.getChildren().stream())
-                .map(XhDxKhBanTrucTiepDdiem::getMaDviTsan)
-                .collect(Collectors.toSet())
-                .size();
+        int slDviTsan = data.getChildren().stream().flatMap(item -> item.getChildren().stream()).map(XhDxKhBanTrucTiepDdiem::getMaDviTsan).collect(Collectors.toSet()).size();
         data.setSlDviTsan(DataUtils.safeToInt(slDviTsan));
         XhDxKhBanTrucTiepHdr updated = xhDxKhBanTrucTiepHdrRepository.save(data);
         this.saveDetail(req, updated.getId());
@@ -142,7 +131,8 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
         Map<String, String> mapLoaiHinhNx = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
         Map<String, String> mapKieuNx = getListDanhMucChung("KIEU_NHAP_XUAT");
         Map<String, String> mapPthucTtoan = getListDanhMucChung("PHUONG_THUC_TT");
-        for (XhDxKhBanTrucTiepHdr data : list) {
+        List<XhDxKhBanTrucTiepHdr> allById = xhDxKhBanTrucTiepHdrRepository.findAllById(ids);
+        for (XhDxKhBanTrucTiepHdr data : allById) {
             List<XhDxKhBanTrucTiepDtl> listDtl = xhDxKhBanTrucTiepDtlRepository.findAllByIdHdr(data.getId());
             for (XhDxKhBanTrucTiepDtl dataDtl : listDtl) {
                 List<XhDxKhBanTrucTiepDdiem> listDiaDiem = xhDxKhBanTrucTiepDdiemRepository.findAllByIdDtl(dataDtl.getId());
@@ -153,13 +143,27 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
                     dataDiaDiem.setTenLoKho(mapDmucDvi.getOrDefault(dataDiaDiem.getMaLoKho(), null));
                     dataDiaDiem.setTenLoaiVthh(mapVthh.getOrDefault(dataDiaDiem.getLoaiVthh(), null));
                     dataDiaDiem.setTenCloaiVthh(mapVthh.getOrDefault(dataDiaDiem.getCloaiVthh(), null));
+                    BigDecimal giaDuocDuyet = BigDecimal.ZERO;
+                    Long longNamKh = data.getNamKh() != null ? data.getNamKh().longValue() : null;
+                    if (dataDiaDiem.getLoaiVthh() != null && longNamKh != null && dataDiaDiem.getLoaiVthh().startsWith(Contains.LOAI_VTHH_VATTU)) {
+                        giaDuocDuyet = xhDxKhBanTrucTiepDdiemRepository.getGiaDuocDuyetVatTu(dataDiaDiem.getCloaiVthh(), dataDiaDiem.getLoaiVthh(), longNamKh);
+                    } else if (dataDiaDiem.getCloaiVthh() != null && dataDiaDiem.getLoaiVthh() != null && longNamKh != null && dataDtl.getMaDvi() != null) {
+                        giaDuocDuyet = xhDxKhBanTrucTiepDdiemRepository.getGiaDuocDuyetLuongThuc(dataDiaDiem.getCloaiVthh(), dataDiaDiem.getLoaiVthh(), longNamKh, dataDtl.getMaDvi());
+                    }
+                    Optional<BigDecimal> giaDuocDuyetOptional = Optional.ofNullable(giaDuocDuyet);
+                    dataDiaDiem.setDonGiaDuocDuyet(giaDuocDuyet);
+                    dataDiaDiem.setThanhTienDuocDuyet(dataDiaDiem.getSoLuongDeXuat().multiply(giaDuocDuyetOptional.orElse(BigDecimal.ZERO)));
                 });
                 dataDtl.setTenDvi(mapDmucDvi.getOrDefault(dataDtl.getMaDvi(), null));
                 dataDtl.setDonGiaDeXuat(listDiaDiem.get(0).getDonGiaDeXuat());
                 BigDecimal sumThanhTien = listDiaDiem.stream().map(XhDxKhBanTrucTiepDdiem::getThanhTienDeXuat).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
+                BigDecimal sumTienDuocDuyet = listDiaDiem.stream().map(XhDxKhBanTrucTiepDdiem::getThanhTienDuocDuyet).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
+                dataDtl.setTienDuocDuyet(sumTienDuocDuyet);
                 dataDtl.setThanhTien(sumThanhTien);
                 dataDtl.setChildren(listDiaDiem);
             }
+            BigDecimal sumThanhTienDd = listDtl.stream().map(XhDxKhBanTrucTiepDtl::getTienDuocDuyet).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
+            data.setThanhTienDuocDuyet(sumThanhTienDd);
             data.setMapDmucDvi(mapDmucDvi);
             data.setMapVthh(mapVthh);
             data.setMapLoaiHinhNx(mapLoaiHinhNx);
@@ -168,7 +172,15 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
             data.setTrangThai(data.getTrangThai());
             data.setChildren(listDtl);
         }
-        return list;
+        return allById;
+    }
+
+    public XhDxKhBanTrucTiepHdr detail(Long id) throws Exception {
+        if (id == null) {
+            throw new Exception("Tham số không hợp lệ.");
+        }
+        List<XhDxKhBanTrucTiepHdr> details = detail(Collections.singletonList(id));
+        return details.isEmpty() ? null : details.get(0);
     }
 
     @Transactional
@@ -226,13 +238,17 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
             case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
             case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
                 data.setNguoiPduyetId(currentUser.getUser().getId());
-                data.setNgayPduyet(LocalDate.now());
+                if (data.getNgayPduyet() == null) {
+                    data.setNgayPduyet(LocalDate.now());
+                }
                 data.setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
             case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
             case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
                 data.setNguoiPduyetId(currentUser.getUser().getId());
-                data.setNgayPduyet(LocalDate.now());
+                if (data.getNgayPduyet() == null) {
+                    data.setNgayPduyet(LocalDate.now());
+                }
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -277,5 +293,16 @@ public class XhDxKhBanTrucTiepServicelmpl extends BaseServiceImpl {
 
     public BigDecimal countSoLuongKeHoachNam(CountKhlcntSlReq req) {
         return xhDxKhBanTrucTiepHdrRepository.countSLDalenKh(req.getYear(), req.getLoaiVthh(), req.getMaDvi(), req.getLastest());
+    }
+
+    public BigDecimal getGiaDuocDuyet(getGiaDuocDuyet req) {
+        if (req == null) {
+            return BigDecimal.ZERO;
+        }
+        Long longNamKh = req.getNam() != null ? req.getNam().longValue() : null;
+        if (!Contains.LOAI_VTHH_VATTU.equals(req.getTypeLoaiVthh()) && req.getMaDvi() != null) {
+            return xhDxKhBanTrucTiepDdiemRepository.getGiaDuocDuyetLuongThuc(req.getCloaiVthh(), req.getLoaiVthh(), longNamKh, req.getMaDvi());
+        }
+        return xhDxKhBanTrucTiepDdiemRepository.getGiaDuocDuyetVatTu(req.getCloaiVthh(), req.getLoaiVthh(), longNamKh);
     }
 }

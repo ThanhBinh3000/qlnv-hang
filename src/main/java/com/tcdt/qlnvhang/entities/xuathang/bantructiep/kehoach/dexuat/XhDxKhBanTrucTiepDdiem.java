@@ -30,6 +30,10 @@ public class XhDxKhBanTrucTiepDdiem implements Serializable {
     private String loaiVthh;
     private String cloaiVthh;
     @Transient
+    private BigDecimal donGiaDuocDuyet;
+    @Transient
+    private BigDecimal thanhTienDuocDuyet;
+    @Transient
     private String tenDiemKho;
     @Transient
     private String tenNhaKho;
@@ -41,6 +45,4 @@ public class XhDxKhBanTrucTiepDdiem implements Serializable {
     private String tenLoaiVthh;
     @Transient
     private String tenCloaiVthh;
-    @Transient
-    private BigDecimal donGiaDuocDuyet;
 }
