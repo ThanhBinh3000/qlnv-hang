@@ -253,14 +253,17 @@ public class ScBangKeXuatVatTuServiceImpl extends BaseServiceImpl implements ScB
                 // lấy Danh sách sửa chữa hdr
                 scQuyetDinhSc.getScTrinhThamDinhHdr().getChildren().forEach(( dsHdr)->{
                     ScDanhSachHdr scDanhSachHdr = dsHdr.getScDanhSachHdr();
-                    req.setIdScDanhSachHdr(scDanhSachHdr.getId());
-                    if(userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
-                        req.setMaDviSr(userInfo.getDvql());
+                    // Filter chi cục
+                    if(scDanhSachHdr.getMaDiaDiem().startsWith(userInfo.getDvql())){
+                        req.setIdScDanhSachHdr(scDanhSachHdr.getId());
+                        if(userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+                            req.setMaDviSr(userInfo.getDvql());
+                        }
+                        // Lấy bảng kê theo từng danh sách sửa chữa ( địa điểm )
+                        List<ScBangKeXuatVatTuHdr> scBangKeXuatVatTuHdrs = hdrRepository.searchList(req);
+                        scDanhSachHdr.setScBangKeXuatVatTuList(scBangKeXuatVatTuHdrs);
+                        scDanhSachHdrList.add(scDanhSachHdr);
                     }
-                    // Lấy bảng kê theo từng danh sách sửa chữa ( địa điểm )
-                    List<ScBangKeXuatVatTuHdr> scBangKeXuatVatTuHdrs = hdrRepository.searchList(req);
-                    scDanhSachHdr.setScBangKeXuatVatTuList(scBangKeXuatVatTuHdrs);
-                    scDanhSachHdrList.add(scDanhSachHdr);
                 });
                 item.setScQuyetDinhSc(scQuyetDinhScService.detail(item.getIdQdSc()));
                 item.setScDanhSachHdrList(scDanhSachHdrList);

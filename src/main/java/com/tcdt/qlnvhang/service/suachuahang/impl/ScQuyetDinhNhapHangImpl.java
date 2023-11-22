@@ -107,11 +107,11 @@ public class ScQuyetDinhNhapHangImpl extends BaseServiceImpl implements ScQuyetD
         ScQuyetDinhNhapHang hdr = optional.get();
         BeanUtils.copyProperties(req, hdr);
         ScQuyetDinhNhapHang created = hdrRepository.save(hdr);
-        fileDinhKemService.delete(req.getId(), Lists.newArrayList(ScQuyetDinhXuatHang.TABLE_NAME + "_CAN_CU"));
-        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), ScQuyetDinhXuatHang.TABLE_NAME + "_CAN_CU");
+        fileDinhKemService.delete(req.getId(), Lists.newArrayList(ScQuyetDinhNhapHang.TABLE_NAME + "_CAN_CU"));
+        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), ScQuyetDinhNhapHang.TABLE_NAME + "_CAN_CU");
         created.setFileCanCu(canCu);
-        fileDinhKemService.delete(req.getId(), Lists.newArrayList(ScQuyetDinhXuatHang.TABLE_NAME + "_DINH_KEM"));
-        List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), ScQuyetDinhXuatHang.TABLE_NAME + "_DINH_KEM");
+        fileDinhKemService.delete(req.getId(), Lists.newArrayList(ScQuyetDinhNhapHang.TABLE_NAME + "_DINH_KEM"));
+        List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), ScQuyetDinhNhapHang.TABLE_NAME + "_DINH_KEM");
         created.setFileDinhKem(fileDinhKemList);
         if(req.getChildren() != null && !req.getChildren().isEmpty()){
             List<ScQuyetDinhNhapHangDtl> scPhieuXuatKhoDtls = saveDtl(req, created.getId());
@@ -127,9 +127,9 @@ public class ScQuyetDinhNhapHangImpl extends BaseServiceImpl implements ScQuyetD
             throw new Exception("Bản ghi không tồn tại");
         }
         ScQuyetDinhNhapHang data = optional.get();
-        List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Collections.singleton(ScQuyetDinhXuatHang.TABLE_NAME + "_CAN_CU"));
+        List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Collections.singleton(ScQuyetDinhNhapHang.TABLE_NAME + "_CAN_CU"));
         data.setFileCanCu(canCu);
-        List<FileDinhKem> fileDinhKemList = fileDinhKemService.search(data.getId(), Collections.singleton(ScQuyetDinhXuatHang.TABLE_NAME + "_DINH_KEM"));
+        List<FileDinhKem> fileDinhKemList = fileDinhKemService.search(data.getId(), Collections.singleton(ScQuyetDinhNhapHang.TABLE_NAME + "_DINH_KEM"));
         data.setFileDinhKem(fileDinhKemList);
         Map<String, String> mapDmucDvi = getMapTenDvi();
         data.setTenDvi(mapDmucDvi.getOrDefault(data.getMaDvi(),null));
