@@ -398,7 +398,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
                 .soLuongHangBaoQuan("")
                 .hinhThucBq(DieuChuyenNoiBo.getData(dcnbPhieuKnChatLuongHdr.get().getHinhThucBq()))
                 .tenThuKho(dcnbPhieuKnChatLuongHdr.get().getTenThuKho())
-                .ngayNhapDayKho(dcnbPhieuKnChatLuongHdr.get().getNgayNhapDayKho().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .ngayNhapDayKho(dcnbPhieuKnChatLuongHdr.get().getNgayNhapDayKho() ==null ?"":dcnbPhieuKnChatLuongHdr.get().getNgayNhapDayKho().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .ngayLayMau(dcnbPhieuKnChatLuongHdr.get().getNgayLayMau().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .ngayKiem(dcnbPhieuKnChatLuongHdr.get().getNgayKiem().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .danhGiaCamQuan(dcnbPhieuKnChatLuongHdr.get().getDanhGiaCamQuan())
