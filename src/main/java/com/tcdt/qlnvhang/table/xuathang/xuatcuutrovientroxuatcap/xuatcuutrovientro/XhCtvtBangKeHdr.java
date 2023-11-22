@@ -55,6 +55,7 @@ public class XhCtvtBangKeHdr extends BaseEntity implements Serializable {
   private Long tongTrongLuong;
   private Long tongTrongLuongBaoBi;
   private Long tongTrongLuongHang;
+  private String tongTrongLuongHangBc;
   private LocalDate ngayGduyet;
   private Long nguoiGduyetId;
   private LocalDate ngayPduyet;
