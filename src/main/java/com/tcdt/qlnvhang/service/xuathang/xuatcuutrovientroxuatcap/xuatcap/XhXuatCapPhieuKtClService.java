@@ -333,7 +333,7 @@ public class XhXuatCapPhieuKtClService extends BaseServiceImpl {
             .tenLoKho(xhPhieuKtclHdr.get().getTenLoKho())
             .tenNhaKho(xhPhieuKtclHdr.get().getTenNhaKho())
             .tenDiemKho(xhPhieuKtclHdr.get().getTenDiemKho())
-            .soLuongHangBaoQuan(xhPhieuKtclHdr.get().getSoLuongNhan() ==null ? "": xhPhieuKtclHdr.get().getSoLuongNhan().toString())
+            .soLuongHangBaoQuan(xhPhieuKtclHdr.get().getSoLuongXuat() ==null ? "": xhPhieuKtclHdr.get().getSoLuongXuat().toString())
             .hinhThucKeLotBaoQuan("")
             .tenThuKho("")
             .ngayNhapDayKho("")
