@@ -148,10 +148,12 @@ public class HhPhieuNhapKhoHdr implements Serializable {
     private HhBcanKeHangHdr hhBcanKeHangHdr;
 
 
-
-
-
-
-
-
+    @Transient
+    private BigDecimal tongSl;
+    @Transient
+    private String tongSlBc;
+    @Transient
+    private BigDecimal tongSt;
+    @Transient
+    private String tongStBc;
 }
