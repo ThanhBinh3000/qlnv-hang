@@ -17,6 +17,7 @@ import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.NumberToWord;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -268,10 +269,12 @@ public class HhBcanKeHangService extends BaseServiceImpl {
         if (bcanKeHangHdr == null) {
             throw new Exception("Bảng kê cân hàng không tồn tại.");
         }
-        HhBcanKeHangHdrPreview object = new HhBcanKeHangHdrPreview();
+        String tongSlDaTruBaoBiBc = NumberToWord.convert(bcanKeHangHdr.getTongSlDaTruBaoBi());
+        bcanKeHangHdr.setTongSlDaTruBaoBiBc(tongSlDaTruBaoBiBc);
+
         ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, bcanKeHangHdr);
     }
 }
