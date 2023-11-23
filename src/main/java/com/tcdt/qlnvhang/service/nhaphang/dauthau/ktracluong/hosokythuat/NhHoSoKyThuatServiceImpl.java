@@ -273,7 +273,7 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
         NhHoSoKyThuatPreview object = new NhHoSoKyThuatPreview();
         BeanUtils.copyProperties(hoSoBienBan,object);
         object.setTenCloaiVthh(hoSoBienBan.getQdGiaoNvuNhapxuatHdr().getTenCloaiVthh());
-        object.setTenDiemKho(hoSoBienBan.getBienBanLayMau().getMaDiemKho());
+        object.setTenDiemKho(hoSoBienBan.getBienBanLayMau().getTenDiemKho());
         object.setTenNganLoKho(hoSoBienBan.getBienBanLayMau().getTenNganLoKho());
         object.setNgayPduyet(Objects.isNull(hoSoBienBan.getNgayPduyet()) ? null : formatter.format(hoSoBienBan.getNgayPduyet()));
         object.setNgayTao(Objects.isNull(hoSoBienBan.getNgayTao()) ? null : formatter.format(hoSoBienBan.getNgayTao()));

@@ -121,8 +121,8 @@ public class NhHoSoBienBan extends TrangThaiBaseEntity implements Serializable {
     private String tenBb;
 
     public String getTenBb() {
-        if(tenBb != null){
-            switch (tenBb){
+        if(loaiBb != null){
+            switch (loaiBb){
                 case "BBKTNQ" :
                     return "Biên bản kiểm tra ngoại quan";
                 case "BBKTVH" :
