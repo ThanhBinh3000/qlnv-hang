@@ -4,4 +4,11 @@ import lombok.Data;
 
 @Data
 public class NhHoSoBienBanPreview {
+
+    private String tenBb;
+
+    private String ngayTao;
+
+    private String tgianNhap;
+
 }

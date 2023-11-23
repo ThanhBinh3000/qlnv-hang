@@ -27,9 +27,9 @@ public class NhHoSoKyThuatPreview {
 
     private String ngayPduyet;
 
-    private List<NhHoSoBienBan> listHoSoBienBan = new ArrayList<>();
+    private List<NhHoSoBienBanPreview> listHoSoBienBan = new ArrayList<>();
 
-    private List<NhHoSoKyThuatCt> children = new ArrayList<>();
+    private List<NhHoSoKyThuatCtPreview> children = new ArrayList<>();
 
 
 }
