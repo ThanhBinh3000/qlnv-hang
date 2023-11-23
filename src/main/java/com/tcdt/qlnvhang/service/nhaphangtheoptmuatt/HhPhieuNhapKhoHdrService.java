@@ -314,6 +314,9 @@ public class HhPhieuNhapKhoHdrService  extends BaseServiceImpl {
 //        private String tongSlBc;
         String tongSlBc = NumberToWord.convert(tongSl);
         phieuNhapKhoHdr.setTongSlBc(tongSlBc);
+
+        Long tongSlct = phieuNhapKhoHdr.getHhPhieuNhapKhoCtList().stream().map(HhPhieuNhapKhoCt::getSoLuongChungTu).mapToLong(BigDecimal::longValue).sum();
+        phieuNhapKhoHdr.setTongSlct(new BigDecimal(tongSlct));
 //        @Transient
 //        private BigDecimal tongSt;
         Long tongSt = phieuNhapKhoHdr.getHhPhieuNhapKhoCtList().stream().map(item -> item.getSoLuongThucNhap().multiply(item.getDonGia())).mapToLong(BigDecimal::longValue).sum();

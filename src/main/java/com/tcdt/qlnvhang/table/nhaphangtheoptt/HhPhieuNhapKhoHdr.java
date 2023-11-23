@@ -151,6 +151,8 @@ public class HhPhieuNhapKhoHdr implements Serializable {
     @Transient
     private BigDecimal tongSl;
     @Transient
+    private BigDecimal tongSlct;
+    @Transient
     private String tongSlBc;
     @Transient
     private BigDecimal tongSt;
