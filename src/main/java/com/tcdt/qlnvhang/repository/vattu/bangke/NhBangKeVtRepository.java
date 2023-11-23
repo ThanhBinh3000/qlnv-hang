@@ -17,6 +17,7 @@ public interface NhBangKeVtRepository extends BaseRepository<NhBangKeVt, Long>, 
     void deleteByIdIn(Collection<Long> ids);
 
     Optional<NhBangKeVt> findFirstBySoBangKe(String soBienBan);
+    NhBangKeVt findBySoPhieuNhapKho(String soPhieuNhapKho);
 
     List<NhBangKeVt> findAllByIdDdiemGiaoNvNh (Long idDdiemGiaoNvNh);
 }
