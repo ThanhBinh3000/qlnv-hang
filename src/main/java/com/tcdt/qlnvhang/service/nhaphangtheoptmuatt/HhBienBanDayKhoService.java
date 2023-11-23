@@ -311,10 +311,9 @@ public class HhBienBanDayKhoService extends BaseServiceImpl {
         if (bienBanDayKhoHdr == null) {
             throw new Exception("Biên bản nhập đầy kho không tồn tại.");
         }
-        HhBienBanDayKhoHdrPreview object = new HhBienBanDayKhoHdrPreview();
         ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, bienBanDayKhoHdr);
     }
 }
