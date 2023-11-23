@@ -22,7 +22,7 @@ public class NhHoSoBienBanPreview {
     private String tgianNhap;
     private String diaDiemKiemTra;
     private String noiDung;
-
+    private String ppLayMau;
     private String ketLuan;
 
     private List<NhHoSoBienBanCt> listCuc = new ArrayList<>();

@@ -186,6 +186,7 @@ public class NhHoSoBienBanService extends BaseServiceImpl {
         BeanUtils.copyProperties(hoSoBienBan,object);
         object.setNgayTao(Objects.isNull(hoSoBienBan.getNgayTao()) ? null : formatter.format(hoSoBienBan.getNgayTao()));
         object.setNgayHd(Objects.isNull(hoSoBienBan.getNgayHd()) ? null : formatter.format(hoSoBienBan.getNgayHd()));
+        object.setTgianNhap(Objects.isNull(hoSoBienBan.getTgianNhap()) ? null : formatter.format(hoSoBienBan.getTgianNhap()));
         List<NhHoSoBienBanCt> cuc = hoSoBienBan.getChildren().stream().filter(item -> item.getLoaiDaiDien().equals("cuc")).collect(Collectors.toList());
         List<NhHoSoBienBanCt> chiCuc = hoSoBienBan.getChildren().stream().filter(item -> item.getLoaiDaiDien().equals("chiCuc")).collect(Collectors.toList());
         object.setListChiCuc(chiCuc);
