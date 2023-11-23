@@ -32,6 +32,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -177,10 +178,13 @@ public class NhHoSoBienBanService extends BaseServiceImpl {
 
     public ReportTemplateResponse preview(SearchNhHoSoBienBan req) throws Exception {
         NhHoSoBienBan hoSoBienBan = detail(req.getId().toString());
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         if (hoSoBienBan == null) {
             throw new Exception("Hồ sơ kỹ thuật không tồn tại.");
         }
         NhHoSoBienBanPreview object = new NhHoSoBienBanPreview();
+        BeanUtils.copyProperties(hoSoBienBan,object);
+        object.setNgayTao(Objects.isNull(hoSoBienBan.getNgayTao()) ? null : formatter.format(hoSoBienBan.getNgayTao()));
         ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
