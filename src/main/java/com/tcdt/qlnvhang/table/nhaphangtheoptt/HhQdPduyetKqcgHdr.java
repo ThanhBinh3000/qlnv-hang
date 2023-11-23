@@ -116,4 +116,13 @@ public class HhQdPduyetKqcgHdr extends TrangThaiBaseEntity implements Serializab
     @Transient
     private List<HhQdPheduyetKqMttSLDD> danhSachCtiet = new ArrayList<>();
 
+    @Transient
+    private String tongThanhTienCg;
+    @Transient
+    private String tongThanhTienStr;
+    @Transient
+    private BigDecimal tongSoLuong;
+    @Transient
+    private String ngayMkhoStr;
+
 }

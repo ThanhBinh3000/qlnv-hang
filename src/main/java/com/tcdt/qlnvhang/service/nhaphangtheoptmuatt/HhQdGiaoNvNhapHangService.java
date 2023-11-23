@@ -659,11 +659,29 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
     }
 
     public ReportTemplateResponse preview(HhQdGiaoNvNhapHangReq hhQdGiaoNvNhapHangReq) throws Exception {
+        List<HhQdGiaoNvNhangDtl> hhQdGiaoNvNhangDtlList = new ArrayList<>();
         HhQdGiaoNvNhapHang hhQdGiaoNvNhapHang = detail(hhQdGiaoNvNhapHangReq.getId().toString());
         ReportTemplate model = findByTenFile(hhQdGiaoNvNhapHangReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        HhQdGiaoNvNhapHangPreview object = new HhQdGiaoNvNhapHangPreview();
-        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+        if(!hhQdGiaoNvNhapHang.getHhQdGiaoNvNhangDtlList().isEmpty()){
+            BigDecimal soLuong = BigDecimal.ZERO;
+            hhQdGiaoNvNhangDtlList = hhQdGiaoNvNhapHang.getHhQdGiaoNvNhangDtlList().stream().filter(x -> x.getMaDvi().equals(this.getUser().getDvql())).collect(Collectors.toList());
+            for (HhQdGiaoNvNhangDtl hhQdGiaoNvNhangDtl : hhQdGiaoNvNhangDtlList) {
+                for (HhQdGiaoNvNhDdiem child : hhQdGiaoNvNhangDtl.getChildren()) {
+                    soLuong = soLuong.add(child.getSoLuong());
+                }
+                hhQdGiaoNvNhangDtl.setSoLuong(soLuong);
+            }
+        }
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(hhQdGiaoNvNhapHang.getNgayQd());
+        hhQdGiaoNvNhapHang.setTenDvi(hhQdGiaoNvNhapHang.getTenDvi().toUpperCase());
+        hhQdGiaoNvNhapHang.setNgay(calendar.get(Calendar.DAY_OF_MONTH));
+        hhQdGiaoNvNhapHang.setThang(calendar.get(Calendar.MONTH) + 1);
+        hhQdGiaoNvNhapHang.setNam(calendar.get(Calendar.YEAR));
+        hhQdGiaoNvNhapHang.setTgianNkhoStr(Contains.convertDateToStringSecond(hhQdGiaoNvNhapHang.getTgianNkho()));
+        hhQdGiaoNvNhapHang.setHhQdGiaoNvNhangDtlList(hhQdGiaoNvNhangDtlList);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, hhQdGiaoNvNhapHang);
     }
 }
