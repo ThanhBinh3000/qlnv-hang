@@ -26,17 +26,16 @@ public interface DcnbBcKqDcDtlRepository extends JpaRepository<DcnbBcKqDcDtl, Lo
             "khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.maLoKho,khdcd.tenLoKho," +
             "khdcd.maChiCucNhan,khdcd.tenChiCucNhan, khdcd.maDiemKhoNhan,khdcd.tenDiemKhoNhan,khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, khdcd.maLoKhoNhan,khdcd.tenLoKhoNhan," +
             "khdcd.donViTinh, " +
-            "khdcd.tonKho, khdcd.soLuongDc, bbtk.tongSlXuatTheoTt,pnkh.tongSoLuong,khdcd.duToanKphi, pxkh.thanhTien, pnkh.tongKinhPhi,khdcd.id) " +
+            "khdcd.tonKho, khdcd.soLuongDc, bbtk.tongSlXuatTheoTt,pnkh.tongSoLuong,khdcd.duToanKphi,  pnkh.tongKinhPhi,khdcd.id) " +
             "FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
             "LEFT JOIN DcnbKeHoachDcDtl khdcd On khdcd.hdrId = khdch.id " +
             "LEFT JOIN DcnbBienBanTinhKhoHdr bbtk On bbtk.keHoachDcDtlId = khdcd.id " +
-            "LEFT JOIN DcnbPhieuXuatKhoHdr pxkh On pxkh.keHoachDcDtlId = khdcd.id " +
             "LEFT JOIN DcnbPhieuNhapKhoHdr pnkh On pnkh.keHoachDcDtlId = khdcd.id " +
             "LEFT JOIN QlnvDmVattu dmvt On dmvt.ma = khdcd.cloaiVthh " +
             "WHERE 1 =1 " +
-            "AND qdc.trangThai = '29' and pnkh.trangThai = '17' and pxkh.trangThai = '17' " +
+            "AND qdc.trangThai = '29' and pnkh.trangThai = '17' " +
             "AND ((:#{#param.maDvi} IS NULL OR LOWER(qdc.maDvi) = :#{#param.maDvi}))" +
             "AND (:#{#param.soQdinhCuc} IS NULL OR LOWER(qdc.soQdinh) LIKE CONCAT('%',LOWER(:#{#param.soQdinhCuc}),'%')) " +
             "AND ((:#{#param.tuNgay}  IS NULL OR khdcd.thoiGianDkDc >= :#{#param.tuNgay})" +
@@ -45,7 +44,7 @@ public interface DcnbBcKqDcDtlRepository extends JpaRepository<DcnbBcKqDcDtl, Lo
             "khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.maLoKho,khdcd.tenLoKho," +
             "khdcd.maChiCucNhan,khdcd.tenChiCucNhan, khdcd.maDiemKhoNhan,khdcd.tenDiemKhoNhan,khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, khdcd.maLoKhoNhan,khdcd.tenLoKhoNhan," +
             "khdcd.donViTinh, " +
-            "khdcd.tonKho, khdcd.soLuongDc, bbtk.tongSlXuatTheoTt,pnkh.tongSoLuong,khdcd.duToanKphi, pxkh.thanhTien, pnkh.tongKinhPhi,khdcd.id ")
+            "khdcd.tonKho, khdcd.soLuongDc, bbtk.tongSlXuatTheoTt,pnkh.tongSoLuong,khdcd.duToanKphi, pnkh.tongKinhPhi,khdcd.id ")
     List<DcnbBcKqDcDtl> thongTinXuatNhapHangChiCuc(@Param("param") DcnbBbKqDcSearch objReq);
 
     @Query(value = "SELECT new com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBcKqDcDtl(" +
@@ -53,7 +52,7 @@ public interface DcnbBcKqDcDtlRepository extends JpaRepository<DcnbBcKqDcDtl, Lo
             "khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.maLoKho,khdcd.tenLoKho," +
             "khdcd.maChiCucNhan,khdcd.tenChiCucNhan, khdcd.maDiemKhoNhan,khdcd.tenDiemKhoNhan,khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, khdcd.maLoKhoNhan,khdcd.tenLoKhoNhan," +
             "khdcd.donViTinh, " +
-            "khdcd.tonKho, khdcd.soLuongDc, bbtk.tongSlXuatTheoTt,bbtk.tongSlXuatTheoTt,khdcd.duToanKphi, khdcd.duToanKphi, khdcd.duToanKphi,khdcd.id) " +
+            "khdcd.tonKho, khdcd.soLuongDc, bbtk.tongSlXuatTheoTt,bbtk.tongSlXuatTheoTt,khdcd.duToanKphi, khdcd.duToanKphi,khdcd.id) " +
             "FROM DcnbQuyetDinhDcCHdr qdc " +
             "LEFT JOIN DcnbQuyetDinhDcCDtl qdcd On qdcd.hdrId = qdc.id " +
             "LEFT JOIN DcnbKeHoachDcHdr khdch On khdch.id = qdcd.keHoachDcHdrId " +
@@ -70,7 +69,7 @@ public interface DcnbBcKqDcDtlRepository extends JpaRepository<DcnbBcKqDcDtl, Lo
             "khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maNhaKho,khdcd.tenNhaKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.maLoKho,khdcd.tenLoKho," +
             "khdcd.maChiCucNhan,khdcd.tenChiCucNhan, khdcd.maDiemKhoNhan,khdcd.tenDiemKhoNhan,khdcd.maNhaKhoNhan,khdcd.tenNhaKhoNhan,khdcd.maNganKhoNhan,khdcd.tenNganKhoNhan, khdcd.maLoKhoNhan,khdcd.tenLoKhoNhan," +
             "khdcd.donViTinh, " +
-            "khdcd.tonKho, khdcd.soLuongDc, bbtk.tongSlXuatTheoTt,bbtk.tongSlXuatTheoTt,khdcd.duToanKphi, khdcd.duToanKphi, khdcd.duToanKphi,khdcd.id")
+            "khdcd.tonKho, khdcd.soLuongDc, bbtk.tongSlXuatTheoTt,bbtk.tongSlXuatTheoTt,khdcd.duToanKphi,  khdcd.duToanKphi,khdcd.id")
     List<DcnbBcKqDcDtl> thongTinXuatNhapHangCuc(@Param("param") DcnbBbKqDcSearch objReq);
 
     List<DcnbBcKqDcDtl> findByHdrIdIn(List<Long> ids);
