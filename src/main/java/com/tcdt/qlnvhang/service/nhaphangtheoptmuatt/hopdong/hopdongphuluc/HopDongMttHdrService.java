@@ -43,6 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -677,15 +678,19 @@ public class HopDongMttHdrService extends BaseServiceImpl {
       BigDecimal tongThanhTienChild = new BigDecimal(0);
       BigDecimal tongThanhTien = new BigDecimal(0);
       for (HhQdPheduyetKqMttSLDD sldd : optional.getDanhSachCtiet()) {
-        soLuongChild = soLuongChild.add(sldd.getSoLuong());
         tongThanhTien = tongThanhTien.add(sldd.getTongThanhTien());
+        sldd.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(sldd.getTongThanhTien()));
         for (HhQdPdKQMttSlddDtl child : sldd.getChildren()) {
-          tongThanhTienChild = child.getSoLuong().multiply(child.getDonGia());
-          child.setTongThanhTien(tongThanhTienChild);
+          soLuongChild = soLuongChild.add(child.getSoLuong());
+          tongThanhTienChild = child.getSoLuong().multiply(child.getDonGia()).multiply(new BigDecimal(1000));
+          child.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(tongThanhTienChild));
         }
       }
+      optional.setTenCloaiVthh(optional.getTenCloaiVthh().toUpperCase());
+      optional.setTenCloaiVthh(optional.getTenCloaiVthh().toUpperCase());
       optional.setSoLuong(soLuongChild);
-      optional.setTongThanhTien(tongThanhTien);
+      optional.setNgayMkhoStr(Contains.convertDateToStringSecond(optional.getNgayMkho()));
+      optional.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(tongThanhTien));
       ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
       byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
       ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
@@ -702,11 +707,11 @@ public class HopDongMttHdrService extends BaseServiceImpl {
       List<HhQdGiaoNvNhDdiem> listChild = new ArrayList<>();
       for (HhQdGiaoNvNhangDtl dtl : optional.getHhQdGiaoNvNhangDtlList()) {
         if(dtl.getMaDvi().equals(this.getUser().getDvql())){
-          soLuongChild = soLuongChild.add(dtl.getSoLuong());
-          tongThanhTien = tongThanhTien.add(dtl.getSoLuong().multiply(dtl.getDonGiaVat()));
           for (HhQdGiaoNvNhDdiem child : dtl.getChildren()) {
-            tongThanhTienChild = child.getSoLuong().multiply(dtl.getDonGiaVat());
-            child.setTongThanhTien(tongThanhTienChild);
+            soLuongChild = soLuongChild.add(child.getSoLuong());
+            tongThanhTien = tongThanhTien.add(child.getSoLuong().multiply(dtl.getDonGiaVat()).multiply(new BigDecimal(1000)));
+            tongThanhTienChild = child.getSoLuong().multiply(dtl.getDonGiaVat()).multiply(new BigDecimal(1000));
+            child.setTongThanhTien(docxToPdfConverter.convertBigDecimalToStr(tongThanhTienChild));
             child.setDonGia(dtl.getDonGiaVat());
             listChild.add(child);
           }
@@ -714,7 +719,10 @@ public class HopDongMttHdrService extends BaseServiceImpl {
       }
 
       optional.setSoLuong(soLuongChild);
-      optional.setTongThanhTien(tongThanhTien);
+      optional.setMoTaHangHoa(optional.getHopDongMttHdrs().get(0).getMoTaHangHoa());
+      optional.setTenLoaiVthh(optional.getTenLoaiVthh().toUpperCase());
+      optional.setNgayMkhoStr(Contains.convertDateToStringSecond(optional.getNgayMkho()));
+      optional.setTongThanhTien(docxToPdfConverter.convertBigDecimalToStr(tongThanhTien));
       optional.setChildren(listChild);
       ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
       byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());

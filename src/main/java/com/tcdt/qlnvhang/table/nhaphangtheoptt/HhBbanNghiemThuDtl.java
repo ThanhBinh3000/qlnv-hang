@@ -5,6 +5,8 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "HH_BB_NGHIEM_THU_DTL")
@@ -34,5 +36,14 @@ public class HhBbanNghiemThuDtl implements Serializable {
     private BigDecimal thanhTienNamTruoc;
     private Boolean isParent;
     private String idParent;
+
+    @Transient
+    private List<HhBbanNghiemThuDtl> children = new ArrayList<>();
+    @Transient
+    private String tongGiaTriStr;
+    @Transient
+    private String thanhTienTrongNamStr;
+    @Transient
+    private String thanhTienNamTruocStr;
 
 }
