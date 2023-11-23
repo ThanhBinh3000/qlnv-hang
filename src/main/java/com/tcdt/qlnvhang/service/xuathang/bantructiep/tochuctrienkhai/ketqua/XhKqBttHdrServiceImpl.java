@@ -109,7 +109,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
         if (isCheckRequired) {
             xhQdPdKhBttDviRepository.deleteAllByIdQdKqHdr(idHdr);
         }
-        for (XhQdPdKhBttDviReq dviReq : req.getChildren()) {
+        for (XhQdPdKhBttDviReq dviReq : req.getChildren().stream().filter(item -> item.getIsKetQua()).collect(Collectors.toList())) {
             XhQdPdKhBttDvi dvi = new XhQdPdKhBttDvi();
             BeanUtils.copyProperties(dviReq, dvi, "id");
             dvi.setId(null);

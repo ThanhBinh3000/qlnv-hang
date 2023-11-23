@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.bienbancbkho;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstDtl;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bienbanchuanbikho.NhBienBanChuanBiKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bienbanchuanbikho.NhBienBanChuanBiKhoCt;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhBbNghiemThuNhapKhac;
@@ -21,6 +22,7 @@ import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.NumberToWord;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -34,6 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -221,7 +224,20 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
             throw new Exception("Biên bản chuẩn bị kho không tồn tại.");
         }
         NhBienBanChuanBiKhoPreview object = new NhBienBanChuanBiKhoPreview();
-        object.setSoBienBan(bienBanChuanBiKho.getSoBienBan());
+        BeanUtils.copyProperties(bienBanChuanBiKho, object);
+        object.setNgayTaoFull(convertDate(bienBanChuanBiKho.getNgayTao()));
+        String[] parts = Objects.requireNonNull(convertDate(bienBanChuanBiKho.getNgayTao())).split("/");
+        object.setNgayTao(parts[0]);
+        object.setThangTao(parts[1]);
+        object.setNamTao(parts[2]);
+        Double tongKp = 0D;
+        for (NhBienBanChuanBiKhoCt child : bienBanChuanBiKho.getChildren()) {
+            if(child.getIsParent() != null && child.getIsParent() && child.getTongGiaTri() != null && child.getType() != null && child.getType().equals("TH")) {
+                tongKp += child.getTongGiaTri();
+            }
+        }
+        object.setTongGiaTri(new BigDecimal(tongKp));
+        object.setTongGiaTriBc(NumberToWord.convert(object.getTongGiaTri().longValue()));
         ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);

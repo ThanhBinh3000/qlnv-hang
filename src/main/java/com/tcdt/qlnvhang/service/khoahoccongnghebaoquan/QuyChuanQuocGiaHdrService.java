@@ -61,11 +61,15 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
     private FileDinhKemService fileDinhKemService;
 
     public Page<QuyChuanQuocGiaHdr> searchPage(SearchQuyChuanQgReq objReq) throws Exception {
-        UserInfo userInfo = SecurityContextService.getUser();
+//        UserInfo userInfo = SecurityContextService.getUser();
 //        objReq.setMaDvi(!ObjectUtils.isEmpty(objReq.getMaDvi()) ? objReq.getMaDvi() : userInfo.getDvql());
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("loaiVthh", "maBn").ascending());
         Page<QuyChuanQuocGiaHdr> data = quyChuanQuocGiaHdrRepository.search(objReq, pageable);
+//        List<QuyChuanQuocGiaHdr> dataFinal = data.getContent();
+//        if (ObjectUtils.isEmpty(objReq.getTrangThaiHl())) {
+//
+//        }
         Map<String, String> hashMapDmHh = getListDanhMucHangHoa();
         List<Long> idsHdr = data.getContent().stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList());
         List<QuyChuanQuocGiaDtl> allByIdHdrIn = quyChuanQuocGiaDtlRepository.findAllByIdHdrIn(idsHdr);
@@ -225,7 +229,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
         fileDinhKemService.deleteMultiple(idCtList, Lists.newArrayList(QuyChuanQuocGiaDtl.TABLE_NAME));
         quyChuanQuocGiaDtlRepository.deleteAll(dtlList);
         this.saveCtiet(data, objReq);
-        //Check bản ghi vừa thêm có hiệu lực và có văn bản thay thế ko , nếu có vb thay thế thì hết hiệu lực vb thay thế luôn
+        //Check bản ghi vừa update có hiệu lực và có văn bản thay thế ko , nếu có vb thay thế thì hết hiệu lực vb thay thế luôn
         if (created.getTrangThaiHl().equals("01") && listIdThayThe.size() > 0) {
             List<QuyChuanQuocGiaHdr> allByIdIn = quyChuanQuocGiaHdrRepository.findAllByIdIn(listIdThayThe);
             allByIdIn.forEach(item -> {
@@ -410,9 +414,6 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
                     .map(Long::valueOf)
                     .toArray(Long[]::new));
         }
-//        if (!ObjectUtils.isEmpty(created.getIdVanBanSuaDoi())) {
-//            listIdThayThe.add(created.getIdVanBanSuaDoi());
-//        }
         if (listIdThayThe.size() > 0 && created.getTrangThaiHl().equals("01")) {
             List<QuyChuanQuocGiaHdr> allByIdIn = quyChuanQuocGiaHdrRepository.findAllByIdIn(listIdThayThe);
             allByIdIn.forEach(item -> {

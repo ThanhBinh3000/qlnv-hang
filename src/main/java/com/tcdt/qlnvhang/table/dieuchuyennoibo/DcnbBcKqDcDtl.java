@@ -108,7 +108,7 @@ public class DcnbBcKqDcDtl extends BaseEntity implements Serializable, Cloneable
 
     public DcnbBcKqDcDtl(String loaiVthh, String cloaiVthh, String tenLoaiVthh, String tenCloaiVthh, String maDiemKho, String tenDiemKho, String maNhaKho, String tenNhaKho, String maNganKho, String tenNganKho, String maLoKho, String tenLoKho,
                          String maDviNhan, String tenDviNhan, String maDiemKhoNhan, String tenDiemKhoNhan, String maNhaKhoNhan, String tenNhaKhoNhan, String maNganKhoNhan, String tenNganKhoNhan, String maLoKhoNhan, String tenLoKhoNhan,
-                         String donViTinh, BigDecimal slTon, BigDecimal slDieuChuyenQd, BigDecimal slXuatTt, BigDecimal slNhapTt, BigDecimal kinhPhiTheoQd, BigDecimal kinhPhiXuatTt, BigDecimal kinhPhiNhapTt, Long keHoachDcDtlId) {
+                         String donViTinh, BigDecimal slTon, BigDecimal slDieuChuyenQd, BigDecimal slXuatTt, BigDecimal slNhapTt, BigDecimal kinhPhiTheoQd, BigDecimal kinhPhiNhapTt, Long keHoachDcDtlId) {
         this.loaiVthh = loaiVthh;
         this.cloaiVthh = cloaiVthh;
         this.tenLoaiVthh = tenLoaiVthh;
@@ -137,7 +137,6 @@ public class DcnbBcKqDcDtl extends BaseEntity implements Serializable, Cloneable
         this.slXuatTt = slXuatTt;
         this.slNhapTt = slNhapTt;
         this.kinhPhiTheoQd = kinhPhiTheoQd;
-        this.kinhPhiXuatTt = kinhPhiXuatTt;
         this.kinhPhiNhapTt = kinhPhiNhapTt;
         this.ketQua = "";
         this.tinhTrang = false;

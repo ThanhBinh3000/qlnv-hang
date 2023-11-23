@@ -32,6 +32,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -177,10 +178,19 @@ public class NhHoSoBienBanService extends BaseServiceImpl {
 
     public ReportTemplateResponse preview(SearchNhHoSoBienBan req) throws Exception {
         NhHoSoBienBan hoSoBienBan = detail(req.getId().toString());
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         if (hoSoBienBan == null) {
             throw new Exception("Hồ sơ kỹ thuật không tồn tại.");
         }
         NhHoSoBienBanPreview object = new NhHoSoBienBanPreview();
+        BeanUtils.copyProperties(hoSoBienBan,object);
+        object.setNgayTao(Objects.isNull(hoSoBienBan.getNgayTao()) ? null : formatter.format(hoSoBienBan.getNgayTao()));
+        object.setNgayHd(Objects.isNull(hoSoBienBan.getNgayHd()) ? null : formatter.format(hoSoBienBan.getNgayHd()));
+        object.setTgianNhap(Objects.isNull(hoSoBienBan.getTgianNhap()) ? null : formatter.format(hoSoBienBan.getTgianNhap()));
+        List<NhHoSoBienBanCt> cuc = hoSoBienBan.getChildren().stream().filter(item -> item.getLoaiDaiDien().equals("cuc")).collect(Collectors.toList());
+        List<NhHoSoBienBanCt> chiCuc = hoSoBienBan.getChildren().stream().filter(item -> item.getLoaiDaiDien().equals("chiCuc")).collect(Collectors.toList());
+        object.setListChiCuc(chiCuc);
+        object.setListCuc(cuc);
         ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);

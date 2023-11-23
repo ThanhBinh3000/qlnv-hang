@@ -15,11 +15,13 @@ import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhPhieuNhapKhoCtReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhPhieuNhapKhoHdrReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhPhieuNhapKhoReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.donvi.QlnvDmDonViService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBcanKeHangHdr;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBienBanLayMau;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoCt;
@@ -27,6 +29,8 @@ import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoHdr;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.MoneyConvert;
+import com.tcdt.qlnvhang.util.NumberToWord;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,9 +41,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+
+import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -56,6 +63,9 @@ public class HhPhieuNhapKhoHdrService  extends BaseServiceImpl {
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
+
+    @Autowired
+    private QlnvDmDonViService qlnvDmDonViService;
 
     public Page<HhPhieuNhapKhoHdr> searchPage(SearchHhPhieuNhapKhoReq objReq) throws Exception{
         UserInfo userInfo = SecurityContextService.getUser();
@@ -296,10 +306,34 @@ public class HhPhieuNhapKhoHdrService  extends BaseServiceImpl {
         if (phieuNhapKhoHdr == null) {
             throw new Exception("Bản kê nhập vật tư không tồn tại.");
         }
-        HhPhieuNhapKhoHdrPreview object = new HhPhieuNhapKhoHdrPreview();
+//        @Transient
+//        private BigDecimal tongSl;
+        Long tongSl = phieuNhapKhoHdr.getHhPhieuNhapKhoCtList().stream().map(HhPhieuNhapKhoCt::getSoLuongThucNhap).mapToLong(BigDecimal::longValue).sum();
+        phieuNhapKhoHdr.setTongSl(new BigDecimal(tongSl));
+        //        @Transient
+//        private String tongSlBc;
+        String tongSlBc = NumberToWord.convert(tongSl);
+        phieuNhapKhoHdr.setTongSlBc(tongSlBc);
+
+        Long tongSlct = phieuNhapKhoHdr.getHhPhieuNhapKhoCtList().stream().map(HhPhieuNhapKhoCt::getSoLuongChungTu).mapToLong(BigDecimal::longValue).sum();
+        phieuNhapKhoHdr.setTongSlct(new BigDecimal(tongSlct));
+//        @Transient
+//        private BigDecimal tongSt;
+        Long tongSt = phieuNhapKhoHdr.getHhPhieuNhapKhoCtList().stream().map(item -> item.getSoLuongThucNhap().multiply(item.getDonGia())).mapToLong(BigDecimal::longValue).sum();
+        phieuNhapKhoHdr.setTongSt(new BigDecimal(tongSt));
+        //        @Transient
+//        private String tongStBc;
+        String tongStBc = MoneyConvert.doctienBangChu(tongSt.toString(),MoneyConvert.DONGF);
+        phieuNhapKhoHdr.setTongStBc(tongStBc);
+//        @Transient
+//        private String tenDviCapCha;
+        String maCuc = phieuNhapKhoHdr.getMaDvi().length() >= 6 ? phieuNhapKhoHdr.getMaDvi().substring(0, 6) : "";
+        QlnvDmDonvi byMa = qlnvDmDonViService.getDonViByMa(maCuc);
+        phieuNhapKhoHdr.setTenDviCapCha(byMa.getTenDvi());
+
         ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, phieuNhapKhoHdr);
     }
 }

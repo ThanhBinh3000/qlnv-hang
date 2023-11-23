@@ -32,6 +32,8 @@ public class HhPhieuNhapKhoHdr implements Serializable {
     private String maDvi;
     @Transient
     private String tenDvi;
+    @Transient
+    private String tenDviCapCha;
 
     private String maQhns;
 
@@ -146,10 +148,14 @@ public class HhPhieuNhapKhoHdr implements Serializable {
     private HhBcanKeHangHdr hhBcanKeHangHdr;
 
 
-
-
-
-
-
-
+    @Transient
+    private BigDecimal tongSl;
+    @Transient
+    private BigDecimal tongSlct;
+    @Transient
+    private String tongSlBc;
+    @Transient
+    private BigDecimal tongSt;
+    @Transient
+    private String tongStBc;
 }
