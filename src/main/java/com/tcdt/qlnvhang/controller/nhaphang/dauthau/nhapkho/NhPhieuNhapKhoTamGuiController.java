@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.controller.nhaphang.dauthau.nhapkho;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
+import com.tcdt.qlnvhang.jwt.CurrentUser;
+import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoReq;
 import com.tcdt.qlnvhang.request.object.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiReq;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -160,10 +163,10 @@ public class NhPhieuNhapKhoTamGuiController {
     @ApiOperation(value = "Xem trước", response = List.class)
     @PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> preview(@RequestBody NhPhieuNhapKhoTamGuiReq objReq) {
+    public ResponseEntity<BaseResponse> preview(@RequestBody HashMap<String, Object> body, @CurrentUser CustomUserDetails currentUser) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.preview(objReq));
+            resp.setData(service.preview(body,currentUser));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
