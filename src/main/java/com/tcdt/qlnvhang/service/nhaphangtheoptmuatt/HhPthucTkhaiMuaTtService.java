@@ -283,10 +283,13 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
         BigDecimal tongThanhTien = BigDecimal.ZERO;
         for (HhQdPheduyetKhMttSLDD child : hhQdPheduyetKhMttDx.getChildren()) {
             for (HhChiTietTTinChaoGia tTinChaoGia : child.getListChaoGia()) {
-                tongThanhTien = tongThanhTien.add(tTinChaoGia.getThanhTien());
+                tTinChaoGia.setThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(tTinChaoGia.getThanhTien()));
+                tongThanhTien = tongThanhTien.add(docxToPdfConverter.convertNullToZero(tTinChaoGia.getThanhTien()));
             }
         }
-        hhQdPheduyetKhMttDx.setTongThanhTien(String.valueOf(tongThanhTien));
+        hhQdPheduyetKhMttDx.setTenCloaiVthh(hhQdPheduyetKhMttDx.getTenLoaiVthh().toUpperCase());
+        hhQdPheduyetKhMttDx.setTenDvi(hhQdPheduyetKhMttDx.getTenDvi().toUpperCase());
+        hhQdPheduyetKhMttDx.setTongThanhTien(docxToPdfConverter.convertBigDecimalToStr(tongThanhTien));
         return docxToPdfConverter.convertDocxToPdf(inputStream, hhQdPheduyetKhMttDx);
     }
 }

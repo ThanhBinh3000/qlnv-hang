@@ -120,4 +120,25 @@ public class HhBienBanNghiemThu implements Serializable {
 
     @Transient
     private List<HhBbanNghiemThuDtl> dmTongCucPdTruocThucHien =new ArrayList<>();
+
+    @Transient
+    private Integer ngay;
+    @Transient
+    private Integer thang;
+    @Transient
+    private Integer nam;
+    @Transient
+    private BigDecimal tongSoLuong;
+    @Transient
+    private String tongThanhTienStr;
+    @Transient
+    private BigDecimal tongSlNamTruoc;
+    @Transient
+    private String tongThanhTienNamTruocStr;
+    @Transient
+    private String tongGiaTriStr;
+    @Transient
+    private String kinhPhiThucTeStr;
+    @Transient
+    private String kinhPhiTtStr;
 }

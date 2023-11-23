@@ -61,4 +61,7 @@ public class HhQdPheduyetKqMttSLDD implements Serializable {
     @Transient
     private List<HopDongMttHdr> listHdong = new ArrayList<>();
 
+    @Transient
+    private String tongThanhTienStr;
+
 }

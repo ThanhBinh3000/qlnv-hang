@@ -61,7 +61,7 @@ public class HhQdGiaoNvNhDdiem {
 
 //    preview
     @Transient
-    private BigDecimal tongThanhTien;
+    private String tongThanhTien;
     @Transient
     private BigDecimal donGia;
 }

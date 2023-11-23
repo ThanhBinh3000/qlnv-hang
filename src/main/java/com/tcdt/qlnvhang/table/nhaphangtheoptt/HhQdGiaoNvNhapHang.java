@@ -104,7 +104,17 @@ public class HhQdGiaoNvNhapHang implements Serializable {
     @Transient
     private Date ngayMkho;
     @Transient
-    private BigDecimal tongThanhTien;
+    private String ngayMkhoStr;
+    @Transient
+    private String tgianNkhoStr;
+    @Transient
+    private String tongThanhTien;
+    @Transient
+    private Integer ngay;
+    @Transient
+    private Integer thang;
+    @Transient
+    private Integer nam;
     @Transient
     private List<HhQdGiaoNvNhDdiem> children = new ArrayList<>();
 }

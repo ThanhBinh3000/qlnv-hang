@@ -473,16 +473,25 @@ public class HhBbNghiemthuKlstHdrServiceImpl extends BaseServiceImpl implements 
 
     @Override
     public ReportTemplateResponse preview(HhBbNghiemthuKlstHdrReq objReq) throws Exception {
-        Optional<HhBbNghiemthuKlstHdr> qOptional = hhBbNghiemthuKlstRepository.findById(objReq.getId());
-        if (!qOptional.isPresent()) {
-            throw new UnsupportedOperationException("Không tồn tại bản ghi");
-        }
         ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
         HhBbNghiemThuKlstPreview object = new HhBbNghiemThuKlstPreview();
         HhBbNghiemthuKlstHdr bbNghiemthuKlstHdr = this.detail(objReq.getId());
         BeanUtils.copyProperties(bbNghiemthuKlstHdr, object);
+        object.setNgayTaoFull(convertDate(bbNghiemthuKlstHdr.getNgayTao()));
+        String[] parts = Objects.requireNonNull(convertDate(bbNghiemthuKlstHdr.getNgayTao())).split("/");
+        object.setNgayTao(parts[0]);
+        object.setThangTao(parts[1]);
+        object.setNamTao(parts[2]);
+        Double tongKp = 0D;
+        for (HhBbNghiemthuKlstDtl child : bbNghiemthuKlstHdr.getChildren()) {
+            if(child.getIsParent() != null && child.getIsParent() && child.getTongGiaTri() != null && child.getType() != null && child.getType().equals("TH")) {
+                tongKp += child.getTongGiaTri();
+            }
+        }
+        object.setTongGiaTri(new BigDecimal(tongKp));
+        object.setTongGiaTriBc(NumberToWord.convert(object.getTongGiaTri().longValue()));
         return docxToPdfConverter.convertDocxToPdf(inputStream, object);
     }
 

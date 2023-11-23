@@ -303,7 +303,7 @@ public class Contains {
 
   static {
     mappingPthucMtt = Maps.<String, String>buildMap().put(Contains.CHAO_GIA, "Chào giá")
-        .put(Contains.UY_QUYEN, "Úy quyền").put(Contains.MUA_LE, "Mua lẻ").get();
+        .put(Contains.UY_QUYEN, "Ủy quyền").put(Contains.MUA_LE, "Mua lẻ").get();
   }
 
   public static String getPthucMtt(String key) {
@@ -374,6 +374,13 @@ public class Contains {
       return null;
     }
     DateFormat df = new SimpleDateFormat(Contains.FORMAT_DATE_STR);
+    return df.format(date);
+  }
+  public static String convertDateToStringSecond(Date date) throws Exception {
+    if (Objects.isNull(date)) {
+      return null;
+    }
+    DateFormat df = new SimpleDateFormat(Contains.FORMAT_DATE);
     return df.format(date);
   }
   public static String convertDateToString(LocalDate localDate) {
