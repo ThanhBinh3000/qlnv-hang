@@ -29,6 +29,7 @@ public interface QuyChuanQuocGiaHdrRepository extends JpaRepository<QuyChuanQuoc
             " AND (:#{#param.trangThai} IS NULL OR LOWER(c.trangThai)=:#{#param.trangThai} )" +
             " AND (:#{#param.isMat} IS NULL OR c.isMat=:#{#param.isMat} )" +
             " AND (:#{#param.maBn} IS NULL OR c.maBn=:#{#param.maBn} )" +
+            " AND (:#{#param.trangThaiHl} IS NULL OR c.trangThaiHl=:#{#param.trangThaiHl} )" +
             " AND (:#{#param.apDungTai}  IS NULL OR LOWER(c.apDungTai) LIKE LOWER(CONCAT(:#{#param.apDungTai},'%' ) ) ) "+
             " AND (:#{#param.maDvi} IS NULL OR LOWER(c.maDvi) LIKE LOWER(CONCAT(:#{#param.maDvi},'%')))  "
     )

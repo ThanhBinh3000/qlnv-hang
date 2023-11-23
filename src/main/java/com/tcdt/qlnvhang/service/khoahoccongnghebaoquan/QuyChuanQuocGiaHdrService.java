@@ -61,7 +61,7 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
     private FileDinhKemService fileDinhKemService;
 
     public Page<QuyChuanQuocGiaHdr> searchPage(SearchQuyChuanQgReq objReq) throws Exception {
-        UserInfo userInfo = SecurityContextService.getUser();
+//        UserInfo userInfo = SecurityContextService.getUser();
 //        objReq.setMaDvi(!ObjectUtils.isEmpty(objReq.getMaDvi()) ? objReq.getMaDvi() : userInfo.getDvql());
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("loaiVthh", "maBn").ascending());
