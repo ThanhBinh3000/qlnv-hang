@@ -185,6 +185,11 @@ public class NhHoSoBienBanService extends BaseServiceImpl {
         NhHoSoBienBanPreview object = new NhHoSoBienBanPreview();
         BeanUtils.copyProperties(hoSoBienBan,object);
         object.setNgayTao(Objects.isNull(hoSoBienBan.getNgayTao()) ? null : formatter.format(hoSoBienBan.getNgayTao()));
+        object.setNgayHd(Objects.isNull(hoSoBienBan.getNgayHd()) ? null : formatter.format(hoSoBienBan.getNgayHd()));
+        List<NhHoSoBienBanCt> cuc = hoSoBienBan.getChildren().stream().filter(item -> item.getLoaiDaiDien().equals("cuc")).collect(Collectors.toList());
+        List<NhHoSoBienBanCt> chiCuc = hoSoBienBan.getChildren().stream().filter(item -> item.getLoaiDaiDien().equals("chiCuc")).collect(Collectors.toList());
+        object.setListChiCuc(chiCuc);
+        object.setListCuc(cuc);
         ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
