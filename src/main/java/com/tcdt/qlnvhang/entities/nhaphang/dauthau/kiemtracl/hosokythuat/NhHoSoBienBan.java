@@ -117,4 +117,22 @@ public class NhHoSoBienBan extends TrangThaiBaseEntity implements Serializable {
     @Transient
     private List<NhHoSoBienBanCt> children = new ArrayList<>();
 
+    @Transient
+    private String tenBb;
+
+    public String getTenBb() {
+        if(tenBb != null){
+            switch (tenBb){
+                case "BBKTNQ" :
+                    return "Biên bản kiểm tra ngoại quan";
+                case "BBKTVH" :
+                    return "Biên bản kiểm tra vận hành";
+                case "BBKTHSKT" :
+                    return "Biên bản kiểm tra hồ sơ kỹ thuật\t";
+                default:
+                    return null;
+            }
+        }
+        return tenBb;
+    }
 }

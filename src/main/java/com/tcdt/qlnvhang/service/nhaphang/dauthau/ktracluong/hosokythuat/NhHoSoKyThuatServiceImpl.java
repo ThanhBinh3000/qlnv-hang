@@ -9,6 +9,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoK
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangCt;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
 import com.tcdt.qlnvhang.repository.kiemtrachatluong.NhHoSoBienBanRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
@@ -40,13 +41,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -74,6 +78,9 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
 
     @Autowired
     private HhHopDongRepository hhHopDongRepository;
+
+    @Autowired
+    private UserInfoRepository userInfoRepository;
 
     @Override
     public Page<NhHoSoKyThuat> searchPage(NhHoSoKyThuatReq objReq) {
@@ -187,7 +194,7 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
             }
         }
         item.setChildren(ctiet);
-
+        item.setTenNguoiTao(ObjectUtils.isEmpty(item.getNguoiTaoId()) ? null : userInfoRepository.findById(item.getNguoiTaoId()).get().getFullName());
         item.setListHoSoBienBan(nhHoSoBienBanRepository.findAllBySoHoSoKyThuat(optional.get().getSoHoSoKyThuat()));
         return item;
     }
@@ -261,11 +268,19 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
         if (hoSoBienBan == null) {
             throw new Exception("Hồ sơ kỹ thuật không tồn tại.");
         }
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
         NhHoSoKyThuatPreview object = new NhHoSoKyThuatPreview();
+        BeanUtils.copyProperties(hoSoBienBan,object);
+        object.setTenCloaiVthh(hoSoBienBan.getQdGiaoNvuNhapxuatHdr().getTenCloaiVthh());
+        object.setTenDiemKho(hoSoBienBan.getBienBanLayMau().getMaDiemKho());
+        object.setTenNganLoKho(hoSoBienBan.getBienBanLayMau().getTenNganLoKho());
+        object.setNgayPduyet(Objects.isNull(hoSoBienBan.getNgayPduyet()) ? null : formatter.format(hoSoBienBan.getNgayPduyet()));
+        object.setNgayTao(Objects.isNull(hoSoBienBan.getNgayTao()) ? null : formatter.format(hoSoBienBan.getNgayTao()));
         ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        return docxToPdfConverter.convertDocxToPdf(inputStream, hoSoBienBan);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
     }
 
 
