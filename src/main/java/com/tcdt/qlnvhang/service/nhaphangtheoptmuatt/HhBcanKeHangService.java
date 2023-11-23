@@ -269,7 +269,7 @@ public class HhBcanKeHangService extends BaseServiceImpl {
         if (bcanKeHangHdr == null) {
             throw new Exception("Bảng kê cân hàng không tồn tại.");
         }
-        String tongSlDaTruBaoBiBc = NumberToWord.convert(bcanKeHangHdr.getTongSlDaTruBaoBi());
+        String tongSlDaTruBaoBiBc = NumberToWord.convert(bcanKeHangHdr.getTongSlCaBaoBi() - bcanKeHangHdr.getTongSlBaoBi() );
         bcanKeHangHdr.setTongSlDaTruBaoBiBc(tongSlDaTruBaoBiBc);
 
         ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
