@@ -3,10 +3,12 @@ package com.tcdt.qlnvhang.service.suachuahang.impl;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhScRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScTongHopHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScTrinhThamDinhRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhScReq;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhXuatHangReq;
 import com.tcdt.qlnvhang.request.suachua.ScTongHopReq;
@@ -21,6 +23,8 @@ import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScQuyetDinhXuatHang;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTongHopHdr;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTrinhThamDinhHdr;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.ExportExcel;
+import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,6 +36,7 @@ import org.springframework.util.ObjectUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -176,7 +181,31 @@ public class ScQuyetDinhScImpl extends BaseServiceImpl implements ScQuyetDinhScS
 
     @Override
     public void export(ScQuyetDinhScReq req, HttpServletResponse response) throws Exception {
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        Page<ScQuyetDinhSc> page = searchPage(req);
+        List<ScQuyetDinhSc> data = page.getContent();
 
+        String title = "Danh sách quyết định sửa chữa hàng DTQG";
+        String[] rowsName = new String[]{"STT", "Số quyết định", "Trích yếu", "Ngày ký", "Số tờ trình", "Trạng thái"};
+        String fileName = "danh-sach.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        for (int i = 0; i < data.size(); i++) {
+            ScQuyetDinhSc dx = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i + 1;
+            objs[1] = dx.getSoQd();
+            objs[2] = dx.getTrichYeu();
+            objs[3] = dx.getNgayKy();
+            objs[4] = dx.getSoTtr();
+            objs[5] = dx.getTenTrangThai();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+        ex.export();
     }
 
     @Override
