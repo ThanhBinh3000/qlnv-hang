@@ -336,9 +336,9 @@ public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBN
         DcnbBBNTBQHdr hdr = detail(req.getId());
         String status = hdr.getTrangThai() + req.getTrangThai();
         switch (status) {
-            case Contains.TUCHOI_TK + Contains.DUTHAO:
-            case Contains.TUCHOI_KT + Contains.DUTHAO:
-            case Contains.TUCHOI_LDCC + Contains.DUTHAO:
+            case Contains.TUCHOI_TK + Contains.CHODUYET_TK:
+            case Contains.TUCHOI_KT + Contains.CHODUYET_TK:
+            case Contains.TUCHOI_LDCC + Contains.CHODUYET_TK:
             case Contains.DUTHAO + Contains.CHODUYET_TK:
                 hdr.setNguoiGduyetId(userInfo.getId());
                 hdr.setNgayGduyet(LocalDate.now());
