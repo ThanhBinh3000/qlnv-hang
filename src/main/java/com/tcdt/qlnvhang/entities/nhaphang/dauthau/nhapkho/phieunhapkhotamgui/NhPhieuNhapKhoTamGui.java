@@ -136,4 +136,14 @@ public class NhPhieuNhapKhoTamGui extends TrangThaiBaseEntity implements Seriali
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+    @Transient
+    Long tongSoLuong;
+    @Transient
+    Long tongTien;
+    @Transient
+    String tongSoLuongBangChu;
+    @Transient
+    String tongTienBangChu;
+    @Transient
+    String dviTinh;
 }
