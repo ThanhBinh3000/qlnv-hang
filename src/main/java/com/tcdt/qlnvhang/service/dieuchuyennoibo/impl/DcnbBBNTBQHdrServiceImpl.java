@@ -498,7 +498,8 @@ public class DcnbBBNTBQHdrServiceImpl extends BaseServiceImpl implements DcnbBBN
     }
     private String phuongThucBaoQuanList (String maPhuongThucBaoQuan) {
         var qlnvDmVattuBq = dmVattuBqRepository.findAllByMaAndType(maPhuongThucBaoQuan, "ppbq");
-        return qlnvDmVattuBq.stream().findFirst().map(QlnvDmVattuBq::getGiaTri).get();
+//        return qlnvDmVattuBq.stream().findFirst().map(QlnvDmVattuBq::getGiaTri).get();
+        return "";
     }
 
 
