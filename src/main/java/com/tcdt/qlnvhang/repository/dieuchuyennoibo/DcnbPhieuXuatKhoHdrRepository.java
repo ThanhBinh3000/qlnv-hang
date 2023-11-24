@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.repository.dieuchuyennoibo;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchPhieuXuatKho;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuXuatKhoHdrDTO;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuXuatKhoHdrListDTO;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBbGiaoNhanHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuXuatKhoHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,7 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
     Optional<DcnbPhieuXuatKhoHdr> findBySoPhieuXuatKho(String soPhieuXuatKho);
 
     List<DcnbPhieuXuatKhoHdr> findByIdIn(List<Long> ids);
-
+    List<DcnbPhieuXuatKhoHdr> findByKeHoachDcDtlId(Long keHoachDcDtlId);
     @Query(value = "SELECT new com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuXuatKhoHdrDTO(" +
             "pxk.id,qdc.id,qdc.soQdinh,qdc.ngayKyQdinh,qdc.nam,khdcd.thoiGianDkDc,khdcd.maNhaKho,khdcd.tenNhaKho, khdcd.maDiemKho,khdcd.tenDiemKho,khdcd.maLoKho," +
             "khdcd.tenLoKho,khdcd.maNganKho,khdcd.tenNganKho, khdcd.thayDoiThuKho,pxk.soPhieuXuatKho,pxk.ngayXuatKho, pxk.phieuKnChatLuongHdrId,pxk.soPhieuKnChatLuong,pxk.ngayKyPhieuKnChatLuong," +
@@ -90,4 +91,17 @@ public interface DcnbPhieuXuatKhoHdrRepository extends JpaRepository<DcnbPhieuXu
             "GROUP BY pxk.id,pxk.soPhieuXuatKho,pxk.ngayTaoPhieu, pxk.tongSoLuong, pkncl.id, pkncl.soPhieu,pxk.bangKeChId, pxk.soBangKeCh,bkxvth.id, bkxvth.soBangKe "+
             "ORDER BY pxk.soPhieuXuatKho desc")
     List<DcnbPhieuXuatKhoHdrListDTO> searchListChung(@Param("param") SearchPhieuXuatKho req);
+    @Query(value = "SELECT dpxkh.* \n" +
+            "FROM DCNB_KE_HOACH_DC_DTL dtl\n" +
+            "JOIN DCNB_KE_HOACH_DC_HDR hdr ON hdr.id = dtl.HDR_ID\n" +
+            "JOIN DCNB_QUYET_DINH_DC_C_DTL qdcd ON qdcd.DCNB_KE_HOACH_DC_HDR_ID = hdr.id\n" +
+            "JOIN DCNB_QUYET_DINH_DC_C_HDR qdch ON qdch.ID = qdcd.HDR_ID\n" +
+            "JOIN DCNB_PHIEU_XUAT_KHO_HDR dpxkh ON dpxkh.KE_HOACH_DC_DTL_ID = dtl.ID\n" +
+            "WHERE dpxkh.TRANG_THAI = '17' AND qdch.SO_QDINH = ?1  \n" +
+            "AND dtl.ID IN (SELECT dtlv.ID \n" +
+            "FROM DCNB_KE_HOACH_DC_DTL dtlv\n" +
+            "WHERE dtlv.PARENT_ID = (SELECT dtlvv.PARENT_ID \n" +
+            "FROM DCNB_KE_HOACH_DC_DTL dtlvv\n" +
+            "WHERE dtlvv.ID = ?2) )", nativeQuery = true)
+    List<DcnbPhieuXuatKhoHdr> findBySoQuyetDinhAndKeHoachDtlId(String soQdinhCuc, Long keHoachDtlId);
 }
