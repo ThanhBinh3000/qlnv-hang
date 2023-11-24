@@ -387,7 +387,7 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
 
         }
         return DcnbBbGiaoNhanHdrPreview.builder()
-                .chungLoaiHangHoa(dcnbBBKetThucNKHdr.get().getCloaiVthh())
+                .chungLoaiHangHoa(dcnbBBKetThucNKHdr.get().getTenCloaiVthh())
                 .donViCungCapHang(dcnbBBKetThucNKHdr.get().getTenDvi())
                 .quyChuanTieuChuan("")
                 .ngayLap(dcnbBBKetThucNKHdr.get().getNgayLap().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
