@@ -51,6 +51,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public NhBangKeVt create(NhBangKeVtReq req) throws Exception {
         if (req == null){
             return null;
@@ -87,6 +88,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public NhBangKeVt update(NhBangKeVtReq req) throws Exception {
         if (req == null){
             return null;
@@ -141,6 +143,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public NhBangKeVt approve(NhBangKeVtReq req) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
 
