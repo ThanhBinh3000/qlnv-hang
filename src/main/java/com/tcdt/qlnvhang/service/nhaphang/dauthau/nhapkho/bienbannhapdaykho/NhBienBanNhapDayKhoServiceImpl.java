@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bienbannhapdaykho;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKhoCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
@@ -16,6 +17,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.DataUtils;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,8 @@ import org.springframework.util.ObjectUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -218,16 +222,30 @@ public class NhBienBanNhapDayKhoServiceImpl extends BaseServiceImpl implements N
     }
 
 
-    @Override
-    public ReportTemplateResponse preview(QlBienBanNhapDayKhoLtReq req) throws Exception {
-        NhBbNhapDayKho bbNhapDayKho = detail(req.getId());
-        if (bbNhapDayKho == null) {
-            throw new Exception("Biên bản không tồn tại.");
-        }
-        NhBbNhapDayKhoPreview object = new NhBbNhapDayKhoPreview();
-        ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
-        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+//    @Override
+//    public ReportTemplateResponse preview(QlBienBanNhapDayKhoLtReq req) throws Exception {
+//        NhBbNhapDayKho bbNhapDayKho = detail(req.getId());
+//        if (bbNhapDayKho == null) {
+//            throw new Exception("Biên bản không tồn tại.");
+//        }
+//        NhBbNhapDayKhoPreview object = new NhBbNhapDayKhoPreview();
+//        ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
+//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+//        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+//    }
+public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
+    try {
+        String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
+        String fileTemplate = "nhapdauthau/" + fileName;
+        FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
+        NhBbNhapDayKho detail  = this.detail(DataUtils.safeToLong(body.get("id")));
+        return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+    } catch (IOException e) {
+        e.printStackTrace();
+    } catch (XDocReportException e) {
+        e.printStackTrace();
     }
+    return null;
+}
 }

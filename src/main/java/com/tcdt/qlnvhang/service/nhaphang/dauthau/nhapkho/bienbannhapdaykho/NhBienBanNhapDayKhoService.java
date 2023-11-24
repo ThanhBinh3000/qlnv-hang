@@ -5,6 +5,9 @@ import com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc.QlBienB
 import com.tcdt.qlnvhang.service.BaseService;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 
+import java.util.HashMap;
+
 public interface NhBienBanNhapDayKhoService extends BaseService<NhBbNhapDayKho,QlBienBanNhapDayKhoLtReq,Long> {
-    ReportTemplateResponse preview(QlBienBanNhapDayKhoLtReq req) throws Exception;
+//    ReportTemplateResponse preview(QlBienBanNhapDayKhoLtReq req) throws Exception;
+    ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception;
 }

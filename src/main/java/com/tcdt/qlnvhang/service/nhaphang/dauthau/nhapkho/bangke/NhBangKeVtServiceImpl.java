@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bangke;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangke.NhBangKeVt;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangke.NhBangKeVtCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.vattu.bangke.NhBangKeVtCtRepository;
@@ -16,7 +17,9 @@ import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
@@ -29,6 +32,8 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -214,16 +219,19 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
     }
 
     @Override
-    public ReportTemplateResponse preview(NhBangKeVtReq req) throws Exception {
-        NhBangKeVt nhBangKeVt = detail(req.getId());
-        if (nhBangKeVt == null) {
-            throw new Exception("Bản kê nhập vật tư không tồn tại.");
+    public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
+        try {
+            String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "nhapdauthau/" + fileName;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
+            NhBangKeVt detail  = this.detail(DataUtils.safeToLong(body.get("id")));
+            return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
+            e.printStackTrace();
         }
-        NhBangKeVtPreview object = new NhBangKeVtPreview();
-        ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
-        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+        return null;
     }
 
 //    @Override
