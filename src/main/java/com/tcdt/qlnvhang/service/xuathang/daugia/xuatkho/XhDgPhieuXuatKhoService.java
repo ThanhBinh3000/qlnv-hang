@@ -105,7 +105,7 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
         if (xhDgPhieuXuatKhoRepository.existsBySoPhieuXuatKhoAndIdNot(req.getSoPhieuXuatKho(), req.getId())) {
             throw new Exception("Số phiếu xuất kho " + req.getSoPhieuXuatKho() + " đã tồn tại");
         }
-        BeanUtils.copyProperties(req, data, "id", "maDvi");
+        BeanUtils.copyProperties(req, data, "id", "maDvi", "idThuKho");
         data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(currentUser.getUser().getId());
         XhDgPhieuXuatKho update = xhDgPhieuXuatKhoRepository.save(data);

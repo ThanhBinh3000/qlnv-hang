@@ -110,7 +110,7 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl {
         if (!StringUtils.isEmpty(req.getSoBbLayMau()) && xhBbLayMauRepository.existsBySoBbLayMauAndIdNot(req.getSoBbLayMau(), req.getId())) {
             throw new Exception("Số biên bản lấy mẫu " + req.getSoBbLayMau() + " đã tồn tại");
         }
-        BeanUtils.copyProperties(req, data, "id", "maDvi");
+        BeanUtils.copyProperties(req, data, "id", "maDvi", "idKtvBaoQuan");
         data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(currentUser.getUser().getId());
         XhBbLayMau update = xhBbLayMauRepository.save(data);

@@ -119,7 +119,7 @@ public class XhDgBbHaoDoiService extends BaseServiceImpl {
         if (xhDgBbHaoDoiHdrRepository.existsBySoBbHaoDoiAndIdNot(req.getSoBbHaoDoi(), req.getId())) {
             throw new Exception("Số biên bản tịnh kho " + req.getSoBbHaoDoi() + " đã tồn tại");
         }
-        BeanUtils.copyProperties(req, data, "id", "maDvi");
+        BeanUtils.copyProperties(req, data, "id", "maDvi", "idThuKho");
         data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(currentUser.getUser().getId());
         XhDgBbHaoDoiHdr update = xhDgBbHaoDoiHdrRepository.save(data);
