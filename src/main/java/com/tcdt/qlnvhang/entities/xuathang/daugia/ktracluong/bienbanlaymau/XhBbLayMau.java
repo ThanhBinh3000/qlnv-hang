@@ -76,6 +76,7 @@ public class XhBbLayMau implements Serializable {
     private Long idTinhKho;
     private String soBbTinhKho;
     private LocalDate ngayXuatDocKho;
+    private String tchuanCluong;
     @Transient
     private String tenDvi;
     @Transient

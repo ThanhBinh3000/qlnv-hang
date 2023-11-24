@@ -110,7 +110,7 @@ public class XhKqBdgHdrServiceImpl extends BaseServiceImpl {
         }
         Optional<XhKqBdgHdr> optional = xhKqBdgHdrRepository.findById(req.getId());
         XhKqBdgHdr data = optional.orElseThrow(() -> new Exception("Không tìm thấy dữ liệu cần sửa"));
-        if (xhKqBdgHdrRepository.existsBySoQdKqAndIdNot(req.getSoQdKq(), req.getId())) {
+        if (!StringUtils.isEmpty(req.getSoQdKq()) && xhKqBdgHdrRepository.existsBySoQdKqAndIdNot(req.getSoQdKq(), req.getId())) {
             throw new Exception("Số quyết định kết quả " + req.getSoQdKq() + " đã tồn tại");
         }
         BeanUtils.copyProperties(req, data, "id", "maDvi", "trangThaiHd", "trangThaiXh");
