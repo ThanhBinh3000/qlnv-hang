@@ -180,11 +180,13 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
         DcnbBbGiaoNhanHdr data = optional.get();
         BeanUtils.copyProperties(req, data);
         Optional<DcnbKeHoachDcDtl> keHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(req.getKeHoachDcDtlId());
-        if (keHoachDcDtl.isPresent()) {
-            if (keHoachDcDtl.get().getParentId() != null) {
-                data.setKeHoachDcDtlId(keHoachDcDtl.get().getParentId());
-            } else {
-                data.setKeHoachDcDtlId(req.getKeHoachDcDtlId());
+        if(!data.getKeHoachDcDtlId().equals(req.getKeHoachDcDtlId())){
+            if (keHoachDcDtl.isPresent()) {
+                if (keHoachDcDtl.get().getParentId() != null) {
+                    data.setKeHoachDcDtlId(keHoachDcDtl.get().getParentId());
+                } else {
+                    data.setKeHoachDcDtlId(req.getKeHoachDcDtlId());
+                }
             }
         }
         data.setDanhSachDaiDien(req.getDanhSachDaiDien());
