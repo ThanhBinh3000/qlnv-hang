@@ -56,6 +56,7 @@ public class XhCtvtBbHaoDoiHdrReq {
   private LocalDate ngayPduyet;
   private Long nguoiPduyetId;
   private String lyDoTuChoi;
+  private Double soThangBaoQuanHang;
   private String type;
   private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
   private List<XhCtvtBbHaoDoiDtlReq> listPhieuXuatKho= new ArrayList<>();
