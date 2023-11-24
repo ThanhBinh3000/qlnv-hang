@@ -5,6 +5,10 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHangCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatDtl;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNxDdiem;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoCtRepository;
@@ -14,14 +18,18 @@ import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bangkecanhang.NhBan
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoRepository;
 import com.tcdt.qlnvhang.request.object.quanlybangkecanhangluongthuc.QlBangKeCanHangLtReq;
 import com.tcdt.qlnvhang.request.object.quanlybangkecanhangluongthuc.QlBangKeChCtLtReq;
+import com.tcdt.qlnvhang.service.HhQdGiaoNvuNhapxuatService;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +40,11 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -44,6 +55,12 @@ public class NhBangKeCanHangServiceImpl extends BaseServiceImpl implements NhBan
 
     @Autowired
     private NhBangKeChCtRepository nhBangKeChCtRepository;
+
+    @Autowired
+    private HhQdGiaoNvuNhapxuatService hhQdGiaoNvuNhapxuatService;
+
+    @Autowired
+    private NhPhieuNhapKhoService nhPhieuNhapKhoService;
 
     @Autowired
     private HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
@@ -95,7 +112,7 @@ public class NhBangKeCanHangServiceImpl extends BaseServiceImpl implements NhBan
     }
 
     @Transactional
-    void saveCtiet(Long idHdr,QlBangKeCanHangLtReq req){
+      public void saveCtiet(Long idHdr,QlBangKeCanHangLtReq req){
         nhBangKeChCtRepository.deleteByIdBangKeCanHangHdr(idHdr);
         for(QlBangKeChCtLtReq objCtiet : req.getChiTiets()){
             NhBangKeCanHangCt ctiet = new NhBangKeCanHangCt();
@@ -239,6 +256,31 @@ public class NhBangKeCanHangServiceImpl extends BaseServiceImpl implements NhBan
 //            item.setPhieuNhapKho(StringUtils.isEmpty(item.getPhieuNhapKho()) ? null : nhPhieuNhapKhoRepository.getOne(Long.valueOf(item.getSoPhieuNhapKho().split("/")[0])));
         });
         return list;
+    }
+    public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
+        try {
+            String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "nhapdauthau/" + fileName;
+//            NhQdGiaoNvuNhapxuatHdr qd = objectMapper.readValue(objectMapper.writeValueAsString(body.get("children")), NhQdGiaoNvuNhapxuatHdr.class);
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
+            NhBangKeCanHang detail  = this.detail(DataUtils.safeToLong(body.get("id")));
+            NhQdGiaoNvuNhapxuatHdr qd = hhQdGiaoNvuNhapxuatService.detail(String.valueOf(detail.getIdQdGiaoNvNh()));
+            NhQdGiaoNvuNxDdiem diaDiem = null;
+            if (qd != null && qd.getDtlList() != null) {
+                for (NhQdGiaoNvuNhapxuatDtl dtl : qd.getDtlList()) {
+                    if (diaDiem==null && dtl.getMaDvi() != null && dtl.getMaDvi().equals(detail.getMaDvi())) {
+                        diaDiem = dtl.getChildren().stream().filter(item -> item.getId().longValue() == detail.getIdDdiemGiaoNvNh().longValue()).findFirst().orElse(null);
+                    }
+                }
+            }
+            NhPhieuNhapKho pn = nhPhieuNhapKhoService.detail(Long.valueOf(detail.getSoPhieuNhapKho().split("/")[0]));
+            return docxToPdfConverter.convertDocxToPdf(inputStream, detail, qd, diaDiem,pn);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

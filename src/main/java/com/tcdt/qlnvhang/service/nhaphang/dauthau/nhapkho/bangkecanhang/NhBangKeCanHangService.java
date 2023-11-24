@@ -4,7 +4,10 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieu
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
 import com.tcdt.qlnvhang.request.object.quanlybangkecanhangluongthuc.QlBangKeCanHangLtReq;
 import com.tcdt.qlnvhang.service.BaseService;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 
+import javax.transaction.Transactional;
+import java.util.HashMap;
 import java.util.List;
 
 public interface NhBangKeCanHangService extends BaseService<NhBangKeCanHang,QlBangKeCanHangLtReq,Long> {
@@ -13,4 +16,5 @@ public interface NhBangKeCanHangService extends BaseService<NhBangKeCanHang,QlBa
 
     List<NhBangKeCanHang> findAllByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh);
 
+    ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception;
 }
