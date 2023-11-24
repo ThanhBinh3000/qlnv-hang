@@ -113,6 +113,8 @@ public class NhHoSoBienBan extends TrangThaiBaseEntity implements Serializable {
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+    @Transient
+    private List<FileDinhKem> listCanCu = new ArrayList<>();
 
     @Transient
     private List<NhHoSoBienBanCt> children = new ArrayList<>();

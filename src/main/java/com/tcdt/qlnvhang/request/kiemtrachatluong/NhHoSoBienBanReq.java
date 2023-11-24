@@ -74,6 +74,7 @@ public class NhHoSoBienBanReq extends BaseRequest {
     private String ketLuan;
 
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
+    private List<FileDinhKemReq> listCanCu = new ArrayList<>();
 
     private List<NhHoSoBienBanCtReq> children = new ArrayList<>();
 }
