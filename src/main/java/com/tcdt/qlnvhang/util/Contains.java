@@ -436,4 +436,8 @@ public class Contains {
   public static String getLoaiHinhXuat(String key) {
     return Contains.mapLoaiHinhXuat.get(key);
   }
+  public static class BIEN_BAN_GUI_HANG_LOAI_BEN {
+    public static String BEN_NHAN = "00";
+    public static String BEN_GIAO = "01";
+  }
 }

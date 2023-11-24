@@ -146,4 +146,6 @@ public class NhPhieuNhapKhoTamGui extends TrangThaiBaseEntity implements Seriali
     String tongTienBangChu;
     @Transient
     String dviTinh;
+    @Transient
+    String tenDviCha;
 }

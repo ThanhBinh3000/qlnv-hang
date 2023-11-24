@@ -25,11 +25,13 @@ import com.tcdt.qlnvhang.util.UserUtils;
 import fr.opensagres.xdocreport.core.XDocReportException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.velocity.util.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
@@ -162,6 +164,8 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
     Map<String, Map<String, Object>> listDanhMucHangHoa = getListDanhMucHangHoaObject();
     Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
     item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
+    item.setTenDviCha(listDanhMucDvi.get(StringUtils.chop(item.getMaDvi(),2)));
+    item.setTenDviCha(listDanhMucDvi.get(item.getMaDvi()));
     item.setTenDiemKho(listDanhMucDvi.get(item.getMaDiemKho()));
     item.setTenNhaKho(listDanhMucDvi.get(item.getMaNhaKho()));
     item.setTenNganKho(listDanhMucDvi.get(item.getMaNganKho()));
