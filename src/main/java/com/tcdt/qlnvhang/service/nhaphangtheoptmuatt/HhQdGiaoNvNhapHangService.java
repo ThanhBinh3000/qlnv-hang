@@ -675,13 +675,20 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
             }
         }
         Calendar calendar = new GregorianCalendar();
-        calendar.setTime(hhQdGiaoNvNhapHang.getNgayQd());
+        if(hhQdGiaoNvNhapHang.getNgayQd() != null){
+            calendar.setTime(hhQdGiaoNvNhapHang.getNgayQd());
+            hhQdGiaoNvNhapHang.setNgay(calendar.get(Calendar.DAY_OF_MONTH));
+            hhQdGiaoNvNhapHang.setThang(calendar.get(Calendar.MONTH) + 1);
+            hhQdGiaoNvNhapHang.setNam(calendar.get(Calendar.YEAR));
+        }
         hhQdGiaoNvNhapHang.setTenDvi(hhQdGiaoNvNhapHang.getTenDvi().toUpperCase());
-        hhQdGiaoNvNhapHang.setNgay(calendar.get(Calendar.DAY_OF_MONTH));
-        hhQdGiaoNvNhapHang.setThang(calendar.get(Calendar.MONTH) + 1);
-        hhQdGiaoNvNhapHang.setNam(calendar.get(Calendar.YEAR));
         hhQdGiaoNvNhapHang.setTgianNkhoStr(Contains.convertDateToStringSecond(hhQdGiaoNvNhapHang.getTgianNkho()));
         hhQdGiaoNvNhapHang.setHhQdGiaoNvNhangDtlList(hhQdGiaoNvNhangDtlList);
+        if(!hhQdGiaoNvNhapHang.getFileDinhKems().isEmpty()){
+            List<FileDinhKem> fileDinhKems = new ArrayList<>();
+            fileDinhKems = hhQdGiaoNvNhapHang.getFileDinhKems().stream().filter(x -> x.getFileType().equals("CAN_CU_PHAP_LY")).collect(Collectors.toList());
+            hhQdGiaoNvNhapHang.setListCanCuPhapLy(fileDinhKems);
+        }
         return docxToPdfConverter.convertDocxToPdf(inputStream, hhQdGiaoNvNhapHang);
     }
 }
