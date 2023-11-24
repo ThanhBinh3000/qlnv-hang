@@ -303,8 +303,7 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
         objReq.setMaDvi(currentUser.getDvql());
-        Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(), objReq.getPaggingReq().getLimit());
-        Page<DcnbBienBanTinhKhoHdrDTO> page = dcnbBienBanTinhKhoHdrRepository.searchPage(objReq, pageable);
+        Page<DcnbBienBanTinhKhoHdrDTO> page = searchPage(currentUser, objReq);
         List<DcnbBienBanTinhKhoHdrDTO> data = page.getContent();
 
         String title = "Danh sách biên bản tịnh kho";
