@@ -273,19 +273,10 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl {
             throw new Exception("Bad request.");
         }
         try {
-            String templatePath = baseReportFolder + "/bandaugia/";
+            String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "bandaugia/" + templatePath;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
             XhPhieuKnghiemCluong detail = this.detail(DataUtils.safeToLong(body.get("id")));
-            if (detail.getLoaiVthh().startsWith("02")) {
-                templatePath += "Phiếu kiểm nghiệm chất lượng vật tư.docx";
-            } else {
-                templatePath += "Phiếu kiểm nghiệm chất lượng lương thực.docx";
-            }
-            Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
-            xhBbLayMauRepository.findById(detail.getIdBbLayMau())
-                    .ifPresent(xhBbLayMau -> {
-                        detail.setSoLuongHangbaoQuan(xhBbLayMau.getSoLuongKiemTra());
-                    });
-            FileInputStream inputStream = new FileInputStream(templatePath);
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
         } catch (IOException e) {
             e.printStackTrace();

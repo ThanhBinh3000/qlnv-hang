@@ -33,6 +33,8 @@ import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovient
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdHdr;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -40,7 +42,8 @@ import java.util.Date;
 
 @Entity
 @Table(name = "FILE_DINH_KEM")
-@Data
+@Getter
+@Setter
 public class FileDinhKemJoinTable implements Serializable {
 
     private static final long serialVersionUID = 1L;

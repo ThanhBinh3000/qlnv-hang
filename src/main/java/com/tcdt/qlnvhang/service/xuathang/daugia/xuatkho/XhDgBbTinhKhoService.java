@@ -249,6 +249,7 @@ public class XhDgBbTinhKhoService extends BaseServiceImpl {
             xhBbLayMauRepository.findById(kiemNghiem.getIdBbLayMau()).ifPresent(layMau -> {
                 layMau.setIdTinhKho(created.getId());
                 layMau.setSoBbTinhKho(created.getSoBbTinhKho());
+                layMau.setNgayXuatDocKho(created.getNgayLapBienBan());
                 xhBbLayMauRepository.save(layMau);
             });
             xhPhieuKnghiemCluongRepository.save(kiemNghiem);
@@ -302,14 +303,10 @@ public class XhDgBbTinhKhoService extends BaseServiceImpl {
             throw new Exception("Bad request.");
         }
         try {
-            String templatePath = baseReportFolder + "/bandaugia/";
+            String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "bandaugia/" + templatePath;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
             XhDgBbTinhKhoHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
-            if (detail.getLoaiVthh().startsWith("02")) {
-                templatePath += "Biên bản tịnh kho bán đấu giá vật tư.docx";
-            } else {
-                templatePath += "Biên bản tịnh kho bán đấu giá lương thực.docx";
-            }
-            FileInputStream inputStream = new FileInputStream(templatePath);
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
         } catch (IOException e) {
             e.printStackTrace();

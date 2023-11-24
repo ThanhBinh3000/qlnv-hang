@@ -107,7 +107,7 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl {
         }
         XhBbLayMau data = xhBbLayMauRepository.findById(req.getId())
                 .orElseThrow(() -> new Exception("Không tìm thấy dữ liệu cần sửa"));
-        if (xhBbLayMauRepository.existsBySoBbLayMauAndIdNot(req.getSoBbLayMau(), req.getId())) {
+        if (!StringUtils.isEmpty(req.getSoBbLayMau()) && xhBbLayMauRepository.existsBySoBbLayMauAndIdNot(req.getSoBbLayMau(), req.getId())) {
             throw new Exception("Số biên bản lấy mẫu " + req.getSoBbLayMau() + " đã tồn tại");
         }
         BeanUtils.copyProperties(req, data, "id", "maDvi");
@@ -263,13 +263,10 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl {
             throw new Exception("Bad request.");
         }
         try {
-            String templatePath = baseReportFolder + "/bandaugia/";
+            String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "bandaugia/" + templatePath;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
             XhBbLayMau detail = this.detail(DataUtils.safeToLong(body.get("id")));
-            if (detail.getLoaiVthh().startsWith("02")) {
-                templatePath += "Biên bản lấy mẫu bàn giao mẫu vật tư.docx";
-            } else {
-                templatePath += "Biên bản lấy mẫu bàn giao mẫu lương thực.docx";
-            }
             Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
             xhQdGiaoNvXhRepository.findById(detail.getIdQdNv())
                     .ifPresent(xhQdGiaoNvXh -> detail.setMaDviCha(xhQdGiaoNvXh.getMaDvi()));
@@ -289,7 +286,6 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl {
                 }
                 detail.setChildren(listDtl.stream().filter(type -> "NLQ".equals(type.getType())).collect(Collectors.toList()));
             }
-            FileInputStream inputStream = new FileInputStream(templatePath);
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
         } catch (IOException e) {
             e.printStackTrace();
