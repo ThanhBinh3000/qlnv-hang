@@ -276,7 +276,7 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
     }
     try {
       String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
-      String fileTemplate = "nhapdauthau/" + templatePath;
+      String fileTemplate = "nhapdauthau/nhapkho/" + templatePath;
       FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
       NhPhieuNhapKhoTamGui detail = this.detail(DataUtils.safeToLong(body.get("id")));
       return docxToPdfConverter.convertDocxToPdf(inputStream, detail);

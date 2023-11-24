@@ -267,7 +267,7 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
     }
     try {
       String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
-      String fileTemplate = "nhapdauthau/" + templatePath;
+      String fileTemplate = "nhapdauthau/nhapkho/" + templatePath;
       FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
       NhBienBanGuiHang detail = this.detail(DataUtils.safeToLong(body.get("id")));
       return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
