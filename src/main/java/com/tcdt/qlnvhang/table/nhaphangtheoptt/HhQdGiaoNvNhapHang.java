@@ -117,4 +117,6 @@ public class HhQdGiaoNvNhapHang implements Serializable {
     private Integer nam;
     @Transient
     private List<HhQdGiaoNvNhDdiem> children = new ArrayList<>();
+    @Transient
+    private List<FileDinhKem> listCanCuPhapLy = new ArrayList<>();
 }
