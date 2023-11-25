@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.CheckDanhGiaEnum;
 import lombok.var;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,23 +17,29 @@ public class DieuChuyenNoiBo {
         return PathContains.BANG_KE_CAN_HANG_NHAP;
     }
     public static List<String> getDataNew(String chiTieuKiemTra){
-        var list = Lists.newArrayList(Splitter.on("-*").split(chiTieuKiemTra));
-        List<String> nds = new ArrayList<>();
-        for (String res : list) {
-            String[] nd = res.split("\\*");
-            nds.add(nd.length > 1 ? nd[1].trim() : "");
+        if(!StringUtils.isEmpty(chiTieuKiemTra)){
+            var list = Lists.newArrayList(Splitter.on("-*").split(chiTieuKiemTra));
+            List<String> nds = new ArrayList<>();
+            for (String res : list) {
+                String[] nd = res.split("\\*");
+                nds.add(nd.length > 1 ? nd[1].trim() : "");
+            }
+            return nds;
         }
-        return nds;
+        return null;
     }
 
     public static String getData(String chiTieuKiemTra){
-        var list = Lists.newArrayList(Splitter.on("-*").split(chiTieuKiemTra));
-        List<String> nds = new ArrayList<>();
-        for (String res : list) {
-            String[] nd = res.split("\\*");
-            nds.add(nd[1].trim());
+        if(!StringUtils.isEmpty(chiTieuKiemTra)){
+            var list = Lists.newArrayList(Splitter.on("-*").split(chiTieuKiemTra));
+            List<String> nds = new ArrayList<>();
+            for (String res : list) {
+                String[] nd = res.split("\\*");
+                nds.add(nd[1].trim());
+            }
+            return String.join(", ", nds);
         }
-        return String.join(", ", nds);
+        return null;
     }
     public static String checkDanhGia(Long danhGia) {
         if (!ObjectUtils.isEmpty(danhGia)) {
