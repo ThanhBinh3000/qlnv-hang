@@ -222,7 +222,7 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
     public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
         try {
             String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
-            String fileTemplate = "nhapdauthau/nhapkho" + fileName;
+            String fileTemplate = "nhapdauthau/nhapkho/" + fileName;
             FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
             NhBangKeVt detail  = this.detail(DataUtils.safeToLong(body.get("id")));
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);

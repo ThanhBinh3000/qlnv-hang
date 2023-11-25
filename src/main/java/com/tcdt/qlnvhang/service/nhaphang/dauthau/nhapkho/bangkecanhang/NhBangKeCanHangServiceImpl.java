@@ -260,7 +260,7 @@ public class NhBangKeCanHangServiceImpl extends BaseServiceImpl implements NhBan
     public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
         try {
             String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
-            String fileTemplate = "nhapdauthau/nhapkho" + fileName;
+            String fileTemplate = "nhapdauthau/nhapkho/" + fileName;
 //            NhQdGiaoNvuNhapxuatHdr qd = objectMapper.readValue(objectMapper.writeValueAsString(body.get("children")), NhQdGiaoNvuNhapxuatHdr.class);
             FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
             NhBangKeCanHang detail  = this.detail(DataUtils.safeToLong(body.get("id")));
