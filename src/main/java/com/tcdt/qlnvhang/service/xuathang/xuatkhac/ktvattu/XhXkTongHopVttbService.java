@@ -120,6 +120,7 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
                 s.setIdTongHopTc(id);
                 s.setMaTongHopTc(ma);
                 s.setNgayTongHopTc(LocalDateTime.now());
+                s.setTrangThai(TrangThaiAllEnum.DA_CHOT.getId());
             });
             xhXkDanhSachRepository.saveAll(listDsHdr);
         }

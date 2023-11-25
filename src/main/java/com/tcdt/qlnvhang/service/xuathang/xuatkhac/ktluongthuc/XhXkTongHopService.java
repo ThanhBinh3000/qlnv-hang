@@ -118,6 +118,7 @@ public class XhXkTongHopService extends BaseServiceImpl {
       s.setIdTongHop(id);
       s.setMaTongHop(ma);
       s.setNgayTongHop(ngay);
+      s.setTrangThai(TrangThaiAllEnum.DA_CHOT.getId());
     });
     xhXkDanhSachRepository.saveAll(listDsHdr);
 
@@ -192,6 +193,7 @@ public class XhXkTongHopService extends BaseServiceImpl {
         item.setIdTongHop(null);
         item.setMaTongHop(null);
         item.setNgayTongHop(null);
+        item.setTrangThai(TrangThaiAllEnum.CHUA_CHOT.getId());
         xhXkDanhSachRepository.save(item);
       });
     }
@@ -213,6 +215,7 @@ public class XhXkTongHopService extends BaseServiceImpl {
           item.setIdTongHop(null);
           item.setMaTongHop(null);
           item.setNgayTongHop(null);
+          item.setTrangThai(TrangThaiAllEnum.CHUA_CHOT.getId());
           xhXkDanhSachRepository.save(item);
         });
       }
