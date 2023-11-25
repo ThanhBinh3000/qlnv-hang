@@ -1,7 +1,5 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bienbanguihang;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tcdt.qlnvhang.common.DocxToPdfConverter;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
@@ -35,12 +33,8 @@ import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -190,7 +184,7 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
     Map<String, Map<String, Object>> listDanhMucHangHoa = getListDanhMucHangHoaObject();
     Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
     item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
-    item.setTenDviCha(listDanhMucDvi.get(StringUtils.chop(item.getMaDvi(),2)));
+    item.setTenDviCha(listDanhMucDvi.get(StringUtils.chop(item.getMaDvi(), 2)));
     item.setTenDiemKho(listDanhMucDvi.get(item.getMaDiemKho()));
     item.setTenNhaKho(listDanhMucDvi.get(item.getMaNhaKho()));
     item.setTenNganKho(listDanhMucDvi.get(item.getMaNganKho()));
@@ -270,7 +264,21 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
       String fileTemplate = "nhapdauthau/nhapkho/" + templatePath;
       FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
       NhBienBanGuiHang detail = this.detail(DataUtils.safeToLong(body.get("id")));
-      return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+
+      List<Map> listBenNhan = new ArrayList();
+      List<Map> listBenGiao = new ArrayList();
+      detail.getChildren().forEach(s -> {
+        HashMap<String, String> mapDetail = new HashMap<>();
+        mapDetail.put("daiDien", s.getDaiDien());
+        mapDetail.put("chucVu", s.getChucVu());
+        if (s.getLoaiBen().equals(Contains.BIEN_BAN_GUI_HANG_LOAI_BEN.BEN_NHAN)) {
+          listBenNhan.add(mapDetail);
+        } else if (s.getLoaiBen().equals(Contains.BIEN_BAN_GUI_HANG_LOAI_BEN.BEN_GIAO)) {
+          listBenGiao.add(mapDetail);
+        }
+      });
+      listBenNhan.sort(Comparator.comparing(o -> o.get("chucVu").toString()));
+      return docxToPdfConverter.convertDocxToPdf(inputStream, detail, listBenNhan, listBenGiao);
     } catch (IOException e) {
       e.printStackTrace();
     } catch (XDocReportException e) {
