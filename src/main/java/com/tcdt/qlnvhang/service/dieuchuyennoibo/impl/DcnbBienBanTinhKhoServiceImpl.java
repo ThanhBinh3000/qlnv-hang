@@ -76,7 +76,6 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
         } else {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
-        req.setTypeQd(Contains.DIEU_CHUYEN);
         searchDto = dcnbBienBanTinhKhoHdrRepository.searchPage(req, pageable);
         return searchDto;
     }
@@ -346,7 +345,6 @@ public class DcnbBienBanTinhKhoServiceImpl extends BaseServiceImpl {
     public List<DcnbBienBanTinhKhoHdrDTO> searchList(CustomUserDetails currentUser, SearchDcnbBienBanTinhKho req) {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
-        req.setTypeQd(Contains.DIEU_CHUYEN);
         List<DcnbBienBanTinhKhoHdrDTO> searchDto = dcnbBienBanTinhKhoHdrRepository.searchList(req);
         return searchDto;
     }

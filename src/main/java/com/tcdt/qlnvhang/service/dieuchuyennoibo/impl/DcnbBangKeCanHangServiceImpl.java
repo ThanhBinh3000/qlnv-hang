@@ -117,10 +117,8 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         if ("00".equals(req.getType())) { // kiểu xuất
-            req.setTypeQd(Contains.DIEU_CHUYEN);
             searchDto = dcnbBangKeCanHangHdrRepository.searchPageXuat(req, pageable);
         } else if ("01".equals(req.getType())) { // kiểu nhan
-            req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
             searchDto = dcnbBangKeCanHangHdrRepository.searchPageNhan(req, pageable);
         }
         return searchDto;
@@ -374,11 +372,9 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         if ("00".equals(req.getType())) { // kiểu xuất
-            req.setTypeQd(Contains.DIEU_CHUYEN);
             searchDto = dcnbBangKeCanHangHdrRepository.searchListXuat(req);
         }
         if ("01".equals(req.getType())) { // kiểu nhan
-            req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
             searchDto = dcnbBangKeCanHangHdrRepository.searchListNhan(req);
         }
         return searchDto;

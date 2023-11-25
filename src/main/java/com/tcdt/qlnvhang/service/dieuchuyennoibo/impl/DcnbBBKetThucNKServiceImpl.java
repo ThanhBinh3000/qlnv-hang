@@ -70,7 +70,6 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
     public List<DcnbBBKetThucNKHdrListDTO> searchList(CustomUserDetails currentUser, DcnbBBKetThucNKReq req) {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
-        req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         return hdrRepository.searchList(req);
     }
 
@@ -87,7 +86,6 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
         } else {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
-        req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         searchDto = hdrRepository.searchPage(req, pageable);
         return searchDto;
     }

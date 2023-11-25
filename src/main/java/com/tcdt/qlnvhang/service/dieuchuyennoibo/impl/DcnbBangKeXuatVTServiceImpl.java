@@ -65,7 +65,6 @@ public class DcnbBangKeXuatVTServiceImpl extends BaseServiceImpl implements Dcnb
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         req.setType("00");
-        req.setTypeQd(Contains.DIEU_CHUYEN);
         searchDto = hdrRepository.searchPage(req, pageable);
         return searchDto;
     }
