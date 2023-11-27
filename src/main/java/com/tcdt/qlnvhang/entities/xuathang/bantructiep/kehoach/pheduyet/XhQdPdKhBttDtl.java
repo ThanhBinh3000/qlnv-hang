@@ -59,13 +59,10 @@ public class XhQdPdKhBttDtl implements Serializable {
     private String diaDiemChaoGia;
     private String loaiHinhNx;
     private String kieuNx;
-    private LocalDate ngayMkho;
-    private LocalDate ngayKthuc;
     private String loaiVthh;
     private String cloaiVthh;
     private String moTaHangHoa;
     private String ghiChuChaoGia;
-    private LocalDate thoiHanBan;
     private String trangThai;
     private Long idQdNv;
     private String soQdNv;
@@ -94,9 +91,7 @@ public class XhQdPdKhBttDtl implements Serializable {
     @Transient
     private XhQdPdKhBttHdr xhQdPdKhBttHdr;
     @Transient
-    private List<FileDinhKem> fileUyQuyen = new ArrayList<>();
-    @Transient
-    private List<FileDinhKem> fileBanLe = new ArrayList<>();
+    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
     @Transient
     private List<XhHopDongBttHdr> listHopDongBtt;
 }
