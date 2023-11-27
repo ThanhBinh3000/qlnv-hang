@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbangiaonhan;
 
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import io.swagger.models.auth.In;
@@ -78,6 +80,8 @@ public class NhBbGiaoNhanVt extends TrangThaiBaseEntity implements Serializable 
 
     @Column(name = "MA_DVI")
     private String maDvi;
+    private String maQhns;
+    private String cbPhongKtbq;
 
     @Transient
     private String tenDvi;
@@ -90,14 +94,22 @@ public class NhBbGiaoNhanVt extends TrangThaiBaseEntity implements Serializable 
     @Transient
     private String tenLoKho;
     @Transient
+    private String tenCuc;
+    @Transient
+    private String tenChiCuc;
+    @Transient
     private List<NhBbGiaoNhanVtCt> chiTiets = new ArrayList<>();
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
 
     @Transient
-    private List<FileDinhKem> canCus = new ArrayList<>();
+    private List<FileDinhKem> canCuLapBb = new ArrayList<>();
 
     @Transient
     private NhBbNhapDayKho bbNhapDayKho;
+    @Transient
+    private NhBienBanGuiHang bbGuiHang;
+    @Transient
+    private BienBanLayMau bbLayMau;
 
 }

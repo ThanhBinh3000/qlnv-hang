@@ -113,11 +113,12 @@ public class NhBbGiaoNhanVtController {
     }
 
     @ApiOperation(value = "Tra cứu Quản lý Biên bản giao nhận vật tư", response = List.class)
-    @GetMapping()
+    @PostMapping(value = PathContains.URL_TRA_CUU, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse> search(NhBbGiaoNhanVtSearchReq req) {
         BaseResponse resp = new BaseResponse();
         try {
-//            resp.setData(service.search(req));
+            resp.setData(service.search(req));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
