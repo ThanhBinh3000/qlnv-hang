@@ -154,6 +154,8 @@ public class BienBanLayMau extends TrangThaiBaseEntity implements Serializable  
 	@Transient
 	private NhBienBanGuiHang bbGuiHang;
 	@Transient
+	private String soHskt;
+	@Transient
 	private List<FileDinhKem> listFileDinhKemBb;
 	@Transient
 	private List<FileDinhKem> listFileDinhKemAnh;

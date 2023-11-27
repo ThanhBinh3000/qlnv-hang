@@ -170,7 +170,7 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
         Map<String, String> mapDmucHh = getListDanhMucHangHoa();
         NhHoSoKyThuat item = optional.get();
         item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
-        Optional<BienBanLayMau> bienBanLayMau = bienBanLayMauRepository.findById(Long.valueOf(item.getIdBbLayMauXuat()));
+        Optional<BienBanLayMau> bienBanLayMau = bienBanLayMauRepository.findById(item.getIdBbLayMau());
         if (bienBanLayMau.isPresent()) {
             bienBanLayMau.get().setTenDiemKho(listDanhMucDvi.get(bienBanLayMau.get().getMaDiemKho()));
             bienBanLayMau.get().setTenNhaKho(listDanhMucDvi.get(bienBanLayMau.get().getMaNhaKho()));
