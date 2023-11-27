@@ -19,4 +19,5 @@ public class HhBbanLayMauDtl implements Serializable {
     private Long idHdr;
     private String daiDien;
     private String loaiDaiDien;
+    private String tenLoaiDaiDien;
 }

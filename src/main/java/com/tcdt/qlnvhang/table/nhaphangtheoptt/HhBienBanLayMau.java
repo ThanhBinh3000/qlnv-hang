@@ -79,6 +79,8 @@ public class HhBienBanLayMau implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date ngayPduyet;
     private String nguoiPduyet;
+    private String truongBpKtbq;
+    private String tenDviCcHang;
 
     @Transient
     private FileDinhKem fileDinhKem;
@@ -91,4 +93,13 @@ public class HhBienBanLayMau implements Serializable {
 
     @Transient
     private HhBienBanDayKhoHdr bbNhapDayKho;
+
+    @Transient
+    private String tenCloaiVthhUp;
+    @Transient
+    private String tenDviUp;
+    @Transient
+    private String tenDviCha;
+    @Transient
+    private String ngayLayMauStr;
 }

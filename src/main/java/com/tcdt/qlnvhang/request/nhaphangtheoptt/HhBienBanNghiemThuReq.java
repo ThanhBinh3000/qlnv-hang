@@ -55,6 +55,7 @@ public class HhBienBanNghiemThuReq {
     private String tenKeToan;
     private String tenNguoiPduyet;
     private String soQdGiaoNvNh;
+    private String soBangKe;
 
     private Long idDdiemGiaoNvNh;
 

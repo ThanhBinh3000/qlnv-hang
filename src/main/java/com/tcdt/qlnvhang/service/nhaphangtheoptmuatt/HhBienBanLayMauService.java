@@ -346,14 +346,19 @@ public class HhBienBanLayMauService extends BaseServiceImpl {
     }
 
     public ReportTemplateResponse preview(HhBienBanLayMauReq req) throws Exception {
-        HhBienBanLayMau nhBangKeVt = detail(req.getId().toString());
-        if (nhBangKeVt == null) {
+        HhBienBanLayMau bienBanLayMau = detail(req.getId().toString());
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        if (bienBanLayMau == null) {
             throw new Exception("Bản kê nhập vật tư không tồn tại.");
         }
-        HhBienBanLayMauPreview object = new HhBienBanLayMauPreview();
         ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+        bienBanLayMau.setTenCloaiVthhUp(bienBanLayMau.getTenCloaiVthh().toUpperCase());
+        bienBanLayMau.setTenDvi(mapDmucDvi.get(bienBanLayMau.getMaDvi()));
+        bienBanLayMau.setTenDviUp(bienBanLayMau.getTenDvi().toUpperCase());
+        bienBanLayMau.setTenDviCha(mapDmucDvi.get(bienBanLayMau.getMaDvi().substring(0, bienBanLayMau.getMaDvi().length() - 2)).toUpperCase());
+        bienBanLayMau.setNgayLayMauStr(Contains.convertDateToStringSecond(bienBanLayMau.getNgayLayMau()));
+        return docxToPdfConverter.convertDocxToPdf(inputStream, bienBanLayMau);
     }
 }
