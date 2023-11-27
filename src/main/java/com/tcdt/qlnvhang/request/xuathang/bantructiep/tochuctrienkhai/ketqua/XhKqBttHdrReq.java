@@ -42,7 +42,6 @@ public class XhKqBttHdrReq extends BaseRequest {
     private String soQdDc;
     private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
     private List<FileDinhKemJoinTable> fileDaKy = new ArrayList<>();
-    private List<FileDinhKemJoinTable> fileQd = new ArrayList<>();
     private List<XhQdPdKhBttDviReq> children = new ArrayList<>();
     private String dvql;
     private LocalDate ngayCgiaTu;

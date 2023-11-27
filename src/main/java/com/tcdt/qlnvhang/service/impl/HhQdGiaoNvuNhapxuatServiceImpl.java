@@ -425,9 +425,9 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 //			}
 
 //		}
-		if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
-			hhHopDongRepository.updateHopDong(optional.get().getIdHd(),Contains.DABANHANH_QD);
-		}
+//		if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
+//			hhHopDongRepository.updateHopDong(optional.get().getIdHd(),Contains.DABANHANH_QD);
+//		}
 		optional.get().setTrangThai(stReq.getTrangThai());
 		hhQdGiaoNvuNhapxuatRepository.save(item);
 		return true;

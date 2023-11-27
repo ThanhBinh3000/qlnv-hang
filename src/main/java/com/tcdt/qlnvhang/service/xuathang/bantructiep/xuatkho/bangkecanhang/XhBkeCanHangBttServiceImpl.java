@@ -107,7 +107,7 @@ public class XhBkeCanHangBttServiceImpl extends BaseServiceImpl {
         if (xhBkeCanHangBttHdrRepository.existsBySoBangKeHangAndIdNot(req.getSoBangKeHang(), req.getId())) {
             throw new Exception("Số phiếu xuất kho " + req.getSoPhieuXuatKho() + " đã tồn tại");
         }
-        BeanUtils.copyProperties(req, data, "id", "maDvi");
+        BeanUtils.copyProperties(req, data, "id", "maDvi", "idThuKho");
         data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(currentUser.getUser().getId());
         XhBkeCanHangBttHdr update = xhBkeCanHangBttHdrRepository.save(data);
