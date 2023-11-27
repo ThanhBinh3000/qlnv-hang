@@ -4,6 +4,9 @@ import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKhoCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatDtl;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNxDdiem;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKhoCtRepository;
@@ -11,6 +14,7 @@ import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbannhapdaykho.N
 import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.nhapkho.NhBbNhapDayKhoPreview;
 import com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc.QlBienBanNdkCtLtReq;
 import com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtReq;
+import com.tcdt.qlnvhang.service.HhQdGiaoNvuNhapxuatService;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -43,6 +47,9 @@ public class NhBienBanNhapDayKhoServiceImpl extends BaseServiceImpl implements N
 
     @Autowired
     private NhBbNhapDayKhoCtRepository nhBbNhapDayKhoCtRepository;
+
+    @Autowired
+    private HhQdGiaoNvuNhapxuatService hhQdGiaoNvuNhapxuatService;
 
     @Autowired
     private UserInfoRepository userInfoRepository;
@@ -82,7 +89,7 @@ public class NhBienBanNhapDayKhoServiceImpl extends BaseServiceImpl implements N
     }
 
     @Transactional
-    List<NhBbNhapDayKhoCt> saveListChiTiet(Long parentId, List<QlBienBanNdkCtLtReq> chiTietReqs) throws Exception {
+    public List<NhBbNhapDayKhoCt> saveListChiTiet(Long parentId, List<QlBienBanNdkCtLtReq> chiTietReqs) throws Exception {
         nhBbNhapDayKhoCtRepository.deleteByIdBbNhapDayKho(parentId);
         List<NhBbNhapDayKhoCt> chiTiets = new ArrayList<>();
         for (QlBienBanNdkCtLtReq req : chiTietReqs) {
@@ -240,7 +247,16 @@ public ReportTemplateResponse preview(HashMap<String, Object> body) throws Excep
         String fileTemplate = "nhapdauthau/nhapkho/" + fileName;
         FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
         NhBbNhapDayKho detail  = this.detail(DataUtils.safeToLong(body.get("id")));
-        return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+        NhQdGiaoNvuNhapxuatHdr qd = hhQdGiaoNvuNhapxuatService.detail(String.valueOf(detail.getIdQdGiaoNvNh()));
+        NhQdGiaoNvuNxDdiem diaDiem = null;
+        if (qd != null && qd.getDtlList() != null) {
+            for (NhQdGiaoNvuNhapxuatDtl dtl : qd.getDtlList()) {
+                if (diaDiem==null && dtl.getMaDvi() != null && dtl.getMaDvi().equals(detail.getMaDvi())) {
+                    diaDiem = dtl.getChildren().stream().filter(item -> item.getId().longValue() == detail.getIdDdiemGiaoNvNh().longValue()).findFirst().orElse(null);
+                }
+            }
+        }
+        return docxToPdfConverter.convertDocxToPdf(inputStream, detail ,qd, diaDiem);
     } catch (IOException e) {
         e.printStackTrace();
     } catch (XDocReportException e) {
