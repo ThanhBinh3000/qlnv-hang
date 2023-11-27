@@ -113,7 +113,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
       }
     }*/
     XhHoSoKyThuatHdr data = new XhHoSoKyThuatHdr();
-    BeanUtils.copyProperties(objReq, data);
+    BeanUtils.copyProperties(objReq, data,"mapVthh");
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
 
