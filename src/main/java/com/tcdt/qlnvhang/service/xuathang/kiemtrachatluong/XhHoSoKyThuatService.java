@@ -157,7 +157,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
         });
       });
 
-      BeanUtils.copyProperties(objReq, xhHoSoKyThuatHdr);
+      BeanUtils.copyProperties(objReq, xhHoSoKyThuatHdr,"mapVthh");
       xhHoSoKyThuatHdr.getXhHoSoKyThuatDtl().forEach(s -> {
         s.setXhHoSoKyThuatHdr(xhHoSoKyThuatHdr);
     /*    if (!DataUtils.isNullOrEmpty(s.getFileDinhKem())) {
