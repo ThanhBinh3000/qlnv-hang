@@ -180,24 +180,6 @@ public class XhKqBttHdr implements Serializable {
             this.fileDaKy.addAll(fileDaKy);
         }
     }
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @Fetch(value = FetchMode.SUBSELECT)
-    @JoinColumn(name = "dataId")
-    @Where(clause = "data_type='" + XhKqBttHdr.TABLE_NAME + "_QUYET_DINH'")
-    private List<FileDinhKemJoinTable> fileQd = new ArrayList<>();
-
-    public void setFileQd(List<FileDinhKemJoinTable> fileQd) {
-        this.fileQd.clear();
-        if (!DataUtils.isNullObject(fileQd)) {
-            fileQd.forEach(s -> {
-                s.setDataType(XhKqBttHdr.TABLE_NAME + "_QUYET_DINH");
-                s.setXhKqBttHdr(this);
-            });
-            this.fileQd.addAll(fileQd);
-        }
-    }
-
     @Transient
     private List<XhHopDongBttHdr> listHopDongBtt;
     @Transient

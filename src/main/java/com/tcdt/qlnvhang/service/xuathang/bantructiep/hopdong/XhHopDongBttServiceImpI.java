@@ -442,17 +442,11 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
-        String capDvi = currentUser.getUser().getCapDvi();
-        boolean isCapCuc = Contains.CAP_CUC.equals(capDvi);
         try {
-            String templatePath = baseReportFolder + "/bantructiep/";
-            if (isCapCuc) {
-                templatePath += "Hợp đồng bán trực tiếp cấp Cục.docx";
-            } else {
-                templatePath += "Hợp đồng bán trực tiếp cấp Chi cục.docx";
-            }
+            String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "bantructiep/" + templatePath;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
             XhHopDongBttHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
-            FileInputStream inputStream = new FileInputStream(templatePath);
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
         } catch (IOException e) {
             e.printStackTrace();
