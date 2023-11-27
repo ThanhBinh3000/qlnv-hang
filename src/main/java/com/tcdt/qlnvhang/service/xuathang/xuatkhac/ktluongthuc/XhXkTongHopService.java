@@ -71,6 +71,7 @@ public class XhXkTongHopService extends BaseServiceImpl {
         s1.setMapDmucDvi(mapDmucDvi);
         s1.setMapVthh(mapVthh);
         s1.setTenTrangThaiBienBan(TrangThaiAllEnum.getLabelById(s1.getTrangThaiBienBan()));
+        s1.setTenTrangThaiKtCl(TrangThaiAllEnum.getLabelById(s1.getTrangThaiKtCl()));
         s1.setTenTrangThaiKnCl(TrangThaiAllEnum.getLabelById(s1.getTrangThaiKnCl()));
       });
       s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
@@ -101,7 +102,7 @@ public class XhXkTongHopService extends BaseServiceImpl {
     data.setTrangThai(Contains.DUTHAO);
     data.getTongHopDtl().forEach(s -> {
       s.setTongHopHdr(data);
-      s.setTrangThaiKnCl(Contains.CHUA_THUC_HIEN);
+      s.setTrangThaiKtCl(Contains.CHUA_THUC_HIEN);
     });
     XhXkTongHopHdr created = xhXkTongHopRepository.save(data);
     created.setMaDanhSach(created.getMaDanhSach() +'-'+ created.getId());
@@ -280,7 +281,7 @@ public class XhXkTongHopService extends BaseServiceImpl {
         objs[10] = dtl.getDonViTinh();
         objs[11] = dtl.getNgayDeXuat();
         objs[12] = qd.getTenTrangThai();
-        objs[13] = dtl.getTrangThaiKnCl();
+        objs[13] = dtl.getTrangThaiKtCl();
       }
       dataList.add(objs);
     }
