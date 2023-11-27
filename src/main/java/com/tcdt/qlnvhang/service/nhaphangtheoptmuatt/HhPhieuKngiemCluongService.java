@@ -159,6 +159,8 @@ public class HhPhieuKngiemCluongService extends BaseServiceImpl {
         data.setTenLoKho(StringUtils.isEmpty(data.getMaLoKho())?null:hashMapDmdv.get(data.getMaLoKho()));
         List<HhPhieuKnCluongDtl> listDtl=hhPhieuKnCluongDtlRepository.findAllByIdHdr(data.getId());
         data.setHhPhieuKnCluongDtlList(listDtl);
+        data.setTenLoaiVthh(hashMapDmhh.get(data.getLoaiVthh()));
+        data.setTenCloaiVthh(hashMapDmhh.get(data.getCloaiVthh()));
 
         List<FileDinhKem> fileDinhkems = fileDinhKemService.search(data.getId(), Arrays.asList("HH_PHIEU_KNGHIEM_CLUONG"));
         if (!DataUtils.isNullOrEmpty(fileDinhkems)) {
@@ -274,14 +276,25 @@ public class HhPhieuKngiemCluongService extends BaseServiceImpl {
     }
 
     public ReportTemplateResponse preview(HhPhieuKngiemCluongReq req) throws Exception {
-        HhPhieuKngiemCluong nhBangKeVt = detail(req.getId().toString());
-        if (nhBangKeVt == null) {
+        HhPhieuKngiemCluong hhPhieuKngiemCluong = detail(req.getId().toString());
+        if (hhPhieuKngiemCluong == null) {
             throw new Exception("Phiếu kiểm nghiệm chất lượng không tồn tại.");
         }
-        HhPhieuKngiemCluongPreview object = new HhPhieuKngiemCluongPreview();
         ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+        Calendar calendar = new GregorianCalendar();
+        if(hhPhieuKngiemCluong.getNgayPduyet() != null){
+            calendar.setTime(hhPhieuKngiemCluong.getNgayPduyet());
+            hhPhieuKngiemCluong.setNgay(calendar.get(Calendar.DAY_OF_MONTH));
+            hhPhieuKngiemCluong.setThang(calendar.get(Calendar.MONTH) + 1);
+            hhPhieuKngiemCluong.setNam(calendar.get(Calendar.YEAR));
+        }
+        hhPhieuKngiemCluong.setTenLoaiVthh(hhPhieuKngiemCluong.getTenLoaiVthh().toUpperCase());
+        hhPhieuKngiemCluong.setNgayNhapDayKhoStr(Contains.convertDateToStringSecond(hhPhieuKngiemCluong.getNgayNhapDayKho()));
+        hhPhieuKngiemCluong.setNgayLayMauStr(Contains.convertDateToStringSecond(hhPhieuKngiemCluong.getNgayLayMau()));
+        hhPhieuKngiemCluong.setNgayKiemNghiemMauStr(Contains.convertDateToStringSecond(hhPhieuKngiemCluong.getNgayKnghiem()));
+        hhPhieuKngiemCluong.setTenNganLo(hhPhieuKngiemCluong.getTenNganKho() != null && hhPhieuKngiemCluong.getTenLoKho() != null ? hhPhieuKngiemCluong.getTenNganKho() + " / " + hhPhieuKngiemCluong.getTenLoKho() : null);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, hhPhieuKngiemCluong);
     }
 }
