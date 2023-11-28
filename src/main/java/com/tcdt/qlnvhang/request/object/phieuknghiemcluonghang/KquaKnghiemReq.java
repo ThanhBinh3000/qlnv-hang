@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class KquaKnghiemReq {
-
+	private Long id;
 	private String tenTchuan;
 
 	private String chiSoNhap;
