@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly;
 
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlHopDongDtl;
 import lombok.Data;
 
@@ -60,7 +61,7 @@ public class XhTlHopDongHdrReq extends BaseRequest {
     private String ghiChu;
     private String trangThai;
     private String trangThaiXh;
-    private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
-    private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
+    private List<FileDinhKemReq> fileDinhKemReq = new ArrayList<>();
+    private List<FileDinhKemReq> fileCanCuReq = new ArrayList<>();
     private List<XhTlHopDongDtl> children = new ArrayList<>();
 }

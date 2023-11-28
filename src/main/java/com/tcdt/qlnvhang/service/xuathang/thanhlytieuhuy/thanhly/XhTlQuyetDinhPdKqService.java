@@ -130,6 +130,8 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
         data.setTrangThaiHd(Contains.CHUA_THUC_HIEN);
         data.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
         XhTlQuyetDinhPdKqHdr created = xhTlQuyetDinhPdKqHdrRepository.save(data);
+        fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(),created.getId(),XhTlQuyetDinhPdKqHdr.FILE_DINH_KEM);
+        fileDinhKemService.saveListFileDinhKem(objReq.getFileCanCuReq(),created.getId(),XhTlQuyetDinhPdKqHdr.FILE_CAN_CU);
         return created;
     }
 
@@ -152,6 +154,9 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
         XhTlQuyetDinhPdKqHdr data = optional.get();
         BeanUtils.copyProperties(objReq, data, "id", "maDvi", "trangThaiHd", "trangThaiXh");
         XhTlQuyetDinhPdKqHdr updated = xhTlQuyetDinhPdKqHdrRepository.save(data);
+        fileDinhKemService.delete(updated.getId(),Arrays.asList(XhTlQuyetDinhPdKqHdr.FILE_DINH_KEM,XhTlQuyetDinhPdKqHdr.FILE_CAN_CU));
+        fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(),updated.getId(),XhTlQuyetDinhPdKqHdr.FILE_DINH_KEM);
+        fileDinhKemService.saveListFileDinhKem(objReq.getFileCanCuReq(),updated.getId(),XhTlQuyetDinhPdKqHdr.FILE_CAN_CU);
         return updated;
     }
 
@@ -188,6 +193,8 @@ public class XhTlQuyetDinhPdKqService extends BaseServiceImpl {
             data.setXhTlQuyetDinhHdr(xhTlQuyetDinhService.detail(data.getXhTlToChucHdr().getIdQdTl()));
         }
         data.setListHopDong(hopDongTlHdr);
+        data.setFileCanCu(fileDinhKemService.search(data.getId(),XhTlQuyetDinhPdKqHdr.FILE_CAN_CU));
+        data.setFileDinhKem(fileDinhKemService.search(data.getId(),XhTlQuyetDinhPdKqHdr.FILE_DINH_KEM));
         return data;
     }
 
