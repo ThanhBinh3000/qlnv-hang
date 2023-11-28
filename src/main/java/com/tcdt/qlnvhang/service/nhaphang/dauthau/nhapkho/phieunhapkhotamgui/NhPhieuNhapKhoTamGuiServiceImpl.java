@@ -165,7 +165,6 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
     Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
     item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
     item.setTenDviCha(listDanhMucDvi.get(StringUtils.chop(item.getMaDvi(),2)));
-    item.setTenDviCha(listDanhMucDvi.get(item.getMaDvi()));
     item.setTenDiemKho(listDanhMucDvi.get(item.getMaDiemKho()));
     item.setTenNhaKho(listDanhMucDvi.get(item.getMaNhaKho()));
     item.setTenNganKho(listDanhMucDvi.get(item.getMaNganKho()));
