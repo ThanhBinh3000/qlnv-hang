@@ -249,6 +249,14 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
             String fileTemplate = "bandaugia/" + templatePath;
             FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
             XhDgPhieuXuatKho detail = this.detail(DataUtils.safeToLong(body.get("id")));
+            Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
+            xhQdGiaoNvXhRepository.findById(detail.getIdQdNv()).ifPresent(quyetDinh -> {
+                detail.setMaDviCha(quyetDinh.getMaDvi());
+                if (mapDmucDvi.containsKey((detail.getMaDviCha()))) {
+                    Map<String, Object> objDonVi = mapDmucDvi.get(detail.getMaDviCha());
+                    detail.setTenDviCha(objDonVi.get("tenDvi").toString());
+                }
+            });
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
         } catch (IOException e) {
             e.printStackTrace();
