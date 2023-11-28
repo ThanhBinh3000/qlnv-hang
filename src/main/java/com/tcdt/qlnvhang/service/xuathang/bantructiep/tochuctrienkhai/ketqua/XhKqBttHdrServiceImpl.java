@@ -385,6 +385,14 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
             String fileTemplate = "bantructiep/" + templatePath;
             FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
             XhKqBttHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
+            List<XhQdPdKhBttDvi> listDvi = xhQdPdKhBttDviRepository.findAllByIdQdKqHdr(detail.getId());
+            listDvi.forEach(dataDvi -> {
+                List<XhQdPdKhBttDviDtl> listDviDtl = xhQdPdKhBttDviDtlRepository.findAllByIdDvi(dataDvi.getId());
+                listDviDtl.forEach(dataDviDtl -> {
+                    List<XhTcTtinBtt> listTtin  = xhTcTtinBttRepository.findAllByIdDviDtl(dataDviDtl.getId());
+                    dataDviDtl.setChildren(listTtin.stream().filter(item -> item.getLuaChon()).collect(Collectors.toList()));
+                });
+            });
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
         } catch (IOException e) {
             e.printStackTrace();

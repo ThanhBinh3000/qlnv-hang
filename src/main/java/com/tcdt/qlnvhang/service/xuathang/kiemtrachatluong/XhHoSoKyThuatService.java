@@ -115,7 +115,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
     XhHoSoKyThuatHdr data = new XhHoSoKyThuatHdr();
     BeanUtils.copyProperties(objReq, data,"mapVthh");
     data.setMaDvi(currentUser.getUser().getDepartment());
-    data.setTrangThai(Contains.DUTHAO);
+    data.setTrangThai(Contains.DADUYET_LDC);
 
     data.getXhHoSoKyThuatDtl().forEach(s -> {
       s.setXhHoSoKyThuatHdr(data);
@@ -264,8 +264,8 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
           xhHoSoKyThuatDtl.setSoHskt(nhHoSoBienBan.getSoHoSoKyThuat());
           xhHoSoKyThuatDtl.setMaDviNhapHskt(nhHoSoBienBan.getMaDvi());
           xhHoSoKyThuatDtl.setNgayTao(DataUtils.convertToLocalDate(nhHoSoBienBan.getNgayTao()).atStartOfDay());
-          xhHoSoKyThuatDtl.setIdBbLayMau(null);
-          xhHoSoKyThuatDtl.setSoBbLayMau(nhHoSoBienBan.getSoBbLayMau());
+          xhHoSoKyThuatDtl.setIdBbLayMauNh(nhHoSoBienBan.getId());
+          xhHoSoKyThuatDtl.setSoBbLayMauNh(nhHoSoBienBan.getSoBbLayMau());
           xhHoSoKyThuatDtl.setSoQdGiaoNvNh(nhHoSoBienBan.getSoQdGiaoNvNh());
           xhHoSoKyThuatDtl.setIdQdGiaoNvNh(nhHoSoBienBan.getIdQdGiaoNvNh());
           xhHoSoKyThuatDtl.setDviCungCap(nhHoSoBienBan.getSoHd());
@@ -372,11 +372,15 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
     } else {
       xhHskt.setMapDmucDvi(mapDmucDvi);
       xhHskt.setMapVthh(mapVthh);
+      xhHskt.getXhHoSoKyThuatDtl().forEach(s->{
+        s.setMapVthh(mapVthh);
+      });
      /* Optional<UserInfo> user = userInfoRepository.findById(xhHskt.getNguoiTaoId());
       if (user.isPresent()) {
         xhHskt.setCanBoTaoHoSoNh(user.get().getFullName());
       }*/
     }
+    xhHskt.getXhHoSoKyThuatDtl().sort(Comparator.comparing(XhHoSoKyThuatDtl::getId));
     return xhHskt;
   }
 

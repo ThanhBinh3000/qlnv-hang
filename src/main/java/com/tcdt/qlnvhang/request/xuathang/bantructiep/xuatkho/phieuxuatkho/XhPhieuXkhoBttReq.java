@@ -66,6 +66,7 @@ public class XhPhieuXkhoBttReq extends BaseRequest {
     private String ghiChu;
     private String pthucBanTrucTiep; // 01 : chào giá; 02 : Ủy quyền; 03 : Bán lẻ
     private String phanLoai;
+    private String tenBenMua;
     private String trangThai;
     private String lyDoTuChoi;
     private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();

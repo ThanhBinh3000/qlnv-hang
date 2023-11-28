@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 import org.hibernate.annotations.Fetch;
@@ -24,6 +25,8 @@ import java.util.Map;
 public class XhTlHopDongHdr extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_TL_HOP_DONG_HDR";
+    public static final String FILE_DINH_KEM = "XH_TL_HOP_DONG_HDR_DK";
+    public static final String FILE_CAN_CU = "XH_TL_HOP_DONG_HDR_CC";
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlHopDongHdr.TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = XhTlHopDongHdr.TABLE_NAME
@@ -132,39 +135,11 @@ public class XhTlHopDongHdr extends BaseEntity implements Serializable {
         this.tenTrangThaiXh = TrangThaiAllEnum.getLabelById(this.trangThaiXh);
     }
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @Fetch(value = FetchMode.SUBSELECT)
-    @JoinColumn(name = "dataId")
-    @Where(clause = "data_type='" + XhTlHopDongHdr.TABLE_NAME + "_CAN_CU'")
-    private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
+    @Transient
+    private List<FileDinhKem> fileCanCu = new ArrayList<>();
 
-    public void setFileCanCu(List<FileDinhKemJoinTable> fileCanCu) {
-        this.fileCanCu.clear();
-        if (!DataUtils.isNullObject(fileCanCu)) {
-            fileCanCu.forEach(f -> {
-                f.setDataType(XhTlHopDongHdr.TABLE_NAME + "_CAN_CU");
-                f.setXhTlHopDongHdr(this);
-            });
-            this.fileCanCu.addAll(fileCanCu);
-        }
-    }
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @Fetch(value = FetchMode.SUBSELECT)
-    @JoinColumn(name = "dataId")
-    @Where(clause = "data_type='" + XhTlHopDongHdr.TABLE_NAME + "_DINH_KEM'")
-    private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
-
-    public void setFileDinhKem(List<FileDinhKemJoinTable> fileDinhKem) {
-        this.fileDinhKem.clear();
-        if (!DataUtils.isNullObject(fileDinhKem)) {
-            fileDinhKem.forEach(s -> {
-                s.setDataType(XhTlHopDongHdr.TABLE_NAME + "_DINH_KEM");
-                s.setXhTlHopDongHdr(this);
-            });
-            this.fileDinhKem.addAll(fileDinhKem);
-        }
-    }
+    @Transient
+    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
 
     @Transient
     private List<XhTlHopDongDtl> children = new ArrayList<>();
