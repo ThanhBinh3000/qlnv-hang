@@ -80,6 +80,7 @@ public class HopDongMttHdrReq extends BaseRequest {
   private String ttinGiayUyQuyen;
 
   private Long idDviBan;
+  private Long idKqCgia;
 
   private String tenDviBan;
 
