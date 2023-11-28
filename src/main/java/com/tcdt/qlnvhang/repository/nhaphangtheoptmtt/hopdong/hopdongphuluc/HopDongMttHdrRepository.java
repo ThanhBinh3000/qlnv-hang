@@ -37,6 +37,7 @@ public interface HopDongMttHdrRepository extends JpaRepository<HopDongMttHdr, Lo
   Page<HopDongMttHdr> dsTaoQd(@Param("param") HopDongMttHdrReq param, Pageable pageable);
 
   Optional<HopDongMttHdr> findBySoHd(String soHd);
+  Optional<HopDongMttHdr> findByIdKqCgia(Long idDviBan);
 
   @Transactional
   List<HopDongMttHdr> findAllByIdHd(Long idHd);
