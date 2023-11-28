@@ -2,18 +2,14 @@ package com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.phieukiemtracl;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuongCt;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.phieuktracl.QlpktclhKetQuaKiemTraRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuongRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNxDdiemRepository;
-import com.tcdt.qlnvhang.request.object.HhBbNghiemThuKlstPreview;
-import com.tcdt.qlnvhang.request.object.HhBbNghiemthuKlstHdrReq;
 import com.tcdt.qlnvhang.request.object.NnPhieuKtChatLuongPreview;
 import com.tcdt.qlnvhang.request.phieuktracluong.QlpktclhPhieuKtChatLuongRequestDto;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -318,6 +314,10 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 		if (hhHopDongHdr.isPresent()) {
 			object.setNgayKyHd(convertDate(hhHopDongHdr.get().getNgayKy()));
 		}
+		Map<String, String> dmucDanhGia = getListDanhMucChung("KET_QUA_DANH_GIA");
+		object.getKetQuaKiemTra().forEach(item -> {
+			item.setDanhGia(dmucDanhGia.get(item.getDanhGia()));
+		});
 		return docxToPdfConverter.convertDocxToPdf(inputStream, object);
 	}
 
