@@ -53,6 +53,10 @@ public class XhXkVtBhPhieuKdclHdr extends BaseEntity implements Serializable {
   private Boolean isDat;
   private Boolean mauBiHuy;
   private String trangThai;
+  private String canBoTao;
+  private String thuKho;
+  private String tpKtbq;
+  private String lanhDaoCuc;
   private LocalDate ngayGduyet;
   private Long nguoiGduyetId;
   private LocalDate ngayPduyet;
