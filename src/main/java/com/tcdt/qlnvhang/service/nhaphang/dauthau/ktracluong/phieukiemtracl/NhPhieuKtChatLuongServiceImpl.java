@@ -1,11 +1,13 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.phieukiemtracl;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuong;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuongCt;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.phieuktracl.QlpktclhKetQuaKiemTraRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.phieuktracl.NhPhieuKtChatLuongRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoRepository;
@@ -59,6 +61,8 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 	private final HhQdGiaoNvuNxDdiemRepository hhQdGiaoNvuNxDdiemRepository;
 	@Autowired
 	private FileDinhKemService fileDinhKemService;
+	@Autowired
+	private HhHopDongRepository hhHopDongRepository;
 
 	@Override
 	public Page<NhPhieuKtChatLuong> searchPage(QlpktclhPhieuKtChatLuongRequestDto objReq) {
@@ -310,6 +314,10 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 		NnPhieuKtChatLuongPreview object = new NnPhieuKtChatLuongPreview();
 		NhPhieuKtChatLuong nhPhieuKtChatLuong = this.detail(objReq.getId());
 		BeanUtils.copyProperties(nhPhieuKtChatLuong, object);
+		Optional<HhHopDongHdr> hhHopDongHdr = hhHopDongRepository.findBySoHd(nhPhieuKtChatLuong.getSoHd());
+		if (hhHopDongHdr.isPresent()) {
+			object.setNgayKyHd(convertDate(hhHopDongHdr.get().getNgayKy()));
+		}
 		return docxToPdfConverter.convertDocxToPdf(inputStream, object);
 	}
 
