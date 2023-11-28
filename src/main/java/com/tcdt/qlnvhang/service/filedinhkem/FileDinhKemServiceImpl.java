@@ -57,6 +57,11 @@ public class FileDinhKemServiceImpl implements FileDinhKemService {
     }
 
     @Override
+    public void delete(Long dataId, String dataTypes) {
+        fileDinhKemRepository.deleteByDataIdAndDataType(dataId, dataTypes);
+    }
+
+    @Override
     public void saveFileDinhKems(Collection<FileDinhKem> fileDinhKems) {
         fileDinhKemRepository.saveAll(fileDinhKems);
     }
