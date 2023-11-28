@@ -39,6 +39,10 @@ public class XhHoSoKyThuatDtl extends BaseEntity implements Serializable {
   private LocalDate ngayTaoHskt;
   private Long idBbLayMau;
   private String soBbLayMau;
+  private Long idBbLayMauNh;
+  private String soBbLayMauNh;
+  private String soQdGiaoNv;
+  private Long idQdGiaoNv;
   private String soQdGiaoNvNh;
   private Long idQdGiaoNvNh;
   private String dviCungCap;
