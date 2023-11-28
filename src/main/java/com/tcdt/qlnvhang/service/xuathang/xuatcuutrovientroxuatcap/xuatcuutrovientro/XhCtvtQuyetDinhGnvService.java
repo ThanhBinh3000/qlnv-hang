@@ -163,7 +163,9 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
     List<XhCtvtQuyetDinhGnvHdr> allById = xhCtvtQuyetDinhGnvHdrRepository.findAllById(ids);
     allById.forEach(data -> {
       String tenDvi = mapDmucDvi.containsKey(data.getMaDvi()) ? mapDmucDvi.get(data.getMaDvi()) : null;
+      String tenDviCha = mapDmucDvi.containsKey(org.apache.velocity.util.StringUtils.chop(data.getMaDvi(),2)) ? mapDmucDvi.get(org.apache.velocity.util.StringUtils.chop(data.getMaDvi(),2)) : null;
       data.setTenDvi(tenDvi);
+      data.setTenDviCha(tenDviCha);
       data.getDataDtl().forEach(s -> {
         s.setMapDmucDvi(mapDmucDvi);
         s.setMapVthh(mapVthh);
