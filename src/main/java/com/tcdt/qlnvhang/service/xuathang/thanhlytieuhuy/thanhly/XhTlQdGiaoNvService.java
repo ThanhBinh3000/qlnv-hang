@@ -11,6 +11,7 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoCtReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlQdGiaoNvHdrReq;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.*;
 import com.tcdt.qlnvhang.util.Contains;
@@ -41,6 +42,8 @@ public class XhTlQdGiaoNvService extends BaseServiceImpl {
     private XhTlHopDongHdrRepository xhTlHopDongHdrRepository;
     @Autowired
     private XhTlDanhSachService xhTlDanhSachService;
+    @Autowired
+    private FileDinhKemService fileDinhKemService;
 
     public Page<XhTlQdGiaoNvHdr> searchPage(CustomUserDetails currentUser, XhTlQdGiaoNvHdrReq req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -91,6 +94,8 @@ public class XhTlQdGiaoNvService extends BaseServiceImpl {
         data.setTrangThai(Contains.DUTHAO);
         XhTlQdGiaoNvHdr created = hdrRepository.save(data);
         saveDetail(req,created.getId());
+        fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(),created.getId(),XhTlQdGiaoNvHdr.FILE_DINH_KEM);
+        fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(),created.getId(),XhTlQdGiaoNvHdr.FILE_CAN_CU);
         return created;
     }
 
@@ -140,6 +145,9 @@ public class XhTlQdGiaoNvService extends BaseServiceImpl {
         BeanUtils.copyProperties(req, data, "id", "maDvi");
         XhTlQdGiaoNvHdr updated = hdrRepository.save(data);
         saveDetail(req,updated.getId());
+        fileDinhKemService.delete(updated.getId(),Arrays.asList(XhTlQdGiaoNvHdr.FILE_DINH_KEM,XhTlQdGiaoNvHdr.FILE_CAN_CU));
+        fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(),updated.getId(),XhTlQdGiaoNvHdr.FILE_DINH_KEM);
+        fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(),updated.getId(),XhTlQdGiaoNvHdr.FILE_CAN_CU);
         return updated;
     }
 
@@ -167,6 +175,8 @@ public class XhTlQdGiaoNvService extends BaseServiceImpl {
                 }
             });
             data.setChildren(allByIdHdr);
+            data.setFileCanCu(fileDinhKemService.search(data.getId(),XhTlQdGiaoNvHdr.FILE_CAN_CU));
+            data.setFileDinhKem(fileDinhKemService.search(data.getId(),XhTlQdGiaoNvHdr.FILE_DINH_KEM));
         });
         return allById;
     }
@@ -176,6 +186,7 @@ public class XhTlQdGiaoNvService extends BaseServiceImpl {
         Optional<XhTlQdGiaoNvHdr> optional = hdrRepository.findById(idSearchReq.getId());
         if (!optional.isPresent()) throw new Exception("Banr ghi không tồn tại");
         hdrRepository.delete(optional.get());
+        fileDinhKemService.delete(optional.get().getId(),Arrays.asList(XhTlQdGiaoNvHdr.FILE_DINH_KEM,XhTlQdGiaoNvHdr.FILE_CAN_CU));
     }
 
     @Transactional
