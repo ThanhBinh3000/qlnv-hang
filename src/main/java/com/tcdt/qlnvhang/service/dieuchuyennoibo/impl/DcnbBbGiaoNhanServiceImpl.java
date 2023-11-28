@@ -86,7 +86,6 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
         } else {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
-        req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         searchDto = hdrRepository.searchPage(req, pageable);
         return searchDto;
     }
@@ -180,11 +179,13 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
         DcnbBbGiaoNhanHdr data = optional.get();
         BeanUtils.copyProperties(req, data);
         Optional<DcnbKeHoachDcDtl> keHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(req.getKeHoachDcDtlId());
-        if (keHoachDcDtl.isPresent()) {
-            if (keHoachDcDtl.get().getParentId() != null) {
-                data.setKeHoachDcDtlId(keHoachDcDtl.get().getParentId());
-            } else {
-                data.setKeHoachDcDtlId(req.getKeHoachDcDtlId());
+        if(!data.getKeHoachDcDtlId().equals(req.getKeHoachDcDtlId())){
+            if (keHoachDcDtl.isPresent()) {
+                if (keHoachDcDtl.get().getParentId() != null) {
+                    data.setKeHoachDcDtlId(keHoachDcDtl.get().getParentId());
+                } else {
+                    data.setKeHoachDcDtlId(req.getKeHoachDcDtlId());
+                }
             }
         }
         data.setDanhSachDaiDien(req.getDanhSachDaiDien());
@@ -387,7 +388,7 @@ public class DcnbBbGiaoNhanServiceImpl extends BaseServiceImpl implements DcnbBb
 
         }
         return DcnbBbGiaoNhanHdrPreview.builder()
-                .chungLoaiHangHoa(dcnbBBKetThucNKHdr.get().getCloaiVthh())
+                .chungLoaiHangHoa(dcnbBBKetThucNKHdr.get().getTenCloaiVthh())
                 .donViCungCapHang(dcnbBBKetThucNKHdr.get().getTenDvi())
                 .quyChuanTieuChuan("")
                 .ngayLap(dcnbBBKetThucNKHdr.get().getNgayLap().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))

@@ -16,9 +16,11 @@ import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBKetThucNKHdrDTO;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBBKetThucNKHdrListDTO;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBBKetThucNKService;
+import com.tcdt.qlnvhang.service.donvi.QlnvDmDonViService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -57,6 +59,8 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
     public DocxToPdfConverter docxToPdfConverter;
     @Autowired
     private FileDinhKemService fileDinhKemService;
+    @Autowired
+    private QlnvDmDonViService qlnvDmDonViService;
     @Override
     public Page<DcnbBBKetThucNKHdr> searchPage(DcnbBBKetThucNKReq req) throws Exception {
         return null;
@@ -66,7 +70,6 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
     public List<DcnbBBKetThucNKHdrListDTO> searchList(CustomUserDetails currentUser, DcnbBBKetThucNKReq req) {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
-        req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         return hdrRepository.searchList(req);
     }
 
@@ -83,7 +86,6 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
         } else {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
-        req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         searchDto = hdrRepository.searchPage(req, pageable);
         return searchDto;
     }
@@ -344,8 +346,9 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
     }
 
     private DcnbBBKetThucNKHdrPreview setDataToPreview(Optional<DcnbBBKetThucNKHdr> dcnbBBKetThucNKHdr, List<DcnbBBKetThucNKDtlDto> dcnbBBKetThucNKDtlDtos) {
+        QlnvDmDonvi byMa = qlnvDmDonViService.getDonViByMa(dcnbBBKetThucNKHdr.get().getMaDvi());
         return DcnbBBKetThucNKHdrPreview.builder()
-                .maDvi(dcnbBBKetThucNKHdr.get().getMaDvi())
+                .maDvi(byMa.getTenDvi())
                 .maQhns(dcnbBBKetThucNKHdr.get().getMaQhns())
                 .soBb(dcnbBBKetThucNKHdr.get().getSoBb())
                 .ngayLap(dcnbBBKetThucNKHdr.get().getNgayLap().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
@@ -353,7 +356,7 @@ public class DcnbBBKetThucNKServiceImpl extends BaseServiceImpl implements DcnbB
                 .tenKeToanTruong(dcnbBBKetThucNKHdr.get().getTenKeToanTruong())
                 .ktvBQuan(dcnbBBKetThucNKHdr.get().getKtvBQuan())
                 .tenThuKho(dcnbBBKetThucNKHdr.get().getTenThuKho())
-                .chungLoaiHangHoa(dcnbBBKetThucNKHdr.get().getCloaiVthh())
+                .chungLoaiHangHoa(dcnbBBKetThucNKHdr.get().getTenCloaiVthh())
                 .tenHangDtqg(dcnbBBKetThucNKHdr.get().getLoaiVthh())
                 .tenNganKho(dcnbBBKetThucNKHdr.get().getTenNganKho())
                 .tenLoKho(dcnbBBKetThucNKHdr.get().getTenLoKho())

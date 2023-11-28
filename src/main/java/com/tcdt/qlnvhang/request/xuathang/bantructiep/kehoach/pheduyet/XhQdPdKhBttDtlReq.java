@@ -46,13 +46,10 @@ public class XhQdPdKhBttDtlReq {
     private String diaDiemChaoGia;
     private String loaiHinhNx;
     private String kieuNx;
-    private LocalDate ngayMkho;
-    private LocalDate ngayKthuc;
     private String loaiVthh;
     private String cloaiVthh;
     private String moTaHangHoa;
     private String ghiChuChaoGia;
-    private LocalDate thoiHanBan;
     private String trangThai;
     private Long idQdNv;
     private String soQdNv;
@@ -62,6 +59,5 @@ public class XhQdPdKhBttDtlReq {
     private Integer slHdChuaKy;
     private BigDecimal tongSlDaKyHdong;
     private BigDecimal tongSlChuaKyHdong;
-    private List<FileDinhKemReq> fileUyQuyen = new ArrayList<>();
-    private List<FileDinhKemReq> fileBanLe = new ArrayList<>();
+    private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();
 }

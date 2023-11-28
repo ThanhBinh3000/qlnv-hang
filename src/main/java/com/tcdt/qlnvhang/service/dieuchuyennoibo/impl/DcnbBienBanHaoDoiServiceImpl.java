@@ -94,7 +94,6 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         } else {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
-        req.setTypeQd(Contains.DIEU_CHUYEN);
         searchDto = dcnbBienBanHaoDoiHdrRepository.searchPage(req, pageable);
         return searchDto;
     }

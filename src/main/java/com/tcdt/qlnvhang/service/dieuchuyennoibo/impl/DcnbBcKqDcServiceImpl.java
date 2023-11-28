@@ -10,13 +10,13 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbBbKqDcSearch;
 import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBbKqDcDTO;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbKeHoachDcDtlBcDTO;
 import com.tcdt.qlnvhang.service.dieuchuyennoibo.DcnbBbKqDcService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.catalog.QlnvDmVattu;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBcKqDcDtl;
-import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbBcKqDcHdr;
+import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -28,7 +28,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.Column;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -54,6 +56,16 @@ public class DcnbBcKqDcServiceImpl implements DcnbBbKqDcService {
     private DcnbBbNhapDayKhoHdrRepository dcnbBbNhapDayKhoHdrRepository;
     @Autowired
     private QlnvDmVattuRepository qlnvDmVattuRepository;
+    @Autowired
+    private DcnbPhieuXuatKhoHdrRepository dcnbPhieuXuatKhoHdrRepository;
+    @Autowired
+    private DcnbPhieuNhapKhoHdrRepository dcnbPhieuNhapKhoHdrRepository;
+    @Autowired
+    private DcnbPhieuXuatKhoDtlRepository dcnbPhieuXuatKhoDtlRepository;
+    @Autowired
+    private DcnbPhieuNhapKhoDtlRepository dcnbPhieuNhapKhoDtlRepository;
+    @Autowired
+    private DcnbKeHoachDcDtlRepository dcnbKeHoachDcDtlRepository;
 
     @Override
     public Page<DcnbBcKqDcHdr> search(CustomUserDetails currentUser, DcnbBbKqDcSearch req) {
@@ -248,22 +260,70 @@ public class DcnbBcKqDcServiceImpl implements DcnbBbKqDcService {
     public List<DcnbBcKqDcDtl> thongTinNhapXuatHangChiCuc(DcnbBbKqDcSearch objReq) throws Exception {
         CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
         objReq.setMaDvi(currentUser.getDvql());
-        List<DcnbBcKqDcDtl> kqdcs = dtlRepository.thongTinXuatNhapHangChiCuc(objReq);
-        for (DcnbBcKqDcDtl dtl : kqdcs) {
-            if (dcnbBbGiaoNhanHdrRepository.findByKeHoachDcDtlId(dtl.getKeHoachDcDtlId()).isEmpty()) { // có biên bản nhập đầy kho đối với lương thực || có biên bản giao nhận đối với vt
-                dtl.setKetQua(Contains.DA_HOAN_THANH);
-            } else if (dcnbBbNhapDayKhoHdrRepository.findByKeHoachDcDtlId(dtl.getKeHoachDcDtlId()).isEmpty()) { // có biên bản nhập đầy kho đối với lương thực || có biên bản giao nhận đối với vt
-                QlnvDmVattu byMa = qlnvDmVattuRepository.findByMa(dtl.getCloaiVthh());
-                if("VT".equals(byMa.getLoaiHang())){ // là vật từ thì đang thực hiện
-                    dtl.setKetQua(Contains.DANG_THUC_HIEN);
-                }else {
-                    dtl.setKetQua(Contains.DA_HOAN_THANH);
+        List<DcnbKeHoachDcDtl> loaiVthhs = dcnbKeHoachDcDtlRepository.findByQuyetDinhDcCuaCuc(objReq.getSoQdinhCuc(), objReq.getMaDvi());
+        List<DcnbBcKqDcDtl> kqdcs = new ArrayList<>();
+        for (DcnbKeHoachDcDtl loaiVthh : loaiVthhs) {
+            DcnbBcKqDcDtl kqdc = new DcnbBcKqDcDtl();
+            kqdc.setKeHoachDcDtlId(loaiVthh.getId());
+            kqdc.setLoaiVthh(loaiVthh.getLoaiVthh());
+            kqdc.setTenLoaiVthh(loaiVthh.getTenLoaiVthh());
+            kqdc.setCloaiVthh(loaiVthh.getCloaiVthh());
+            kqdc.setTenCloaiVthh(loaiVthh.getTenCloaiVthh());
+            kqdc.setDonViTinh(loaiVthh.getDonViTinh());
+            kqdc.setMaDiemKho(loaiVthh.getMaDiemKho());
+            kqdc.setTenDiemKho(loaiVthh.getTenDiemKho());
+            kqdc.setMaNhaKho(loaiVthh.getMaNhaKho());
+            kqdc.setTenNhaKho(loaiVthh.getTenNhaKho());
+            kqdc.setMaNganKho(loaiVthh.getMaNganKho());
+            kqdc.setTenNganKho(loaiVthh.getTenNganKho());
+            kqdc.setMaLoKho(loaiVthh.getMaLoKho());
+            kqdc.setTenLoKho(loaiVthh.getTenLoKho());
+            kqdc.setSlTon(loaiVthh.getTonKho());
+
+            kqdc.setMaDviNhan(loaiVthh.getMaChiCucNhan());
+            kqdc.setTenDviNhan(loaiVthh.getTenChiCucNhan());
+            kqdc.setMaDiemKhoNhan(loaiVthh.getMaDiemKhoNhan());
+            kqdc.setTenDiemKhoNhan(loaiVthh.getTenDiemKhoNhan());
+            kqdc.setMaNhaKhoNhan(loaiVthh.getMaNhaKhoNhan());
+            kqdc.setTenNhaKhoNhan(loaiVthh.getTenNhaKhoNhan());
+            kqdc.setMaNganKhoNhan(loaiVthh.getMaNganKhoNhan());
+            kqdc.setTenNganKhoNhan(loaiVthh.getTenNganKhoNhan());
+            kqdc.setMaLoKhoNhan(loaiVthh.getMaLoKhoNhan());
+            kqdc.setTenLoKhoNhan(loaiVthh.getTenLoKhoNhan());
+            kqdc.setSlDieuChuyenQd(loaiVthh.getSoLuongDc());
+            // tính số lượng xuất thực tế
+            List<DcnbPhieuXuatKhoHdr> pxks = dcnbPhieuXuatKhoHdrRepository.findBySoQuyetDinhAndKeHoachDtlId(objReq.getSoQdinhCuc(),loaiVthh.getId());
+            long slXuatTtSum = pxks.stream().map(DcnbPhieuXuatKhoHdr::getTongSoLuong).mapToLong(BigDecimal::longValue).sum();
+            kqdc.setSlXuatTt(new BigDecimal(slXuatTtSum));
+            // tính số lượng nhập thực tế
+            List<DcnbPhieuNhapKhoHdr> pnks = dcnbPhieuNhapKhoHdrRepository.findBySoQuyetDinhAndKeHoachDtlId(objReq.getSoQdinhCuc(),loaiVthh.getId());
+            long slNhapTttSum = pnks.stream().map(DcnbPhieuNhapKhoHdr::getTongSoLuong).mapToLong(BigDecimal::longValue).sum();
+            kqdc.setSlNhapTt(new BigDecimal(slNhapTttSum));
+            kqdc.setKinhPhiTheoQd(loaiVthh.getDuToanKphi());
+            // tính kinh phí xuất thực tế
+            List<DcnbPhieuXuatKhoDtl> pxkds = dcnbPhieuXuatKhoDtlRepository.findBySoQuyetDinhAndKeHoachDtlId(objReq.getSoQdinhCuc(),loaiVthh.getId());
+            long kinhPhiXuatTt = pxkds.stream().map(DcnbPhieuXuatKhoDtl::getKinhPhiDcTt).mapToLong(BigDecimal::longValue).sum();
+            kqdc.setKinhPhiXuatTt(new BigDecimal(kinhPhiXuatTt));
+            // tính kinh phí nhập thực tế
+            List<DcnbPhieuNhapKhoDtl> pnkds = dcnbPhieuNhapKhoDtlRepository.findBySoQuyetDinhAndKeHoachDtlId(objReq.getSoQdinhCuc(),loaiVthh.getId());
+            long kinhPhiNhapTt = pnkds.stream().map(DcnbPhieuNhapKhoDtl::getThucTeKinhPhi).mapToLong(BigDecimal::longValue).sum();
+            kqdc.setKinhPhiNhapTt(new BigDecimal(kinhPhiNhapTt));
+
+            if (dcnbBbGiaoNhanHdrRepository.findByKeHoachDcDtlId(kqdc.getKeHoachDcDtlId()).isEmpty()) { // có biên bản nhập đầy kho đối với lương thực || có biên bản giao nhận đối với vt
+                kqdc.setKetQua(Contains.DA_HOAN_THANH);
+            } else if (dcnbBbNhapDayKhoHdrRepository.findByKeHoachDcDtlId(kqdc.getKeHoachDcDtlId()).isEmpty()) { // có biên bản nhập đầy kho đối với lương thực || có biên bản giao nhận đối với vt
+                QlnvDmVattu byMa = qlnvDmVattuRepository.findByMa(kqdc.getCloaiVthh());
+                if ("VT".equals(byMa.getLoaiHang())) { // là vật từ thì đang thực hiện
+                    kqdc.setKetQua(Contains.DANG_THUC_HIEN);
+                } else {
+                    kqdc.setKetQua(Contains.DA_HOAN_THANH);
                 }
-            } else if (!dcnbBienBanLayMauHdrRepository.findByKeHoachDcDtlIdAndType(dtl.getKeHoachDcDtlId(),"01").isEmpty()) { // có biên bản lấy mẫu
-                dtl.setKetQua(Contains.DANG_THUC_HIEN);
+            } else if (!dcnbBienBanLayMauHdrRepository.findByKeHoachDcDtlIdAndType(kqdc.getKeHoachDcDtlId(), "01").isEmpty()) { // có biên bản lấy mẫu
+                kqdc.setKetQua(Contains.DANG_THUC_HIEN);
             } else {
-                dtl.setKetQua(Contains.CHUA_THUC_HIEN);
+                kqdc.setKetQua(Contains.CHUA_THUC_HIEN);
             }
+            kqdcs.add(kqdc);
         }
         return kqdcs;
     }

@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc.QlBienB
 import com.tcdt.qlnvhang.request.search.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBienBanNhapDayKhoService;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.util.PathContains;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -193,10 +195,10 @@ public class NhBienBanNhapDayKhoController {
     @ApiOperation(value = "Xem trước", response = List.class)
     @PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> preview(@RequestBody QlBienBanNhapDayKhoLtReq objReq) {
+    public ResponseEntity<BaseResponse> preview(@RequestBody HashMap<String, Object> body) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(service.preview(objReq));
+            resp.setData(service.preview(body));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

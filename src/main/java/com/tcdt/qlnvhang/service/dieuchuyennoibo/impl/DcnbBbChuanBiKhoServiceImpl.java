@@ -86,7 +86,6 @@ public class DcnbBbChuanBiKhoServiceImpl extends BaseServiceImpl implements Dcnb
         } else {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
-        req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         searchDto = hdrRepository.searchPage(req, pageable);
         return searchDto;
     }
@@ -103,7 +102,6 @@ public class DcnbBbChuanBiKhoServiceImpl extends BaseServiceImpl implements Dcnb
         } else {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
-        req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         searchDto = hdrRepository.searchList(req);
         return searchDto;
     }

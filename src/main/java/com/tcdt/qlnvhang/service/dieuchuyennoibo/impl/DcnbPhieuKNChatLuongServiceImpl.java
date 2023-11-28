@@ -87,11 +87,9 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         if ("00".equals(req.getType())) { // kiểu xuất
-            req.setTypeQd(Contains.DIEU_CHUYEN);
             searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageXuat(req, pageable);
         }
         if ("01".equals(req.getType())) { // kiểu nhan
-            req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
             searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageNhan(req, pageable);
         }
         return searchDto;
@@ -363,10 +361,8 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         if ("00".equals(req.getType())) { // kiểu xuất
-            req.setTypeQd(Contains.DIEU_CHUYEN);
         }
         if ("01".equals(req.getType())) { // kiểu nhan
-            req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         }
         searchDto = dcnbPhieuKnChatLuongHdrRepository.searchList(req);
 

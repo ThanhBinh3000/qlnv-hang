@@ -1,9 +1,12 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bienbaogiaonhan;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbangiaonhan.NhBbGiaoNhanVt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.request.object.vattu.bienbangiaonhan.NhBbGiaoNhanVtReq;
+import com.tcdt.qlnvhang.request.search.vattu.bienbangiaonhan.NhBbGiaoNhanVtSearchReq;
 import com.tcdt.qlnvhang.service.BaseService;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
+import org.springframework.data.domain.Page;
 
 public interface NhBbGiaoNhanVtService extends BaseService<NhBbGiaoNhanVt,NhBbGiaoNhanVtReq,Long> {
 
@@ -19,7 +22,7 @@ public interface NhBbGiaoNhanVtService extends BaseService<NhBbGiaoNhanVt,NhBbGi
 //    @Transactional(rollbackOn = Exception.class)
 //    boolean updateStatusQd(StatusReq req) throws Exception;
 //
-//    Page<NhBbGiaoNhanVtRes> search(NhBbGiaoNhanVtSearchReq req) throws Exception;
+    Page<NhQdGiaoNvuNhapxuatHdr> search(NhBbGiaoNhanVtSearchReq req) throws Exception;
 //
 //    @Transactional(rollbackOn = Exception.class)
 //    boolean deleteMultiple(DeleteReq req) throws Exception;

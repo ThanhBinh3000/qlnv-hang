@@ -10,6 +10,7 @@ import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import org.springframework.data.domain.Page;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
 
 public interface NhPhieuNhapKhoService extends BaseService<NhPhieuNhapKho,NhPhieuNhapKhoReq,Long> {
@@ -20,7 +21,8 @@ public interface NhPhieuNhapKhoService extends BaseService<NhPhieuNhapKho,NhPhie
 
     Page<NhPhieuNhapKho> search(LkPhieuNhapKhoReq req) throws Exception;
     Page<NhQdGiaoNvuNhapxuatHdr> timKiem(NhPhieuNhapKhoReq req) throws Exception;
-    ReportTemplateResponse preview(NhPhieuNhapKhoReq objReq) throws Exception;
+//    ReportTemplateResponse preview(NhPhieuNhapKhoReq objReq) throws Exception;
+    ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception;
 
 //    NhPhieuNhapKhoRes create(NhPhieuNhapKhoReq req) throws Exception;
 //    NhPhieuNhapKhoRes update(NhPhieuNhapKhoReq req) throws Exception;

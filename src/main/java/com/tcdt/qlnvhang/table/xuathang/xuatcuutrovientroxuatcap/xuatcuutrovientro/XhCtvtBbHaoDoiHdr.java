@@ -71,6 +71,8 @@ public class XhCtvtBbHaoDoiHdr extends BaseEntity implements Serializable {
   private Long nguoiPduyetId;
   private String lyDoTuChoi;
   private String type;
+  @Column(name = "SO_THANG_BAO_QUAN_HANG")
+  private Double soThangBaoQuanHang;
   @Transient
   private String tenDvi;
   @Transient

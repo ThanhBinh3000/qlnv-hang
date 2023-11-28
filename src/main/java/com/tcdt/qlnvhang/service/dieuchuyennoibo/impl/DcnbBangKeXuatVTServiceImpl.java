@@ -65,7 +65,6 @@ public class DcnbBangKeXuatVTServiceImpl extends BaseServiceImpl implements Dcnb
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         req.setType("00");
-        req.setTypeQd(Contains.DIEU_CHUYEN);
         searchDto = hdrRepository.searchPage(req, pageable);
         return searchDto;
     }
@@ -285,14 +284,14 @@ public class DcnbBangKeXuatVTServiceImpl extends BaseServiceImpl implements Dcnb
                 .cloaiVthh(dcnbBangKeXuatVT.get().getCloaiVthh())
                 .donViTinh(dcnbBangKeXuatVT.get().getDonViTinh())
                 .hoVaTenNguoiNhanHang("")
-                .thoiHanGiaoNhan(dcnbBangKeXuatVT.get().getThoiHanGiaoNhan().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .thoiHanGiaoNhan(dcnbBangKeXuatVT.get().getThoiHanGiaoNhan() == null? "": dcnbBangKeXuatVT.get().getThoiHanGiaoNhan().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .nguoiGiamSat("")
                 .tongSlHang(tongSlHang)
                 .tongSlHangBc(NumberToWord.convert(tongSlHang))
                 .ngayNhap(dcnbBangKeXuatVT.get().getNgayNhap().getDayOfMonth())
                 .thangNhap(dcnbBangKeXuatVT.get().getNgayNhap().getMonth().getValue())
                 .namNhap(dcnbBangKeXuatVT.get().getNgayNhap().getYear())
-                .ngayThangXuat(soDxuat.get().getNgayXuatKho().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .ngayThangXuat(soDxuat.get().getNgayXuatKho() ==null? "":soDxuat.get().getNgayXuatKho().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .dcnbBangKeXuatVTDtlDto(dcnbBangKeXuatVTDtlToDto(dcnbBangKeXuatVT.get().getDcnbBangKeXuatVTDtl()))
                 .build();
     }

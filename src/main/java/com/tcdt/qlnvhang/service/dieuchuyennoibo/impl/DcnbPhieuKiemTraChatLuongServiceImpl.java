@@ -84,7 +84,6 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         Page<DcnbPhieuKtChatLuongHdrDTO> search = null;
-        req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         search = dcnbPhieuKtChatLuongHdrRepository.searchPage(req, pageable);
 
         return search;

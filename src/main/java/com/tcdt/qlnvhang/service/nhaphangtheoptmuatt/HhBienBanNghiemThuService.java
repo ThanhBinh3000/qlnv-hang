@@ -369,6 +369,7 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
         hhBienBanNghiemThu.setTongGiaTriStr(docxToPdfConverter.convertBigDecimalToStr(tongGiaTri));
         hhBienBanNghiemThu.setKinhPhiThucTeStr(docxToPdfConverter.convertBigDecimalToStr(hhBienBanNghiemThu.getKinhPhiThucTe()));
         hhBienBanNghiemThu.setKinhPhiTtStr(NumberToWord.convert(Long.valueOf(String.valueOf(hhBienBanNghiemThu.getKinhPhiThucTe()))));
+        hhBienBanNghiemThu.setTenDvi(hhBienBanNghiemThu.getTenDvi().toUpperCase());
 
         return docxToPdfConverter.convertDocxToPdf(inputStream, hhBienBanNghiemThu);
     }

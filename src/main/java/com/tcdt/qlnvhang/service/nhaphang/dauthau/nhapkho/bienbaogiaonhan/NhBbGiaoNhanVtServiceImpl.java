@@ -1,27 +1,50 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bienbaogiaonhan;
 
 
+import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoKyThuat;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbangiaonhan.NhBbGiaoNhanVt;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbangiaonhan.NhBbGiaoNhanVtCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHang;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
+import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKhoRepository;
+import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.vattu.bienbangiaonhan.NhBbGiaoNhanVtCtRepository;
 import com.tcdt.qlnvhang.repository.vattu.bienbangiaonhan.NhBbGiaoNhanVtRepository;
+import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatRepository;
 import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.nhapkho.NhBbGiaoNhanVtPreview;
 import com.tcdt.qlnvhang.request.object.vattu.bienbangiaonhan.NhBbGiaoNhanVtCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbangiaonhan.NhBbGiaoNhanVtReq;
+import com.tcdt.qlnvhang.request.search.vattu.bienbangiaonhan.NhBbGiaoNhanVtSearchReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoService;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXcapQdGnvXhHdr;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -29,6 +52,7 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -45,7 +69,22 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
     @Autowired
     private UserInfoRepository userInfoRepository;
 
-
+    @Autowired
+    private HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
+    @Autowired
+    private NhBbNhapDayKhoRepository nhBbNhapDayKhoRepository;
+    @Autowired
+    private NhBienBanGuiHangRepository nhBienBanGuiHangRepository;
+    @Autowired
+    private BienBanLayMauRepository bienBanLayMauRepository;
+    @Autowired
+    private NhHoSoKyThuatRepository nhHoSoKyThuatRepository;
+    @Autowired
+    private HhHopDongRepository hhHopDongRepository;
+    @Autowired
+    private NhPhieuNhapKhoService nhPhieuNhapKhoService;
+    @Autowired
+    private FileDinhKemService fileDinhKemService;
     @Override
     public Page<NhBbGiaoNhanVt> searchPage(NhBbGiaoNhanVtReq req) {
         return null;
@@ -70,9 +109,15 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
         item.setMaDvi(userInfo.getDvql());
         item.setNam(LocalDate.now().getYear());
         item.setId(Long.valueOf(item.getSoBbGiaoNhan().split("/")[0]));
-
         nhBbGiaoNhanVtRepository.save(item);
-
+        fileDinhKemService.delete(req.getId(), Lists.newArrayList(NhBbGiaoNhanVt.TABLE_NAME));
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKemReqs())) {
+            fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReqs(), item.getId(), NhBbGiaoNhanVt.TABLE_NAME);
+        }
+        fileDinhKemService.delete(req.getId(), Lists.newArrayList(NhBbGiaoNhanVt.TABLE_NAME + "_CAN_CU"));
+        if (!DataUtils.isNullOrEmpty(req.getCanCuLapBb())) {
+            fileDinhKemService.saveListFileDinhKem(req.getCanCuLapBb(), item.getId(), NhBbGiaoNhanVt.TABLE_NAME+ "_CAN_CU");
+        }
         this.saveCtiet(item.getId(),req);
 
         return item;
@@ -110,6 +155,14 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
         item.setNgaySua(new Date());
         item.setNguoiSuaId(userInfo.getId());
         nhBbGiaoNhanVtRepository.save(item);
+        fileDinhKemService.delete(req.getId(), Lists.newArrayList(NhBbGiaoNhanVt.TABLE_NAME));
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKemReqs())) {
+            fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReqs(), item.getId(), NhBbGiaoNhanVt.TABLE_NAME);
+        }
+        fileDinhKemService.delete(req.getId(), Lists.newArrayList(NhBbGiaoNhanVt.TABLE_NAME + "_CAN_CU"));
+        if (!DataUtils.isNullOrEmpty(req.getCanCuLapBb())) {
+            fileDinhKemService.saveListFileDinhKem(req.getCanCuLapBb(), item.getId(), NhBbGiaoNhanVt.TABLE_NAME+ "_CAN_CU");
+        }
         this.saveCtiet(item.getId(),req);
         return item;
     }
@@ -130,8 +183,15 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
 
         item.setChiTiets(nhBbGiaoNhanVtCtRepository.findByBbGiaoNhanVtId(item.getId()));
         item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
+        item.setTenDiemKho(listDanhMucDvi.get(item.getMaDiemKho()));
+        item.setTenCuc(listDanhMucDvi.get(item.getMaDiemKho().substring(0,6)));
+        item.setTenChiCuc(listDanhMucDvi.get(item.getMaDiemKho().substring(0,8)));
         item.setTenNguoiTao(ObjectUtils.isEmpty(item.getNguoiTaoId()) ? "" : userInfoRepository.findById(item.getNguoiTaoId()).get().getFullName());
         item.setTenNguoiPduyet(ObjectUtils.isEmpty(item.getNguoiPduyetId()) ? "" :userInfoRepository.findById(item.getNguoiPduyetId()).get().getFullName());
+        List<FileDinhKem> canCu = fileDinhKemService.search(item.getId(), Arrays.asList(NhBbGiaoNhanVt.TABLE_NAME + "_CAN_CU"));
+        item.setCanCuLapBb(canCu);
+        List<FileDinhKem> fileDinhKems = fileDinhKemService.search(item.getId(), Arrays.asList(NhBbGiaoNhanVt.TABLE_NAME));
+        item.setFileDinhKems(fileDinhKems);
         return item;
     }
 
@@ -199,12 +259,122 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
     }
 
     @Override
+    public Page<NhQdGiaoNvuNhapxuatHdr> search(NhBbGiaoNhanVtSearchReq req) throws Exception {
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null) throw new Exception("Bad request.");
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(),
+                req.getPaggingReq().getLimit(), Sort.by("id").descending());
+        Page<NhQdGiaoNvuNhapxuatHdr> data = null;
+        if (userInfo.getCapDvi().equalsIgnoreCase(Contains.CAP_CHI_CUC)) {
+            data = hhQdGiaoNvuNhapxuatRepository.selectPageChiCuc(
+                    req.getNam(),
+                    req.getSoQdGiaonvNh(),
+                    "02",
+                    null, null, null, null, null,
+                    userInfo.getDvql(),
+                    null,
+                    Contains.BAN_HANH,
+                    null, null, null,
+                    pageable);
+        } else {
+            // Cục or Tổng cục
+            data = hhQdGiaoNvuNhapxuatRepository.selectPageCuc(
+                    req.getNam(),
+                    req.getSoQdGiaonvNh(),
+                    "02",
+                    null,null,null,null,
+                    userInfo.getDvql(),
+                    Contains.BAN_HANH,
+                    pageable);
+        }
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
+        data.getContent().forEach(f -> {
+            List<NhBbGiaoNhanVt> bbGiaoNhanVt = nhBbGiaoNhanVtRepository.findByIdQdGiaoNvNhAndMaDvi(f.getId(),f.getMaDvi());
+            bbGiaoNhanVt.forEach( item -> {
+                item.setTenDiemKho(mapDmucDvi.get(item.getMaDiemKho()));
+                item.setTenNhaKho(mapDmucDvi.get(item.getMaNhaKho()));
+                item.setTenNganKho(mapDmucDvi.get(item.getMaNganKho()));
+                item.setTenLoKho(mapDmucDvi.get(item.getMaLoKho()));
+                Optional<NhBbNhapDayKho> bbNhapDayKho = nhBbNhapDayKhoRepository.findById(Long.parseLong(item.getSoBbNhapDayKho().split("/")[0]));
+                bbNhapDayKho.ifPresent(item::setBbNhapDayKho);
+                NhBienBanGuiHang nhBienBanGuiHang = nhBienBanGuiHangRepository.findByIdDdiemGiaoNvNh(item.getIdDdiemGiaoNvNh());
+                if (nhBienBanGuiHang != null) {
+                    item.setBbGuiHang(nhBienBanGuiHang);
+                }
+                BienBanLayMau bienBanLayMau = bienBanLayMauRepository.findByIdDdiemGiaoNvNh(item.getIdDdiemGiaoNvNh());
+                if (bienBanLayMau != null) {
+                    NhHoSoKyThuat hoSoKyThuat = nhHoSoKyThuatRepository.findByIdBbLayMau(bienBanLayMau.getId());
+                    if (hoSoKyThuat != null) {
+                        bienBanLayMau.setSoHskt(hoSoKyThuat.getSoHoSoKyThuat());
+                    }
+                    item.setBbLayMau(bienBanLayMau);
+                }
+            });
+            f.setListBienBanGiaoNhan(bbGiaoNhanVt);
+        });
+        return data;
+    }
+
+    @Override
     public ReportTemplateResponse preview(NhBbGiaoNhanVtReq req) throws Exception {
         NhBbGiaoNhanVt nhBbGiaoNhanVt = detail(req.getId());
         if (nhBbGiaoNhanVt == null) {
-            throw new Exception("Bản kê nhập vật tư không tồn tại.");
+            throw new Exception("Biên bản giao nhận không tồn tại.");
+        }
+        Optional<NhQdGiaoNvuNhapxuatHdr> qdGiaoNvuNhapxuatHdr =  hhQdGiaoNvuNhapxuatRepository.findById(nhBbGiaoNhanVt.getIdQdGiaoNvNh());
+        if (!qdGiaoNvuNhapxuatHdr.isPresent()) {
+            throw new Exception("Quyết định giao nhiệm vụ nhập hàng không tồn tại.");
+        }
+        Optional<HhHopDongHdr> hhHopDongHdr = hhHopDongRepository.findById(qdGiaoNvuNhapxuatHdr.get().getIdHd());
+        Map<String, String> mapDmucHh = getListDanhMucHangHoa();
+        List<NhPhieuNhapKho> nhapKhoList = nhPhieuNhapKhoService.findAllByIdDdiemGiaoNvNh(nhBbGiaoNhanVt.getIdDdiemGiaoNvNh());
+        BigDecimal soLuong = BigDecimal.ZERO;
+        for (NhPhieuNhapKho nhPhieuNhapKho : nhapKhoList) {
+            soLuong = soLuong.add(nhPhieuNhapKho.getSoLuongNhapKho());
         }
         NhBbGiaoNhanVtPreview object = new NhBbGiaoNhanVtPreview();
+        object.setTenDvi(nhBbGiaoNhanVt.getTenDvi());
+        object.setTenDiemKho(nhBbGiaoNhanVt.getTenDiemKho());
+        object.setTenChiCuc(nhBbGiaoNhanVt.getTenChiCuc());
+        object.setTenChiCucUpper(nhBbGiaoNhanVt.getTenChiCuc().toUpperCase());
+        object.setTenCuc(nhBbGiaoNhanVt.getTenCuc());
+        object.setTenCucUpper(nhBbGiaoNhanVt.getTenCuc().toUpperCase());
+        String[] parts = Objects.requireNonNull(convertDate(nhBbGiaoNhanVt.getNgayTao())).split("/");
+        object.setNgayTao(parts[0]);
+        object.setThangTao(parts[1]);
+        object.setNamTao(parts[2]);
+        if (hhHopDongHdr.isPresent()) {
+            object.setSoHd(hhHopDongHdr.get().getSoHd());
+            object.setTenNhaThau(hhHopDongHdr.get().getTenNhaThau());
+            object.setTenNhaThauUpper(hhHopDongHdr.get().getTenNhaThau().toUpperCase());
+            object.setNgayKy(convertDate(hhHopDongHdr.get().getNgayKy()));
+        }
+        object.setSoLuong(soLuong);
+        if (qdGiaoNvuNhapxuatHdr.get().getCloaiVthh() == null) {
+            object.setTenCloaiVthh(mapDmucHh.get(qdGiaoNvuNhapxuatHdr.get().getLoaiVthh()));
+        } else {
+            object.setTenCloaiVthh(mapDmucHh.get(qdGiaoNvuNhapxuatHdr.get().getCloaiVthh()));
+        }
+        object.setTenCloaiVthhUpper(object.getTenCloaiVthh().toUpperCase());
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(nhBbGiaoNhanVt.getId(), Collections.singletonList(NhBbGiaoNhanVt.TABLE_NAME + "_CAN_CU"));
+        object.setFileDinhKems(fileDinhKem);
+        object.setDsDaiDienCuc(new ArrayList<>());
+        object.setDsDaiDienChiCuc(new ArrayList<>());
+        object.setDsDaiDienNhaThau(new ArrayList<>());
+        List<NhBbGiaoNhanVtCt> bbGiaoNhanVtCtList = nhBbGiaoNhanVtCtRepository.findByBbGiaoNhanVtId(nhBbGiaoNhanVt.getId());
+        bbGiaoNhanVtCtList.forEach(item -> {
+            switch (item.getLoaiDaiDien()) {
+                case "00":
+                    object.getDsDaiDienCuc().add(item);
+                    break;
+                case "01":
+                    object.getDsDaiDienChiCuc().add(item);
+                    break;
+                case "02":
+                    object.getDsDaiDienNhaThau().add(item);
+                    break;
+            }
+        });
         ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);

@@ -323,10 +323,18 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
         if (hhPhieuKiemTraChatLuong == null) {
             throw new Exception("Bản kê nhập vật tư không tồn tại.");
         }
-        HhPhieuKiemTraChatLuongPreview object = new HhPhieuKiemTraChatLuongPreview();
         ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+        hhPhieuKiemTraChatLuong.setTenDvi(hhPhieuKiemTraChatLuong.getTenDvi().toUpperCase());
+        hhPhieuKiemTraChatLuong.setTenLoaiVthh(hhPhieuKiemTraChatLuong.getTenLoaiVthh().toUpperCase());
+        Calendar calendar = new GregorianCalendar();
+        if(hhPhieuKiemTraChatLuong.getNgayPduyet() != null){
+            calendar.setTime(hhPhieuKiemTraChatLuong.getNgayPduyet());
+            hhPhieuKiemTraChatLuong.setNgay(calendar.get(Calendar.DAY_OF_MONTH));
+            hhPhieuKiemTraChatLuong.setThang(calendar.get(Calendar.MONTH) + 1);
+            hhPhieuKiemTraChatLuong.setNam(calendar.get(Calendar.YEAR));
+        }
+        return docxToPdfConverter.convertDocxToPdf(inputStream, hhPhieuKiemTraChatLuong);
     }
 }

@@ -6,6 +6,8 @@ import com.tcdt.qlnvhang.request.object.vattu.phieunhapkhotamgui.NhPhieuNhapKhoT
 import com.tcdt.qlnvhang.service.BaseService;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 
+import java.util.HashMap;
+
 public interface NhBangKeVtService extends BaseService<NhBangKeVt,NhBangKeVtReq,Long> {
 //    NhBangKeVtRes create(NhBangKeVtReq req) throws Exception;
 //
@@ -27,5 +29,5 @@ public interface NhBangKeVtService extends BaseService<NhBangKeVt,NhBangKeVtReq,
 //    boolean exportToExcel(NhBangKeVtSearchReq objReq, HttpServletResponse response) throws Exception;
 //
 //    BaseNhapHangCount count(Set<String> maDvis) throws Exception;
-ReportTemplateResponse preview(NhBangKeVtReq req) throws Exception;
+ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception;
 }

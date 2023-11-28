@@ -113,7 +113,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
       }
     }*/
     XhHoSoKyThuatHdr data = new XhHoSoKyThuatHdr();
-    BeanUtils.copyProperties(objReq, data);
+    BeanUtils.copyProperties(objReq, data,"mapVthh");
     data.setMaDvi(currentUser.getUser().getDepartment());
     data.setTrangThai(Contains.DUTHAO);
 
@@ -157,7 +157,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
         });
       });
 
-      BeanUtils.copyProperties(objReq, xhHoSoKyThuatHdr);
+      BeanUtils.copyProperties(objReq, xhHoSoKyThuatHdr,"mapVthh");
       xhHoSoKyThuatHdr.getXhHoSoKyThuatDtl().forEach(s -> {
         s.setXhHoSoKyThuatHdr(xhHoSoKyThuatHdr);
     /*    if (!DataUtils.isNullOrEmpty(s.getFileDinhKem())) {
@@ -348,6 +348,10 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
         xhHskt.setSoHsktNh(nhHoSoKyThuat.getSoHoSoKyThuat());
         xhHskt.setSoBbLayMauNh(nhHoSoKyThuat.getSoBbLayMau());
         xhHskt.setSoQdGiaoNvNh(nhHoSoKyThuat.getSoQdGiaoNvNh());
+        Optional<UserInfo> user = userInfoRepository.findById(nhHoSoKyThuat.getNguoiTaoId());
+        if (user.isPresent()) {
+          xhHskt.setCanBoTaoHoSoNh(user.get().getFullName());
+        }
         xhHskt.setNgayTaoNh(DataUtils.convertToLocalDate(nhHoSoKyThuat.getNgayTao()));
         xhHskt.setNgayDuyetNh(DataUtils.convertToLocalDate(nhHoSoKyThuat.getNgayPduyet()));
         String maDiaDiem = "";
@@ -358,6 +362,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
         }
         xhHskt.setLoaiVthh(firstBySoBienBan.get().getLoaiVthh());
         xhHskt.setCloaiVthh(firstBySoBienBan.get().getCloaiVthh());
+        xhHskt.setMaDvi(nhHoSoKyThuat.getMaDvi());
         xhHskt.setMaDiaDiem(maDiaDiem);
         xhHskt.setTrangThai(nhHoSoKyThuat.getTrangThai());
         xhHskt.setXhHoSoKyThuatDtl(listDtl);
@@ -367,10 +372,10 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
     } else {
       xhHskt.setMapDmucDvi(mapDmucDvi);
       xhHskt.setMapVthh(mapVthh);
-      Optional<UserInfo> user = userInfoRepository.findById(xhHskt.getNguoiTaoId());
+     /* Optional<UserInfo> user = userInfoRepository.findById(xhHskt.getNguoiTaoId());
       if (user.isPresent()) {
-        xhHskt.setCanBoTaoHoSo(user.get().getFullName());
-      }
+        xhHskt.setCanBoTaoHoSoNh(user.get().getFullName());
+      }*/
     }
     return xhHskt;
   }
