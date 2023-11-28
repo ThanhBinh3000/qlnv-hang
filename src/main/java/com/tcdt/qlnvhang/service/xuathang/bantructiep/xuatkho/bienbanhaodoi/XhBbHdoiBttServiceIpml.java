@@ -234,11 +234,6 @@ public class XhBbHdoiBttServiceIpml extends BaseServiceImpl {
     }
 
     private void updateKiemNghiemAndLayMauAndQuyetDinh(XhBbHdoiBttHdr created) {
-        xhQdNvXhBttHdrRepository.findById(created.getIdQdNv()).ifPresent(quyetDinh -> {
-            quyetDinh.setIdHaoDoi(created.getId());
-            quyetDinh.setSoHaoDoi(created.getSoBbHaoDoi());
-            xhQdNvXhBttHdrRepository.save(quyetDinh);
-        });
         xhPhieuKtraCluongBttHdrRepository.findById(created.getIdPhieuKiemNghiem()).ifPresent(kiemNghiem -> {
             xhBbLayMauBttHdrRepository.findById(kiemNghiem.getIdBbLayMau()).ifPresent(layMau -> {
                 layMau.setIdHaoDoi(created.getId());
@@ -290,7 +285,9 @@ public class XhBbHdoiBttServiceIpml extends BaseServiceImpl {
             throw new Exception("Bad request.");
         }
         try {
-            FileInputStream inputStream = new FileInputStream(baseReportFolder + "bantructiep/Biên bản hao dôi.docx");
+            String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "bantructiep/" + templatePath;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
             XhBbHdoiBttHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
         } catch (IOException e) {
