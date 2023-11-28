@@ -380,6 +380,7 @@ public class XhHoSoKyThuatService extends BaseServiceImpl {
         xhHskt.setCanBoTaoHoSoNh(user.get().getFullName());
       }*/
     }
+    xhHskt.getXhHoSoKyThuatDtl().sort(Comparator.comparing(XhHoSoKyThuatDtl::getId));
     return xhHskt;
   }
 
