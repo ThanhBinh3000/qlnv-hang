@@ -105,6 +105,8 @@ public class XhBbTinhkBttHdr implements Serializable {
     @Transient
     private String tenCloaiVthh;
     @Transient
+    private String tenHinhThucBaoQuan;
+    @Transient
     private String tenThuKho;
     @Transient
     private String tenKtvBaoQuan;
@@ -155,6 +157,17 @@ public class XhBbTinhkBttHdr implements Serializable {
         }
         if (!DataUtils.isNullObject(getCloaiVthh())) {
             setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
+        }
+    }
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapHinhThucBaoQuan;
+
+    public void setMapHinhThucBaoQuan(Map<String, String> mapHinhThucBaoQuan) {
+        this.mapHinhThucBaoQuan = mapHinhThucBaoQuan;
+        if (!DataUtils.isNullObject(getHinhThucBaoQuan())) {
+            setTenHinhThucBaoQuan(mapHinhThucBaoQuan.containsKey(getHinhThucBaoQuan()) ? mapHinhThucBaoQuan.get(getHinhThucBaoQuan()) : null);
         }
     }
 

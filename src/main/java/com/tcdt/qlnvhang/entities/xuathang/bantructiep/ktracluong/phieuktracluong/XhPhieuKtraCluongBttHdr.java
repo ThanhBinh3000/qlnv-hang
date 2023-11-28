@@ -63,6 +63,7 @@ public class XhPhieuKtraCluongBttHdr implements Serializable {
     private Long idKtvBaoQuan;
     private Long idThuKho;
     private Long idTphongKtvBaoQuan;
+    private Long idLanhDaoCuc;
     private String ketQua;
     private String nhanXet;
     private String pthucBanTrucTiep; // 01 : chào giá; 02 : Ủy quyền; 03 : Bán lẻ
@@ -114,9 +115,7 @@ public class XhPhieuKtraCluongBttHdr implements Serializable {
     @Transient
     private String tenDviCon;
     @Transient
-    private BigDecimal soLuongHangbaoQuan;
-    @Transient
-    private String tenThuTruongDonVi;
+    private String tenLanhDaoCuc;
 
     @JsonIgnore
     @Transient

@@ -81,6 +81,7 @@ public class XhPhieuXkhoBtt implements Serializable {
     private String ghiChu;
     private String pthucBanTrucTiep; // 01 : chào giá; 02 : Ủy quyền; 03 : Bán lẻ
     private String phanLoai;
+    private String tenBenMua;
     private String trangThai;
     private String lyDoTuChoi;
     private LocalDate ngayTao;
@@ -121,8 +122,6 @@ public class XhPhieuXkhoBtt implements Serializable {
     private String tenLanhDaoChiCuc;
     @Transient
     private String tenTrangThai;
-    @Transient
-    private String tenBenMua;
     @Transient
     private String maDviCha;
     @Transient
