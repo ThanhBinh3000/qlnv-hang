@@ -359,8 +359,10 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
             }
         }
         HhQdGiaoNvNhapHang data=optional.get();
-        HhQdGiaoNvNhapHang dataMap = new ModelMapper().map(objReq,HhQdGiaoNvNhapHang.class);
+        HhQdGiaoNvNhapHang dataMap = new HhQdGiaoNvNhapHang();
+        BeanUtils.copyProperties(objReq, dataMap);
         updateObjectToObject(data,dataMap);
+        data.setNgayQd(dataMap.getNgayQd());
         data.setNgaySua(new Date());
         data.setNguoiSua(userInfo.getUsername());
         HhQdGiaoNvNhapHang created= hhQdGiaoNvNhapHangRepository.save(data);

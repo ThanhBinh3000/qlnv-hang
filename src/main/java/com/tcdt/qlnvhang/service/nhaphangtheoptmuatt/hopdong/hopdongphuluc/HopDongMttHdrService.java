@@ -682,7 +682,7 @@ public class HopDongMttHdrService extends BaseServiceImpl {
         sldd.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(sldd.getTongThanhTien()));
         for (HhQdPdKQMttSlddDtl child : sldd.getChildren()) {
           soLuongChild = soLuongChild.add(child.getSoLuong());
-          tongThanhTienChild = child.getSoLuong().multiply(child.getDonGia()).multiply(new BigDecimal(1000));
+          tongThanhTienChild = child.getSoLuong().multiply(child.getDonGiaVat()).multiply(new BigDecimal(1000));
           child.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(tongThanhTienChild));
         }
       }
