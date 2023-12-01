@@ -189,7 +189,7 @@ public class HopDongMttHdrService extends BaseServiceImpl {
           hhQdPduyetKqcgRepository.save(checkSoQdKq.get());
         }
       }
-      if(!StringUtils.isEmpty(req.getSoQdGiaoNvNh())){
+      if(req.getSoQdGiaoNvNh() != null || !req.getSoQdGiaoNvNh().equals("")){
         checkSoQdGiaoNvNh = hhQdGiaoNvNhapHangRepository.findAllBySoQd(req.getSoQdGiaoNvNh());
         if (!checkSoQdGiaoNvNh.isPresent()){
           throw new Exception("Số quyết định giao nhiệm vụ nhập hàng " + req.getSoQdGiaoNvNh() + " không tồn tại");
@@ -671,30 +671,30 @@ public class HopDongMttHdrService extends BaseServiceImpl {
 
   public ReportTemplateResponse preview(HopDongMttHdrReq objReq) throws Exception {
     if(getUser().getCapDvi().equals(Contains.CAP_CUC)){
-      HhQdPduyetKqcgHdr optional = this.hhQdPduyetKqcgService.detail(objReq.getIdQdKq().toString());
-      Map<String, DmVattuDTO> mapVthh = getListObjectDanhMucHangHoa(optional.getMaDvi().substring(0, 4));
-      optional.setDvt(mapVthh.get(optional.getLoaiVthh()).getMaDviTinh());
+
+      HopDongMttHdr hopDongMttHdr = this.detail(objReq.getId());
+      hopDongMttHdr.setTenLoaiVthh(hopDongMttHdr.getTenLoaiVthh().toUpperCase());
+      hopDongMttHdr.setNgayMkhoStr(Contains.convertDateToStringSecond(hopDongMttHdr.getNgayMkho()));
+
+      Map<String, DmVattuDTO> mapVthh = getListObjectDanhMucHangHoa(hopDongMttHdr.getMaDvi().substring(0, hopDongMttHdr.getMaDvi().length()-2));
       BigDecimal soLuongChild = new BigDecimal(0);
       BigDecimal tongThanhTienChild = new BigDecimal(0);
       BigDecimal tongThanhTien = new BigDecimal(0);
-      for (HhQdPheduyetKqMttSLDD sldd : optional.getDanhSachCtiet()) {
+      for (HhQdPheduyetKqMttSLDD sldd : hopDongMttHdr.getChildren()) {
         tongThanhTien = tongThanhTien.add(sldd.getTongThanhTien());
         sldd.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(sldd.getTongThanhTien()));
         for (HhQdPdKQMttSlddDtl child : sldd.getChildren()) {
           soLuongChild = soLuongChild.add(child.getSoLuong());
-          tongThanhTienChild = child.getSoLuong().multiply(child.getDonGia()).multiply(new BigDecimal(1000));
+          tongThanhTienChild = child.getSoLuong().multiply(child.getDonGiaVat()).multiply(new BigDecimal(1000));
           child.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(tongThanhTienChild));
         }
       }
-      optional.setTenCloaiVthh(optional.getTenCloaiVthh().toUpperCase());
-      optional.setTenCloaiVthh(optional.getTenCloaiVthh().toUpperCase());
-      optional.setSoLuong(soLuongChild);
-      optional.setNgayMkhoStr(Contains.convertDateToStringSecond(optional.getNgayMkho()));
-      optional.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(tongThanhTien));
+
+      hopDongMttHdr.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(tongThanhTien));
       ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
       byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
       ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-      return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
+      return docxToPdfConverter.convertDocxToPdf(inputStream, hopDongMttHdr);
     }
     if(getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)){
       HhQdGiaoNvNhapHang optional = hhQdGiaoNvNhapHangService.detail(objReq.getIdQdGiaoNvNh().toString());

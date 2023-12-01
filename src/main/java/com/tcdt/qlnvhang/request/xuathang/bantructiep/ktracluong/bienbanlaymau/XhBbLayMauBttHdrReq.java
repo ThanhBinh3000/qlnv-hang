@@ -55,6 +55,7 @@ public class XhBbLayMauBttHdrReq extends BaseRequest {
     private Long idTinhKho;
     private String soBbTinhKho;
     private LocalDate ngayXuatDocKho;
+    private String tchuanCluong;
     private String trangThai;
     private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
     private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();

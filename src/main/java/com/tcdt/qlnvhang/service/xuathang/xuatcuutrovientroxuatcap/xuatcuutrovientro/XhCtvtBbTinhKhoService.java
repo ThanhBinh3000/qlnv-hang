@@ -152,7 +152,7 @@ public class XhCtvtBbTinhKhoService extends BaseServiceImpl {
       throw new Exception("Không tìm thấy dữ liệu");
     }
     Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
-    Map<String, String> mapVthh = getListDanhMucHangHoa();
+    Map<String, Map<String, Object>> listDanhMucHangHoa = getListDanhMucHangHoaObject();
     List<XhCtvtBbTinhKhoHdr> allById = xhCtvtBbTinhKhoHdrRepository.findAllById(ids);
     allById.forEach(data -> {
       if (mapDmucDvi.containsKey(data.getMaDvi())) {
@@ -175,11 +175,13 @@ public class XhCtvtBbTinhKhoService extends BaseServiceImpl {
       if (data.getNguoiPduyetId() != null) {
         data.setLdChiCuc(ObjectUtils.isEmpty(data.getNguoiPduyetId()) ? null : userInfoRepository.findById(data.getNguoiPduyetId()).get().getFullName());
       }
-      if (mapVthh.get((data.getLoaiVthh())) != null) {
-        data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
+      data.setTenLoaiVthh(DataUtils.safeToString(listDanhMucHangHoa.get(data.getLoaiVthh()).get("ten")));
+      data.setTenCloaiVthh(DataUtils.safeToString(listDanhMucHangHoa.get(data.getCloaiVthh()).get("ten")));
+      if (listDanhMucHangHoa.containsKey(data.getLoaiVthh())) {
+        data.setDviTinh(DataUtils.safeToString(listDanhMucHangHoa.get(data.getLoaiVthh()).get("maDviTinh")));
       }
-      if (mapVthh.get((data.getCloaiVthh())) != null) {
-        data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
+      if (listDanhMucHangHoa.containsKey(data.getCloaiVthh())) {
+        data.setDviTinh(DataUtils.safeToString(listDanhMucHangHoa.get(data.getCloaiVthh()).get("maDviTinh")));
       }
       data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
       List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhCtvtBbTinhKhoHdr.TABLE_NAME));

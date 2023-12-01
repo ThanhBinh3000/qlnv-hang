@@ -80,6 +80,7 @@ public class XhBbLayMauBttHdr implements Serializable {
     private Long nguoiGuiDuyetId;
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
+    private String tchuanCluong;
     @Transient
     private String tenDvi;
     @Transient

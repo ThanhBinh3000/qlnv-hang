@@ -106,8 +106,6 @@ public class XhPhieuKnghiemCluong implements Serializable {
     private String tenTrangThai;
     @Transient
     private String tenDviCon;
-    @Transient
-    private BigDecimal soLuongHangbaoQuan;
 
     @JsonIgnore
     @Transient

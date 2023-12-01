@@ -66,7 +66,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
     public Page<XhKqBttHdr> searchPage(CustomUserDetails currentUser, XhKqBttHdrReq req) throws Exception {
         String dvql = currentUser.getDvql();
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
-            req.setTrangThai(Contains.BAN_HANH);
+            req.setTrangThai(Contains.DA_DUYET_LDC);
         } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
             req.setDvql(dvql);
         }
@@ -192,6 +192,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
                     dviDtl.setTenLoKho(StringUtils.isEmpty(dviDtl.getMaLoKho()) ? null : mapDmucDvi.get(dviDtl.getMaLoKho()));
                     dviDtl.setTenLoaiVthh(StringUtils.isEmpty(dviDtl.getLoaiVthh()) ? null : mapDmucVthh.get(dviDtl.getLoaiVthh()));
                     dviDtl.setTenCloaiVthh(StringUtils.isEmpty(dviDtl.getCloaiVthh()) ? null : mapDmucVthh.get(dviDtl.getCloaiVthh()));
+                    dataDvi.setDonGiaDuocDuyet(dviDtl.getDonGiaDuocDuyet());
                     List<XhTcTtinBtt> listTtin = xhTcTtinBttRepository.findAllByIdDviDtl(dviDtl.getId());
                     listTtin.forEach(dataTtin -> {
                         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(dataTtin.getId(), Arrays.asList(XhTcTtinBtt.TABLE_NAME));
@@ -212,6 +213,14 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
             data.setListHopDongBtt(listHd);
         }
         return allById;
+    }
+
+    public XhKqBttHdr detail(Long id) throws Exception {
+        if (id == null) {
+            throw new Exception("Tham số không hợp lệ.");
+        }
+        List<XhKqBttHdr> details = detail(Collections.singletonList(id));
+        return details.isEmpty() ? null : details.get(0);
     }
 
     @Transactional
@@ -287,7 +296,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
                     data.setLyDoTuChoi(statusReq.getLyDoTuChoi());
                     break;
                 case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
-                case Contains.BAN_HANH + Contains.CHODUYET_LDC:
+                case Contains.DA_DUYET_LDC + Contains.CHODUYET_LDC:
                     data.setNguoiPduyetId(currentUser.getUser().getId());
                     data.setNgayPduyet(LocalDate.now());
                     break;
@@ -295,7 +304,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
                     throw new Exception("Phê duyệt không thành công");
             }
             data.setTrangThai(statusReq.getTrangThai());
-            if (statusReq.getTrangThai().equals(Contains.BAN_HANH)) {
+            if (statusReq.getTrangThai().equals(Contains.DA_DUYET_LDC)) {
                 xhQdPdKhBttDtlRepository.findById(data.getIdChaoGia()).ifPresent(dtl -> {
                     dtl.setIdQdKq(data.getId());
                     dtl.setSoQdKq(data.getSoQdKq());
@@ -367,32 +376,27 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
         ex.export();
     }
 
-    public XhTcTtinBtt detailToChuc(Long id) throws Exception {
-        if (id == null || id <= 0) {
-            throw new Exception("Không tồn tại bản ghi.");
-        }
-        return xhTcTtinBttRepository.findById(id)
-                .orElseThrow(() -> new UnsupportedOperationException("Bản ghi không tồn tại."));
-    }
-
     public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
-        try (FileInputStream inputStream = new FileInputStream(baseReportFolder + "/bantructiep/Quyết định phê duyệt kết quả chào giá.docx")) {
-            List<XhKqBttHdr> listDetail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
-            if (!listDetail.isEmpty()) {
-                XhKqBttHdr detail = listDetail.get(0);
-                List<XhQdPdKhBttDvi> listDvi = xhQdPdKhBttDviRepository.findAllByIdQdKqHdr(detail.getId());
-                listDvi.forEach(dataDvi -> {
-                    List<XhQdPdKhBttDviDtl> listDviDtl = xhQdPdKhBttDviDtlRepository.findAllByIdDvi(dataDvi.getId());
-                    if (!listDviDtl.isEmpty()) {
-                        dataDvi.setDonGiaDuocDuyet(listDviDtl.get(0).getDonGiaDuocDuyet());
-                    }
+        try {
+            String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "bantructiep/" + templatePath;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
+            XhKqBttHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
+            List<XhQdPdKhBttDvi> listDvi = xhQdPdKhBttDviRepository.findAllByIdQdKqHdr(detail.getId());
+            listDvi.forEach(dataDvi -> {
+                List<XhQdPdKhBttDviDtl> listDviDtl = xhQdPdKhBttDviDtlRepository.findAllByIdDvi(dataDvi.getId());
+                listDviDtl.forEach(dataDviDtl -> {
+                    List<XhTcTtinBtt> listTtin  = xhTcTtinBttRepository.findAllByIdDviDtl(dataDviDtl.getId());
+                    dataDviDtl.setChildren(listTtin.stream().filter(item -> item.getLuaChon()).collect(Collectors.toList()));
                 });
-                return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
-            }
-        } catch (IOException | XDocReportException e) {
+            });
+            return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
             e.printStackTrace();
         }
         return null;

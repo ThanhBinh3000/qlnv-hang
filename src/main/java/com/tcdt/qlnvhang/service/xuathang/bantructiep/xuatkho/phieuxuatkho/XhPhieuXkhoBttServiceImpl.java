@@ -101,7 +101,7 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl {
         if (xhPhieuXkhoBttReposytory.existsBySoPhieuXuatKhoAndIdNot(req.getSoPhieuXuatKho(), req.getId())) {
             throw new Exception("Số phiếu xuất kho " + req.getSoPhieuXuatKho() + " đã tồn tại");
         }
-        BeanUtils.copyProperties(req, data, "id", "maDvi");
+        BeanUtils.copyProperties(req, data, "id", "maDvi", "idThuKho");
         data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(currentUser.getUser().getId());
         XhPhieuXkhoBtt update = xhPhieuXkhoBttReposytory.save(data);
@@ -200,12 +200,6 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl {
                 throw new Exception("Phê duyệt không thành công");
         }
         data.setTrangThai(statusReq.getTrangThai());
-        if (statusReq.getTrangThai().equals(Contains.DADUYET_LDCC)) {
-            xhQdNvXhBttHdrRepository.findById(data.getIdQdNv()).ifPresent(quyetDinh -> {
-                quyetDinh.setTrangThaiXh(Contains.DA_HOAN_THANH);
-                xhQdNvXhBttHdrRepository.save(quyetDinh);
-            });
-        }
         XhPhieuXkhoBtt created = xhPhieuXkhoBttReposytory.save(data);
         return created;
     }
@@ -247,32 +241,20 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl {
             throw new Exception("Bad request.");
         }
         try {
-            String templatePath = baseReportFolder + "/bantructiep/";
+            String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "bantructiep/" + templatePath;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
             XhPhieuXkhoBtt detail = this.detail(DataUtils.safeToLong(body.get("id")));
-            if (detail.getLoaiVthh().startsWith("02")) {
-                templatePath += "Phiếu xuất kho vật tư.docx";
-            } else {
-                templatePath += "Phiếu xuất kho lương thực.docx";
-            }
             Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
-            xhQdNvXhBttHdrRepository.findById(detail.getIdQdNv())
-                    .ifPresent(quyetDinh -> {
-                        if (detail.getPthucBanTrucTiep().equals("01")) {
-                            detail.setTenBenMua(quyetDinh.getTenBenMua());
-                        }
-                        detail.setMaDviCha(quyetDinh.getMaDvi());
-                        if (mapDmucDvi.containsKey((detail.getMaDviCha()))) {
-                            Map<String, Object> objDonVi = mapDmucDvi.get(detail.getMaDviCha());
-                            detail.setTenDviCha(objDonVi.get("tenDvi").toString());
-                        }
-                    });
-            if (detail.getPthucBanTrucTiep().equals("02")) {
-                xhHopDongBttHdrRepository.findById(detail.getIdHopDong())
-                        .ifPresent(hopDong -> detail.setTenBenMua(hopDong.getTenBenMua()));
-            }
-            FileInputStream inputStream = new FileInputStream(templatePath);
+            xhQdNvXhBttHdrRepository.findById(detail.getIdQdNv()).ifPresent(quyetDinh -> {
+                detail.setMaDviCha(quyetDinh.getMaDvi());
+                if (mapDmucDvi.containsKey((detail.getMaDviCha()))) {
+                    Map<String, Object> objDonVi = mapDmucDvi.get(detail.getMaDviCha());
+                    detail.setTenDviCha(objDonVi.get("tenDvi").toString());
+                }
+            });
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
-        } catch (IOException e) {
+        }  catch (IOException e) {
             e.printStackTrace();
         } catch (XDocReportException e) {
             e.printStackTrace();

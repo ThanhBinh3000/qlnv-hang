@@ -59,6 +59,7 @@ public class NhHoSoKyThuat extends TrangThaiBaseEntity implements Serializable {
 
     //bo sung cot cho ktcl xuat kho
     private Integer idBbLayMauXuat;
+    private Long idBbLayMau;
 
     private Boolean kqKiemTra;
 

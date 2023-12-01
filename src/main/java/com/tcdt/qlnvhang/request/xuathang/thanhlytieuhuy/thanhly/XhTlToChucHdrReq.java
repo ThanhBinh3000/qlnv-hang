@@ -82,9 +82,9 @@ public class XhTlToChucHdrReq {
     private String soHopDong;
     private Long idQdGnv;
     private String soQdGnv;
-    private List<FileDinhKemReq> fileCanCu = new ArrayList<>();
-    private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();
-    private List<FileDinhKemReq> fileDinhKemDaKy = new ArrayList<>();
+    private List<FileDinhKemReq> fileCanCuReq = new ArrayList<>();
+    private List<FileDinhKemReq> fileDinhKemReq = new ArrayList<>();
+    private List<FileDinhKemReq> fileDinhKemDaKyReq = new ArrayList<>();
     private List<XhTlToChucDtl> children = new ArrayList<>();
     private List<XhTlToChucNlq> childrenNlq = new ArrayList<>();
 }

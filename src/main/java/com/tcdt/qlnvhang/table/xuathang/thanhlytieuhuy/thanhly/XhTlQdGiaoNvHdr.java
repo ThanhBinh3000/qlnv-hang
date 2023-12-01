@@ -27,6 +27,8 @@ import java.util.Map;
 public class XhTlQdGiaoNvHdr extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_TL_QD_GIAO_NV_HDR";
+    public static final String FILE_DINH_KEM = "XH_TL_QD_GIAO_NV_HDR_DK";
+    public static final String FILE_CAN_CU = "XH_TL_QD_GIAO_NV_HDR_CC";
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlQdGiaoNvHdr.TABLE_NAME + "_SEQ")
     @SequenceGenerator(sequenceName = XhTlQdGiaoNvHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhTlQdGiaoNvHdr.TABLE_NAME + "_SEQ")

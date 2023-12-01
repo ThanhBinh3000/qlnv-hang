@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.controller.nhaphangtheoptmuatt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.controller.BaseController;
 import com.tcdt.qlnvhang.enums.EnumResponse;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.hopdong.hopdongphuluc.HopDongMttHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhNkPhieuKtclSearch;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdrReq;
@@ -34,6 +35,9 @@ import java.util.Map;
 public class HhHopDongMttHdrController extends BaseController {
     @Autowired
     HopDongMttHdrService hopDongMttHdrService;
+
+    @Autowired
+    HopDongMttHdrRepository hopDongMttHdrRepository;
 
 
     @ApiOperation(value = "Tra cứu thông tin hợp đồng", response = List.class)
@@ -261,9 +265,30 @@ public class HhHopDongMttHdrController extends BaseController {
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
+            e.printStackTrace();
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
         }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Tra cứu thông tin hợp đồng", response = List.class)
+    @PostMapping(value = "/find-by-id-dvi-ban", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> findByIdDviBan(@Valid @RequestBody HopDongMttHdrReq req) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(hopDongMttHdrRepository.findByIdKqCgia(req.getIdKqCgia()).get());
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (
+                Exception e) {
+            e.printStackTrace();
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu thông tin : {}", e);
+        }
+
         return ResponseEntity.ok(resp);
     }
 }

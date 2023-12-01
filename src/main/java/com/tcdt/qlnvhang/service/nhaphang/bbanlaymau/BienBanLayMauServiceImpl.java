@@ -36,6 +36,8 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @Log4j2
@@ -331,7 +333,27 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		if (bienBanLayMau.getNgayTao() != null) {
 			object.setNgayTao(convertDate(bienBanLayMau.getNgayTao()));
 		}
+		object.setPpLayMau(bienBanLayMau.getPpLayMau().split("-")[1]);
+		if (bienBanLayMau.getChiTieuKiemTra() != null) {
+			List<String> listChiTieu = Arrays.asList(bienBanLayMau.getChiTieuKiemTra().split(";"));
+			object.setChiTieuKiemTra(new ArrayList<>());
+			listChiTieu.forEach(item -> {
+				object.getChiTieuKiemTra().add(extractTextAfterDash(item));
+			});
+		}
+		object.setTenDviUpper(bienBanLayMau.getTenDvi().toUpperCase());
 		return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+	}
+
+	private static String extractTextAfterDash(String input) {
+		String regex = "\\-(.+)";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(input);
+		if (matcher.find()) {
+			return matcher.group(1).trim();
+		} else {
+			return "";
+		}
 	}
 //
 //	@Override

@@ -46,6 +46,8 @@ public class HhBienBanLayMauReq {
     private String chiTieuKiemTra;
     private Boolean ketQuaNiemPhong;
     private String trangThai;
+    private String truongBpKtbq;
+    private String tenDviCcHang;
 
     private FileDinhKemReq fileDinhKem;
 

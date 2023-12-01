@@ -25,8 +25,6 @@ public class HhBienBanNghiemThu implements Serializable {
     private Long id;
     private String soBb;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    @Column(columnDefinition = "Date")
-    @Temporal(TemporalType.DATE)
     private Date ngayNghiemThu;
     private String thuTruong;
     private String keToan;
@@ -111,6 +109,7 @@ public class HhBienBanNghiemThu implements Serializable {
     private BigDecimal kinhPhiThucTe;
 
     private BigDecimal kinhPhiTcPd;
+    private String soBangKe;
 
     @Transient
     private List<FileDinhKem> fileDinhKems =new ArrayList<>();

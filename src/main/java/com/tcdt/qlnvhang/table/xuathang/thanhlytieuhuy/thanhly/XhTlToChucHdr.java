@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 import org.hibernate.annotations.Fetch;
@@ -24,6 +25,9 @@ import java.util.Map;
 public class XhTlToChucHdr extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_TL_TO_CHUC_HDR";
+    public static final String FILE_CAN_CU = "XH_TL_TO_CHUC_HDR_CC";
+    public static final String FILE_DINH_KEM = "XH_TL_TO_CHUC_HDR_DK";
+    public static final String FILE_DA_KY = "XH_TL_TO_CHUC_HDR_KY";
 
     @Id
 //    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlToChucHdr.TABLE_NAME + "_SEQ")
@@ -132,56 +136,15 @@ public class XhTlToChucHdr extends BaseEntity implements Serializable {
         return TrangThaiAllEnum.getLabelById(trangThai);
     }
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @Fetch(value = FetchMode.SUBSELECT)
-    @JoinColumn(name = "dataId")
-    @Where(clause = "data_type='" + XhTlToChucHdr.TABLE_NAME + "_CAN_CU'")
-    private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
+    @Transient
+    private List<FileDinhKem> fileCanCu = new ArrayList<>();
 
-    public void setFileCanCu(List<FileDinhKemJoinTable> fileCanCu) {
-        this.fileCanCu.clear();
-        if (!DataUtils.isNullObject(fileCanCu)) {
-            fileCanCu.forEach(f -> {
-                f.setDataType(XhTlToChucHdr.TABLE_NAME + "_CAN_CU");
-                f.setXhTlToChucHdr(this);
-            });
-            this.fileCanCu.addAll(fileCanCu);
-        }
-    }
+    @Transient
+    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @Fetch(value = FetchMode.SUBSELECT)
-    @JoinColumn(name = "dataId")
-    @Where(clause = "data_type='" + XhTlToChucHdr.TABLE_NAME + "_DINH_KEM'")
-    private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
+    @Transient
+    private List<FileDinhKem> fileDinhKemDaKy = new ArrayList<>();
 
-    public void setFileDinhKem(List<FileDinhKemJoinTable> fileCanCu) {
-        this.fileDinhKem.clear();
-        if (!DataUtils.isNullObject(fileCanCu)) {
-            fileCanCu.forEach(f -> {
-                f.setDataType(XhTlToChucHdr.TABLE_NAME + "_DINH_KEM");
-                f.setXhTlToChucHdr(this);
-            });
-            this.fileDinhKem.addAll(fileCanCu);
-        }
-    }
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @Fetch(value = FetchMode.SUBSELECT)
-    @JoinColumn(name = "dataId")
-    @Where(clause = "data_type='" + XhTlToChucHdr.TABLE_NAME + "_DA_KY'")
-    private List<FileDinhKemJoinTable> fileDinhKemDaKy = new ArrayList<>();
-
-    public void setFileDinhKemDaKy(List<FileDinhKemJoinTable> fileCanCu) {
-        this.fileDinhKemDaKy.clear();
-        if (!DataUtils.isNullObject(fileCanCu)) {
-            fileCanCu.forEach(f -> {
-                f.setDataType(XhTlToChucHdr.TABLE_NAME + "_DA_KY");
-                f.setXhTlToChucHdr(this);
-            });
-            this.fileDinhKemDaKy.addAll(fileCanCu);
-        }
-    }
 
     @Transient
     private List<XhTlToChucDtl> children = new ArrayList<>();

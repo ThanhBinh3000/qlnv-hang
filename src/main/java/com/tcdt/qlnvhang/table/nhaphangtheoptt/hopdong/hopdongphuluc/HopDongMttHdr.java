@@ -205,4 +205,9 @@ public class HopDongMttHdr extends TrangThaiBaseEntity implements Serializable {
   @Transient
   private HhQdPheduyetKhMttHdr hhQdPheduyetKhMttHdr;
 
+  @Transient
+  private String ngayMkhoStr;
+  @Transient
+  private String tongThanhTienStr;
+
 }

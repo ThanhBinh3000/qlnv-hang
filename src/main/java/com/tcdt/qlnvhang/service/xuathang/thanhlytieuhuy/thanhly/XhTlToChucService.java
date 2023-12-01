@@ -8,6 +8,7 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoCtReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.SearchXhTlToChuc;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlToChucHdrReq;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.*;
 import com.tcdt.qlnvhang.util.Contains;
@@ -22,10 +23,7 @@ import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,6 +46,9 @@ public class XhTlToChucService extends BaseServiceImpl {
 
     @Autowired
     private XhTlDanhSachService xhTlDanhSachService;
+
+    @Autowired
+    private FileDinhKemService fileDinhKemService;
 
     public Page<XhTlToChucHdr> searchPage(CustomUserDetails currentUser, SearchXhTlToChuc req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -99,6 +100,9 @@ public class XhTlToChucService extends BaseServiceImpl {
             xhTlQuyetDinhHdrRepository.save(byId.get());
         }
         XhTlToChucHdr created = hdrRepository.save(data);
+        fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(),data.getId(),XhTlToChucHdr.FILE_DINH_KEM);
+        fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(),data.getId(),XhTlToChucHdr.FILE_CAN_CU);
+        fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemDaKyReq(),data.getId(),XhTlToChucHdr.FILE_DA_KY);
         this.saveDetail(req,created.getId());
         return created;
     }
@@ -176,6 +180,10 @@ public class XhTlToChucService extends BaseServiceImpl {
 //        });
 
         XhTlToChucHdr updated = hdrRepository.save(data);
+        fileDinhKemService.delete(data.getId(), Arrays.asList(XhTlToChucHdr.FILE_DINH_KEM,XhTlToChucHdr.FILE_CAN_CU,XhTlToChucHdr.FILE_DA_KY));
+        fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(),data.getId(),XhTlToChucHdr.FILE_DINH_KEM);
+        fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(),data.getId(),XhTlToChucHdr.FILE_CAN_CU);
+        fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemDaKyReq(),data.getId(),XhTlToChucHdr.FILE_DA_KY);
         this.saveDetail(req,updated.getId());
         return updated;
     }
@@ -206,6 +214,9 @@ public class XhTlToChucService extends BaseServiceImpl {
             }
         });
         data.setChildren(dtlRepository.findAllByIdHdr(data.getId()));
+        data.setFileDinhKem(fileDinhKemService.search(data.getId(),XhTlToChucHdr.FILE_DINH_KEM));
+        data.setFileCanCu(fileDinhKemService.search(data.getId(),XhTlToChucHdr.FILE_CAN_CU));
+        data.setFileDinhKemDaKy(fileDinhKemService.search(data.getId(),XhTlToChucHdr.FILE_DA_KY));
         return data;
     }
 
@@ -215,6 +226,7 @@ public class XhTlToChucService extends BaseServiceImpl {
         if (!optional.isPresent()) throw new Exception("Bản ghi không tồn tại");
         hdrRepository.delete(optional.get());
         nlqRepository.deleteAllByIdHdr(optional.get().getId());
+        fileDinhKemService.delete(optional.get().getId(), Arrays.asList(XhTlToChucHdr.FILE_DINH_KEM,XhTlToChucHdr.FILE_CAN_CU,XhTlToChucHdr.FILE_DA_KY));
         List<XhTlToChucDtl> allByIdHdr = dtlRepository.findAllByIdHdr(idSearchReq.getId());
         allByIdHdr.forEach( dtl -> {
             Optional<XhTlDanhSachHdr> byId = xhTlDanhSachRepository.findById(dtl.getIdDsHdr());

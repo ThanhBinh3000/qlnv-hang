@@ -122,18 +122,16 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
                 .orElseThrow(() -> new Exception("Bản Ghi không tồn tại"));
         data.setPthucBanTrucTiep(req.getPthucBanTrucTiep());
         data.setDiaDiemChaoGia(req.getDiaDiemChaoGia());
-        data.setNgayMkho(req.getNgayMkho());
-        data.setNgayKthuc(req.getNgayKthuc());
         data.setGhiChuChaoGia(req.getGhiChuChaoGia());
-        data.setThoiHanBan(req.getThoiHanBan());
         data.setTrangThai(Contains.DANG_THUC_HIEN);
-        if (req.getPthucBanTrucTiep().equals(Contains.UY_QUYEN) && !DataUtils.isNullOrEmpty(req.getFileUyQuyen())) {
-            List<FileDinhKem> fileUyQuyen = fileDinhKemService.saveListFileDinhKem(req.getFileUyQuyen(), data.getId(), XhQdPdKhBttDtl.TABLE_NAME + "_UY_QUYEN");
-            data.setFileUyQuyen(fileUyQuyen);
-        }
-        if (req.getPthucBanTrucTiep().equals(Contains.BAN_LE) && !DataUtils.isNullOrEmpty(req.getFileBanLe())) {
-            List<FileDinhKem> fileBanLe = fileDinhKemService.saveListFileDinhKem(req.getFileBanLe(), data.getId(), XhQdPdKhBttDtl.TABLE_NAME + "_BAN_LE");
-            data.setFileBanLe(fileBanLe);
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKem())) {
+            if (req.getPthucBanTrucTiep().equals(Contains.UY_QUYEN)){
+                List<FileDinhKem> fileUyQuyen = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), data.getId(), XhQdPdKhBttDtl.TABLE_NAME + "_UY_QUYEN");
+                data.setFileDinhKem(fileUyQuyen);
+            }else if (req.getPthucBanTrucTiep().equals(Contains.BAN_LE)) {
+                List<FileDinhKem> fileBanLe = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), data.getId(), XhQdPdKhBttDtl.TABLE_NAME + "_BAN_LE");
+                data.setFileDinhKem(fileBanLe);
+            }
         }
         if (data.getPthucBanTrucTiep().equals(Contains.CHAO_GIA)) {
             this.processChaoGiaData(req, data);
@@ -189,10 +187,10 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
                 List<FileDinhKem> fileDinhKems = new ArrayList<>();
                 if (data.getPthucBanTrucTiep().equals(Contains.UY_QUYEN)) {
                     fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBttDtl.TABLE_NAME + "_UY_QUYEN"));
-                    data.setFileUyQuyen(fileDinhKems);
+                    data.setFileDinhKem(fileDinhKems);
                 } else if (data.getPthucBanTrucTiep().equals(Contains.BAN_LE)) {
                     fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBttDtl.TABLE_NAME + "_BAN_LE"));
-                    data.setFileBanLe(fileDinhKems);
+                    data.setFileDinhKem(fileDinhKems);
                 }
             }
             List<XhQdPdKhBttDvi> listDvi = xhQdPdKhBttDviRepository.findAllByIdDtl(data.getId());
@@ -351,7 +349,7 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
             objs[2] = dtl.getSoQdPd();
             objs[3] = dtl.getSlHdChuaKy();
             objs[4] = dtl.getSlHdDaKy();
-            objs[5] = dtl.getNgayMkho();
+            objs[5] = dtl.getTgianDkienDen();
             objs[6] = dtl.getTenLoaiVthh();
             objs[7] = dtl.getTenCloaiVthh();
             objs[8] = dtl.getThanhTienDuocDuyet();
