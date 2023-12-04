@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = XhCtvtBangKeDtl.TABLE_NAME)
@@ -21,8 +22,8 @@ public class XhCtvtBangKeDtl extends BaseEntity implements Serializable {
   private Long idHdr;
   private String maCan;
   private String soBaoBi;
-  private Long trongLuongBaoBi;
-  private Long trongLuongCaBi;
+  private BigDecimal trongLuongBaoBi;
+  private BigDecimal trongLuongCaBi;
   private String soSerial;
-  private Long soLuong;
+  private BigDecimal soLuong;
 }
