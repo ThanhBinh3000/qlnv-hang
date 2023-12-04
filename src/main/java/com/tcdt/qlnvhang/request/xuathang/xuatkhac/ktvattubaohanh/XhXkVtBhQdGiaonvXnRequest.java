@@ -24,6 +24,7 @@ public class XhXkVtBhQdGiaonvXnRequest extends BaseRequest {
   String soCanCu;
   String idCanCu;
   String trangThai;
+  String trangThaiXh;
   LocalDate ngayGduyet;
   Long nguoiGduyetId;
   LocalDate ngayPduyet;
