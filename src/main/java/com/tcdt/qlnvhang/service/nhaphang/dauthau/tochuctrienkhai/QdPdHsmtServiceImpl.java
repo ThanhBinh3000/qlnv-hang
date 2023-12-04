@@ -17,12 +17,10 @@ import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.dauthauvattu.QdPdHsmtReq;
 import com.tcdt.qlnvhang.request.search.QdPdHsmtSearchReq;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.HhDchinhDxKhLcntDsgthau;
-import com.tcdt.qlnvhang.table.HhDchinhDxKhLcntDsgthauCtiet;
-import com.tcdt.qlnvhang.table.HhDchinhDxKhLcntDsgthauCtietVt;
-import com.tcdt.qlnvhang.table.HhDchinhDxKhLcntHdr;
+import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -80,8 +78,20 @@ public class QdPdHsmtServiceImpl extends BaseServiceImpl implements QdPdHsmtServ
 
     @Override
     public Page<QdPdHsmt> timKiem(QdPdHsmtSearchReq req) throws Exception {
+        UserInfo currentUser = SecurityContextService.getUser();
+        if (currentUser == null) {
+            throw new Exception("Access denied.");
+        }
+        if (!Contains.CAP_TONG_CUC.equals(currentUser.getCapDvi())) {
+            req.setMaDvi(currentUser.getDvql());
+        }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit(), Sort.by("id").descending());
-        Page<QdPdHsmt> page = qdPdHsmtRepository.search(req.getNamKhoach(), req.getSoQd(), req.getSoQdPdKhlcnt(), convertFullDateToString(req.getTuNgayKy()), convertFullDateToString(req.getDenNgayKy()), req.getLoaiVthh(), req.getCloaiVthh(), req.getTrichYeu(), req.getTrangThai(), req.getMaDvi(), pageable);
+        Page<QdPdHsmt> page;
+        if (req.getLoaiVthh().startsWith("02")) {
+           page = qdPdHsmtRepository.searchVt(req.getNamKhoach(), req.getSoQd(), req.getSoQdPdKhlcnt(), convertFullDateToString(req.getTuNgayKy()), convertFullDateToString(req.getDenNgayKy()), req.getLoaiVthh(), req.getCloaiVthh(), req.getTrichYeu(), req.getTrangThai(), req.getMaDvi(), pageable);
+        } else {
+            page = qdPdHsmtRepository.search(req.getNamKhoach(), req.getSoQd(), req.getSoQdPdKhlcnt(), convertFullDateToString(req.getTuNgayKy()), convertFullDateToString(req.getDenNgayKy()), req.getLoaiVthh(), req.getCloaiVthh(), req.getTrichYeu(), req.getTrangThai(), req.getMaDvi(), pageable);
+        }
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
         page.getContent().forEach(f -> {
             Optional<HhQdKhlcntHdr> qdKhlcntHdr = hhQdKhlcntHdrRepository.findById(f.getIdQdPdKhlcnt());
