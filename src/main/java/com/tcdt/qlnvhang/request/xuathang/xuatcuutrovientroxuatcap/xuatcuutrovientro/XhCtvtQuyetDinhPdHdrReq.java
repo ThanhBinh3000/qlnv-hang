@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdDtl;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +24,10 @@ public class XhCtvtQuyetDinhPdHdrReq {
   private Long idDx;
   private String soDx;
   private LocalDate ngayDx;
-  private Long tongSoLuongDx;
-  private Long tongSoLuong;
+  private BigDecimal tongSoLuongDx;
+  private BigDecimal tongSoLuong;
   private Long thanhTien;
-  private Long soLuongXuatCap;
+  private BigDecimal soLuongXuatCap;
   private String loaiVthh;
   private String cloaiVthh;
   private String tenVthh;

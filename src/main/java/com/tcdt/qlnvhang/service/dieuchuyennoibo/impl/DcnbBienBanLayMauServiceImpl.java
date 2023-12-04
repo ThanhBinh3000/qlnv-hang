@@ -321,7 +321,7 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
     public ReportTemplateResponse preview(DcnbBienBanLayMauHdrReq objReq) throws Exception {
         var dcnbBienBanLayMauHdr = dcnbBienBanLayMauHdrRepository.findById(objReq.getId());
         if (!dcnbBienBanLayMauHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
-        Optional<UserInfo> userInfo = null;
+        Optional<UserInfo> userInfo = Optional.empty();
         if (dcnbBienBanLayMauHdr.get().getNguoiPDuyet() != null) {
             userInfo = userInfoRepository.findById(dcnbBienBanLayMauHdr.get().getNguoiPDuyet());
         }
@@ -367,7 +367,7 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
         for (var res : dcnbBienBanLayMauDtl) {
             var dcnbBienBanLayMauDtlDto = DcnbBienBanLayMauDtlDto.builder()
                     .stt(stt++)
-                    .loaiDaiDien(res.getLoaiDaiDien())
+                    .loaiDaiDien(res.getLoaiDaiDien().equals("00") ? "Đại diện Cục Dự Trữ nhà nước" : "Đại diện Chi Cục Dự Trữ nhà nước")
                     .tenDaiDien(res.getTenDaiDien())
                     .build();
             dcnbBienBanLayMauDtlDtos.add(dcnbBienBanLayMauDtlDto);
