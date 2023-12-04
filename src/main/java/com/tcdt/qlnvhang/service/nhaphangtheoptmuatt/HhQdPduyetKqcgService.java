@@ -222,7 +222,7 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
                     hopDong.setSoLuong(save.getSoLuong());
                     hopDong.setDonGiaGomThue(save.getDonGia());
                     hopDong.setThanhTien(save.getThanhTien());
-                    hopDong.setTrangThai(Contains.DUTHAO);
+//                    hopDong.setTrangThai(Contains.DUTHAO);
                     hopDong.setIdQdKq(req.getId());
                     hopDong.setSoQdKq(req.getSoQdKq());
                     hopDongMttHdrRepository.save(hopDong);
