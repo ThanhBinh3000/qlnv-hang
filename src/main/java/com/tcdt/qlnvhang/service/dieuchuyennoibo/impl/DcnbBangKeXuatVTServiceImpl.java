@@ -281,7 +281,7 @@ public class DcnbBangKeXuatVTServiceImpl extends BaseServiceImpl implements Dcnb
                 .tenNganKho(dcnbBangKeXuatVT.get().getTenNganKho())
                 .tenLoKho(dcnbBangKeXuatVT.get().getTenLoKho())
                 .tenDiemKho(dcnbBangKeXuatVT.get().getTenDiemKho())
-                .cloaiVthh(dcnbBangKeXuatVT.get().getCloaiVthh())
+                .cloaiVthh(dcnbBangKeXuatVT.get().getTenCloaiVthh())
                 .donViTinh(dcnbBangKeXuatVT.get().getDonViTinh())
                 .hoVaTenNguoiNhanHang("")
                 .thoiHanGiaoNhan(dcnbBangKeXuatVT.get().getThoiHanGiaoNhan() == null? "": dcnbBangKeXuatVT.get().getThoiHanGiaoNhan().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
