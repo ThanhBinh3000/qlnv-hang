@@ -17,7 +17,6 @@ import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdg
 import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.tonghop.XhThopDxKhBdgRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
-import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.pheduyet.XhQdPdKhBdgDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.pheduyet.XhQdPdKhBdgPlDtlReq;
@@ -247,7 +246,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
                         dataPloDtl.setTenNganLoKho(StringUtils.isEmpty(dataPloDtl.getMaLoKho()) ? mapDmucDvi.get(dataPloDtl.getMaNganKho()) : mapDmucDvi.get(dataPloDtl.getMaLoKho()));
                         dataPloDtl.setTenLoaiVthh(StringUtils.isEmpty(dataPloDtl.getLoaiVthh()) ? null : mapVthh.get(dataPloDtl.getLoaiVthh()));
                         dataPloDtl.setTenCloaiVthh(StringUtils.isEmpty(dataPloDtl.getCloaiVthh()) ? null : mapVthh.get(dataPloDtl.getCloaiVthh()));
-                        if (dataPloDtl.getDonGiaDuocDuyet().equals(BigDecimal.ZERO)) {
+                        if (dataPloDtl.getDonGiaDuocDuyet() == null || dataPloDtl.getDonGiaDuocDuyet().compareTo(BigDecimal.ZERO) == 0) {
                             BigDecimal phanChia = new BigDecimal(100);
                             Long longNamKh = data.getNam() != null ? data.getNam().longValue() : null;
                             if (dataPloDtl.getLoaiVthh() != null && longNamKh != null && dataPloDtl.getLoaiVthh().startsWith(Contains.LOAI_VTHH_VATTU)) {
@@ -262,7 +261,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
                         }
                     }
                     dataPhanLo.setTenDvi(StringUtils.isEmpty(dataPhanLo.getMaDvi()) ? null : mapDmucDvi.get(dataPhanLo.getMaDvi()));
-                    if (!giaDuocDuyet.equals(BigDecimal.ZERO)) {
+                    if (giaDuocDuyet != null && giaDuocDuyet.compareTo(BigDecimal.ZERO) != 0) {
                         BigDecimal sumSoTienDuocDuyet = listPloDtl.stream().map(XhQdPdKhBdgPlDtl::getThanhTienDuocDuyet).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
                         BigDecimal sumSoTienDtruocDduyet = listPloDtl.stream().map(XhQdPdKhBdgPlDtl::getTienDatTruocDuocDuyet).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
                         dataPhanLo.setSoTienDuocDuyet(sumSoTienDuocDuyet);
@@ -274,7 +273,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
                 dataDtl.setTenLoaiVthh(StringUtils.isEmpty(dataDtl.getLoaiVthh()) ? null : mapVthh.get(dataDtl.getLoaiVthh()));
                 dataDtl.setTenCloaiVthh(StringUtils.isEmpty(dataDtl.getCloaiVthh()) ? null : mapVthh.get(dataDtl.getCloaiVthh()));
                 dataDtl.setTenPthucTtoan(StringUtils.isEmpty(dataDtl.getPthucTtoan()) ? null : mapPhuongThucTt.get(dataDtl.getPthucTtoan()));
-                if (!giaDuocDuyet.equals(BigDecimal.ZERO)) {
+                if (giaDuocDuyet != null && giaDuocDuyet.compareTo(BigDecimal.ZERO) != 0) {
                     BigDecimal sumTongTienDuocDuyet = listPhanLo.stream().map(XhQdPdKhBdgPl::getSoTienDuocDuyet).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
                     BigDecimal sumTongKtienDtruocDduyet = listPhanLo.stream().map(XhQdPdKhBdgPl::getSoTienDtruocDduyet).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
                     dataDtl.setTongTienDuocDuyet(sumTongTienDuocDuyet);
@@ -440,6 +439,9 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
             if (deXuat.getTrangThai().equals(Contains.DABANHANH_QD)) {
                 throw new Exception("Đề xuất kế hoạch này đã được quyết định");
             }
+            deXuat.setIdSoQdPd(data.getId());
+            deXuat.setSoQdPd(data.getSoQdPd());
+            deXuat.setNgayKyQd(data.getNgayKyQd());
             deXuat.setTrangThaiTh(Contains.DABANHANH_QD);
             xhDxKhBanDauGiaRepository.save(deXuat);
         }
@@ -477,31 +479,105 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
     }
 
     public void export(CustomUserDetails currentUser, XhQdPdKhBdgReq req, HttpServletResponse response) throws Exception {
-        PaggingReq paggingReq = new PaggingReq();
-        paggingReq.setPage(0);
-        paggingReq.setLimit(Integer.MAX_VALUE);
-        req.setPaggingReq(paggingReq);
+        req.getPaggingReq().setPage(0);
+        req.getPaggingReq().setLimit(Integer.MAX_VALUE);
         Page<XhQdPdKhBdg> page = this.searchPage(currentUser, req);
         List<XhQdPdKhBdg> data = page.getContent();
-        String title = " Danh sách quyết định phê duyệt kế hoạch mua trưc tiếp";
-        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số QĐ PD KH BĐG", "ngày ký QĐ", "Trích yếu", "Số KH/ Tờ trình", "Mã tổng hợp", "Loại hàng hóa", "Chủng loại hàng hóa", "Số ĐV tài sản", "SL HĐ đã ký", "Trạng Thái"};
-        String fileName = "danh-sach-dx-pd-kh-mua-truc-tiep.xlsx";
-        List<Object[]> dataList = new ArrayList<Object[]>();
-        Object[] objs = null;
+        boolean isQdPdType = data.stream().anyMatch(item -> item.getType().equals("QDKH"));
+        boolean isVattuType = data.stream().anyMatch(item -> item.getLoaiVthh().startsWith(Contains.LOAI_VTHH_VATTU));
+        if (isQdPdType) {
+            exportQdPdType(response, data, isVattuType);
+        } else {
+            exportQdDcType(response, data, isVattuType);
+        }
+    }
+
+    public void exportQdPdType(HttpServletResponse response, List<XhQdPdKhBdg> data, boolean isVattuType) throws Exception {
+        String title = "Danh sách quyết định phê duyệt kế hoạch bán đấu giá hàng DTQG";
+        String[] rowsName;
+        String[] commonRowsName = new String[]{"STT", "Năm kế hoạch", "Số QĐ PD KH BĐG", "Ngày ký QĐ", "Trích yếu", "Số công văn/tờ trình", "Mã tổng hợp"};
+        if (isVattuType) {
+            String[] vattuRowsName = Arrays.copyOf(commonRowsName, commonRowsName.length + 4);
+            vattuRowsName[7] = "Loại hàng DTQG";
+            vattuRowsName[8] = "Chủng loại hàng DTQG";
+            vattuRowsName[9] = "Số ĐV tài sản";
+            vattuRowsName[10] = "Trạng thái";
+            rowsName = vattuRowsName;
+        } else {
+            String[] nonVattuRowsName = Arrays.copyOf(commonRowsName, commonRowsName.length + 3);
+            nonVattuRowsName[7] = "Chủng loại hàng DTQG";
+            nonVattuRowsName[8] = "Số ĐV tài sản";
+            nonVattuRowsName[9] = "Trạng thái";
+            rowsName = nonVattuRowsName;
+        }
+        String fileName = "danh-sach-quyet-dinh-phe-duyet-ke-hoach-ban-dau-gia-hang-DTQG.xlsx";
+        List<Object[]> dataList = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
-            XhQdPdKhBdg pduyet = data.get(i);
-            objs = new Object[rowsName.length];
+            XhQdPdKhBdg hdr = data.get(i);
+            Object[] objs = new Object[rowsName.length];
             objs[0] = i;
-            objs[1] = pduyet.getNam();
-            objs[2] = pduyet.getSoQdPd();
-            objs[3] = pduyet.getNgayKyQd();
-            objs[4] = pduyet.getTrangThai();
-            objs[5] = pduyet.getSoTrHdr();
-            objs[6] = pduyet.getIdThHdr();
-            objs[7] = pduyet.getTenCloaiVthh();
-            objs[8] = pduyet.getSlDviTsan();
-            objs[9] = null;
-            objs[10] = pduyet.getTenTrangThai();
+            objs[1] = hdr.getNam();
+            objs[2] = hdr.getSoQdPd();
+            objs[3] = hdr.getNgayKyQd();
+            objs[4] = hdr.getTrichYeu();
+            objs[5] = hdr.getSoTrHdr();
+            objs[6] = hdr.getIdThHdr();
+            if (isVattuType) {
+                objs[7] = hdr.getTenLoaiVthh();
+                objs[8] = hdr.getTenCloaiVthh();
+                objs[9] = hdr.getSlDviTsan();
+                objs[10] = hdr.getTenTrangThai();
+            } else {
+                objs[7] = hdr.getTenCloaiVthh();
+                objs[8] = hdr.getSlDviTsan();
+                objs[9] = hdr.getTenTrangThai();
+            }
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+        ex.export();
+    }
+
+    public void exportQdDcType(HttpServletResponse response, List<XhQdPdKhBdg> data, boolean isVattuType) throws Exception {
+        String title = "Danh sách điều chỉnh quyết định phê duyệt kế hoạch bán đấu giá hàng DTQG";
+        String[] rowsName;
+        String[] commonRowsName = new String[]{"STT", "Năm KH", "Số QĐ điều chỉnh KH BĐG", "Ngày ký QĐ điều chỉnh", "Số QĐ cần điều chỉnh", "Số QĐ công văn/tờ trình", "Trích yếu"};
+        if (isVattuType) {
+            String[] vattuRowsName = Arrays.copyOf(commonRowsName, commonRowsName.length + 4);
+            vattuRowsName[7] = "Loại hàng DTQG";
+            vattuRowsName[8] = "Chủng loại hàng DTQG";
+            vattuRowsName[9] = "Số ĐV tài sản";
+            vattuRowsName[10] = "Trạng thái";
+            rowsName = vattuRowsName;
+        } else {
+            String[] nonVattuRowsName = Arrays.copyOf(commonRowsName, commonRowsName.length + 3);
+            nonVattuRowsName[7] = "Chủng loại hàng DTQG";
+            nonVattuRowsName[8] = "Số ĐV tài sản";
+            nonVattuRowsName[9] = "Trạng thái";
+            rowsName = nonVattuRowsName;
+        }
+        String fileName = "danh-sach-dieu-chinh-quyet-dinh-phe-duyet-ke-hoach-ban-dau-gia-hang-DTQG.xlsx";
+        List<Object[]> dataList = new ArrayList<>();
+        for (int i = 0; i < data.size(); i++) {
+            XhQdPdKhBdg hdr = data.get(i);
+            Object[] objs = new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = hdr.getNam();
+            objs[2] = hdr.getSoQdDc();
+            objs[3] = hdr.getNgayKyDc();
+            objs[4] = hdr.getSoQdPd();
+            objs[5] = hdr.getSoCongVan();
+            objs[6] = hdr.getTrichYeu();
+            if (isVattuType) {
+                objs[7] = hdr.getTenLoaiVthh();
+                objs[8] = hdr.getTenCloaiVthh();
+                objs[9] = hdr.getSlDviTsan();
+                objs[10] = hdr.getTenTrangThai();
+            } else {
+                objs[7] = hdr.getTenCloaiVthh();
+                objs[8] = hdr.getSlDviTsan();
+                objs[9] = hdr.getTenTrangThai();
+            }
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
@@ -610,37 +686,53 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
     }
 
     public void exportDtl(CustomUserDetails currentUser, XhQdPdKhBdgDtlReq req, HttpServletResponse response) throws Exception {
-        PaggingReq paggingReq = new PaggingReq();
-        paggingReq.setPage(0);
-        paggingReq.setLimit(Integer.MAX_VALUE);
-        req.setPaggingReq(paggingReq);
+        req.getPaggingReq().setPage(0);
+        req.getPaggingReq().setLimit(Integer.MAX_VALUE);
         Page<XhQdPdKhBdgDtl> page = this.searchPageDtl(currentUser, req);
-        List<XhQdPdKhBdgDtl> dataDtl = page.getContent();
-        String title = "Danh sách quản lý thông tin bán đấu giá";
-        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số QĐ PD KHBĐG", "Số QĐ ĐC KHBĐG",
-                "Số QĐ PD KQBĐG", "Số KH/đề xuất", "Ngày QĐ PD KQBĐG",
-                "Tổng số ĐV tài sản", "Số ĐV tài sản ĐG thành công", "Số ĐV tài sản ĐG không thành công",
-                "Thời hạn giao nhận hàng", "Chủng loại hàng hóa", "Trạng thái thực hiện", "Kết quả đấu giá"};
-        String fileName = "danh-sach-quan-ly-thong-tin-ban-dau-gia.xlsx";
-        List<Object[]> dataList = new ArrayList<Object[]>();
-        Object[] objs = null;
-        for (int i = 0; i < dataDtl.size(); i++) {
-            XhQdPdKhBdgDtl dtl = dataDtl.get(i);
-            objs = new Object[rowsName.length];
+        List<XhQdPdKhBdgDtl> data = page.getContent();
+        String title = "Danh sách quản lý thông tin bán đấu giá hàng DTQG";
+        String[] rowsName;
+        boolean isVattuType = data.stream().anyMatch(item -> item.getLoaiVthh().startsWith(Contains.LOAI_VTHH_VATTU));
+        String[] commonRowsName = new String[]{"STT", "Năm kế hoạch", "Số QĐ PD KHBĐG", "Số QĐ ĐC KHBĐG", "Số công văn/tờ trình", "Số QĐ PD KQBĐG", "Ngày QĐ PD KQBĐG", "Tổng số ĐV tài sản", "Số ĐV tài sản đấu giá thành công", "Số ĐV tài sản đấu giá không thành"};
+        if (isVattuType) {
+            String[] vattuRowsName = Arrays.copyOf(commonRowsName, commonRowsName.length + 4);
+            vattuRowsName[10] = "Loại hàng DTQG";
+            vattuRowsName[11] = "Chủng loại hàng DTQG";
+            vattuRowsName[12] = "Trạng thái thực hiện";
+            vattuRowsName[13] = "Kết quả đấu giá";
+            rowsName = vattuRowsName;
+        } else {
+            String[] nonVattuRowsName = Arrays.copyOf(commonRowsName, commonRowsName.length + 3);
+            nonVattuRowsName[10] = "Chủng loại hàng DTQG";
+            nonVattuRowsName[11] = "Trạng thái thực hiện";
+            nonVattuRowsName[12] = "Kết quả đấu giá";
+            rowsName = nonVattuRowsName;
+        }
+        String fileName = "danh-sach-quan-ly-thong-tin-ban-dau-gia-hang-DTQG.xlsx";
+        List<Object[]> dataList = new ArrayList<>();
+        for (int i = 0; i < data.size(); i++) {
+            XhQdPdKhBdgDtl dtl = data.get(i);
+            Object[] objs = new Object[rowsName.length];
             objs[0] = i;
             objs[1] = dtl.getNam();
             objs[2] = dtl.getSoQdPd();
             objs[3] = dtl.getSoQdDc();
-            objs[4] = dtl.getSoQdKq();
-            objs[5] = dtl.getSoDxuat();
+            objs[4] = dtl.getSoDxuat();
+            objs[5] = dtl.getSoQdKq();
             objs[6] = dtl.getNgayKyQdKq();
             objs[7] = dtl.getSlDviTsan();
             objs[8] = dtl.getSoDviTsanThanhCong();
             objs[9] = dtl.getSoDviTsanKhongThanh();
-            objs[10] = null;
-            objs[11] = dtl.getTenCloaiVthh();
-            objs[12] = dtl.getTenTrangThai();
-            objs[13] = dtl.getKetQuaDauGia();
+            if (isVattuType) {
+                objs[10] = dtl.getTenLoaiVthh();
+                objs[11] = dtl.getTenCloaiVthh();
+                objs[12] = dtl.getTenTrangThai();
+                objs[13] = dtl.getKetQuaDauGia();
+            } else {
+                objs[10] = dtl.getTenCloaiVthh();
+                objs[11] = dtl.getTenTrangThai();
+                objs[12] = dtl.getKetQuaDauGia();
+            }
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

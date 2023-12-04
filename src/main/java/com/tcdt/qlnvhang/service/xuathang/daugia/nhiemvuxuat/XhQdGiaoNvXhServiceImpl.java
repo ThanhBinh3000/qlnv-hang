@@ -133,7 +133,7 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl {
         if (xhQdGiaoNvXhRepository.existsBySoQdNvAndIdNot(req.getSoQdNv(), req.getId())) {
             throw new Exception("Số quyết định nhiệm vụ " + req.getSoQdNv() + " đã tồn tại");
         }
-        BeanUtils.copyProperties(req, data, "id", "maDvi", "trangThaiXh");
+        BeanUtils.copyProperties(req, data, "id", "maDvi", "trangThaiXh", "idCanBoPhong");
         data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(currentUser.getUser().getId());
         XhQdGiaoNvXh update = xhQdGiaoNvXhRepository.save(data);
@@ -288,11 +288,29 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl {
         req.getPaggingReq().setLimit(Integer.MAX_VALUE);
         Page<XhQdGiaoNvXh> page = this.searchPage(currentUser, req);
         List<XhQdGiaoNvXh> data = page.getContent();
-        String title = "Danh sách quyết định giao nhiệm vụ xuất hàng bán đấu giá";
-        String[] rowsName = new String[]{"STT", "Năm xuất", "Số quyết định", "Ngày quyết định", "Số hợp đồng",
-                "Chủng loại hàng hóa", "Thời gian giao nhận hàng", "Trích yếu quyết định", "Số BB tịnh kho", "Số BB hao dôi",
-                "Trạng thái QĐ", "Trạng thái XH"};
-        String fileName = "danh-sach-quyet-dinh-nhiem-vu-xuat-hang-ban-dau-gia.xlsx";
+        String title = "Danh sách quyết định giao nhiệm vụ xuất hàng bán đấu giá hàng DTQG";
+        String[] rowsName;
+        boolean isVattuType = data.stream().anyMatch(item -> item.getLoaiVthh().startsWith(Contains.LOAI_VTHH_VATTU));
+        String[] commonRowsName = new String[]{"STT", "Năm xuất", "Số quyết định", "Ngày ký quyết định", "Số hợp đồng"};
+        if (isVattuType) {
+            String[] vattuRowsName = Arrays.copyOf(commonRowsName, commonRowsName.length + 6);
+            vattuRowsName[5] = "Loại hàng DTQG";
+            vattuRowsName[6] = "Chủng loại hàng DTQG";
+            vattuRowsName[7] = "Thời gian giao nhận hàng";
+            vattuRowsName[8] = "Trích yếu quyết định";
+            vattuRowsName[9] = "Trạng thái QĐ";
+            vattuRowsName[10] = "Trạng thái XH";
+            rowsName = vattuRowsName;
+        } else {
+            String[] nonVattuRowsName = Arrays.copyOf(commonRowsName, commonRowsName.length + 5);
+            nonVattuRowsName[5] = "Chủng loại hàng DTQG";
+            nonVattuRowsName[6] = "Thời gian giao nhận hàng";
+            nonVattuRowsName[7] = "Trích yếu quyết định";
+            nonVattuRowsName[8] = "Trạng thái QĐ";
+            nonVattuRowsName[9] = "Trạng thái XH";
+            rowsName = nonVattuRowsName;
+        }
+        String fileName = "danh-sach-quyet-dinh-nhiem-vu-xuat-hang-ban-dau-gia-hang-DTQG.xlsx";
         List<Object[]> dataList = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
             XhQdGiaoNvXh hdr = data.get(i);
@@ -302,13 +320,20 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl {
             objs[2] = hdr.getSoQdNv();
             objs[3] = hdr.getNgayKy();
             objs[4] = hdr.getSoHopDong();
-            objs[5] = hdr.getTenCloaiVthh();
-            objs[6] = hdr.getTgianGiaoHang();
-            objs[7] = hdr.getTrichYeu();
-            objs[8] = hdr.getBienBanTinhKho();
-            objs[9] = hdr.getBienBanHaoDoi();
-            objs[10] = hdr.getTenTrangThai();
-            objs[11] = hdr.getTenTrangThaiXh();
+            if (isVattuType) {
+                objs[5] = hdr.getTenLoaiVthh();
+                objs[6] = hdr.getTenCloaiVthh();
+                objs[7] = hdr.getTgianGiaoHang();
+                objs[8] = hdr.getTrichYeu();
+                objs[9] = hdr.getTenTrangThai();
+                objs[10] = hdr.getTenTrangThaiXh();
+            } else {
+                objs[5] = hdr.getTenCloaiVthh();
+                objs[6] = hdr.getTgianGiaoHang();
+                objs[7] = hdr.getTrichYeu();
+                objs[8] = hdr.getTenTrangThai();
+                objs[9] = hdr.getTenTrangThaiXh();
+            }
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
