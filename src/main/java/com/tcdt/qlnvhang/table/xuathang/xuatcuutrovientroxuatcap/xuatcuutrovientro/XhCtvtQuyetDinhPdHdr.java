@@ -13,6 +13,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +45,10 @@ public class XhCtvtQuyetDinhPdHdr extends BaseEntity implements Serializable {
   private Long idXc;
   private String soXc;
   private LocalDate ngayDx;
-  private Long tongSoLuongDx;
-  private Long tongSoLuong;
+  private BigDecimal tongSoLuongDx;
+  private BigDecimal tongSoLuong;
   private Long thanhTien;
-  private Long soLuongXuatCap;
+  private BigDecimal soLuongXuatCap;
   private String loaiVthh;
   private String cloaiVthh;
   private String tenVthh;
@@ -89,7 +90,7 @@ public class XhCtvtQuyetDinhPdHdr extends BaseEntity implements Serializable {
   private LocalDate ngayHieuLucQdcxc; //Ngày hiệu lực QĐ chuyển xuất cấp
 
   @Transient
-  private Long slGaoChuyenXuatCap; // Số lượng gạo chuyển sang xuất cấp
+  private BigDecimal slGaoChuyenXuatCap; // Số lượng gạo chuyển sang xuất cấp
 
   @OneToMany(mappedBy = "xhCtvtQuyetDinhPdHdr", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<XhCtvtQuyetDinhPdDtl> quyetDinhPdDtl = new ArrayList<>();
