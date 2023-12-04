@@ -261,7 +261,7 @@ public class XhDgBbHaoDoiService extends BaseServiceImpl {
             objs[0] = i;
             objs[1] = hdr.getSoQdNv();
             objs[2] = hdr.getNam();
-            objs[3] = hdr.getNgayKyQdNv();
+            objs[3] = hdr.getThoiGianGiaoNhan();
             objs[4] = hdr.getTenDiemKho();
             objs[5] = hdr.getTenNganLoKho();
             objs[6] = hdr.getSoBbHaoDoi();
@@ -274,7 +274,7 @@ public class XhDgBbHaoDoiService extends BaseServiceImpl {
                 finalObjs[11] = dtl.getSoPhieuXuatKho();
                 finalObjs[12] = dtl.getNgayXuatKho();
             });
-            objs[13] = hdr.getTrangThai();
+            objs[13] = hdr.getTenTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
