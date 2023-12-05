@@ -22,8 +22,8 @@ public interface XhQdNvXhBttHdrRepository extends JpaRepository<XhQdNvXhBttHdr, 
             "AND (:#{#param.soQdNv} IS NULL OR LOWER(QD.soQdNv) LIKE LOWER(CONCAT('%', :#{#param.soQdNv}, '%'))) " +
             "AND (:#{#param.loaiVthh } IS NULL OR LOWER(QD.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(QD.trichYeu) LIKE LOWER(CONCAT('%', :#{#param.trichYeu}, '%'))) " +
-            "AND (:#{#param.ngayTaoTu} IS NULL OR QD.ngayTao >= :#{#param.ngayTaoTu}) " +
-            "AND (:#{#param.ngayTaoDen} IS NULL OR QD.ngayTao <= :#{#param.ngayTaoDen}) " +
+            "AND (:#{#param.ngayKyQdNvTu} IS NULL OR QD.ngayKyQdNv >= :#{#param.ngayKyQdNvTu}) " +
+            "AND (:#{#param.ngayKyQdNvDen} IS NULL OR QD.ngayKyQdNv <= :#{#param.ngayKyQdNvDen}) " +
             "AND (:#{#param.trangThai} IS NULL OR QD.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.maDviCon} IS NULL OR DTL.maDvi LIKE CONCAT(:#{#param.maDviCon}, '%')) " +
             "AND (:#{#param.pthucBanTrucTiep} IS NULL OR LOWER(QD.pthucBanTrucTiep) LIKE LOWER(CONCAT('%', :#{#param.pthucBanTrucTiep}, '%'))) " +

@@ -345,6 +345,24 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		return docxToPdfConverter.convertDocxToPdf(inputStream, object);
 	}
 
+	@Override
+	public List<BienBanLayMau> searchList(BienBanLayMauReq objReq) {
+		List<BienBanLayMau> bienBanLayMaus = bienBanLayMauRepository.selectList(objReq);
+		Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
+		Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
+		bienBanLayMaus.forEach(x -> {
+			x.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(x.getTrangThai()));
+			x.setTenLoaiVthh(listDanhMucHangHoa.get(x.getLoaiVthh()));
+			x.setTenCloaiVthh(listDanhMucHangHoa.get(x.getCloaiVthh()));
+			x.setTenDvi(listDanhMucDvi.get(x.getMaDvi()));
+			x.setTenDiemKho(listDanhMucDvi.get(x.getMaDiemKho()));
+			x.setTenNhaKho(listDanhMucDvi.get(x.getMaNhaKho()));
+			x.setTenNganKho(listDanhMucDvi.get(x.getMaNganKho()));
+			x.setTenLoKho(listDanhMucDvi.get(x.getMaLoKho()));
+		});
+		return bienBanLayMaus;
+	}
+
 	private static String extractTextAfterDash(String input) {
 		String regex = "\\-(.+)";
 		Pattern pattern = Pattern.compile(regex);

@@ -18,6 +18,10 @@ public class SearchXhTcTtinBttReq extends BaseRequest {
     private String soDxuat;
     private LocalDate ngayCgiaTu;
     private LocalDate ngayCgiaDen;
+    private LocalDate ngayTaoTu;
+    private LocalDate ngayTaoDen;
+    private LocalDate ngayDuyetTu;
+    private LocalDate ngayDuyetDen;
     private String tochucCanhan;
     private Integer lanDieuChinh;
     private Integer lastest;
@@ -26,4 +30,6 @@ public class SearchXhTcTtinBttReq extends BaseRequest {
     private String dvql;
     private String maChiCuc;
     private String trangThaiHdr;
+    private String soHopDong;
+    private String tenHopDong;
 }

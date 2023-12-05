@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.repository.bbanlaymau;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
 import com.tcdt.qlnvhang.repository.BaseRepository;
+import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauReq;
 import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -68,4 +69,28 @@ public interface BienBanLayMauRepository extends BaseRepository<BienBanLayMau, L
             countQuery = "SELECT COUNT(1) FROM NH_BB_LAY_MAU  BB",
             nativeQuery = true)
     Page<BienBanLayMau> selectPage( Pageable pageable);
+
+    @Query(
+            value = " SELECT * FROM NH_BB_LAY_MAU  BB " +
+                    " WHERE 1 = 1 " +
+                    " AND (:#{#objReq.trangThai} IS NULL OR BB.TRANG_THAI = :#{#objReq.trangThai}) " +
+                    " AND (:#{#objReq.maDvi} IS NULL OR BB.MA_DVI LIKE CONCAT( :#{#objReq.maDvi}, '%')) " +
+                    " AND (:#{#objReq.loaiVthh} IS NULL OR BB.LOAI_VTHH LIKE CONCAT( :#{#objReq.loaiVthh}, '%')) " +
+                    " AND NOT EXISTS ( " +
+                    "    SELECT 1 " +
+                    "    FROM NH_PHIEU_KNGHIEM_CLUONG pkc " +
+                    "    WHERE pkc.SO_BB_LAY_MAU = BB.SO_BIEN_BAN " +
+                    " )"
+            , countQuery = "SELECT COUNT(1) FROM NH_BB_LAY_MAU  BB " +
+            " WHERE 1 = 1 " +
+            " AND (:#{#objReq.trangThai} IS NULL OR BB.TRANG_THAI = :#{#objReq.trangThai}) " +
+            " AND (:#{#objReq.maDvi} IS NULL OR BB.MA_DVI LIKE CONCAT( :#{#objReq.maDvi}, '%')) " +
+            " AND (:#{#objReq.loaiVthh} IS NULL OR BB.LOAI_VTHH LIKE CONCAT( :#{#objReq.loaiVthh}, '%')) " +
+            " AND NOT EXISTS ( " +
+            "    SELECT 1 " +
+            "    FROM NH_PHIEU_KNGHIEM_CLUONG pkc " +
+            "    WHERE pkc.SO_BB_LAY_MAU = BB.SO_BIEN_BAN )"
+            , nativeQuery = true
+    )
+    List<BienBanLayMau> selectList(BienBanLayMauReq objReq);
 }
