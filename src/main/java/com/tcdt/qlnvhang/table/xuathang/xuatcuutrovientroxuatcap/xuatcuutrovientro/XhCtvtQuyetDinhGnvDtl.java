@@ -42,7 +42,6 @@ public class XhCtvtQuyetDinhGnvDtl implements Serializable {
   private BigDecimal tonKhoDvi;
   private BigDecimal tonKhoLoaiVthh;
   private BigDecimal tonKhoCloaiVthh;
-  private String donViTinh;
   private String trangThai;
   @Column(name = "TY_LE_THU_HOI_SAU_XAY_XAT")
   private BigDecimal tyLeThuHoiSauXayXat;
@@ -53,11 +52,13 @@ public class XhCtvtQuyetDinhGnvDtl implements Serializable {
 
   @JsonIgnore
   @Transient
-  private Map<String, String> mapVthh;
+  private Map<String, Map<String, Object>> mapVthh;
   @Transient
   private String tenLoaiVthh;
   @Transient
   private String tenCloaiVthh;
+  @Transient
+  private String donViTinh;
   @JsonIgnore
   @Transient
   private Map<String, String> mapDmucDvi = new ArrayMap<>();
@@ -106,13 +107,17 @@ public class XhCtvtQuyetDinhGnvDtl implements Serializable {
     }
   }
 
-  public void setMapVthh(Map<String, String> mapVthh) {
+  public void setMapVthh(Map<String, Map<String, Object>> mapVthh) {
     this.mapVthh = mapVthh;
-    if (!DataUtils.isNullObject(getLoaiVthh())) {
-      setTenLoaiVthh(mapVthh.containsKey(getLoaiVthh()) ? mapVthh.get(getLoaiVthh()) : null);
-    }
-    if (!DataUtils.isNullObject(getCloaiVthh())) {
-      setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
+    if (mapVthh != null) {
+      if (mapVthh.containsKey(getLoaiVthh())) {
+        setTenLoaiVthh(DataUtils.safeToString(mapVthh.get(getLoaiVthh()).get("ten")));
+        setDonViTinh(DataUtils.safeToString(mapVthh.get(getLoaiVthh()).get("maDviTinh")));
+      }
+      if (mapVthh.containsKey(getCloaiVthh())) {
+        setTenCloaiVthh(DataUtils.safeToString(mapVthh.get(getCloaiVthh()).get("ten")));
+        setDonViTinh(DataUtils.safeToString(mapVthh.get(getLoaiVthh()).get("maDviTinh")));
+      }
     }
   }
 
