@@ -788,7 +788,11 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			}
 
 			// Set phiếu kiểm nghiệm chất lượng
-			List<PhieuKnghiemCluongHang> phieuKnghiemCl = phieuKnghiemCluongHangRepository.findBySoQdGiaoNvNhAndMaDvi(f.getSoQd(), f.getMaDvi());
+			List<PhieuKnghiemCluongHang> phieuKnghiemCl = phieuKnghiemCluongHangRepository.getDanhSachPhieuKncl(f.getId(), req.getSoPhieuKncl(), req.getSoBbBanGiao(), req.getSoBbNhapDayKho(),
+					convertFullDateToString(req.getTuNgayKncl()),
+					convertFullDateToString(req.getDenNgayKncl()),
+					f.getMaDvi(),
+					userInfo.getDvql());
 			phieuKnghiemCl.forEach( item -> {
 				item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
 				item.setTenDiemKho(mapDmucDvi.get(item.getMaDiemKho()));
