@@ -1,8 +1,10 @@
 package com.tcdt.qlnvhang.table.nhaphangtheoptt;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttHdr;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdr;
+import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -25,7 +27,7 @@ public class HhQdGiaoNvNhapHang implements Serializable {
     private Long id;
     private Integer namNhap;
     private String soQd;
-    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayQd;
     @Temporal(TemporalType.DATE)
     private Date ngayKyHd;
@@ -104,7 +106,19 @@ public class HhQdGiaoNvNhapHang implements Serializable {
     @Transient
     private Date ngayMkho;
     @Transient
-    private BigDecimal tongThanhTien;
+    private String ngayMkhoStr;
+    @Transient
+    private String tgianNkhoStr;
+    @Transient
+    private String tongThanhTien;
+    @Transient
+    private Integer ngay;
+    @Transient
+    private Integer thang;
+    @Transient
+    private Integer nam;
     @Transient
     private List<HhQdGiaoNvNhDdiem> children = new ArrayList<>();
+    @Transient
+    private List<FileDinhKem> listCanCuPhapLy = new ArrayList<>();
 }

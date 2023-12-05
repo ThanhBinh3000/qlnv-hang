@@ -151,9 +151,9 @@ public class XhPhieuKtraCluongBttServiceImpl extends BaseServiceImpl {
                     data.setTenTphongKtvBaoQuan(userInfo.getFullName());
                 });
             }
-            if (data.getNguoiPduyetId() != null) {
-                userInfoRepository.findById(data.getNguoiPduyetId()).ifPresent(userInfo -> {
-                    data.setTenThuTruongDonVi(userInfo.getFullName());
+            if (data.getIdLanhDaoCuc() != null) {
+                userInfoRepository.findById(data.getIdLanhDaoCuc()).ifPresent(userInfo -> {
+                    data.setTenLanhDaoCuc(userInfo.getFullName());
                 });
             }
             List<XhPhieuKtraCluongBttDtl> listDtl = xhPhieuKtraCluongBttDtlRepository.findAllByIdHdr(data.getId());
@@ -210,6 +210,7 @@ public class XhPhieuKtraCluongBttServiceImpl extends BaseServiceImpl {
             case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
                 data.setNguoiPduyetId(currentUser.getUser().getId());
                 data.setNgayPduyet(LocalDate.now());
+                data.setIdLanhDaoCuc(currentUser.getUser().getId());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
@@ -257,10 +258,10 @@ public class XhPhieuKtraCluongBttServiceImpl extends BaseServiceImpl {
             throw new Exception("Bad request.");
         }
         try {
-            FileInputStream inputStream = new FileInputStream(baseReportFolder + "bantructiep/Phiếu kiểm nghiệm chất lượng.docx");
+            String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "bantructiep/" + templatePath;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
             XhPhieuKtraCluongBttHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
-            xhBbLayMauBttHdrRepository.findById(detail.getIdBbLayMau())
-                    .ifPresent(layMau -> detail.setSoLuongHangbaoQuan(layMau.getSoLuongKiemTra()));
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
         } catch (IOException e) {
             e.printStackTrace();

@@ -58,6 +58,7 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
             "AND ((:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho})) " +
             "AND ((:#{#param.loaiDc} IS NULL OR qdc.loaiDc = :#{#param.loaiDc})) " +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
+            "AND (qdc.type = 'NDC') " +
             "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
             "AND ((:#{#param.maDvi} IS NULL OR LOWER(qdc.maDvi) LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND ((qdc.loaiDc= 'DCNB' OR qdc.loaiDc= 'CHI_CUC') OR  ((:#{#param.typeQd} IS NULL OR qdc.loaiQdinh = :#{#param.typeQd})))" +
@@ -101,4 +102,17 @@ public interface DcnbPhieuNhapKhoHdrRepository extends JpaRepository<DcnbPhieuNh
             "GROUP BY pnk.id,pnk.soPhieuNhapKho, pnk.id ,pnk.ngayLap,pnk.tongSoLuong, pktcl.id, pktcl.soPhieu,bkchh.id, bkchh.soBangKe,bknvt.id, bknvt.soBangKe, bbcbkh.id, bbcbkh.soBban "+
             "ORDER BY pnk.soPhieuNhapKho desc")
     List<DcnbPhieuNhapKhoHdrListDTO> searchListChung(@Param("param")DcnbPhieuNhapKhoHdrReq objReq);
+    @Query(value = "SELECT dpxkh.* \n" +
+            "FROM DCNB_KE_HOACH_DC_DTL dtl\n" +
+            "JOIN DCNB_KE_HOACH_DC_HDR hdr ON hdr.id = dtl.HDR_ID\n" +
+            "JOIN DCNB_QUYET_DINH_DC_C_DTL qdcd ON qdcd.DCNB_KE_HOACH_DC_HDR_ID = hdr.id\n" +
+            "JOIN DCNB_QUYET_DINH_DC_C_HDR qdch ON qdch.ID = qdcd.HDR_ID\n" +
+            "JOIN DCNB_PHIEU_NHAP_KHO_HDR dpxkh ON dpxkh.KE_HOACH_DC_DTL_ID = dtl.ID\n" +
+            "WHERE dpxkh.TRANG_THAI = '17' AND qdch.SO_QDINH = ?1\n" +
+            "AND dtl.ID IN (SELECT dtlv.ID \n" +
+            "FROM DCNB_KE_HOACH_DC_DTL dtlv\n" +
+            "WHERE dtlv.PARENT_ID = (SELECT dtlvv.PARENT_ID \n" +
+            "FROM DCNB_KE_HOACH_DC_DTL dtlvv\n" +
+            "WHERE dtlvv.ID = ?2) )", nativeQuery = true)
+    List<DcnbPhieuNhapKhoHdr> findBySoQuyetDinhAndKeHoachDtlId(String soQdinhCuc, Long keHoachDtlId);
 }

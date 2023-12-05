@@ -36,6 +36,7 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
@@ -206,6 +207,7 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
         break;
       case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+        optional.get().setLanhDaoChiCuc(currentUser.getUser().getFullName());
         optional.get().setNgayPduyet(LocalDate.now());
         break;
       default:
@@ -265,11 +267,13 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
               f.setSoBienBan(null);
               f.setNgayLayMau(null);
               f.setTrangThaiBienBan(null);
+              f.setIdNguoiTaoBb(null);
             } else {
               f.setIdBienBan(bienBan.getId());
               f.setSoBienBan(bienBan.getSoBienBan());
               f.setNgayLayMau(bienBan.getNgayLayMau());
               f.setTrangThaiBienBan(bienBan.getTrangThai());
+              f.setIdNguoiTaoBb(bienBan.getNguoiTaoId());
             }
 
           }
@@ -281,11 +285,9 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
 
   public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
     try {
-      ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
-      reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
-      ReportTemplate model = findByTenFile(reportTemplateRequest);
-      byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-      ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+      String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
+      String fileTemplate = "xuatkhac/luongthuc/" + fileName;
+      FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
       List<XhXkLtBbLayMauHdr>  detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
       return docxToPdfConverter.convertDocxToPdf(inputStream, detail.get(0));
     } catch (IOException e) {

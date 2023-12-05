@@ -157,25 +157,30 @@ public class XhPhieuKnclService extends BaseServiceImpl {
         case Contains.DU_THAO + Contains.CHODUYET_LDCC:
           data.setNguoiGduyetId(currentUser.getUser().getId());
           data.setNgayGduyet(LocalDate.now());
+          data.setKtvBaoQuan(currentUser.getUser().getFullName());
           break;
         case Contains.CHO_DUYET_TP + Contains.CHODUYET_LDC:
           data.setNguoiPduyetTpId(currentUser.getUser().getId());
           data.setNgayPduyetTp(LocalDate.now());
+          data.setTruongPhong(currentUser.getUser().getFullName());
           break;
         case Contains.CHO_DUYET_TP + Contains.TUCHOI_TP:
           data.setNguoiPduyetTpId(currentUser.getUser().getId());
           data.setNgayPduyetTp(LocalDate.now());
           data.setLyDoTuChoi(statusReq.getLyDoTuChoi());
+          data.setTruongPhong(currentUser.getUser().getFullName());
           break;
         case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
           data.setNguoiPduyetId(currentUser.getUser().getId());
           data.setNgayPduyet(LocalDate.now());
           data.setLyDoTuChoi(statusReq.getLyDoTuChoi());
+          data.setLanhDaoCuc(currentUser.getUser().getFullName());
           break;
         case Contains.CHODUYET_LDC + Contains.DADUYET_LDC:
           data.setNguoiPduyetId(currentUser.getUser().getId());
           data.setIdLanhDao(currentUser.getUser().getId());
           data.setNgayPduyet(LocalDate.now());
+          data.setLanhDaoCuc(currentUser.getUser().getFullName());
           break;
         case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
           data.setNguoiPduyetId(currentUser.getUser().getId());
@@ -288,7 +293,7 @@ public class XhPhieuKnclService extends BaseServiceImpl {
     for (var res : xhPhieuKnclDtl) {
       var xhPhieuKnclDtlDto = XhPhieuKnclDtlDto.builder()
           .stt(stt++)
-          .chiTieuCl(res.getChiTieuCl())
+          .chiTieuCl(StringUtils.isEmpty(res.getChiTieuCl()) ?res.getTen():res.getChiTieuCl() )
           .chiSoCl(res.getChiSoCl())
           .ketQua(res.getKetQua())
           .phuongPhap(res.getPhuongPhap())

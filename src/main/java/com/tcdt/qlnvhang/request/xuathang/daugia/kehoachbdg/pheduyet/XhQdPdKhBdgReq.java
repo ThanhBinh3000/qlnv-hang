@@ -32,12 +32,24 @@ public class XhQdPdKhBdgReq extends BaseRequest {
     private Integer slDviTsan;
     private String phanLoai;
     private String trangThai;
+    private String soCongVan;
+    private LocalDate ngayTaoCongVan;
+    private Integer lanDieuChinh;
+    private String soQdCanDc;
+    private String soQdDc;
+    private LocalDate ngayKyDc;
+    private LocalDate ngayHlucDc;
+    private String noiDungDieuChinh;
+    private String type;
+    private Long idQdPd;
     private List<XhQdPdKhBdgDtlReq> children;
     private List<FileDinhKemReq> canCuPhapLy = new ArrayList<>();
     private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();
+    private List<FileDinhKemReq> fileDinhKemDc = new ArrayList<>();
     private LocalDate ngayKyQdTu;
     private LocalDate ngayKyQdDen;
+    private LocalDate ngayKyDcTu;
+    private LocalDate ngayKyDcDen;
     private String dvql;
     private String maCuc;
 }
-

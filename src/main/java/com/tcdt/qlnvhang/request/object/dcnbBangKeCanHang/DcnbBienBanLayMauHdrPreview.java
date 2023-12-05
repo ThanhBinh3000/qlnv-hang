@@ -18,7 +18,7 @@ public class DcnbBienBanLayMauHdrPreview {
     private Long soLuongMau;
     private String donViTinh;
     private String pPLayMau;
-    private String chiTieuKiemTra;
+    private List<String> chiTieuKiemTra;
     private String ktvBaoQuan;
     private String truongBpKtbq;
     private String lanhDaoChiCuc;

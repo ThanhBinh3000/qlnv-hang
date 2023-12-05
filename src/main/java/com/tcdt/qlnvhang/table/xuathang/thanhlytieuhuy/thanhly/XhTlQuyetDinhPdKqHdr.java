@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,6 +27,8 @@ import java.util.Map;
 public class XhTlQuyetDinhPdKqHdr extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_TL_QUYET_DINH_PD_KQ_HDR";
+    public static final String FILE_DINH_KEM = "XH_TL_QUYET_DINH_PD_KQ_HDR_DK";
+    public static final String FILE_CAN_CU = "XH_TL_QUYET_DINH_PD_KQ_HDR_CC";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhTlQuyetDinhPdKqHdr.TABLE_NAME + "_SEQ")
@@ -107,10 +110,10 @@ public class XhTlQuyetDinhPdKqHdr extends BaseEntity implements Serializable {
     }
 
     @Transient
-    private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
+    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
 
     @Transient
-    private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
+    private List<FileDinhKem> fileCanCu = new ArrayList<>();
 
     @Transient
     private List<XhTlHopDongHdr> listHopDong = new ArrayList<>();

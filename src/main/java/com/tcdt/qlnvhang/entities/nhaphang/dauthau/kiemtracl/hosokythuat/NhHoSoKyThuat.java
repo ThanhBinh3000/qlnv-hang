@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat;
 
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -58,6 +59,7 @@ public class NhHoSoKyThuat extends TrangThaiBaseEntity implements Serializable {
 
     //bo sung cot cho ktcl xuat kho
     private Integer idBbLayMauXuat;
+    private Long idBbLayMau;
 
     private Boolean kqKiemTra;
 
@@ -69,6 +71,8 @@ public class NhHoSoKyThuat extends TrangThaiBaseEntity implements Serializable {
 
     @Transient
     private BienBanLayMau bienBanLayMau;
+    @Transient
+    private NhQdGiaoNvuNhapxuatHdr qdGiaoNvuNhapxuatHdr;
 
     @Transient
     private String soBbKtnq;

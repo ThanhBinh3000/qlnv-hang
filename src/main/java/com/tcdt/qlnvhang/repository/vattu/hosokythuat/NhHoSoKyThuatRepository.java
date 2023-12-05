@@ -27,6 +27,7 @@ public interface NhHoSoKyThuatRepository extends BaseRepository<NhHoSoKyThuat, L
     Page<NhHoSoKyThuat> selectPage(Pageable pageable);
 
     NhHoSoKyThuat findBySoBbLayMau(String soBienBanLayMau);
+    NhHoSoKyThuat findByIdBbLayMau(Long id);
 
 
 //    Optional<NhHoSoKyThuat> findFirstBySoBienBan(String soBienBan);

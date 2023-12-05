@@ -33,7 +33,7 @@ public class BienBanLayMauReq extends BaseRequest {
 	private String maNhaKho;
 	private String maNganKho;
 
-	private Integer soLuongMau;
+	private String soLuongMau;
 	private String ppLayMau;
 	private String chiTieuKiemTra;
 	private boolean ketQuaNiemPhong;

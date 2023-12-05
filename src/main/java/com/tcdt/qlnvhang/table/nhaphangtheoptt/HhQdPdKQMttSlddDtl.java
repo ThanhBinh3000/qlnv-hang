@@ -35,5 +35,5 @@ public class HhQdPdKQMttSlddDtl implements Serializable {
 
     //privew
     @Transient
-    private BigDecimal tongThanhTien;
+    private String tongThanhTienStr;
 }

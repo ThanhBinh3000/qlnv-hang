@@ -73,4 +73,7 @@ public class NnPhieuKtChatLuongPreview {
     private String tenNguoiPduyet;
     private Date ngayPduyet;
     private String lyDoTuChoi;
+    private BigDecimal slKhKb;
+    private BigDecimal slTtKtra;
+    private String ngayKyHd;
 }

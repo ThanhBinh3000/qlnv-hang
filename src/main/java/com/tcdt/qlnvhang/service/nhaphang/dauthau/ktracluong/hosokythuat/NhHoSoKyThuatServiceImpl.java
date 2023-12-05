@@ -1,12 +1,15 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.hosokythuat;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoBienBan;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoKyThuat;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoKyThuatCt;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
 import com.tcdt.qlnvhang.repository.kiemtrachatluong.NhHoSoBienBanRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
@@ -15,6 +18,7 @@ import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhap
 import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatCtRepository;
 import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatRepository;
 import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.kiemtrachatluong.NhHoSoBienBanPreview;
+import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.kiemtrachatluong.NhHoSoKyThuatCtPreview;
 import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.kiemtrachatluong.NhHoSoKyThuatPreview;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangReq;
@@ -38,13 +42,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -67,6 +74,15 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
     @Autowired
     private BienBanLayMauRepository bienBanLayMauRepository;
 
+    @Autowired
+    private HhQdGiaoNvuNhapxuatRepository hhQdGiaoNvuNhapxuatRepository;
+
+    @Autowired
+    private HhHopDongRepository hhHopDongRepository;
+
+    @Autowired
+    private UserInfoRepository userInfoRepository;
+
     @Override
     public Page<NhHoSoKyThuat> searchPage(NhHoSoKyThuatReq objReq) {
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
@@ -85,9 +101,12 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
             }
             List<NhHoSoBienBan> nhHoSoBienBanList = nhHoSoBienBanRepository.findAllBySoHoSoKyThuat(i.getSoHoSoKyThuat());
             if (!nhHoSoBienBanList.isEmpty()) {
-                i.setSoBbKtnq(nhHoSoBienBanList.stream().filter(item -> item.getLoaiBb().equals("BBKTNQ")).findFirst().get().getSoBienBan());
-                i.setSoBbKtvh(nhHoSoBienBanList.stream().filter(item -> item.getLoaiBb().equals("BBKTVH")).findFirst().get().getSoBienBan());
-                i.setSoBbKthskt(nhHoSoBienBanList.stream().filter(item -> item.getLoaiBb().equals("BBKTHSKT")).findFirst().get().getSoBienBan());
+                Optional<NhHoSoBienBan> data1 = nhHoSoBienBanList.stream().filter(item -> item.getLoaiBb().equals("BBKTNQ")).findFirst();
+                data1.ifPresent(nhHoSoBienBan -> i.setSoBbKtnq(nhHoSoBienBan.getSoBienBan()));
+                Optional<NhHoSoBienBan> data2 = nhHoSoBienBanList.stream().filter(item -> item.getLoaiBb().equals("BBKTVH")).findFirst();
+                data2.ifPresent(nhHoSoBienBan -> i.setSoBbKtvh(nhHoSoBienBan.getSoBienBan()));
+                Optional<NhHoSoBienBan> data3 = nhHoSoBienBanList.stream().filter(item -> item.getLoaiBb().equals("BBKTHSKT")).findFirst();
+                data3.ifPresent(nhHoSoBienBan -> i.setSoBbKthskt(nhHoSoBienBan.getSoBienBan()));
             }
         });
         return nhHoSoKyThuatPage;
@@ -148,8 +167,25 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
         if (!optional.isPresent())
             throw new Exception("Hồ sơ kỹ thuật không tồn tại.");
         Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
+        Map<String, String> mapDmucHh = getListDanhMucHangHoa();
         NhHoSoKyThuat item = optional.get();
         item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
+        Optional<BienBanLayMau> bienBanLayMau = bienBanLayMauRepository.findById(item.getIdBbLayMau());
+        if (bienBanLayMau.isPresent()) {
+            bienBanLayMau.get().setTenDiemKho(listDanhMucDvi.get(bienBanLayMau.get().getMaDiemKho()));
+            bienBanLayMau.get().setTenNhaKho(listDanhMucDvi.get(bienBanLayMau.get().getMaNhaKho()));
+            bienBanLayMau.get().setTenNganLoKho(bienBanLayMau.get().getMaLoKho() != null ? listDanhMucDvi.get(bienBanLayMau.get().getMaLoKho()) + " - " + listDanhMucDvi.get(bienBanLayMau.get().getMaNganKho()): listDanhMucDvi.get(bienBanLayMau.get().getMaNganKho()));
+            bienBanLayMau.get().setTenDvi(listDanhMucDvi.get(bienBanLayMau.get().getMaDvi()));
+            item.setBienBanLayMau(bienBanLayMau.get());
+        }
+        Optional<NhQdGiaoNvuNhapxuatHdr> qdGiaoNvuNhapxuatHdr = hhQdGiaoNvuNhapxuatRepository.findById(item.getIdQdGiaoNvNh());
+        if (qdGiaoNvuNhapxuatHdr.isPresent()) {
+            qdGiaoNvuNhapxuatHdr.get().setTenLoaiVthh(mapDmucHh.get(qdGiaoNvuNhapxuatHdr.get().getLoaiVthh()));
+            qdGiaoNvuNhapxuatHdr.get().setTenCloaiVthh(mapDmucHh.get(qdGiaoNvuNhapxuatHdr.get().getCloaiVthh()));
+            Optional<HhHopDongHdr> hhHopDongHdr = hhHopDongRepository.findById(qdGiaoNvuNhapxuatHdr.get().getIdHd());
+            hhHopDongHdr.ifPresent(qdGiaoNvuNhapxuatHdr.get()::setHopDong);
+            item.setQdGiaoNvuNhapxuatHdr(qdGiaoNvuNhapxuatHdr.get());
+        }
         List<NhHoSoKyThuatCt> ctiet = nhHoSoKyThuatCtRepository.findByHoSoKyThuatId(item.getId());
         for (NhHoSoKyThuatCt nhHoSoKyThuatCt : ctiet) {
             List<FileDinhKem> fileDinhKem = fileDinhKemService.search(nhHoSoKyThuatCt.getId(), Collections.singletonList("NH_HO_SO_KY_THUAT_CT"));
@@ -159,7 +195,7 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
             }
         }
         item.setChildren(ctiet);
-
+        item.setTenNguoiTao(ObjectUtils.isEmpty(item.getNguoiTaoId()) ? null : userInfoRepository.findById(item.getNguoiTaoId()).get().getFullName());
         item.setListHoSoBienBan(nhHoSoBienBanRepository.findAllBySoHoSoKyThuat(optional.get().getSoHoSoKyThuat()));
         return item;
     }
@@ -233,7 +269,34 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
         if (hoSoBienBan == null) {
             throw new Exception("Hồ sơ kỹ thuật không tồn tại.");
         }
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         NhHoSoKyThuatPreview object = new NhHoSoKyThuatPreview();
+        BeanUtils.copyProperties(hoSoBienBan,object);
+        object.setTenCloaiVthh(hoSoBienBan.getQdGiaoNvuNhapxuatHdr().getTenCloaiVthh());
+        object.setTenDiemKho(hoSoBienBan.getBienBanLayMau().getTenDiemKho());
+        object.setTenNganLoKho(hoSoBienBan.getBienBanLayMau().getTenNganLoKho());
+        object.setNgayPduyet(Objects.isNull(hoSoBienBan.getNgayPduyet()) ? null : formatter.format(hoSoBienBan.getNgayPduyet()));
+        object.setNgayTao(Objects.isNull(hoSoBienBan.getNgayTao()) ? null : formatter.format(hoSoBienBan.getNgayTao()));
+        List<NhHoSoBienBanPreview> listHoSoBienBan = new ArrayList<>();
+        List<NhHoSoKyThuatCtPreview> children = new ArrayList<>();
+        hoSoBienBan.getChildren().forEach(item -> {
+            NhHoSoKyThuatCtPreview ctPreview = new NhHoSoKyThuatCtPreview();
+            ctPreview.setTenHoSo(item.getTenHoSo());
+            ctPreview.setLoaiTaiLieu(item.getLoaiTaiLieu());
+            ctPreview.setSoLuong(item.getSoLuong());
+            ctPreview.setGhiChu(item.getGhiChu());
+            ctPreview.setTgianNhap(object.getNgayTao());
+            children.add(ctPreview);
+        });
+        hoSoBienBan.getListHoSoBienBan().forEach( item -> {
+            NhHoSoBienBanPreview hoSo = new NhHoSoBienBanPreview();
+            hoSo.setNgayTao(Objects.isNull(item.getNgayTao()) ? null : formatter.format(item.getNgayTao()));
+            hoSo.setTgianNhap(Objects.isNull(item.getTgianNhap()) ? null : formatter.format(item.getTgianNhap()));
+            hoSo.setTenBb(item.getTenBb());
+            listHoSoBienBan.add(hoSo);
+        });
+        object.setChildren(children);
+        object.setListHoSoBienBan(listHoSoBienBan);
         ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);

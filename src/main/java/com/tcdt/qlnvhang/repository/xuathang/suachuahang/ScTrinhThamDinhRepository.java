@@ -16,6 +16,7 @@ import java.util.Optional;
 
 public interface ScTrinhThamDinhRepository extends JpaRepository<ScTrinhThamDinhHdr, Long> {
     @Query(value = "SELECT t FROM ScTrinhThamDinhHdr t WHERE 1 = 1 " +
+        "AND (:#{#param.maDvi} IS NULL OR t.maDvi LIKE CONCAT(:#{#param.maDvi},'%')) " +
         "AND (:#{#param.soTtr} IS NULL OR t.soTtr LIKE CONCAT(:#{#param.soTtr},'%')) " +
         "AND (:#{#param.soQdScSr} IS NULL OR t.soQdSc LIKE CONCAT(:#{#param.soQdScSr},'%')) " +
         "AND (:#{#param.trangThai} IS NULL OR t.trangThai = :#{#param.trangThai}) " +

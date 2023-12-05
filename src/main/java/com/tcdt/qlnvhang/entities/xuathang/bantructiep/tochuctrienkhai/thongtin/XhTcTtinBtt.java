@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.thongtin;
 
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviDtl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
 
@@ -29,7 +30,6 @@ public class XhTcTtinBtt implements Serializable {
     private BigDecimal donGia;
     private BigDecimal thanhTien;
     private Boolean luaChon;
-    private String type;
     @Transient
     private FileDinhKem fileDinhKems;
 }

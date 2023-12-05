@@ -359,8 +359,10 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
             }
         }
         HhQdGiaoNvNhapHang data=optional.get();
-        HhQdGiaoNvNhapHang dataMap = new ModelMapper().map(objReq,HhQdGiaoNvNhapHang.class);
+        HhQdGiaoNvNhapHang dataMap = new HhQdGiaoNvNhapHang();
+        BeanUtils.copyProperties(objReq, dataMap);
         updateObjectToObject(data,dataMap);
+        data.setNgayQd(dataMap.getNgayQd());
         data.setNgaySua(new Date());
         data.setNguoiSua(userInfo.getUsername());
         HhQdGiaoNvNhapHang created= hhQdGiaoNvNhapHangRepository.save(data);
@@ -387,7 +389,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
             hhQdPheduyetKhMttHdr.get().setSoQdGnvu(data.getSoQd());
             hhQdPheduyetKhMttHdrRepository.save(hhQdPheduyetKhMttHdr.get());
         }
-        if(!StringUtils.isEmpty(objReq.getIdHd())){
+        if(!StringUtils.isEmpty(objReq.getIdHd()) && !objReq.getTrangThai().equals(Contains.DUTHAO)){
             String[] idHds = objReq.getIdHd().split(",");
             for (int i = 0; i < idHds.length; i++) {
                 Optional<HopDongMttHdr> hopDongMttHdr = hopDongMttHdrRepository.findById(Long.valueOf(idHds[i]));
@@ -501,11 +503,13 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
         List<HopDongMttHdr> listHd = hopDongMttHdrRepository.findAllByIdQdGiaoNvNh(data.getId());
         for (HopDongMttHdr hopDongMttHdr : listHd) {
             HhQdGiaoNvNhangDtl hhQdGiaoNvNhangDtl = hhQdGiaoNvNhangDtlRepository.findByIdQdHdrAndMaDvi(hopDongMttHdr.getIdQdGiaoNvNh(), hopDongMttHdr.getMaDvi());
-            List<HhQdGiaoNvNhDdiem> hhQdGiaoNvNhDdiems = hhQdGiaoNvNhDdiemRepository.findAllByIdDtl(hhQdGiaoNvNhangDtl.getId());
-            hopDongMttHdr.setSoLuong(hhQdGiaoNvNhDdiems.stream().map(HhQdGiaoNvNhDdiem::getSoLuong).reduce(BigDecimal.ZERO, BigDecimal::add));
-            hopDongMttHdr.setDviCungCap(hashMapDmdv.get(hopDongMttHdr.getMaDvi()));
-            hopDongMttHdr.setDonGiaGomThue(hhQdGiaoNvNhangDtl.getDonGiaVat());
-            hopDongMttHdr.setTenTrangThaiNh(NhapXuatHangTrangThaiEnum.getTenById(hopDongMttHdr.getTrangThaiNh()));
+            if(hhQdGiaoNvNhangDtl != null){
+                List<HhQdGiaoNvNhDdiem> hhQdGiaoNvNhDdiems = hhQdGiaoNvNhDdiemRepository.findAllByIdDtl(hhQdGiaoNvNhangDtl.getId());
+                hopDongMttHdr.setSoLuong(hhQdGiaoNvNhDdiems.stream().map(HhQdGiaoNvNhDdiem::getSoLuong).reduce(BigDecimal.ZERO, BigDecimal::add));
+                hopDongMttHdr.setDviCungCap(hashMapDmdv.get(hopDongMttHdr.getMaDvi()));
+                hopDongMttHdr.setDonGiaGomThue(hhQdGiaoNvNhangDtl.getDonGiaVat());
+                hopDongMttHdr.setTenTrangThaiNh(NhapXuatHangTrangThaiEnum.getTenById(hopDongMttHdr.getTrangThaiNh()));
+            }
         }
         data.setHopDongMttHdrs(listHd);
 
@@ -657,11 +661,36 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
     }
 
     public ReportTemplateResponse preview(HhQdGiaoNvNhapHangReq hhQdGiaoNvNhapHangReq) throws Exception {
+        List<HhQdGiaoNvNhangDtl> hhQdGiaoNvNhangDtlList = new ArrayList<>();
         HhQdGiaoNvNhapHang hhQdGiaoNvNhapHang = detail(hhQdGiaoNvNhapHangReq.getId().toString());
         ReportTemplate model = findByTenFile(hhQdGiaoNvNhapHangReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        HhQdGiaoNvNhapHangPreview object = new HhQdGiaoNvNhapHangPreview();
-        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+        if(!hhQdGiaoNvNhapHang.getHhQdGiaoNvNhangDtlList().isEmpty()){
+            BigDecimal soLuong = BigDecimal.ZERO;
+            hhQdGiaoNvNhangDtlList = hhQdGiaoNvNhapHang.getHhQdGiaoNvNhangDtlList().stream().filter(x -> x.getMaDvi().equals(this.getUser().getDvql())).collect(Collectors.toList());
+            for (HhQdGiaoNvNhangDtl hhQdGiaoNvNhangDtl : hhQdGiaoNvNhangDtlList) {
+                for (HhQdGiaoNvNhDdiem child : hhQdGiaoNvNhangDtl.getChildren()) {
+                    soLuong = soLuong.add(child.getSoLuong());
+                }
+                hhQdGiaoNvNhangDtl.setSoLuong(soLuong);
+            }
+        }
+        Calendar calendar = new GregorianCalendar();
+        if(hhQdGiaoNvNhapHang.getNgayQd() != null){
+            calendar.setTime(hhQdGiaoNvNhapHang.getNgayQd());
+            hhQdGiaoNvNhapHang.setNgay(calendar.get(Calendar.DAY_OF_MONTH));
+            hhQdGiaoNvNhapHang.setThang(calendar.get(Calendar.MONTH) + 1);
+            hhQdGiaoNvNhapHang.setNam(calendar.get(Calendar.YEAR));
+        }
+        hhQdGiaoNvNhapHang.setTenDvi(hhQdGiaoNvNhapHang.getTenDvi().toUpperCase());
+        hhQdGiaoNvNhapHang.setTgianNkhoStr(Contains.convertDateToStringSecond(hhQdGiaoNvNhapHang.getTgianNkho()));
+        hhQdGiaoNvNhapHang.setHhQdGiaoNvNhangDtlList(hhQdGiaoNvNhangDtlList);
+        if(!hhQdGiaoNvNhapHang.getFileDinhKems().isEmpty()){
+            List<FileDinhKem> fileDinhKems = new ArrayList<>();
+            fileDinhKems = hhQdGiaoNvNhapHang.getFileDinhKems().stream().filter(x -> x.getFileType().equals("CAN_CU_PHAP_LY")).collect(Collectors.toList());
+            hhQdGiaoNvNhapHang.setListCanCuPhapLy(fileDinhKems);
+        }
+        return docxToPdfConverter.convertDocxToPdf(inputStream, hhQdGiaoNvNhapHang);
     }
 }

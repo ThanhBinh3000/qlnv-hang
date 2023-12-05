@@ -87,7 +87,6 @@ public class DcnbBangKeNhapVTServiceImpl extends BaseServiceImpl implements Dcnb
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         req.setType("01");
-        req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         searchDto = hdrRepository.searchPage(req, pageable);
         return searchDto;
     }
@@ -320,7 +319,7 @@ public class DcnbBangKeNhapVTServiceImpl extends BaseServiceImpl implements Dcnb
                 .tenLoKho(dcnbBangKeNhapVTHdr.get().getTenLoKho())
                 .tenDiemKho(dcnbBangKeNhapVTHdr.get().getTenDiemKho())
                 .tenDvi(dcnbBangKeNhapVTHdr.get().getTenDvi())
-                .chungLoaiHangHoa(dcnbBangKeNhapVTHdr.get().getCloaiVthh())
+                .chungLoaiHangHoa(dcnbBangKeNhapVTHdr.get().getTenCloaiVthh())
                 .tenDonViTinh(dcnbBangKeNhapVTHdr.get().getDonViTinh())
                 .tenNguoiGiaoHang(dcnbBangKeNhapVTHdr.get().getTenNguoiGiaoHang())
                 .thoiGianGiaoNhan(dcnbBangKeNhapVTHdr.get().getThoiHanGiaoNhan().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))

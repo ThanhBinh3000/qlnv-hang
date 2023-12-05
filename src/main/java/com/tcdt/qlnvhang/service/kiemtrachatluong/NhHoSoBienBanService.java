@@ -23,6 +23,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoB
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.hosokythuat.NhHoSoBienBanCt;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.DataUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -71,10 +73,20 @@ public class NhHoSoBienBanService extends BaseServiceImpl {
         data.setNgayTao(new Date());
         data.setId(Long.parseLong(objReq.getSoBienBan().split("/")[0]));
         nhHoSoBienBanRepository.save(data);
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(),data.getId(),"NH_HO_SO_BIEN_BAN");
-        data.setFileDinhKems(fileDinhKems);
+        updateFileDinhKem(objReq, data.getId());
         this.saveCtiet(data,objReq);
         return data;
+    }
+
+    private void updateFileDinhKem (NhHoSoBienBanReq objReq, Long id){
+        fileDinhKemService.delete(id, Lists.newArrayList(NhHoSoBienBan.TABLE_NAME + "_CAN_CU"));
+        fileDinhKemService.delete(id, Lists.newArrayList(NhHoSoBienBan.TABLE_NAME));
+        if (!DataUtils.isNullOrEmpty(objReq.getListCanCu())) {
+            fileDinhKemService.saveListFileDinhKem(objReq.getListCanCu(), id, NhHoSoBienBan.TABLE_NAME + "_CAN_CU");
+        }
+        if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKems())) {
+            fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), id, NhHoSoBienBan.TABLE_NAME);
+        }
     }
 
     @Transactional
@@ -84,9 +96,13 @@ public class NhHoSoBienBanService extends BaseServiceImpl {
             throw new Exception("Bad request.");
         }
         Optional<NhHoSoBienBan> optional = nhHoSoBienBanRepository.findById(objReq.getId());
+        if (!optional.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu.");
+        }
         NhHoSoBienBan data=optional.get();
         BeanUtils.copyProperties(objReq,data,"id","maDvi");
         NhHoSoBienBan created= nhHoSoBienBanRepository.save(data);
+        updateFileDinhKem(objReq, created.getId());
         List<NhHoSoBienBanCt> dtlList = nhHoSoBienBanCtRepository.findAllByIdHoSoBienBan(data.getId());
         nhHoSoBienBanCtRepository.deleteAll(dtlList);
         this.saveCtiet(data,objReq);
@@ -116,9 +132,9 @@ public class NhHoSoBienBanService extends BaseServiceImpl {
         data.setTenLoaiVthh(mapVthh.get(data.getLoaiVthh()));
         data.setTenCloaiVthh(mapVthh.get(data.getCloaiVthh()));
         List<NhHoSoBienBanCt> dtlList = nhHoSoBienBanCtRepository.findAllByIdHoSoBienBan(data.getId());
-        List<FileDinhKem> fileDinhKems = fileDinhKemService.search(data.getId(), Collections.singleton(NhHoSoBienBan.TABLE_NAME));
         data.setChildren(dtlList);
-        data.setFileDinhKems(fileDinhKems);
+        data.setFileDinhKems(fileDinhKemService.search(data.getId(), Collections.singleton(NhHoSoBienBan.TABLE_NAME)));
+        data.setListCanCu(fileDinhKemService.search(data.getId(), Collections.singleton(NhHoSoBienBan.TABLE_NAME + "_CAN_CU")));
         return data;
     }
 
@@ -177,10 +193,19 @@ public class NhHoSoBienBanService extends BaseServiceImpl {
 
     public ReportTemplateResponse preview(SearchNhHoSoBienBan req) throws Exception {
         NhHoSoBienBan hoSoBienBan = detail(req.getId().toString());
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         if (hoSoBienBan == null) {
             throw new Exception("Hồ sơ kỹ thuật không tồn tại.");
         }
         NhHoSoBienBanPreview object = new NhHoSoBienBanPreview();
+        BeanUtils.copyProperties(hoSoBienBan,object);
+        object.setNgayTao(Objects.isNull(hoSoBienBan.getNgayTao()) ? null : formatter.format(hoSoBienBan.getNgayTao()));
+        object.setNgayHd(Objects.isNull(hoSoBienBan.getNgayHd()) ? null : formatter.format(hoSoBienBan.getNgayHd()));
+        object.setTgianNhap(Objects.isNull(hoSoBienBan.getTgianNhap()) ? null : formatter.format(hoSoBienBan.getTgianNhap()));
+        List<NhHoSoBienBanCt> cuc = hoSoBienBan.getChildren().stream().filter(item -> item.getLoaiDaiDien().equals("cuc")).collect(Collectors.toList());
+        List<NhHoSoBienBanCt> chiCuc = hoSoBienBan.getChildren().stream().filter(item -> item.getLoaiDaiDien().equals("chiCuc")).collect(Collectors.toList());
+        object.setListChiCuc(chiCuc);
+        object.setListCuc(cuc);
         ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);

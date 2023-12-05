@@ -106,7 +106,7 @@ public class XhDgBangKeService extends BaseServiceImpl {
         if (xhDgBangKeHdrRepository.existsBySoBangKeHangAndIdNot(req.getSoBangKeHang(), req.getId())) {
             throw new Exception("Số phiếu xuất kho " + req.getSoPhieuXuatKho() + " đã tồn tại");
         }
-        BeanUtils.copyProperties(req, data, "id", "maDvi");
+        BeanUtils.copyProperties(req, data, "id", "maDvi", "idThuKho");
         data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(currentUser.getUser().getId());
         XhDgBangKeHdr update = xhDgBangKeHdrRepository.save(data);
@@ -213,11 +213,11 @@ public class XhDgBangKeService extends BaseServiceImpl {
         req.getPaggingReq().setLimit(Integer.MAX_VALUE);
         Page<XhDgBangKeHdr> page = this.searchPage(currentUser, req);
         List<XhDgBangKeHdr> data = page.getContent();
-        String title = "Danh sách bảng kê cân hàng";
+        String title = "Danh sách bảng kê cân hàng DTQG";
         String[] rowsName = new String[]{"STT", "Số QĐ giao NVXH", "Năm KH", "Thời hạn XH trước ngày", "Điểm kho",
                 "Lô kho", "Số phiếu KNCL", "Ngày giám định", "Số bảng kê", "Số phiếu xuất kho",
                 "Ngày tạo bảng kê", "Trạng thái"};
-        String fileName = "danh-sach-bang-ke-can-hang.xlsx";
+        String fileName = "danh-sach-bang-ke-can-hang-DTQG.xlsx";
         List<Object[]> dataList = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
             XhDgBangKeHdr hdr = data.get(i);
@@ -225,15 +225,15 @@ public class XhDgBangKeService extends BaseServiceImpl {
             objs[0] = i;
             objs[1] = hdr.getSoQdNv();
             objs[2] = hdr.getNam();
-            objs[3] = hdr.getNgayKyQdNv();
+            objs[3] = hdr.getThoiGianGiaoNhan();
             objs[4] = hdr.getTenDiemKho();
-            objs[5] = hdr.getTenLoKho();
+            objs[5] = hdr.getTenNganLoKho();
             objs[6] = hdr.getSoPhieuKiemNghiem();
             objs[7] = hdr.getNgayKiemNghiemMau();
             objs[8] = hdr.getSoBangKeHang();
             objs[9] = hdr.getSoPhieuXuatKho();
             objs[10] = hdr.getNgayLapBangKe();
-            objs[11] = hdr.getTrangThai();
+            objs[11] = hdr.getTenTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
@@ -244,21 +244,17 @@ public class XhDgBangKeService extends BaseServiceImpl {
         if (currentUser == null) {
             throw new Exception("Bad request.");
         }
-       try {
-           String templatePath = baseReportFolder + "/bandaugia/";
-           XhDgBangKeHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
-           if (detail.getLoaiVthh().startsWith("02")) {
-               templatePath += "Bảng kê cân hàng bán đấu giá vật tư.docx";
-           }else {
-               templatePath += "Bảng kê cân hàng bán đấu giá lương thực.docx";
-           }
-           FileInputStream inputStream = new FileInputStream(templatePath);
-           return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
-       }catch (IOException e) {
-           e.printStackTrace();
-       } catch (XDocReportException e) {
-           e.printStackTrace();
-       }
+        try {
+            String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "bandaugia/" + templatePath;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
+            XhDgBangKeHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
+            return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 }

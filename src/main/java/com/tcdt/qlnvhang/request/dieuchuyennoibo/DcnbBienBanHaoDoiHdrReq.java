@@ -124,6 +124,7 @@ public class DcnbBienBanHaoDoiHdrReq {
     private String soPhieuKtChatLuong;
     private String donViTinh;
     private String slHaoTheoDinhMuc;
+    private Double soThangBaoQuanHang;
     @Valid
     private List<DcnbBienBanHaoDoiTtDtl> danhSachBangKe = new ArrayList<>();
     @Valid

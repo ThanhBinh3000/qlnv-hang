@@ -26,11 +26,9 @@ import com.tcdt.qlnvhang.table.khoahoccongnghebaoquan.KhCnTienDoThucHien;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBbanNghiemThuDtl;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBienBanNghiemThu;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
-import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.DataUtils;
-import com.tcdt.qlnvhang.util.ExportExcel;
-import com.tcdt.qlnvhang.util.ObjectMapperUtils;
+import com.tcdt.qlnvhang.util.*;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -87,7 +85,8 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
             throw new Exception("Số biên bản đã tồn tại");
         }
         Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
-        HhBienBanNghiemThu data = new ModelMapper().map(objReq,HhBienBanNghiemThu.class);
+        HhBienBanNghiemThu data = new HhBienBanNghiemThu();
+        BeanUtils.copyProperties(objReq, data);
         data.setNgayTao(new Date());
         data.setNguoiTao(userInfo.getUsername());
         data.setTrangThai(Contains.DUTHAO);
@@ -136,7 +135,8 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
             }
         }
         HhBienBanNghiemThu data= optional.get();
-        HhBienBanNghiemThu dataMap = new ModelMapper().map(objReq,HhBienBanNghiemThu.class);
+        HhBienBanNghiemThu dataMap = new HhBienBanNghiemThu();
+        BeanUtils.copyProperties(objReq, dataMap);
         updateObjectToObject(data,dataMap);
         data.setNguoiSua(userInfo.getUsername());
         data.setNgaySua(new Date());
@@ -314,10 +314,66 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
         if (hhBienBanNghiemThu == null) {
             throw new Exception("Biên bản không tồn tại.");
         }
-        HhBienBanNghiemThuPreview object = new HhBienBanNghiemThuPreview();
         ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+        List<HhBbanNghiemThuDtl> dsDviCdongThs = new ArrayList<>();
+        List<HhBbanNghiemThuDtl> dsDmTcPds = new ArrayList<>();
+        BigDecimal tongSoLuong = BigDecimal.ZERO;
+        BigDecimal tongThanhTien = BigDecimal.ZERO;
+        BigDecimal tongSlNamTruoc = BigDecimal.ZERO;
+        BigDecimal tongThanhTienNamTruoc = BigDecimal.ZERO;
+        BigDecimal tongGiaTri = BigDecimal.ZERO;
+        dsDviCdongThs.addAll(hhBienBanNghiemThu.getDviChuDongThucHien().stream().filter(x -> x.getIsParent() != null && x.getIsParent() == true).collect(Collectors.toList()));
+        for (HhBbanNghiemThuDtl item : hhBienBanNghiemThu.getDviChuDongThucHien()) {
+            if (item.getIsParent() == null) {
+                if(dsDviCdongThs.size() > 0){
+                    if (item.getIdParent().equals(dsDviCdongThs.stream().filter(x -> x.getIdParent().equals(item.getIdParent())).findFirst().get().getIdParent())) {
+                        item.setTongGiaTriStr(docxToPdfConverter.convertBigDecimalToStr(item.getTongGiaTri()));
+                        item.setThanhTienTrongNamStr(docxToPdfConverter.convertBigDecimalToStr(item.getThanhTienTrongNam()));
+                        item.setThanhTienNamTruocStr(docxToPdfConverter.convertBigDecimalToStr(item.getThanhTienNamTruoc()));
+                        dsDviCdongThs.stream().filter(x -> x.getIdParent().equals(item.getIdParent())).findFirst().get().getChildren().add(item);
+                    }
+                }
+            }
+        }
+
+        dsDmTcPds.addAll(hhBienBanNghiemThu.getDmTongCucPdTruocThucHien().stream().filter(x -> x.getIsParent() != null && x.getIsParent() == true).collect(Collectors.toList()));
+        for (HhBbanNghiemThuDtl item : hhBienBanNghiemThu.getDmTongCucPdTruocThucHien()) {
+            if (item.getIsParent() == null) {
+                if(dsDmTcPds.size() > 0){
+                    if (item.getIdParent().equals(dsDmTcPds.stream().filter(x -> x.getIdParent().equals(item.getIdParent())).findFirst().get().getIdParent())) {
+                        item.setTongGiaTriStr(docxToPdfConverter.convertBigDecimalToStr(item.getTongGiaTri()));
+                        item.setThanhTienTrongNamStr(docxToPdfConverter.convertBigDecimalToStr(item.getThanhTienTrongNam()));
+                        item.setThanhTienNamTruocStr(docxToPdfConverter.convertBigDecimalToStr(item.getThanhTienNamTruoc()));
+                        tongSoLuong = tongSoLuong.add(item.getSoLuongTrongNam());
+                        tongThanhTien = tongThanhTien.add(item.getThanhTienTrongNam());
+                        tongSlNamTruoc = tongSlNamTruoc.add(item.getSoLuongNamTruoc());
+                        tongThanhTienNamTruoc = tongThanhTienNamTruoc.add(item.getThanhTienNamTruoc());
+                        tongGiaTri = tongGiaTri.add(item.getTongGiaTri());
+                        dsDmTcPds.stream().filter(x -> x.getIdParent().equals(item.getIdParent())).findFirst().get().getChildren().add(item);
+                    }
+                }
+            }
+        }
+        Calendar calendar = new GregorianCalendar();
+        if(hhBienBanNghiemThu.getNgayPduyet() != null){
+            calendar.setTime(hhBienBanNghiemThu.getNgayPduyet());
+            hhBienBanNghiemThu.setNgay(calendar.get(Calendar.DAY_OF_MONTH));
+            hhBienBanNghiemThu.setThang(calendar.get(Calendar.MONTH));
+            hhBienBanNghiemThu.setNam(calendar.get(Calendar.YEAR));
+        }
+        hhBienBanNghiemThu.setDviChuDongThucHien(dsDviCdongThs);
+        hhBienBanNghiemThu.setDmTongCucPdTruocThucHien(dsDmTcPds);
+        hhBienBanNghiemThu.setTongSoLuong(tongSoLuong);
+        hhBienBanNghiemThu.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(tongThanhTien));
+        hhBienBanNghiemThu.setTongSlNamTruoc(tongSlNamTruoc);
+        hhBienBanNghiemThu.setTongThanhTienNamTruocStr(docxToPdfConverter.convertBigDecimalToStr(tongThanhTienNamTruoc));
+        hhBienBanNghiemThu.setTongGiaTriStr(docxToPdfConverter.convertBigDecimalToStr(tongGiaTri));
+        hhBienBanNghiemThu.setKinhPhiThucTeStr(docxToPdfConverter.convertBigDecimalToStr(hhBienBanNghiemThu.getKinhPhiThucTe()));
+        hhBienBanNghiemThu.setKinhPhiTtStr(NumberToWord.convert(Long.valueOf(String.valueOf(hhBienBanNghiemThu.getKinhPhiThucTe()))));
+        hhBienBanNghiemThu.setTenDvi(hhBienBanNghiemThu.getTenDvi().toUpperCase());
+
+        return docxToPdfConverter.convertDocxToPdf(inputStream, hhBienBanNghiemThu);
     }
 }

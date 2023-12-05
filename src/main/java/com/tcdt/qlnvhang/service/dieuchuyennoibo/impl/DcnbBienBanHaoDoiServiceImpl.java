@@ -94,7 +94,6 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
         } else {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
-        req.setTypeQd(Contains.DIEU_CHUYEN);
         searchDto = dcnbBienBanHaoDoiHdrRepository.searchPage(req, pageable);
         return searchDto;
     }
@@ -109,12 +108,12 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
 //            throw new Exception("Số biên bản đã tồn tại");
 //        }
         List<DcnbBienBanHaoDoiHdr> lists = new ArrayList<>();
-        if(StringUtils.isEmpty(objReq.getMaLoKho())){
+        if (StringUtils.isEmpty(objReq.getMaLoKho())) {
             lists = dcnbBienBanHaoDoiHdrRepository.findByMaDviAndSoQdinhDcAndMaNganKho(currentUser.getDvql(), objReq.getSoQdinhDcc(), objReq.getMaNganKho());
-        }else {
+        } else {
             lists = dcnbBienBanHaoDoiHdrRepository.findByMaDviAndSoQdinhDcAndMaLoKho(currentUser.getDvql(), objReq.getSoQdinhDcc(), objReq.getMaLoKho());
         }
-        if(!lists.isEmpty()){
+        if (!lists.isEmpty()) {
             throw new Exception("Ngăn Lô kho đã được khởi tạo!");
         }
         DcnbBienBanHaoDoiHdr data = new DcnbBienBanHaoDoiHdr();
@@ -392,15 +391,16 @@ public class DcnbBienBanHaoDoiServiceImpl extends BaseServiceImpl {
                 .tongSlXuatTheoQd(dcnbBienBanHaoDoiHdr.get().getTongSlXuatTheoQd())
                 .donViTinh(dcnbBienBanHaoDoiHdr.get().getDonViTinh())
                 .tongSlXuatTheoTt(dcnbBienBanHaoDoiHdr.get().getTongSlXuatTheoTt())
-                .ngayKetThucXuatQd(dcnbBienBanHaoDoiHdr.get().getNgayKetThucXuatQd().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .ngayKetThucXuatQd(dcnbBienBanHaoDoiHdr.get().getNgayKetThucXuatQd() == null ? "" : dcnbBienBanHaoDoiHdr.get().getNgayKetThucXuatQd().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .slHaoTt(dcnbBienBanHaoDoiHdr.get().getSlHaoTt())
                 .slHaoDuocThanhLy(dcnbBienBanHaoDoiHdr.get().getSlHaoTheoDinhMuc())
                 .slHaoVuotDm(dcnbBienBanHaoDoiHdr.get().getSlHaoVuotDm())
                 .tiLeHaoVuotDm(dcnbBienBanHaoDoiHdr.get().getTiLeHaoVuotDm())
-                .slHaoDuoiDm(dcnbBienBanHaoDoiHdr.get().getSlHaoTheoDinhMuc()
+                .slHaoDuoiDm(dcnbBienBanHaoDoiHdr.get().getSlHaoTheoDinhMuc() == null ?
+                        new BigDecimal(0d) : dcnbBienBanHaoDoiHdr.get().getSlHaoTheoDinhMuc()
                         .subtract(BigDecimal.valueOf(dcnbBienBanHaoDoiHdr.get().getSlHaoTt())))
-                .tiLeHaoDuoiDm((dcnbBienBanHaoDoiHdr.get().getSlHaoTheoDinhMuc()
-                        .divide(BigDecimal.valueOf(dcnbBienBanHaoDoiHdr.get().getTongSlXuatTheoQd())))
+                .tiLeHaoDuoiDm((dcnbBienBanHaoDoiHdr.get().getSlHaoTheoDinhMuc() == null ?
+                        new BigDecimal(0d) : dcnbBienBanHaoDoiHdr.get().getSlHaoTheoDinhMuc().divide(BigDecimal.valueOf(dcnbBienBanHaoDoiHdr.get().getTongSlXuatTheoQd())))
                         .multiply(new BigDecimal(100)))
                 .nguyenNhan(dcnbBienBanHaoDoiHdr.get().getNguyenNhan())
                 .kienNghi(dcnbBienBanHaoDoiHdr.get().getKienNghi())

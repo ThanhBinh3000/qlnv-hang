@@ -47,12 +47,25 @@ public class XhQdPdKhBttHdr implements Serializable {
     private String slHdongDaKy;
     private String phanLoai;
     private String trangThai;
+    private String lyDoTuChoi;
     private LocalDate ngayTao;
     private Long nguoiTaoId;
     private LocalDate ngaySua;
     private Long nguoiSuaId;
+    private LocalDate ngayGuiDuyet;
+    private Long nguoiGuiDuyetId;
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
+    private String soCongVan;
+    private LocalDate ngayTaoCongVan;
+    private Integer lanDieuChinh;
+    private String soQdCanDc;
+    private String soQdDc;
+    private LocalDate ngayKyDc;
+    private LocalDate ngayHlucDc;
+    private String noiDungDieuChinh;
+    private String type;
+    private Long idQdPd;
     @Transient
     private String tenDvi;
     @Transient
@@ -126,6 +139,8 @@ public class XhQdPdKhBttHdr implements Serializable {
     private List<FileDinhKem> canCuPhapLy = new ArrayList<>();
     @Transient
     private List<FileDinhKem> fileDinhKem = new ArrayList<>();
+    @Transient
+    private List<FileDinhKem> fileDinhKemDc = new ArrayList<>();
     @Transient
     private List<XhQdPdKhBttDtl> children = new ArrayList<>();
 }

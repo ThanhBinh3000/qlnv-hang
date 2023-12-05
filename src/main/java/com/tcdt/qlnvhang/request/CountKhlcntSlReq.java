@@ -10,4 +10,5 @@ public class CountKhlcntSlReq {
     String loaiVthh;
     String maDvi;
     Integer lastest ;
+    String trangThai;
 }

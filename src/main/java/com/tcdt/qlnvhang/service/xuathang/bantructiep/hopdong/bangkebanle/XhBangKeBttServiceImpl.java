@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.xuathang.bantructiep.hopdong.bangkebanle;
 
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.bangkebanle.XhBangKeBtt;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.bangkebanle.XhBangKeBttRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -32,6 +33,8 @@ public class XhBangKeBttServiceImpl extends BaseServiceImpl {
     private XhBangKeBttRepository xhBangKeBttRepository;
     @Autowired
     private XhQdNvXhBttHdrRepository xhQdNvXhBttHdrRepository;
+    @Autowired
+    private UserInfoRepository userInfoRepository;
 
     public Page<XhBangKeBtt> searchPage(CustomUserDetails currentUser, XhBangKeBttReq req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -82,6 +85,11 @@ public class XhBangKeBttServiceImpl extends BaseServiceImpl {
         list.forEach(data -> {
             data.setMapDmucDvi(mapDmucDvi);
             data.setMapVthh(mapVthh);
+            if (data.getNguoiTaoId() != null) {
+                userInfoRepository.findById(data.getNguoiTaoId()).ifPresent(userInfo -> {
+                    data.setTenNguoiTao(userInfo.getFullName());
+                });
+            }
         });
         return list;
     }

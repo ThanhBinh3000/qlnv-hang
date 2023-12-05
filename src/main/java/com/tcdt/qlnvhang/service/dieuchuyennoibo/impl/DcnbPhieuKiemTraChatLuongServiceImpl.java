@@ -84,7 +84,6 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         Page<DcnbPhieuKtChatLuongHdrDTO> search = null;
-        req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         search = dcnbPhieuKtChatLuongHdrRepository.searchPage(req, pageable);
 
         return search;
@@ -350,11 +349,11 @@ public class DcnbPhieuKiemTraChatLuongServiceImpl extends BaseServiceImpl {
                 .diaChiDonViGiaoHang(dcnbPhieuKtChatLuongHdr.get().getDiaChiDonViGiaoHang())
                 .chungLoaiHangHoa(dcnbPhieuKtChatLuongHdr.get().getCloaiVthh())
                 .soChungThuGiamDinh(dcnbPhieuKtChatLuongHdr.get().getSoChungThuGiamDinh())
-                .ngayGiamDinh(dcnbPhieuKtChatLuongHdr.get().getNgayGiamDinh().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .ngayGiamDinh(dcnbPhieuKtChatLuongHdr.get().getNgayGiamDinh() == null ?"":dcnbPhieuKtChatLuongHdr.get().getNgayGiamDinh().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .toChucGiamDinh(dcnbPhieuKtChatLuongHdr.get().getToChucGiamDinh())
                 .slNhapTheoKb(dcnbPhieuKtChatLuongHdr.get().getSlNhapTheoKb())
                 .slNhapTheoKt(dcnbPhieuKtChatLuongHdr.get().getSlNhapTheoKt())
-                .ngayLapPhieu(dcnbPhieuKtChatLuongHdr.get().getNgayLapPhieu().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .ngayLapPhieu(dcnbPhieuKtChatLuongHdr.get().getNgayLapPhieu() == null ? "":dcnbPhieuKtChatLuongHdr.get().getNgayLapPhieu().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .tenNganKho(dcnbPhieuKtChatLuongHdr.get().getTenNganKho())
                 .tenLoKho(dcnbPhieuKtChatLuongHdr.get().getTenLoKho())
                 .tenDiemKho(dcnbPhieuKtChatLuongHdr.get().getTenDiemKho())

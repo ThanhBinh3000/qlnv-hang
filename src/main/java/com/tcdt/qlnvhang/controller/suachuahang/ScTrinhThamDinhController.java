@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.controller.suachuahang;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
@@ -20,8 +21,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(PathContains.SUA_CHUA + PathContains.TRINH_THAM_DINH)
@@ -169,24 +173,22 @@ public class ScTrinhThamDinhController {
     return ResponseEntity.ok(resp);
   }
 
-//  @ApiOperation(value = "Kết xuất danh sách", response = List.class)
-//  @PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
-//  @ResponseStatus(HttpStatus.OK)
-//  public void exportList(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody XhTlHoSoRequest objReq, HttpServletResponse response) throws Exception {
-//    try {
-//      service.export(currentUser, objReq, response);
-//
-//    } catch (Exception e) {
-//      log.error("Kết xuất danh sách dánh sách : {}", e);
-//      final Map<String, Object> body = new HashMap<>();
-//      body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//      body.put("msg", e.getMessage());
-//      response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-//      response.setCharacterEncoding("UTF-8");
-//      final ObjectMapper mapper = new ObjectMapper();
-//      mapper.writeValue(response.getOutputStream(), body);
-//
-//    }
-//  }
+  @ApiOperation(value = "Kết xuất danh sách", response = List.class)
+  @PostMapping(value = PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public void exportList(@Valid @RequestBody ScTrinhThamDinhHdrReq objReq, HttpServletResponse response) throws Exception {
+    try {
+      service.export(objReq, response);
+    } catch (Exception e) {
+      log.error("Kết xuất danh sách dánh sách : {}", e);
+      final Map<String, Object> body = new HashMap<>();
+      body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      body.put("msg", e.getMessage());
+      response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+      response.setCharacterEncoding("UTF-8");
+      final ObjectMapper mapper = new ObjectMapper();
+      mapper.writeValue(response.getOutputStream(), body);
+    }
+  }
 
 }

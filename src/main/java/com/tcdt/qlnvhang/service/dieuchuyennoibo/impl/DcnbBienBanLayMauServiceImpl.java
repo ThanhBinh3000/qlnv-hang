@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
@@ -86,11 +87,9 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         if ("00".equals(req.getType())) { // kiểu xuất
-            req.setTypeQd(Contains.DIEU_CHUYEN);
             searchDto = dcnbBienBanLayMauHdrRepository.searchPageXuat(req, pageable);
         }
         if ("01".equals(req.getType())) { // kiểu nhan
-            req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
             searchDto = dcnbBienBanLayMauHdrRepository.searchPageNhan(req, pageable);
         }
         return searchDto;
@@ -322,7 +321,7 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
     public ReportTemplateResponse preview(DcnbBienBanLayMauHdrReq objReq) throws Exception {
         var dcnbBienBanLayMauHdr = dcnbBienBanLayMauHdrRepository.findById(objReq.getId());
         if (!dcnbBienBanLayMauHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
-        Optional<UserInfo> userInfo = null;
+        Optional<UserInfo> userInfo = Optional.empty();
         if (dcnbBienBanLayMauHdr.get().getNguoiPDuyet() != null) {
             userInfo = userInfoRepository.findById(dcnbBienBanLayMauHdr.get().getNguoiPDuyet());
         }
@@ -338,6 +337,8 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
     private DcnbBienBanLayMauHdrPreview setDataToPreview(Optional<DcnbBienBanLayMauHdr> dcnbBienBanLayMauHdr,
                                                          Optional<UserInfo> userInfo,
                                                          Optional<DcnbQuyetDinhDcCHdr> dcnbQuyetDinhDcCHdr) {
+//        2136+*Lấy mẫu ngẫu nhiên+*true
+        String pplm = StringUtils.isEmpty(dcnbBienBanLayMauHdr.get().getPPLayMau()) ? "" : Lists.newArrayList(Splitter.on("+*").split(dcnbBienBanLayMauHdr.get().getPPLayMau())).get(1);
         return DcnbBienBanLayMauHdrPreview.builder()
                 .donViCungCapHang(dcnbBienBanLayMauHdr.get().getTenDvi())
                 .quyChuanTieuChuan("")
@@ -347,8 +348,8 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
                 .tenDviCha(dcnbBienBanLayMauHdr.get().getTenDviCha())
                 .soLuongMau(dcnbBienBanLayMauHdr.get().getSoLuongMau())
                 .donViTinh(dcnbBienBanLayMauHdr.get().getDonViTinh())
-                .pPLayMau(dcnbBienBanLayMauHdr.get().getPPLayMau())
-                .chiTieuKiemTra(DieuChuyenNoiBo.getData(dcnbBienBanLayMauHdr.get().getChiTieuKiemTra()))
+                .pPLayMau(pplm)
+                .chiTieuKiemTra(DieuChuyenNoiBo.getDataNew(dcnbBienBanLayMauHdr.get().getChiTieuKiemTra()))
                 .ktvBaoQuan(dcnbBienBanLayMauHdr.get().getKtvBaoQuan())
                 .truongBpKtbq(dcnbBienBanLayMauHdr.get().getKtvBaoQuan())
                 .lanhDaoChiCuc(userInfo.isPresent() ? userInfo.get().getFullName() : "")
@@ -366,7 +367,7 @@ public class DcnbBienBanLayMauServiceImpl extends BaseServiceImpl {
         for (var res : dcnbBienBanLayMauDtl) {
             var dcnbBienBanLayMauDtlDto = DcnbBienBanLayMauDtlDto.builder()
                     .stt(stt++)
-                    .loaiDaiDien(res.getLoaiDaiDien())
+                    .loaiDaiDien(res.getLoaiDaiDien().equals("00") ? "Đại diện Cục Dự Trữ nhà nước" : "Đại diện Chi Cục Dự Trữ nhà nước")
                     .tenDaiDien(res.getTenDaiDien())
                     .build();
             dcnbBienBanLayMauDtlDtos.add(dcnbBienBanLayMauDtlDto);

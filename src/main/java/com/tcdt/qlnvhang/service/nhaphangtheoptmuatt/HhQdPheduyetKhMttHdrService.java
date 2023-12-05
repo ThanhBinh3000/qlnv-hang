@@ -683,7 +683,8 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         qdPheduyetKhMttHdr.getChildren().forEach(cuc -> {
             AtomicReference<BigDecimal> tongThanhTien = new AtomicReference<>(BigDecimal.ZERO);
             cuc.getChildren().forEach(chiCuc -> {
-                tongThanhTien.updateAndGet(v -> v.add(chiCuc.getDonGiaVat().multiply(chiCuc.getTongSoLuong())));
+                chiCuc.setTongThanhTienVatStr(docxToPdfConverter.convertBigDecimalToStr(chiCuc.getTongThanhTienVat()));
+                tongThanhTien.updateAndGet(v -> v.add(chiCuc.getDonGiaVat().multiply(chiCuc.getTongSoLuong()).multiply(new BigDecimal(1000))));
             });
             cuc.setTongThanhTien(docxToPdfConverter.convertBigDecimalToStr(tongThanhTien.get()));
         });

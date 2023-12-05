@@ -49,4 +49,7 @@ public class HhChiTietTTinChaoGia implements Serializable {
 
     @Transient
     private FileDinhKem fileDinhKems ;
+
+    @Transient
+    private String thanhTienStr;
 }

@@ -126,7 +126,7 @@ public class XhDgBbTinhKhoService extends BaseServiceImpl {
         if (xhDgBbTinhKhoHdrRepository.existsBySoBbTinhKhoAndIdNot(req.getSoBbTinhKho(), req.getId())) {
             throw new Exception("Số biên bản tịnh kho " + req.getSoBbTinhKho() + " đã tồn tại");
         }
-        BeanUtils.copyProperties(req, data, "id", "maDvi");
+        BeanUtils.copyProperties(req, data, "id", "maDvi", "idThuKho");
         data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(currentUser.getUser().getId());
         XhDgBbTinhKhoHdr update = xhDgBbTinhKhoHdrRepository.save(data);
@@ -249,6 +249,7 @@ public class XhDgBbTinhKhoService extends BaseServiceImpl {
             xhBbLayMauRepository.findById(kiemNghiem.getIdBbLayMau()).ifPresent(layMau -> {
                 layMau.setIdTinhKho(created.getId());
                 layMau.setSoBbTinhKho(created.getSoBbTinhKho());
+                layMau.setNgayXuatDocKho(created.getNgayLapBienBan());
                 xhBbLayMauRepository.save(layMau);
             });
             xhPhieuKnghiemCluongRepository.save(kiemNghiem);
@@ -266,11 +267,11 @@ public class XhDgBbTinhKhoService extends BaseServiceImpl {
         req.getPaggingReq().setLimit(Integer.MAX_VALUE);
         Page<XhDgBbTinhKhoHdr> page = this.searchPage(currentUser, req);
         List<XhDgBbTinhKhoHdr> data = page.getContent();
-        String title = "Danh sách biên bản tịnh kho";
+        String title = "Danh sách biên bản tịnh kho hàng DTQG";
         String[] rowsName = new String[]{"STT", "Số QĐ giao NVXH", "Năm KH", "Thời hạn XH", "Điểm kho",
                 "Ngăn/Lô kho", "Số BB tịnh kho", "Ngày lập BB tịnh kho", "Số phiếu KNCL", "Số bảng kê",
                 "Số phiếu xuất kho", "Ngày xuất kho", "Trạng thái"};
-        String fileName = "danh-sach-bien-ban-tinh-kho.xlsx";
+        String fileName = "danh-sach-bien-ban-tinh-kho-hang-DTQG.xlsx";
         List<Object[]> dataList = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
             XhDgBbTinhKhoHdr hdr = data.get(i);
@@ -278,7 +279,7 @@ public class XhDgBbTinhKhoService extends BaseServiceImpl {
             objs[0] = i;
             objs[1] = hdr.getSoQdNv();
             objs[2] = hdr.getNam();
-            objs[3] = hdr.getNgayKyQdNv();
+            objs[3] = hdr.getThoiGianGiaoNhan();
             objs[4] = hdr.getTenDiemKho();
             objs[5] = hdr.getTenNganLoKho();
             objs[6] = hdr.getSoBbTinhKho();
@@ -290,7 +291,7 @@ public class XhDgBbTinhKhoService extends BaseServiceImpl {
                 finalObjs[10] = dtl.getSoPhieuXuatKho();
                 finalObjs[11] = dtl.getNgayXuatKho();
             });
-            objs[12] = hdr.getTrangThai();
+            objs[12] = hdr.getTenTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
@@ -302,14 +303,10 @@ public class XhDgBbTinhKhoService extends BaseServiceImpl {
             throw new Exception("Bad request.");
         }
         try {
-            String templatePath = baseReportFolder + "/bandaugia/";
+            String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "bandaugia/" + templatePath;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
             XhDgBbTinhKhoHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
-            if (detail.getLoaiVthh().startsWith("02")) {
-                templatePath += "Biên bản tịnh kho bán đấu giá vật tư.docx";
-            } else {
-                templatePath += "Biên bản tịnh kho bán đấu giá lương thực.docx";
-            }
-            FileInputStream inputStream = new FileInputStream(templatePath);
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
         } catch (IOException e) {
             e.printStackTrace();

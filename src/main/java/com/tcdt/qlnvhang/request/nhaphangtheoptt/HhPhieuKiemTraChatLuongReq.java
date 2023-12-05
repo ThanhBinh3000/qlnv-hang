@@ -17,7 +17,7 @@ public class HhPhieuKiemTraChatLuongReq {
     private String maDvi;
     private String soPhieu;
     private String maQhns;
-    private String idQdGiaoNvNh;
+    private Long idQdGiaoNvNh;
     private String soQdGiaoNvNh;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayQdGiaoNvNh;

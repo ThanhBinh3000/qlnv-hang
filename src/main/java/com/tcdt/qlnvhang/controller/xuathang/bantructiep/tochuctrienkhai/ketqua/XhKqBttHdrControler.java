@@ -190,23 +190,6 @@ public class XhKqBttHdrControler extends BaseController {
         }
     }
 
-    @ApiOperation(value = "Lấy chi tiết Quyết định phê duyệt kế hoạch bán trực tiếp", response = List.class)
-    @GetMapping(value = "/tchuc-chi-tiet" + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> detailDtl(@ApiParam(value = "ID phương án kế hoạch bán đấu giá", example = "1", required = true) @PathVariable("ids") Long ids) {
-        BaseResponse resp = new BaseResponse();
-        try {
-            resp.setData(xhKqBttHdrService.detailToChuc(ids));
-            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
-            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
-        } catch (Exception e) {
-            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
-            resp.setMsg(e.getMessage());
-            log.error("Lấy chi tiết Quyết định phê duyệt kế hoạch bán đấu giá trace: {}", e);
-        }
-        return ResponseEntity.ok(resp);
-    }
-
     @ApiOperation(value = "Xem trước", response = List.class)
     @PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)

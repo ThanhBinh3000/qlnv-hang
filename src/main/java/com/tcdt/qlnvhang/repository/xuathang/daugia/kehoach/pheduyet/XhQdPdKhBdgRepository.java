@@ -19,12 +19,16 @@ public interface XhQdPdKhBdgRepository extends JpaRepository<XhQdPdKhBdg, Long> 
             "WHERE (:#{#param.dvql} IS NULL OR QD.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
             "AND (:#{#param.nam} IS NULL OR QD.nam = :#{#param.nam}) " +
             "AND (:#{#param.soQdPd} IS NULL OR LOWER(QD.soQdPd) LIKE LOWER(CONCAT('%', :#{#param.soQdPd}, '%'))) " +
+            "AND (:#{#param.soQdDc} IS NULL OR LOWER(QD.soQdDc) LIKE LOWER(CONCAT('%', :#{#param.soQdDc}, '%'))) " +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(QD.trichYeu) LIKE LOWER(CONCAT('%', :#{#param.trichYeu}, '%'))) " +
+            "AND (:#{#param.type} IS NULL OR LOWER(QD.type) LIKE LOWER(CONCAT('%', :#{#param.type}, '%'))) " +
+            "AND (:#{#param.lastest} IS NULL OR LOWER(QD.lastest) LIKE LOWER(CONCAT('%', :#{#param.lastest}, '%'))) " +
             "AND (:#{#param.ngayKyQdTu} IS NULL OR QD.ngayKyQd >= :#{#param.ngayKyQdTu}) " +
             "AND (:#{#param.ngayKyQdDen} IS NULL OR QD.ngayKyQd <= :#{#param.ngayKyQdDen}) " +
+            "AND (:#{#param.ngayKyDcTu} IS NULL OR QD.ngayKyDc >= :#{#param.ngayKyDcTu}) " +
+            "AND (:#{#param.ngayKyDcDen} IS NULL OR QD.ngayKyDc <= :#{#param.ngayKyDcDen}) " +
             "AND (:#{#param.soTrHdr} IS NULL OR LOWER(QD.soTrHdr) LIKE LOWER(CONCAT('%', :#{#param.soTrHdr}, '%'))) " +
             "AND (:#{#param.loaiVthh} IS NULL OR QD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
-            "AND (:#{#param.lastest} IS NULL OR LOWER(QD.lastest) LIKE LOWER(CONCAT('%', :#{#param.lastest}, '%'))) " +
             "AND (:#{#param.trangThai} IS NULL OR QD.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.maCuc} IS NULL OR DTL.maDvi LIKE CONCAT(:#{#param.maCuc}, '%')) " +
             "ORDER BY QD.nam DESC, QD.ngaySua DESC, QD.ngayTao DESC, QD.id DESC")
@@ -37,4 +41,10 @@ public interface XhQdPdKhBdgRepository extends JpaRepository<XhQdPdKhBdg, Long> 
     List<XhQdPdKhBdg> findByIdIn(List<Long> idDxList);
 
     List<XhQdPdKhBdg> findAllByIdIn(List<Long> listId);
+
+    boolean existsBySoQdDc(String soQdDc);
+
+    boolean existsBySoQdDcAndIdNot(String soQdDc, Long id);
+
+    long countBySoQdPdAndType(String soQdPd, String type);
 }

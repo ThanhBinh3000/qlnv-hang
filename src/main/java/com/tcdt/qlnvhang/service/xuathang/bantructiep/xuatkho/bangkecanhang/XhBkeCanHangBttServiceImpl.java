@@ -107,7 +107,7 @@ public class XhBkeCanHangBttServiceImpl extends BaseServiceImpl {
         if (xhBkeCanHangBttHdrRepository.existsBySoBangKeHangAndIdNot(req.getSoBangKeHang(), req.getId())) {
             throw new Exception("Số phiếu xuất kho " + req.getSoPhieuXuatKho() + " đã tồn tại");
         }
-        BeanUtils.copyProperties(req, data, "id", "maDvi");
+        BeanUtils.copyProperties(req, data, "id", "maDvi", "idThuKho");
         data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(currentUser.getUser().getId());
         XhBkeCanHangBttHdr update = xhBkeCanHangBttHdrRepository.save(data);
@@ -245,14 +245,10 @@ public class XhBkeCanHangBttServiceImpl extends BaseServiceImpl {
             throw new Exception("Bad request.");
         }
         try {
-            String templatePath = baseReportFolder + "/bantructiep/";
+            String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "bantructiep/" + templatePath;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
             XhBkeCanHangBttHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
-            if (detail.getLoaiVthh().startsWith("02")) {
-                templatePath += "Bảng kê cân hàng vật tư.docx";
-            } else {
-                templatePath += "Bảng kê cân hàng lương thực.docx";
-            }
-            FileInputStream inputStream = new FileInputStream(templatePath);
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
         } catch (IOException e) {
             e.printStackTrace();

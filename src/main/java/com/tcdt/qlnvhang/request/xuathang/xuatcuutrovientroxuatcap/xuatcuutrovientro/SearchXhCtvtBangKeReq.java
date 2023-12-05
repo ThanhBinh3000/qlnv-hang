@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovi
 import com.tcdt.qlnvhang.request.BaseRequest;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
@@ -31,9 +32,9 @@ public class SearchXhCtvtBangKeReq extends BaseRequest {
   private String nlqDonVi;
   private String nlqDiaChi;
   private LocalDate thoiGianGiaoNhan;
-  private Long tongTrongLuong;
-  private Long tongTrongLuongBaoBi;
-  private Long tongTrongLuongHang;
+  private BigDecimal tongTrongLuong;
+  private BigDecimal tongTrongLuongBaoBi;
+  private BigDecimal tongTrongLuongHang;
   private LocalDate ngayGduyet;
   private Long nguoiGduyetId;
   private LocalDate ngayPduyet;

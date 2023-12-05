@@ -65,6 +65,7 @@ public class HhBbNghiemThuKlstPreview {
     BigDecimal chiPhiThucHienTrongNam;
     BigDecimal chiPhiThucHienNamTruoc;
     BigDecimal tongGiaTri;
+    String tongGiaTriBc;
     String tenTrangThai;
     String trangThaiDuyet;
     String tongGiaTriBangChu;
@@ -76,6 +77,10 @@ public class HhBbNghiemThuKlstPreview {
     Long idQdGiaoNvNh;
     String soQdGiaoNvNh;
     String soPhieuNhapKho;
+    private String ngayTaoFull;
+    private String ngayTao;
+    private String thangTao;
+    private String namTao;
     private List<HhBbNghiemthuKlstDtl> children = new ArrayList<>();
     private List<FileDKemJoinKeLot> children1 = new ArrayList<>();
 }

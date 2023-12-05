@@ -14,6 +14,7 @@ import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuK
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuKdclHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuXuatNhapKho;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhQdGiaonvXnDtl;
@@ -21,6 +22,7 @@ import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhQdGiaonv
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,6 +35,8 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -70,9 +74,9 @@ public class XhXkVtBhPhieuKdclService extends BaseServiceImpl {
     search.getContent().forEach(s -> {
       s.setMapDmucDvi(mapDmucDvi);
       s.setMapVthh(mapVthh);
-      if (s.getNguoiPduyetId() != null) {
-        s.setTenThuKho(ObjectUtils.isEmpty(s.getNguoiPduyetId()) ? null : userInfoRepository.findById(s.getNguoiPduyetId()).get().getFullName());
-      }
+//      if (s.getNguoiPduyetId() != null) {
+//        s.setTenThuKho(ObjectUtils.isEmpty(s.getNguoiPduyetId()) ? null : userInfoRepository.findById(s.getNguoiPduyetId()).get().getFullName());
+//      }
       s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
     });
     return search;
@@ -176,10 +180,14 @@ public class XhXkVtBhPhieuKdclService extends BaseServiceImpl {
     String status = statusReq.getTrangThai() + optional.get().getTrangThai();
     switch (status) {
       case Contains.CHO_DUYET_TP + Contains.DUTHAO:
-      case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
       case Contains.CHO_DUYET_TP + Contains.TUCHOI_TP:
       case Contains.CHO_DUYET_TP + Contains.TUCHOI_LDC:
         optional.get().setNguoiGduyetId(currentUser.getUser().getId());
+        optional.get().setNgayGduyet(LocalDate.now());
+        break;
+      case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+        optional.get().setNguoiGduyetId(currentUser.getUser().getId());
+        optional.get().setTpKtbq(currentUser.getUser().getFullName());
         optional.get().setNgayGduyet(LocalDate.now());
         break;
       case Contains.TUCHOI_TP + Contains.CHO_DUYET_TP:
@@ -190,6 +198,7 @@ public class XhXkVtBhPhieuKdclService extends BaseServiceImpl {
         break;
       case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
+        optional.get().setLanhDaoCuc(currentUser.getUser().getFullName());
         optional.get().setNgayPduyet(LocalDate.now());
         break;
       default:
@@ -271,6 +280,21 @@ public class XhXkVtBhPhieuKdclService extends BaseServiceImpl {
         xhXkVtBhPhieuXuatNhapKhoRepository.saveAll(allByIdCanCuIn);
       }
     }
+  }
+
+  public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
+    try {
+      String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
+      String fileTemplate = "xuatkhac/" + fileName;
+      FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
+      XhXkVtBhPhieuKdclHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
+      return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (XDocReportException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }
 

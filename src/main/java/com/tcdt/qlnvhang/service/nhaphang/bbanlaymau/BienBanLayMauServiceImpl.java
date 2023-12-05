@@ -36,6 +36,8 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @Log4j2
@@ -315,15 +317,61 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		if (bienBanLayMau == null) {
 			throw new Exception("Biên bản lấy mẫu không tồn tại.");
 		}
-		bienBanLayMau.setTenCloaiVthh(bienBanLayMau.getTenCloaiVthh().toUpperCase());
+		if (bienBanLayMau.getCloaiVthh() == null) {
+			bienBanLayMau.setTenLoaiVthh(bienBanLayMau.getTenCloaiVthh().toUpperCase());
+		} else {
+			bienBanLayMau.setTenCloaiVthh(bienBanLayMau.getTenCloaiVthh().toUpperCase());
+		}
 		BienBanLayMauPreview object = new BienBanLayMauPreview();
 		ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
 		byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
 		object.setHdr(bienBanLayMau);
-		object.setNgayHd(convertDate(bienBanLayMau.getBbNhapDayKho().getNgayHd()));
-		object.setNgayTao(convertDate(bienBanLayMau.getNgayTao()));
+		if (bienBanLayMau.getBbNhapDayKho() != null && bienBanLayMau.getBbNhapDayKho().getNgayHd()!= null ) {
+			object.setNgayHd(convertDate(bienBanLayMau.getBbNhapDayKho().getNgayHd()));
+		}
+		if (bienBanLayMau.getNgayTao() != null) {
+			object.setNgayTao(convertDate(bienBanLayMau.getNgayTao()));
+		}
+		object.setPpLayMau(bienBanLayMau.getPpLayMau().split("-")[1]);
+		if (bienBanLayMau.getChiTieuKiemTra() != null) {
+			List<String> listChiTieu = Arrays.asList(bienBanLayMau.getChiTieuKiemTra().split(";"));
+			object.setChiTieuKiemTra(new ArrayList<>());
+			listChiTieu.forEach(item -> {
+				object.getChiTieuKiemTra().add(extractTextAfterDash(item));
+			});
+		}
+		object.setTenDviUpper(bienBanLayMau.getTenDvi().toUpperCase());
 		return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+	}
+
+	@Override
+	public List<BienBanLayMau> searchList(BienBanLayMauReq objReq) {
+		List<BienBanLayMau> bienBanLayMaus = bienBanLayMauRepository.selectList(objReq);
+		Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
+		Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
+		bienBanLayMaus.forEach(x -> {
+			x.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(x.getTrangThai()));
+			x.setTenLoaiVthh(listDanhMucHangHoa.get(x.getLoaiVthh()));
+			x.setTenCloaiVthh(listDanhMucHangHoa.get(x.getCloaiVthh()));
+			x.setTenDvi(listDanhMucDvi.get(x.getMaDvi()));
+			x.setTenDiemKho(listDanhMucDvi.get(x.getMaDiemKho()));
+			x.setTenNhaKho(listDanhMucDvi.get(x.getMaNhaKho()));
+			x.setTenNganKho(listDanhMucDvi.get(x.getMaNganKho()));
+			x.setTenLoKho(listDanhMucDvi.get(x.getMaLoKho()));
+		});
+		return bienBanLayMaus;
+	}
+
+	private static String extractTextAfterDash(String input) {
+		String regex = "\\-(.+)";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(input);
+		if (matcher.find()) {
+			return matcher.group(1).trim();
+		} else {
+			return "";
+		}
 	}
 //
 //	@Override

@@ -119,7 +119,7 @@ public class XhDgBbHaoDoiService extends BaseServiceImpl {
         if (xhDgBbHaoDoiHdrRepository.existsBySoBbHaoDoiAndIdNot(req.getSoBbHaoDoi(), req.getId())) {
             throw new Exception("Số biên bản tịnh kho " + req.getSoBbHaoDoi() + " đã tồn tại");
         }
-        BeanUtils.copyProperties(req, data, "id", "maDvi");
+        BeanUtils.copyProperties(req, data, "id", "maDvi", "idThuKho");
         data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(currentUser.getUser().getId());
         XhDgBbHaoDoiHdr update = xhDgBbHaoDoiHdrRepository.save(data);
@@ -235,11 +235,6 @@ public class XhDgBbHaoDoiService extends BaseServiceImpl {
     }
 
     private void updateKiemNghiemAndLayMauAndQuyetDinh(XhDgBbHaoDoiHdr created) {
-        xhQdGiaoNvXhRepository.findById(created.getIdQdNv()).ifPresent(quyetDinh -> {
-            quyetDinh.setIdHaoDoi(created.getId());
-            quyetDinh.setBienBanHaoDoi(created.getSoBbHaoDoi());
-            xhQdGiaoNvXhRepository.save(quyetDinh);
-        });
         xhPhieuKnghiemCluongRepository.findById(created.getIdPhieuKiemNghiem()).ifPresent(kiemNghiem -> {
             xhBbLayMauRepository.findById(kiemNghiem.getIdBbLayMau()).ifPresent(layMau -> {
                 layMau.setIdHaoDoi(created.getId());
@@ -266,7 +261,7 @@ public class XhDgBbHaoDoiService extends BaseServiceImpl {
             objs[0] = i;
             objs[1] = hdr.getSoQdNv();
             objs[2] = hdr.getNam();
-            objs[3] = hdr.getNgayKyQdNv();
+            objs[3] = hdr.getThoiGianGiaoNhan();
             objs[4] = hdr.getTenDiemKho();
             objs[5] = hdr.getTenNganLoKho();
             objs[6] = hdr.getSoBbHaoDoi();
@@ -279,7 +274,7 @@ public class XhDgBbHaoDoiService extends BaseServiceImpl {
                 finalObjs[11] = dtl.getSoPhieuXuatKho();
                 finalObjs[12] = dtl.getNgayXuatKho();
             });
-            objs[13] = hdr.getTrangThai();
+            objs[13] = hdr.getTenTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
@@ -291,8 +286,10 @@ public class XhDgBbHaoDoiService extends BaseServiceImpl {
             throw new Exception("Bad request.");
         }
         try {
+            String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "bandaugia/" + templatePath;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
             XhDgBbHaoDoiHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
-            FileInputStream inputStream = new FileInputStream(baseReportFolder + "bandaugia/Biên bản hao dôi bán đấu giá.docx");
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
         } catch (IOException e) {
             e.printStackTrace();

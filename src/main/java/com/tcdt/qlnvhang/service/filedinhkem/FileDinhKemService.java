@@ -19,6 +19,7 @@ public interface FileDinhKemService {
     List<FileDinhKem> search(Long dataId, String dataTypes);
 
     void delete(Long dataId, Collection<String> dataTypes);
+    void delete(Long dataId, String dataTypes);
 
     void saveFileDinhKems(Collection<FileDinhKem> fileDinhKems);
 

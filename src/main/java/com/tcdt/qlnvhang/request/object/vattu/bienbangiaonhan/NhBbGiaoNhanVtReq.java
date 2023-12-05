@@ -54,6 +54,8 @@ public class NhBbGiaoNhanVtReq extends BaseRequest {
     private String trangThai;
 
     private String maDvi;
+    private String maQhns;
+    private String cbPhongKtbq;
 
     private Long nguoiGuiDuyetId;
 
@@ -67,6 +69,6 @@ public class NhBbGiaoNhanVtReq extends BaseRequest {
 
     private List<FileDinhKemReq> fileDinhKemReqs = new ArrayList<>();
 
-    private List<FileDinhKemReq> canCus = new ArrayList<>();
+    private List<FileDinhKemReq> canCuLapBb = new ArrayList<>();
     private ReportTemplateRequest reportTemplateRequest;
 }

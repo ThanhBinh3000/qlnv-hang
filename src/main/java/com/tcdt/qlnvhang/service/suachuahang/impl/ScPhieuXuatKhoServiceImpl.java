@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.suachuahang.impl;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.*;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.suachua.ScPhieuXuatKhoReq;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhXuatHangReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -15,6 +16,7 @@ import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.*;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -225,7 +227,36 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
 
     @Override
     public void export(ScPhieuXuatKhoReq req, HttpServletResponse response) throws Exception {
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        Page<ScPhieuXuatKhoHdr> page = searchPage(req);
+        List<ScPhieuXuatKhoHdr> data = page.getContent();
 
+        String title = "Danh sách phiếu xuất kho";
+        String[] rowsName = new String[]{"STT", "Năm xuất", "Số QĐ giao NVXH", "Ngày ký QĐ giao NVXH", "Thời hạn xuất sửa chữa","Thời hạn nhập sửa chữa","Số QĐ SC hàng DTQG","Trích yếu", "Trạng thái QĐ","Trạng thái xuất để SC"};
+        String fileName = "danh-sach.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        for (int i = 0; i < data.size(); i++) {
+            ScPhieuXuatKhoHdr dx = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i + 1;
+            objs[1] = dx.getNam();
+            objs[2] = dx.getSoQdXh();
+            objs[3] = dx.getNam();
+            objs[4] = dx.getNgayXuatKho();
+            objs[5] = dx.getTenDiemKho()+"/"+dx.getTenNhaKho()+"/"+dx.getTenNganKho()+"/"+dx.getTenLoKho();
+            objs[6] = dx.getSoPhieuXuatKho();
+            objs[7] = dx.getNgayXuatKho();
+            objs[8] = null;
+            objs[9] = null;
+            objs[10] = dx.getTenTrangThai();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+        ex.export();
     }
 
     @Override
@@ -250,14 +281,17 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
                 // lấy Danh sách sửa chữa hdr
                 scQuyetDinhSc.getScTrinhThamDinhHdr().getChildren().forEach(( dsHdr)->{
                     ScDanhSachHdr scDanhSachHdr = dsHdr.getScDanhSachHdr();
-                    req.setIdScDanhSachHdr(scDanhSachHdr.getId());
-                    if(userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
-                        req.setMaDviSr(userInfo.getDvql());
+                    // Filter chi cục
+                    if(scDanhSachHdr.getMaDiaDiem().startsWith(userInfo.getDvql())){
+                        req.setIdScDanhSachHdr(scDanhSachHdr.getId());
+                        if(userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)){
+                            req.setMaDviSr(userInfo.getDvql());
+                        }
+                        // Lấy phiếu xuất kho theo từng danh sách sửa chữa ( địa điểm )
+                        List<ScPhieuXuatKhoHdr> scPhieuXuatKhoHdrs = hdrRepository.searchList(req);
+                        scDanhSachHdr.setScPhieuXuatKhoList(scPhieuXuatKhoHdrs);
+                        scDanhSachHdrList.add(scDanhSachHdr);
                     }
-                    // Lấy phiếu xuất kho theo từng danh sách sửa chữa ( địa điểm )
-                    List<ScPhieuXuatKhoHdr> scPhieuXuatKhoHdrs = hdrRepository.searchList(req);
-                    scDanhSachHdr.setScPhieuXuatKhoList(scPhieuXuatKhoHdrs);
-                    scDanhSachHdrList.add(scDanhSachHdr);
                 });
                 item.setScQuyetDinhSc(scQuyetDinhScService.detail(item.getIdQdSc()));
                 item.setScDanhSachHdrList(scDanhSachHdrList);

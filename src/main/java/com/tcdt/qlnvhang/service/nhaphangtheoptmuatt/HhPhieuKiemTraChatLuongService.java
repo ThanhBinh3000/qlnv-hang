@@ -26,6 +26,7 @@ import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -98,7 +99,8 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
         if(optional.isPresent()){
             throw new Exception("số phiếu đã tồn tại");
         }
-        HhPhieuKiemTraChatLuong data = new ModelMapper().map(objReq,HhPhieuKiemTraChatLuong.class);
+        HhPhieuKiemTraChatLuong data = new HhPhieuKiemTraChatLuong();
+        BeanUtils.copyProperties(objReq, data);
         data.setNgayTao(new Date());
         data.setNguoiTao(userInfo.getUsername());
         data.setTrangThai(Contains.DUTHAO);
@@ -323,10 +325,18 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
         if (hhPhieuKiemTraChatLuong == null) {
             throw new Exception("Bản kê nhập vật tư không tồn tại.");
         }
-        HhPhieuKiemTraChatLuongPreview object = new HhPhieuKiemTraChatLuongPreview();
         ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+        hhPhieuKiemTraChatLuong.setTenDvi(hhPhieuKiemTraChatLuong.getTenDvi().toUpperCase());
+        hhPhieuKiemTraChatLuong.setTenLoaiVthh(hhPhieuKiemTraChatLuong.getTenLoaiVthh().toUpperCase());
+        Calendar calendar = new GregorianCalendar();
+        if(hhPhieuKiemTraChatLuong.getNgayPduyet() != null){
+            calendar.setTime(hhPhieuKiemTraChatLuong.getNgayPduyet());
+            hhPhieuKiemTraChatLuong.setNgay(calendar.get(Calendar.DAY_OF_MONTH));
+            hhPhieuKiemTraChatLuong.setThang(calendar.get(Calendar.MONTH) + 1);
+            hhPhieuKiemTraChatLuong.setNam(calendar.get(Calendar.YEAR));
+        }
+        return docxToPdfConverter.convertDocxToPdf(inputStream, hhPhieuKiemTraChatLuong);
     }
 }

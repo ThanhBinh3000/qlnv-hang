@@ -3,12 +3,15 @@ package com.tcdt.qlnvhang.service.suachuahang.impl;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScDanhSachRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScTrinhThamDinhDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScTrinhThamDinhRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.suachua.ScTrinhThamDinhDtlReq;
 import com.tcdt.qlnvhang.request.suachua.ScTrinhThamDinhHdrReq;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbBangKeXuatVTHdrDTO;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -17,6 +20,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.*;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
@@ -309,7 +313,35 @@ public class ScTrinhThamDinhServiceImpl extends BaseServiceImpl implements ScTri
 
     @Override
     public void export(ScTrinhThamDinhHdrReq req, HttpServletResponse response) throws Exception {
+        CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        req.setMaDvi(currentUser.getDvql());
+        Page<ScTrinhThamDinhHdr> page = searchPage(req);
+        List<ScTrinhThamDinhHdr> data = page.getContent();
 
+        String title = "Thẩm định danh sách hàng dữ trữ quốc gia cần sửa chữa";
+        String[] rowsName = new String[]{"STT", "Số tờ trình", "Trích yếu", "Ngày duyệt LĐ Cục", "Ngày duyệt LĐ Vụ", "Ngày duyệt LĐ TC", "Số QĐ SC", "Trạng thái thẩm định"};
+        String fileName = "danh-sach.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        for (int i = 0; i < data.size(); i++) {
+            ScTrinhThamDinhHdr dx = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i + 1;
+            objs[1] = dx.getSoTtr();
+            objs[2] = dx.getTrichYeu();
+            objs[3] = dx.getNgayDuyetLdc();
+            objs[4] = dx.getNgayDuyetLdv();
+            objs[5] = dx.getNgayDuyetLdtc();
+            objs[6] = dx.getSoQdSc();
+            objs[7] = dx.getTenTrangThai();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+        ex.export();
     }
 
     @Override

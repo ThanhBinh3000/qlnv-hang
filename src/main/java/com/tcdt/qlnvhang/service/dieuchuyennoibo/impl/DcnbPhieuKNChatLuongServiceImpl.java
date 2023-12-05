@@ -87,11 +87,9 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         if ("00".equals(req.getType())) { // kiểu xuất
-            req.setTypeQd(Contains.DIEU_CHUYEN);
             searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageXuat(req, pageable);
         }
         if ("01".equals(req.getType())) { // kiểu nhan
-            req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
             searchDto = dcnbPhieuKnChatLuongHdrRepository.searchPageNhan(req, pageable);
         }
         return searchDto;
@@ -169,11 +167,13 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
         DcnbPhieuKnChatLuongHdr data = optional.get();
         BeanUtils.copyProperties(objReq, data);
         Optional<DcnbKeHoachDcDtl> keHoachDcDtl = dcnbKeHoachDcDtlRepository.findById(objReq.getKeHoachDcDtlId());
-        if (keHoachDcDtl.isPresent()) {
-            if (keHoachDcDtl.get().getParentId() != null) {
-                data.setKeHoachDcDtlId(keHoachDcDtl.get().getParentId());
-            } else {
-                data.setKeHoachDcDtlId(objReq.getKeHoachDcDtlId());
+        if(!data.getKeHoachDcDtlId().equals(objReq.getKeHoachDcDtlId())){
+            if (keHoachDcDtl.isPresent()) {
+                if (keHoachDcDtl.get().getParentId() != null) {
+                    data.setKeHoachDcDtlId(keHoachDcDtl.get().getParentId());
+                } else {
+                    data.setKeHoachDcDtlId(objReq.getKeHoachDcDtlId());
+                }
             }
         }
         data.setNguoiSuaId(currentUser.getUser().getId());
@@ -361,10 +361,8 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         if ("00".equals(req.getType())) { // kiểu xuất
-            req.setTypeQd(Contains.DIEU_CHUYEN);
         }
         if ("01".equals(req.getType())) { // kiểu nhan
-            req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         }
         searchDto = dcnbPhieuKnChatLuongHdrRepository.searchList(req);
 
@@ -398,7 +396,7 @@ public class DcnbPhieuKNChatLuongServiceImpl extends BaseServiceImpl {
                 .soLuongHangBaoQuan("")
                 .hinhThucBq(DieuChuyenNoiBo.getData(dcnbPhieuKnChatLuongHdr.get().getHinhThucBq()))
                 .tenThuKho(dcnbPhieuKnChatLuongHdr.get().getTenThuKho())
-                .ngayNhapDayKho(dcnbPhieuKnChatLuongHdr.get().getNgayNhapDayKho().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .ngayNhapDayKho(dcnbPhieuKnChatLuongHdr.get().getNgayNhapDayKho() ==null ?"":dcnbPhieuKnChatLuongHdr.get().getNgayNhapDayKho().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .ngayLayMau(dcnbPhieuKnChatLuongHdr.get().getNgayLayMau().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .ngayKiem(dcnbPhieuKnChatLuongHdr.get().getNgayKiem().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .danhGiaCamQuan(dcnbPhieuKnChatLuongHdr.get().getDanhGiaCamQuan())

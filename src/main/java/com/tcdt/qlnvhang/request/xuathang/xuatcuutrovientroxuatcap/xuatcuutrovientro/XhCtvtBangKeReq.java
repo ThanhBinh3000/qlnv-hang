@@ -1,9 +1,11 @@
 package com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro;
 
+import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBangKeDtl;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +36,10 @@ public class XhCtvtBangKeReq extends BaseRequest {
   private String nlqDonVi;
   private String nlqDiaChi;
   private LocalDate thoiGianGiaoNhan;
-  private Long tongTrongLuong;
-  private Long tongTrongLuongBaoBi;
-  private Long tongTrongLuongHang;
+  private BigDecimal tongTrongLuong;
+  private BigDecimal tongTrongLuongBaoBi;
+  private BigDecimal tongTrongLuongHang;
+  private String tongTrongLuongHangBc;
   private LocalDate ngayGduyet;
   private Long nguoiGduyetId;
   private LocalDate ngayPduyet;
@@ -44,5 +47,10 @@ public class XhCtvtBangKeReq extends BaseRequest {
   private String lyDoTuChoi;
   private String trangThai;
   private String type;
+  private LocalDate ngayLapBangKe;
+  private String nguoiGiamSat;
+  private String idPhieuKnCl;
+  private String soPhieuKnCl;
+  private List<FileDinhKemJoinTable> fileDinhKem;
   private List<XhCtvtBangKeDtl> bangKeDtl= new ArrayList<>();
 }

@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScKiemTraChatLuongHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhNhapHangDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhNhapHangRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.suachua.ScPhieuXuatKhoReq;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhNhapHangReq;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhXuatHangReq;
@@ -19,6 +20,7 @@ import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.*;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,11 +109,11 @@ public class ScQuyetDinhNhapHangImpl extends BaseServiceImpl implements ScQuyetD
         ScQuyetDinhNhapHang hdr = optional.get();
         BeanUtils.copyProperties(req, hdr);
         ScQuyetDinhNhapHang created = hdrRepository.save(hdr);
-        fileDinhKemService.delete(req.getId(), Lists.newArrayList(ScQuyetDinhXuatHang.TABLE_NAME + "_CAN_CU"));
-        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), ScQuyetDinhXuatHang.TABLE_NAME + "_CAN_CU");
+        fileDinhKemService.delete(req.getId(), Lists.newArrayList(ScQuyetDinhNhapHang.TABLE_NAME + "_CAN_CU"));
+        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), ScQuyetDinhNhapHang.TABLE_NAME + "_CAN_CU");
         created.setFileCanCu(canCu);
-        fileDinhKemService.delete(req.getId(), Lists.newArrayList(ScQuyetDinhXuatHang.TABLE_NAME + "_DINH_KEM"));
-        List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), ScQuyetDinhXuatHang.TABLE_NAME + "_DINH_KEM");
+        fileDinhKemService.delete(req.getId(), Lists.newArrayList(ScQuyetDinhNhapHang.TABLE_NAME + "_DINH_KEM"));
+        List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), ScQuyetDinhNhapHang.TABLE_NAME + "_DINH_KEM");
         created.setFileDinhKem(fileDinhKemList);
         if(req.getChildren() != null && !req.getChildren().isEmpty()){
             List<ScQuyetDinhNhapHangDtl> scPhieuXuatKhoDtls = saveDtl(req, created.getId());
@@ -127,9 +129,9 @@ public class ScQuyetDinhNhapHangImpl extends BaseServiceImpl implements ScQuyetD
             throw new Exception("Bản ghi không tồn tại");
         }
         ScQuyetDinhNhapHang data = optional.get();
-        List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Collections.singleton(ScQuyetDinhXuatHang.TABLE_NAME + "_CAN_CU"));
+        List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Collections.singleton(ScQuyetDinhNhapHang.TABLE_NAME + "_CAN_CU"));
         data.setFileCanCu(canCu);
-        List<FileDinhKem> fileDinhKemList = fileDinhKemService.search(data.getId(), Collections.singleton(ScQuyetDinhXuatHang.TABLE_NAME + "_DINH_KEM"));
+        List<FileDinhKem> fileDinhKemList = fileDinhKemService.search(data.getId(), Collections.singleton(ScQuyetDinhNhapHang.TABLE_NAME + "_DINH_KEM"));
         data.setFileDinhKem(fileDinhKemList);
         Map<String, String> mapDmucDvi = getMapTenDvi();
         data.setTenDvi(mapDmucDvi.getOrDefault(data.getMaDvi(),null));
@@ -213,7 +215,36 @@ public class ScQuyetDinhNhapHangImpl extends BaseServiceImpl implements ScQuyetD
 
     @Override
     public void export(ScQuyetDinhNhapHangReq req, HttpServletResponse response) throws Exception {
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        Page<ScQuyetDinhNhapHang> page = searchPage(req);
+        List<ScQuyetDinhNhapHang> data = page.getContent();
 
+        String title = "Danh sách phiếu xuất kho";
+        String[] rowsName = new String[]{"STT", "Năm xuất", "Số QĐ giao NVXH", "Ngày ký QĐ giao NVXH", "Thời hạn xuất sửa chữa","Thời hạn nhập sửa chữa","Số QĐ SC hàng DTQG","Trích yếu", "Trạng thái QĐ","Trạng thái xuất để SC"};
+        String fileName = "danh-sach.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        for (int i = 0; i < data.size(); i++) {
+            ScQuyetDinhNhapHang dx = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i + 1;
+            objs[1] = dx.getNam();
+//            objs[2] = dx.getSoQdXh();
+            objs[3] = dx.getNam();
+//            objs[4] = dx.getNgayXuatKho();
+//            objs[5] = dx.getTenDiemKho()+"/"+dx.getTenNhaKho()+"/"+dx.getTenNganKho()+"/"+dx.getTenLoKho();
+//            objs[6] = dx.getSoPhieuXuatKho();
+//            objs[7] = dx.getNgayXuatKho();
+            objs[8] = null;
+            objs[9] = null;
+            objs[10] = dx.getTenTrangThai();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+        ex.export();
     }
 
     @Override

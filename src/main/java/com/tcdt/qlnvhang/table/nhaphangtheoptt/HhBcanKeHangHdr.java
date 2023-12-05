@@ -118,6 +118,8 @@ public class HhBcanKeHangHdr  implements Serializable {
     private Long tongSlBaoBi;
     private Long tongSlCaBaoBi;
     private Long tongSlDaTruBaoBi;
+    @Transient
+    private String tongSlDaTruBaoBiBc;
 
 
     @Transient

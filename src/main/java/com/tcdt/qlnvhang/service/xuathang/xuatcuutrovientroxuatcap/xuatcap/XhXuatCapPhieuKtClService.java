@@ -3,22 +3,33 @@ package com.tcdt.qlnvhang.service.xuathang.xuatcuutrovientroxuatcap.xuatcap;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
+import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXuatCapPhieuKtClDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXuatCapPhieuKtClHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.object.xuatcuutrovientro.XhPhieuKnclHdrPreview;
+import com.tcdt.qlnvhang.request.xuathang.kiemtrachatluong.XhPhieuKnclReq;
+import com.tcdt.qlnvhang.request.xuathang.kiemtrachatluong.XhPhieuKtclReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcap.SearchXhXuatCapPhieuKtCl;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXuatCapPhieuKtClDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXuatCapPhieuKtClHdrReq;
+import com.tcdt.qlnvhang.response.xuatcuutrovientro.XhPhieuKnclDtlDto;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
+import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.phieukncl.XhPhieuKnclDtl;
+import com.tcdt.qlnvhang.table.xuathang.kiemtrachatluong.phieukncl.XhPhieuKnclHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXuatCapPhieuKtClDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXuatCapPhieuKtClHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import lombok.var;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,6 +41,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -45,7 +57,10 @@ public class XhXuatCapPhieuKtClService extends BaseServiceImpl {
   private XhXuatCapPhieuKtClDtlRepository xhCtvtPhieuKtClDtlRepository;
   @Autowired
   private FileDinhKemService fileDinhKemService;
-
+  @Autowired
+  private QlnvDmVattuRepository qlnvDmVattuRepository;
+  @Autowired
+  private UserInfoRepository userInfoRepository;
   public Page<XhXuatCapPhieuKtClHdr> searchPage(CustomUserDetails currentUser, SearchXhXuatCapPhieuKtCl req) throws Exception {
     req.setDvql(currentUser.getDvql());
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
@@ -104,7 +119,7 @@ public class XhXuatCapPhieuKtClService extends BaseServiceImpl {
   }
 
   @Transactional()
-  void saveCtiet(Long idHdr, XhXuatCapPhieuKtClHdrReq objReq) {
+  public void saveCtiet(Long idHdr, XhXuatCapPhieuKtClHdrReq objReq) {
     for (XhXuatCapPhieuKtClDtlReq ketQuaPhanTichReq : objReq.getKetQuaPhanTich()) {
       XhXuatCapPhieuKtClDtl ketQuaPhanTich =new XhXuatCapPhieuKtClDtl();
       BeanUtils.copyProperties(ketQuaPhanTichReq,ketQuaPhanTich);
@@ -281,5 +296,75 @@ public class XhXuatCapPhieuKtClService extends BaseServiceImpl {
     }
     ExportExcel ex =new ExportExcel(title,fileName,rowsName,dataList,response);
     ex.export();
+  }
+
+  public ReportTemplateResponse preview(XhPhieuKtclReq objReq) throws Exception {
+    var xhPhieuKtclHdr = xhCtvtPhieuKtClHdrRepository.findById(objReq.getId());
+    List<XhXuatCapPhieuKtClDtl> list = xhCtvtPhieuKtClDtlRepository.findByIdHdr(objReq.getId());
+    xhPhieuKtclHdr.get().setKetQuaPhanTich(list);
+    if (!xhPhieuKtclHdr.isPresent()) throw new Exception("Không tồn tại bản ghi");
+    var fileTemplate = "xuatcuutrovientro/" + "2.1.C77-HD_PhieuKiemTraChatLuong_LT.docx";
+    if (StringUtils.isEmpty(xhPhieuKtclHdr.get().getLoaiVthh()))
+      throw new Exception("Không tồn tại loại vật tư hàng hoá");
+    var qlnvDmVattu = qlnvDmVattuRepository.findByMa(xhPhieuKtclHdr.get().getLoaiVthh());
+    if (Objects.isNull(qlnvDmVattu)) throw new Exception("Không tồn tại bản ghi");
+    Optional<UserInfo> userInfo = Optional.of(new UserInfo());
+    if (xhPhieuKtclHdr.get().getNguoiPduyetId() != null) {
+      userInfo = userInfoRepository.findById(xhPhieuKtclHdr.get().getNguoiPduyetId());
+    }
+    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    List<XhXuatCapPhieuKtClHdr> xhPhieuKtclHdrs = new ArrayList<>();
+    xhPhieuKtclHdrs.add(xhPhieuKtclHdr.get());
+    xhPhieuKtclHdrs.forEach(data -> {
+      data.setMapDmucDvi(mapDmucDvi);
+    });
+    FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
+    var xhPhieuKnclHdrPreview = setDataToPreview(xhPhieuKtclHdr, userInfo);
+    return docxToPdfConverter.convertDocxToPdf(inputStream, xhPhieuKnclHdrPreview);
+  }
+
+  private XhPhieuKnclHdrPreview setDataToPreview(Optional<XhXuatCapPhieuKtClHdr> xhPhieuKtclHdr, Optional<UserInfo> userInfo) throws Exception {
+    return XhPhieuKnclHdrPreview.builder()
+            .tenDvi(xhPhieuKtclHdr.get().getTenDvi())
+            .maQhns(xhPhieuKtclHdr.get().getMaQhNs())
+            .loaiVthh(qlnvDmVattuRepository.findByMa(xhPhieuKtclHdr.get().getLoaiVthh()).getTen().toUpperCase())
+            .soBbQd(xhPhieuKtclHdr.get().getSoPhieuKtCl())
+            .tenNganKho(xhPhieuKtclHdr.get().getTenNganKho())
+            .tenLoKho(xhPhieuKtclHdr.get().getTenLoKho())
+            .tenNhaKho(xhPhieuKtclHdr.get().getTenNhaKho())
+            .tenDiemKho(xhPhieuKtclHdr.get().getTenDiemKho())
+            .soLuongHangBaoQuan(xhPhieuKtclHdr.get().getSoLuongXuat() ==null ? "": xhPhieuKtclHdr.get().getSoLuongXuat().toString())
+            .hinhThucKeLotBaoQuan("")
+            .tenThuKho("")
+            .ngayNhapDayKho("")
+            .ngayBbLayMau(null)
+            .ngayKiemNghiem(xhPhieuKtclHdr.get().getNgayLapPhieu() != null ? Contains.convertDateToString(xhPhieuKtclHdr.get().getNgayLapPhieu()) : "")
+            .ketLuan(xhPhieuKtclHdr.get().getKetLuan())
+            .ketQua(xhPhieuKtclHdr.get().getKetQua())
+            .ngayNhap(xhPhieuKtclHdr.get().getNgayLapPhieu() != null ? String.valueOf(xhPhieuKtclHdr.get().getNgayLapPhieu().getDayOfMonth()) : "")
+            .thangNhap(xhPhieuKtclHdr.get().getNgayLapPhieu() != null ? String.valueOf(xhPhieuKtclHdr.get().getNgayLapPhieu().getMonth().getValue()) : "")
+            .namNhap(xhPhieuKtclHdr.get().getNgayLapPhieu() != null ? String.valueOf(xhPhieuKtclHdr.get().getNgayLapPhieu().getYear()) : "")
+            .nguoiLapPhieu(xhPhieuKtclHdr.get().getNguoiTaoId() != null ? userInfoRepository.findById(xhPhieuKtclHdr.get().getNguoiTaoId()).get().getFullName() : "")
+            .ktvBaoQuan("")
+            .lanhDaoCuc(userInfo.isPresent() ? userInfo.get().getFullName() : "")
+            .xhPhieuKnclDtlDto(convertXhPhieuKnclDtlToDto(xhPhieuKtclHdr.get().getKetQuaPhanTich()))
+            .build();
+  }
+
+  private List<XhPhieuKnclDtlDto> convertXhPhieuKnclDtlToDto(List<XhXuatCapPhieuKtClDtl> xhPhieuKtclDtl) {
+    List<XhPhieuKnclDtlDto> xhPhieuKnclDtlDtos = new ArrayList<>();
+    int stt = 1;
+    for (var res : xhPhieuKtclDtl) {
+      var xhPhieuKnclDtlDto = XhPhieuKnclDtlDto.builder()
+              .stt(stt++)
+              .chiTieuCl(res.getTenTchuan() )
+              .chiSoCl(StringUtils.isEmpty(res.getChiSoXuat()) ?res.getChiSoNhap():res.getChiSoXuat())
+              .ketQua(res.getKetQuaPt())
+              .phuongPhap(res.getPhuongPhap())
+              .danhGia("")
+              .build();
+      xhPhieuKnclDtlDtos.add(xhPhieuKnclDtlDto);
+    }
+    return xhPhieuKnclDtlDtos;
   }
 }

@@ -1,8 +1,12 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bienbannhapdaykho;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKhoCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatDtl;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNxDdiem;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKhoCtRepository;
@@ -10,12 +14,14 @@ import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbannhapdaykho.N
 import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.nhapkho.NhBbNhapDayKhoPreview;
 import com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc.QlBienBanNdkCtLtReq;
 import com.tcdt.qlnvhang.request.object.quanlybienbannhapdaykholuongthuc.QlBienBanNhapDayKhoLtReq;
+import com.tcdt.qlnvhang.service.HhQdGiaoNvuNhapxuatService;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.DataUtils;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +33,8 @@ import org.springframework.util.ObjectUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -39,6 +47,9 @@ public class NhBienBanNhapDayKhoServiceImpl extends BaseServiceImpl implements N
 
     @Autowired
     private NhBbNhapDayKhoCtRepository nhBbNhapDayKhoCtRepository;
+
+    @Autowired
+    private HhQdGiaoNvuNhapxuatService hhQdGiaoNvuNhapxuatService;
 
     @Autowired
     private UserInfoRepository userInfoRepository;
@@ -78,7 +89,7 @@ public class NhBienBanNhapDayKhoServiceImpl extends BaseServiceImpl implements N
     }
 
     @Transactional
-    List<NhBbNhapDayKhoCt> saveListChiTiet(Long parentId, List<QlBienBanNdkCtLtReq> chiTietReqs) throws Exception {
+    public List<NhBbNhapDayKhoCt> saveListChiTiet(Long parentId, List<QlBienBanNdkCtLtReq> chiTietReqs) throws Exception {
         nhBbNhapDayKhoCtRepository.deleteByIdBbNhapDayKho(parentId);
         List<NhBbNhapDayKhoCt> chiTiets = new ArrayList<>();
         for (QlBienBanNdkCtLtReq req : chiTietReqs) {
@@ -218,16 +229,39 @@ public class NhBienBanNhapDayKhoServiceImpl extends BaseServiceImpl implements N
     }
 
 
-    @Override
-    public ReportTemplateResponse preview(QlBienBanNhapDayKhoLtReq req) throws Exception {
-        NhBbNhapDayKho bbNhapDayKho = detail(req.getId());
-        if (bbNhapDayKho == null) {
-            throw new Exception("Biên bản không tồn tại.");
+//    @Override
+//    public ReportTemplateResponse preview(QlBienBanNhapDayKhoLtReq req) throws Exception {
+//        NhBbNhapDayKho bbNhapDayKho = detail(req.getId());
+//        if (bbNhapDayKho == null) {
+//            throw new Exception("Biên bản không tồn tại.");
+//        }
+//        NhBbNhapDayKhoPreview object = new NhBbNhapDayKhoPreview();
+//        ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
+//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+//        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+//    }
+public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
+    try {
+        String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
+        String fileTemplate = "nhapdauthau/nhapkho/" + fileName;
+        FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
+        NhBbNhapDayKho detail  = this.detail(DataUtils.safeToLong(body.get("id")));
+        NhQdGiaoNvuNhapxuatHdr qd = hhQdGiaoNvuNhapxuatService.detail(String.valueOf(detail.getIdQdGiaoNvNh()));
+        NhQdGiaoNvuNxDdiem diaDiem = null;
+        if (qd != null && qd.getDtlList() != null) {
+            for (NhQdGiaoNvuNhapxuatDtl dtl : qd.getDtlList()) {
+                if (diaDiem==null && dtl.getMaDvi() != null && dtl.getMaDvi().equals(detail.getMaDvi())) {
+                    diaDiem = dtl.getChildren().stream().filter(item -> item.getId().longValue() == detail.getIdDdiemGiaoNvNh().longValue()).findFirst().orElse(null);
+                }
+            }
         }
-        NhBbNhapDayKhoPreview object = new NhBbNhapDayKhoPreview();
-        ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
-        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, detail ,qd, diaDiem);
+    } catch (IOException e) {
+        e.printStackTrace();
+    } catch (XDocReportException e) {
+        e.printStackTrace();
     }
+    return null;
+}
 }

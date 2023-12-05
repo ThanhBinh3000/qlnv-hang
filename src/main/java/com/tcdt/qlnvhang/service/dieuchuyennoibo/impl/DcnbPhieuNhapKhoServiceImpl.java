@@ -83,7 +83,6 @@ public class DcnbPhieuNhapKhoServiceImpl extends BaseServiceImpl implements Dcnb
         } else {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
-        req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         searchDto = hdrRepository.searchPage(req, pageable);
 
         return searchDto;
@@ -352,7 +351,6 @@ public class DcnbPhieuNhapKhoServiceImpl extends BaseServiceImpl implements Dcnb
     public List<DcnbPhieuNhapKhoHdrListDTO> searchList(DcnbPhieuNhapKhoHdrReq objReq) throws Exception {
         CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
         objReq.setMaDvi(currentUser.getDvql());
-        objReq.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         if (objReq.getIsVatTu() == null) {
             objReq.setIsVatTu(false);
         }
@@ -369,7 +367,6 @@ public class DcnbPhieuNhapKhoServiceImpl extends BaseServiceImpl implements Dcnb
     public List<DcnbPhieuNhapKhoHdrListDTO> searchListChung(DcnbPhieuNhapKhoHdrReq objReq) throws Exception {
         CustomUserDetails currentUser = UserUtils.getUserLoginInfo();
         objReq.setMaDvi(currentUser.getDvql());
-        objReq.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
         if (objReq.getIsVatTu() == null) {
             objReq.setIsVatTu(false);
         }
@@ -409,14 +406,14 @@ public class DcnbPhieuNhapKhoServiceImpl extends BaseServiceImpl implements Dcnb
                 .diaChi(dcnbPhieuNhapKhoHdr.get().getDiaChi())
                 .donViCungCapHang(dcnbPhieuNhapKhoHdr.get().getDonViNguoiGiao())
                 .soQdGiaoVnNhapHang(dcnbPhieuNhapKhoHdr.get().getSoQdDcCuc())
-                .ngayKyQdGiaoNvNhapHang(dcnbPhieuNhapKhoHdr.get().getNgayQdDcCuc().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .ngayKyQdGiaoNvNhapHang(dcnbPhieuNhapKhoHdr.get().getNgayQdDcCuc()==null?"":dcnbPhieuNhapKhoHdr.get().getNgayQdDcCuc().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .donViCapChaCuaTruongDonVi(dcnbPhieuNhapKhoHdr.get().getMaDviCha())
                 .tenNganKho(dcnbPhieuNhapKhoHdr.get().getTenNganKho())
                 .tenLoKho(dcnbPhieuNhapKhoHdr.get().getTenLoKho())
                 .tenNhaKho(dcnbPhieuNhapKhoHdr.get().getTenNhaKho())
                 .tenDiemKho(dcnbPhieuNhapKhoHdr.get().getTenDiemKho())
                 .tenThuKho(dcnbPhieuNhapKhoHdr.get().getTenThuKho())
-                .tgianGiaoNhanHang(dcnbPhieuNhapKhoHdr.get().getTgianGiaoNhanHang().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .tgianGiaoNhanHang(dcnbPhieuNhapKhoHdr.get().getTgianGiaoNhanHang() ==null?"":dcnbPhieuNhapKhoHdr.get().getTgianGiaoNhanHang().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .tongSoLuongBc(dcnbPhieuNhapKhoHdr.get().getTongSoLuongBc())
                 .tongKinhPhiBc(dcnbPhieuNhapKhoHdr.get().getTongKinhPhiBc())
                 .tenNguoiLap(dcnbPhieuNhapKhoHdr.get().getTenNguoiLap())

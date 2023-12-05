@@ -8,6 +8,7 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScDanhSachRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScTongHopDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScTongHopHdrRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.suachua.ScTongHopReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachRequest;
 import com.tcdt.qlnvhang.service.SecurityContextService;
@@ -16,9 +17,11 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.suachuahang.ScTongHopService;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScDanhSachHdr;
+import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScPhieuNhapKhoHdr;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTongHopDtl;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTongHopHdr;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.bag.CollectionBag;
@@ -174,7 +177,36 @@ public class ScTongHopServiceImpl extends BaseServiceImpl implements ScTongHopSe
 
   @Override
   public void export(ScTongHopReq req, HttpServletResponse response) throws Exception {
-
+//    PaggingReq paggingReq = new PaggingReq();
+//    paggingReq.setPage(0);
+//    paggingReq.setLimit(Integer.MAX_VALUE);
+//    req.setPaggingReq(paggingReq);
+//    Page<ScPhieuNhapKhoHdr> page = searchPage(req);
+//    List<ScPhieuNhapKhoHdr> data = page.getContent();
+//
+//    String title = "Danh sách phiếu xuất kho";
+//    String[] rowsName = new String[]{"STT", "Năm xuất", "Số QĐ giao NVXH", "Ngày ký QĐ giao NVXH", "Thời hạn xuất sửa chữa","Thời hạn nhập sửa chữa","Số QĐ SC hàng DTQG","Trích yếu", "Trạng thái QĐ","Trạng thái xuất để SC"};
+//    String fileName = "danh-sach.xlsx";
+//    List<Object[]> dataList = new ArrayList<Object[]>();
+//    Object[] objs = null;
+//    for (int i = 0; i < data.size(); i++) {
+//      ScPhieuNhapKhoHdr dx = data.get(i);
+//      objs = new Object[rowsName.length];
+//      objs[0] = i + 1;
+//      objs[1] = dx.getNam();
+////            objs[2] = dx.getSoQdXh();
+//      objs[3] = dx.getNam();
+////            objs[4] = dx.getNgayXuatKho();
+////            objs[5] = dx.getTenDiemKho()+"/"+dx.getTenNhaKho()+"/"+dx.getTenNganKho()+"/"+dx.getTenLoKho();
+////            objs[6] = dx.getSoPhieuXuatKho();
+////            objs[7] = dx.getNgayXuatKho();
+//      objs[8] = null;
+//      objs[9] = null;
+//      objs[10] = dx.getTenTrangThai();
+//      dataList.add(objs);
+//    }
+//    ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+//    ex.export();
   }
 
   @Override

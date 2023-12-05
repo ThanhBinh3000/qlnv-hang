@@ -6,7 +6,6 @@ import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKh
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBtt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.xuathang.bantructiep.dieuchinh.XhQdDchinhKhBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviDtlRepository;
@@ -31,7 +30,6 @@ import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -51,17 +49,15 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
     @Autowired
     private XhQdPdKhBttHdrRepository xhQdPdKhBttHdrRepository;
     @Autowired
-    private XhTcTtinBttRepository xhTcTtinBttRepository;
-    @Autowired
     private XhQdPdKhBttDtlRepository xhQdPdKhBttDtlRepository;
     @Autowired
     private XhQdPdKhBttDviRepository xhQdPdKhBttDviRepository;
     @Autowired
     private XhQdPdKhBttDviDtlRepository xhQdPdKhBttDviDtlRepository;
     @Autowired
-    private XhHopDongBttHdrRepository xhHopDongBttHdrRepository;
+    private XhTcTtinBttRepository xhTcTtinBttRepository;
     @Autowired
-    private XhQdDchinhKhBttHdrRepository xhQdDchinhKhBttHdrRepository;
+    private XhHopDongBttHdrRepository xhHopDongBttHdrRepository;
     @Autowired
     private FileDinhKemService fileDinhKemService;
 
@@ -69,33 +65,22 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
         String dvql = currentUser.getDvql();
         Integer lastest = 1;
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
-            req.setDvql(dvql.substring(0, 4));
             req.setLastest(lastest);
+            req.setTrangThaiHdr(Contains.BAN_HANH);
         } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
             req.setDvql(dvql);
             req.setLastest(lastest);
+            req.setTrangThaiHdr(Contains.BAN_HANH);
         } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
             req.setLastest(lastest);
+            req.setTrangThaiHdr(Contains.BAN_HANH);
+            req.setMaChiCuc(dvql);
         }
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhQdPdKhBttDtl> search = xhQdPdKhBttDtlRepository.searchPage(req, pageable);
         Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
-        Map<String, XhQdPdKhBttDtl> recordMap = new HashMap<>();
         search.getContent().forEach(data -> {
-            if (recordMap.containsKey(data.getSoDxuat())) {
-                XhQdPdKhBttDtl existingRecord = recordMap.get(data.getSoDxuat());
-                if (data.getIsDieuChinh() && data.getLanDieuChinh() > existingRecord.getLanDieuChinh()) {
-                    recordMap.put(data.getSoDxuat(), data);
-                } else if (!existingRecord.getIsDieuChinh()) {
-                    recordMap.put(data.getSoDxuat(), data);
-                }
-            } else {
-                recordMap.put(data.getSoDxuat(), data);
-            }
-        });
-        List<XhQdPdKhBttDtl> filteredRecords = new ArrayList<>(recordMap.values());
-        filteredRecords.forEach(data -> {
             try {
                 mapDmucDvi.computeIfPresent(data.getMaDvi(), (key, objDonVi) -> {
                     data.setTenDvi(objDonVi.get("tenDvi").toString());
@@ -118,18 +103,14 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
                 if (data.getTrangThaiXh() != null) {
                     data.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiXh()));
                 }
-                if (data.getSoQdDc() != null) {
-                    data.setXhQdDchinhKhBttHdr(xhQdDchinhKhBttHdrRepository.findById(data.getIdHdr()).orElse(null));
-                } else {
-                    data.setXhQdPdKhBttHdr(xhQdPdKhBttHdrRepository.findById(data.getIdHdr()).orElse(null));
-                }
+                data.setXhQdPdKhBttHdr(xhQdPdKhBttHdrRepository.findById(data.getIdHdr()).orElse(null));
                 List<XhQdPdKhBttDvi> listDvi = xhQdPdKhBttDviRepository.findAllByIdDtl(data.getId());
                 data.setChildren(listDvi != null && !listDvi.isEmpty() ? listDvi : Collections.emptyList());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
-        return new PageImpl<>(filteredRecords, pageable, search.getTotalElements());
+        return search;
     }
 
     @Transactional
@@ -141,19 +122,16 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
                 .orElseThrow(() -> new Exception("Bản Ghi không tồn tại"));
         data.setPthucBanTrucTiep(req.getPthucBanTrucTiep());
         data.setDiaDiemChaoGia(req.getDiaDiemChaoGia());
-        data.setNgayMkho(req.getNgayMkho());
-        data.setNgayKthuc(req.getNgayKthuc());
         data.setGhiChuChaoGia(req.getGhiChuChaoGia());
-        data.setThoiHanBan(req.getThoiHanBan());
-        data.setTongGiaTriHdong(req.getTongGiaTriHdong());
         data.setTrangThai(Contains.DANG_THUC_HIEN);
-        if (req.getPthucBanTrucTiep().equals(Contains.UY_QUYEN) && !DataUtils.isNullOrEmpty(req.getFileUyQuyen())) {
-            List<FileDinhKem> fileUyQuyen = fileDinhKemService.saveListFileDinhKem(req.getFileUyQuyen(), data.getId(), XhQdPdKhBttDtl.TABLE_NAME + "_UY_QUYEN");
-            data.setFileUyQuyen(fileUyQuyen);
-        }
-        if (req.getPthucBanTrucTiep().equals(Contains.BAN_LE) && !DataUtils.isNullOrEmpty(req.getFileBanLe())) {
-            List<FileDinhKem> fileBanLe = fileDinhKemService.saveListFileDinhKem(req.getFileBanLe(), data.getId(), XhQdPdKhBttDtl.TABLE_NAME + "_BAN_LE");
-            data.setFileBanLe(fileBanLe);
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKem())) {
+            if (req.getPthucBanTrucTiep().equals(Contains.UY_QUYEN)){
+                List<FileDinhKem> fileUyQuyen = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), data.getId(), XhQdPdKhBttDtl.TABLE_NAME + "_UY_QUYEN");
+                data.setFileDinhKem(fileUyQuyen);
+            }else if (req.getPthucBanTrucTiep().equals(Contains.BAN_LE)) {
+                List<FileDinhKem> fileBanLe = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), data.getId(), XhQdPdKhBttDtl.TABLE_NAME + "_BAN_LE");
+                data.setFileDinhKem(fileBanLe);
+            }
         }
         if (data.getPthucBanTrucTiep().equals(Contains.CHAO_GIA)) {
             this.processChaoGiaData(req, data);
@@ -167,12 +145,10 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
             for (XhQdPdKhBttDviDtlReq dviDtlReq : dviReq.getChildren()) {
                 xhTcTtinBttRepository.deleteAllByIdDviDtl(dviDtlReq.getId());
                 for (XhTcTtinBttReq chaoGiaReq : dviDtlReq.getChildren()) {
-                    String type = "tcTt";
                     XhTcTtinBtt chaoGia = new XhTcTtinBtt();
                     BeanUtils.copyProperties(chaoGiaReq, chaoGia, "id");
                     chaoGia.setId(null);
                     chaoGia.setIdQdPdDtl(data.getId());
-                    chaoGia.setType(type);
                     XhTcTtinBtt create = xhTcTtinBttRepository.save(chaoGia);
                     fileDinhKemService.delete(create.getId(), Collections.singleton(XhTcTtinBtt.TABLE_NAME));
                     if (!DataUtils.isNullObject(chaoGiaReq.getFileDinhKems())) {
@@ -205,26 +181,22 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
             data.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThai()));
             data.setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiHd()));
             data.setTenTrangThaiXh(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiXh()));
-            if (data.getSoQdDc() != null) {
-                data.setXhQdDchinhKhBttHdr(xhQdDchinhKhBttHdrRepository.findById(data.getIdHdr()).orElse(null));
-            } else {
-                data.setXhQdPdKhBttHdr(xhQdPdKhBttHdrRepository.findById(data.getIdHdr()).orElse(null));
-            }
+            data.setXhQdPdKhBttHdr(xhQdPdKhBttHdrRepository.findById(data.getIdHdr()).orElse(null));
             data.setListHopDongBtt(xhHopDongBttHdrRepository.findAllByIdChaoGia(data.getId()));
             if (!DataUtils.isNullObject(data.getPthucBanTrucTiep())) {
                 List<FileDinhKem> fileDinhKems = new ArrayList<>();
                 if (data.getPthucBanTrucTiep().equals(Contains.UY_QUYEN)) {
                     fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBttDtl.TABLE_NAME + "_UY_QUYEN"));
-                    data.setFileUyQuyen(fileDinhKems);
+                    data.setFileDinhKem(fileDinhKems);
                 } else if (data.getPthucBanTrucTiep().equals(Contains.BAN_LE)) {
                     fileDinhKems = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBttDtl.TABLE_NAME + "_BAN_LE"));
-                    data.setFileBanLe(fileDinhKems);
+                    data.setFileDinhKem(fileDinhKems);
                 }
             }
-            List<XhQdPdKhBttDvi> dvi = xhQdPdKhBttDviRepository.findAllByIdDtl(data.getId());
-            dvi.forEach(dataDvi -> {
-                List<XhQdPdKhBttDviDtl> dviDtl = xhQdPdKhBttDviDtlRepository.findAllByIdDvi(dataDvi.getId());
-                dviDtl.forEach(dataDviDtl -> {
+            List<XhQdPdKhBttDvi> listDvi = xhQdPdKhBttDviRepository.findAllByIdDtl(data.getId());
+            listDvi.forEach(dataDvi -> {
+                List<XhQdPdKhBttDviDtl> listDviDtl = xhQdPdKhBttDviDtlRepository.findAllByIdDvi(dataDvi.getId());
+                listDviDtl.forEach(dataDviDtl -> {
                     List<XhTcTtinBtt> toChuc = xhTcTtinBttRepository.findAllByIdDviDtl(dataDviDtl.getId());
                     toChuc.forEach(dataToChuc -> {
                         List<FileDinhKem> fileDinhKems = fileDinhKemService.search(dataToChuc.getId(), Arrays.asList(XhTcTtinBtt.TABLE_NAME));
@@ -238,20 +210,12 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
                     dataDviDtl.setTenLoKho(mapDmucDvi.getOrDefault(dataDviDtl.getMaLoKho(), null));
                     dataDviDtl.setTenLoaiVthh(mapDmucVthh.getOrDefault(dataDviDtl.getLoaiVthh(), null));
                     dataDviDtl.setTenCloaiVthh(mapDmucVthh.getOrDefault(dataDviDtl.getCloaiVthh(), null));
-                    dataDviDtl.setChildren(toChuc.stream().filter(type -> "tcTt".equals(type.getType())).collect(Collectors.toList()));
+                    dataDviDtl.setChildren(toChuc);
                 });
                 dataDvi.setTenDvi(mapDmucDvi.getOrDefault(dataDvi.getMaDvi(), null));
-                if (data.getSoQdDc() != null) {
-                    dataDvi.setChildren(dviDtl.stream().filter(type -> "QdDc".equals(type.getType())).collect(Collectors.toList()));
-                } else {
-                    dataDvi.setChildren(dviDtl.stream().filter(type -> "QdKh".equals(type.getType())).collect(Collectors.toList()));
-                }
+                dataDvi.setChildren(listDviDtl);
             });
-            if (data.getSoQdDc() != null) {
-                data.setChildren(dvi.stream().filter(type -> "QdDc".equals(type.getType())).collect(Collectors.toList()));
-            } else {
-                data.setChildren(dvi.stream().filter(type -> "QdKh".equals(type.getType())).collect(Collectors.toList()));
-            }
+            data.setChildren(listDvi.stream().filter(item -> !item.getIsKetQua()).collect(Collectors.toList()));
         });
         return list;
     }
@@ -385,10 +349,10 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
             objs[2] = dtl.getSoQdPd();
             objs[3] = dtl.getSlHdChuaKy();
             objs[4] = dtl.getSlHdDaKy();
-            objs[5] = dtl.getNgayMkho();
+            objs[5] = dtl.getTgianDkienDen();
             objs[6] = dtl.getTenLoaiVthh();
             objs[7] = dtl.getTenCloaiVthh();
-            objs[8] = dtl.getTongGiaTriHdong();
+            objs[8] = dtl.getThanhTienDuocDuyet();
             objs[9] = dtl.getTenTrangThaiHd();
             objs[10] = dtl.getTenTrangThaiXh();
             dataList.add(objs);
@@ -407,8 +371,7 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
             FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
             XhQdPdKhBttDtl detail = this.detail(DataUtils.safeToLong(body.get("id")));
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         } catch (XDocReportException e) {
             e.printStackTrace();

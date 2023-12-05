@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet;
 
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.dieuchinh.XhQdDchinhKhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import lombok.Data;
@@ -23,6 +22,7 @@ public class XhQdPdKhBttDtl implements Serializable {
     @SequenceGenerator(sequenceName = XhQdPdKhBttDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhQdPdKhBttDtl.TABLE_NAME + "_SEQ")
     private Long id;
     private Long idHdr;
+    private Integer namKh;
     private String maDvi;
     private String diaChi;
     private Long idDxHdr;
@@ -33,6 +33,7 @@ public class XhQdPdKhBttDtl implements Serializable {
     private Integer slDviTsan;
     private BigDecimal tongSoLuong;
     private BigDecimal thanhTien;
+    private BigDecimal thanhTienDuocDuyet;
     private String donViTinh;
     private LocalDate tgianDkienTu;
     private LocalDate tgianDkienDen;
@@ -50,6 +51,7 @@ public class XhQdPdKhBttDtl implements Serializable {
 
     // thông tin chào giá
     private String soQdPd;
+    private String soQdDc;
     private String pthucBanTrucTiep;
     private LocalDate ngayNhanCgia;
     private Long idQdKq;
@@ -57,13 +59,10 @@ public class XhQdPdKhBttDtl implements Serializable {
     private String diaDiemChaoGia;
     private String loaiHinhNx;
     private String kieuNx;
-    private LocalDate ngayMkho;
-    private LocalDate ngayKthuc;
     private String loaiVthh;
     private String cloaiVthh;
     private String moTaHangHoa;
     private String ghiChuChaoGia;
-    private LocalDate thoiHanBan;
     private String trangThai;
     private Long idQdNv;
     private String soQdNv;
@@ -71,14 +70,8 @@ public class XhQdPdKhBttDtl implements Serializable {
     private String trangThaiXh;
     private Integer slHdDaKy;
     private Integer slHdChuaKy;
-    private BigDecimal tongGiaTriHdong;
     private BigDecimal tongSlDaKyHdong;
     private BigDecimal tongSlChuaKyHdong;
-    private Integer namKh;
-    private Boolean isDieuChinh;
-    private Boolean lastest;
-    private String soQdDc;
-    private Integer lanDieuChinh;
     @Transient
     private String tenLoaiHinhNx;
     @Transient
@@ -98,11 +91,7 @@ public class XhQdPdKhBttDtl implements Serializable {
     @Transient
     private XhQdPdKhBttHdr xhQdPdKhBttHdr;
     @Transient
-    private XhQdDchinhKhBttHdr xhQdDchinhKhBttHdr;
-    @Transient
-    private List<FileDinhKem> fileUyQuyen = new ArrayList<>();
-    @Transient
-    private List<FileDinhKem> fileBanLe = new ArrayList<>();
+    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
     @Transient
     private List<XhHopDongBttHdr> listHopDongBtt;
 }

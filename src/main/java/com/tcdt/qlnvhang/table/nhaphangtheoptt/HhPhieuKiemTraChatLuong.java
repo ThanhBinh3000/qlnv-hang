@@ -95,5 +95,11 @@ public class HhPhieuKiemTraChatLuong implements Serializable {
 
     @Transient
     private List<HhPhieuNhapKhoHdr> phieuNhapKhoHdr;
+    @Transient
+    private Integer ngay;
+    @Transient
+    private Integer thang;
+    @Transient
+    private Integer nam;
 
 }

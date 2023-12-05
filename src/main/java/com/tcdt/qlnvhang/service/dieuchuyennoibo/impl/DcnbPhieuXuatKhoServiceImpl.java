@@ -66,7 +66,6 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
         } else {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
-        req.setTypeQd(Contains.DIEU_CHUYEN);
         searchDto = hdrRepository.searchPage(req, pageable);
         return searchDto;
     }
@@ -245,7 +244,6 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
         List<DcnbPhieuXuatKhoHdrListDTO> searchDto = null;
-        req.setTypeQd(Contains.DIEU_CHUYEN);
         if (req.getIsVatTu() == null) {
             req.setIsVatTu(false);
         }
@@ -262,7 +260,6 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
         String dvql = currentUser.getDvql();
         req.setMaDvi(dvql);
         List<DcnbPhieuXuatKhoHdrListDTO> searchDto = null;
-        req.setTypeQd(Contains.DIEU_CHUYEN);
         if (req.getIsVatTu() == null) {
             req.setIsVatTu(false);
         }
@@ -290,7 +287,7 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
             tongKinhPhiDcTt = tongKinhPhiDcTt.add(res.getKinhPhiDcTt());
         }
         return DcnbPhieuXuatKhoHdrPreview.builder()
-                .maDvi(dcnbPhieuXuatKhoHdr.get().getMaDvi())
+                .maDvi(dcnbPhieuXuatKhoHdr.get().getTenMaDvi())
                 .maQhns(dcnbPhieuXuatKhoHdr.get().getMaQhns())
                 .ngayNhap(dcnbPhieuXuatKhoHdr.get().getNgayTaoPhieu().getDayOfMonth())
                 .thangNhap(dcnbPhieuXuatKhoHdr.get().getNgayTaoPhieu().getMonth().getValue())

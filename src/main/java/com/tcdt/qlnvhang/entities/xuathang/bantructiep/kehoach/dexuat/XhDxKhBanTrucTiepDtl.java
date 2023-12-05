@@ -26,13 +26,13 @@ public class XhDxKhBanTrucTiepDtl implements Serializable {
     private BigDecimal soLuongChiTieu;
     private BigDecimal soLuongKhDaDuyet;
     private String donViTinh;
+    private BigDecimal thanhTien;
     @Transient
     private String tenDvi;
     @Transient
-    private List<XhDxKhBanTrucTiepDdiem> children = new ArrayList<>();
-    //Print preview
-    @Transient
     private BigDecimal donGiaDeXuat;
     @Transient
-    private BigDecimal thanhTien;
+    private BigDecimal tienDuocDuyet;
+    @Transient
+    private List<XhDxKhBanTrucTiepDdiem> children = new ArrayList<>();
 }

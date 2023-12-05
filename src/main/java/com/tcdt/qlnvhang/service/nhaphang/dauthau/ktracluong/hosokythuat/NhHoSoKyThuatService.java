@@ -29,5 +29,5 @@ public interface NhHoSoKyThuatService extends BaseService<NhHoSoKyThuat,NhHoSoKy
 //    Integer getSo() throws Exception;
 //
 //    BaseNhapHangCount count(Set<String> maDvis) throws Exception;
-ReportTemplateResponse preview(NhHoSoKyThuatReq req) throws Exception;
+    ReportTemplateResponse preview(NhHoSoKyThuatReq req) throws Exception;
 }

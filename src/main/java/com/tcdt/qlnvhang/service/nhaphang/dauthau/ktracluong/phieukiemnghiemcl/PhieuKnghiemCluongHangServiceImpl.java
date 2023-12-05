@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.phieuknghiemcluonghang.KquaKnghiemRepository;
 import com.tcdt.qlnvhang.repository.phieuknghiemcluonghang.PhieuKnghiemCluongHangRepository;
+import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.kiemtrachatluong.PhieuKnghiemCluongHangPreview;
 import com.tcdt.qlnvhang.request.object.phieuknghiemcluonghang.KquaKnghiemReq;
 import com.tcdt.qlnvhang.request.object.phieuknghiemcluonghang.PhieuKnghiemCluongHangReq;
 import com.tcdt.qlnvhang.request.search.PhieuKnghiemCluongHangSearchReq;
@@ -93,11 +94,7 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
 
         for (KquaKnghiemReq kquaReq : req.getKquaKnghiem()) {
             KquaKnghiem kq = new KquaKnghiem();
-//            BeanUtils.copyProperties(kquaReq, kq, "id");
-            kq.setChiSoNhap(kquaReq.getMucYeuCauNhap());
-            kq.setPhuongPhap(kquaReq.getPhuongPhapXd());
-            kq.setTenTchuan(kquaReq.getTenChiTieu());
-            kq.setMaTchuan(kquaReq.getMaChiTieu());
+            BeanUtils.copyProperties(kquaReq, kq, "id");
             kq.setPhieuKnghiemId(id);
             kquaKnghiemRepository.save(kq);
         }
@@ -202,7 +199,16 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
         ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
+        PhieuKnghiemCluongHangPreview preview = new PhieuKnghiemCluongHangPreview();
+        BeanUtils.copyProperties(optional, preview);
+        preview.setNgayNhapDayKho(convertDate(optional.getNgayNhapDayKho()));
+        preview.setNgayLayMau(convertDate(optional.getNgayLayMau()));
+        preview.setNgayKnghiem(convertDate(optional.getNgayKnghiem()));
+        String[] parts = Objects.requireNonNull(convertDate(optional.getNgayTao())).split("/");
+        preview.setNgayTao(parts[0]);
+        preview.setThangTao(parts[1]);
+        preview.setNamTao(parts[2]);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, preview);
     }
 
 

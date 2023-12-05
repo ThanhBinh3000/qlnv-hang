@@ -48,6 +48,8 @@ public class XhBangKeBtt implements Serializable {
     private String tenLoaiVthh;
     @Transient
     private String tenCloaiVthh;
+    @Transient
+    private String tenNguoiTao;
 
     @JsonIgnore
     @Transient

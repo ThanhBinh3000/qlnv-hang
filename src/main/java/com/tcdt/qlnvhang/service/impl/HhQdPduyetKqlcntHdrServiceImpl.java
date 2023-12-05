@@ -390,11 +390,13 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 	}
 
 	@Override
+	@Transactional
 	public void delete(IdSearchReq idSearchReq) throws Exception {
 		if(!StringUtils.isEmpty(idSearchReq.getId())){
 			fileDinhKemService.delete(idSearchReq.getId(), Lists.newArrayList(HhQdPduyetKqlcntHdr.TABLE_NAME + "_CAN_CU"));
 			fileDinhKemService.delete(idSearchReq.getId(), Lists.newArrayList(HhQdPduyetKqlcntHdr.TABLE_NAME));
 			hhQdPduyetKqlcntHdrRepository.deleteById(idSearchReq.getId());
+			hhQdPduyetKqlcntDtlRepository.deleteAllByIdQdPdHdr(idSearchReq.getId());
 		}else{
 			throw new Exception(
 					"Xóa thất bại, không tìm thấy dữ liệu");
@@ -402,10 +404,12 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 	}
 
 	@Override
+	@Transactional
 	public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
 		if (StringUtils.isEmpty(idSearchReq.getIds()))
 			throw new Exception("Xoá thất bại, không tìm thấy dữ liệu");
 		List<HhQdPduyetKqlcntHdr> listHdr = hhQdPduyetKqlcntHdrRepository.findAllByIdIn(idSearchReq.getIds());
+		hhQdPduyetKqlcntDtlRepository.deleteAllByIdQdPdHdrIn(idSearchReq.getIds());
 		hhQdPduyetKqlcntHdrRepository.deleteAll(listHdr);
 	}
 

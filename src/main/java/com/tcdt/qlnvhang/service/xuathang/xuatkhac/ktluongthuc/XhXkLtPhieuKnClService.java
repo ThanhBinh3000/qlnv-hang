@@ -20,6 +20,7 @@ import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktluongthuc.XhXkLtPhieuKnClHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuKdclHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhBbLayMauHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -36,6 +37,7 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
@@ -82,7 +84,7 @@ public class XhXkLtPhieuKnClService extends BaseServiceImpl {
     data.setTrangThai(Contains.DUTHAO);
     data.getPhieuKnClDtl().forEach(s -> s.setPhieuKnClHdr(data));
     XhXkLtPhieuKnClHdr created = xhXkLtPhieuKnClRepository.save(data);
-    this.updateTongHopDtl(created, false);
+    this.updateTongHopDtl(created,Contains.DANG_THUC_HIEN, false);
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkLtPhieuKnClHdr.TABLE_NAME);
     created.setFileDinhKems(fileDinhKems);
     return created;
@@ -110,7 +112,7 @@ public class XhXkLtPhieuKnClService extends BaseServiceImpl {
       s.setPhieuKnClHdr(data);
     });
     XhXkLtPhieuKnClHdr created = xhXkLtPhieuKnClRepository.save(data);
-    this.updateTongHopDtl(created, false);
+    this.updateTongHopDtl(created,Contains.DANG_THUC_HIEN, false);
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhXkLtPhieuKnClHdr.TABLE_NAME));
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkLtPhieuKnClHdr.TABLE_NAME);
     created.setFileDinhKems(fileDinhKems);
@@ -149,7 +151,7 @@ public class XhXkLtPhieuKnClService extends BaseServiceImpl {
     }
     XhXkLtPhieuKnClHdr data = optional.get();
     fileDinhKemService.delete(data.getId(), Lists.newArrayList(XhXkLtPhieuKnClHdr.TABLE_NAME));
-    this.updateTongHopDtl(data, true);
+    this.updateTongHopDtl(data,Contains.CHUA_THUC_HIEN, true);
     xhXkLtPhieuKnClRepository.delete(data);
   }
 
@@ -183,6 +185,7 @@ public class XhXkLtPhieuKnClService extends BaseServiceImpl {
       case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
         optional.get().setNguoiGduyetId(currentUser.getUser().getId());
         optional.get().setNgayGduyet(LocalDate.now());
+        optional.get().setTruongPhong(currentUser.getUser().getFullName());
         break;
       case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
       case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
@@ -193,13 +196,14 @@ public class XhXkLtPhieuKnClService extends BaseServiceImpl {
       case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
+        optional.get().setLanhDaoCuc(currentUser.getUser().getFullName());
         break;
       default:
         throw new Exception("Phê duyệt không thành công");
     }
     optional.get().setTrangThai(statusReq.getTrangThai());
     XhXkLtPhieuKnClHdr created = xhXkLtPhieuKnClRepository.save(optional.get());
-    this.updateTongHopDtl(created, false);
+    this.updateTongHopDtl(created,Contains.DA_HOAN_THANH, false);
     return created;
   }
 
@@ -240,7 +244,7 @@ public class XhXkLtPhieuKnClService extends BaseServiceImpl {
     ex.export();
   }
 
-  public void updateTongHopDtl(XhXkLtPhieuKnClHdr phieuKnCl, boolean xoa) {
+  public void updateTongHopDtl(XhXkLtPhieuKnClHdr phieuKnCl,String trangThai, boolean xoa) {
     if (!DataUtils.isNullObject(phieuKnCl.getIdTongHop())) {
       Optional<XhXkTongHopHdr> listTongHop = xhXkTongHopRepository.findById(phieuKnCl.getIdTongHop());
       if (listTongHop.isPresent()) {
@@ -251,15 +255,19 @@ public class XhXkLtPhieuKnClService extends BaseServiceImpl {
             if (xoa) {
               f.setIdPhieuKnCl(null);
               f.setSoPhieuKnCl(null);
-              f.setNgayLayMau(null);
+              f.setNgayKnMau(null);
+              f.setTrangThaiKtCl(trangThai);
               f.setTrangThaiKnCl(null);
               f.setKqThamDinh(null);
+              f.setIdNguoiTaoPhieu(null);
             } else {
               f.setIdPhieuKnCl(phieuKnCl.getId());
               f.setSoPhieuKnCl(phieuKnCl.getSoPhieu());
               f.setNgayKnMau(phieuKnCl.getNgayKnMau());
+              f.setTrangThaiKtCl(trangThai);
               f.setTrangThaiKnCl(phieuKnCl.getTrangThai());
               f.setKqThamDinh(phieuKnCl.getKqThamDinh());
+              f.setIdNguoiTaoPhieu(phieuKnCl.getNguoiTaoId());
             }
 
           }
@@ -271,12 +279,9 @@ public class XhXkLtPhieuKnClService extends BaseServiceImpl {
 
   public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
     try {
-      ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
-      reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
-      ReportTemplate model = findByTenFile(reportTemplateRequest);
-      byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-      ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-//            FileInputStream inputStream = new FileInputStream("src/main/resources/reports/xuatcuutrovientro/Phiếu kiểm nghiệm chất lượng.docx");
+      String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
+      String fileTemplate = "xuatkhac/luongthuc/" + fileName;
+      FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
       List<XhXkLtPhieuKnClHdr>  detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
       return docxToPdfConverter.convertDocxToPdf(inputStream, detail.get(0));
     } catch (IOException e) {

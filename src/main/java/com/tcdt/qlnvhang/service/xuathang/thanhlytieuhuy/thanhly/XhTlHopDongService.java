@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlHopDongHdrReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBienBanDayKhoHdr;
@@ -42,6 +43,8 @@ public class XhTlHopDongService extends BaseServiceImpl {
     private XhTlToChucDtlRepository xhTlToChucDtlRepository;
     @Autowired
     private XhTlDanhSachService xhTlDanhSachService;
+    @Autowired
+    private FileDinhKemService fileDinhKemService;
 
     public Page<XhTlHopDongHdr> searchPage(CustomUserDetails currentUser, XhTlHopDongHdrReq req) throws Exception {
         String dvql = currentUser.getDvql();
@@ -96,6 +99,8 @@ public class XhTlHopDongService extends BaseServiceImpl {
         data.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
         XhTlHopDongHdr created = xhTlHopDongHdrRepository.save(data);
         this.saveDetail(req,data.getId());
+        fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(),created.getId(),XhTlHopDongHdr.FILE_DINH_KEM);
+        fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(),created.getId(),XhTlHopDongHdr.FILE_CAN_CU);
         return created;
     }
 
@@ -148,6 +153,9 @@ public class XhTlHopDongService extends BaseServiceImpl {
         BeanUtils.copyProperties(req, data, "id", "maDvi", "trangThaiXh");
         XhTlHopDongHdr created = xhTlHopDongHdrRepository.save(data);
         this.saveDetail(req,data.getId());
+        fileDinhKemService.delete(created.getId(),Arrays.asList(XhTlHopDongHdr.FILE_DINH_KEM,XhTlHopDongHdr.FILE_CAN_CU));
+        fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(),created.getId(),XhTlHopDongHdr.FILE_DINH_KEM);
+        fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(),created.getId(),XhTlHopDongHdr.FILE_CAN_CU);
         return created;
     }
 
@@ -178,8 +186,11 @@ public class XhTlHopDongService extends BaseServiceImpl {
                     throw new RuntimeException(e);
                 }
             });
+            data.setFileCanCu(fileDinhKemService.search(data.getId(),XhTlHopDongHdr.FILE_CAN_CU));
+            data.setFileDinhKem(fileDinhKemService.search(data.getId(),XhTlHopDongHdr.FILE_DINH_KEM));
             data.setChildren(allByIdHdr);
         });
+
         return allById;
     }
 
@@ -196,7 +207,7 @@ public class XhTlHopDongService extends BaseServiceImpl {
             item.setIdHopDongTl(null);
             xhTlToChucDtlRepository.save(item);
         });
-
+        fileDinhKemService.delete(idSearchReq.getId(),Arrays.asList(XhTlHopDongHdr.FILE_DINH_KEM,XhTlHopDongHdr.FILE_CAN_CU));
         xhTlHopDongHdrRepository.delete(optional.get());
         dtlRepository.deleteAllByIdHdr(optional.get().getId());
     }

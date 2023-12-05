@@ -107,10 +107,10 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl {
         }
         XhBbLayMau data = xhBbLayMauRepository.findById(req.getId())
                 .orElseThrow(() -> new Exception("Không tìm thấy dữ liệu cần sửa"));
-        if (xhBbLayMauRepository.existsBySoBbLayMauAndIdNot(req.getSoBbLayMau(), req.getId())) {
+        if (!StringUtils.isEmpty(req.getSoBbLayMau()) && xhBbLayMauRepository.existsBySoBbLayMauAndIdNot(req.getSoBbLayMau(), req.getId())) {
             throw new Exception("Số biên bản lấy mẫu " + req.getSoBbLayMau() + " đã tồn tại");
         }
-        BeanUtils.copyProperties(req, data, "id", "maDvi");
+        BeanUtils.copyProperties(req, data, "id", "maDvi", "idKtvBaoQuan");
         data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(currentUser.getUser().getId());
         XhBbLayMau update = xhBbLayMauRepository.save(data);
@@ -231,11 +231,21 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl {
         req.getPaggingReq().setLimit(Integer.MAX_VALUE);
         Page<XhBbLayMau> page = this.searchPage(currentUser, req);
         List<XhBbLayMau> data = page.getContent();
-        String title = "Danh sách biên bản lấy mẫu/bàn giao mẫu";
-        String[] rowsName = new String[]{"STT", "Số QĐ giao NVXH", "Năm KH", "Thời hạn XH", "Điểm kho",
-                "Ngăn/Lô kho", "Số BB LM/BGM", "Ngày lấy mẫu", "Số BB tịnh kho", "Ngày xuất dốc kho",
-                "Số BB hao dôi", "Trạng thái"};
-        String fileName = "danh-sach-bien-ban-lay-mau/ban-giao-mau.xlsx";
+        String title = "Danh sách biên bản lấy mẫu/bàn giao mẫu hàng DTQG";
+        String[] rowsName;
+        boolean isVattuType = data.stream().anyMatch(item -> item.getLoaiVthh().startsWith(Contains.LOAI_VTHH_VATTU));
+        String[] commonRowsName = new String[]{"STT", "Số QĐ giao NVXH", "Năm KH", "Thời hạn XH", "Điểm kho", "Ngăn/Lô kho", "Số BB LM/BGM", "Ngày lấy mẫu", "Số BB tịnh kho", "Ngày xuất dốc kho"};
+        if (isVattuType) {
+            String[] vattuRowsName = Arrays.copyOf(commonRowsName, commonRowsName.length + 1);
+            vattuRowsName[10] = "Trạng thái";
+            rowsName = vattuRowsName;
+        } else {
+            String[] nonVattuRowsName = Arrays.copyOf(commonRowsName, commonRowsName.length + 2);
+            nonVattuRowsName[10] = "Số BB hao dôi";
+            nonVattuRowsName[11] = "Trạng thái";
+            rowsName = nonVattuRowsName;
+        }
+        String fileName = "danh-sach-bien-ban-lay-mau/ban-giao-mau-hang-DTQG.xlsx";
         List<Object[]> dataList = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
             XhBbLayMau hdr = data.get(i);
@@ -243,15 +253,19 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl {
             objs[0] = i;
             objs[1] = hdr.getSoQdNv();
             objs[2] = hdr.getNam();
-            objs[3] = hdr.getNgayKyQdNv();
+            objs[3] = hdr.getTgianGiaoHang();
             objs[4] = hdr.getTenDiemKho();
-            objs[5] = hdr.getTenLoKho();
+            objs[5] = hdr.getTenNganLoKho();
             objs[6] = hdr.getSoBbLayMau();
             objs[7] = hdr.getNgayLayMau();
             objs[8] = hdr.getSoBbTinhKho();
             objs[9] = hdr.getNgayXuatDocKho();
-            objs[10] = hdr.getSoBbHaoDoi();
-            objs[11] = hdr.getTenTrangThai();
+            if (isVattuType) {
+                objs[10] = hdr.getTenTrangThai();
+            } else {
+                objs[10] = hdr.getSoBbHaoDoi();
+                objs[11] = hdr.getTenTrangThai();
+            }
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
@@ -263,13 +277,10 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl {
             throw new Exception("Bad request.");
         }
         try {
-            String templatePath = baseReportFolder + "/bandaugia/";
+            String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "bandaugia/" + templatePath;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
             XhBbLayMau detail = this.detail(DataUtils.safeToLong(body.get("id")));
-            if (detail.getLoaiVthh().startsWith("02")) {
-                templatePath += "Biên bản lấy mẫu bàn giao mẫu vật tư.docx";
-            } else {
-                templatePath += "Biên bản lấy mẫu bàn giao mẫu lương thực.docx";
-            }
             Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
             xhQdGiaoNvXhRepository.findById(detail.getIdQdNv())
                     .ifPresent(xhQdGiaoNvXh -> detail.setMaDviCha(xhQdGiaoNvXh.getMaDvi()));
@@ -289,7 +300,6 @@ public class XhBbLayMauServiceImpl extends BaseServiceImpl {
                 }
                 detail.setChildren(listDtl.stream().filter(type -> "NLQ".equals(type.getType())).collect(Collectors.toList()));
             }
-            FileInputStream inputStream = new FileInputStream(templatePath);
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
         } catch (IOException e) {
             e.printStackTrace();

@@ -255,7 +255,7 @@ public class XhXkVtBhBaoCaoKqService extends BaseServiceImpl {
   public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
     try {
       String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
-      String fileTemplate = "xuatcuutrovientro/" + fileName;
+      String fileTemplate = "xuatkhac/" + fileName;
       FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
       XhXkVtBhBaoCaoKqHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
       return docxToPdfConverter.convertDocxToPdf(inputStream, detail);

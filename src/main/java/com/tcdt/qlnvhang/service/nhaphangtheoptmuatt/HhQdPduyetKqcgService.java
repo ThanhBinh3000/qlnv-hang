@@ -222,7 +222,7 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
                     hopDong.setSoLuong(save.getSoLuong());
                     hopDong.setDonGiaGomThue(save.getDonGia());
                     hopDong.setThanhTien(save.getThanhTien());
-                    hopDong.setTrangThai(Contains.DUTHAO);
+//                    hopDong.setTrangThai(Contains.DUTHAO);
                     hopDong.setIdQdKq(req.getId());
                     hopDong.setSoQdKq(req.getSoQdKq());
                     hopDongMttHdrRepository.save(hopDong);
@@ -421,7 +421,24 @@ public class HhQdPduyetKqcgService extends BaseServiceImpl {
         ReportTemplate model = findByTenFile(hhQdPduyetKqcgHdrReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        HhQdPduyetKqcgPreview object = new HhQdPduyetKqcgPreview();
-        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+        BigDecimal tongThanhTien = BigDecimal.ZERO;
+        BigDecimal tongThanhTienCg = BigDecimal.ZERO;
+        BigDecimal tongSoLuong = BigDecimal.ZERO;
+        for (HhQdPheduyetKqMttSLDD sldd : hhQdPduyetKqcgHdr.getDanhSachCtiet()) {
+            sldd.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(sldd.getTongThanhTien()));
+            tongSoLuong = tongSoLuong.add(sldd.getTongSoLuong());
+            tongThanhTien = tongThanhTien.add(sldd.getTongThanhTien());
+            for (HhChiTietKqTTinChaoGia hhChiTietKqTTinChaoGia : sldd.getListChaoGia()) {
+                hhChiTietKqTTinChaoGia.setThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(hhChiTietKqTTinChaoGia.getDonGia().multiply(hhChiTietKqTTinChaoGia.getSoLuong())));
+                tongThanhTienCg = tongThanhTienCg.add(hhChiTietKqTTinChaoGia.getDonGia().multiply(hhChiTietKqTTinChaoGia.getSoLuong()));
+            }
+        }
+        hhQdPduyetKqcgHdr.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(tongThanhTien));
+        hhQdPduyetKqcgHdr.setTongThanhTienCg(docxToPdfConverter.convertBigDecimalToStr(tongThanhTienCg));
+        hhQdPduyetKqcgHdr.setTongSoLuong(tongSoLuong);
+        hhQdPduyetKqcgHdr.setTenDvi(hhQdPduyetKqcgHdr.getTenDvi().toUpperCase());
+        hhQdPduyetKqcgHdr.setTenCloaiVthh(hhQdPduyetKqcgHdr.getTenCloaiVthh().toUpperCase());
+
+        return docxToPdfConverter.convertDocxToPdf(inputStream, hhQdPduyetKqcgHdr);
     }
 }

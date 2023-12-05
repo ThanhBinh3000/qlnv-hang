@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.phieunhapkho;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangke.NhBangKeVt;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoCt;
@@ -17,6 +18,7 @@ import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhie
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatDtlRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNxDdiemRepository;
+import com.tcdt.qlnvhang.repository.vattu.bangke.NhBangKeVtRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.nhapkho.NhPhieuNhapKhoPreview;
 import com.tcdt.qlnvhang.request.object.quanlyphieunhapkholuongthuc.NhPhieuNhapKhoCtReq;
@@ -31,10 +33,12 @@ import com.tcdt.qlnvhang.table.HhQdPduyetKqlcntHdr;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhBbLayMauHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +54,8 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -91,6 +97,9 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
+
+    @Autowired
+    private NhBangKeVtRepository bangKeVtRepository;
 
     @Override
     public Page<NhQdGiaoNvuNhapxuatHdr> timKiem(NhPhieuNhapKhoReq req) throws Exception {
@@ -202,7 +211,7 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
     }
 
     @Transactional()
-    void saveCtiet(Long idHdr , NhPhieuNhapKhoReq req){
+    public void saveCtiet(Long idHdr, NhPhieuNhapKhoReq req){
         nhPhieuNhapKhoCtRepository.deleteAllByIdPhieuNkHdr(idHdr);
         if(!ObjectUtils.isEmpty(req.getHangHoaList())){
             for(NhPhieuNhapKhoCtReq obj : req.getHangHoaList()){
@@ -261,6 +270,10 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
         NhBangKeCanHang bySoPhieuNhapKho = nhBangKeCanHangRepository.findBySoPhieuNhapKho(data.getSoPhieuNhapKho());
         if(!ObjectUtils.isEmpty(bySoPhieuNhapKho)){
             data.setBangKeCanHang(bySoPhieuNhapKho);
+        }
+        NhBangKeVt bangKeVt = bangKeVtRepository.findBySoPhieuNhapKho(data.getSoPhieuNhapKho());
+        if(!ObjectUtils.isEmpty(bangKeVt)){
+            data.setBangKeVt(bangKeVt);
         }
         return data;
     }
@@ -384,24 +397,38 @@ public class NhPhieuNhapKhoServiceImpl extends BaseServiceImpl implements NhPhie
     }
 
     @Override
-    public ReportTemplateResponse preview(NhPhieuNhapKhoReq req) throws Exception {
-        NhPhieuNhapKho nhPhieuNhapKho = detail(req.getId());
-        if (nhPhieuNhapKho == null) {
-            throw new Exception("Phiếu nhập kho không tồn tại.");
+//    public ReportTemplateResponse preview(NhPhieuNhapKhoReq req) throws Exception {
+//        NhPhieuNhapKho nhPhieuNhapKho = detail(req.getId());
+//        if (nhPhieuNhapKho == null) {
+//            throw new Exception("Phiếu nhập kho không tồn tại.");
+//        }
+//        NhPhieuNhapKhoPreview object = new NhPhieuNhapKhoPreview();
+//        if (req.getLoaiVthh().startsWith("02")) {
+//
+//        } else {
+//            for (NhPhieuNhapKhoCt nhPhieuNhapKhoCt : nhPhieuNhapKho.getHangHoaList()) {
+//                nhPhieuNhapKhoCt.setThanhTien(nhPhieuNhapKhoCt.getDonGia().multiply(nhPhieuNhapKhoCt.getSoLuongThucNhap()));
+//            }
+//            BeanUtils.copyProperties(nhPhieuNhapKho, object);
+//        }
+//        ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
+//        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+//        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+//        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+//    }
+    public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
+        try {
+            String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "nhapdauthau/nhapkho/" + fileName;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
+            NhPhieuNhapKho detail  = this.detail(DataUtils.safeToLong(body.get("id")));
+            return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
+            e.printStackTrace();
         }
-        NhPhieuNhapKhoPreview object = new NhPhieuNhapKhoPreview();
-        if (req.getLoaiVthh().startsWith("02")) {
-
-        } else {
-            for (NhPhieuNhapKhoCt nhPhieuNhapKhoCt : nhPhieuNhapKho.getHangHoaList()) {
-                nhPhieuNhapKhoCt.setThanhTien(nhPhieuNhapKhoCt.getDonGia().multiply(nhPhieuNhapKhoCt.getSoLuongThucNhap()));
-            }
-            BeanUtils.copyProperties(nhPhieuNhapKho, object);
-        }
-        ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
-        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-        return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+        return null;
     }
 
     List<NhPhieuNhapKho> setDetailList(List<NhPhieuNhapKho> list){

@@ -9,6 +9,7 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.object.HhQdKhlcntHdrReq;
 import com.tcdt.qlnvhang.request.search.HhDthauSearchReq;
 import com.tcdt.qlnvhang.request.search.HhQdKhlcntSearchReq;
+import com.tcdt.qlnvhang.response.dauthauvattu.ChiTietGoiThauRes;
 import com.tcdt.qlnvhang.table.HhDthauNthauDuthau;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtl;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
@@ -35,7 +36,7 @@ public interface HhDauThauService {
 //	@Transactional(rollbackOn = Exception.class)
 //	HhDthau update(HhDthauReq objReq) throws Exception;
 //
-    List<HhDthauNthauDuthau> detail(String ids,String loaiVthh, String type) throws Exception;
+	ChiTietGoiThauRes detail(String ids, String loaiVthh, String type) throws Exception;
     List<HhDthauNthauDuthau> getDanhSachNhaThau() throws Exception;
 //
 ////	Page<HhDthau2> colection(HhDthauSearchReq objReq, HttpServletRequest req) throws Exception;

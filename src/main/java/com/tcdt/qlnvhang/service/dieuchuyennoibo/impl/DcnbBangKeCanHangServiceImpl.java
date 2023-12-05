@@ -117,10 +117,8 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         if ("00".equals(req.getType())) { // kiểu xuất
-            req.setTypeQd(Contains.DIEU_CHUYEN);
             searchDto = dcnbBangKeCanHangHdrRepository.searchPageXuat(req, pageable);
         } else if ("01".equals(req.getType())) { // kiểu nhan
-            req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
             searchDto = dcnbBangKeCanHangHdrRepository.searchPageNhan(req, pageable);
         }
         return searchDto;
@@ -146,7 +144,7 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
         if("00".equals(objReq.getType())){
             Optional<DcnbPhieuXuatKhoHdr> phieuXuatKhoHdr = dcnbPhieuXuatKhoHdrRepository.findById(objReq.getPhieuXuatKhoId());
             if(phieuXuatKhoHdr.isPresent()){
-                if(!objReq.getPhieuNhapKhoId().equals(optional.get().getPhieuNhapKhoId())){
+                if(!objReq.getPhieuXuatKhoId().equals(optional.get().getPhieuNhapKhoId())){
                     if(phieuXuatKhoHdr.get().getBangKeVtId()!= null){
                         throw new Exception("Phiếu nhập đã có bảng cân hàng!");
                     }
@@ -374,11 +372,9 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
             req.setDsLoaiHang(Arrays.asList("LT", "M"));
         }
         if ("00".equals(req.getType())) { // kiểu xuất
-            req.setTypeQd(Contains.DIEU_CHUYEN);
             searchDto = dcnbBangKeCanHangHdrRepository.searchListXuat(req);
         }
         if ("01".equals(req.getType())) { // kiểu nhan
-            req.setTypeQd(Contains.NHAN_DIEU_CHUYEN);
             searchDto = dcnbBangKeCanHangHdrRepository.searchListNhan(req);
         }
         return searchDto;
@@ -408,7 +404,7 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
                 .chungLoaiHangHoa(dcnbBangKeCanHangHdr.get().getCloaiVthh())
                 .tenDonViTinh(dcnbBangKeCanHangHdr.get().getDonViTinh())
                 .tenNguoiGiaoHang(dcnbBangKeCanHangHdr.get().getTenNguoiGiaoHang())
-                .thoiGianGiaoNhan(dcnbBangKeCanHangHdr.get().getThoiGianGiaoNhan().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .thoiGianGiaoNhan(dcnbBangKeCanHangHdr.get().getThoiGianGiaoNhan() == null ?"":dcnbBangKeCanHangHdr.get().getThoiGianGiaoNhan().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .nguoiGiamSat("")
                 .tongTrongLuongCabaoBi(dcnbBangKeCanHangHdr.get().getTongTrongLuongCabaoBi())
                 .tongTrongLuongBaoBi(dcnbBangKeCanHangHdr.get().getTongTrongLuongBaoBi())

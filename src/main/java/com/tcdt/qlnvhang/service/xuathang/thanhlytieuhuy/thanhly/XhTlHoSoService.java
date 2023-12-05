@@ -68,7 +68,7 @@ public class XhTlHoSoService extends BaseServiceImpl {
   public Page<XhTlHoSoHdr> searchPage(CustomUserDetails currentUser, XhTlHoSoReq req) throws Exception {
     String dvql = currentUser.getDvql();
     if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
-      req.setDvql(dvql.substring(0, 4));
+      req.setDvql(dvql.substring(0, 6));
     } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
       req.setDvql(dvql);
     }
@@ -339,6 +339,7 @@ public class XhTlHoSoService extends BaseServiceImpl {
           optional.get().setNgayDuyetLan3(LocalDate.now());
           break;
         case Contains.DA_DUYET_LDC + Contains.TU_CHOI_CBV:
+        case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
         case Contains.DANG_DUYET_CB_VU + Contains.TU_CHOI_CBV:
         case Contains.CHO_DUYET_BTC + Contains.TU_CHOI_BTC:
           hdr.setLyDoTuChoi(req.getLyDoTuChoi());
