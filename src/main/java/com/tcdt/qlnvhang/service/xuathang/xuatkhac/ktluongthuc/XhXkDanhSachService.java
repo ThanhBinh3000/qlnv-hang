@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -24,11 +25,7 @@ public class XhXkDanhSachService extends BaseServiceImpl {
 
     public Page<XhXkDanhSachHdr> searchPage(CustomUserDetails currentUser, XhXkDanhSachRequest req) throws Exception {
         String dvql = currentUser.getDvql();
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
-            req.setDvql(dvql.substring(0, 8));
-        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
-            req.setDvql(dvql);
-        }
+        req.setDvql(ObjectUtils.isEmpty(req.getMaDvi()) ? dvql : req.getMaDvi() );
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         Page<XhXkDanhSachHdr> search = xhXkDanhSachRepository.searchPage(req, pageable);
         //set label

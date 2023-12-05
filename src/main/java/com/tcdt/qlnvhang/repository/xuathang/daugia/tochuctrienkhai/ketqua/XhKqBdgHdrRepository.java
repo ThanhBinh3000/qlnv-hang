@@ -13,8 +13,9 @@ import java.util.Optional;
 
 public interface XhKqBdgHdrRepository extends JpaRepository<XhKqBdgHdr, Long> {
 
-    @Query("SELECT KQ FROM XhKqBdgHdr KQ WHERE " +
-            "(:#{#param.dvql} IS NULL OR KQ.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
+    @Query("SELECT DISTINCT KQ FROM XhKqBdgHdr KQ " +
+            "LEFT JOIN XhHopDongHdr HĐ ON KQ.id = HĐ.idQdKq " +
+            "WHERE (:#{#param.dvql} IS NULL OR KQ.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
             "AND (:#{#param.nam} IS NULL OR KQ.nam = :#{#param.nam}) " +
             "AND (:#{#param.soQdKq} IS NULL OR LOWER(KQ.soQdKq) LIKE LOWER(CONCAT('%',:#{#param.soQdKq},'%'))) " +
             "AND (:#{#param.trichYeu} IS NULL OR LOWER(KQ.trichYeu) LIKE LOWER(CONCAT('%',:#{#param.trichYeu},'%'))) " +
@@ -23,6 +24,9 @@ public interface XhKqBdgHdrRepository extends JpaRepository<XhKqBdgHdr, Long> {
             "AND (:#{#param.ngayKyTu} IS NULL OR KQ.ngayKy >= :#{#param.ngayKyTu}) " +
             "AND (:#{#param.ngayKyDen} IS NULL OR KQ.ngayKy <= :#{#param.ngayKyDen}) " +
             "AND (:#{#param.trangThai} IS NULL OR KQ.trangThai = :#{#param.trangThai}) " +
+            "AND (:#{#param.soHopDong} IS NULL OR LOWER(HĐ.soHopDong) LIKE LOWER(CONCAT('%',:#{#param.soHopDong},'%'))) " +
+            "AND (:#{#param.tenHopDong} IS NULL OR LOWER(HĐ.tenHopDong) LIKE LOWER(CONCAT('%',:#{#param.tenHopDong},'%'))) " +
+            "AND (:#{#param.toChucCaNhan} IS NULL OR LOWER(HĐ.toChucCaNhan) LIKE LOWER(CONCAT('%',:#{#param.toChucCaNhan},'%'))) " +
             "AND (:#{#param.trangThaiHd} IS NULL OR KQ.trangThaiHd = :#{#param.trangThaiHd}) " +
             "ORDER BY KQ.nam DESC, KQ.ngaySua DESC, KQ.ngayTao DESC, KQ.id DESC")
     Page<XhKqBdgHdr> searchPage(@Param("param") XhKqBdgHdrReq param, Pageable pageable);

@@ -202,6 +202,7 @@ public class XhXkVtBhPhieuXuatNhapKhoService extends BaseServiceImpl {
       case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
         optional.get().setNguoiDuyetId(currentUser.getUser().getId());
         optional.get().setNgayDuyet(LocalDate.now());
+        optional.get().setLdChiCuc(currentUser.getUser().getFullName());
         break;
       default:
         throw new Exception("Phê duyệt không thành công");

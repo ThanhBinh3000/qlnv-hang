@@ -404,7 +404,7 @@ public class DcnbBangKeCanHangServiceImpl extends BaseServiceImpl {
                 .chungLoaiHangHoa(dcnbBangKeCanHangHdr.get().getCloaiVthh())
                 .tenDonViTinh(dcnbBangKeCanHangHdr.get().getDonViTinh())
                 .tenNguoiGiaoHang(dcnbBangKeCanHangHdr.get().getTenNguoiGiaoHang())
-                .thoiGianGiaoNhan(dcnbBangKeCanHangHdr.get().getThoiGianGiaoNhan().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .thoiGianGiaoNhan(dcnbBangKeCanHangHdr.get().getThoiGianGiaoNhan() == null ?"":dcnbBangKeCanHangHdr.get().getThoiGianGiaoNhan().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .nguoiGiamSat("")
                 .tongTrongLuongCabaoBi(dcnbBangKeCanHangHdr.get().getTongTrongLuongCabaoBi())
                 .tongTrongLuongBaoBi(dcnbBangKeCanHangHdr.get().getTongTrongLuongBaoBi())

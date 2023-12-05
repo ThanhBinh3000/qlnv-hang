@@ -44,6 +44,9 @@ public class XhKqBdgHdrReq extends BaseRequest {
     private LocalDate ngayKyTu;
     private LocalDate ngayKyDen;
     //Hợp đồng
+    private String soHopDong;
+    private String tenHopDong;
+    private String toChucCaNhan;
     private Integer tongDviTsan;
     private Integer slDviTsanThanhCong;
     private Integer slDviTsanKhongThanh;

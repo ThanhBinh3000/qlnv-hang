@@ -34,6 +34,7 @@ public interface DcnbBienBanLayMauHdrRepository extends JpaRepository<DcnbBienBa
             "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
             "AND ((:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho})) " +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
+            "AND ((:#{#param.type} IS NULL OR qdc.type = :#{#param.type=='01'? 'NDC':'DC'})) " +
             "AND ((:#{#param.maDvi} IS NULL OR LOWER(qdc.maDvi) LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND ((qdc.loaiDc= 'DCNB' OR qdc.loaiDc= 'CHI_CUC') OR  ((:#{#param.typeQd} IS NULL OR qdc.loaiQdinh = :#{#param.typeQd})))" +
             "AND (:#{#param.dViKiemNghiem} IS NULL OR bblm.dViKiemNghiem LIKE CONCAT(:#{#param.dViKiemNghiem},'%')) " +
@@ -112,6 +113,7 @@ public interface DcnbBienBanLayMauHdrRepository extends JpaRepository<DcnbBienBa
             "AND (dmvt.loaiHang in :#{#param.dsLoaiHang} ) " +
             "AND ((:#{#param.thayDoiThuKho} IS NULL OR khdcd.thayDoiThuKho = :#{#param.thayDoiThuKho})) " +
             "AND ((:#{#param.loaiQdinh} IS NULL OR qdc.loaiQdinh = :#{#param.loaiQdinh})) " +
+            "AND ((:#{#param.type} IS NULL OR qdc.type = :#{#param.type=='01'? 'NDC':'DC'})) " +
             "AND ((:#{#param.maDvi} IS NULL OR LOWER(qdc.maDvi) LIKE CONCAT('%',LOWER(:#{#param.maDvi}),'%')))" +
             "AND ((qdc.loaiDc= 'DCNB' OR qdc.loaiDc= 'CHI_CUC') OR  ((:#{#param.typeQd} IS NULL OR qdc.loaiQdinh = :#{#param.typeQd})))" +
             "AND (:#{#param.dViKiemNghiem} IS NULL OR bblm.dViKiemNghiem LIKE CONCAT(:#{#param.dViKiemNghiem},'%')) " +

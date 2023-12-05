@@ -28,6 +28,7 @@ import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBienBanNghiemThu;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.*;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -84,7 +85,8 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
             throw new Exception("Số biên bản đã tồn tại");
         }
         Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
-        HhBienBanNghiemThu data = new ModelMapper().map(objReq,HhBienBanNghiemThu.class);
+        HhBienBanNghiemThu data = new HhBienBanNghiemThu();
+        BeanUtils.copyProperties(objReq, data);
         data.setNgayTao(new Date());
         data.setNguoiTao(userInfo.getUsername());
         data.setTrangThai(Contains.DUTHAO);
@@ -133,7 +135,8 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
             }
         }
         HhBienBanNghiemThu data= optional.get();
-        HhBienBanNghiemThu dataMap = new ModelMapper().map(objReq,HhBienBanNghiemThu.class);
+        HhBienBanNghiemThu dataMap = new HhBienBanNghiemThu();
+        BeanUtils.copyProperties(objReq, dataMap);
         updateObjectToObject(data,dataMap);
         data.setNguoiSua(userInfo.getUsername());
         data.setNgaySua(new Date());

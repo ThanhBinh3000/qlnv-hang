@@ -14,6 +14,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl.PhieuKnghiemCluongHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbangiaonhan.NhBbGiaoNhanVt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bienbanchuanbikho.NhBienBanChuanBiKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatDtl;
@@ -171,7 +172,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 //			hhHopDongDdiemNhapKhoRepository.saveAll(collect);
 			this.saveDetail(dataMap,objReq,false);
 		}else{
-			hhHopDongRepository.updateHopDong(dataMap.getIdHd(),Contains.DADUTHAO_QD);
+//			hhHopDongRepository.updateHopDong(dataMap.getIdHd(),Contains.DADUTHAO_QD);
 			this.saveDetailLt(dataMap,objReq,false);
 		}
 		return dataMap;
@@ -872,7 +873,11 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			ddNhap.setListBangKeCanHang(nhBangKeCanHangService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
 			ddNhap.setBienBanNhapDayKho(nhBbNhapDayKhoRepository.findByIdDdiemGiaoNvNh(ddNhap.getId()));
 			ddNhap.setPhieuNhapKhoTamGui(nhPhieuNhapKhoTamGuiRepository.findByIdDdiemGiaoNvNh(ddNhap.getId()));
-			ddNhap.setBienBanGuiHang(nhBienBanGuiHangRepository.findByIdDdiemGiaoNvNh(ddNhap.getId()));
+			NhBienBanGuiHang nhBienBanGuiHang = nhBienBanGuiHangRepository.findByIdDdiemGiaoNvNh(ddNhap.getId());
+			if (nhBienBanGuiHang != null) {
+				nhBienBanGuiHang.setTenNguoiTao(userInfoRepository.findById(nhBienBanGuiHang.getNguoiTaoId()).get().getFullName());
+				ddNhap.setBienBanGuiHang(nhBienBanGuiHang);
+			}
 			ddNhap.setListPhieuNhapKho(nhPhieuNhapKhoService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
 			ddNhap.setListBangKeVt(nhBangKeVtRepository.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
 			List<HhBbNghiemthuKlstHdr> hhBbNghiemthuKlstHdrList = hhBbNghiemthuKlstRepository.findByIdDdiemGiaoNvNh(ddNhap.getId());
