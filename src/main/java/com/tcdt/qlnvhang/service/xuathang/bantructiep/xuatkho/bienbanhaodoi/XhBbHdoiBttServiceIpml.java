@@ -248,11 +248,11 @@ public class XhBbHdoiBttServiceIpml extends BaseServiceImpl {
         req.getPaggingReq().setLimit(Integer.MAX_VALUE);
         Page<XhBbHdoiBttHdr> page = this.searchPage(currentUser, req);
         List<XhBbHdoiBttHdr> data = page.getContent();
-        String title = "Danh sách biên bản hao dôi";
+        String title = "Danh sách biên bản hao dôi hàng DTQG";
         String[] rowsName = new String[]{"STT", "Số QĐ giao NVXH", "Năm KH", "Thời hạn XH", "Điểm kho",
                 "Ngăn/Lô kho", "Số BB hao dôi", "Ngày lập BB hao dôi", "Số BB tịnh kho", "Số phiếu KNCL", "Số bảng kê",
                 "Số phiếu xuất kho", "Ngày xuất kho", "Trạng thái"};
-        String fileName = "danh-sach-bien-ban-hao-doi.xlsx";
+        String fileName = "danh-sach-bien-ban-hao-doi-hang-DTQG.xlsx";
         List<Object[]> dataList = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
             XhBbHdoiBttHdr hdr = data.get(i);
@@ -260,7 +260,7 @@ public class XhBbHdoiBttServiceIpml extends BaseServiceImpl {
             objs[0] = i;
             objs[1] = hdr.getSoQdNv();
             objs[2] = hdr.getNamKh();
-            objs[3] = hdr.getNgayKyQdNv();
+            objs[3] = hdr.getTgianGiaoNhan();
             objs[4] = hdr.getTenDiemKho();
             objs[5] = hdr.getTenNganLoKho();
             objs[6] = hdr.getSoBbHaoDoi();
@@ -273,7 +273,7 @@ public class XhBbHdoiBttServiceIpml extends BaseServiceImpl {
                 finalObjs[11] = dtl.getSoPhieuXuatKho();
                 finalObjs[12] = dtl.getNgayXuatKho();
             });
-            objs[13] = hdr.getTrangThai();
+            objs[13] = hdr.getTenTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
