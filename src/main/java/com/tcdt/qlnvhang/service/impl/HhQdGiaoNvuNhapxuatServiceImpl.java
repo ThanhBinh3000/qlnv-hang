@@ -172,7 +172,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 //			hhHopDongDdiemNhapKhoRepository.saveAll(collect);
 			this.saveDetail(dataMap,objReq,false);
 		}else{
-			hhHopDongRepository.updateHopDong(dataMap.getIdHd(),Contains.DADUTHAO_QD);
+//			hhHopDongRepository.updateHopDong(dataMap.getIdHd(),Contains.DADUTHAO_QD);
 			this.saveDetailLt(dataMap,objReq,false);
 		}
 		return dataMap;
