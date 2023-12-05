@@ -282,7 +282,7 @@ public class XhCtvtQuyetDinhGnvService extends BaseServiceImpl {
         }
       }
       Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-      Map<String, String> mapVthh = getListDanhMucHangHoa();
+      Map<String, Map<String, Object>> mapVthh = getListDanhMucHangHoaObject();
       xhCtvtQuyetDinhGnvHdr.get().getDataDtl().forEach(data -> {
         data.setMapDmucDvi(mapDmucDvi);
         data.setMapVthh(mapVthh);
