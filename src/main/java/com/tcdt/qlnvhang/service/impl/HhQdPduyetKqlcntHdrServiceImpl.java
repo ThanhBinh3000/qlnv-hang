@@ -670,13 +670,13 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 						gthauPreview.setSoLuong(gThau.getSoLuong());
 						gthauPreview.setDonGia(docxToPdfConverter.convertBigDecimalToStr(gThau.getDonGiaVat()));
 						gthauPreview.setTenCloaiVthh(StringUtils.isEmpty(gThau.getCloaiVthh()) ? "" : hashMapDmHh.get(gThau.getCloaiVthh()).toUpperCase());
-						gthauPreview.setDonGiaNhaThau(docxToPdfConverter.convertBigDecimalToStr(gThau.getDonGiaNhaThau()));
+						gthauPreview.setDonGiaNhaThau(docxToPdfConverter.convertBigDecimalToStr(checkNullAsZero(gThau.getDonGiaNhaThau())));
 						gthauPreview.setThanhTien(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaVat())));
-						gthauPreview.setThanhTienNhaThau(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau())));
-						gthauPreview.setChenhLech(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaVat()).subtract((gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau())))));
+						gthauPreview.setThanhTienNhaThau(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(checkNullAsZero(gThau.getDonGiaNhaThau()))));
+						gthauPreview.setChenhLech(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaVat()).subtract((gThau.getSoLuong().multiply(checkNullAsZero(gThau.getDonGiaNhaThau()))))));
 						tongThanhTien = tongThanhTien.add(gThau.getSoLuong().multiply(gThau.getDonGiaVat()));
-						tongThanhTienNhaThau = tongThanhTienNhaThau.add(gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau()));
-						tongChenhLech = tongChenhLech.add(gThau.getSoLuong().multiply(gThau.getDonGiaVat()).subtract((gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau()))));
+						tongThanhTienNhaThau = tongThanhTienNhaThau.add(gThau.getSoLuong().multiply(checkNullAsZero(gThau.getDonGiaNhaThau())));
+						tongChenhLech = tongChenhLech.add(gThau.getSoLuong().multiply(gThau.getDonGiaVat()).subtract((gThau.getSoLuong().multiply(checkNullAsZero(gThau.getDonGiaNhaThau())))));
 						tongSl = tongSl.add(gThau.getSoLuong());
 						gthauPreview.setDvt(gThau.getDviTinh());
 						HhQdPduyetKqlcntDtl kq = hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndType(gThau.getId(), "DC");
@@ -697,13 +697,13 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 					gthauPreview.setDvt(gThau.getDviTinh());
 					gthauPreview.setDonGia(docxToPdfConverter.convertBigDecimalToStr(gThau.getDonGiaVat()));
 					gthauPreview.setTenCloaiVthh(StringUtils.isEmpty(gThau.getCloaiVthh()) ? "" : hashMapDmHh.get(gThau.getCloaiVthh()).toUpperCase());
-					gthauPreview.setDonGiaNhaThau(docxToPdfConverter.convertBigDecimalToStr(gThau.getDonGiaNhaThau()));
-					gthauPreview.setChenhLech(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaVat()).subtract((gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau())))));
+					gthauPreview.setDonGiaNhaThau(docxToPdfConverter.convertBigDecimalToStr(checkNullAsZero(gThau.getDonGiaNhaThau())));
+					gthauPreview.setChenhLech(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaVat()).subtract((gThau.getSoLuong().multiply(checkNullAsZero(gThau.getDonGiaNhaThau()))))));
 					gthauPreview.setThanhTien(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaVat())));
-					gthauPreview.setThanhTienNhaThau(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau())));
+					gthauPreview.setThanhTienNhaThau(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(checkNullAsZero(gThau.getDonGiaNhaThau()))));
 					tongThanhTien = tongThanhTien.add(gThau.getSoLuong().multiply(gThau.getDonGiaVat()));
-					tongThanhTienNhaThau = tongThanhTienNhaThau.add(gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau()));
-					tongChenhLech = tongChenhLech.add(gThau.getSoLuong().multiply(gThau.getDonGiaVat()).subtract((gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau()))));
+					tongThanhTienNhaThau = tongThanhTienNhaThau.add(gThau.getSoLuong().multiply(checkNullAsZero(gThau.getDonGiaNhaThau())));
+					tongChenhLech = tongChenhLech.add(gThau.getSoLuong().multiply(gThau.getDonGiaVat()).subtract((gThau.getSoLuong().multiply(checkNullAsZero(gThau.getDonGiaNhaThau())))));
 					tongSl = tongSl.add(gThau.getSoLuong());
 					HhQdPduyetKqlcntDtl kq = hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndType(gThau.getId(), "GOC");
 					if (kq != null) {
@@ -772,6 +772,13 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		return docxToPdfConverter.convertDocxToPdf(inputStream, object);
 	}
 
+	private BigDecimal checkNullAsZero (BigDecimal number) {
+		if (number == null) {
+			return BigDecimal.ZERO;
+		} else {
+			return number;
+		}
+	}
 
 //	@Override
 //	public HhQdPduyetKqlcntHdr create(HhQdPduyetKqlcntHdrReq objReq) throws Exception {
