@@ -2,8 +2,11 @@ package com.tcdt.qlnvhang.controller.nhaphang.dauthau.ktracl;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
 import com.tcdt.qlnvhang.enums.EnumResponse;
+import com.tcdt.qlnvhang.jwt.CurrentUser;
+import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.IdSearchReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchBangKeCanHang;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
@@ -125,6 +128,24 @@ public class NhBienBanLayMauController {
 			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
 			resp.setMsg(e.getMessage());
 			log.error(e.getMessage());
+		}
+		return ResponseEntity.ok(resp);
+	}
+
+	@ApiOperation(value = "Tra cứu thông tin ", response = List.class)
+	@PostMapping(value = PathContains.DANH_SACH, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> list(@RequestBody BienBanLayMauReq objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.searchList(objReq));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch ( Exception e) {
+			e.printStackTrace();
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Tra cứu thông tin : {?}", e);
 		}
 		return ResponseEntity.ok(resp);
 	}
