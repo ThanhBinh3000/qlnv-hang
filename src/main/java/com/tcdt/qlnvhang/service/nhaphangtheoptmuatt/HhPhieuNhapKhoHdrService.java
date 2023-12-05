@@ -144,7 +144,7 @@ public class HhPhieuNhapKhoHdrService  extends BaseServiceImpl {
             throw new Exception("Phiếu nhập kho không tồn tại.");
         }
         HhPhieuNhapKhoHdr phieuNhapKhoHdr = optional.get();
-        BeanUtils.copyProperties(objReq, phieuNhapKhoHdr, "id");
+        BeanUtils.copyProperties(objReq, phieuNhapKhoHdr);
         phieuNhapKhoHdr.setNgaySua(getDateTimeNow());
         phieuNhapKhoHdr.setNguoiSua(userInfo.getUsername());
         HhPhieuNhapKhoHdr  createCheck = hhPhieuNhapKhoHdrRepository.save(phieuNhapKhoHdr);
