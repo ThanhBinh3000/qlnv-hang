@@ -25,6 +25,7 @@ import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -88,7 +89,8 @@ public class HhPhieuKngiemCluongService extends BaseServiceImpl {
         if(optional.isPresent()){
             throw new Exception("số phiếu đã tồn tại");
         }
-        HhPhieuKngiemCluong data = new ModelMapper().map(objReq,HhPhieuKngiemCluong.class);
+        HhPhieuKngiemCluong data = new HhPhieuKngiemCluong();
+        BeanUtils.copyProperties(objReq, data);
         data.setNgayTao(new Date());
         data.setNguoiTaoId(userInfo.getId());
         data.setTrangThai(Contains.DUTHAO);
@@ -120,8 +122,7 @@ public class HhPhieuKngiemCluongService extends BaseServiceImpl {
             }
         }
         HhPhieuKngiemCluong data = optional.get();
-        HhPhieuKngiemCluong dataMap = new ModelMapper().map(objReq,HhPhieuKngiemCluong.class);
-        updateObjectToObject(data,dataMap);
+        BeanUtils.copyProperties(objReq, data);
         data.setNgaySua(new Date());
         data.setNguoiSuaId(userInfo.getId());
 
