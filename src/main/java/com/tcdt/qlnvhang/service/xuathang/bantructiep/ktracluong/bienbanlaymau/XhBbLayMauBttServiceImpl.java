@@ -232,11 +232,21 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl {
         req.getPaggingReq().setLimit(Integer.MAX_VALUE);
         Page<XhBbLayMauBttHdr> page = this.searchPage(currentUser, req);
         List<XhBbLayMauBttHdr> data = page.getContent();
-        String title = "Danh sách biên bản lấy mẫu/bàn giao mẫu";
-        String[] rowsName = new String[]{"STT", "Số QĐ giao nhiệm vụ XH", "Năm KH", "Thời hạn XH trước ngày", "Số BB LM/BGM",
-                "Ngày lấy mẫu", "Điểm kho", "Lô kho", "Số BB tịnh kho", "Ngày xuất dốc kho",
-                "Số BB hao dôi", "Trạng thái"};
-        String fileName = "danh-sach-bien-ban-lay-mau/ban-giao-mau.xlsx";
+        String title = "Danh sách biên bản lấy mẫu/bàn giao mẫu hàng DTQG";
+        String[] rowsName;
+        boolean isVattuType = data.stream().anyMatch(item -> item.getLoaiVthh().startsWith(Contains.LOAI_VTHH_VATTU));
+        String[] commonRowsName = new String[]{"STT", "Số QĐ giao NVXH", "Năm KH", "Thời hạn XH", "Điểm kho", "Ngăn/Lô kho", "Số BB LM/BGM", "Ngày lấy mẫu", "Số BB tịnh kho", "Ngày xuất dốc kho"};
+        if (isVattuType) {
+            String[] vattuRowsName = Arrays.copyOf(commonRowsName, commonRowsName.length + 1);
+            vattuRowsName[10] = "Trạng thái";
+            rowsName = vattuRowsName;
+        } else {
+            String[] nonVattuRowsName = Arrays.copyOf(commonRowsName, commonRowsName.length + 2);
+            nonVattuRowsName[5] = "Số BB hao dôi";
+            nonVattuRowsName[6] = "Trạng thái";
+            rowsName = nonVattuRowsName;
+        }
+        String fileName = "danh-sach-bien-ban-lay-mau/ban-giao-mau-hang-DTQG.xlsx";
         List<Object[]> dataList = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
             XhBbLayMauBttHdr hdr = data.get(i);
@@ -244,15 +254,19 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl {
             objs[0] = i;
             objs[1] = hdr.getSoQdNv();
             objs[2] = hdr.getNamKh();
-            objs[3] = hdr.getNgayKyQdNv();
-            objs[4] = hdr.getSoBbLayMau();
-            objs[5] = hdr.getNgayLayMau();
-            objs[6] = hdr.getTenDiemKho();
-            objs[7] = hdr.getTenNganLoKho();
+            objs[3] = hdr.getTgianGiaoNhan();
+            objs[4] = hdr.getTenDiemKho();
+            objs[5] = hdr.getTenNganLoKho();
+            objs[6] = hdr.getSoBbLayMau();
+            objs[7] = hdr.getNgayLayMau();
             objs[8] = hdr.getSoBbTinhKho();
             objs[9] = hdr.getNgayXuatDocKho();
-            objs[10] = hdr.getSoBbHaoDoi();
-            objs[11] = hdr.getTenTrangThai();
+            if (isVattuType) {
+                objs[10] = hdr.getTenTrangThai();
+            } else {
+                objs[10] = hdr.getSoBbHaoDoi();
+                objs[11] = hdr.getTenTrangThai();
+            }
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
@@ -267,7 +281,7 @@ public class XhBbLayMauBttServiceImpl extends BaseServiceImpl {
             String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
             String fileTemplate = "bantructiep/" + templatePath;
             FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
-            XhBbLayMauBttHdr  detail = this.detail(DataUtils.safeToLong(body.get("id")));
+            XhBbLayMauBttHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
             Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
             xhQdNvXhBttHdrRepository.findById(detail.getIdQdNv())
                     .ifPresent(quyetDinh -> {

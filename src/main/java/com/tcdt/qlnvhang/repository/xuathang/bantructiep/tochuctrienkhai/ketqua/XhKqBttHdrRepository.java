@@ -10,15 +10,20 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface XhKqBttHdrRepository extends JpaRepository<XhKqBttHdr, Long> {
 
-    @Query("SELECT QD FROM XhKqBttHdr QD " +
-            "WHERE (:#{#param.dvql} IS NULL OR QD.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
+    @Query("SELECT DISTINCT QD FROM XhKqBttHdr QD " +
+            "LEFT JOIN XhHopDongBttHdr HĐ ON QD.id = HĐ.idQdKq " +
+            "WHERE (:#{#param.dvql} IS NULL OR QD.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
             "AND (:#{#param.namKh} IS NULL OR QD.namKh = :#{#param.namKh}) " +
             "AND (:#{#param.soQdKq} IS NULL OR LOWER(QD.soQdKq) LIKE LOWER(CONCAT('%', :#{#param.soQdKq}, '%'))) " +
+            "AND (:#{#param.soHopDong} IS NULL OR LOWER(HĐ.soHopDong) LIKE LOWER(CONCAT('%', :#{#param.soHopDong}, '%'))) " +
+            "AND (:#{#param.tenHopDong} IS NULL OR LOWER(HĐ.tenHopDong) LIKE CONCAT(:#{#param.tenHopDong},'%')) " +
+            "AND (:#{#param.tenBenMua} IS NULL OR LOWER(HĐ.tenBenMua) LIKE CONCAT(:#{#param.tenBenMua},'%')) " +
+            "AND (:#{#param.ngayKyHopDongTu} IS NULL OR HĐ.ngayKyHopDong >= :#{#param.ngayKyHopDongTu}) " +
+            "AND (:#{#param.ngayKyHopDongDen} IS NULL OR HĐ.ngayKyHopDong <= :#{#param.ngayKyHopDongDen}) " +
             "AND (:#{#param.ngayCgiaTu} IS NULL OR EXISTS (SELECT 1 FROM XhQdPdKhBttDtl DTL WHERE DTL.idQdKq = QD.id AND DTL.ngayNhanCgia >= :#{#param.ngayCgiaTu})) " +
             "AND (:#{#param.ngayCgiaDen} IS NULL OR EXISTS (SELECT 1 FROM XhQdPdKhBttDtl DTL WHERE DTL.idQdKq = QD.id AND DTL.ngayNhanCgia <= :#{#param.ngayCgiaDen})) " +
             "AND (:#{#param.loaiVthh} IS NULL OR QD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +

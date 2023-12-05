@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.xuathang.bantructiep.tochuctrienkhai.thongtin;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDvi;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviDtl;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBtt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
@@ -12,7 +13,6 @@ import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPd
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBttRepository;
-import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviDtlReq;
@@ -125,10 +125,10 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
         data.setGhiChuChaoGia(req.getGhiChuChaoGia());
         data.setTrangThai(Contains.DANG_THUC_HIEN);
         if (!DataUtils.isNullOrEmpty(req.getFileDinhKem())) {
-            if (req.getPthucBanTrucTiep().equals(Contains.UY_QUYEN)){
+            if (req.getPthucBanTrucTiep().equals(Contains.UY_QUYEN)) {
                 List<FileDinhKem> fileUyQuyen = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), data.getId(), XhQdPdKhBttDtl.TABLE_NAME + "_UY_QUYEN");
                 data.setFileDinhKem(fileUyQuyen);
-            }else if (req.getPthucBanTrucTiep().equals(Contains.BAN_LE)) {
+            } else if (req.getPthucBanTrucTiep().equals(Contains.BAN_LE)) {
                 List<FileDinhKem> fileBanLe = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKem(), data.getId(), XhQdPdKhBttDtl.TABLE_NAME + "_BAN_LE");
                 data.setFileDinhKem(fileBanLe);
             }
@@ -253,74 +253,123 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
     }
 
     public void export(CustomUserDetails currentUser, SearchXhTcTtinBttReq req, HttpServletResponse response) throws Exception {
-        String capDvi = (currentUser.getUser().getCapDvi());
-        if (Contains.CAP_CHI_CUC.equals(capDvi)) {
-            exportChiCuc(currentUser, req, response);
-            return;
-        }
-        exportCuc(currentUser, req, response);
-
-    }
-
-    void exportCuc(CustomUserDetails currentUser, SearchXhTcTtinBttReq req, HttpServletResponse response) throws Exception {
-        PaggingReq paggingReq = new PaggingReq();
-        paggingReq.setPage(0);
-        paggingReq.setLimit(Integer.MAX_VALUE);
-        req.setPaggingReq(paggingReq);
+        req.getPaggingReq().setPage(0);
+        req.getPaggingReq().setLimit(Integer.MAX_VALUE);
         Page<XhQdPdKhBttDtl> page = this.searchPage(currentUser, req);
         List<XhQdPdKhBttDtl> data = page.getContent();
-        String title = "Danh sách thông tin triển khai kế hoạch bán trực tiếp";
-        String[] rowsName = {"STT", "Số QĐ phê duyệt KH bán trực tiếp",
-                "Số đề xuất KH bán trực tiếp", "Phương thức bán trực tiếp", "Ngày nhận chào giá/Ngày ủy quyền",
-                "Số QĐ PD KQ chào giá", "Loại hàng hóa", "Chủng loại hàng hóa", "Trạng thái"};
-        String fileName = "Danh-sach-thong-tin-trien-khai-ke-hoach-ban-truc-tiep.xlsx";
+        boolean isVattuType = data.stream().anyMatch(item -> item.getLoaiVthh().startsWith(Contains.LOAI_VTHH_VATTU));
+        boolean isCapDvi = Contains.CAP_CHI_CUC.equals(currentUser.getUser().getCapDvi());
+        if (isCapDvi) {
+            this.exportChiCuc(response, data, isVattuType);
+        } else {
+            this.exportCuc(response, data, isVattuType);
+        }
+    }
+
+    public void exportCuc(HttpServletResponse response, List<XhQdPdKhBttDtl> data, boolean isVattuType) throws Exception {
+        String title = "Danh sách thông tin triển khai kế hoạch bán trực tiếp hàng DTQG";
+        String[] rowsName;
+        String[] commonRowsName = new String[]{"STT", "Số QĐ phê duyệt KH bán trực tiếp", "Số QĐ điều chỉnh KH bán trực tiếp", "Số đề xuất KH bán trực tiếp", "Phương thức bán trực tiếp", "Ngày nhận chào giá/Ngày ủy quyền", "Số QĐ PD KQ chào giá"};
+        if (isVattuType) {
+            String[] vattuRowsName = Arrays.copyOf(commonRowsName, commonRowsName.length + 3);
+            vattuRowsName[7] = "Loại hàng DTQG";
+            vattuRowsName[8] = "Chủng loại hàng DTQG";
+            vattuRowsName[9] = "Trạng thái";
+            rowsName = vattuRowsName;
+        } else {
+            String[] nonVattuRowsName = Arrays.copyOf(commonRowsName, commonRowsName.length + 2);
+            nonVattuRowsName[7] = "Chủng loại hàng DTQG";
+            nonVattuRowsName[8] = "Trạng thái";
+            rowsName = nonVattuRowsName;
+        }
+        Map<String, String> pthucBanTrucTiepMap = new HashMap<>();
+        pthucBanTrucTiepMap.put(Contains.CHAO_GIA, "Chào giá");
+        pthucBanTrucTiepMap.put(Contains.UY_QUYEN, "Ủy quyền");
+        pthucBanTrucTiepMap.put(Contains.BAN_LE, "Bán lẻ");
+        String fileName = "danh-sach-thong-tin-trien-khai-ke-hoach-ban-truc-tiep-hang-DTQG.xlsx";
         List<Object[]> dataList = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
-            XhQdPdKhBttDtl dtl = data.get(i);
+            XhQdPdKhBttDtl hdr = data.get(i);
+            String pthucBanTrucTiepValue = pthucBanTrucTiepMap.get(hdr.getPthucBanTrucTiep());
             Object[] objs = new Object[rowsName.length];
-            objs[0] = i + 1;
-            objs[1] = dtl.getSoQdPd();
-            objs[2] = dtl.getSoDxuat();
-            objs[3] = dtl.getPthucBanTrucTiep();
-            objs[4] = dtl.getNgayNhanCgia();
-            objs[5] = dtl.getSoQdKq();
-            objs[6] = dtl.getTenLoaiVthh();
-            objs[7] = dtl.getTenCloaiVthh();
-            objs[8] = dtl.getTenTrangThai();
+            objs[0] = i;
+            objs[1] = hdr.getSoQdPd();
+            objs[2] = hdr.getSoQdDc();
+            objs[3] = hdr.getSoDxuat();
+            objs[4] = pthucBanTrucTiepValue;
+            objs[5] = hdr.getNgayNhanCgia();
+            objs[6] = hdr.getSoQdKq();
+            if (isVattuType) {
+                objs[7] = hdr.getTenLoaiVthh();
+                objs[8] = hdr.getTenCloaiVthh();
+                objs[9] = hdr.getTenTrangThai();
+            } else {
+                objs[7] = hdr.getTenCloaiVthh();
+                objs[8] = hdr.getTenTrangThai();
+            }
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
     }
 
-    void exportChiCuc(CustomUserDetails currentUser, SearchXhTcTtinBttReq req, HttpServletResponse response) throws Exception {
-        PaggingReq paggingReq = new PaggingReq();
-        paggingReq.setPage(0);
-        paggingReq.setLimit(Integer.MAX_VALUE);
-        req.setPaggingReq(paggingReq);
-        Page<XhQdPdKhBttDtl> page = this.searchPage(currentUser, req);
-        List<XhQdPdKhBttDtl> data = page.getContent();
-        String title = "Danh sách quyết định phê duyệt bán trực tiếp ủy quyền/bán lẻ";
-        String[] rowsName = {"STT", "Số quyết định",
-                "Số kế hoạch", "Năm kế hoạch", "Ngày duyệt",
-                "Ngày ủy quyền", "Trích yếu", "Loại hàng hóa", "Chủng loại hàng hóa", "Số lượng", "Phương thức bán trực tiếp", "Trạng thái"};
-        String fileName = "Danh-sach-quyet-dinh-phe-duyet-bán-truc-tiep-uy-quyen-ban-le.xlsx";
+    public void exportChiCuc(HttpServletResponse response, List<XhQdPdKhBttDtl> data, boolean isVattuType) throws Exception {
+        String title = "Danh sách quyết định phê duyệt kế hoạch bán trực tiếp được ủy quyền/bán lẻ hàng DTQG";
+        String[] rowsName;
+        String[] commonRowsName = new String[]{"STT", "Số quyết định", "Số kế hoạch", "Năm kế hoạch", "Ngày duyệt", "Ngày ủy quyền", "Trích yếu"};
+        if (isVattuType) {
+            String[] vattuRowsName = Arrays.copyOf(commonRowsName, commonRowsName.length + 5);
+            vattuRowsName[7] = "Loại hàng DTQG";
+            vattuRowsName[8] = "Chủng loại hàng DTQG";
+            vattuRowsName[9] = "Số lượng";
+            vattuRowsName[10] = "Phương thức bán trực tiếp";
+            vattuRowsName[11] = "Trạng thái";
+            rowsName = vattuRowsName;
+        } else {
+            String[] nonVattuRowsName = Arrays.copyOf(commonRowsName, commonRowsName.length + 4);
+            nonVattuRowsName[7] = "Chủng loại hàng DTQG";
+            nonVattuRowsName[8] = "Số lượng (kg)";
+            nonVattuRowsName[9] = "Phương thức bán trực tiếp";
+            nonVattuRowsName[10] = "Trạng thái";
+            rowsName = nonVattuRowsName;
+        }
+        Map<String, String> pthucBanTrucTiepMap = new HashMap<>();
+        pthucBanTrucTiepMap.put(Contains.UY_QUYEN, "Ủy quyền");
+        pthucBanTrucTiepMap.put(Contains.BAN_LE, "Bán lẻ");
+        String fileName = "danh-sach-quyet-dinh-phe-duyet-ke-hoach-ban-truc-tiep-duoc-uy-quyen/ban-le-hang-DTQG.xlsx";
         List<Object[]> dataList = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
-            XhQdPdKhBttDtl dtl = data.get(i);
+            XhQdPdKhBttDtl hdr = data.get(i);
+            String pthucBanTrucTiepValue = pthucBanTrucTiepMap.get(hdr.getPthucBanTrucTiep());
+            XhQdPdKhBttHdr xhQdPdKhBttHdr = hdr.getXhQdPdKhBttHdr();
+            String tenTrangThai = null;
+            String trichYeu = null;
+            LocalDate ngayPheDuyet = null;
+            if (xhQdPdKhBttHdr != null) {
+                tenTrangThai = NhapXuatHangTrangThaiEnum.getTenById(xhQdPdKhBttHdr.getTrangThai());
+                trichYeu = xhQdPdKhBttHdr.getTrichYeu();
+                ngayPheDuyet = xhQdPdKhBttHdr.getNgayPduyet();
+            }
             Object[] objs = new Object[rowsName.length];
-            objs[0] = i + 1;
-            objs[1] = dtl.getSoQdPd();
-            objs[2] = dtl.getSoDxuat();
-            objs[3] = dtl.getNamKh();
-            objs[4] = dtl.getNgayPduyet();
-            objs[5] = dtl.getNgayNhanCgia();
-            objs[6] = dtl.getTrichYeu();
-            objs[7] = dtl.getTenLoaiVthh();
-            objs[8] = dtl.getTenCloaiVthh();
-            objs[9] = dtl.getTongSoLuong();
-            objs[10] = dtl.getPthucBanTrucTiep();
-            objs[11] = dtl.getTenTrangThai();
+            objs[0] = i;
+            objs[1] = hdr.getSoQdPd();
+            objs[2] = hdr.getSoDxuat();
+            objs[3] = hdr.getNamKh();
+            objs[4] = ngayPheDuyet;
+            objs[5] = hdr.getNgayNhanCgia();
+            objs[6] = trichYeu;
+            if (isVattuType) {
+                objs[7] = hdr.getTenLoaiVthh();
+                objs[8] = hdr.getTenCloaiVthh();
+                objs[9] = hdr.getTongSoLuong();
+                objs[10] = pthucBanTrucTiepValue;
+                objs[11] = tenTrangThai;
+            } else {
+                objs[7] = hdr.getTenCloaiVthh();
+                objs[8] = hdr.getTongSoLuong();
+                objs[9] = pthucBanTrucTiepValue;
+                objs[10] = tenTrangThai;
+            }
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
@@ -328,33 +377,53 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
     }
 
     public void exportHd(CustomUserDetails currentUser, SearchXhTcTtinBttReq req, HttpServletResponse response) throws Exception {
-        PaggingReq paggingReq = new PaggingReq();
-        paggingReq.setPage(0);
-        paggingReq.setLimit(Integer.MAX_VALUE);
-        req.setPaggingReq(paggingReq);
+        req.getPaggingReq().setPage(0);
+        req.getPaggingReq().setLimit(Integer.MAX_VALUE);
         Page<XhQdPdKhBttDtl> page = this.searchPage(currentUser, req);
         List<XhQdPdKhBttDtl> data = page.getContent();
-        String title = "Danh sách hợp đồng bán trực tiếp";
-        String[] rowsName = {"STT", "Năm KH",
-                "QĐ PD KHBTT", "SL HĐ cần ký", "SL HĐ đã ký",
-                "Thời hạn xuất kho", "Loại hàng hóa", "Chủng loại hàng hóa", "Tổng giá trị hợp đồng",
-                "Trạng thái hợp đồng", "Trạng thái xuất hàng"};
-        String fileName = "Danh-sach-hop-dong-ban-truc-tiep.xlsx";
+        String title = "Danh sách hợp đồng bán trực tiếp hàng DTQG";
+        String[] rowsName;
+        boolean isVattuType = data.stream().anyMatch(item -> item.getLoaiVthh().startsWith(Contains.LOAI_VTHH_VATTU));
+        String[] commonRowsName = new String[]{"STT", "Năm KH", "QĐ PD KHBTT", "SL HĐ cần ký", "SL HĐ đã ký", "Thời hạn xuất kho"};
+        if (isVattuType) {
+            String[] vattuRowsName = Arrays.copyOf(commonRowsName, commonRowsName.length + 5);
+            vattuRowsName[6] = "Loại hàng DTQG";
+            vattuRowsName[7] = "Chủng loại hàng DTQG";
+            vattuRowsName[8] = "Tổng giá trị hợp đồng";
+            vattuRowsName[9] = "Trạng thái ký HĐ";
+            vattuRowsName[10] = "trạng thái XH";
+            rowsName = vattuRowsName;
+        } else {
+            String[] nonVattuRowsName = Arrays.copyOf(commonRowsName, commonRowsName.length + 4);
+            nonVattuRowsName[6] = "Chủng loại hàng DTQG";
+            nonVattuRowsName[7] = "Tổng giá trị hợp đồng";
+            nonVattuRowsName[8] = "Trạng thái ký HĐ";
+            nonVattuRowsName[9] = "trạng thái XH";
+            rowsName = nonVattuRowsName;
+        }
+        String fileName = "danh-sach-hop-dong-ban-truc-tiep-hang-DTQG.xlsx";
         List<Object[]> dataList = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
-            XhQdPdKhBttDtl dtl = data.get(i);
+            XhQdPdKhBttDtl hdr = data.get(i);
             Object[] objs = new Object[rowsName.length];
-            objs[0] = i + 1;
-            objs[1] = dtl.getNamKh();
-            objs[2] = dtl.getSoQdPd();
-            objs[3] = dtl.getSlHdChuaKy();
-            objs[4] = dtl.getSlHdDaKy();
-            objs[5] = dtl.getTgianDkienDen();
-            objs[6] = dtl.getTenLoaiVthh();
-            objs[7] = dtl.getTenCloaiVthh();
-            objs[8] = dtl.getThanhTienDuocDuyet();
-            objs[9] = dtl.getTenTrangThaiHd();
-            objs[10] = dtl.getTenTrangThaiXh();
+            objs[0] = i;
+            objs[1] = hdr.getNamKh();
+            objs[2] = hdr.getSoQdPd();
+            objs[3] = hdr.getSlHdChuaKy();
+            objs[4] = hdr.getSlHdDaKy();
+            objs[5] = hdr.getTgianDkienDen();
+            if (isVattuType) {
+                objs[6] = hdr.getTenLoaiVthh();
+                objs[7] = hdr.getTenCloaiVthh();
+                objs[8] = hdr.getThanhTienDuocDuyet();
+                objs[9] = hdr.getTenTrangThaiHd();
+                objs[10] = hdr.getTenTrangThaiXh();
+            } else {
+                objs[6] = hdr.getTenCloaiVthh();
+                objs[7] = hdr.getThanhTienDuocDuyet();
+                objs[8] = hdr.getTenTrangThaiHd();
+                objs[9] = hdr.getTenTrangThaiXh();
+            }
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

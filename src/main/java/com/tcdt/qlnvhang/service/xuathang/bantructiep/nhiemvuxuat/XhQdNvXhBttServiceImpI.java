@@ -313,13 +313,30 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl {
         req.getPaggingReq().setLimit(Integer.MAX_VALUE);
         Page<XhQdNvXhBttHdr> page = this.searchPage(currentUser, req);
         List<XhQdNvXhBttHdr> data = page.getContent();
-        String title = "Danh sách quyết định giao nhiệm vụ xuất hàng";
-        String[] rowsName = new String[]{"STT", "Năm xuất", "Số quyết định", "Ngày quyết định",
-                "Số hợp đồng", "Loại hàng hóa", "Chủng loại hành hóa",
-                "Thời gian giao nhận hàng", "Trích yếu quyết định", "Số BB tịnh kho",
-                "Số BB hao dôi", "Trạng thái QĐ", "Trạng thái XH"};
-        String fileName = "danh-sach-dx-kh-ban-truc-tiep.xlsx";
-        List<Object[]> dataList = new ArrayList<Object[]>();
+        String title = "Danh sách quyết định giao nhiệm vụ xuất hàng bán trực tiếp hàng DTQG";
+        String[] rowsName;
+        boolean isVattuType = data.stream().anyMatch(item -> item.getLoaiVthh().startsWith(Contains.LOAI_VTHH_VATTU));
+        String[] commonRowsName = new String[]{"STT", "Năm xuất", "Số quyết định", "Ngày quyết định", "Số hợp đồng"};
+        if (isVattuType) {
+            String[] vattuRowsName = Arrays.copyOf(commonRowsName, commonRowsName.length + 6);
+            vattuRowsName[5] = "Loại hàng DTQG";
+            vattuRowsName[6] = "Chủng loại hàng DTQG";
+            vattuRowsName[7] = "Thời gian giao nhận hàng";
+            vattuRowsName[8] = "Trích yếu quyết định";
+            vattuRowsName[9] = "Trạng thái QĐ";
+            vattuRowsName[10] = "Trạng thái XH";
+            rowsName = vattuRowsName;
+        } else {
+            String[] nonVattuRowsName = Arrays.copyOf(commonRowsName, commonRowsName.length + 5);
+            nonVattuRowsName[5] = "Chủng loại hàng DTQG";
+            nonVattuRowsName[6] = "Thời gian giao nhận hàng";
+            nonVattuRowsName[7] = "Trích yếu quyết định";
+            nonVattuRowsName[8] = "Trạng thái QĐ";
+            nonVattuRowsName[9] = "Trạng thái XH";
+            rowsName = nonVattuRowsName;
+        }
+        String fileName = "danh-sach-quyet-dinh-nhiem-vu-xuat-hang-ban-truc-tiep-hang-DTQG.xlsx";
+        List<Object[]> dataList = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
             XhQdNvXhBttHdr hdr = data.get(i);
             Object[] objs = new Object[rowsName.length];
@@ -328,14 +345,20 @@ public class XhQdNvXhBttServiceImpI extends BaseServiceImpl {
             objs[2] = hdr.getSoQdNv();
             objs[3] = hdr.getNgayKyQdNv();
             objs[4] = hdr.getSoHopDong();
-            objs[5] = hdr.getTenLoaiVthh();
-            objs[6] = hdr.getTenCloaiVthh();
-            objs[7] = hdr.getTgianGiaoNhan();
-            objs[8] = hdr.getTrichYeu();
-            objs[9] = hdr.getSoTinhKho();
-            objs[10] = hdr.getSoHaoDoi();
-            objs[11] = hdr.getTenTrangThai();
-            objs[12] = hdr.getTenTrangThaiXh();
+            if (isVattuType) {
+                objs[5] = hdr.getTenLoaiVthh();
+                objs[6] = hdr.getTenCloaiVthh();
+                objs[7] = hdr.getTgianGiaoNhan();
+                objs[8] = hdr.getTrichYeu();
+                objs[9] = hdr.getTenTrangThai();
+                objs[10] = hdr.getTenTrangThaiXh();
+            } else {
+                objs[5] = hdr.getTenCloaiVthh();
+                objs[6] = hdr.getTgianGiaoNhan();
+                objs[7] = hdr.getTrichYeu();
+                objs[8] = hdr.getTenTrangThai();
+                objs[9] = hdr.getTenTrangThaiXh();
+            }
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

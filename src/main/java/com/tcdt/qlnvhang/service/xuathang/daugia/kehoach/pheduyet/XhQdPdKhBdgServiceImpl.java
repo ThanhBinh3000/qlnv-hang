@@ -486,9 +486,9 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
         boolean isQdPdType = data.stream().anyMatch(item -> item.getType().equals("QDKH"));
         boolean isVattuType = data.stream().anyMatch(item -> item.getLoaiVthh().startsWith(Contains.LOAI_VTHH_VATTU));
         if (isQdPdType) {
-            exportQdPdType(response, data, isVattuType);
+            this.exportQdPdType(response, data, isVattuType);
         } else {
-            exportQdDcType(response, data, isVattuType);
+            this.exportQdDcType(response, data, isVattuType);
         }
     }
 
