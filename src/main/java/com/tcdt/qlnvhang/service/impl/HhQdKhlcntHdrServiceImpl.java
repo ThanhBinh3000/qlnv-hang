@@ -142,6 +142,9 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKems())) {
 			fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), dataMap.getId(), HhQdKhlcntHdr.TABLE_NAME);
 		}
+		if (!DataUtils.isNullOrEmpty(objReq.getListCcPhapLy())) {
+			fileDinhKemService.saveListFileDinhKem(objReq.getListCcPhapLy(), dataMap.getId(), HhQdKhlcntHdr.TABLE_NAME + "_CAN_CU");
+		}
 		dataMap.setNgayTao(getDateTimeNow());
 		dataMap.setTrangThai(Contains.DANG_NHAP_DU_LIEU);
 		dataMap.setNguoiTao(getUser().getUsername());
@@ -377,6 +380,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKems())) {
 			fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), dataDB.getId(), HhQdKhlcntHdr.TABLE_NAME);
 		}
+		fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(HhQdKhlcntHdr.TABLE_NAME + "_CAN_CU"));
+		if (!DataUtils.isNullOrEmpty(objReq.getListCcPhapLy())) {
+			fileDinhKemService.saveListFileDinhKem(objReq.getListCcPhapLy(), dataMap.getId(), HhQdKhlcntHdr.TABLE_NAME + "_CAN_CU");
+		}
 
 		hhQdKhlcntHdrRepository.save(dataDB);
 
@@ -432,15 +439,13 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 		if (!qOptional.isPresent())
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
+		List<FileDinhKem> canCu = fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhQdKhlcntHdr.TABLE_NAME + "_CAN_CU"));
+		qOptional.get().setListCcPhapLy(canCu);
+		List<FileDinhKem> fileDinhKems = fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhQdKhlcntHdr.TABLE_NAME));
+		qOptional.get().setFileDinhKems(fileDinhKems);
 		if (qOptional.get().getLoaiVthh().startsWith("02")) {
-			List<FileDinhKem> canCu = fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhQdKhlcntHdr.TABLE_NAME + "_CAN_CU"));
-			qOptional.get().setListCcPhapLy(canCu);
-			List<FileDinhKem> fileDinhKems = fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhQdKhlcntHdr.TABLE_NAME));
-			qOptional.get().setFileDinhKems(fileDinhKems);
 			detailVt(qOptional.get());
 		} else {
-			List<FileDinhKem> fileDinhKems = fileDinhKemService.search(qOptional.get().getId(), Collections.singletonList(HhQdKhlcntHdr.TABLE_NAME));
-			qOptional.get().setFileDinhKems(fileDinhKems);
 			detailLt(qOptional.get());
 		}
 		return qOptional.get();

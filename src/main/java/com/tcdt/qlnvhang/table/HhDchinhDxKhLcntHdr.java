@@ -90,6 +90,8 @@ public class HhDchinhDxKhLcntHdr extends TrangThaiBaseEntity implements Serializ
 	private Boolean lastest;
 	private Integer lanDieuChinh;
 	String noiDungQd;
+	String noiDungTtr;
+	String trichYeuQd;
 	String tenDuAn;
 	String dienGiaiTongMucDt;
 	String dienGiai;
