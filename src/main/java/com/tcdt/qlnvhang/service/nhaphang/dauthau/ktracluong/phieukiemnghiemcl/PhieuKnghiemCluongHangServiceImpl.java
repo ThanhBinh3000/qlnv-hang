@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.util.*;
@@ -168,6 +169,7 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
     }
 
     @Override
+    @Transactional
     public void delete(Long id) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         Optional<PhieuKnghiemCluongHang> optional = phieuKnghiemCluongHangRepository.findById(id);

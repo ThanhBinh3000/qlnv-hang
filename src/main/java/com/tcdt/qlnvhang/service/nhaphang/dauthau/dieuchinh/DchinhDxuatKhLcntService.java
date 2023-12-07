@@ -318,7 +318,13 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 			if ((Contains.CHODUYET_LDV + Contains.DA_LAP).equals(status)) {
 				optional.get().setNguoiGuiDuyetId(getUser().getId());
 				optional.get().setNgayGuiDuyet(getDateTimeNow());
-			} else if ((Contains.BAN_HANH + Contains.CHODUYET_LDV).equals(status)) {
+			} else if ((Contains.CHODUYET_LDV + Contains.TUCHOI_LDV).equals(status)) {
+				optional.get().setNguoiGuiDuyetId(getUser().getId());
+				optional.get().setNgayGuiDuyet(getDateTimeNow());
+			} else if ((Contains.DADUYET_LDV + Contains.CHODUYET_LDV).equals(status)) {
+				optional.get().setNguoiPduyetId(getUser().getId());
+				optional.get().setNgayPduyet(getDateTimeNow());
+			} else if ((Contains.BAN_HANH + Contains.DADUYET_LDV).equals(status)) {
 				Optional<HhDchinhDxKhLcntHdr> dchinhDxKhLcntHdr = hdrRepository.findByIdQdGocAndLastest(optional.get().getIdQdGoc(), Boolean.TRUE);
 				if (dchinhDxKhLcntHdr.isPresent()) {
 					dchinhDxKhLcntHdr.get().setLastest(Boolean.FALSE);
@@ -327,13 +333,11 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 				optional.get().setNguoiPduyetId(getUser().getId());
 				optional.get().setNgayPduyet(getDateTimeNow());
 				optional.get().setLastest(Boolean.TRUE);
-//				Optional<HhQdKhlcntHdr> qdKhlcntHdr = hhQdKhlcntHdrRepository.findById(optional.get().getIdQdGoc());
-//				if (!qdKhlcntHdr.isPresent()){
-//					throw new Exception("Quyết định gốc không tồn tại");
-//				}
-//				qdKhlcntHdr.get().setDieuChinh(Boolean.TRUE);
-//				hhQdKhlcntHdrRepository.save(qdKhlcntHdr.get());
 			} else if ((Contains.TUCHOI_LDV + Contains.CHODUYET_LDV).equals(status)) {
+				optional.get().setNguoiPduyetId(getUser().getId());
+				optional.get().setNgayPduyet(getDateTimeNow());
+				optional.get().setLyDoTuChoi(stReq.getLyDo());
+			} else if ((Contains.TUCHOI_LDTC + Contains.DADUYET_LDV).equals(status)) {
 				optional.get().setNguoiPduyetId(getUser().getId());
 				optional.get().setNgayPduyet(getDateTimeNow());
 				optional.get().setLyDoTuChoi(stReq.getLyDo());
@@ -347,10 +351,17 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 			} else if ((Contains.CHODUYET_LDV + Contains.TUCHOI_LDV).equals(status)) {
 				optional.get().setNguoiGuiDuyetId(getUser().getId());
 				optional.get().setNgayGuiDuyet(getDateTimeNow());
-			} else if ((Contains.BAN_HANH + Contains.CHODUYET_LDV).equals(status)) {
+			} else if ((Contains.DADUYET_LDV + Contains.CHODUYET_LDV).equals(status)) {
+				optional.get().setNguoiPduyetId(getUser().getId());
+				optional.get().setNgayPduyet(getDateTimeNow());
+			} else if ((Contains.BAN_HANH + Contains.DADUYET_LDV).equals(status)) {
 				optional.get().setNguoiPduyetId(getUser().getId());
 				optional.get().setNgayPduyet(getDateTimeNow());
 			} else if ((Contains.TUCHOI_LDV + Contains.CHODUYET_LDV).equals(status)) {
+				optional.get().setNguoiPduyetId(getUser().getId());
+				optional.get().setNgayPduyet(getDateTimeNow());
+				optional.get().setLyDoTuChoi(stReq.getLyDo());
+			} else if ((Contains.TUCHOI_LDTC + Contains.DADUYET_LDV).equals(status)) {
 				optional.get().setNguoiPduyetId(getUser().getId());
 				optional.get().setNgayPduyet(getDateTimeNow());
 				optional.get().setLyDoTuChoi(stReq.getLyDo());
