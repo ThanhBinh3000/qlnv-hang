@@ -82,6 +82,10 @@ public class XhBkeCanHangBttServiceImpl extends BaseServiceImpl {
         data.setId(Long.parseLong(data.getSoBangKeHang().split("/")[0]));
         data.setTrangThai(Contains.DU_THAO);
         XhBkeCanHangBttHdr created = xhBkeCanHangBttHdrRepository.save(data);
+        xhPhieuXkhoBttReposytory.findById(created.getIdPhieuXuatKho()).ifPresent(xuatKho -> {
+            xuatKho.setIdBangKeHang(created.getId());
+            xhPhieuXkhoBttReposytory.save(xuatKho);
+        });
         this.saveDetail(req, created.getId());
         return created;
     }
@@ -111,6 +115,10 @@ public class XhBkeCanHangBttServiceImpl extends BaseServiceImpl {
         data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(currentUser.getUser().getId());
         XhBkeCanHangBttHdr update = xhBkeCanHangBttHdrRepository.save(data);
+        xhPhieuXkhoBttReposytory.findById(update.getIdPhieuXuatKho()).ifPresent(xuatKho -> {
+            xuatKho.setIdBangKeHang(update.getId());
+            xhPhieuXkhoBttReposytory.save(xuatKho);
+        });
         this.saveDetail(req, update.getId());
         return update;
     }

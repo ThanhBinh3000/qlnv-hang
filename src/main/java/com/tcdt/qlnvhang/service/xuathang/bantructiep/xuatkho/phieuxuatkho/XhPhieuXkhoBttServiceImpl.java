@@ -3,8 +3,8 @@ package com.tcdt.qlnvhang.service.xuathang.bantructiep.xuatkho.phieuxuatkho;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBtt;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
-import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.bangcankehang.XhBkeCanHangBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBttReposytory;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -38,7 +38,7 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl {
     @Autowired
     private XhQdNvXhBttHdrRepository xhQdNvXhBttHdrRepository;
     @Autowired
-    private XhHopDongBttHdrRepository xhHopDongBttHdrRepository;
+    private XhBkeCanHangBttHdrRepository xhBkeCanHangBttHdrRepository;
     @Autowired
     private UserInfoRepository userInfoRepository;
 
@@ -105,6 +105,13 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl {
         data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(currentUser.getUser().getId());
         XhPhieuXkhoBtt update = xhPhieuXkhoBttReposytory.save(data);
+        xhBkeCanHangBttHdrRepository.findById(update.getIdBangKeHang()).ifPresent(bangKe -> {
+            bangKe.setTenNguoiGiao(update.getTenNguoiGiao());
+            bangKe.setCmtNguoiGiao(update.getCmtNguoiGiao());
+            bangKe.setCongTyNguoiGiao(update.getCongTyNguoiGiao());
+            bangKe.setDiaChiNguoiGiao(update.getDiaChiNguoiGiao());
+            xhBkeCanHangBttHdrRepository.save(bangKe);
+        });
         return update;
     }
 
@@ -254,7 +261,7 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl {
                 }
             });
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
-        }  catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         } catch (XDocReportException e) {
             e.printStackTrace();
