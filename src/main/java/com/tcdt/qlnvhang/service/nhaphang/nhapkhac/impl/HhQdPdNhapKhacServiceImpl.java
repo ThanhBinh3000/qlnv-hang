@@ -137,6 +137,7 @@ public class HhQdPdNhapKhacServiceImpl extends BaseServiceImpl implements HhQdPd
             Optional<HhThopKhNhapKhac> hhThopKhNhapKhac = hhThopKhNhapKhacRepository.findById(dataMap.getIdTh());
             hhThopKhNhapKhac.get().setSoQd(dataMap.getSoQd());
             hhThopKhNhapKhac.get().setTrangThai(Contains.DADUTHAO_QD);
+            hhThopKhNhapKhac.get().setIdQd(dataMap.getId());
             hhThopKhNhapKhacRepository.save(hhThopKhNhapKhac.get());
         }else{
             hhDxuatKhNhapKhacHdrRepository.updateStatusInList(Arrays.asList(req.getDetails().get(0).getSoDxuat()), Contains.DADUTHAO_QD);
