@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.nhiemvuxuat.XhQdGiaoNvXhRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.xuatkho.XhDgBangKeHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.xuatkho.XhDgPhieuXuatKhoRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -39,6 +40,8 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
     private XhQdGiaoNvXhRepository xhQdGiaoNvXhRepository;
     @Autowired
     private XhQdGiaoNvXhDtlRepository xhQdGiaoNvXhDtlRepository;
+    @Autowired
+    private XhDgBangKeHdrRepository xhDgBangKeHdrRepository;
     @Autowired
     private UserInfoRepository userInfoRepository;
 
@@ -109,6 +112,13 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
         data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(currentUser.getUser().getId());
         XhDgPhieuXuatKho update = xhDgPhieuXuatKhoRepository.save(data);
+        xhDgBangKeHdrRepository.findById(update.getIdBangKeHang()).ifPresent(bangKe -> {
+            bangKe.setTenNguoiGiao(update.getTenNguoiGiao());
+            bangKe.setCmtNguoiGiao(update.getCmtNguoiGiao());
+            bangKe.setCongTyNguoiGiao(update.getCongTyNguoiGiao());
+            bangKe.setDiaChiNguoiGiao(update.getDiaChiNguoiGiao());
+            xhDgBangKeHdrRepository.save(bangKe);
+        });
         return update;
     }
 

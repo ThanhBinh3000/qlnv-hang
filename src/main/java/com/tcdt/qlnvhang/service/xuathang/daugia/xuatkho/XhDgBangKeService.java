@@ -81,6 +81,10 @@ public class XhDgBangKeService extends BaseServiceImpl {
         data.setId(Long.parseLong(data.getSoBangKeHang().split("/")[0]));
         data.setTrangThai(Contains.DU_THAO);
         XhDgBangKeHdr created = xhDgBangKeHdrRepository.save(data);
+        xhDgPhieuXuatKhoRepository.findById(created.getIdPhieuXuatKho()).ifPresent(xuatKho -> {
+            xuatKho.setIdBangKeHang(created.getId());
+            xhDgPhieuXuatKhoRepository.save(xuatKho);
+        });
         this.saveDetail(req, created.getId());
         return created;
     }
@@ -110,6 +114,10 @@ public class XhDgBangKeService extends BaseServiceImpl {
         data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(currentUser.getUser().getId());
         XhDgBangKeHdr update = xhDgBangKeHdrRepository.save(data);
+        xhDgPhieuXuatKhoRepository.findById(update.getIdPhieuXuatKho()).ifPresent(xuatKho -> {
+            xuatKho.setIdBangKeHang(update.getId());
+            xhDgPhieuXuatKhoRepository.save(xuatKho);
+        });
         this.saveDetail(req, update.getId());
         return update;
     }

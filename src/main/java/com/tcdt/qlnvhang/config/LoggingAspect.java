@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.tcdt.qlnvhang.entities.UserActivity;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoCt;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBtt;
@@ -28,7 +29,6 @@ import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovient
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvHdr;
 import com.tcdt.qlnvhang.util.BeanUtils;
 import com.tcdt.qlnvhang.util.DataUtils;
-import com.tcdt.qlnvhang.util.UserUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -93,6 +93,11 @@ public class LoggingAspect {
   public void phieuNhapXuatPointCut() {
   }
 
+  @Pointcut("execution(* com.tcdt.qlnvhang.controller.nhaphang.dauthau.nhapkho.NhBienBanNhapDayKhoController.updateStatus(..)) ||" +
+      "execution(* com.tcdt.qlnvhang.controller.nhaphangtheoptmuatt.HhBienBanDayKhoControler.updateStatusUbtvqh(..))")
+  public void BbNhapDayKhoPointCut() {
+  }
+
   @Before("v3Controller()")
   public void logBefore(JoinPoint joinPoint) {
     try {
@@ -141,9 +146,10 @@ public class LoggingAspect {
             NhPhieuNhapKhoCt nhPhieuNhapKhoCt = nhPhieuNhapKhoCtRepository.findAllByIdPhieuNkHdr(rowData.getId()).get(0);
             PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
             phieuNhapXuatHistory.setMaKho(rowData.getMaLoKho() == null ? rowData.getMaNganKho() : rowData.getMaLoKho());
-            phieuNhapXuatHistory.setSoLuong(DataUtils.safeToLong(nhPhieuNhapKhoCt.getSoLuongThucNhap()));
-            phieuNhapXuatHistory.setDonGia(DataUtils.safeToLong(nhPhieuNhapKhoCt.getDonGia()));
-            phieuNhapXuatHistory.setThanhTien(DataUtils.safeToLong(nhPhieuNhapKhoCt.getThanhTien()));
+            phieuNhapXuatHistory.setSoLuong(DataUtils.safeToDouble(nhPhieuNhapKhoCt.getSoLuongThucNhap()));
+            phieuNhapXuatHistory.setDonGia(DataUtils.safeToDouble(nhPhieuNhapKhoCt.getDonGia()));
+//            phieuNhapXuatHistory.setThanhTien(DataUtils.safeToLong(nhPhieuNhapKhoCt.getThanhTien()));
+            phieuNhapXuatHistory.setThanhTien(phieuNhapXuatHistory.getDonGia() * phieuNhapXuatHistory.getSoLuong());
             phieuNhapXuatHistory.setSoLuongChungTu(nhPhieuNhapKhoCt.getSoLuongChungTu());
             phieuNhapXuatHistory.setIdPhieu(rowData.getId());
             phieuNhapXuatHistory.setSoPhieu(rowData.getSoPhieuNhapKho());
@@ -152,6 +158,7 @@ public class LoggingAspect {
             phieuNhapXuatHistory.setCloaiVthh(rowData.getCloaiVthh());
             phieuNhapXuatHistory.setNgayDuyet(DataUtils.convertToLocalDate(rowData.getNgayPduyet()));
             phieuNhapXuatHistory.setKieu("NHAP_DAU_THAU");
+            phieuNhapXuatHistory.setLoaiHinhNhapXuat("81");
             phieuNhapXuatHistory.setBang(rowData.TABLE_NAME);
             phieuNhapXuatHistory.setNamNhap(rowData.getNam());
             phieuNhapXuatHistory.setNgayTao(LocalDate.now());
@@ -167,9 +174,10 @@ public class LoggingAspect {
             HhPhieuNhapKhoCt dtl = hhPhieuNhapKhoCtRepository.findAllByIdHdr(rowData.getId()).get(0);
             PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
             phieuNhapXuatHistory.setMaKho(rowData.getMaLoKho() == null ? rowData.getMaNganKho() : rowData.getMaLoKho());
-            phieuNhapXuatHistory.setSoLuong(DataUtils.safeToLong(dtl.getSoLuongThucNhap()));
-            phieuNhapXuatHistory.setDonGia(DataUtils.safeToLong(dtl.getDonGia()));
-            phieuNhapXuatHistory.setThanhTien(DataUtils.safeToLong(dtl.getDonGia()) * DataUtils.safeToLong(dtl.getSoLuongThucNhap()));
+            phieuNhapXuatHistory.setSoLuong(DataUtils.safeToDouble(dtl.getSoLuongThucNhap()));
+            phieuNhapXuatHistory.setDonGia(DataUtils.safeToDouble(dtl.getDonGia()));
+//            phieuNhapXuatHistory.setThanhTien(DataUtils.safeToLong(dtl.getDonGia()) * DataUtils.safeToLong(dtl.getSoLuongThucNhap()));
+            phieuNhapXuatHistory.setThanhTien(DataUtils.safeToDouble(dtl.getDonGia()) * DataUtils.safeToLong(dtl.getSoLuongThucNhap()));
             phieuNhapXuatHistory.setSoLuongChungTu(dtl.getSoLuongChungTu());
             phieuNhapXuatHistory.setIdPhieu(rowData.getId());
             phieuNhapXuatHistory.setSoPhieu(rowData.getSoPhieuNhapKho());
@@ -178,6 +186,7 @@ public class LoggingAspect {
             phieuNhapXuatHistory.setCloaiVthh(rowData.getCloaiVthh());
             phieuNhapXuatHistory.setNgayDuyet(DataUtils.convertToLocalDate(rowData.getNgayPduyet()));
             phieuNhapXuatHistory.setKieu("NHAP_TRUC_TIEP");
+            phieuNhapXuatHistory.setLoaiHinhNhapXuat("93");
             phieuNhapXuatHistory.setBang(rowData.TABLE_NAME);
             phieuNhapXuatHistory.setNamNhap(rowData.getNamKh());
             phieuNhapXuatHistory.setNgayTao(LocalDate.now());
@@ -192,9 +201,9 @@ public class LoggingAspect {
           if (rowData.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
             PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
             phieuNhapXuatHistory.setMaKho(rowData.getMaLoKho() == null ? rowData.getMaNganKho() : rowData.getMaLoKho());
-            phieuNhapXuatHistory.setSoLuong(DataUtils.safeToLong(rowData.getThucXuat()));
-            phieuNhapXuatHistory.setDonGia(DataUtils.safeToLong(rowData.getDonGia()));
-            phieuNhapXuatHistory.setThanhTien(DataUtils.safeToLong(rowData.getThanhTien()));
+            phieuNhapXuatHistory.setSoLuong(DataUtils.safeToDouble(rowData.getThucXuat()));
+            phieuNhapXuatHistory.setDonGia(DataUtils.safeToDouble(rowData.getDonGia()));
+            phieuNhapXuatHistory.setThanhTien(DataUtils.safeToDouble(rowData.getThanhTien()));
             phieuNhapXuatHistory.setSoLuongChungTu(BigDecimal.ZERO);
             phieuNhapXuatHistory.setIdPhieu(rowData.getId());
             phieuNhapXuatHistory.setSoPhieu(rowData.getSoPhieuXuatKho());
@@ -226,9 +235,9 @@ public class LoggingAspect {
           if (rowData.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
             PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
             phieuNhapXuatHistory.setMaKho(rowData.getMaLoKho() == null ? rowData.getMaNganKho() : rowData.getMaLoKho());
-            phieuNhapXuatHistory.setSoLuong(DataUtils.safeToLong(rowData.getThucXuat()));
-            phieuNhapXuatHistory.setDonGia(DataUtils.safeToLong(rowData.getDonGia()));
-            phieuNhapXuatHistory.setThanhTien(DataUtils.safeToLong(rowData.getDonGia()) * DataUtils.safeToLong(rowData.getThucXuat()));
+            phieuNhapXuatHistory.setSoLuong(DataUtils.safeToDouble(rowData.getThucXuat()));
+            phieuNhapXuatHistory.setDonGia(DataUtils.safeToDouble(rowData.getDonGia()));
+            phieuNhapXuatHistory.setThanhTien(DataUtils.safeToDouble(rowData.getDonGia()) * DataUtils.safeToLong(rowData.getThucXuat()));
             phieuNhapXuatHistory.setSoLuongChungTu(BigDecimal.ZERO);
             phieuNhapXuatHistory.setIdPhieu(rowData.getId());
             phieuNhapXuatHistory.setSoPhieu(rowData.getSoPhieuXuatKho());
@@ -237,6 +246,7 @@ public class LoggingAspect {
             phieuNhapXuatHistory.setCloaiVthh(rowData.getCloaiVthh());
             phieuNhapXuatHistory.setNgayDuyet(rowData.getNgayPduyet());
             phieuNhapXuatHistory.setKieu("BAN_DAU_GIA");
+            phieuNhapXuatHistory.setLoaiHinhNhapXuat("89");
             phieuNhapXuatHistory.setBang(rowData.TABLE_NAME);
             phieuNhapXuatHistory.setNamNhap(rowData.getNam());
             phieuNhapXuatHistory.setNgayTao(LocalDate.now());
@@ -251,9 +261,9 @@ public class LoggingAspect {
           if (rowData.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
             PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
             phieuNhapXuatHistory.setMaKho(rowData.getMaLoKho() == null ? rowData.getMaNganKho() : rowData.getMaLoKho());
-            phieuNhapXuatHistory.setSoLuong(DataUtils.safeToLong(rowData.getThucXuat()));
-            phieuNhapXuatHistory.setDonGia(DataUtils.safeToLong(rowData.getDonGia()));
-            phieuNhapXuatHistory.setThanhTien(DataUtils.safeToLong(rowData.getDonGia()) * DataUtils.safeToLong(rowData.getThucXuat()));
+            phieuNhapXuatHistory.setSoLuong(DataUtils.safeToDouble(rowData.getThucXuat()));
+            phieuNhapXuatHistory.setDonGia(DataUtils.safeToDouble(rowData.getDonGia()));
+            phieuNhapXuatHistory.setThanhTien(DataUtils.safeToDouble(rowData.getDonGia()) * DataUtils.safeToLong(rowData.getThucXuat()));
             phieuNhapXuatHistory.setSoLuongChungTu(rowData.getTheoChungTu());
             phieuNhapXuatHistory.setIdPhieu(rowData.getId());
             phieuNhapXuatHistory.setSoPhieu(rowData.getSoPhieuXuatKho());
@@ -262,6 +272,7 @@ public class LoggingAspect {
             phieuNhapXuatHistory.setCloaiVthh(rowData.getCloaiVthh());
             phieuNhapXuatHistory.setNgayDuyet(rowData.getNgayPduyet());
             phieuNhapXuatHistory.setKieu("BAN_TRUC_TIEP");
+            phieuNhapXuatHistory.setLoaiHinhNhapXuat("95");
             phieuNhapXuatHistory.setBang(rowData.TABLE_NAME);
             phieuNhapXuatHistory.setNamNhap(rowData.getNamKh());
             phieuNhapXuatHistory.setNgayTao(LocalDate.now());
@@ -276,9 +287,9 @@ public class LoggingAspect {
           if (rowData.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
             PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
             phieuNhapXuatHistory.setMaKho(rowData.getMaLoKho() == null ? rowData.getMaNganKho() : rowData.getMaLoKho());
-            phieuNhapXuatHistory.setSoLuong(DataUtils.safeToLong(rowData.getTongSoLuong()));
-            phieuNhapXuatHistory.setDonGia(DataUtils.safeToLong(rowData.getDonGia()));
-            phieuNhapXuatHistory.setThanhTien(DataUtils.safeToLong(rowData.getThanhTien()));
+            phieuNhapXuatHistory.setSoLuong(DataUtils.safeToDouble(rowData.getTongSoLuong()));
+            phieuNhapXuatHistory.setDonGia(DataUtils.safeToDouble(rowData.getDonGia()));
+            phieuNhapXuatHistory.setThanhTien(DataUtils.safeToDouble(rowData.getThanhTien()));
             phieuNhapXuatHistory.setSoLuongChungTu(BigDecimal.ZERO);
             phieuNhapXuatHistory.setIdPhieu(rowData.getId());
             phieuNhapXuatHistory.setSoPhieu(rowData.getSoPhieuXuatKho());
@@ -299,9 +310,9 @@ public class LoggingAspect {
             if (rowData.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
               PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
               phieuNhapXuatHistory.setMaKho(rowData.getMaLoKho() == null ? rowData.getMaNganKho() : rowData.getMaLoKho());
-              phieuNhapXuatHistory.setSoLuong(DataUtils.safeToLong(rowData.getTongSoLuong()));
-              phieuNhapXuatHistory.setDonGia(0L);
-              phieuNhapXuatHistory.setThanhTien(0L);
+              phieuNhapXuatHistory.setSoLuong(DataUtils.safeToDouble(rowData.getTongSoLuong()));
+              phieuNhapXuatHistory.setDonGia(0d);
+              phieuNhapXuatHistory.setThanhTien(0d);
               phieuNhapXuatHistory.setSoLuongChungTu(BigDecimal.ZERO);
               phieuNhapXuatHistory.setIdPhieu(rowData.getId());
               phieuNhapXuatHistory.setSoPhieu(rowData.getSoPhieuNhapKho());
@@ -317,6 +328,36 @@ public class LoggingAspect {
               luuKhoClient.synchronizeData(phieuNhapXuatHistory);
               logger.info("Cập nhật kho theo Phiếu nhập kho DcnbPhieuXuatKhoController {}", rowData);
             }
+          }
+        }
+      }
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @AfterReturning(value = "BbNhapDayKhoPointCut()", returning = "result")
+  public void BbNhapDayKhoAfterLog(JoinPoint joinPoint, ResponseEntity<BaseResponse> result) {
+    try {
+      if (joinPoint.getTarget().toString().contains("NhBienBanNhapDayKhoController")) {
+        if (result != null && result.getBody().getMsg().equals(EnumResponse.RESP_SUCC.getDescription())) {
+          NhBbNhapDayKho rowData = objectMapper.convertValue(result.getBody().getData(), NhBbNhapDayKho.class);
+          if (rowData.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
+            PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
+            phieuNhapXuatHistory.setMaKho(rowData.getMaLoKho() == null ? rowData.getMaNganKho() : rowData.getMaLoKho());
+            phieuNhapXuatHistory.setSoLuong(DataUtils.safeToDouble(rowData.getSoLuong()));
+            phieuNhapXuatHistory.setIdPhieu(rowData.getId());
+            phieuNhapXuatHistory.setSoPhieu(rowData.getSoBienBanNhapDayKho());
+            phieuNhapXuatHistory.setLoaiNhapXuat(0);
+            phieuNhapXuatHistory.setNgayDuyet(DataUtils.convertToLocalDate(rowData.getNgayPduyet()));
+            phieuNhapXuatHistory.setKieu("BB_DAY_KHO_NHAP_DAU_THAU");
+            phieuNhapXuatHistory.setBang(rowData.TABLE_NAME);
+            phieuNhapXuatHistory.setNamNhap(rowData.getNam());
+            phieuNhapXuatHistory.setNgayNhapDay(DataUtils.convertToLocalDate(rowData.getNgayKetThucNhap()));
+            phieuNhapXuatHistory.setNgayTao(LocalDate.now());
+
+            luuKhoClient.synchronizeData(phieuNhapXuatHistory);
+            logger.info("Cập nhật kho theo Phiếu nhập đầy kho NhBienBanNhapDayKhoController {}", rowData);
           }
         }
       }
