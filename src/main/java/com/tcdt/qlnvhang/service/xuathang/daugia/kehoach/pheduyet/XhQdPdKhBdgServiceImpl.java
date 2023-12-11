@@ -456,13 +456,13 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
                 data.setNgayGuiDuyet(LocalDate.now());
                 break;
             case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
-            case Contains.TUCHOI_LDTC + Contains.CHODUYET_LDTC:
+            case Contains.TUCHOI_LDTC + Contains.DADUYET_LDV:
                 data.setNguoiPduyetId(currentUser.getUser().getId());
                 data.setNgayPduyet(LocalDate.now());
                 data.setLyDoTuChoi(statusReq.getLyDoTuChoi());
                 break;
-            case Contains.CHODUYET_LDTC + Contains.CHODUYET_LDV:
-            case Contains.BAN_HANH + Contains.CHODUYET_LDTC:
+            case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
+            case Contains.BAN_HANH + Contains.DADUYET_LDV:
                 data.setNguoiPduyetId(currentUser.getUser().getId());
                 data.setNgayPduyet(LocalDate.now());
                 break;
