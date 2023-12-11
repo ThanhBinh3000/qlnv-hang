@@ -19,9 +19,11 @@ import com.tcdt.qlnvhang.request.search.HhQdKhlcntSearchReq;
 import com.tcdt.qlnvhang.response.dauthauvattu.ChiTietGoiThauRes;
 import com.tcdt.qlnvhang.service.HhDauThauService;
 import com.tcdt.qlnvhang.service.HhQdKhlcntHdrService;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
+import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
@@ -292,17 +294,23 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 
     @Override
     public Page<HhQdKhlcntHdr> selectPageVt(HhQdKhlcntSearchReq req) throws Exception {
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null) {
+            throw new Exception("Access denied.");
+        }
+        if (!userInfo.getCapDvi().equals(Contains.CAP_TONG_CUC)) {
+            req.setMaDvi(userInfo.getDvql());
+        }
         int page = req.getPaggingReq().getPage();
         int limit = req.getPaggingReq().getLimit();
         Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 //        Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
-        Page<HhQdKhlcntHdr> data = hhQdKhlcntHdrRepository.selectPage(req.getNamKhoach(), req.getLoaiVthh(), req.getSoQd(), req.getTrichYeu(),
+        Page<HhQdKhlcntHdr> data = hhQdKhlcntHdrRepository.selectPageVt(req.getNamKhoach(), req.getLoaiVthh(), req.getSoQd(), req.getTrichYeu(),
                 convertDateToString(req.getTuNgayQd()),
                 convertDateToString(req.getDenNgayQd()),
                 req.getTrangThai(), req.getLastest(),
                 req.getMaDvi(),
-                req.getTrangThaiDtl(),
                 req.getTrangThaiDt(), req.getSoQdPdKhlcnt(), req.getSoQdPdKqlcnt(),
                 pageable);
         data.getContent().forEach(f -> {

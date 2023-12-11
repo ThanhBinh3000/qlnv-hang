@@ -47,6 +47,39 @@ public interface HhQdKhlcntHdrRepository extends BaseRepository<HhQdKhlcntHdr, L
 			, nativeQuery = true)
 	Page<HhQdKhlcntHdr> selectPage(Integer namKh, String loaiVthh, String soQd,String trichYeu, String tuNgayQd, String denNgayQd,String trangThai,Integer lastest,String maDvi,String trangThaiDtl,String trangThaiDt, String soQdPdKhlcnt, String soQdPdKqlcnt, Pageable pageable);
 
+	@Query(value = " SELECT DISTINCT QD_HDR.*, QD_PD_HDR.NGAY_PDUYET AS NGAY_PD_QD_PDKQ_KHLCNT FROM HH_QD_KHLCNT_HDR QD_HDR " +
+			" LEFT JOIN HH_QD_KHLCNT_DSGTHAU GT ON QD_HDR.ID = GT.ID_QD_HDR " +
+			" LEFT JOIN HH_QD_KHLCNT_DSGTHAU_CTIET CT ON GT.ID = CT.ID_GOI_THAU " +
+			" LEFT JOIN HH_QD_PDUYET_KQLCNT_HDR QD_PD_HDR ON QD_HDR.ID = QD_PD_HDR.ID_QD_PD_KHLCNT " +
+			" WHERE (:namKh IS NULL OR QD_HDR.NAM_KHOACH = TO_NUMBER(:namKh)) "+
+			" AND (:loaiVthh IS NULL OR QD_HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) "+
+			" AND (:soQdPdKqlcnt IS NULL OR LOWER(QD_PD_HDR.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQdPdKqlcnt),'%')))" +
+			" AND (:soQdPdKhlcnt IS NULL OR LOWER(QD_HDR.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQdPdKhlcnt),'%')))" +
+			" AND (:soQd IS NULL OR LOWER(QD_HDR.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%'))) "+
+			" AND (:trichYeu IS NULL OR LOWER(QD_HDR.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) "+
+			" AND (:tuNgayQd IS NULL OR QD_HDR.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
+			" AND (:denNgayQd IS NULL OR QD_HDR.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) "+
+			" AND (:trangThai IS NULL OR QD_HDR.TRANG_THAI = :trangThai)" +
+			" AND (:lastest IS NULL OR QD_HDR.LASTEST = :lastest) " +
+			" AND (:maDvi IS NULL OR CT.MA_DVI = :maDvi) " +
+//			" AND (:trangThaiDtl IS NULL OR QD_DTL.TRANG_THAI = :trangThaiDtl) " +
+			" AND (:trangThaiDt IS NULL OR QD_HDR.TRANG_THAI_DT = :trangThaiDt )"
+			, countQuery = " SELECT COUNT(DISTINCT QD_HDR.ID) FROM HH_QD_KHLCNT_HDR  QD_HDR LEFT JOIN HH_QD_KHLCNT_DSGTHAU GT ON QD_HDR.ID = GT.ID_QD_HDR LEFT JOIN HH_QD_KHLCNT_DSGTHAU_CTIET CT ON GT.ID = CT.ID_GOI_THAU LEFT JOIN HH_QD_PDUYET_KQLCNT_HDR QD_PD_HDR ON QD_HDR.ID = QD_PD_HDR.ID_QD_PD_KHLCNT WHERE (:namKh IS NULL OR QD_HDR.NAM_KHOACH = TO_NUMBER(:namKh)) "+
+			" AND (:loaiVthh IS NULL OR QD_HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) "+
+			" AND (:soQdPdKqlcnt IS NULL OR LOWER(QD_PD_HDR.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQdPdKqlcnt),'%')))" +
+			" AND (:soQdPdKhlcnt IS NULL OR LOWER(QD_HDR.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQdPdKhlcnt),'%')))" +
+			" AND (:soQd IS NULL OR LOWER(QD_HDR.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%'))) "+
+			" AND (:trichYeu IS NULL OR LOWER(QD_HDR.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) "+
+			" AND (:tuNgayQd IS NULL OR QD_HDR.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
+			" AND (:denNgayQd IS NULL OR QD_HDR.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) "+
+			" AND (:trangThai IS NULL OR QD_HDR.TRANG_THAI = :trangThai) " +
+			" AND (:lastest IS NULL OR QD_HDR.LASTEST = :lastest)" +
+			" AND (:maDvi IS NULL OR CT.MA_DVI = :maDvi) " +
+//			" AND (:trangThaiDtl IS NULL OR QD_DTL.TRANG_THAI = :trangThaiDtl) " +
+			" AND (:trangThaiDt IS NULL OR QD_HDR.TRANG_THAI_DT = :trangThaiDt )"
+			, nativeQuery = true)
+	Page<HhQdKhlcntHdr> selectPageVt(Integer namKh, String loaiVthh, String soQd,String trichYeu, String tuNgayQd, String denNgayQd,String trangThai,Integer lastest,String maDvi,String trangThaiDt, String soQdPdKhlcnt, String soQdPdKqlcnt, Pageable pageable);
+
 	@Query(value = "SELECT * FROM HH_QD_KHLCNT_HDR QDKHLCNT " +
 			" LEFT JOIN HH_QD_KHLCNT_DTL QD_DTL ON QDKHLCNT.ID = QD_DTL.ID_QD_HDR " +
 			" WHERE (:namKh IS NULL OR QDKHLCNT.NAM_KHOACH = TO_NUMBER(:namKh)) "+
