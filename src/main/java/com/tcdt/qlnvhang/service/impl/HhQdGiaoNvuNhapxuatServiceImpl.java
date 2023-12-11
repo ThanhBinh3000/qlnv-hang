@@ -141,7 +141,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 		Optional<NhQdGiaoNvuNhapxuatHdr> byIdHdAndMaDviAndNamNhap = hhQdGiaoNvuNhapxuatRepository.findByIdHdAndMaDviAndNamNhap(objReq.getIdHd(), userInfo.getDvql(), objReq.getNamNhap());
 		if(byIdHdAndMaDviAndNamNhap.isPresent()){
-			throw new Exception("Đơn vị đã tạo hợp đồng, vui lòng tạo hợp đồng");
+			throw new Exception("Hợp đồng đã được tạo Qđ giao nhiệm vụ nhập hàng, vui lòng chọn hợp đồng khác.");
 		}
 
 		this.validateSoQd(null, objReq);
