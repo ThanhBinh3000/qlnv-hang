@@ -26,7 +26,8 @@ public interface XhDxKhBanDauGiaPhanLoRepository extends JpaRepository<XhDxKhBan
             "AND hdr.LOAI_GIA = 'LG04' " +
             "AND dtl.MA_CHI_CUC = :maDvi " +
             "AND hdr.TRANG_THAI = '" + Contains.BAN_HANH + "'" +
-            "AND hdr.NGAY_HIEU_LUC <= CURRENT_DATE " +
+            "AND hdr.NGAY_KY <= CURRENT_DATE " +
+            "ORDER BY hdr.NGAY_KY DESC " +
             "FETCH FIRST 1 ROWS ONLY",
             nativeQuery = true)
     BigDecimal getGiaDuocDuyetLuongThuc(
@@ -43,7 +44,8 @@ public interface XhDxKhBanDauGiaPhanLoRepository extends JpaRepository<XhDxKhBan
             "AND hdr.NAM_KE_HOACH = :namKh " +
             "AND hdr.LOAI_GIA = 'LG04' " +
             "AND hdr.TRANG_THAI = '" + Contains.BAN_HANH + "'" +
-            "AND hdr.NGAY_HIEU_LUC <= CURRENT_DATE " +
+            "AND hdr.NGAY_KY <= CURRENT_DATE " +
+            "ORDER BY hdr.NGAY_KY DESC " +
             "FETCH FIRST 1 ROWS ONLY",
             nativeQuery = true)
     BigDecimal getGiaDuocDuyetVatTu(
