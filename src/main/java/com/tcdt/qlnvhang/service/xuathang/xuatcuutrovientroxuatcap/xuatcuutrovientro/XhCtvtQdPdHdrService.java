@@ -346,14 +346,15 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     }*/
 
     XhCtvtQuyetDinhPdHdr created = xhCtvtQdPdHdrRepository.save(pheDuyetRow);
-    XhCtvtQuyetDinhPdHdr xuatCapRow = new XhCtvtQuyetDinhPdHdr();
-    List<XhCtvtQuyetDinhPdDtl> listXuatCapDtl = new ArrayList<>();
-    if (created.isXuatCap() && statusReq.getTrangThai().equals(TrangThaiAllEnum.BAN_HANH.getId()) && !created.getType().equals("XC")) {
-      DataUtils.copyProperties(created,xuatCapRow,"id");
+    /*if (created.isXuatCap() && statusReq.getTrangThai().equals(TrangThaiAllEnum.BAN_HANH.getId()) && !created.getType().equals("XC")) {
+      XhCtvtQuyetDinhPdHdr xuatCapRow = new XhCtvtQuyetDinhPdHdr();
+      List<XhCtvtQuyetDinhPdDtl> listXuatCapDtl = new ArrayList<>();
+//      DataUtils.copyProperties(created,xuatCapRow,"id");
+      created.setSoBbQd(created.getSoBbQd().replace("QĐPDCTVT","QĐPDXC"));
       created.getQuyetDinhPdDtl().forEach(s -> {
         if(s.isXuatCap()) {
           XhCtvtQuyetDinhPdDtl dtl = new XhCtvtQuyetDinhPdDtl();
-          BeanUtils.copyProperties(s, dtl, "id");
+          BeanUtils.copyProperties(s, dtl, "id","mapVthh");
           dtl.setXhCtvtQuyetDinhPdHdr(xuatCapRow);
           listXuatCapDtl.add(dtl);
         }
@@ -363,7 +364,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
       xuatCapRow.setType("XC");
       xuatCapRow.setLoaiNhapXuat("Xuất cấp");
       xhCtvtQdPdHdrRepository.save(xuatCapRow);
-    }
+    }*/
     return created;
   }
 
