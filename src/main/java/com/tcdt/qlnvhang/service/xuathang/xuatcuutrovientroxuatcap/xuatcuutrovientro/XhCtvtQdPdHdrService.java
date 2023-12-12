@@ -357,6 +357,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
       });
       xuatCapRow.setQuyetDinhPdDtl(listXuatCapDtl);
       xuatCapRow.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
+      xuatCapRow.setType("XC");
       xhCtvtQdPdHdrRepository.save(xuatCapRow);
     }
     return created;
