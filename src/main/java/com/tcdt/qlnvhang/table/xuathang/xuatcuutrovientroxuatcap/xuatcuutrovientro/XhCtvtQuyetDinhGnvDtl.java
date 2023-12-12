@@ -49,7 +49,7 @@ public class XhCtvtQuyetDinhGnvDtl implements Serializable {
   private BigDecimal slGaoThuHoiSauXayXat;
   @Column(name = "SL_THOC_DE_XAY_XAT")
   private BigDecimal slThocDeXayXat;
-
+  private Integer namNhap;
   @JsonIgnore
   @Transient
   private Map<String, Map<String, Object>> mapVthh;
