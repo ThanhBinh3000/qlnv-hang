@@ -36,6 +36,9 @@ public class XhPhieuKnclDtl extends BaseEntity implements Serializable {
   //phan rieng
   private String chiTieuCl;
   private String chiSoCl;
+  private String chiSoClToiThieu;
+  private String chiSoClToiDa;
+  private String toanTu;
   private String ketQua;
   private String phuongPhap;
   private String danhGia;
