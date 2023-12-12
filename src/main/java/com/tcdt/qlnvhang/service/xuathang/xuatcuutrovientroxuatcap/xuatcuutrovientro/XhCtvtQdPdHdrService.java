@@ -17,6 +17,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtTongHopHdr;
 import com.tcdt.qlnvhang.util.Contains;
@@ -343,7 +344,21 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
       XhCtvtQuyetDinhPdHdr xuatCapRow = xhCtvtQdPdHdrRepository.save(data);
       pheDuyetRow.setIdXc(xuatCapRow.getId());
     }*/
+
     XhCtvtQuyetDinhPdHdr created = xhCtvtQdPdHdrRepository.save(pheDuyetRow);
+    XhCtvtQuyetDinhPdHdr xuatCapRow = new XhCtvtQuyetDinhPdHdr();
+    List<XhCtvtQuyetDinhPdDtl> listXuatCapDtl = new ArrayList<>();
+    if (created.isXuatCap() && statusReq.getTrangThai().equals(TrangThaiAllEnum.BAN_HANH.getId()) && !created.getType().equals("XC")) {
+      created.getQuyetDinhPdDtl().forEach(s -> {
+        XhCtvtQuyetDinhPdDtl dtl = new XhCtvtQuyetDinhPdDtl();
+        BeanUtils.copyProperties(dtl, s, "id");
+        dtl.setXhCtvtQuyetDinhPdHdr(xuatCapRow);
+        listXuatCapDtl.add(dtl);
+      });
+      xuatCapRow.setQuyetDinhPdDtl(listXuatCapDtl);
+      xuatCapRow.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
+      xhCtvtQdPdHdrRepository.save(xuatCapRow);
+    }
     return created;
   }
 
