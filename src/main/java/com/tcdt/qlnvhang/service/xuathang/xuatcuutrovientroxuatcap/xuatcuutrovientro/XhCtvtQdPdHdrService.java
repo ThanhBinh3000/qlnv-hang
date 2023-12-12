@@ -349,15 +349,19 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     XhCtvtQuyetDinhPdHdr xuatCapRow = new XhCtvtQuyetDinhPdHdr();
     List<XhCtvtQuyetDinhPdDtl> listXuatCapDtl = new ArrayList<>();
     if (created.isXuatCap() && statusReq.getTrangThai().equals(TrangThaiAllEnum.BAN_HANH.getId()) && !created.getType().equals("XC")) {
+      DataUtils.copyProperties(created,xuatCapRow,"id");
       created.getQuyetDinhPdDtl().forEach(s -> {
-        XhCtvtQuyetDinhPdDtl dtl = new XhCtvtQuyetDinhPdDtl();
-        BeanUtils.copyProperties(dtl, s, "id");
-        dtl.setXhCtvtQuyetDinhPdHdr(xuatCapRow);
-        listXuatCapDtl.add(dtl);
+        if(s.isXuatCap()) {
+          XhCtvtQuyetDinhPdDtl dtl = new XhCtvtQuyetDinhPdDtl();
+          BeanUtils.copyProperties(s, dtl, "id");
+          dtl.setXhCtvtQuyetDinhPdHdr(xuatCapRow);
+          listXuatCapDtl.add(dtl);
+        }
       });
       xuatCapRow.setQuyetDinhPdDtl(listXuatCapDtl);
-      xuatCapRow.setTrangThai(TrangThaiAllEnum.DU_THAO.getId());
+      xuatCapRow.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
       xuatCapRow.setType("XC");
+      xuatCapRow.setLoaiNhapXuat("Xuất cấp");
       xhCtvtQdPdHdrRepository.save(xuatCapRow);
     }
     return created;
