@@ -46,6 +46,10 @@ public class XhXkVtBhPhieuKdclRequest extends BaseRequest {
     private Long nguoiPduyetId;
     private String lyDoTuChoi;
     private String type;
+    private String canBoTao;
+    private String thuKho;
+    private String tpKtbq;
+    private String lanhDaoCuc;
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
     private List<XhXkVtBhPhieuKdclDtl> phieuKdclDtl = new ArrayList<>();
 
