@@ -50,6 +50,7 @@ public class XhCtvtQuyetDinhPdDtl implements Serializable {
   private String soQdGnv;
   private LocalDate ngayKetThuc;
   private Integer namNhap;
+  private Boolean isXuatCap;
   @JsonIgnore
   @Transient
   private Map<String, String> mapVthh;
