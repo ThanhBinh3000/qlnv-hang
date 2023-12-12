@@ -37,6 +37,7 @@ public class XhCtvtDeXuatPa implements Serializable {
   private BigDecimal soLuongNhuCauXuat;
   private BigDecimal soLuongConThieu;
   private BigDecimal soLuongChuyenCapThoc;
+  private Integer namNhap;
 
   @JsonIgnore
   @Transient
