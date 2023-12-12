@@ -24,19 +24,16 @@ public class DcnbBienBanHaoDoiDtl implements Serializable {
 
     @Column(name = "HDR_ID", insertable = true, updatable = true)
     private Long hdrId;
-    @NotNull
     @Column(name = "NGAY_BAT_DAU")
     private LocalDate ngayBatDau;
-    @NotNull
     @Column(name = "NGAY_KET_THUC")
     private LocalDate ngayKetThuc;
-    @NotNull
+    @Column(name = "SO_THANG_BAO_QUAN")
+    private Double soThangBaoQuan;
     @Column(name = "SL_BAO_QUAN")
     private Double slBaoQuan;
-    @NotNull
     @Column(name = "DINH_MUC_HAO_HUT")
     private Double dinhMucHaoHut;
-    @NotNull
     @Column(name = "SL_HAO")
     private Double slHao;
 

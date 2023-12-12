@@ -34,6 +34,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -80,6 +81,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 	}
 
 	@Override
+	@Transactional
 	public BienBanLayMau create(BienBanLayMauReq req) throws Exception {
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null){
@@ -117,6 +119,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 	}
 
 	@Override
+	@Transactional
 	public BienBanLayMau update(BienBanLayMauReq req) throws Exception {
 				UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null)
@@ -178,6 +181,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 	}
 
 	@Override
+	@Transactional
 	public BienBanLayMau approve(BienBanLayMauReq req) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
 
@@ -221,6 +225,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 	}
 
 	@Override
+	@Transactional
 	public void delete(Long id) throws Exception {
 		Optional<BienBanLayMau> optional = bienBanLayMauRepository.findById(id);
 		if (!optional.isPresent())
@@ -343,6 +348,24 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 		}
 		object.setTenDviUpper(bienBanLayMau.getTenDvi().toUpperCase());
 		return docxToPdfConverter.convertDocxToPdf(inputStream, object);
+	}
+
+	@Override
+	public List<BienBanLayMau> searchList(BienBanLayMauReq objReq) {
+		List<BienBanLayMau> bienBanLayMaus = bienBanLayMauRepository.selectList(objReq);
+		Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
+		Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
+		bienBanLayMaus.forEach(x -> {
+			x.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(x.getTrangThai()));
+			x.setTenLoaiVthh(listDanhMucHangHoa.get(x.getLoaiVthh()));
+			x.setTenCloaiVthh(listDanhMucHangHoa.get(x.getCloaiVthh()));
+			x.setTenDvi(listDanhMucDvi.get(x.getMaDvi()));
+			x.setTenDiemKho(listDanhMucDvi.get(x.getMaDiemKho()));
+			x.setTenNhaKho(listDanhMucDvi.get(x.getMaNhaKho()));
+			x.setTenNganKho(listDanhMucDvi.get(x.getMaNganKho()));
+			x.setTenLoKho(listDanhMucDvi.get(x.getMaLoKho()));
+		});
+		return bienBanLayMaus;
 	}
 
 	private static String extractTextAfterDash(String input) {

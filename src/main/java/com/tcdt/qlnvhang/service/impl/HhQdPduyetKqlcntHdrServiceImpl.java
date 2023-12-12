@@ -390,11 +390,13 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 	}
 
 	@Override
+	@Transactional
 	public void delete(IdSearchReq idSearchReq) throws Exception {
 		if(!StringUtils.isEmpty(idSearchReq.getId())){
 			fileDinhKemService.delete(idSearchReq.getId(), Lists.newArrayList(HhQdPduyetKqlcntHdr.TABLE_NAME + "_CAN_CU"));
 			fileDinhKemService.delete(idSearchReq.getId(), Lists.newArrayList(HhQdPduyetKqlcntHdr.TABLE_NAME));
 			hhQdPduyetKqlcntHdrRepository.deleteById(idSearchReq.getId());
+			hhQdPduyetKqlcntDtlRepository.deleteAllByIdQdPdHdr(idSearchReq.getId());
 		}else{
 			throw new Exception(
 					"Xóa thất bại, không tìm thấy dữ liệu");
@@ -402,10 +404,12 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 	}
 
 	@Override
+	@Transactional
 	public void deleteMulti(IdSearchReq idSearchReq) throws Exception {
 		if (StringUtils.isEmpty(idSearchReq.getIds()))
 			throw new Exception("Xoá thất bại, không tìm thấy dữ liệu");
 		List<HhQdPduyetKqlcntHdr> listHdr = hhQdPduyetKqlcntHdrRepository.findAllByIdIn(idSearchReq.getIds());
+		hhQdPduyetKqlcntDtlRepository.deleteAllByIdQdPdHdrIn(idSearchReq.getIds());
 		hhQdPduyetKqlcntHdrRepository.deleteAll(listHdr);
 	}
 
@@ -666,13 +670,13 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 						gthauPreview.setSoLuong(gThau.getSoLuong());
 						gthauPreview.setDonGia(docxToPdfConverter.convertBigDecimalToStr(gThau.getDonGiaVat()));
 						gthauPreview.setTenCloaiVthh(StringUtils.isEmpty(gThau.getCloaiVthh()) ? "" : hashMapDmHh.get(gThau.getCloaiVthh()).toUpperCase());
-						gthauPreview.setDonGiaNhaThau(docxToPdfConverter.convertBigDecimalToStr(gThau.getDonGiaNhaThau()));
+						gthauPreview.setDonGiaNhaThau(docxToPdfConverter.convertBigDecimalToStr(checkNullAsZero(gThau.getDonGiaNhaThau())));
 						gthauPreview.setThanhTien(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaVat())));
-						gthauPreview.setThanhTienNhaThau(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau())));
-						gthauPreview.setChenhLech(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaVat()).subtract((gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau())))));
+						gthauPreview.setThanhTienNhaThau(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(checkNullAsZero(gThau.getDonGiaNhaThau()))));
+						gthauPreview.setChenhLech(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaVat()).subtract((gThau.getSoLuong().multiply(checkNullAsZero(gThau.getDonGiaNhaThau()))))));
 						tongThanhTien = tongThanhTien.add(gThau.getSoLuong().multiply(gThau.getDonGiaVat()));
-						tongThanhTienNhaThau = tongThanhTienNhaThau.add(gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau()));
-						tongChenhLech = tongChenhLech.add(gThau.getSoLuong().multiply(gThau.getDonGiaVat()).subtract((gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau()))));
+						tongThanhTienNhaThau = tongThanhTienNhaThau.add(gThau.getSoLuong().multiply(checkNullAsZero(gThau.getDonGiaNhaThau())));
+						tongChenhLech = tongChenhLech.add(gThau.getSoLuong().multiply(gThau.getDonGiaVat()).subtract((gThau.getSoLuong().multiply(checkNullAsZero(gThau.getDonGiaNhaThau())))));
 						tongSl = tongSl.add(gThau.getSoLuong());
 						gthauPreview.setDvt(gThau.getDviTinh());
 						HhQdPduyetKqlcntDtl kq = hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndType(gThau.getId(), "DC");
@@ -693,13 +697,13 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 					gthauPreview.setDvt(gThau.getDviTinh());
 					gthauPreview.setDonGia(docxToPdfConverter.convertBigDecimalToStr(gThau.getDonGiaVat()));
 					gthauPreview.setTenCloaiVthh(StringUtils.isEmpty(gThau.getCloaiVthh()) ? "" : hashMapDmHh.get(gThau.getCloaiVthh()).toUpperCase());
-					gthauPreview.setDonGiaNhaThau(docxToPdfConverter.convertBigDecimalToStr(gThau.getDonGiaNhaThau()));
-					gthauPreview.setChenhLech(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaVat()).subtract((gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau())))));
+					gthauPreview.setDonGiaNhaThau(docxToPdfConverter.convertBigDecimalToStr(checkNullAsZero(gThau.getDonGiaNhaThau())));
+					gthauPreview.setChenhLech(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaVat()).subtract((gThau.getSoLuong().multiply(checkNullAsZero(gThau.getDonGiaNhaThau()))))));
 					gthauPreview.setThanhTien(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaVat())));
-					gthauPreview.setThanhTienNhaThau(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau())));
+					gthauPreview.setThanhTienNhaThau(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(checkNullAsZero(gThau.getDonGiaNhaThau()))));
 					tongThanhTien = tongThanhTien.add(gThau.getSoLuong().multiply(gThau.getDonGiaVat()));
-					tongThanhTienNhaThau = tongThanhTienNhaThau.add(gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau()));
-					tongChenhLech = tongChenhLech.add(gThau.getSoLuong().multiply(gThau.getDonGiaVat()).subtract((gThau.getSoLuong().multiply(gThau.getDonGiaNhaThau()))));
+					tongThanhTienNhaThau = tongThanhTienNhaThau.add(gThau.getSoLuong().multiply(checkNullAsZero(gThau.getDonGiaNhaThau())));
+					tongChenhLech = tongChenhLech.add(gThau.getSoLuong().multiply(gThau.getDonGiaVat()).subtract((gThau.getSoLuong().multiply(checkNullAsZero(gThau.getDonGiaNhaThau())))));
 					tongSl = tongSl.add(gThau.getSoLuong());
 					HhQdPduyetKqlcntDtl kq = hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndType(gThau.getId(), "GOC");
 					if (kq != null) {
@@ -768,6 +772,13 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		return docxToPdfConverter.convertDocxToPdf(inputStream, object);
 	}
 
+	private BigDecimal checkNullAsZero (BigDecimal number) {
+		if (number == null) {
+			return BigDecimal.ZERO;
+		} else {
+			return number;
+		}
+	}
 
 //	@Override
 //	public HhQdPduyetKqlcntHdr create(HhQdPduyetKqlcntHdrReq objReq) throws Exception {

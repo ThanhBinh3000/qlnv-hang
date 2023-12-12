@@ -254,11 +254,11 @@ public class XhBbTinhkBttServiceImpl extends BaseServiceImpl {
         req.getPaggingReq().setLimit(Integer.MAX_VALUE);
         Page<XhBbTinhkBttHdr> page = this.searchPage(currentUser, req);
         List<XhBbTinhkBttHdr> data = page.getContent();
-        String title = "Danh sách biên bản tịnh kho";
+        String title = "Danh sách biên bản tịnh kho hàng DTQG";
         String[] rowsName = new String[]{"STT", "Số QĐ giao NVXH", "Năm KH", "Thời hạn XH", "Điểm kho",
                 "Ngăn/Lô kho", "Số BB tịnh kho", "Ngày lập BB tịnh kho", "Số phiếu KNCL", "Số bảng kê",
                 "Số phiếu xuất kho", "Ngày xuất kho", "Trạng thái"};
-        String fileName = "danh-sach-bien-ban-tinh-kho.xlsx";
+        String fileName = "danh-sach-bien-ban-tinh-kho-hang-DTQG.xlsx";
         List<Object[]> dataList = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
             XhBbTinhkBttHdr hdr = data.get(i);
@@ -266,7 +266,7 @@ public class XhBbTinhkBttServiceImpl extends BaseServiceImpl {
             objs[0] = i;
             objs[1] = hdr.getSoQdNv();
             objs[2] = hdr.getNamKh();
-            objs[3] = hdr.getNgayKyQdNv();
+            objs[3] = hdr.getTgianGiaoNhan();
             objs[4] = hdr.getTenDiemKho();
             objs[5] = hdr.getTenNganLoKho();
             objs[6] = hdr.getSoBbTinhKho();
@@ -278,7 +278,7 @@ public class XhBbTinhkBttServiceImpl extends BaseServiceImpl {
                 finalObjs[10] = dtl.getSoPhieuXuatKho();
                 finalObjs[11] = dtl.getNgayXuatKho();
             });
-            objs[12] = hdr.getTrangThai();
+            objs[12] = hdr.getTenTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

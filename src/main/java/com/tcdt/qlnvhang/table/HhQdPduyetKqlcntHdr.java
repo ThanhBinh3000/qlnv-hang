@@ -96,6 +96,10 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 
 	String cloaiVthh;
 	String noiDungQd;
+	@Temporal(TemporalType.DATE)
+	private Date tgianTrinhKqTcg;
+	@Temporal(TemporalType.DATE)
+	private Date tgianTrinhTtd;
 
 
 	public String getTenTrangThaiHd() {

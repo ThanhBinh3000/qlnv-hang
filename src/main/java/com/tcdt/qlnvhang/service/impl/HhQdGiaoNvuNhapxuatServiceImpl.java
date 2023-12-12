@@ -141,7 +141,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 
 		Optional<NhQdGiaoNvuNhapxuatHdr> byIdHdAndMaDviAndNamNhap = hhQdGiaoNvuNhapxuatRepository.findByIdHdAndMaDviAndNamNhap(objReq.getIdHd(), userInfo.getDvql(), objReq.getNamNhap());
 		if(byIdHdAndMaDviAndNamNhap.isPresent()){
-			throw new Exception("Đơn vị đã tạo hợp đồng, vui lòng tạo hợp đồng");
+			throw new Exception("Hợp đồng đã được tạo Qđ giao nhiệm vụ nhập hàng, vui lòng chọn hợp đồng khác.");
 		}
 
 		this.validateSoQd(null, objReq);
@@ -172,7 +172,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 //			hhHopDongDdiemNhapKhoRepository.saveAll(collect);
 			this.saveDetail(dataMap,objReq,false);
 		}else{
-			hhHopDongRepository.updateHopDong(dataMap.getIdHd(),Contains.DADUTHAO_QD);
+//			hhHopDongRepository.updateHopDong(dataMap.getIdHd(),Contains.DADUTHAO_QD);
 			this.saveDetailLt(dataMap,objReq,false);
 		}
 		return dataMap;
@@ -788,7 +788,11 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			}
 
 			// Set phiếu kiểm nghiệm chất lượng
-			List<PhieuKnghiemCluongHang> phieuKnghiemCl = phieuKnghiemCluongHangRepository.findBySoQdGiaoNvNhAndMaDvi(f.getSoQd(), f.getMaDvi());
+			List<PhieuKnghiemCluongHang> phieuKnghiemCl = phieuKnghiemCluongHangRepository.getDanhSachPhieuKncl(f.getId(), req.getSoPhieuKncl(), req.getSoBbBanGiao(), req.getSoBbNhapDayKho(),
+					convertFullDateToString(req.getTuNgayKncl()),
+					convertFullDateToString(req.getDenNgayKncl()),
+					f.getMaDvi(),
+					userInfo.getDvql());
 			phieuKnghiemCl.forEach( item -> {
 				item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
 				item.setTenDiemKho(mapDmucDvi.get(item.getMaDiemKho()));

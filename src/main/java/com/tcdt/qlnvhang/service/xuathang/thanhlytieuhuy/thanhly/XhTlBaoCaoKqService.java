@@ -76,7 +76,7 @@ public class XhTlBaoCaoKqService extends BaseServiceImpl {
   public XhTlBaoCaoKqHdr save( XhTlBaoCaoKqHdrReq req) throws Exception {
     UserInfo userInfo = UserUtils.getUserInfo();
     XhTlBaoCaoKqHdr hdr = new XhTlBaoCaoKqHdr();
-    validateData(req);
+    this.validateData(req);
     BeanUtils.copyProperties(req, hdr);
     hdr.setNguoiTaoId(userInfo.getId());
     hdr.setMaDvi(userInfo.getDvql());
@@ -89,13 +89,13 @@ public class XhTlBaoCaoKqService extends BaseServiceImpl {
   }
 
   void validateData(XhTlBaoCaoKqHdrReq req) throws Exception {
-    Optional<XhTlBaoCaoKqHdr> bySoQd = hdrRepository.findBySoBaoCao(req.getSoQd());
+    Optional<XhTlBaoCaoKqHdr> bySoQd = hdrRepository.findBySoBaoCao(req.getSoBaoCao());
     if(bySoQd.isPresent()){
       if(ObjectUtils.isEmpty(req.getId())){
-        throw new Exception("Số báo cáo " + bySoQd.get().getSoQd() +" đã tồn tại");
+        throw new Exception("Số báo cáo " + bySoQd.get().getSoBaoCao() +" đã tồn tại");
       }else{
         if(!req.getId().equals(bySoQd.get().getId())){
-          throw new Exception("Số báo cáo " + bySoQd.get().getSoQd() +" đã tồn tại");
+          throw new Exception("Số báo cáo " + bySoQd.get().getSoBaoCao() +" đã tồn tại");
         }
       }
     }

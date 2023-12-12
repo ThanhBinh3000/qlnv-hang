@@ -139,7 +139,7 @@ public class HhBienBanDayKhoService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại. ");
         }
         HhBienBanDayKhoHdr bienBanDayKhoHdr = optional.get();
-        BeanUtils.copyProperties(objReq, bienBanDayKhoHdr, "id");
+        BeanUtils.copyProperties(objReq, bienBanDayKhoHdr);
         bienBanDayKhoHdr.setNgaySua(getDateTimeNow());
         bienBanDayKhoHdr.setNguoiSua(userInfo.getUsername());
         HhBienBanDayKhoHdr createCheck = hhBienBanDayKhoHdrRepository.save(bienBanDayKhoHdr);

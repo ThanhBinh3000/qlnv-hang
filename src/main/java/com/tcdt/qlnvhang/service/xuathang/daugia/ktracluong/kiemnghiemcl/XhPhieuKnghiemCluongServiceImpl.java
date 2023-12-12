@@ -240,11 +240,11 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl {
         req.getPaggingReq().setLimit(Integer.MAX_VALUE);
         Page<XhPhieuKnghiemCluong> page = this.searchPage(currentUser, req);
         List<XhPhieuKnghiemCluong> data = page.getContent();
-        String title = "Danh sách phiếu kiểm nghiệm chất lượng";
+        String title = "Danh sách phiếu kiểm nghiệm hàng DTQG";
         String[] rowsName = new String[]{"STT", "Số QĐ giao NVXH", "Năm KH", "Thời hạn XH", "Điểm kho",
                 "Ngăn/Lô kho", "Số phiếu KNCL", "Ngày kiểm nghiệm", "Số BB LM/BGM", "Ngày lấy mẫu",
                 "Số BB tịnh kho", "Ngày lập BB tịnh kho", "Trạng thái"};
-        String fileName = "dạm-sach-phieu-kiem-nghiem-chat-luong.xlsx";
+        String fileName = "danh-sach-phieu-kiem-nghiem-chat-luong-hang-DTQG.xlsx";
         List<Object[]> dataList = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
             XhPhieuKnghiemCluong hdr = data.get(i);
@@ -252,9 +252,9 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl {
             objs[0] = i;
             objs[1] = hdr.getSoQdNv();
             objs[2] = hdr.getNam();
-            objs[3] = hdr.getNgayKyQdNv();
+            objs[3] = hdr.getTgianGiaoHang();
             objs[4] = hdr.getTenDiemKho();
-            objs[5] = hdr.getTenLoKho();
+            objs[5] = hdr.getTenNganLoKho();
             objs[6] = hdr.getSoPhieuKiemNghiem();
             objs[7] = hdr.getNgayKiemNghiemMau();
             objs[8] = hdr.getSoBbLayMau();

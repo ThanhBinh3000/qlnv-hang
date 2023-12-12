@@ -24,9 +24,9 @@ public class PhieuNhapXuatHistory implements Serializable {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = PhieuNhapXuatHistory.TABLE_NAME + "_SEQ")
   @SequenceGenerator(sequenceName = PhieuNhapXuatHistory.TABLE_NAME + "_SEQ", allocationSize = 1, name = PhieuNhapXuatHistory.TABLE_NAME + "_SEQ")
   private Long id;
-  private Long soLuong;
-  private Long donGia;
-  private Long thanhTien;
+  private Double soLuong;
+  private Double donGia;
+  private Double thanhTien;
   private BigDecimal soLuongChungTu;
   private Long idPhieu;
   private String soPhieu;
@@ -42,7 +42,7 @@ public class PhieuNhapXuatHistory implements Serializable {
   private String bang;
   private Integer namNhap;
   private LocalDate ngayTao;
-
+  private LocalDate ngayNhapDay;
   @Transient
   private String maCuc;
   @Transient

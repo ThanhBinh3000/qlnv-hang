@@ -16,11 +16,14 @@ import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.*;
 import com.tcdt.qlnvhang.request.search.HhDthauSearchReq;
 import com.tcdt.qlnvhang.request.search.HhQdKhlcntSearchReq;
+import com.tcdt.qlnvhang.response.dauthauvattu.ChiTietGoiThauRes;
 import com.tcdt.qlnvhang.service.HhDauThauService;
 import com.tcdt.qlnvhang.service.HhQdKhlcntHdrService;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
+import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.springframework.beans.BeanUtils;
@@ -133,9 +136,9 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 //            gthau.get().setTgianTrinhKqTcg(objReq.getTgianTrinhKqTcg());
 //            gthau.get().setTgianTrinhTtd(objReq.getTgianTrinhTtd());
             dchinhDxKhLcntDsgthauRepository.save(gthau.get());
-            fileDinhKemService.delete(gthau.get().getId(), Lists.newArrayList("HH_DC_DX_LCNT_DSGTHAU"));
+            fileDinhKemService.delete(gthau.get().getId(), Lists.newArrayList("HH_DC_DX_LCNT_DSGTHAU" + "_NHA_THAU"));
             if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKems())) {
-                fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), gthau.get().getId(), "HH_DC_DX_LCNT_DSGTHAU");
+                fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), gthau.get().getId(), "HH_DC_DX_LCNT_DSGTHAU" + "_NHA_THAU");
             }
         }else{
             Optional<HhQdKhlcntDsgthau> gthau = goiThauRepository.findById(objReq.getIdGoiThau());
@@ -146,9 +149,9 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
             gthau.get().setTgianTrinhKqTcg(objReq.getTgianTrinhKqTcg());
             gthau.get().setTgianTrinhTtd(objReq.getTgianTrinhTtd());
             goiThauRepository.save(gthau.get());
-            fileDinhKemService.delete(gthau.get().getId(), Lists.newArrayList("HH_QD_KHLCNT_DSGTHAU"));
+            fileDinhKemService.delete(gthau.get().getId(), Lists.newArrayList("HH_QD_KHLCNT_DSGTHAU" + "_NHA_THAU"));
             if (!DataUtils.isNullOrEmpty(objReq.getFileDinhKems())) {
-                fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), gthau.get().getId(), "HH_QD_KHLCNT_DSGTHAU");
+                fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), gthau.get().getId(), "HH_QD_KHLCNT_DSGTHAU" + "_NHA_THAU");
             }
         }
     }
@@ -291,17 +294,23 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
 
     @Override
     public Page<HhQdKhlcntHdr> selectPageVt(HhQdKhlcntSearchReq req) throws Exception {
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null) {
+            throw new Exception("Access denied.");
+        }
+        if (!userInfo.getCapDvi().equals(Contains.CAP_TONG_CUC)) {
+            req.setMaDvi(userInfo.getDvql());
+        }
         int page = req.getPaggingReq().getPage();
         int limit = req.getPaggingReq().getLimit();
         Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
         Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 //        Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
-        Page<HhQdKhlcntHdr> data = hhQdKhlcntHdrRepository.selectPage(req.getNamKhoach(), req.getLoaiVthh(), req.getSoQd(), req.getTrichYeu(),
+        Page<HhQdKhlcntHdr> data = hhQdKhlcntHdrRepository.selectPageVt(req.getNamKhoach(), req.getLoaiVthh(), req.getSoQd(), req.getTrichYeu(),
                 convertDateToString(req.getTuNgayQd()),
                 convertDateToString(req.getDenNgayQd()),
                 req.getTrangThai(), req.getLastest(),
                 req.getMaDvi(),
-                req.getTrangThaiDtl(),
                 req.getTrangThaiDt(), req.getSoQdPdKhlcnt(), req.getSoQdPdKqlcnt(),
                 pageable);
         data.getContent().forEach(f -> {
@@ -319,7 +328,8 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
     }
 
     @Override
-    public List<HhDthauNthauDuthau> detail(String ids,String loaiVthh, String type) throws Exception {
+    public ChiTietGoiThauRes detail(String ids, String loaiVthh, String type) throws Exception {
+        ChiTietGoiThauRes chiTietGoiThauRes = new ChiTietGoiThauRes();
         List<HhDthauNthauDuthau> byIdDtGt = new ArrayList<>();
         if(loaiVthh.startsWith("02")){
             if (type.equals("DC")) {
@@ -327,12 +337,19 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
                 if(!byId.isPresent()){
                     throw new Exception("Gói thầu không tồn tại");
                 }
+                List<FileDinhKem> fileDinhKems = fileDinhKemService.search(byId.get().getId(), Collections.singletonList("HH_DC_DX_LCNT_DSGTHAU" + "_NHA_THAU"));
+                chiTietGoiThauRes.setFileDinhKems(fileDinhKems);
                 byIdDtGt = nhaThauDuthauRepository.findByIdDtGtAndType(Long.parseLong(ids), type);
             } else if (type.equals("GOC")) {
                 Optional<HhQdKhlcntDsgthau> byId = goiThauRepository.findById(Long.parseLong(ids));
                 if(!byId.isPresent()){
                     throw new Exception("Gói thầu không tồn tại");
                 }
+                chiTietGoiThauRes.setTgianTrinhKqTcg(byId.get().getTgianTrinhKqTcg());
+                chiTietGoiThauRes.setTgianTrinhTtd(byId.get().getTgianTrinhTtd());
+                chiTietGoiThauRes.setGhiChuTtdt(byId.get().getGhiChuTtdt());
+                List<FileDinhKem> fileDinhKems = fileDinhKemService.search(byId.get().getId(), Collections.singletonList("HH_QD_KHLCNT_DSGTHAU" + "_NHA_THAU"));
+                chiTietGoiThauRes.setFileDinhKems(fileDinhKems);
                 byIdDtGt = nhaThauDuthauRepository.findByIdDtGtAndType(Long.parseLong(ids), type);
             }
             byIdDtGt.forEach(f -> {
@@ -343,12 +360,18 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
             if(!byId.isPresent()){
                 throw new Exception("Gói thầu không tồn tại");
             }
+            chiTietGoiThauRes.setTgianTrinhKqTcg(byId.get().getTgianTrinhKqTcg());
+            chiTietGoiThauRes.setTgianTrinhTtd(byId.get().getTgianTrinhTtd());
+            chiTietGoiThauRes.setGhiChuTtdt(byId.get().getGhiChuTtdt());
+            List<FileDinhKem> fileDinhKems = fileDinhKemService.search(byId.get().getId(), Collections.singletonList("HH_QD_KHLCNT_DSGTHAU" + "_NHA_THAU"));
+            chiTietGoiThauRes.setFileDinhKems(fileDinhKems);
             byIdDtGt = nhaThauDuthauRepository.findByIdDtGtAndType(Long.parseLong(ids), null);
             byIdDtGt.forEach(f -> {
                 f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             });
         }
-        return byIdDtGt;
+        chiTietGoiThauRes.setDsNhaThauDthau(byIdDtGt);
+        return chiTietGoiThauRes;
     }
 
     @Override

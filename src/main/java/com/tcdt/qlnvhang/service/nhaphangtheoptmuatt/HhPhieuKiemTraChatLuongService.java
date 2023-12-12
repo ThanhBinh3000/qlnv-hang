@@ -141,8 +141,7 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
             }
         }
         HhPhieuKiemTraChatLuong data = optional.get();
-        HhPhieuKiemTraChatLuong dataMap = new ModelMapper().map(objReq,HhPhieuKiemTraChatLuong.class);
-        updateObjectToObject(data,dataMap);
+        BeanUtils.copyProperties(objReq, data);
         data.setNgaySua(new Date());
         data.setNguoiSua(userInfo.getUsername());
 

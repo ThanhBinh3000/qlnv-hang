@@ -287,7 +287,7 @@ public class DcnbPhieuXuatKhoServiceImpl extends BaseServiceImpl {
             tongKinhPhiDcTt = tongKinhPhiDcTt.add(res.getKinhPhiDcTt());
         }
         return DcnbPhieuXuatKhoHdrPreview.builder()
-                .maDvi(dcnbPhieuXuatKhoHdr.get().getMaDvi())
+                .maDvi(dcnbPhieuXuatKhoHdr.get().getTenMaDvi())
                 .maQhns(dcnbPhieuXuatKhoHdr.get().getMaQhns())
                 .ngayNhap(dcnbPhieuXuatKhoHdr.get().getNgayTaoPhieu().getDayOfMonth())
                 .thangNhap(dcnbPhieuXuatKhoHdr.get().getNgayTaoPhieu().getMonth().getValue())

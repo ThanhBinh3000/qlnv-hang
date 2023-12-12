@@ -50,8 +50,8 @@ public class XhQdNvXhBttHdrReq extends BaseRequest {
     private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
     private List<XhQdNvXhBttDtlReq> children = new ArrayList<>();
     private String dvql;
-    private LocalDate ngayTaoTu;
-    private LocalDate ngayTaoDen;
+    private LocalDate ngayKyQdNvTu;
+    private LocalDate ngayKyQdNvDen;
     private String soBienBan;
     private LocalDate ngayLayMauTu;
     private LocalDate ngayLayMauDen;

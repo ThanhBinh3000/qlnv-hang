@@ -114,6 +114,8 @@ public class DchinhDxKhLcntHdrReq extends BaseRequest {
 	private Integer lanDieuChinh;
 	String maTrHdr;
 	String noiDungQd;
+	String noiDungTtr;
+	String trichYeuQd;
 	String tenDuAn;
 	String dienGiaiTongMucDt;
 	String dienGiai;

@@ -118,7 +118,7 @@ public class HhBcanKeHangService extends BaseServiceImpl {
             throw new Exception(" Bảng cân kê hàng không tồn tại. ");
         }
         HhBcanKeHangHdr bcanKeHangHdr = optional.get();
-        BeanUtils.copyProperties(objReq, bcanKeHangHdr, "id");
+        BeanUtils.copyProperties(objReq, bcanKeHangHdr);
         bcanKeHangHdr.setNgaySua(getDateTimeNow());
         bcanKeHangHdr.setNguoiSua(userInfo.getUsername());
         hhBcanKeHangHdrRepository.save(bcanKeHangHdr);

@@ -81,6 +81,10 @@ public class XhDgBangKeService extends BaseServiceImpl {
         data.setId(Long.parseLong(data.getSoBangKeHang().split("/")[0]));
         data.setTrangThai(Contains.DU_THAO);
         XhDgBangKeHdr created = xhDgBangKeHdrRepository.save(data);
+        xhDgPhieuXuatKhoRepository.findById(created.getIdPhieuXuatKho()).ifPresent(xuatKho -> {
+            xuatKho.setIdBangKeHang(created.getId());
+            xhDgPhieuXuatKhoRepository.save(xuatKho);
+        });
         this.saveDetail(req, created.getId());
         return created;
     }
@@ -110,6 +114,10 @@ public class XhDgBangKeService extends BaseServiceImpl {
         data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(currentUser.getUser().getId());
         XhDgBangKeHdr update = xhDgBangKeHdrRepository.save(data);
+        xhDgPhieuXuatKhoRepository.findById(update.getIdPhieuXuatKho()).ifPresent(xuatKho -> {
+            xuatKho.setIdBangKeHang(update.getId());
+            xhDgPhieuXuatKhoRepository.save(xuatKho);
+        });
         this.saveDetail(req, update.getId());
         return update;
     }
@@ -213,11 +221,11 @@ public class XhDgBangKeService extends BaseServiceImpl {
         req.getPaggingReq().setLimit(Integer.MAX_VALUE);
         Page<XhDgBangKeHdr> page = this.searchPage(currentUser, req);
         List<XhDgBangKeHdr> data = page.getContent();
-        String title = "Danh sách bảng kê cân hàng";
+        String title = "Danh sách bảng kê cân hàng DTQG";
         String[] rowsName = new String[]{"STT", "Số QĐ giao NVXH", "Năm KH", "Thời hạn XH trước ngày", "Điểm kho",
                 "Lô kho", "Số phiếu KNCL", "Ngày giám định", "Số bảng kê", "Số phiếu xuất kho",
                 "Ngày tạo bảng kê", "Trạng thái"};
-        String fileName = "danh-sach-bang-ke-can-hang.xlsx";
+        String fileName = "danh-sach-bang-ke-can-hang-DTQG.xlsx";
         List<Object[]> dataList = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
             XhDgBangKeHdr hdr = data.get(i);
@@ -225,15 +233,15 @@ public class XhDgBangKeService extends BaseServiceImpl {
             objs[0] = i;
             objs[1] = hdr.getSoQdNv();
             objs[2] = hdr.getNam();
-            objs[3] = hdr.getNgayKyQdNv();
+            objs[3] = hdr.getThoiGianGiaoNhan();
             objs[4] = hdr.getTenDiemKho();
-            objs[5] = hdr.getTenLoKho();
+            objs[5] = hdr.getTenNganLoKho();
             objs[6] = hdr.getSoPhieuKiemNghiem();
             objs[7] = hdr.getNgayKiemNghiemMau();
             objs[8] = hdr.getSoBangKeHang();
             objs[9] = hdr.getSoPhieuXuatKho();
             objs[10] = hdr.getNgayLapBangKe();
-            objs[11] = hdr.getTrangThai();
+            objs[11] = hdr.getTenTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);

@@ -21,7 +21,7 @@ public interface XhBbLayMauRepository extends BaseRepository<XhBbLayMau, Long> {
             "AND (:#{#param.soBbLayMau} IS NULL OR LM.soBbLayMau = :#{#param.soBbLayMau}) " +
             "AND (:#{#param.soQdNv} IS NULL OR LM.soQdNv = :#{#param.soQdNv}) " +
             "AND (:#{#param.donViKnghiem} IS NULL OR LOWER(LM.donViKnghiem) LIKE LOWER(CONCAT('%', :#{#param.donViKnghiem}, '%'))) " +
-            "AND (:#{#param.loaiVthh} IS NULL OR LM.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
+            "AND (:#{#param.loaiVthh } IS NULL OR LOWER(LM.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
             "AND (:#{#param.ngayLayMauTu} IS NULL OR LM.ngayLayMau >= :#{#param.ngayLayMauTu}) " +
             "AND (:#{#param.ngayLayMauDen} IS NULL OR LM.ngayLayMau <= :#{#param.ngayLayMauDen}) " +
             "AND (:#{#param.trangThai} IS NULL OR LM.trangThai = :#{#param.trangThai}) " +

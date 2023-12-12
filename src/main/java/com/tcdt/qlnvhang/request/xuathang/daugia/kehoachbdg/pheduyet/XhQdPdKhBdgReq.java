@@ -35,10 +35,12 @@ public class XhQdPdKhBdgReq extends BaseRequest {
     private String soCongVan;
     private LocalDate ngayTaoCongVan;
     private Integer lanDieuChinh;
+    private String noiDungToTrinh;
     private String soQdCanDc;
     private String soQdDc;
     private LocalDate ngayKyDc;
     private LocalDate ngayHlucDc;
+    private String trichYeuDieuChinh;
     private String noiDungDieuChinh;
     private String type;
     private Long idQdPd;
@@ -48,6 +50,8 @@ public class XhQdPdKhBdgReq extends BaseRequest {
     private List<FileDinhKemReq> fileDinhKemDc = new ArrayList<>();
     private LocalDate ngayKyQdTu;
     private LocalDate ngayKyQdDen;
+    private LocalDate ngayKyDcTu;
+    private LocalDate ngayKyDcDen;
     private String dvql;
     private String maCuc;
 }

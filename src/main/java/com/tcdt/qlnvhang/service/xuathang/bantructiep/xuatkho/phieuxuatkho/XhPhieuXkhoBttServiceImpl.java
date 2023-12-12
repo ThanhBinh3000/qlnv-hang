@@ -3,8 +3,8 @@ package com.tcdt.qlnvhang.service.xuathang.bantructiep.xuatkho.phieuxuatkho;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBtt;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
-import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.nhiemvuxuat.XhQdNvXhBttHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.bangcankehang.XhBkeCanHangBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.xuatkho.phieuxuatkho.XhPhieuXkhoBttReposytory;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -38,7 +38,7 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl {
     @Autowired
     private XhQdNvXhBttHdrRepository xhQdNvXhBttHdrRepository;
     @Autowired
-    private XhHopDongBttHdrRepository xhHopDongBttHdrRepository;
+    private XhBkeCanHangBttHdrRepository xhBkeCanHangBttHdrRepository;
     @Autowired
     private UserInfoRepository userInfoRepository;
 
@@ -105,6 +105,13 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl {
         data.setNgaySua(LocalDate.now());
         data.setNguoiSuaId(currentUser.getUser().getId());
         XhPhieuXkhoBtt update = xhPhieuXkhoBttReposytory.save(data);
+        xhBkeCanHangBttHdrRepository.findById(update.getIdBangKeHang()).ifPresent(bangKe -> {
+            bangKe.setTenNguoiGiao(update.getTenNguoiGiao());
+            bangKe.setCmtNguoiGiao(update.getCmtNguoiGiao());
+            bangKe.setCongTyNguoiGiao(update.getCongTyNguoiGiao());
+            bangKe.setDiaChiNguoiGiao(update.getDiaChiNguoiGiao());
+            xhBkeCanHangBttHdrRepository.save(bangKe);
+        });
         return update;
     }
 
@@ -209,11 +216,11 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl {
         req.getPaggingReq().setLimit(Integer.MAX_VALUE);
         Page<XhPhieuXkhoBtt> page = this.searchPage(currentUser, req);
         List<XhPhieuXkhoBtt> data = page.getContent();
-        String title = "Danh sách phiếu xuất kho";
+        String title = "Danh sách phiếu xuất kho bán trực tiếp hàng DTQG";
         String[] rowsName = new String[]{"STT", "Số QĐ giao NVXH", "Năm KH", "Thời hạn XH", "Điểm kho",
                 "Lô kho", "Số phiếu KNCL", "Ngày giám định", "Số phiếu xuất kho", "Số bảng kê",
                 "Ngày xuất kho", "Trạng thái"};
-        String fileName = "danh-sach-bien-ban-lay-mau/ban-giao-mau.xlsx";
+        String fileName = "danh-sach-phieu-xuat-kho-ban-truc-tiep-hang-DTQG.xlsx";
         List<Object[]> dataList = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
             XhPhieuXkhoBtt hdr = data.get(i);
@@ -221,9 +228,9 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl {
             objs[0] = i;
             objs[1] = hdr.getSoQdNv();
             objs[2] = hdr.getNamKh();
-            objs[3] = hdr.getNgayKyQdNv();
+            objs[3] = hdr.getTgianGiaoNhan();
             objs[4] = hdr.getTenDiemKho();
-            objs[5] = hdr.getTenLoKho();
+            objs[5] = hdr.getTenNganLoKho();
             objs[6] = hdr.getSoPhieuKiemNghiem();
             objs[7] = hdr.getNgayKiemNghiemMau();
             objs[8] = hdr.getSoPhieuXuatKho();
@@ -254,7 +261,7 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl {
                 }
             });
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
-        }  catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         } catch (XDocReportException e) {
             e.printStackTrace();

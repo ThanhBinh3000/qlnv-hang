@@ -21,10 +21,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class XhBangKeBttServiceImpl extends BaseServiceImpl {
@@ -63,12 +60,12 @@ public class XhBangKeBttServiceImpl extends BaseServiceImpl {
         data.setNgayTao(LocalDate.now());
         data.setNguoiTaoId(currentUser.getUser().getId());
         XhBangKeBtt created = xhBangKeBttRepository.save(data);
-        if (created.getIdQdNv() != null && created.getSoBangKe() != null) {
-            xhQdNvXhBttHdrRepository.findById(created.getIdQdNv()).ifPresent(nhiemVu -> {
-                String soBangKe = nhiemVu.getSoBangKeBanLe() != null ? (", " + created.getSoBangKe()) : data.getSoBangKe();
-                xhQdNvXhBttHdrRepository.updateSoBangKeBanLe(soBangKe, created.getIdQdNv());
-            });
-        }
+//        if (created.getIdQdNv() != null && created.getSoBangKe() != null) {
+//            xhQdNvXhBttHdrRepository.findById(created.getIdQdNv()).ifPresent(nhiemVu -> {
+//                String soBangKe = nhiemVu.getSoBangKeBanLe() != null ? (", " + created.getSoBangKe()) : data.getSoBangKe();
+//                xhQdNvXhBttHdrRepository.updateSoBangKeBanLe(soBangKe, created.getIdQdNv());
+//            });
+//        }
         return created;
     }
 
@@ -117,36 +114,57 @@ public class XhBangKeBttServiceImpl extends BaseServiceImpl {
     }
 
     public void export(CustomUserDetails currentUser, XhBangKeBttReq req, HttpServletResponse response) throws Exception {
-        PaggingReq paggingReq = new PaggingReq();
-        paggingReq.setPage(0);
-        paggingReq.setLimit(Integer.MAX_VALUE);
-        req.setPaggingReq(paggingReq);
+        req.getPaggingReq().setPage(0);
+        req.getPaggingReq().setLimit(Integer.MAX_VALUE);
         Page<XhBangKeBtt> page = this.searchPage(currentUser, req);
         List<XhBangKeBtt> data = page.getContent();
-        String title = "Danh sách bảng kê bán lẻ";
-        String[] rowsName = new String[]{"STT", "Năm kế hoạch", "Số bảng kê",
-                "Số quyết định", "Tên người mua", "Địa chỉ", "Số CMT/CCCD",
-                "Loại hàng hóa", "Chủng loại hàng hóa", "Số lượng",
-                "Đơn giá", "Thanh tiền"};
-        String filename = "danh-sach-dx-kh-ban-truc-tiep.xlsx";
+        String title = "Danh sách bảng kê bán lẻ hàng DTQG";
+        String[] rowsName;
+        boolean isVattuType = data.stream().anyMatch(item -> item.getLoaiVthh().startsWith(Contains.LOAI_VTHH_VATTU));
+        String[] commonRowsName = new String[]{"STT", "Năm kế hoạch", "Số bảng kê", "Số quyết định", "Tên người mua", "Địa chỉ", "Số CMT/CCCD"};
+        if (isVattuType) {
+            String[] vattuRowsName = Arrays.copyOf(commonRowsName, commonRowsName.length + 5);
+            vattuRowsName[7] = "Loại hàng DTQG";
+            vattuRowsName[8] = "Chủng loại hàng DTQG";
+            vattuRowsName[9] = "Số lượng";
+            vattuRowsName[10] = "Đơn giá (đ)";
+            vattuRowsName[11] = "Thanh tiền (đ)";
+            rowsName = vattuRowsName;
+        } else {
+            String[] nonVattuRowsName = Arrays.copyOf(commonRowsName, commonRowsName.length + 4);
+            nonVattuRowsName[7] = "Chủng loại hàng DTQG";
+            nonVattuRowsName[8] = "Số lượng";
+            nonVattuRowsName[9] = "Đơn giá (đ)";
+            nonVattuRowsName[10] = "Thanh tiền (đ)";
+            rowsName = nonVattuRowsName;
+        }
+        String fileName = "danh-sach-bang-ke-ban-le-hang-DTQG.xlsx";
         List<Object[]> dataList = new ArrayList<>();
-        data.stream().forEach(hdr -> {
+        for (int i = 0; i < data.size(); i++) {
+            XhBangKeBtt hdr = data.get(i);
             Object[] objs = new Object[rowsName.length];
-            objs[0] = data.indexOf(hdr) + 1;
+            objs[0] = i;
             objs[1] = hdr.getNamKh();
             objs[2] = hdr.getSoBangKe();
             objs[3] = hdr.getSoQdNv();
             objs[4] = hdr.getTenBenMua();
             objs[5] = hdr.getDiaChi();
             objs[6] = hdr.getCmtBenMua();
-            objs[7] = hdr.getTenLoaiVthh();
-            objs[8] = hdr.getTenCloaiVthh();
-            objs[9] = hdr.getSoLuong();
-            objs[10] = hdr.getDonGia();
-            objs[11] = hdr.getThanhTien();
+            if (isVattuType) {
+                objs[7] = hdr.getTenLoaiVthh();
+                objs[8] = hdr.getTenCloaiVthh();
+                objs[9] = hdr.getSoLuong();
+                objs[10] = hdr.getDonGia();
+                objs[11] = hdr.getThanhTien();
+            } else {
+                objs[7] = hdr.getTenCloaiVthh();
+                objs[8] = hdr.getSoLuong();
+                objs[9] = hdr.getDonGia();
+                objs[10] = hdr.getThanhTien();
+            }
             dataList.add(objs);
-        });
-        ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+        }
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
     }
 }

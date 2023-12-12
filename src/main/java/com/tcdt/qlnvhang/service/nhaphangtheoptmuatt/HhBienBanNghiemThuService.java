@@ -135,7 +135,8 @@ public class HhBienBanNghiemThuService extends BaseServiceImpl {
             }
         }
         HhBienBanNghiemThu data= optional.get();
-        HhBienBanNghiemThu dataMap = new ModelMapper().map(objReq,HhBienBanNghiemThu.class);
+        HhBienBanNghiemThu dataMap = new HhBienBanNghiemThu();
+        BeanUtils.copyProperties(objReq, dataMap);
         updateObjectToObject(data,dataMap);
         data.setNguoiSua(userInfo.getUsername());
         data.setNgaySua(new Date());
