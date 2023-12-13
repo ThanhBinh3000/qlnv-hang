@@ -40,6 +40,8 @@ public class XhQdPdKhBttHdrReq extends BaseRequest {
     private String soQdDc;
     private LocalDate ngayKyDc;
     private LocalDate ngayHlucDc;
+    private String trichYeuDieuChinh;
+    private String noiDungToTrinh;
     private String noiDungDieuChinh;
     private String type;
     private Long idQdPd;

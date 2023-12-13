@@ -18,6 +18,7 @@ import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.tonghop.XhThopDxKhBd
 import com.tcdt.qlnvhang.repository.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.getGiaDuocDuyet;
 import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.pheduyet.XhQdPdKhBdgDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.pheduyet.XhQdPdKhBdgPlDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.pheduyet.XhQdPdKhBdgPlReq;
@@ -218,6 +219,17 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
         return updated;
     }
 
+    public BigDecimal getGiaDuocDuyet(getGiaDuocDuyet req) {
+        if (req == null) {
+            return BigDecimal.ZERO;
+        }
+        Long longNamKh = req.getNam() != null ? req.getNam().longValue() : null;
+        if (!Contains.LOAI_VTHH_VATTU.equals(req.getTypeLoaiVthh()) && req.getMaDvi() != null) {
+            return xhQdPdKhBdgPlDtlRepository.getGiaDuocDuyetLuongThuc(req.getCloaiVthh(), req.getLoaiVthh(), longNamKh, req.getMaDvi());
+        }
+        return xhQdPdKhBdgPlDtlRepository.getGiaDuocDuyetVatTu(req.getCloaiVthh(), req.getLoaiVthh(), longNamKh);
+    }
+
     public List<XhQdPdKhBdg> detail(List<Long> ids) throws Exception {
         if (DataUtils.isNullOrEmpty(ids)) {
             throw new Exception("Tham số không hợp lệ.");
@@ -239,14 +251,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
                 for (XhQdPdKhBdgPl dataPhanLo : listPhanLo) {
                     List<XhQdPdKhBdgPlDtl> listPloDtl = xhQdPdKhBdgPlDtlRepository.findAllByIdPhanLo(dataPhanLo.getId());
                     for (XhQdPdKhBdgPlDtl dataPloDtl : listPloDtl) {
-                        dataPloDtl.setTenDiemKho(StringUtils.isEmpty(dataPloDtl.getMaDiemKho()) ? null : mapDmucDvi.get(dataPloDtl.getMaDiemKho()));
-                        dataPloDtl.setTenNhaKho(StringUtils.isEmpty(dataPloDtl.getMaNhaKho()) ? null : mapDmucDvi.get(dataPloDtl.getMaNhaKho()));
-                        dataPloDtl.setTenNganKho(StringUtils.isEmpty(dataPloDtl.getMaNganKho()) ? null : mapDmucDvi.get(dataPloDtl.getMaNganKho()));
-                        dataPloDtl.setTenLoKho(StringUtils.isEmpty(dataPloDtl.getMaLoKho()) ? null : mapDmucDvi.get(dataPloDtl.getMaLoKho()));
-                        dataPloDtl.setTenNganLoKho(StringUtils.isEmpty(dataPloDtl.getMaLoKho()) ? mapDmucDvi.get(dataPloDtl.getMaNganKho()) : mapDmucDvi.get(dataPloDtl.getMaLoKho()));
-                        dataPloDtl.setTenLoaiVthh(StringUtils.isEmpty(dataPloDtl.getLoaiVthh()) ? null : mapVthh.get(dataPloDtl.getLoaiVthh()));
-                        dataPloDtl.setTenCloaiVthh(StringUtils.isEmpty(dataPloDtl.getCloaiVthh()) ? null : mapVthh.get(dataPloDtl.getCloaiVthh()));
-                        if (dataPloDtl.getDonGiaDuocDuyet() == null || dataPloDtl.getDonGiaDuocDuyet().compareTo(BigDecimal.ZERO) == 0) {
+                        if (dataPloDtl.getDonGiaDuocDuyet() == null || dataPloDtl.getDonGiaDuocDuyet().compareTo(BigDecimal.ZERO) == 0 && "QDKH".equals(data.getType())) {
                             BigDecimal phanChia = new BigDecimal(100);
                             Long longNamKh = data.getNam() != null ? data.getNam().longValue() : null;
                             if (dataPloDtl.getLoaiVthh() != null && longNamKh != null && dataPloDtl.getLoaiVthh().startsWith(Contains.LOAI_VTHH_VATTU)) {
@@ -259,36 +264,42 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
                             dataPloDtl.setThanhTienDuocDuyet(dataPloDtl.getSoLuongDeXuat().multiply(giaDuocDuyetOptional.orElse(BigDecimal.ZERO)));
                             dataPloDtl.setTienDatTruocDuocDuyet(dataPloDtl.getThanhTienDuocDuyet().multiply(dataDtl.getKhoanTienDatTruoc().divide(phanChia)));
                         }
+                        dataPloDtl.setTenDiemKho(mapDmucDvi.getOrDefault(dataPloDtl.getMaDiemKho(), null));
+                        dataPloDtl.setTenNhaKho(mapDmucDvi.getOrDefault(dataPloDtl.getMaNhaKho(), null));
+                        dataPloDtl.setTenNganKho(mapDmucDvi.getOrDefault(dataPloDtl.getMaNganKho(), null));
+                        dataPloDtl.setTenLoKho(mapDmucDvi.getOrDefault(dataPloDtl.getMaLoKho(), null));
+                        dataPloDtl.setTenLoaiVthh(mapVthh.getOrDefault(dataPloDtl.getLoaiVthh(), null));
+                        dataPloDtl.setTenCloaiVthh(mapVthh.getOrDefault(dataPloDtl.getCloaiVthh(), null));
                     }
-                    dataPhanLo.setTenDvi(StringUtils.isEmpty(dataPhanLo.getMaDvi()) ? null : mapDmucDvi.get(dataPhanLo.getMaDvi()));
-                    if (giaDuocDuyet != null && giaDuocDuyet.compareTo(BigDecimal.ZERO) != 0) {
+                    if (giaDuocDuyet != null && giaDuocDuyet.compareTo(BigDecimal.ZERO) != 0 && "QDKH".equals(data.getType())) {
                         BigDecimal sumSoTienDuocDuyet = listPloDtl.stream().map(XhQdPdKhBdgPlDtl::getThanhTienDuocDuyet).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
                         BigDecimal sumSoTienDtruocDduyet = listPloDtl.stream().map(XhQdPdKhBdgPlDtl::getTienDatTruocDuocDuyet).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
                         dataPhanLo.setSoTienDuocDuyet(sumSoTienDuocDuyet);
                         dataPhanLo.setSoTienDtruocDduyet(sumSoTienDtruocDduyet);
                     }
+                    dataPhanLo.setTenDvi(mapDmucDvi.getOrDefault(dataPhanLo.getMaDvi(), null));
                     dataPhanLo.setChildren(listPloDtl);
                 }
-                dataDtl.setTenDvi(StringUtils.isEmpty(dataDtl.getMaDvi()) ? null : mapDmucDvi.get(dataDtl.getMaDvi()));
-                dataDtl.setTenLoaiVthh(StringUtils.isEmpty(dataDtl.getLoaiVthh()) ? null : mapVthh.get(dataDtl.getLoaiVthh()));
-                dataDtl.setTenCloaiVthh(StringUtils.isEmpty(dataDtl.getCloaiVthh()) ? null : mapVthh.get(dataDtl.getCloaiVthh()));
-                dataDtl.setTenPthucTtoan(StringUtils.isEmpty(dataDtl.getPthucTtoan()) ? null : mapPhuongThucTt.get(dataDtl.getPthucTtoan()));
-                if (giaDuocDuyet != null && giaDuocDuyet.compareTo(BigDecimal.ZERO) != 0) {
+                if (giaDuocDuyet != null && giaDuocDuyet.compareTo(BigDecimal.ZERO) != 0 && "QDKH".equals(data.getType())) {
                     BigDecimal sumTongTienDuocDuyet = listPhanLo.stream().map(XhQdPdKhBdgPl::getSoTienDuocDuyet).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
                     BigDecimal sumTongKtienDtruocDduyet = listPhanLo.stream().map(XhQdPdKhBdgPl::getSoTienDtruocDduyet).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
                     dataDtl.setTongTienDuocDuyet(sumTongTienDuocDuyet);
                     dataDtl.setTongKtienDtruocDduyet(sumTongKtienDtruocDduyet);
                 }
+                dataDtl.setTenDvi(mapDmucDvi.getOrDefault(dataDtl.getMaDvi(), null));
+                dataDtl.setTenLoaiVthh(mapVthh.getOrDefault(dataDtl.getLoaiVthh(), null));
+                dataDtl.setTenCloaiVthh(mapVthh.getOrDefault(dataDtl.getCloaiVthh(), null));
+                dataDtl.setTenPthucTtoan(mapPhuongThucTt.getOrDefault(dataDtl.getPthucTtoan(), null));
                 dataDtl.setChildren(listPhanLo);
             }
+            List<FileDinhKem> canCuPhapLy = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBdg.TABLE_NAME));
+            List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBdg.TABLE_NAME + "_BAN_HANH"));
+            List<FileDinhKem> fileDinhKemDc = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBdg.TABLE_NAME + "_DIEU_CHINH"));
             data.setMapVthh(mapVthh);
             data.setMapDmucDvi(mapDmucDvi);
             data.setMapLoaiHinhNx(mapLoaiHinhNx);
             data.setMapKieuNx(mapKieuNx);
             data.setTrangThai(data.getTrangThai());
-            List<FileDinhKem> canCuPhapLy = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBdg.TABLE_NAME));
-            List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBdg.TABLE_NAME + "_BAN_HANH"));
-            List<FileDinhKem> fileDinhKemDc = fileDinhKemService.search(data.getId(), Arrays.asList(XhQdPdKhBdg.TABLE_NAME + "_DIEU_CHINH"));
             data.setCanCuPhapLy(canCuPhapLy);
             data.setFileDinhKem(fileDinhKem);
             data.setFileDinhKemDc(fileDinhKemDc);
