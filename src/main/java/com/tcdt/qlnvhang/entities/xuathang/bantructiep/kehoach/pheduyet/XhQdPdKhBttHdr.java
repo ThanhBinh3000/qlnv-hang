@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -63,6 +62,8 @@ public class XhQdPdKhBttHdr implements Serializable {
     private String soQdDc;
     private LocalDate ngayKyDc;
     private LocalDate ngayHlucDc;
+    private String trichYeuDieuChinh;
+    private String noiDungToTrinh;
     private String noiDungDieuChinh;
     private String type;
     private Long idQdPd;

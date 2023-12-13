@@ -56,12 +56,12 @@ public class XhQdPdKhBdg implements Serializable {
     private String soCongVan;
     private LocalDate ngayTaoCongVan;
     private Integer lanDieuChinh;
-    private String noiDungToTrinh;
     private String soQdCanDc;
     private String soQdDc;
     private LocalDate ngayKyDc;
     private LocalDate ngayHlucDc;
     private String trichYeuDieuChinh;
+    private String noiDungToTrinh;
     private String noiDungDieuChinh;
     private String type;
     private Long idQdPd;
