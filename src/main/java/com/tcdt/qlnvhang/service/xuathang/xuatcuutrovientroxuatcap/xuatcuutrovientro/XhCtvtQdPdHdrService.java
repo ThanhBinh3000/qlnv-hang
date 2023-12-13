@@ -24,6 +24,7 @@ import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import fr.opensagres.xdocreport.core.XDocReportException;
+import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -346,12 +347,10 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     }*/
 
     XhCtvtQuyetDinhPdHdr created = xhCtvtQdPdHdrRepository.save(pheDuyetRow);
-    /*if (created.isXuatCap() && statusReq.getTrangThai().equals(TrangThaiAllEnum.BAN_HANH.getId()) && !created.getType().equals("XC")) {
-      XhCtvtQuyetDinhPdHdr xuatCapRow = new XhCtvtQuyetDinhPdHdr();
+    if (created.isXuatCap() && statusReq.getTrangThai().equals(TrangThaiAllEnum.BAN_HANH.getId()) && !created.getType().equals("XC")) {
       List<XhCtvtQuyetDinhPdDtl> listXuatCapDtl = new ArrayList<>();
-//      DataUtils.copyProperties(created,xuatCapRow,"id");
-      created.setSoBbQd(created.getSoBbQd().replace("QĐPDCTVT","QĐPDXC"));
-      created.getQuyetDinhPdDtl().forEach(s -> {
+      XhCtvtQuyetDinhPdHdr xuatCapRow = objectMapper.readValue(objectMapper.writeValueAsString(created), XhCtvtQuyetDinhPdHdr.class);
+      xuatCapRow.getQuyetDinhPdDtl().forEach(s -> {
         if(s.isXuatCap()) {
           XhCtvtQuyetDinhPdDtl dtl = new XhCtvtQuyetDinhPdDtl();
           BeanUtils.copyProperties(s, dtl, "id","mapVthh");
@@ -360,11 +359,13 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
         }
       });
       xuatCapRow.setQuyetDinhPdDtl(listXuatCapDtl);
+      xuatCapRow.setId(null);
+      xuatCapRow.setSoBbQd(xuatCapRow.getSoBbQd().replace("QĐPDCTVT","QĐPDXC"));
       xuatCapRow.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
       xuatCapRow.setType("XC");
       xuatCapRow.setLoaiNhapXuat("Xuất cấp");
       xhCtvtQdPdHdrRepository.save(xuatCapRow);
-    }*/
+    }
     return created;
   }
 
