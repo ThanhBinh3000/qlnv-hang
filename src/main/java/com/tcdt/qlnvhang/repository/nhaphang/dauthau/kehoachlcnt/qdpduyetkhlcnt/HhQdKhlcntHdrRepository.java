@@ -101,4 +101,5 @@ public interface HhQdKhlcntHdrRepository extends BaseRepository<HhQdKhlcntHdr, L
 	Long countSLDalenKh(Integer namKh, String loaiVthh, String maDvi);
 
 	Optional<HhQdKhlcntHdr> findByIdThHdrAndLastest(Long id, Boolean lastest);
+	Optional<HhQdKhlcntHdr> findByIdTrHdr(Long id);
 }

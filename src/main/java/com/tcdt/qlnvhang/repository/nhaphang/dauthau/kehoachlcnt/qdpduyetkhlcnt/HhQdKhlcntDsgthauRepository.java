@@ -27,4 +27,24 @@ public interface HhQdKhlcntDsgthauRepository extends BaseRepository<HhQdKhlcntDs
     @Query(value = "SELECT NVL(SUM(DTL.THANH_TIEN),0) FROM HH_QD_KHLCNT_DSGTHAU DTL WHERE DTL.ID_QD_DTL = :idQdDtl ", nativeQuery = true)
     BigDecimal sumTotalPriceByIdQdDtl(Long idQdDtl);
 
+    @Query(value = "SELECT gthau.* FROM HH_QD_KHLCNT_DSGTHAU gthau" +
+            " JOIN HH_QD_KHLCNT_DTL dtl ON gthau.ID_QD_DTL = dtl.ID " +
+            " JOIN HH_QD_KHLCNT_HDR hdr ON dtl.ID_QD_HDR = hdr.ID " +
+            " WHERE 1 = 1 " +
+            " AND (:cloaiVthh IS NULL OR gthau.CLOAI_VTHH = :cloaiVthh)" +
+            " AND (:loaiVthh IS NULL OR gthau.LOAI_VTHH = :loaiVthh)" +
+            " AND (:namKh IS NULL OR hdr.NAM_KHOACH = :namKh)" +
+            " AND gthau.TRANG_THAI_DT IN ('41', '36')"
+            , nativeQuery = true)
+    List<HhQdKhlcntDsgthau> danhSachGthauTruot (String cloaiVthh, String loaiVthh, Integer namKh);
+
+    @Query(value = "SELECT gthau.* FROM HH_QD_KHLCNT_DSGTHAU gthau" +
+            " JOIN HH_QD_KHLCNT_HDR hdr ON gthau.ID_QD_HDR = hdr.ID " +
+            " WHERE 1 = 1 " +
+            " AND (:cloaiVthh IS NULL OR gthau.CLOAI_VTHH = :cloaiVthh)" +
+            " AND (:loaiVthh IS NULL OR gthau.LOAI_VTHH = :loaiVthh)" +
+            " AND (:namKh IS NULL OR hdr.NAM_KHOACH = :namKh)" +
+            " AND gthau.TRANG_THAI_DT IN ('41', '36')"
+            , nativeQuery = true)
+    List<HhQdKhlcntDsgthau> danhSachGthauTruotVt (String cloaiVthh, String loaiVthh, Integer namKh);
 }

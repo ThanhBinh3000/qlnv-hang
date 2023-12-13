@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.tochuctrienkhai.QdPdHsmt;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.HhDxKhLcntThopHdr;
 import com.tcdt.qlnvhang.table.HhQdPduyetKqlcntHdr;
 import com.tcdt.qlnvhang.util.Contains;
@@ -112,4 +113,6 @@ public class HhQdKhlcntDtl implements Serializable {
 	private List<HhQdKhlcntDsgthau> children = new ArrayList<>();
 	@Transient
 	private QdPdHsmt qdPdHsmt;
+	@Transient
+	private List<FileDinhKem> fileDinhKem;
 }

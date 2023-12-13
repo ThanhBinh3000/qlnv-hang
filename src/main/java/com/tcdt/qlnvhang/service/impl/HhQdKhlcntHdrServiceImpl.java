@@ -218,6 +218,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			}
 			BigDecimal tongSl = BigDecimal.ZERO;
 			hhQdKhlcntDtlRepository.save(qd);
+			fileDinhKemService.delete(qd.getId(), Lists.newArrayList("HH_QD_KHLCNT_DTL"));
+			if (!DataUtils.isNullOrEmpty(dx.getFileDinhKem())) {
+				fileDinhKemService.saveListFileDinhKem(dx.getFileDinhKem(), qd.getId(), "HH_QD_KHLCNT_DTL");
+			}
 			for (HhQdKhlcntDsgthauReq gtList : ObjectUtils.isEmpty(dx.getDsGoiThau()) ? dx.getChildren() : dx.getDsGoiThau()){
 					HhQdKhlcntDsgthau gt = ObjectMapperUtils.map(gtList, HhQdKhlcntDsgthau.class);
 				hhQdKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(gt.getId());
@@ -478,6 +482,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 					dtl.setDxuatKhLcntHdr(dxuatKhLcntHdr.get());
 				}
 			}
+			List<FileDinhKem> fileDinhKems = fileDinhKemService.search(dtl.getId(), Collections.singletonList("HH_QD_KHLCNT_DTL"));
+			dtl.setFileDinhKem(fileDinhKems);
 			Optional<QdPdHsmt> qOptional = qdPdHsmtRepository.findByIdQdPdKhlcntDtl(dtl.getId());
 			qOptional.ifPresent(dtl::setQdPdHsmt);
 			List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauList = new ArrayList<>();
