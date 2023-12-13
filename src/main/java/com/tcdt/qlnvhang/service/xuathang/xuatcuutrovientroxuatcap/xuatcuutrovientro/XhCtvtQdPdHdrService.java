@@ -349,7 +349,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     XhCtvtQuyetDinhPdHdr created = xhCtvtQdPdHdrRepository.save(pheDuyetRow);
     if (created.isXuatCap() && statusReq.getTrangThai().equals(TrangThaiAllEnum.BAN_HANH.getId()) && !created.getType().equals("XC")) {
       List<XhCtvtQuyetDinhPdDtl> listXuatCapDtl = new ArrayList<>();
-      XhCtvtQuyetDinhPdHdr xuatCapRow = SerializationUtils.clone(created);
+      XhCtvtQuyetDinhPdHdr xuatCapRow = objectMapper.readValue(objectMapper.writeValueAsString(created), XhCtvtQuyetDinhPdHdr.class);
       xuatCapRow.getQuyetDinhPdDtl().forEach(s -> {
         if(s.isXuatCap()) {
           XhCtvtQuyetDinhPdDtl dtl = new XhCtvtQuyetDinhPdDtl();
