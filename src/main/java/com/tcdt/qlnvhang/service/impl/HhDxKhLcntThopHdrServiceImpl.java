@@ -205,6 +205,8 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		thopHdr.setGhiChu(objReq.getGhiChu());
 		thopHdr.setMaTh(objReq.getMaTh());
 		thopHdr.setSoQdCc(objReq.getSoQdCc());
+		thopHdr.setSoTtr(objReq.getSoTtr());
+		thopHdr.setNgayTrinh(objReq.getNgayTrinh());
 		// Add danh sach file dinh kem o Master
 		List<FileDKemJoinDxKhlcntThopHdr> fileDinhKemList = new ArrayList<FileDKemJoinDxKhlcntThopHdr>();
 		if (objReq.getFileDinhKems() != null) {
@@ -238,6 +240,8 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 			throw new Exception("Không tìm thấy bản ghi tổng hợp");
 		}
 		thopHdr.get().setNoiDung(objReq.getNoiDung());
+		thopHdr.get().setSoTtr(objReq.getSoTtr());
+		thopHdr.get().setNgayTrinh(objReq.getNgayTrinh());
 		return hhDxKhLcntThopHdrRepository.save(thopHdr.get());
 	}
 
