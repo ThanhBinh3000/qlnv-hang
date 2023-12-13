@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxKhlcntDsgthau;
 import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import com.tcdt.qlnvhang.request.search.HhDxuatKhLcntSearchReq;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface HhDxuatKhLcntHdrService {
 
@@ -67,4 +69,6 @@ public interface HhDxuatKhLcntHdrService {
 	BigDecimal countSoLuongKeHoachNam(CountKhlcntSlReq objReq) throws Exception;
 
 	BigDecimal getGiaBanToiDa (String cloaiVhtt, String maDvi, String namKhoach);
+
+	List<HhDxKhlcntDsgthau> danhSachGthauTruot (HhDxuatKhLcntHdrReq objReq);
 }

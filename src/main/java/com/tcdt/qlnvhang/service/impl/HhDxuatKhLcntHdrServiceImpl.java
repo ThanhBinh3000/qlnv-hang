@@ -14,23 +14,24 @@ import java.text.SimpleDateFormat;
 import com.tcdt.qlnvhang.common.DocxToPdfConverter;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.HhSlNhapHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.*;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.*;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.tochuctrienkhai.QdPdHsmt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
-import com.tcdt.qlnvhang.repository.HhDxKhLcntThopDtlRepository;
-import com.tcdt.qlnvhang.repository.HhDxKhLcntThopHdrRepository;
+import com.tcdt.qlnvhang.repository.*;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.HhSlNhapHangRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.*;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.*;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.tochuctrienkhai.QdPdHsmtRepository;
 import com.tcdt.qlnvhang.request.CountKhlcntSlReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.*;
 import com.tcdt.qlnvhang.service.feign.BaoCaoClient;
-import com.tcdt.qlnvhang.table.DmDonViDTO;
-import com.tcdt.qlnvhang.table.HhDxKhLcntThopDtl;
-import com.tcdt.qlnvhang.table.HhDxKhLcntThopHdr;
-import com.tcdt.qlnvhang.table.ReportTemplateResponse;
+import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.report.HhDxKhlcntDsgthauReport;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.*;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -78,6 +79,24 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
     private HhDxKhLcntThopHdrRepository hhDxKhLcntThopHdrRepository;
     @Autowired
     private HhSlNhapHangRepository hhSlNhapHangRepository;
+    @Autowired
+    private HhQdKhlcntHdrRepository hhQdKhlcntHdrRepository;
+    @Autowired
+    private HhQdKhlcntDtlRepository hhQdKhlcntDtlRepository;
+    @Autowired
+    private QdPdHsmtRepository qdPdHsmtRepository;
+    @Autowired
+    private HhQdKhlcntDsgthauRepository qdKhlcntDsgthauRepository;
+    @Autowired
+    private HhQdKhlcntDsgthauCtietRepository hhQdKhlcntDsgthauCtietRepository;
+    @Autowired
+    private HhQdKhlcntDsgthauCtietVtRepository hhQdKhlcntDsgthauCtietVtRepository;
+    @Autowired
+    private HhDchinhDxKhLcntDsgthauRepository dchinhDxKhLcntDsgthauRepository;
+    @Autowired
+    private HhDchinhDxKhLcntDsgthauCtietRepository dchinhDxKhLcntDsgthauCtietRepository;
+    @Autowired
+    private HhDchinhDxKhLcntDsgthauCtietVtRepository dchinhDxKhLcntDsgthauCtietVtRepository;
     @Autowired
     private DocxToPdfConverter docxToPdfConverter;
     @Autowired
@@ -827,106 +846,77 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
 
     @Override
     public void exportList(HhDxuatKhLcntSearchReq objReq, HttpServletResponse response) throws Exception {
-
         String cDvi = getUser().getCapDvi();
-        if (Contains.CAP_TONG_CUC.equals(cDvi)) {
-            this.exportToExcelTongCuc(objReq, response);
-        } else {
-            this.exportToExcelCuc(objReq, response);
-        }
-    }
-
-    public void exportToExcelTongCuc(HhDxuatKhLcntSearchReq objReq, HttpServletResponse response) throws Exception {
         PaggingReq paggingReq = new PaggingReq();
         paggingReq.setPage(0);
         paggingReq.setLimit(Integer.MAX_VALUE);
         objReq.setPaggingReq(paggingReq);
         Page<HhDxuatKhLcntHdr> page = this.timKiem(objReq);
         List<HhDxuatKhLcntHdr> data = page.getContent();
-        String filename = "Danh_sach_ke_hoach_de_xuat_lua_chon_nha_thau_tong_cuc.xlsx";
+        String filename = "Danh_sach_ke_hoach_de_xuat_lua_chon_nha_thau.xlsx";
         String title = "Danh sách kế hoạch đề xuất lựa chọn nhà thầu";
         String[] rowsName;
-        if (objReq.getLoaiVthh().startsWith("02")) {
-            rowsName = new String[]{"STT", "Số kế hoạch/ tờ trình", "Năm kế hoạch", "Ngày lập KH", "Ngày duyệt KH", "Số QĐ giao chỉ tiêu", "Loại hàng DTQG",
-                    "Tổng số gói thầu", "Số gói thầu đã trúng", "SL HĐ đã ký", "Số QĐ duyệt KHLCNT", "Thời hạn thực hiện dự án", "Trạng thái đề xuất"};
-        } else {
-            rowsName = new String[]{"STT", "Số tờ trình", "Năm kế hoạch", "Ngày lập KH", "Ngày duyệt KH", "Số QĐ giao chỉ tiêu", "Loại hàng DTQG",
-                    "Chủng loại hàng DQTG", "Tổng số gói thầu", "Số gói thầu đã trúng", "SL HĐ đã ký", "Số QĐ duyệt KHLCNT", "Thời hạn nhập kho", "Trạng thái đề xuất", "Mã tổng hợp"};
-        }
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
-        for (int i = 0; i < data.size(); i++) {
-            HhDxuatKhLcntHdr dx = data.get(i);
-            objs = new Object[rowsName.length];
-            objs[0] = i;
-            objs[1] = dx.getSoDxuat();
-            objs[2] = dx.getNamKhoach();
-            objs[3] = convertDate(dx.getNgayTao());
-            objs[4] = convertDate(dx.getNgayPduyet());
-            objs[5] = dx.getSoQd();
-            objs[6] = dx.getTenLoaiVthh();
-            if (objReq.getLoaiVthh().startsWith("02")) {
+        if (objReq.getLoaiVthh().startsWith("02")) {
+            rowsName = new String[]{"STT", "Số công văn/ tờ trình", "Năm KH", "Ngày lập KH", "Ngày duyệt KH", "Số QĐ giao chỉ tiêu", "Loại hàng DTQG",
+                    "Tổng số gói thầu", "Số QĐ PD KHLCNT", "Thời gian đóng - mở thầu", "Thời gian thực hiện hợp đồng", "Thời hạn thực hiện dự án", "Trạng thái đề xuất"};
+            for (int i = 0; i < data.size(); i++) {
+                HhDxuatKhLcntHdr dx = data.get(i);
+                objs = new Object[rowsName.length];
+                objs[0] = i;
+                objs[1] = dx.getSoDxuat();
+                objs[2] = dx.getNamKhoach();
+                objs[3] = convertDate(dx.getNgayTao());
+                objs[4] = convertDate(dx.getNgayPduyet());
+                objs[5] = dx.getSoQd();
+                objs[6] = dx.getTenLoaiVthh();
                 objs[7] = dx.getSoGoiThau();
-                objs[8] = dx.getSoGthauTrung();
-                objs[10] = dx.getSoQdPdKqLcnt();
-                objs[11] = dx.getTgianNhang();
+                objs[8] = dx.getSoQdPdKhLcnt();
+                objs[9] = convertDate(dx.getTgianDongMothau());
+                objs[10] = dx.getTgianThienHd();
+                objs[11] = dx.getTgianThien();
                 objs[12] = dx.getTenTrangThai();
+                dataList.add(objs);
+            }
+        } else {
+            if (Contains.CAP_TONG_CUC.equals(cDvi)) {
+                rowsName = new String[]{"STT", "Số công văn/tờ trình", "Cục DTNN KV", "Năm KH", "Ngày lập KH", "Ngày duyệt KH", "Số QĐ giao chỉ tiêu",
+                        "Chủng loại hàng DQTG", "Tổng số gói thầu", "Số QĐ PD KHLCNT", "Thời điểm đóng thầu", "Thời điểm mở thầu", "Thời hạn nhập kho", "Trạng thái", "Mã tổng hợp"};
             } else {
+                rowsName = new String[]{"STT", "Số công văn/tờ trình", "Cục DTNN KV", "Năm KH", "Ngày lập KH", "Ngày duyệt KH", "Số QĐ giao chỉ tiêu",
+                        "Chủng loại hàng DQTG", "Tổng số gói thầu", "Số QĐ PD KHLCNT", "Thời điểm đóng thầu", "Thời điểm mở thầu", "Thời hạn nhập kho", "Trạng thái"};
+            }
+            for (int i = 0; i < data.size(); i++) {
+                HhDxuatKhLcntHdr dx = data.get(i);
+                objs = new Object[rowsName.length];
+                objs[0] = i;
+                objs[1] = dx.getSoDxuat();
+                objs[2] = dx.getTenDvi();
+                objs[3] = dx.getNamKhoach();
+                objs[4] = convertDate(dx.getNgayTao());
+                objs[5] = convertDate(dx.getNgayPduyet());
+                objs[6] = dx.getSoQd();
                 objs[7] = dx.getTenCloaiVthh();
                 objs[8] = dx.getSoGoiThau();
-                objs[9] = dx.getSoGthauTrung();
-                objs[11] = dx.getSoQdPdKqLcnt();
+                objs[9] = dx.getSoQdPdKhLcnt();
+                objs[10] = convertDate(dx.getTgianDthau());
+                objs[11] = convertDate(dx.getTgianMthau());
                 objs[12] = dx.getTgianNhang();
                 objs[13] = dx.getTenTrangThai();
-                if (dx.getTrangThaiTh().equals(Contains.CHUATONGHOP)) {
-                    objs[14] = dx.getTenTrangThaiTh();
-                } else {
-                    objs[14] = dx.getMaTh();
+                if (Contains.CAP_TONG_CUC.equals(cDvi)) {
+                    if (dx.getTrangThaiTh().equals(NhapXuatHangTrangThaiEnum.CHUATONGHOP.getId())) {
+                        objs[14] = dx.getTenTrangThaiTh();
+                    } else {
+                        objs[14] = dx.getMaTh();
+                    }
                 }
+                dataList.add(objs);
             }
-            dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
         ex.export();
-    }
 
-    public void exportToExcelCuc(HhDxuatKhLcntSearchReq objReq, HttpServletResponse response) throws Exception {
-
-        PaggingReq paggingReq = new PaggingReq();
-        paggingReq.setPage(0);
-        paggingReq.setLimit(Integer.MAX_VALUE);
-        objReq.setPaggingReq(paggingReq);
-        Page<HhDxuatKhLcntHdr> page = this.timKiem(objReq);
-        List<HhDxuatKhLcntHdr> data = page.getContent();
-
-        String title = "Danh sách kế hoạch đề xuất lựa chọn nhà thầu";
-        String[] rowsName = new String[]{"STT", "Số kế hoạch/ tờ trình", "Năm kế hoạch", "Ngày lập KH", "Ngày duyệt KH", "Số QĐ giao chỉ tiêu", "Loại hàng hóa",
-                "Chủng loại hàng hóa", "Tổng số gói thầu", "Số gói thầu đã trúng", "SL HĐ đã ký", "Số QĐ duyệt KHLCNT", "Thời hạn nhập kho", "Trạng thái"};
-        String filename = "Danh_sach_ke_hoach_de_xuat_lua_chon_nha_thau_cuc.xlsx";
-
-        List<Object[]> dataList = new ArrayList<Object[]>();
-        Object[] objs = null;
-        for (int i = 0; i < data.size(); i++) {
-            HhDxuatKhLcntHdr dx = data.get(i);
-            objs = new Object[rowsName.length];
-            objs[0] = i;
-            objs[1] = dx.getSoDxuat();
-            objs[2] = dx.getNamKhoach();
-            objs[3] = convertDate(dx.getNgayTao());
-            objs[4] = convertDate(dx.getNgayPduyet());
-            objs[5] = dx.getSoQd();
-            objs[6] = dx.getTenLoaiVthh();
-            objs[7] = dx.getTenCloaiVthh();
-            objs[8] = dx.getSoGoiThau();
-            objs[9] = dx.getSoGthauTrung();
-            objs[11] = dx.getSoQdPdKqLcnt();
-            objs[12] = dx.getTgianNhang();
-            objs[13] = dx.getTenTrangThai();
-            dataList.add(objs);
-        }
-
-        ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
-        ex.export();
     }
 
     @Override
@@ -940,21 +930,6 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         }
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
-        List<Long> ids = page.getContent().stream().map(HhDxuatKhLcntHdr::getId).collect(Collectors.toList());
-        List<Object[]> listGthau;
-        if (req.getLoaiVthh() != null && req.getLoaiVthh().startsWith("02")) {
-            listGthau = hhDxuatKhLcntHdrRepository.getQdPdKhLcntVt(ids, NhapXuatHangTrangThaiEnum.THANH_CONG.getId());
-        } else {
-            listGthau = hhDxuatKhLcntHdrRepository.getQdPdKhLcnt(ids, NhapXuatHangTrangThaiEnum.THANH_CONG.getId());
-        }
-        Map<Long, Map<String, String>> hhDxKhlcnt = new HashMap<>();
-        for (Object[] it : listGthau) {
-            Map<String, String> dataQd = new HashMap<>();
-            dataQd.put("idQdPdKqLcnt", it[1].toString());
-            dataQd.put("soQdPdKqLcnt", it[2].toString());
-            dataQd.put("soGthauTrung", it[3].toString());
-            hhDxKhlcnt.put(Long.parseLong(it[0].toString()), dataQd);
-        }
         page.getContent().forEach(f -> {
             f.setQdGiaoChiTieuId(hhDxuatKhLcntHdrRepository.getIdByKhLcnt(f.getId(), f.getNamKhoach()));
             Optional<HhDxKhLcntThopDtl> thopDtl = hhDxKhLcntThopDtlRepository.findByIdDxHdr(f.getId());
@@ -971,11 +946,22 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : mapVthh.get(f.getCloaiVthh()));
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenTrangThaiTh(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiTh()));
-            Map<String, String> stringStringMap = hhDxKhlcnt.get(f.getId());
-            if (!ObjectUtils.isEmpty(stringStringMap)) {
-                f.setIdQdPdKqLcnt(Long.parseLong(stringStringMap.get("idQdPdKqLcnt")));
-                f.setSoQdPdKqLcnt(stringStringMap.get("soQdPdKqLcnt"));
-                f.setSoGthauTrung(Integer.valueOf(stringStringMap.get("soGthauTrung")));
+            if (req.getLoaiVthh() != null && req.getLoaiVthh().startsWith("02")) {
+                Optional<HhQdKhlcntHdr> qdKhlcntHdr = hhQdKhlcntHdrRepository.findByIdTrHdr(f.getId());
+                if (qdKhlcntHdr.isPresent()){
+                    f.setSoQdPdKhLcnt(qdKhlcntHdr.get().getSoQd());
+                    f.setIdQdPdKhLcnt(qdKhlcntHdr.get().getId());
+                    Optional<QdPdHsmt> qdPdHsmt = qdPdHsmtRepository.findByIdQdPdKhlcnt(qdKhlcntHdr.get().getId());
+                    qdPdHsmt.ifPresent(pdHsmt -> f.setTgianDongMothau(pdHsmt.getTgianDthau()));
+                }
+            } else {
+                Optional<HhQdKhlcntDtl> qdKhlcntDtl = hhQdKhlcntDtlRepository.findByIdDxHdrAndHdrLastest(f.getId());
+                if (qdKhlcntDtl.isPresent()){
+                    Optional<HhQdKhlcntHdr> qdKhlcntHdr = hhQdKhlcntHdrRepository.findById(qdKhlcntDtl.get().getIdQdHdr());
+                    qdKhlcntHdr.ifPresent(hhQdKhlcntHdr -> f.setSoQdPdKhLcnt(hhQdKhlcntHdr.getSoQd()));
+                    Optional<QdPdHsmt> qdPdHsmt = qdPdHsmtRepository.findByIdQdPdKhlcntDtl(qdKhlcntDtl.get().getId());
+                    qdPdHsmt.ifPresent(pdHsmt -> f.setTgianDongMothau(pdHsmt.getTgianDthau()));
+                }
             }
         });
         return page;
@@ -1182,6 +1168,85 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             return hhDxuatKhLcntHdrRepository.getGiaBanToiDaVt(cloaiVhtt, namKhoach);
         }
         return hhDxuatKhLcntHdrRepository.getGiaBanToiDaLt(cloaiVhtt, maDvi, namKhoach);
+    }
+
+    @Override
+    public List<HhDxKhlcntDsgthau> danhSachGthauTruot(HhDxuatKhLcntHdrReq objReq) {
+        List<HhDxKhlcntDsgthau> data = new ArrayList<>();
+        List<HhQdKhlcntDsgthau> dsgthaus = new ArrayList<>();
+        if (objReq.getLoaiVthh() != null && objReq.getLoaiVthh().startsWith("02")) {
+            dsgthaus = qdKhlcntDsgthauRepository.danhSachGthauTruotVt(objReq.getCloaiVthh(), objReq.getLoaiVthh(), objReq.getNamKhoach());
+        } else {
+            dsgthaus = qdKhlcntDsgthauRepository.danhSachGthauTruot(objReq.getCloaiVthh(), objReq.getLoaiVthh(), objReq.getNamKhoach());
+        }
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        Map<String, String> mapVthh = getListDanhMucHangHoa();
+        dsgthaus.forEach(gthau -> {
+            HhDxKhlcntDsgthau item = new HhDxKhlcntDsgthau();
+            item.setGoiThau(gthau.getGoiThau());
+            item.setSoLuong(gthau.getSoLuong());
+            item.setMaDvi(gthau.getMaDvi());
+            item.setLoaiVthh(gthau.getLoaiVthh());
+            item.setCloaiVthh(gthau.getCloaiVthh());
+            item.setDviTinh(gthau.getDviTinh());
+            item.setTenDvi(mapDmucDvi.get(gthau.getMaDvi()));
+            item.setTenCloaiVthh(mapVthh.get(gthau.getCloaiVthh()));
+            List<HhDxKhlcntDsgthauCtiet> listDdNhap = new ArrayList<>();
+            List<HhQdKhlcntDsgthauCtiet> listGtCtiet = hhQdKhlcntDsgthauCtietRepository.findByIdGoiThau(gthau.getId());
+            listGtCtiet.forEach(f -> {
+                List<HhDxKhlcntDsgthauCtietVt> listDdNhapCt = new ArrayList<>();
+                f.setTenDvi(mapDmucDvi.get(f.getMaDvi()));
+                f.setTenDiemKho(mapDmucDvi.get(f.getMaDiemKho()));
+                List<HhQdKhlcntDsgthauCtietVt> byIdGoiThauCtiet = hhQdKhlcntDsgthauCtietVtRepository.findByIdGoiThauCtiet(f.getId());
+                byIdGoiThauCtiet.forEach( x -> {
+                    x.setTenDvi(mapDmucDvi.get(x.getMaDvi()));
+                    HhDxKhlcntDsgthauCtietVt ddNhapCt = new HhDxKhlcntDsgthauCtietVt();
+                    BeanUtils.copyProperties(x, ddNhapCt);
+                    listDdNhapCt.add(ddNhapCt);
+                });
+                HhDxKhlcntDsgthauCtiet ddNhap = new HhDxKhlcntDsgthauCtiet();
+                BeanUtils.copyProperties(f, ddNhap);
+                ddNhap.setChildren(listDdNhapCt);
+                listDdNhap.add(ddNhap);
+            });
+            item.setChildren(listDdNhap);
+            data.add(item);
+        });
+        if (objReq.getLoaiVthh() != null && objReq.getLoaiVthh().startsWith("02")) {
+            List<HhDchinhDxKhLcntDsgthau> danhSachGthauTruotVt = dchinhDxKhLcntDsgthauRepository.danhSachGthauTruotVt(objReq.getCloaiVthh(), objReq.getLoaiVthh(), objReq.getNamKhoach());
+            danhSachGthauTruotVt.forEach(gthau -> {
+                HhDxKhlcntDsgthau item = new HhDxKhlcntDsgthau();
+                item.setGoiThau(gthau.getGoiThau());
+                item.setSoLuong(gthau.getSoLuong());
+                item.setMaDvi(gthau.getMaDvi());
+                item.setLoaiVthh(gthau.getLoaiVthh());
+                item.setCloaiVthh(gthau.getCloaiVthh());
+                item.setDviTinh(gthau.getDviTinh());
+                item.setTenDvi(mapDmucDvi.get(gthau.getMaDvi()));
+                item.setTenCloaiVthh(mapVthh.get(gthau.getCloaiVthh()));
+                List<HhDxKhlcntDsgthauCtiet> listDdNhap = new ArrayList<>();
+                List<HhDchinhDxKhLcntDsgthauCtiet> listGtCtiet = dchinhDxKhLcntDsgthauCtietRepository.findAllByIdGoiThau(gthau.getId());
+                listGtCtiet.forEach(f -> {
+                    List<HhDxKhlcntDsgthauCtietVt> listDdNhapCt = new ArrayList<>();
+                    f.setTenDvi(mapDmucDvi.get(f.getMaDvi()));
+                    f.setTenDiemKho(mapDmucDvi.get(f.getMaDiemKho()));
+                    List<HhDchinhDxKhLcntDsgthauCtietVt> byIdGoiThauCtiet = dchinhDxKhLcntDsgthauCtietVtRepository.findAllByIdGoiThauCtiet(f.getId());
+                    byIdGoiThauCtiet.forEach( x -> {
+                        x.setTenDvi(mapDmucDvi.get(x.getMaDvi()));
+                        HhDxKhlcntDsgthauCtietVt ddNhapCt = new HhDxKhlcntDsgthauCtietVt();
+                        BeanUtils.copyProperties(x, ddNhapCt);
+                        listDdNhapCt.add(ddNhapCt);
+                    });
+                    HhDxKhlcntDsgthauCtiet ddNhap = new HhDxKhlcntDsgthauCtiet();
+                    BeanUtils.copyProperties(f, ddNhap);
+                    ddNhap.setChildren(listDdNhapCt);
+                    listDdNhap.add(ddNhap);
+                });
+                item.setChildren(listDdNhap);
+                data.add(item);
+            });
+        }
+        return data;
     }
 
     private void capNhatSoLuongNhap (HhDxuatKhLcntHdr dxuatKhLcntHdr) {

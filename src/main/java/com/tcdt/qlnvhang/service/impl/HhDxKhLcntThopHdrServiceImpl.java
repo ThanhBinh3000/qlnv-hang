@@ -511,6 +511,7 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		List<HhDxKhLcntThopDtl> listTh = hhDxKhLcntThopDtlRepository.findByIdThopHdr(optional.get().getId());
 		Map<String, String> mapDmucDvi = getMapTenDvi();
 		AtomicReference<BigDecimal> tongSl = new AtomicReference<>(BigDecimal.ZERO);
+		AtomicReference<BigDecimal> tongThanhTien = new AtomicReference<>(BigDecimal.ZERO);
 		AtomicReference<Long> tongSoGthau = new AtomicReference<>(0L);
 		listTh.forEach(f -> {
 			Optional<HhDxuatKhLcntHdr> qOptional = hhDxuatKhLcntHdrRepository.findById(f.getIdDxHdr());
@@ -529,6 +530,12 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 					DsChiCucPreview chiCuc = new DsChiCucPreview();
 					chiCuc.setDonGia(docxToPdfConverter.convertBigDecimalToStr(ctiet.getDonGiaTamTinh()));
 					chiCuc.setChiCuc(StringUtils.isEmpty(ctiet.getMaDvi()) ? null : mapDmucDvi.get(ctiet.getMaDvi()));
+					if (ctiet.getDonGiaTamTinh() != null && ctiet.getSoLuong() != null) {
+						BigDecimal thanhTien = ctiet.getDonGiaTamTinh().multiply(ctiet.getSoLuong());
+						chiCuc.setThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(thanhTien));
+						tongThanhTien.updateAndGet(v -> v.add(thanhTien));
+					}
+					chiCuc.setSoLuongStr(docxToPdfConverter.convertBigDecimalToStr(ctiet.getSoLuong()));
 					dsChiCuc.add(chiCuc);
 				});
 			}
@@ -541,8 +548,11 @@ public class HhDxKhLcntThopHdrServiceImpl extends BaseServiceImpl implements HhD
 		object.setDetails(listTh);
 		object.setNamKhoach(optional.get().getNamKhoach().toString());
 		object.setTongSl(docxToPdfConverter.convertBigDecimalToStr(tongSl.get()));
+		object.setTongThanhTien(docxToPdfConverter.convertBigDecimalToStr(tongThanhTien.get()));
 		object.setTongSoGthau(tongSoGthau.toString());
-		object.setTenLoaiVthh(hashMapDmHh.get(optional.get().getLoaiVthh()).toUpperCase());
+		object.setTenCloaiVthh(hashMapDmHh.get(optional.get().getCloaiVthh()).toUpperCase());
+		object.setSoTtr(optional.get().getSoTtr());
+		object.setNgayTrinh(convertDate(optional.get().getNgayTrinh()));
 		return docxToPdfConverter.convertDocxToPdf(inputStream, object);
 	}
 }

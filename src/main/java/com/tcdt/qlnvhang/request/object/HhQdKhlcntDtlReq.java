@@ -96,5 +96,6 @@ public class HhQdKhlcntDtlReq {
 	private List<HhQdKhlcntDsgthauReq> dsGoiThau = new ArrayList<>();
 
 	private List<HhQdKhlcntDsgthauReq> children = new ArrayList<>();
+	private List<FileDinhKemReq> fileDinhKem;
 
 }

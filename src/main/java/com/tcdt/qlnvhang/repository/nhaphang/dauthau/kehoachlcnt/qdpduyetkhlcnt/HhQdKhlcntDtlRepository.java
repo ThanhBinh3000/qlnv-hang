@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Long> {
 
@@ -18,6 +19,15 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
     List<HhQdKhlcntDtl> findAllByIdQdHdrIn (List<Long> ids);
 
     List<HhQdKhlcntDtl> findByIdQdHdr(Long idQdHdr);
+
+    @Query(value = "SELECT dtl.* FROM HH_QD_KHLCNT_DTL dtl " +
+            " JOIN HH_QD_KHLCNT_HDR hdr ON dtl.ID_QD_HDR = hdr.ID " +
+            " JOIN HH_DX_KHLCNT_HDR dx ON dtl.ID_DX_HDR = dx.ID " +
+            "  WHERE 1=1 " +
+            "  AND hdr.LASTEST = 1 " +
+            "  AND dx.ID = :idDx "
+            , nativeQuery = true)
+    Optional<HhQdKhlcntDtl> findByIdDxHdrAndHdrLastest(Long idDx);
 
     @Query(value = "SELECT HDR.ID,COUNT( DISTINCT GT.ID ) AS C " +
             " FROM HH_QD_KHLCNT_HDR HDR " +
