@@ -362,6 +362,7 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
       xuatCapRow.setId(null);
       xuatCapRow.setSoBbQd(xuatCapRow.getSoBbQd().replace("QĐPDCTVT","QĐPDXC"));
       xuatCapRow.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
+      xuatCapRow.setPaXuatGaoChuyenXc(true);
       xuatCapRow.setType("XC");
       xuatCapRow.setLoaiNhapXuat("Xuất cấp");
       xhCtvtQdPdHdrRepository.save(xuatCapRow);
