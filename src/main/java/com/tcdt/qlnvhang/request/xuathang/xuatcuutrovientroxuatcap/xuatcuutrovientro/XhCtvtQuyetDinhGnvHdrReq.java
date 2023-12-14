@@ -51,6 +51,8 @@ public class XhCtvtQuyetDinhGnvHdrReq {
   String tenCloaiVthh;
   String tenTrangThai;
   String tenTrangThaiXh;
+  LocalDate ngayTapKet;
+  LocalDate ngayGiaoHang;
   List<XhCtvtQuyetDinhGnvDtl> dataDtl;
   List<FileDinhKemJoinTable> fileDinhKem;
   List<FileDinhKemJoinTable> canCu;

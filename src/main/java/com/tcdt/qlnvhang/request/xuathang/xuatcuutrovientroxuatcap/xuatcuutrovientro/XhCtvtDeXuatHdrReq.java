@@ -44,7 +44,8 @@ public class XhCtvtDeXuatHdrReq {
     private String type;
     private BigDecimal thanhTien;
     private BigDecimal tonKhoDvi;
-
+    private LocalDate ngayTapKet;
+    private LocalDate ngayGiaoHang;
     private List<FileDinhKemJoinTable> canCu = new ArrayList<>();
 
     private List<XhCtvtDeXuatPa> deXuatPhuongAn = new ArrayList<>();
