@@ -46,9 +46,10 @@ public class XhCtvtQuyetDinhPdHdrReq {
   private Long nguoiPduyetId;
   private String donViTinh;
   private LocalDate ngayKetThuc;
-
   private Long idQdGiaoNv;
   private String soQdGiaoNv;
+  private LocalDate ngayTapKet;
+  private LocalDate ngayGiaoHang;
 
   private List<FileDinhKemJoinTable> fileDinhKem;
 
