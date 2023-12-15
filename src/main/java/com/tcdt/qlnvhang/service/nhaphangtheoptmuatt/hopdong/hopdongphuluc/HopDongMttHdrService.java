@@ -713,7 +713,7 @@ public class HopDongMttHdrService extends BaseServiceImpl {
           child.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(tongThanhTienChild));
         }
       }
-
+      hopDongMttHdr.setSoLuong(soLuongChild);
       hopDongMttHdr.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(tongThanhTien));
       ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
       byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
