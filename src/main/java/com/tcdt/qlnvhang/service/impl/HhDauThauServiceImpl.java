@@ -462,6 +462,8 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
             if (!qOptional.isPresent()) {
                 throw new UnsupportedOperationException("Không tồn tại bản ghi");
             }
+            object.setSoQdPdKhlcnt(qOptional.get().getSoQd());
+            object.setNgayPdKhlcnt(convertDate(qOptional.get().getNgayPduyet()));
             if (qOptional.get().getIdTrHdr() != null) {
                 Optional<HhDxuatKhLcntHdr> dxuatKhLcntHdr = hhDxuatKhLcntHdrRepository.findById(qOptional.get().getIdTrHdr());
                 if (dxuatKhLcntHdr.isPresent()) {
@@ -481,6 +483,8 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
                         DsGthauPreview gthauPreview = new DsGthauPreview();
                         gthauPreview.setGoiThau(gThau.getGoiThau());
                         gthauPreview.setSoLuong(gThau.getSoLuong());
+                        gthauPreview.setThanhTien(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaVat())));
+                        gthauPreview.setThanhTienNhaThau(docxToPdfConverter.convertBigDecimalToStr(gThau.getThanhTienNhaThau()));
                         tongSl = tongSl.add(gThau.getSoLuong());
                         gthauPreview.setDvt(gThau.getDviTinh());
                         HhQdPduyetKqlcntDtl kq = hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndType(gThau.getId(), "DC");
@@ -498,6 +502,8 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
                     DsGthauPreview gthauPreview = new DsGthauPreview();
                     gthauPreview.setGoiThau(gThau.getGoiThau());
                     gthauPreview.setSoLuong(gThau.getSoLuong());
+                    gthauPreview.setThanhTien(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(gThau.getDonGiaVat())));
+                    gthauPreview.setThanhTienNhaThau(docxToPdfConverter.convertBigDecimalToStr(gThau.getThanhTienNhaThau()));
                     gthauPreview.setDvt(gThau.getDviTinh());
                     tongSl = tongSl.add(gThau.getSoLuong());
                     HhQdPduyetKqlcntDtl kq = hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndType(gThau.getId(), "GOC");
@@ -505,12 +511,16 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
                         gthauPreview.setNhaThauTrungThau(kq.getTenNhaThau());
                     }
                     List<HhDthauNthauDuthau> byIdDtGt = nhaThauDuthauRepository.findByIdDtGtAndType(gThau.getId(), "GOC");
+                    byIdDtGt.forEach(item -> {
+                        item.setGiaDuThau(docxToPdfConverter.convertBigDecimalToStr(item.getDonGia()));
+                    });
                     gthauPreview.setDsNhaThau(byIdDtGt);
                     dsGthau.add(gthauPreview);
                 }
             }
             object.setDsGthauKq(dsGthau);
             object.setTongSl(tongSl.toString());
+
         } else {
             Optional<HhQdKhlcntDtl> byId = dtlRepository.findById(objReq.getId());
             if(!byId.isPresent()){

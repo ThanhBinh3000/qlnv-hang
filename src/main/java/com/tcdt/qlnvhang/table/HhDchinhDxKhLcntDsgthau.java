@@ -49,6 +49,7 @@ public class HhDchinhDxKhLcntDsgthau implements Serializable {
 	private String tenNhaThau;
 	private Long idNhaThau;
 	private BigDecimal donGiaNhaThau;
+	private BigDecimal thanhTienNhaThau;;
 	private String trangThaiDt;
 //	private String ghiChuTtdt;
 //	@Temporal(TemporalType.DATE)

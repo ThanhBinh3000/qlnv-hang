@@ -22,6 +22,8 @@ public class HhQdKhlcntPreview {
     private String tongThanhTien;
     private String tongThanhTienNhaThau;
     private String tongChenhLech;
+    private String soQdPdKhlcnt;
+    private String ngayPdKhlcnt;
     private List<HhQdKhlcntDsgthau> dsGthau;
     private List<DsGthauPreview> dsGthauKq;
     private List<HhQdKhlcntDtl> qdKhlcntDtls;

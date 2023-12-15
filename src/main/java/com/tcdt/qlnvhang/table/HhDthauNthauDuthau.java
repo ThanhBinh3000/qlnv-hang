@@ -31,10 +31,13 @@ public class HhDthauNthauDuthau implements Serializable {
 	String diaChi;
 	String sdt;
 	BigDecimal soLuong;
+	//Gia du thau
 	BigDecimal donGia;
 	String trangThai;
 	@Transient
 	String tenTrangThai;
+	@Transient
+	String giaDuThau;
 	String lyDo;
 
 	private Long idDtGt;

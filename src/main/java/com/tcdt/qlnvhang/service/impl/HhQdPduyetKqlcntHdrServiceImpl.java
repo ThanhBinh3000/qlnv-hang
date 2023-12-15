@@ -10,6 +10,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.Hh
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.tochuctrienkhai.QdPdHsmt;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhDxuatKhNhapKhacHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.*;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthau;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtl;
@@ -297,6 +298,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 				break;
 			case Contains.DA_HOAN_THANH + Contains.BAN_HANH:
 				optional.get().setTrangThaiHd(stReq.getTrangThai());
+				updateTrangThaiDt(optional.get());
 				break;
 			default:
 				throw new Exception("Phê duyệt không thành công");
@@ -304,6 +306,26 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 
 		HhQdPduyetKqlcntHdr createCheck = hhQdPduyetKqlcntHdrRepository.save(optional.get());
 		return createCheck;
+	}
+
+	void updateTrangThaiDt (HhQdPduyetKqlcntHdr kqlcntHdr) {
+		Optional<HhQdKhlcntDtl> qdKhlcntDtl = hhQdKhlcntDtlRepository.findById(kqlcntHdr.getIdQdPdKhlcntDtl());
+		if(qdKhlcntDtl.isPresent()){
+			List<HhQdKhlcntDsgthau> listDsgThau = hhQdKhlcntDsgthauRepository.findByIdQdDtl(qdKhlcntDtl.get().getId());
+			for (HhQdKhlcntDsgthau dsgthau : listDsgThau) {
+				if (dsgthau.getTrangThaiDt().equals(TrangThaiAllEnum.THANH_CONG.getId())) {
+					Optional<HhHopDongHdr> hhHopDongHdr = hhHopDongRepository.findBySoQdKqLcntAndIdGoiThau(kqlcntHdr.getSoQd(), dsgthau.getId());
+					if (hhHopDongHdr.isPresent()) {
+						if (!hhHopDongHdr.get().getTrangThai().equals(TrangThaiAllEnum.DA_KY.getId())){
+							dsgthau.setTrangThaiDt(TrangThaiAllEnum.KHONG_KY_HD.getId());
+						}
+					} else {
+						dsgthau.setTrangThaiDt(TrangThaiAllEnum.KHONG_KY_HD.getId());
+					}
+					hhQdKhlcntDsgthauRepository.save(dsgthau);
+				}
+			}
+		}
 	}
 
 	void updateDataApproveVt(HhQdPduyetKqlcntHdr qdPduyetKqlcntHdr) throws Exception {
@@ -327,6 +349,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 						gThau.setTenNhaThau(hhQdPduyetKqlcntDtl.getTenNhaThau());
 						gThau.setDonGiaNhaThau(hhQdPduyetKqlcntDtl.getDonGiaVat());
 						gThau.setIdNhaThau(hhQdPduyetKqlcntDtl.getIdNhaThau());
+						gThau.setThanhTien(hhQdPduyetKqlcntDtl.getThanhTienNhaThau());
 						dchinhDxKhLcntDsgthauRepository.save(gThau);
 					}
 				}
