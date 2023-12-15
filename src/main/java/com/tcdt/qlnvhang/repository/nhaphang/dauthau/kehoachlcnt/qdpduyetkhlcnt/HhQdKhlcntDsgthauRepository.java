@@ -34,7 +34,7 @@ public interface HhQdKhlcntDsgthauRepository extends BaseRepository<HhQdKhlcntDs
             " AND (:cloaiVthh IS NULL OR gthau.CLOAI_VTHH = :cloaiVthh)" +
             " AND (:loaiVthh IS NULL OR gthau.LOAI_VTHH = :loaiVthh)" +
             " AND (:namKh IS NULL OR hdr.NAM_KHOACH = :namKh)" +
-            " AND gthau.TRANG_THAI_DT IN ('41', '36')"
+            " AND gthau.TRANG_THAI_DT IN ('41', '36', '84')"
             , nativeQuery = true)
     List<HhQdKhlcntDsgthau> danhSachGthauTruot (String cloaiVthh, String loaiVthh, Integer namKh);
 
@@ -44,7 +44,7 @@ public interface HhQdKhlcntDsgthauRepository extends BaseRepository<HhQdKhlcntDs
             " AND (:cloaiVthh IS NULL OR gthau.CLOAI_VTHH = :cloaiVthh)" +
             " AND (:loaiVthh IS NULL OR gthau.LOAI_VTHH = :loaiVthh)" +
             " AND (:namKh IS NULL OR hdr.NAM_KHOACH = :namKh)" +
-            " AND gthau.TRANG_THAI_DT IN ('41', '36')"
+            " AND gthau.TRANG_THAI_DT IN ('41', '36', '84')"
             , nativeQuery = true)
     List<HhQdKhlcntDsgthau> danhSachGthauTruotVt (String cloaiVthh, String loaiVthh, Integer namKh);
 }

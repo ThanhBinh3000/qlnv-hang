@@ -80,7 +80,8 @@ public enum TrangThaiAllEnum {
     DA_LAP("80", "Đã lập"),
     CHUATAO_KH("81", "Chưa tạo KH"),
     DADUTHAO_KH("82", "Đã dự thảo KH"),
-    DAGUIDUYET_KH("83", "Đã gửi duyệt KH");
+    DAGUIDUYET_KH("83", "Đã gửi duyệt KH"),
+    KHONG_KY_HD("84", "Đã trúng thầu nhưng không ký HĐ");
 
     private final String id;
     private final String ten;
