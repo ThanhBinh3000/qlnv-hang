@@ -1,16 +1,21 @@
 package com.tcdt.qlnvhang.service.nhaphang.nhapkhac.impl;
 
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhNkBBKetThucNKHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhNkBangKeNhapVTHdr;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhNkBBKetThucNKDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhNkBBKetThucNKHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhNkBBKetThucNKReq;
+import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhNkBangKeNhapVTReq;
 import com.tcdt.qlnvhang.response.nhaphang.nhapkhac.HhNkBBKetThucNKHdrDTO;
 import com.tcdt.qlnvhang.response.nhaphang.nhapkhac.HhNkBBKetThucNKHdrListDTO;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.nhaphang.nhapkhac.HhNkBBKetThucNKService;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -22,11 +27,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.util.*;
 
 @Service
-public class HhNkBBKetThucNKServiceImpl implements HhNkBBKetThucNKService {
+public class HhNkBBKetThucNKServiceImpl extends BaseServiceImpl implements HhNkBBKetThucNKService {
     @Autowired
     private HhNkBBKetThucNKHdrRepository hdrRepository;
     @Autowired
@@ -213,5 +219,14 @@ public class HhNkBBKetThucNKServiceImpl implements HhNkBBKetThucNKService {
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
+    }
+
+    @Override
+    public ReportTemplateResponse preview(HhNkBBKetThucNKReq objReq) throws Exception {
+        HhNkBBKetThucNKHdr optional = detail(objReq.getId());
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
     }
 }

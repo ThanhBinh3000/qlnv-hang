@@ -64,9 +64,9 @@ public interface HhNkBbGiaoNhanHdrRepository extends JpaRepository<HhNkBbGiaoNha
             "AND (:#{#param.denNgayKtnk}  IS NULL OR bbgn.ngayKtNhap <= :#{#param.denNgayKtnk}) ) " +
             "AND ((:#{#param.tuNgayThoiHanNhap}  IS NULL OR qdgnv.tgianNkMnhat >= :#{#param.tuNgayThoiHanNhap})" +
             "AND (:#{#param.denNgayThoiHanNhap}  IS NULL OR qdgnv.tgianNkMnhat <= :#{#param.denNgayThoiHanNhap}) ) " +
-            "GROUP BY bbgn.id,bbgn.ngayLap, qdgnv.id,qdgnv.soQd,qdgnv.nam,qdgnv.tgianNkMnhat,dtl.maNhaKho,dmdvnhakho.tenDvi, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho," +
-            "dmdvlokho.tenDvi,dtl.maNganKho,dmdvngankho.tenDvi,hdr.loaiVthh,dmvt.ten, dtl.cloaiVthh, dmvt.loaiHang, qdgnv.dvt, qdgnv.dvt ," +
-            "bbgn.soBb,bbktnk.soBb,bbktnk.id, bbktnk.ngayKetThucNhap,pnkh.id,pnkh.soPhieuNhapKho, pnkh.ngayLap, bbktnk.ngayKetThucNhap,bblm.soBienBan,bblm.id, bbgn.trangThai, bbgn.trangThai "+
+            "GROUP BY bbgn.id,bbgn.ngayLap, qdgnv.id,qdgnv.soQd,qdgnv.nam,qdgnv.tgianNkMnhat,dtl.maNhaKho,dmdvnhakho.tenDvi, dtl.maDiemKho,dmdvdiemkho.tenDvi,dtl.maLoKho,dmdvlokho.tenDvi,dtl.maNganKho,dmdvngankho.tenDvi,hdr.loaiVthh,dmvt.ten, dtl.cloaiVthh, dmvt.loaiHang,hdr.tongSlNhap, hdr.dvt,bbgn.soBb,bbktnk.soBb,bbktnk.id, bbktnk.ngayKetThucNhap,pnkh.id,pnkh.soPhieuNhapKho, pnkh.ngayLap, bbktnk.ngayKetThucNhap,bblm.soBienBan,bblm.id, bbgn.trangThai, bbgn.trangThai " +
+//            "dmdvlokho.tenDvi,dtl.maNganKho,dmdvngankho.tenDvi,hdr.loaiVthh,dmvt.ten, dtl.cloaiVthh, dmvt.loaiHang, qdgnv.dvt, qdgnv.dvt ," +
+//            "bbgn.soBb,bbktnk.soBb,bbktnk.id, bbktnk.ngayKetThucNhap,pnkh.id,pnkh.soPhieuNhapKho, pnkh.ngayLap, bbktnk.ngayKetThucNhap,bblm.soBienBan,bblm.id, bbgn.trangThai, bbgn.trangThai "+
             "ORDER BY qdgnv.soQd DESC")
     Page<HhNkBbGiaoNhanHdrDTO> searchPage(@Param("param") HhNkBbGiaoNhanHdrReq req, Pageable pageable);
 

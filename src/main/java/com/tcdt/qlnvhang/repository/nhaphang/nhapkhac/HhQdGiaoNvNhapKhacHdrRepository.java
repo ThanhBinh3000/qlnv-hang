@@ -34,7 +34,7 @@ public interface HhQdGiaoNvNhapKhacHdrRepository extends JpaRepository<HhQdGiaoN
     Page<HhQdGiaoNvuNhapHangKhacHdr> search(HhQdGiaoNvuNhapKhacSearch req, Pageable pageable);
 
     @Query(
-            value = "SELECT qdgnv.* " +
+            value = "SELECT DISTINCT qdgnv.* " +
                     "FROM hh_qd_giao_nvu_nhapxuat_khac qdgnv LEFT JOIN hh_qd_pdnk_dtl pdtdl ON pdtdl.id_dx_hdr = qdgnv.id_qd_pd_nk " +
                     " LEFT JOIN NH_BB_LAY_MAU_KHAC bblm ON bblm.ID_QD_GIAO_NV_NH = qdgnv.id " +
                     " WHERE 1=1" +
@@ -91,7 +91,7 @@ public interface HhQdGiaoNvNhapKhacHdrRepository extends JpaRepository<HhQdGiaoN
                     " WHERE (:#{#req.namKhoach} IS NULL OR qdnk.nam = :#{#req.namKhoach}) " +
                     "  AND (:#{#req.soQd} IS NULL OR LOWER(qdnk.soQd) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.soQd}),'%'))) " +
                     "  AND (:#{#req.maDvi} IS NULL OR LOWER(qdnk.maDvi) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.maDvi}),'%')))" +
-//                    "  AND (:#{#req.maDviChiCuc} IS NULL OR LOWER(pdtdl.maChiCuc) LIKE LOWER(CONCAT(:#{#req.maDviChiCuc},'%')))" +
+                    "  AND (:#{#req.maDviChiCuc} IS NULL OR LOWER(pdtdl.maChiCuc) LIKE LOWER(CONCAT(:#{#req.maDviChiCuc},'%')))" +
                     "  AND (:#{#req.loaiVthh} IS NULL OR LOWER(qdnk.loaiVthh) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.loaiVthh}),'%')))" +
                     "  AND (:#{#req.tuNgayLPStr} IS NULL OR ktcl.ngayTao >= TO_DATE(:#{#req.tuNgayLPStr}, 'YYYY-MM-DD HH24:MI:SS'))" +
                     "  AND (:#{#req.denNgayLPStr} IS NULL OR ktcl.ngayTao <= TO_DATE(:#{#req.denNgayLPStr}, 'YYYY-MM-DD HH24:MI:SS'))" +
@@ -100,6 +100,7 @@ public interface HhQdGiaoNvNhapKhacHdrRepository extends JpaRepository<HhQdGiaoN
                     "  AND (:#{#req.soPhieu} IS NULL OR LOWER(ktcl.soPhieu) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.soPhieu}),'%'))) " +
                     "  AND (:#{#req.kqDanhGia} IS NULL OR LOWER(ktcl.kqDanhGia) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.kqDanhGia}),'%'))) " +
                     "  AND (:#{#req.trangThai} IS NULL OR ktcl.trangThai = :#{#req.trangThai}) "+
+                    "  AND (:#{#req.trangThaiQdnk} IS NULL OR qdnk.trangThai = :#{#req.trangThaiQdnk}) "+
                     "  ORDER BY qdnk.ngaySua desc , qdnk.ngayTao desc, qdnk.id desc"
     )
     Page<HhQdGiaoNvuNhapHangKhacHdr> searchPhieuKtcl(HhNkPhieuKtclSearch req, Pageable pageable);

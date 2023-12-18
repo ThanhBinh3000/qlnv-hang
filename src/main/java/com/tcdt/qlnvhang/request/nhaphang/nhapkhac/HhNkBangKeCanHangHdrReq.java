@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.nhaphang.nhapkhac;
 
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhNkBangKeCanHangDtl;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -107,4 +108,5 @@ public class HhNkBangKeCanHangHdrReq {
     private String tenTrangThai;
 
     private List<HhNkBangKeCanHangDtl> hhNkBangKeCanHangDtl = new ArrayList<>();
+    private ReportTemplateRequest reportTemplateRequest;
 }

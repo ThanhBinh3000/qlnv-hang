@@ -109,6 +109,7 @@ public class HhBbNghiemThuNhapKhacServiceImpl extends BaseServiceImpl implements
     }
 
     @Override
+    @Transactional
     public HhBbNghiemThuNhapKhac themMoi(HhBbNghiemThuNhapKhacReq objReq) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null){
@@ -130,6 +131,7 @@ public class HhBbNghiemThuNhapKhacServiceImpl extends BaseServiceImpl implements
     }
 
     @Override
+    @Transactional
     public HhBbNghiemThuNhapKhac capNhat(HhBbNghiemThuNhapKhacReq objReq) throws Exception {
         UserInfo userInfo = SecurityContextService.getUser();
         if (userInfo == null){
@@ -359,6 +361,21 @@ public class HhBbNghiemThuNhapKhacServiceImpl extends BaseServiceImpl implements
     @Override
     public ReportTemplateResponse preview(HhBbNghiemThuNhapKhacReq objReq) throws Exception {
         HhBbNghiemThuNhapKhac optional = chiTiet(objReq.getId());
+        if(optional.getMaLoKho() != null){
+            KtNganLo nganLo = (KtNganLo) this.getDataKho(optional.getMaLoKho());
+            optional.setLoaiHinhKho(nganLo.getLhKho());
+            optional.setTichLuong(nganLo.getTichLuongTkLt().subtract(nganLo.getTichLuongKdLt()).compareTo(BigDecimal.ZERO) > 0 ? nganLo.getTichLuongTkLt().subtract(nganLo.getTichLuongKdLt()) : BigDecimal.ZERO);
+        }else{
+            KtNganKho ktNganKho = (KtNganKho) this.getDataKho(optional.getMaNganKho());
+            optional.setLoaiHinhKho(ktNganKho.getLhKho());
+            optional.setTichLuong(ktNganKho.getTichLuongTkLt().subtract(ktNganKho.getTichLuongKdLt()).compareTo(BigDecimal.ZERO) > 0 ? ktNganKho.getTichLuongTkLt().subtract(ktNganKho.getTichLuongKdLt()) : BigDecimal.ZERO);
+        }
+
+        if(optional.getChildren().size() > 0){
+            optional.setDmTongCucPdTruocThucHien(optional.getChildren().stream().filter(x -> x.getType().equals("PD")).collect(Collectors.toList()));
+            optional.setDviChuDongThucHien(optional.getChildren().stream().filter(x -> x.getType().equals("TH")).collect(Collectors.toList()));
+        }
+
         ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         if(optional.getLoaiVthh().startsWith("02")){

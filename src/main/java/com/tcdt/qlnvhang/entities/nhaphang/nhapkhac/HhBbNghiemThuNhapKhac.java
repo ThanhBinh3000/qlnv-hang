@@ -83,8 +83,10 @@ public class HhBbNghiemThuNhapKhac {
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     @Transient
     private List<HhBbNghiemThuNhapKhacDtl> children =new ArrayList<>();
-//    @Transient
-//    private List<HhBbNghiemThuNhapKhacDtl> dmTongCucPdTruocThucHien =new ArrayList<>();
+    @Transient
+    private List<HhBbNghiemThuNhapKhacDtl> dmTongCucPdTruocThucHien =new ArrayList<>();
+    @Transient
+    private List<HhBbNghiemThuNhapKhacDtl> dviChuDongThucHien =new ArrayList<>();
     @Transient
     private HhNkPhieuKtcl phieuKtcl;
 
@@ -95,6 +97,10 @@ public class HhBbNghiemThuNhapKhac {
     private String tenBaoCao;
     @Transient
     private String thang;
+    @Transient
+    private String loaiHinhKho;
+    @Transient
+    private BigDecimal tichLuong;
     public String getNgay() {
         return Objects.isNull(this.getNgayTao()) ? null : String.valueOf(this.getNgayTao().getDate());
     }
