@@ -96,6 +96,8 @@ public class DcnbBcKqDcDtl extends BaseEntity implements Serializable, Cloneable
     private String ketQua;
     @Column(name = "TINH_TRANG")
     private Boolean tinhTrang;
+    @Column(name = "NAM_NHAP")
+    private BigDecimal namNhap;
     @Column(name = "TYPE")
     private String type; // CHI_CUC, CUC
     @Column(name = "KE_HOACH_DC_DTL_ID")

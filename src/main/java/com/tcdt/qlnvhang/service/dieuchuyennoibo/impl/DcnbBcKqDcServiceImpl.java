@@ -279,6 +279,7 @@ public class DcnbBcKqDcServiceImpl implements DcnbBbKqDcService {
             kqdc.setMaLoKho(loaiVthh.getMaLoKho());
             kqdc.setTenLoKho(loaiVthh.getTenLoKho());
             kqdc.setSlTon(loaiVthh.getTonKho());
+            kqdc.setNamNhap(loaiVthh.getNamNhap());
 
             kqdc.setMaDviNhan(loaiVthh.getMaChiCucNhan());
             kqdc.setTenDviNhan(loaiVthh.getTenChiCucNhan());

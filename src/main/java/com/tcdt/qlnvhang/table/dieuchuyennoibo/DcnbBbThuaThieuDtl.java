@@ -51,6 +51,8 @@ public class DcnbBbThuaThieuDtl {
     private String tenLoKho;
     @Column(name = "DON_VI_TINH")
     private String donViTinh;
+    @Column(name = "NAM_NHAP")
+    private BigDecimal namNhap;
 
     @Column(name = "MA_DVI_NHAN")
     private String maDviNhan;
