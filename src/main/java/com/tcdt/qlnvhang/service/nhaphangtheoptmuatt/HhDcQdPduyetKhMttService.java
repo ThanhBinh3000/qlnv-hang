@@ -366,12 +366,13 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
                 optional.get().setNgayGduyet(getDateTimeNow());
                 break;
             case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
+            case Contains.TUCHOI_LDTC + Contains.CHODUYET_LDV:
                 optional.get().setNguoiGduyet(getUser().getUsername());
                 optional.get().setNgayGduyet(getDateTimeNow());
                 optional.get().setLdoTchoi(statusReq.getLyDo());
                 break;
-//            case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
-            case Contains.BAN_HANH + Contains.CHODUYET_LDV:
+            case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
+            case Contains.BAN_HANH + Contains.DADUYET_LDV:
                 optional.get().setNguoiPduyet(getUser().getUsername());
                 optional.get().setNgayPduyet(getDateTimeNow());
                 break;

@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.impl;
 
 import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 import com.google.common.collect.Lists;
@@ -668,6 +669,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		BigDecimal tongSl = BigDecimal.ZERO;
 		BigDecimal tongThanhTien = BigDecimal.ZERO;
 		BigDecimal tongThanhTienNhaThau = BigDecimal.ZERO;
+		BigDecimal tongThanhTienDuThau = BigDecimal.ZERO;
 		BigDecimal tongChenhLech = BigDecimal.ZERO;
 		if (objReq.getLoaiVthh().startsWith("02")) {
 			Optional<HhQdKhlcntHdr> qOptional = hhQdKhlcntHdrRepository.findById(qdPduyetKqlcntHdr.get().getIdQdPdKhlcnt());
@@ -688,7 +690,13 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 				if (dchinhDxKhLcntHdr.isPresent()) {
 					List<HhDchinhDxKhLcntDsgthau> gThauList = dchinhDxKhLcntDsgthauRepository.findAllByIdDcDxHdr(dchinhDxKhLcntHdr.get().getId());
 					for(HhDchinhDxKhLcntDsgthau gThau : gThauList){
+						Optional<HhDthauNthauDuthau> nthau = nhaThauDuthauRepository.findById(gThau.getIdNhaThau());
 						DsGthauPreview gthauPreview = new DsGthauPreview();
+						if (nthau.isPresent()){
+							gthauPreview.setDonGiaDuThau(docxToPdfConverter.convertBigDecimalToStr(checkNullAsZero(nthau.get().getDonGia()).divide(gThau.getSoLuong(),2, RoundingMode.HALF_UP)));
+							gthauPreview.setThanhTienDuThau(docxToPdfConverter.convertBigDecimalToStr(nthau.get().getDonGia()));
+							tongThanhTienDuThau = tongThanhTienDuThau.add(nthau.get().getDonGia());
+						}
 						gthauPreview.setGoiThau(gThau.getGoiThau());
 						gthauPreview.setSoLuong(gThau.getSoLuong());
 						gthauPreview.setDonGia(docxToPdfConverter.convertBigDecimalToStr(gThau.getDonGiaVat()));
@@ -714,7 +722,13 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			} else {
 				List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdHdr(qOptional.get().getId());
 				for(HhQdKhlcntDsgthau gThau : hhQdKhlcntDsgthauData){
+					Optional<HhDthauNthauDuthau> nthau = nhaThauDuthauRepository.findById(gThau.getIdNhaThau());
 					DsGthauPreview gthauPreview = new DsGthauPreview();
+					if (nthau.isPresent()){
+						gthauPreview.setDonGiaDuThau(docxToPdfConverter.convertBigDecimalToStr(checkNullAsZero(nthau.get().getDonGia()).divide(gThau.getSoLuong(),2, RoundingMode.HALF_UP)));
+						gthauPreview.setThanhTienDuThau(docxToPdfConverter.convertBigDecimalToStr(nthau.get().getDonGia()));
+						tongThanhTienDuThau = tongThanhTienDuThau.add(nthau.get().getDonGia());
+					}
 					gthauPreview.setGoiThau(gThau.getGoiThau());
 					gthauPreview.setSoLuong(gThau.getSoLuong());
 					gthauPreview.setDvt(gThau.getDviTinh());
@@ -740,6 +754,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			object.setTongThanhTien(docxToPdfConverter.convertBigDecimalToStr(tongThanhTien));
 			object.setTongThanhTienNhaThau(docxToPdfConverter.convertBigDecimalToStr(tongThanhTienNhaThau));
 			object.setTongChenhLech(docxToPdfConverter.convertBigDecimalToStr(tongChenhLech));
+			object.setTongThanhTienDuThau(docxToPdfConverter.convertBigDecimalToStr(tongThanhTienDuThau));
 		} else {
 			Optional<HhQdKhlcntDtl> byId = hhQdKhlcntDtlRepository.findById(objReq.getIdQdPdKhlcntDtl());
 			if(!byId.isPresent()){
