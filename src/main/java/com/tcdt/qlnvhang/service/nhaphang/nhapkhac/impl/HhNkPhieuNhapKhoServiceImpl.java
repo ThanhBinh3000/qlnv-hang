@@ -3,18 +3,23 @@ package com.tcdt.qlnvhang.service.nhaphang.nhapkhac.impl;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhNkPhieuNhapKhoDtl;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhNkPhieuNhapKhoHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.nvnhap.HhQdGiaoNvuNhapHangKhacHdr;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhNkPhieuNhapKhoDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhNkPhieuNhapKhoHdrRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhNkPhieuNhapKhoHdrReq;
+import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhQdGiaoNvuNhapKhacSearch;
 import com.tcdt.qlnvhang.response.nhaphang.nhapkhac.HhNkPhieuNhapKhoHdrDTO;
 import com.tcdt.qlnvhang.response.nhaphang.nhapkhac.HhNkPhieuNhapKhoHdrListDTO;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
+import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.nhaphang.nhapkhac.HhNkPhieuNhapKhoService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -26,11 +31,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.util.*;
 
 @Service
-public class HhNkPhieuNhapKhoServiceImpl implements HhNkPhieuNhapKhoService {
+public class HhNkPhieuNhapKhoServiceImpl extends BaseServiceImpl implements HhNkPhieuNhapKhoService {
     @Autowired
     private HhNkPhieuNhapKhoHdrRepository hdrRepository;
     @Autowired
@@ -233,5 +239,13 @@ public class HhNkPhieuNhapKhoServiceImpl implements HhNkPhieuNhapKhoService {
         objReq.setMaDvi(currentUser.getDvql());
         List<HhNkPhieuNhapKhoHdrListDTO> searchDto = hdrRepository.searchListChung(objReq);
         return searchDto;
+    }
+
+    public ReportTemplateResponse preview(HhNkPhieuNhapKhoHdrReq objReq) throws Exception {
+        HhNkPhieuNhapKhoHdr optional = detail(objReq.getId());
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
     }
 }

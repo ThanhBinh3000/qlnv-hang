@@ -5,6 +5,7 @@ import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
+import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhNkBBKetThucNKReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhNkBbGiaoNhanHdrReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.nhaphang.nhapkhac.impl.HhNkBbGiaoNhanServiceImpl;
@@ -178,5 +179,21 @@ public class HhNkBbGiaoNhanController {
             mapper.writeValue(response.getOutputStream(), body);
 
         }
+    }
+
+    @ApiOperation(value = "Xem truoc", response = List.class)
+    @PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> preview(@RequestBody HhNkBbGiaoNhanHdrReq req) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(service.preview(req));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+        }
+        return ResponseEntity.ok(resp);
     }
 }

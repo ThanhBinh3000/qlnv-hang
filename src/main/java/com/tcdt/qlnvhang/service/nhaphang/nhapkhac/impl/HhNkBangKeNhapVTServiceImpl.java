@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.nhaphang.nhapkhac.impl;
 
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhNkBangKeNhapVTDtl;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhNkBangKeNhapVTHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.hosokythuat.NhHoSoKyThuatNk;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbPhieuNhapKhoHdrRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhNkBangKeNhapVTDtlRepository;
@@ -9,10 +10,14 @@ import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhNkBangKeNhapVTHdrReposit
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhNkBangKeNhapVTReq;
+import com.tcdt.qlnvhang.request.object.vattu.hosokythuat.NhHoSoKyThuatReq;
 import com.tcdt.qlnvhang.response.nhaphang.nhapkhac.HhNkBangKeNhapVTHdrDTO;
+import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.nhaphang.nhapkhac.HhNkBangKeNhapVTService;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoHdr;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
@@ -26,15 +31,13 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class HhNkBangKeNhapVTServiceImpl implements HhNkBangKeNhapVTService {
+public class HhNkBangKeNhapVTServiceImpl extends BaseServiceImpl implements HhNkBangKeNhapVTService {
     @Autowired
     private HhNkBangKeNhapVTHdrRepository hdrRepository;
     @Autowired
@@ -210,5 +213,14 @@ public class HhNkBangKeNhapVTServiceImpl implements HhNkBangKeNhapVTService {
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
+    }
+
+    @Override
+    public ReportTemplateResponse preview(HhNkBangKeNhapVTReq objReq) throws Exception {
+        HhNkBangKeNhapVTHdr optional = detail(objReq.getId());
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
     }
 }
