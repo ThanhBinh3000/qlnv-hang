@@ -220,6 +220,7 @@ public class XhXkVtBhQdGiaonvXnService extends BaseServiceImpl {
       case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
+        optional.get().setNgayKy(optional.get().getNgayKy() != null ? optional.get().getNgayKy():LocalDate.now());
         break;
       default:
         throw new Exception("Phê duyệt không thành công");
