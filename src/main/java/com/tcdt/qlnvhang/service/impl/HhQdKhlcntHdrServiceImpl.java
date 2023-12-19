@@ -1106,7 +1106,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
 				f.setTongTien(StringUtils.isEmpty(hashMapSum.get(f.getId().toString())) ? BigDecimal.valueOf(0) : BigDecimal.valueOf(Long.parseLong(hashMapSum.get(f.getId().toString()))));
 //				f.setNamKhoach(f.getNamKhoach());
-				Optional<HhDchinhDxKhLcntHdr> dchinh = hhDchinhDxKhLcntHdrRepository.findByIdQdGoc(f.getId());
+				Optional<HhDchinhDxKhLcntHdr> dchinh = hhDchinhDxKhLcntHdrRepository.findTopByIdQdGocOrderByLanDieuChinhDesc(f.getId());
 				dchinh.ifPresent(hhDchinhDxKhLcntHdr -> f.setSoQdDc(hhDchinhDxKhLcntHdr.getSoQdDc()));
 			}
 			for (Object[] it: listGthau) {
@@ -1152,7 +1152,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			listData.forEach(f -> {
 				f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
 				f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
-				Optional<HhDchinhDxKhLcntHdr> dchinh = hhDchinhDxKhLcntHdrRepository.findByIdQdGoc(f.getId());
+				Optional<HhDchinhDxKhLcntHdr> dchinh = hhDchinhDxKhLcntHdrRepository.findTopByIdQdGocOrderByLanDieuChinhDesc(f.getId());
 				dchinh.ifPresent(hhDchinhDxKhLcntHdr -> f.setSoQdDc(hhDchinhDxKhLcntHdr.getSoQdDc()));
 				detailLt(f);
 			});

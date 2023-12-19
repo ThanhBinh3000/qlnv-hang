@@ -161,11 +161,9 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		if (checkSoQd.isPresent()){
 			throw new Exception("Số quyết định " + objReq.getSoQdDc() + " đã tồn tại");
 		}
-		if (objReq.getLoaiVthh().startsWith("02")) {
-			List<HhDchinhDxKhLcntHdr> checkBanHanh = hdrRepository.findAllByIdQdGocAndTrangThaiNot(objReq.getIdQdGoc(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
-			if (!checkBanHanh.isEmpty()) {
-				throw new Exception("Số quyết định gốc " + objReq.getSoQdGoc() + " có quyết định điều chỉnh chưa được ban hành.");
-			}
+		List<HhDchinhDxKhLcntHdr> checkBanHanh = hdrRepository.findAllByIdQdGocAndTrangThaiNot(objReq.getIdQdGoc(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+		if (!checkBanHanh.isEmpty()) {
+			throw new Exception("Số quyết định gốc " + objReq.getSoQdGoc() + " có quyết định điều chỉnh chưa được ban hành.");
 		}
 	}
 
@@ -621,7 +619,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 	}
 	@Transient
 	public HhDchinhDxKhLcntHdr findByIdQdGoc(Long idQdGoc) {
-		Optional<HhDchinhDxKhLcntHdr> qOptional = hdrRepository.findByIdQdGoc(idQdGoc);
+		Optional<HhDchinhDxKhLcntHdr> qOptional = hdrRepository.findTopByIdQdGocOrderByLanDieuChinhDesc(idQdGoc);
 		System.out.println(qOptional);
 		if (!qOptional.isPresent())
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
