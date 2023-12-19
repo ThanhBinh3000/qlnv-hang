@@ -339,8 +339,11 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
           .map(Long::valueOf)
           .toArray(Long[]::new);
       if (detail.getLoaiCanCu().equals(Contains.QD_GNV)) {
-        XhXkVtBhQdGiaonvXnHdr qd = xhXkVtBhQdGiaonvXnService.detail(Long.valueOf(detail.getIdCanCu()));
-        qdDtl = qd.getQdGiaonvXhDtl().stream().filter(i -> i.getMauBiHuy() == true).collect(Collectors.toList());
+        List<XhXkVtBhQdGiaonvXnHdr> qd = xhXkVtBhQdGiaonvXnRepository.findByIdIn(Arrays.asList(idCanCu));
+        for (XhXkVtBhQdGiaonvXnHdr qdGiaonvXnHdr : qd){
+          qdDtl = qdGiaonvXnHdr.getQdGiaonvXhDtl().stream().filter(i -> i.getMauBiHuy() == true).collect(Collectors.toList());
+        }
+
       } else {
         pktcl = xhXkVtBhPhieuKtclRepository.findByIdIn(Arrays.asList(idCanCu)).stream().map(item->{
           item.setMapVthh(mapVthh);
