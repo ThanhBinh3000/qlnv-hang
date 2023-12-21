@@ -30,6 +30,7 @@ public class XhBienBanLayMauDtl extends BaseEntity implements Serializable {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhBienBanLayMauDtl.TABLE_NAME + "_SEQ")
   @SequenceGenerator(sequenceName = XhBienBanLayMauDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhBienBanLayMauDtl.TABLE_NAME + "_SEQ")
   private Long id;
+  private String ma;
   private String ten;
   private String loai;
   private Long soLuong;
