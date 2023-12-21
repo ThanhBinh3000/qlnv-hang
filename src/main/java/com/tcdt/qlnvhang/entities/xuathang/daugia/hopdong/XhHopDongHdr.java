@@ -13,9 +13,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Entity
 @Table(name = XhHopDongHdr.TABLE_NAME)
@@ -115,43 +113,43 @@ public class XhHopDongHdr implements Serializable {
     public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
         this.mapDmucDvi = mapDmucDvi;
         if (!DataUtils.isNullObject(getMaDvi())) {
-            setTenDvi(mapDmucDvi.containsKey(getMaDvi()) ? mapDmucDvi.get(getMaDvi()) : null);
+            setTenDvi(mapDmucDvi.getOrDefault(getMaDvi(), null));
         }
     }
 
     @JsonIgnore
     @Transient
-    private Map<String, String> mapLoaiHinhNx;
+    private Map<String, String> mapDmucVthh;
 
-    public void setMapLoaiHinhNx(Map<String, String> mapLoaiHinhNx) {
-        this.mapLoaiHinhNx = mapLoaiHinhNx;
-        if (!DataUtils.isNullObject(getLoaiHinhNx())) {
-            setTenLoaiHinhNx(mapLoaiHinhNx.containsKey(getLoaiHinhNx()) ? mapLoaiHinhNx.get(getLoaiHinhNx()) : null);
-        }
-    }
-
-    @JsonIgnore
-    @Transient
-    private Map<String, String> mapKieuNhapXuat;
-
-    public void setMapKieuNhapXuat(Map<String, String> mapKieuNhapXuat) {
-        this.mapKieuNhapXuat = mapKieuNhapXuat;
-        if (!DataUtils.isNullObject(getKieuNhapXuat())) {
-            setTenKieuNhapXuat(mapKieuNhapXuat.containsKey(getKieuNhapXuat()) ? mapKieuNhapXuat.get(getKieuNhapXuat()) : null);
-        }
-    }
-
-    @JsonIgnore
-    @Transient
-    private Map<String, String> mapVthh;
-
-    public void setMapVthh(Map<String, String> mapVthh) {
-        this.mapVthh = mapVthh;
+    public void setMapDmucVthh(Map<String, String> mapDmucVthh) {
+        this.mapDmucVthh = mapDmucVthh;
         if (!DataUtils.isNullObject(getLoaiVthh())) {
-            setTenLoaiVthh(mapVthh.containsKey(getLoaiVthh()) ? mapVthh.get(getLoaiVthh()) : null);
+            setTenLoaiVthh(mapDmucVthh.getOrDefault(getLoaiVthh(), null));
         }
         if (!DataUtils.isNullObject(getCloaiVthh())) {
-            setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
+            setTenCloaiVthh(mapDmucVthh.getOrDefault(getCloaiVthh(), null));
+        }
+    }
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucLoaiXuat;
+
+    public void setMapDmucLoaiXuat(Map<String, String> mapDmucLoaiXuat) {
+        this.mapDmucLoaiXuat = mapDmucLoaiXuat;
+        if (!DataUtils.isNullObject(getLoaiHinhNx())) {
+            setTenLoaiHinhNx(mapDmucLoaiXuat.getOrDefault(getLoaiHinhNx(), null));
+        }
+    }
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucKieuXuat;
+
+    public void setMapDmucKieuXuat(Map<String, String> mapDmucKieuXuat) {
+        this.mapDmucKieuXuat = mapDmucKieuXuat;
+        if (!DataUtils.isNullObject(getKieuNhapXuat())) {
+            setTenKieuNhapXuat(mapDmucKieuXuat.getOrDefault(getKieuNhapXuat(), null));
         }
     }
 
@@ -172,16 +170,17 @@ public class XhHopDongHdr implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "dataId")
     @Where(clause = "data_type='" + XhHopDongHdr.TABLE_NAME + "_DINH_KEM'")
-    private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
+    private Set<FileDinhKemJoinTable> fileDinhKem = new HashSet<>();
 
     public void setFileDinhKem(List<FileDinhKemJoinTable> fileDinhKem) {
         this.fileDinhKem.clear();
         if (!DataUtils.isNullObject(fileDinhKem)) {
-            fileDinhKem.forEach(s -> {
-                s.setDataType(XhHopDongHdr.TABLE_NAME + "_DINH_KEM");
-                s.setXhHopDongHdr(this);
-            });
-            this.fileDinhKem.addAll(fileDinhKem);
+            Set<FileDinhKemJoinTable> uniqueFiles = new HashSet<>(fileDinhKem);
+            for (FileDinhKemJoinTable file : uniqueFiles) {
+                file.setDataType(XhHopDongHdr.TABLE_NAME + "_DINH_KEM");
+                file.setXhHopDongHdr(this);
+            }
+            this.fileDinhKem.addAll(uniqueFiles);
         }
     }
 
@@ -189,16 +188,17 @@ public class XhHopDongHdr implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "dataId")
     @Where(clause = "data_type='" + XhHopDongHdr.TABLE_NAME + "_CAN_CU'")
-    private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
+    private Set<FileDinhKemJoinTable> fileCanCu = new HashSet<>();
 
     public void setFileCanCu(List<FileDinhKemJoinTable> fileCanCu) {
         this.fileCanCu.clear();
         if (!DataUtils.isNullObject(fileCanCu)) {
-            fileCanCu.forEach(s -> {
-                s.setDataType(XhHopDongHdr.TABLE_NAME + "_CAN_CU");
-                s.setXhHopDongHdr(this);
-            });
-            this.fileCanCu.addAll(fileCanCu);
+            Set<FileDinhKemJoinTable> uniqueFiles = new HashSet<>(fileCanCu);
+            for (FileDinhKemJoinTable file : uniqueFiles) {
+                file.setDataType(XhHopDongHdr.TABLE_NAME + "_CAN_CU");
+                file.setXhHopDongHdr(this);
+            }
+            this.fileCanCu.addAll(uniqueFiles);
         }
     }
 
@@ -221,16 +221,17 @@ public class XhHopDongHdr implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "dataId")
     @Where(clause = "data_type='" + XhHopDongHdr.TABLE_NAME + "_PHU_LUC'")
-    private List<FileDinhKemJoinTable> filePhuLuc = new ArrayList<>();
+    private Set<FileDinhKemJoinTable> filePhuLuc = new HashSet<>();
 
     public void setFilePhuLuc(List<FileDinhKemJoinTable> filePhuLuc) {
         this.filePhuLuc.clear();
         if (!DataUtils.isNullObject(filePhuLuc)) {
-            filePhuLuc.forEach(s -> {
-                s.setDataType(XhHopDongHdr.TABLE_NAME + "_PHU_LUC");
-                s.setXhHopDongHdr(this);
-            });
-            this.filePhuLuc.addAll(filePhuLuc);
+            Set<FileDinhKemJoinTable> uniqueFiles = new HashSet<>(filePhuLuc);
+            for (FileDinhKemJoinTable file : uniqueFiles) {
+                file.setDataType(XhHopDongHdr.TABLE_NAME + "_PHU_LUC");
+                file.setXhHopDongHdr(this);
+            }
+            this.filePhuLuc.addAll(uniqueFiles);
         }
     }
 

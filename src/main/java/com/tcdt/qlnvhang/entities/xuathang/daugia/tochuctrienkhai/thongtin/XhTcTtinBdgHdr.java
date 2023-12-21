@@ -1,7 +1,6 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -14,14 +13,13 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Entity
 @Table(name = XhTcTtinBdgHdr.TABLE_NAME)
 @Data
-public class XhTcTtinBdgHdr  implements Serializable {
+public class XhTcTtinBdgHdr implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String TABLE_NAME = "XH_TC_TTIN_BDG_HDR";
     @Id
@@ -63,8 +61,8 @@ public class XhTcTtinBdgHdr  implements Serializable {
     private String stkThuHuong;
     private String nganHangThuHuong;
     private String chiNhanhNganHang;
-    private LocalDate tgianDauGiaTu;
-    private LocalDate tgianDauGiaDen;
+    private LocalDateTime tgianDauGiaTu;
+    private LocalDateTime tgianDauGiaDen;
     private String diaDiemDauGia;
     private String hthucDgia;
     private String pthucDgia;
@@ -90,6 +88,7 @@ public class XhTcTtinBdgHdr  implements Serializable {
     private Long nguoiPduyetId;
     private Long idQdDc;
     private String soQdDc;
+    private String qdLcTcBdg;
     @Transient
     private String tenDvi;
     @Transient
@@ -100,6 +99,7 @@ public class XhTcTtinBdgHdr  implements Serializable {
     private String tenTrangThai;
     @Transient
     private BigDecimal tongTien;
+
     @JsonIgnore
     @Transient
     private Map<String, String> mapDmucDvi;
@@ -107,21 +107,21 @@ public class XhTcTtinBdgHdr  implements Serializable {
     public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
         this.mapDmucDvi = mapDmucDvi;
         if (!DataUtils.isNullObject(getMaDvi())) {
-            setTenDvi(mapDmucDvi.containsKey(getMaDvi()) ? mapDmucDvi.get(getMaDvi()) : null);
+            setTenDvi(mapDmucDvi.getOrDefault(getMaDvi(), null));
         }
     }
 
     @JsonIgnore
     @Transient
-    private Map<String, String> mapVthh;
+    private Map<String, String> mapDmucVthh;
 
-    public void setMapVthh(Map<String, String> mapVthh) {
-        this.mapVthh = mapVthh;
+    public void setMapDmucVthh(Map<String, String> mapDmucVthh) {
+        this.mapDmucVthh = mapDmucVthh;
         if (!DataUtils.isNullObject(getLoaiVthh())) {
-            setTenLoaiVthh(mapVthh.containsKey(getLoaiVthh()) ? mapVthh.get(getLoaiVthh()) : null);
+            setTenLoaiVthh(mapDmucVthh.getOrDefault(getLoaiVthh(), null));
         }
         if (!DataUtils.isNullObject(getCloaiVthh())) {
-            setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
+            setTenCloaiVthh(mapDmucVthh.getOrDefault(getCloaiVthh(), null));
         }
     }
 
@@ -134,16 +134,17 @@ public class XhTcTtinBdgHdr  implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "dataId")
     @Where(clause = "data_type='" + XhTcTtinBdgHdr.TABLE_NAME + "_CAN_CU'")
-    private List<FileDinhKemJoinTable> canCu = new ArrayList<>();
+    private Set<FileDinhKemJoinTable> canCu = new HashSet<>();
 
-    public void setCanCu(List<FileDinhKemJoinTable> fileDinhKem) {
+    public void setCanCu(List<FileDinhKemJoinTable> canCu) {
         this.canCu.clear();
-        if (!DataUtils.isNullObject(fileDinhKem)) {
-            fileDinhKem.forEach(s -> {
-                s.setDataType(XhTcTtinBdgHdr.TABLE_NAME + "_CAN_CU");
-                s.setXhTcTtinBdgHdr(this);
-            });
-            this.canCu.addAll(fileDinhKem);
+        if (!DataUtils.isNullObject(canCu)) {
+            Set<FileDinhKemJoinTable> uniqueFiles = new HashSet<>(canCu);
+            for (FileDinhKemJoinTable file : uniqueFiles) {
+                file.setDataType(XhTcTtinBdgHdr.TABLE_NAME + "_CAN_CU");
+                file.setXhTcTtinBdgHdr(this);
+            }
+            this.canCu.addAll(uniqueFiles);
         }
     }
 
@@ -151,16 +152,17 @@ public class XhTcTtinBdgHdr  implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "dataId")
     @Where(clause = "data_type='" + XhTcTtinBdgHdr.TABLE_NAME + "_DINH_KEM'")
-    private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
+    private Set<FileDinhKemJoinTable> fileDinhKem = new HashSet<>();
 
     public void setFileDinhKem(List<FileDinhKemJoinTable> fileDinhKem) {
         this.fileDinhKem.clear();
         if (!DataUtils.isNullObject(fileDinhKem)) {
-            fileDinhKem.forEach(s -> {
-                s.setDataType(XhTcTtinBdgHdr.TABLE_NAME + "_DINH_KEM");
-                s.setXhTcTtinBdgHdr(this);
-            });
-            this.fileDinhKem.addAll(fileDinhKem);
+            Set<FileDinhKemJoinTable> uniqueFiles = new HashSet<>(fileDinhKem);
+            for (FileDinhKemJoinTable file : uniqueFiles) {
+                file.setDataType(XhTcTtinBdgHdr.TABLE_NAME + "_DINH_KEM");
+                file.setXhTcTtinBdgHdr(this);
+            }
+            this.fileDinhKem.addAll(uniqueFiles);
         }
     }
 

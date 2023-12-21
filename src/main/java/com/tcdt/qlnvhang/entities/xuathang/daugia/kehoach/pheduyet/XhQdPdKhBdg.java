@@ -85,43 +85,43 @@ public class XhQdPdKhBdg implements Serializable {
     public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
         this.mapDmucDvi = mapDmucDvi;
         if (!DataUtils.isNullObject(getMaDvi())) {
-            setTenDvi(mapDmucDvi.containsKey(getMaDvi()) ? mapDmucDvi.get(getMaDvi()) : null);
+            setTenDvi(mapDmucDvi.getOrDefault(getMaDvi(), null));
         }
     }
 
     @JsonIgnore
     @Transient
-    private Map<String, String> mapLoaiHinhNx;
+    private Map<String, String> mapDmucVthh;
 
-    public void setMapLoaiHinhNx(Map<String, String> mapLoaiHinhNx) {
-        this.mapLoaiHinhNx = mapLoaiHinhNx;
-        if (!DataUtils.isNullObject(getLoaiHinhNx())) {
-            setTenLoaiHinhNx(mapLoaiHinhNx.containsKey(getLoaiHinhNx()) ? mapLoaiHinhNx.get(getLoaiHinhNx()) : null);
-        }
-    }
-
-    @JsonIgnore
-    @Transient
-    private Map<String, String> mapKieuNx;
-
-    public void setMapKieuNx(Map<String, String> mapKieuNx) {
-        this.mapKieuNx = mapKieuNx;
-        if (!DataUtils.isNullObject(getKieuNx())) {
-            setTenKieuNx(mapKieuNx.containsKey(getKieuNx()) ? mapKieuNx.get(getKieuNx()) : null);
-        }
-    }
-
-    @JsonIgnore
-    @Transient
-    private Map<String, String> mapVthh;
-
-    public void setMapVthh(Map<String, String> mapVthh) {
-        this.mapVthh = mapVthh;
+    public void setMapDmucVthh(Map<String, String> mapDmucVthh) {
+        this.mapDmucVthh = mapDmucVthh;
         if (!DataUtils.isNullObject(getLoaiVthh())) {
-            setTenLoaiVthh(mapVthh.containsKey(getLoaiVthh()) ? mapVthh.get(getLoaiVthh()) : null);
+            setTenLoaiVthh(mapDmucVthh.getOrDefault(getLoaiVthh(), null));
         }
         if (!DataUtils.isNullObject(getCloaiVthh())) {
-            setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
+            setTenCloaiVthh(mapDmucVthh.getOrDefault(getCloaiVthh(), null));
+        }
+    }
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucLoaiXuat;
+
+    public void setMapDmucLoaiXuat(Map<String, String> mapDmucLoaiXuat) {
+        this.mapDmucLoaiXuat = mapDmucLoaiXuat;
+        if (!DataUtils.isNullObject(getLoaiHinhNx())) {
+            setTenLoaiHinhNx(mapDmucLoaiXuat.getOrDefault(getLoaiHinhNx(), null));
+        }
+    }
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucKieuXuat;
+
+    public void setMapDmucKieuXuat(Map<String, String> mapDmucKieuXuat) {
+        this.mapDmucKieuXuat = mapDmucKieuXuat;
+        if (!DataUtils.isNullObject(getKieuNx())) {
+            setTenKieuNx(mapDmucKieuXuat.getOrDefault(getKieuNx(), null));
         }
     }
 

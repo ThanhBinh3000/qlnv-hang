@@ -1,6 +1,9 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdr;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -9,6 +12,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = XhQdPdKhBdgDtl.TABLE_NAME)
@@ -61,11 +65,54 @@ public class XhQdPdKhBdgDtl implements Serializable {
     @Transient
     private String tenCloaiVthh;
     @Transient
+    private String tenPthucTtoan;
+    @Transient
     private String tenTrangThai;
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucDvi;
+
+    public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+        this.mapDmucDvi = mapDmucDvi;
+        if (!DataUtils.isNullObject(getMaDvi())) {
+            setTenDvi(mapDmucDvi.getOrDefault(getMaDvi(), null));
+        }
+    }
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucVthh;
+
+    public void setMapDmucVthh(Map<String, String> mapDmucVthh) {
+        this.mapDmucVthh = mapDmucVthh;
+        if (!DataUtils.isNullObject(getLoaiVthh())) {
+            setTenLoaiVthh(mapDmucVthh.getOrDefault(getLoaiVthh(), null));
+        }
+        if (!DataUtils.isNullObject(getCloaiVthh())) {
+            setTenCloaiVthh(mapDmucVthh.getOrDefault(getCloaiVthh(), null));
+        }
+    }
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucThanhToan;
+
+    public void setMapDmucThanhToan(Map<String, String> mapDmucThanhToan) {
+        this.mapDmucThanhToan = mapDmucThanhToan;
+        if (!DataUtils.isNullObject(getPthucTtoan())) {
+            setTenPthucTtoan(mapDmucThanhToan.getOrDefault(getPthucTtoan(), null));
+        }
+    }
+
+    public String getTrangThai() {
+        setTenTrangThai(TrangThaiAllEnum.getLabelById(trangThai));
+        return trangThai;
+    }
+
     @Transient
     private List<XhQdPdKhBdgPl> children = new ArrayList<>();
-
-    //    Thông tin đấu giá
+    //Thông tin đấu giá
     private Long idQdKq;
     private String soQdKq;
     private LocalDate ngayKyQdKq;
@@ -74,8 +121,6 @@ public class XhQdPdKhBdgDtl implements Serializable {
     private BigDecimal soDviTsanThanhCong;
     private BigDecimal soDviTsanKhongThanh;
     private String ketQuaDauGia;
-    @Transient
-    private String tenPthucTtoan;
     @Transient
     private XhQdPdKhBdg xhQdPdKhBdg;
     @Transient

@@ -1,12 +1,13 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Map;
 
 @Entity
 @Table(name = XhTcTtinBdgPlo.TABLE_NAME)
@@ -43,4 +44,24 @@ public class XhTcTtinBdgPlo implements Serializable {
     private String tenLoKho;
     @Transient
     private BigDecimal thanhTien;
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucDvi;
+
+    public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+        this.mapDmucDvi = mapDmucDvi;
+        if (!DataUtils.isNullObject(getMaDiemKho())) {
+            setTenDiemKho(mapDmucDvi.getOrDefault(getMaDiemKho(), null));
+        }
+        if (!DataUtils.isNullObject(getMaNhaKho())) {
+            setTenNhaKho(mapDmucDvi.getOrDefault(getMaNhaKho(), null));
+        }
+        if (!DataUtils.isNullObject(getMaNganKho())) {
+            setTenNganKho(mapDmucDvi.getOrDefault(getMaNganKho(), null));
+        }
+        if (!DataUtils.isNullObject(getMaLoKho())) {
+            setTenLoKho(mapDmucDvi.getOrDefault(getMaLoKho(), null));
+        }
+    }
 }
