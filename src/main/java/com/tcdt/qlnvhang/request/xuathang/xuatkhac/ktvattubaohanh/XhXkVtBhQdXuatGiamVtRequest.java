@@ -20,7 +20,7 @@ public class XhXkVtBhQdXuatGiamVtRequest extends BaseRequest {
     private String loai;
     private String trichYeu;
     private LocalDate ngayKy;
-    private LocalDate thoiHanXuatGiam;
+    private LocalDate ngayHieuLuc;
     private String soCanCu;
     private Long idCanCu;
     private String trangThai;

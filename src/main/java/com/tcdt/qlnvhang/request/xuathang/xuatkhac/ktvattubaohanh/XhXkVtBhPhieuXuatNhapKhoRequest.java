@@ -31,6 +31,7 @@ public class XhXkVtBhPhieuXuatNhapKhoRequest extends BaseRequest {
     private LocalDate ngayKdcl;
     private String loaiVthh;
     private String cloaiVthh;
+    private Integer namNhap;
     private String canBoLapPhieu;
     private String ldChiCuc;
     private String ktvBaoQuan;

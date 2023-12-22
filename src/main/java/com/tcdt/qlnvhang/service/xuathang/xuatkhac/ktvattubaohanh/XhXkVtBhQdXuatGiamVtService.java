@@ -227,7 +227,7 @@ public class XhXkVtBhQdXuatGiamVtService extends BaseServiceImpl {
       objs[2] = dx.getSoQuyetDinh();
       objs[3] = dx.getNgayKy();
       objs[4] = dx.getSoCanCu();
-      objs[5] = dx.getThoiHanXuatGiam();
+      objs[5] = dx.getNgayHieuLuc();
       objs[6] = dx.getTrichYeu();
       objs[7] = dx.getTenDviNhan();
       objs[8] = dx.getListSoQdGiaoNvXh();
