@@ -13,9 +13,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Entity
 @Table(name = XhKqBdgHdr.TABLE_NAME)
@@ -87,65 +85,65 @@ public class XhKqBdgHdr implements Serializable {
     public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
         this.mapDmucDvi = mapDmucDvi;
         if (!DataUtils.isNullObject(getMaDvi())) {
-            setTenDvi(mapDmucDvi.containsKey(getMaDvi()) ? mapDmucDvi.get(getMaDvi()) : null);
+            setTenDvi(mapDmucDvi.getOrDefault(getMaDvi(), null));
         }
     }
 
     @JsonIgnore
     @Transient
-    private Map<String, String> mapLoaiHinhNx;
+    private Map<String, String> mapDmucVthh;
 
-    public void setMapLoaiHinhNx(Map<String, String> mapLoaiHinhNx) {
-        this.mapLoaiHinhNx = mapLoaiHinhNx;
-        if (!DataUtils.isNullObject(getLoaiHinhNx())) {
-            setTenLoaiHinhNx(mapLoaiHinhNx.containsKey(getLoaiHinhNx()) ? mapLoaiHinhNx.get(getLoaiHinhNx()) : null);
-        }
-    }
-
-    @JsonIgnore
-    @Transient
-    private Map<String, String> mapKieuNhapXuat;
-
-    public void setMapKieuNhapXuat(Map<String, String> mapKieuNhapXuat) {
-        this.mapKieuNhapXuat = mapKieuNhapXuat;
-        if (!DataUtils.isNullObject(getKieuNhapXuat())) {
-            setTenKieuNhapXuat(mapKieuNhapXuat.containsKey(getKieuNhapXuat()) ? mapKieuNhapXuat.get(getKieuNhapXuat()) : null);
-        }
-    }
-
-    @JsonIgnore
-    @Transient
-    private Map<String, String> mapVthh;
-
-    public void setMapVthh(Map<String, String> mapVthh) {
-        this.mapVthh = mapVthh;
+    public void setMapDmucVthh(Map<String, String> mapDmucVthh) {
+        this.mapDmucVthh = mapDmucVthh;
         if (!DataUtils.isNullObject(getLoaiVthh())) {
-            setTenLoaiVthh(mapVthh.containsKey(getLoaiVthh()) ? mapVthh.get(getLoaiVthh()) : null);
+            setTenLoaiVthh(mapDmucVthh.getOrDefault(getLoaiVthh(), null));
         }
         if (!DataUtils.isNullObject(getCloaiVthh())) {
-            setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
+            setTenCloaiVthh(mapDmucVthh.getOrDefault(getCloaiVthh(), null));
         }
     }
 
     @JsonIgnore
     @Transient
-    private Map<String, String> mapHinhThucDauGia;
+    private Map<String, String> mapDmucLoaiXuat;
 
-    public void setMapHinhThucDauGia(Map<String, String> mapHinhThucDauGia) {
-        this.mapHinhThucDauGia = mapHinhThucDauGia;
+    public void setMapDmucLoaiXuat(Map<String, String> mapDmucLoaiXuat) {
+        this.mapDmucLoaiXuat = mapDmucLoaiXuat;
+        if (!DataUtils.isNullObject(getLoaiHinhNx())) {
+            setTenLoaiHinhNx(mapDmucLoaiXuat.getOrDefault(getLoaiHinhNx(), null));
+        }
+    }
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucKieuXuat;
+
+    public void setMapDmucKieuXuat(Map<String, String> mapDmucKieuXuat) {
+        this.mapDmucKieuXuat = mapDmucKieuXuat;
+        if (!DataUtils.isNullObject(getKieuNhapXuat())) {
+            setTenKieuNhapXuat(mapDmucKieuXuat.getOrDefault(getKieuNhapXuat(), null));
+        }
+    }
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucHinhThuc;
+
+    public void setMapDmucHinhThuc(Map<String, String> mapDmucHinhThuc) {
+        this.mapDmucHinhThuc = mapDmucHinhThuc;
         if (!DataUtils.isNullObject(getHinhThucDauGia())) {
-            setTenHinhThucDauGia(mapHinhThucDauGia.containsKey(getHinhThucDauGia()) ? mapHinhThucDauGia.get(getHinhThucDauGia()) : null);
+            setTenHinhThucDauGia(mapDmucHinhThuc.getOrDefault(getHinhThucDauGia(), null));
         }
     }
 
     @JsonIgnore
     @Transient
-    private Map<String, String> mapPhuongThucDauGia;
+    private Map<String, String> mapDmucPhuongThuc;
 
-    public void setMapPhuongThucDauGia(Map<String, String> mapPhuongThucDauGia) {
-        this.mapPhuongThucDauGia = mapPhuongThucDauGia;
+    public void setMapDmucPhuongThuc(Map<String, String> mapDmucPhuongThuc) {
+        this.mapDmucPhuongThuc = mapDmucPhuongThuc;
         if (!DataUtils.isNullObject(getPhuongThucDauGia())) {
-            setTenPhuongThucDauGia(mapPhuongThucDauGia.containsKey(getPhuongThucDauGia()) ? mapPhuongThucDauGia.get(getPhuongThucDauGia()) : null);
+            setTenPhuongThucDauGia(mapDmucPhuongThuc.getOrDefault(getPhuongThucDauGia(), null));
         }
     }
 
@@ -157,17 +155,18 @@ public class XhKqBdgHdr implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "dataId")
-    @Where(clause = "data_type='" + XhKqBdgHdr.TABLE_NAME + "CAN_CU'")
-    private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
+    @Where(clause = "data_type='" + XhKqBdgHdr.TABLE_NAME + "_CAN_CU'")
+    private Set<FileDinhKemJoinTable> fileCanCu = new HashSet<>();
 
     public void setFileCanCu(List<FileDinhKemJoinTable> fileCanCu) {
         this.fileCanCu.clear();
         if (!DataUtils.isNullObject(fileCanCu)) {
-            fileCanCu.forEach(s -> {
-                s.setDataType(XhKqBdgHdr.TABLE_NAME + "CAN_CU");
-                s.setXhKqBdgHdr(this);
-            });
-            this.fileCanCu.addAll(fileCanCu);
+            Set<FileDinhKemJoinTable> uniqueFiles = new HashSet<>(fileCanCu);
+            for (FileDinhKemJoinTable file: uniqueFiles){
+                file.setDataType(XhKqBdgHdr.TABLE_NAME + "_CAN_CU");
+                file.setXhKqBdgHdr(this);
+            }
+            this.fileCanCu.addAll(uniqueFiles);
         }
     }
 
@@ -175,18 +174,20 @@ public class XhKqBdgHdr implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "dataId")
     @Where(clause = "data_type='" + XhKqBdgHdr.TABLE_NAME + "_DINH_KEM'")
-    private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
+    private Set<FileDinhKemJoinTable> fileDinhKem = new HashSet<>();
 
     public void setFileDinhKem(List<FileDinhKemJoinTable> fileDinhKem) {
         this.fileDinhKem.clear();
         if (!DataUtils.isNullObject(fileDinhKem)) {
-            fileDinhKem.forEach(s -> {
-                s.setDataType(XhKqBdgHdr.TABLE_NAME + "_DINH_KEM");
-                s.setXhKqBdgHdr(this);
-            });
-            this.fileDinhKem.addAll(fileDinhKem);
+            Set<FileDinhKemJoinTable> uniqueFiles = new HashSet<>(fileDinhKem);
+            for (FileDinhKemJoinTable file: uniqueFiles){
+                file.setDataType(XhKqBdgHdr.TABLE_NAME + "_DINH_KEM");
+                file.setXhKqBdgHdr(this);
+            }
+            this.fileDinhKem.addAll(uniqueFiles);
         }
     }
+
 
     //Hợp đồng
     private Integer tongDviTsan;

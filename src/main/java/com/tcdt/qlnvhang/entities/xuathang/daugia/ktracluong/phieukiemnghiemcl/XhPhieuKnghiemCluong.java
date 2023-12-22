@@ -114,25 +114,22 @@ public class XhPhieuKnghiemCluong implements Serializable {
     public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
         this.mapDmucDvi = mapDmucDvi;
         if (!DataUtils.isNullObject(getMaDvi())) {
-            setTenDvi(mapDmucDvi.containsKey(getMaDvi()) ? mapDmucDvi.get(getMaDvi()) : null);
-        }
-        if (!DataUtils.isNullObject(getMaDviCon())) {
-            setTenDviCon(mapDmucDvi.containsKey(getMaDviCon()) ? mapDmucDvi.get(getMaDviCon()) : null);
+            setTenDvi(mapDmucDvi.getOrDefault(getMaDvi(), null));
         }
         if (!DataUtils.isNullObject(getMaDiemKho())) {
-            setTenDiemKho(mapDmucDvi.containsKey(getMaDiemKho()) ? mapDmucDvi.get(getMaDiemKho()) : null);
+            setTenDiemKho(mapDmucDvi.getOrDefault(getMaDiemKho(), null));
         }
         if (!DataUtils.isNullObject(getMaNhaKho())) {
-            setTenNhaKho(mapDmucDvi.containsKey(getMaNhaKho()) ? mapDmucDvi.get(getMaNhaKho()) : null);
+            setTenNhaKho(mapDmucDvi.getOrDefault(getMaNhaKho(), null));
         }
         if (!DataUtils.isNullObject(getMaNganKho())) {
-            setTenNganKho(mapDmucDvi.containsKey(getMaNganKho()) ? mapDmucDvi.get(getMaNganKho()) : null);
+            setTenNganKho(mapDmucDvi.getOrDefault(getMaNganKho(), null));
             if (getTenNganKho() != null) {
                 setTenNganLoKho(getTenNganKho());
             }
         }
         if (!DataUtils.isNullObject(getMaLoKho())) {
-            setTenLoKho(mapDmucDvi.containsKey(getMaLoKho()) ? mapDmucDvi.get(getMaLoKho()) : null);
+            setTenLoKho(mapDmucDvi.getOrDefault(getMaLoKho(), null));
             if (getTenLoKho() != null) {
                 setTenNganLoKho(getTenLoKho() + " - " + getTenNganKho());
             }
@@ -141,26 +138,26 @@ public class XhPhieuKnghiemCluong implements Serializable {
 
     @JsonIgnore
     @Transient
-    private Map<String, String> mapVthh;
+    private Map<String, String> mapDmucVthh;
 
-    public void setMapVthh(Map<String, String> mapVthh) {
-        this.mapVthh = mapVthh;
+    public void setMapDmucVthh(Map<String, String> mapDmucVthh) {
+        this.mapDmucVthh = mapDmucVthh;
         if (!DataUtils.isNullObject(getLoaiVthh())) {
-            setTenLoaiVthh(mapVthh.containsKey(getLoaiVthh()) ? mapVthh.get(getLoaiVthh()) : null);
+            setTenLoaiVthh(mapDmucVthh.getOrDefault(getLoaiVthh(), null));
         }
         if (!DataUtils.isNullObject(getCloaiVthh())) {
-            setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
+            setTenCloaiVthh(mapDmucVthh.getOrDefault(getCloaiVthh(), null));
         }
     }
 
     @JsonIgnore
     @Transient
-    private Map<String, String> mapHinhThucBaoQuan;
+    private Map<String, String> mapDmucHinhThuc;
 
-    public void setMapHinhThucBaoQuan(Map<String, String> mapHinhThucBaoQuan) {
-        this.mapHinhThucBaoQuan = mapHinhThucBaoQuan;
+    public void setMapDmucHinhThuc(Map<String, String> mapDmucHinhThuc) {
+        this.mapDmucHinhThuc = mapDmucHinhThuc;
         if (!DataUtils.isNullObject(getHinhThucBaoQuan())) {
-            setTenHinhThucBaoQuan(mapHinhThucBaoQuan.containsKey(getHinhThucBaoQuan()) ? mapHinhThucBaoQuan.get(getHinhThucBaoQuan()) : null);
+            setTenHinhThucBaoQuan(mapDmucHinhThuc.getOrDefault(getHinhThucBaoQuan(), null));
         }
     }
 
@@ -173,16 +170,17 @@ public class XhPhieuKnghiemCluong implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "dataId")
     @Where(clause = "data_type='" + XhPhieuKnghiemCluong.TABLE_NAME + "_DINH_KEM'")
-    private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
+    private Set<FileDinhKemJoinTable> fileDinhKem = new HashSet<>();
 
     public void setFileDinhKem(List<FileDinhKemJoinTable> fileDinhKem) {
         this.fileDinhKem.clear();
         if (!DataUtils.isNullObject(fileDinhKem)) {
-            fileDinhKem.forEach(s -> {
-                s.setDataType(XhPhieuKnghiemCluong.TABLE_NAME + "_DINH_KEM");
-                s.setXhPhieuKnghiemCluong(this);
-            });
-            this.fileDinhKem.addAll(fileDinhKem);
+            Set<FileDinhKemJoinTable> uniqueFiles = new HashSet<>(fileDinhKem);
+            for (FileDinhKemJoinTable file : uniqueFiles){
+                file.setDataType(XhPhieuKnghiemCluong.TABLE_NAME + "_DINH_KEM");
+                file.setXhPhieuKnghiemCluong(this);
+            }
+            this.fileDinhKem.addAll(uniqueFiles);
         }
     }
 

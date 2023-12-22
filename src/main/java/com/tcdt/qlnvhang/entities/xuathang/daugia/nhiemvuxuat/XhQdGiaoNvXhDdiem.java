@@ -1,10 +1,13 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.nhiemvuxuat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Map;
 
 @Entity
 @Table(name = XhQdGiaoNvXhDdiem.TABLE_NAME)
@@ -39,4 +42,24 @@ public class XhQdGiaoNvXhDdiem {
     private String tenNganKho;
     @Transient
     private String tenLoKho;
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucDvi;
+
+    public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+        this.mapDmucDvi = mapDmucDvi;
+        if (!DataUtils.isNullObject(getMaDiemKho())) {
+            setTenDiemKho(mapDmucDvi.getOrDefault(getMaDiemKho(), null));
+        }
+        if (!DataUtils.isNullObject(getMaNhaKho())) {
+            setTenNhaKho(mapDmucDvi.getOrDefault(getMaNhaKho(), null));
+        }
+        if (!DataUtils.isNullObject(getMaNganKho())) {
+            setTenNganKho(mapDmucDvi.getOrDefault(getMaNganKho(), null));
+        }
+        if (!DataUtils.isNullObject(getMaLoKho())) {
+            setTenLoKho(mapDmucDvi.getOrDefault(getMaLoKho(), null));
+        }
+    }
 }
