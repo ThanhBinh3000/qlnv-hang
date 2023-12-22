@@ -244,7 +244,7 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
             KhCnCongTrinhNghienCuu dx = data.get(i);
             objs = new Object[rowsName.length];
             objs[0] = i;
-            objs[1] = dx.getNgayKyTu().getYear();
+            objs[1] = dx.getNgayKyTu().getYear() + 1900;
             objs[2] = dx.getMaDeTai();
             objs[3] = dx.getTenDeTai();
             objs[4] = dx.getCapDeTai();
