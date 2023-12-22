@@ -41,4 +41,5 @@ public class KquaKnghiem {
 	@Column(name = "KIEU")
 	private String kieu;
 	private String maTchuan;
+	private String danhGia;
 }

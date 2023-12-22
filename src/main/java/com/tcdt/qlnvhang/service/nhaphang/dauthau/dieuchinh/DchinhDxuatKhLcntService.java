@@ -319,6 +319,9 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 			} else if ((Contains.CHODUYET_LDV + Contains.TUCHOI_LDV).equals(status)) {
 				optional.get().setNguoiGuiDuyetId(getUser().getId());
 				optional.get().setNgayGuiDuyet(getDateTimeNow());
+			} else if ((Contains.CHODUYET_LDV + Contains.TUCHOI_LDTC).equals(status)) {
+				optional.get().setNguoiGuiDuyetId(getUser().getId());
+				optional.get().setNgayGuiDuyet(getDateTimeNow());
 			} else if ((Contains.DADUYET_LDV + Contains.CHODUYET_LDV).equals(status)) {
 				optional.get().setNguoiPduyetId(getUser().getId());
 				optional.get().setNgayPduyet(getDateTimeNow());
@@ -347,6 +350,9 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 				optional.get().setNguoiGuiDuyetId(getUser().getId());
 				optional.get().setNgayGuiDuyet(getDateTimeNow());
 			} else if ((Contains.CHODUYET_LDV + Contains.TUCHOI_LDV).equals(status)) {
+				optional.get().setNguoiGuiDuyetId(getUser().getId());
+				optional.get().setNgayGuiDuyet(getDateTimeNow());
+			} else if ((Contains.CHODUYET_LDV + Contains.TUCHOI_LDTC).equals(status)) {
 				optional.get().setNguoiGuiDuyetId(getUser().getId());
 				optional.get().setNgayGuiDuyet(getDateTimeNow());
 			} else if ((Contains.DADUYET_LDV + Contains.CHODUYET_LDV).equals(status)) {

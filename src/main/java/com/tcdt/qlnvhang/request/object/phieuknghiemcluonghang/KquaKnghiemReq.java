@@ -20,4 +20,5 @@ public class KquaKnghiemReq {
 	private String tenChiTieu;
 	private String mucYeuCauNhap;
 	private String phuongPhapXd;
+	private String danhGia;
 }
