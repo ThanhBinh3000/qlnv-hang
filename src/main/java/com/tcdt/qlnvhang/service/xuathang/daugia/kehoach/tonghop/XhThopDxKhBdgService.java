@@ -72,7 +72,7 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
         }
         List<XhDxKhBanDauGia> resultList = xhDxKhBanDauGiaRepository.listTongHop(request);
         if (resultList.isEmpty()) {
-            throw new Exception("Không tìm thấy dữ liệu để tổng hợp");
+            throw new Exception("Không tìm thấy dữ liệu để tổng hợp.");
         }
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         XhThopDxKhBdg summary = new XhThopDxKhBdg();
@@ -83,7 +83,6 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
             XhThopDxKhBdgDtl summaryDetail = new XhThopDxKhBdgDtl();
             BeanUtils.copyProperties(result, summaryDetail, "id");
             summaryDetail.setMaDvi(result.getMaDvi());
-            summaryDetail.setTenDvi(result.getTenDvi());
             summaryDetail.setTenDvi(result.getTenDvi());
             summaryDetail.setDiaChi(result.getDiaChi());
             summaryDetail.setIdDxHdr(result.getId());

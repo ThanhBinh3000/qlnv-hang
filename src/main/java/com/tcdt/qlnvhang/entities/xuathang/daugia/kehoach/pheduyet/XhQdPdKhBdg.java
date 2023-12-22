@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Entity
 @Table(name = XhQdPdKhBdg.TABLE_NAME)
@@ -83,8 +84,9 @@ public class XhQdPdKhBdg implements Serializable {
     private Map<String, String> mapDmucDvi;
 
     public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+        boolean isNewValue = !Objects.equals(this.mapDmucDvi, mapDmucDvi);
         this.mapDmucDvi = mapDmucDvi;
-        if (!DataUtils.isNullObject(getMaDvi())) {
+        if (isNewValue && !DataUtils.isNullObject(getMaDvi())) {
             setTenDvi(mapDmucDvi.getOrDefault(getMaDvi(), null));
         }
     }
@@ -94,11 +96,12 @@ public class XhQdPdKhBdg implements Serializable {
     private Map<String, String> mapDmucVthh;
 
     public void setMapDmucVthh(Map<String, String> mapDmucVthh) {
+        boolean isNewValue = !Objects.equals(this.mapDmucVthh, mapDmucVthh);
         this.mapDmucVthh = mapDmucVthh;
-        if (!DataUtils.isNullObject(getLoaiVthh())) {
+        if (isNewValue && !DataUtils.isNullObject(getLoaiVthh())) {
             setTenLoaiVthh(mapDmucVthh.getOrDefault(getLoaiVthh(), null));
         }
-        if (!DataUtils.isNullObject(getCloaiVthh())) {
+        if (isNewValue && !DataUtils.isNullObject(getCloaiVthh())) {
             setTenCloaiVthh(mapDmucVthh.getOrDefault(getCloaiVthh(), null));
         }
     }
@@ -108,8 +111,9 @@ public class XhQdPdKhBdg implements Serializable {
     private Map<String, String> mapDmucLoaiXuat;
 
     public void setMapDmucLoaiXuat(Map<String, String> mapDmucLoaiXuat) {
+        boolean isNewValue = !Objects.equals(this.mapDmucLoaiXuat, mapDmucLoaiXuat);
         this.mapDmucLoaiXuat = mapDmucLoaiXuat;
-        if (!DataUtils.isNullObject(getLoaiHinhNx())) {
+        if (isNewValue && !DataUtils.isNullObject(getLoaiHinhNx())) {
             setTenLoaiHinhNx(mapDmucLoaiXuat.getOrDefault(getLoaiHinhNx(), null));
         }
     }
@@ -119,8 +123,9 @@ public class XhQdPdKhBdg implements Serializable {
     private Map<String, String> mapDmucKieuXuat;
 
     public void setMapDmucKieuXuat(Map<String, String> mapDmucKieuXuat) {
+        boolean isNewValue = !Objects.equals(this.mapDmucKieuXuat, mapDmucKieuXuat);
         this.mapDmucKieuXuat = mapDmucKieuXuat;
-        if (!DataUtils.isNullObject(getKieuNx())) {
+        if (isNewValue && !DataUtils.isNullObject(getKieuNx())) {
             setTenKieuNx(mapDmucKieuXuat.getOrDefault(getKieuNx(), null));
         }
     }

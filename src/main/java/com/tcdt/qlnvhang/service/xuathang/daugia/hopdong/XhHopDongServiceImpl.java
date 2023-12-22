@@ -38,15 +38,13 @@ import java.util.*;
 
 @Service
 public class XhHopDongServiceImpl extends BaseServiceImpl {
+
     @Autowired
     private XhHopDongHdrRepository xhHopDongHdrRepository;
-
     @Autowired
     private XhHopDongDtlRepository xhHopDongDtlRepository;
-
     @Autowired
     private XhHopDongDdiemNhapKhoRepository xhHopDongDdiemNhapKhoRepository;
-
     @Autowired
     private XhKqBdgHdrRepository xhKqBdgHdrRepository;
 
