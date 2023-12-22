@@ -26,6 +26,7 @@ public class XhXkVtBhQdGiaonvXnDtl {
   String loaiVthh;
   String donViTinh;
   String cloaiVthh;
+  Integer namNhap;
   BigDecimal slLayMau;
   BigDecimal slTonKho;
   String maDviTsan;
