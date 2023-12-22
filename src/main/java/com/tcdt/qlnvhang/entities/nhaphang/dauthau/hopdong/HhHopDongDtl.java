@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
@@ -38,6 +39,11 @@ public class HhHopDongDtl implements Serializable {
 	private String tongThanhTienStr;
 	@Transient
 	private List<HhHopDongDdiemNhapKho> children = new ArrayList<>();
-
+	@Temporal(TemporalType.DATE)
+	private Date tgianGiaoThucTe;
+	private Integer soNgayGiaoCham;
+	private BigDecimal slGiaoCham;
+	private BigDecimal mucPhat;
+	private BigDecimal thanhTienTinhPhat;
 
 }
