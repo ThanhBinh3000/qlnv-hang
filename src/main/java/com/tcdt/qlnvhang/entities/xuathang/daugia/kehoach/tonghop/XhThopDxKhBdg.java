@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Entity
 @Table(name = XhThopDxKhBdg.TABLE_NAME)
@@ -56,11 +57,12 @@ public class XhThopDxKhBdg implements Serializable {
     private Map<String, String> mapDmucVthh;
 
     public void setMapDmucVthh(Map<String, String> mapDmucVthh) {
+        boolean isNewValue = !Objects.equals(this.mapDmucVthh, mapDmucVthh);
         this.mapDmucVthh = mapDmucVthh;
-        if (!DataUtils.isNullObject(getLoaiVthh())) {
+        if (isNewValue && !DataUtils.isNullObject(getLoaiVthh())) {
             setTenLoaiVthh(mapDmucVthh.getOrDefault(getLoaiVthh(), null));
         }
-        if (!DataUtils.isNullObject(getCloaiVthh())) {
+        if (isNewValue && !DataUtils.isNullObject(getCloaiVthh())) {
             setTenCloaiVthh(mapDmucVthh.getOrDefault(getCloaiVthh(), null));
         }
     }

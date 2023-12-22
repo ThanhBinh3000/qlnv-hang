@@ -83,8 +83,9 @@ public class XhKqBdgHdr implements Serializable {
     private Map<String, String> mapDmucDvi;
 
     public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+        boolean isNewValue = !Objects.equals(this.mapDmucDvi, mapDmucDvi);
         this.mapDmucDvi = mapDmucDvi;
-        if (!DataUtils.isNullObject(getMaDvi())) {
+        if (isNewValue && !DataUtils.isNullObject(getMaDvi())) {
             setTenDvi(mapDmucDvi.getOrDefault(getMaDvi(), null));
         }
     }
@@ -94,11 +95,12 @@ public class XhKqBdgHdr implements Serializable {
     private Map<String, String> mapDmucVthh;
 
     public void setMapDmucVthh(Map<String, String> mapDmucVthh) {
+        boolean isNewValue = !Objects.equals(this.mapDmucVthh, mapDmucVthh);
         this.mapDmucVthh = mapDmucVthh;
-        if (!DataUtils.isNullObject(getLoaiVthh())) {
+        if (isNewValue && !DataUtils.isNullObject(getLoaiVthh())) {
             setTenLoaiVthh(mapDmucVthh.getOrDefault(getLoaiVthh(), null));
         }
-        if (!DataUtils.isNullObject(getCloaiVthh())) {
+        if (isNewValue && !DataUtils.isNullObject(getCloaiVthh())) {
             setTenCloaiVthh(mapDmucVthh.getOrDefault(getCloaiVthh(), null));
         }
     }
@@ -108,8 +110,9 @@ public class XhKqBdgHdr implements Serializable {
     private Map<String, String> mapDmucLoaiXuat;
 
     public void setMapDmucLoaiXuat(Map<String, String> mapDmucLoaiXuat) {
+        boolean isNewValue = !Objects.equals(this.mapDmucLoaiXuat, mapDmucLoaiXuat);
         this.mapDmucLoaiXuat = mapDmucLoaiXuat;
-        if (!DataUtils.isNullObject(getLoaiHinhNx())) {
+        if (isNewValue && !DataUtils.isNullObject(getLoaiHinhNx())) {
             setTenLoaiHinhNx(mapDmucLoaiXuat.getOrDefault(getLoaiHinhNx(), null));
         }
     }
@@ -119,8 +122,9 @@ public class XhKqBdgHdr implements Serializable {
     private Map<String, String> mapDmucKieuXuat;
 
     public void setMapDmucKieuXuat(Map<String, String> mapDmucKieuXuat) {
+        boolean isNewValue = !Objects.equals(this.mapDmucKieuXuat, mapDmucKieuXuat);
         this.mapDmucKieuXuat = mapDmucKieuXuat;
-        if (!DataUtils.isNullObject(getKieuNhapXuat())) {
+        if (isNewValue && !DataUtils.isNullObject(getKieuNhapXuat())) {
             setTenKieuNhapXuat(mapDmucKieuXuat.getOrDefault(getKieuNhapXuat(), null));
         }
     }
@@ -130,8 +134,9 @@ public class XhKqBdgHdr implements Serializable {
     private Map<String, String> mapDmucHinhThuc;
 
     public void setMapDmucHinhThuc(Map<String, String> mapDmucHinhThuc) {
+        boolean isNewValue = !Objects.equals(this.mapDmucHinhThuc, mapDmucHinhThuc);
         this.mapDmucHinhThuc = mapDmucHinhThuc;
-        if (!DataUtils.isNullObject(getHinhThucDauGia())) {
+        if (isNewValue && !DataUtils.isNullObject(getHinhThucDauGia())) {
             setTenHinhThucDauGia(mapDmucHinhThuc.getOrDefault(getHinhThucDauGia(), null));
         }
     }
@@ -141,8 +146,9 @@ public class XhKqBdgHdr implements Serializable {
     private Map<String, String> mapDmucPhuongThuc;
 
     public void setMapDmucPhuongThuc(Map<String, String> mapDmucPhuongThuc) {
+        boolean isNewValue = !Objects.equals(this.mapDmucPhuongThuc, mapDmucPhuongThuc);
         this.mapDmucPhuongThuc = mapDmucPhuongThuc;
-        if (!DataUtils.isNullObject(getPhuongThucDauGia())) {
+        if (isNewValue && !DataUtils.isNullObject(getPhuongThucDauGia())) {
             setTenPhuongThucDauGia(mapDmucPhuongThuc.getOrDefault(getPhuongThucDauGia(), null));
         }
     }
@@ -162,7 +168,7 @@ public class XhKqBdgHdr implements Serializable {
         this.fileCanCu.clear();
         if (!DataUtils.isNullObject(fileCanCu)) {
             Set<FileDinhKemJoinTable> uniqueFiles = new HashSet<>(fileCanCu);
-            for (FileDinhKemJoinTable file: uniqueFiles){
+            for (FileDinhKemJoinTable file : uniqueFiles) {
                 file.setDataType(XhKqBdgHdr.TABLE_NAME + "_CAN_CU");
                 file.setXhKqBdgHdr(this);
             }
@@ -180,7 +186,7 @@ public class XhKqBdgHdr implements Serializable {
         this.fileDinhKem.clear();
         if (!DataUtils.isNullObject(fileDinhKem)) {
             Set<FileDinhKemJoinTable> uniqueFiles = new HashSet<>(fileDinhKem);
-            for (FileDinhKemJoinTable file: uniqueFiles){
+            for (FileDinhKemJoinTable file : uniqueFiles) {
                 file.setDataType(XhKqBdgHdr.TABLE_NAME + "_DINH_KEM");
                 file.setXhKqBdgHdr(this);
             }

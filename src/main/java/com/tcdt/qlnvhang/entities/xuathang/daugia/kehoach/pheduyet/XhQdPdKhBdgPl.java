@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Entity
 @Table(name = XhQdPdKhBdgPl.TABLE_NAME)
@@ -34,13 +35,15 @@ public class XhQdPdKhBdgPl implements Serializable {
     private BigDecimal soTienDtruocDduyet;
     @Transient
     private String tenDvi;
+
     @JsonIgnore
     @Transient
     private Map<String, String> mapDmucDvi;
 
     public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+        boolean isNewValue = !Objects.equals(this.mapDmucDvi, mapDmucDvi);
         this.mapDmucDvi = mapDmucDvi;
-        if (!DataUtils.isNullObject(getMaDvi())) {
+        if (isNewValue && !DataUtils.isNullObject(getMaDvi())) {
             setTenDvi(mapDmucDvi.getOrDefault(getMaDvi(), null));
         }
     }

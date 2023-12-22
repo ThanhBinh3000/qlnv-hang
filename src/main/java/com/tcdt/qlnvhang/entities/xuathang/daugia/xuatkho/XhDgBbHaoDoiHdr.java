@@ -120,23 +120,24 @@ public class XhDgBbHaoDoiHdr implements Serializable {
     private Map<String, String> mapDmucDvi;
 
     public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+        boolean isNewValue = !Objects.equals(this.mapDmucDvi, mapDmucDvi);
         this.mapDmucDvi = mapDmucDvi;
-        if (!DataUtils.isNullObject(getMaDvi())) {
+        if (isNewValue && !DataUtils.isNullObject(getMaDvi())) {
             setTenDvi(mapDmucDvi.getOrDefault(getMaDvi(), null));
         }
-        if (!DataUtils.isNullObject(getMaDiemKho())) {
+        if (isNewValue && !DataUtils.isNullObject(getMaDiemKho())) {
             setTenDiemKho(mapDmucDvi.getOrDefault(getMaDiemKho(), null));
         }
-        if (!DataUtils.isNullObject(getMaNhaKho())) {
+        if (isNewValue && !DataUtils.isNullObject(getMaNhaKho())) {
             setTenNhaKho(mapDmucDvi.getOrDefault(getMaNhaKho(), null));
         }
-        if (!DataUtils.isNullObject(getMaNganKho())) {
+        if (isNewValue && !DataUtils.isNullObject(getMaNganKho())) {
             setTenNganKho(mapDmucDvi.getOrDefault(getMaNganKho(), null));
             if (getTenNganKho() != null) {
                 setTenNganLoKho(getTenNganKho());
             }
         }
-        if (!DataUtils.isNullObject(getMaLoKho())) {
+        if (isNewValue && !DataUtils.isNullObject(getMaLoKho())) {
             setTenLoKho(mapDmucDvi.getOrDefault(getMaLoKho(), null));
             if (getTenLoKho() != null) {
                 setTenNganLoKho(getTenLoKho() + " - " + getTenNganKho());
@@ -149,11 +150,12 @@ public class XhDgBbHaoDoiHdr implements Serializable {
     private Map<String, String> mapDmucVthh;
 
     public void setMapDmucVthh(Map<String, String> mapDmucVthh) {
+        boolean isNewValue = !Objects.equals(this.mapDmucVthh, mapDmucVthh);
         this.mapDmucVthh = mapDmucVthh;
-        if (!DataUtils.isNullObject(getLoaiVthh())) {
+        if (isNewValue && !DataUtils.isNullObject(getLoaiVthh())) {
             setTenLoaiVthh(mapDmucVthh.getOrDefault(getLoaiVthh(), null));
         }
-        if (!DataUtils.isNullObject(getCloaiVthh())) {
+        if (isNewValue && !DataUtils.isNullObject(getCloaiVthh())) {
             setTenCloaiVthh(mapDmucVthh.getOrDefault(getCloaiVthh(), null));
         }
     }

@@ -134,7 +134,6 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
         if (DataUtils.isNullOrEmpty(ids)) {
             throw new Exception("Tham số không hợp lệ.");
         }
-
         List<XhDxKhBanDauGia> resultList = xhDxKhBanDauGiaRepository.findByIdIn(ids);
         if (DataUtils.isNullOrEmpty(resultList)) {
             throw new Exception("Không tìm thấy dữ liệu");
@@ -171,11 +170,13 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
         BigDecimal giaDuocDuyet = BigDecimal.ZERO;
         Long longNamKh = item.getNamKh() != null ? item.getNamKh().longValue() : null;
         if (subDetailItem.getLoaiVthh() != null && longNamKh != null && subDetailItem.getLoaiVthh().startsWith(Contains.LOAI_VTHH_VATTU)) {
-            giaDuocDuyet = xhDxKhBanDauGiaPhanLoRepository.getGiaDuocDuyetVatTu(subDetailItem.getCloaiVthh(),
+            giaDuocDuyet = xhDxKhBanDauGiaPhanLoRepository.getGiaDuocDuyetVatTu(
+                    subDetailItem.getCloaiVthh(),
                     subDetailItem.getLoaiVthh(),
                     longNamKh);
         } else if (subDetailItem.getCloaiVthh() != null && subDetailItem.getLoaiVthh() != null && longNamKh != null && detailItem.getMaDvi() != null) {
-            giaDuocDuyet = xhDxKhBanDauGiaPhanLoRepository.getGiaDuocDuyetLuongThuc(subDetailItem.getCloaiVthh(),
+            giaDuocDuyet = xhDxKhBanDauGiaPhanLoRepository.getGiaDuocDuyetLuongThuc(
+                    subDetailItem.getCloaiVthh(),
                     subDetailItem.getLoaiVthh(),
                     longNamKh,
                     detailItem.getMaDvi());
