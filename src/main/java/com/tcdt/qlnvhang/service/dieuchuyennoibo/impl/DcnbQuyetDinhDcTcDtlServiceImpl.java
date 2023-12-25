@@ -348,6 +348,7 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
                     thKeHoachDCTCHdrRepository.save(thKeHoachDieu.get());
                 }
                 break;
+            case Contains.CHODUYET_LDV + Contains.DADUYET_LDV:
             case Contains.CHODUYET_LDV + Contains.CHODUYET_LDTC:
                 optional.get().setNgayPduyet(LocalDate.now());
                 optional.get().setNguoiPduyetId(currentUser.getUser().getId());
@@ -357,6 +358,7 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
                     thKeHoachDCTCHdrRepository.save(thKeHoachDieu.get());
                 }
                 break;
+            case Contains.DADUYET_LDV + Contains.TUCHOI_LDTC:
             case Contains.CHODUYET_LDTC + Contains.TUCHOI_LDTC:
                 optional.get().setNgayDuyetTc(LocalDate.now());
                 optional.get().setNguoiDuyetTcId(currentUser.getUser().getId());
@@ -367,6 +369,7 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
                     thKeHoachDCTCHdrRepository.save(thKeHoachDieu.get());
                 }
                 break;
+            case Contains.DADUYET_LDV + Contains.DADUYET_LDTC:
             case Contains.CHODUYET_LDTC + Contains.DADUYET_LDTC:
                 optional.get().setNgayDuyetTc(LocalDate.now());
                 optional.get().setNguoiDuyetTcId(currentUser.getUser().getId());
@@ -376,6 +379,7 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
                     thKeHoachDCTCHdrRepository.save(thKeHoachDieu.get());
                 }
                 break;
+            case Contains.DADUYET_LDV + Contains.BAN_HANH:
             case Contains.CHODUYET_LDTC + Contains.BAN_HANH:
             case Contains.DADUYET_LDTC + Contains.BAN_HANH:
                 optional.get().setNgayBanHanhTc(LocalDate.now());
