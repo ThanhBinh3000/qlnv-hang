@@ -23,6 +23,7 @@ import com.tcdt.qlnvhang.table.PhieuNhapXuatHistory;
 import com.tcdt.qlnvhang.table.UserActivitySetting;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuXuatKhoHdr;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBienBanDayKhoHdr;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoCt;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuXuatKho;
@@ -358,6 +359,28 @@ public class LoggingAspect {
 
             luuKhoClient.synchronizeData(phieuNhapXuatHistory);
             logger.info("Cập nhật kho theo Phiếu nhập đầy kho NhBienBanNhapDayKhoController {}", rowData);
+          }
+        }
+      }
+      else if (joinPoint.getTarget().toString().contains("HhBienBanDayKhoControler")) {
+        if (result != null && result.getBody().getMsg().equals(EnumResponse.RESP_SUCC.getDescription())) {
+          HhBienBanDayKhoHdr rowData = objectMapper.convertValue(result.getBody().getData(), HhBienBanDayKhoHdr.class);
+          if (rowData.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
+            PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
+            phieuNhapXuatHistory.setMaKho(rowData.getMaLoKho() == null ? rowData.getMaNganKho() : rowData.getMaLoKho());
+            phieuNhapXuatHistory.setSoLuong(DataUtils.safeToDouble(rowData.getTongSoLuongNhap()));
+            phieuNhapXuatHistory.setIdPhieu(rowData.getId());
+            phieuNhapXuatHistory.setSoPhieu(rowData.getSoBbNhapDayKho());
+            phieuNhapXuatHistory.setLoaiNhapXuat(0);
+            phieuNhapXuatHistory.setNgayDuyet(DataUtils.convertToLocalDate(rowData.getNgayPduyet()));
+            phieuNhapXuatHistory.setKieu("BB_DAY_KHO_NHAP_TRUC_TIEP");
+            phieuNhapXuatHistory.setBang(rowData.TABLE_NAME);
+            phieuNhapXuatHistory.setNamNhap(rowData.getNamKh());
+            phieuNhapXuatHistory.setNgayNhapDay(DataUtils.convertToLocalDate(rowData.getNgayKthucNhap()));
+            phieuNhapXuatHistory.setNgayTao(LocalDate.now());
+
+            luuKhoClient.synchronizeData(phieuNhapXuatHistory);
+            logger.info("Cập nhật kho theo Phiếu nhập đầy kho HhBienBanDayKhoControler {}", rowData);
           }
         }
       }
