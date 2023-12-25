@@ -24,6 +24,7 @@ public interface HhDcQdPduyetKhMttRepository extends JpaRepository<HhDcQdPduyetK
     Page<HhDcQdPduyetKhmttHdr> searchPage(Integer namKh, String soQdDc, String trichYeu, String ngayKyDcTu, String ngayKyDcDen, String trangThai, String maDvi, Pageable pageable);
 
     Optional<HhDcQdPduyetKhmttHdr> findBySoQdDc(String soQdDc);
+    Optional<HhDcQdPduyetKhmttHdr> findBySoToTrinh(String soToTrinh);
 
     List<HhDcQdPduyetKhmttHdr> findAllByIdIn(List<Long> listId);
 

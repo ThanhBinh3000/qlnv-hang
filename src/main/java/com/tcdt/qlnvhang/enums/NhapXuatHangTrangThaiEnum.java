@@ -71,6 +71,7 @@ public enum NhapXuatHangTrangThaiEnum {
 	DANG_NHAP_DU_LIEU("78", "Đang nhập dữ liệu", "Đang nhập dữ liệu"),
 	TU_CHOI_BAN_HANH_QD("79", "Từ chối ban hành QĐ", "Từ chối ban hành QĐ"),
 	DA_LAP("80", "Đã lập", "Đã lập"),
+	KHONG_KY_HD("84", "Đã trúng thầu nhưng không ký HĐ", "Đã trúng thầu nhưng không ký HĐ"),
 
 	;
 

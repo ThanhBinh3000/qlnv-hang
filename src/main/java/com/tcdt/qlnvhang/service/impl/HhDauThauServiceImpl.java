@@ -509,6 +509,9 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
                     HhQdPduyetKqlcntDtl kq = hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndType(gThau.getId(), "GOC");
                     if (kq != null) {
                         gthauPreview.setNhaThauTrungThau(kq.getTenNhaThau());
+                        if (kq.getDonGiaVat() != null && gThau.getSoLuong() != null) {
+                            gthauPreview.setThanhTienNhaThau(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong().multiply(kq.getDonGiaVat())));
+                        }
                     }
                     List<HhDthauNthauDuthau> byIdDtGt = nhaThauDuthauRepository.findByIdDtGtAndType(gThau.getId(), "GOC");
                     byIdDtGt.forEach(item -> {

@@ -95,9 +95,9 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         UserInfo userInfo= SecurityContextService.getUser();
         if (userInfo == null)
             throw new Exception("Bad request.");
-        Optional<HhDcQdPduyetKhmttHdr> optional = hhDcQdPduyetKhMttRepository.findBySoQdDc(objReq.getSoQdDc());
+        Optional<HhDcQdPduyetKhmttHdr> optional = hhDcQdPduyetKhMttRepository.findBySoToTrinh(objReq.getSoToTrinh());
         if(optional.isPresent()){
-            throw new Exception("số quyết định đã tồn tại");
+            throw new Exception("số công văn/tờ trình đã tồn tại");
         }
         HhDcQdPduyetKhmttHdr data = new ModelMapper().map(objReq,HhDcQdPduyetKhmttHdr.class);
         data.setNgayTao(new Date());
@@ -153,11 +153,11 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
             throw new Exception(" Bar request.");
         }
         Optional<HhDcQdPduyetKhmttHdr> optional = hhDcQdPduyetKhMttRepository.findById(objReq.getId());
-        Optional<HhDcQdPduyetKhmttHdr> soQdDc = hhDcQdPduyetKhMttRepository.findBySoQdDc(objReq.getSoQdDc());
-        if (soQdDc.isPresent()){
-            if (soQdDc.isPresent()){
+        Optional<HhDcQdPduyetKhmttHdr> soQdDc = hhDcQdPduyetKhMttRepository.findBySoToTrinh(objReq.getSoToTrinh());
+        if(soQdDc.isPresent()){
+            if (optional.isPresent()){
                 if (!soQdDc.get().getId().equals(objReq.getId())){
-                    throw new Exception("Số quyết định đã tồn tại");
+                    throw new Exception("số công văn/tờ trình đã tồn tại");
                 }
             }
         }
