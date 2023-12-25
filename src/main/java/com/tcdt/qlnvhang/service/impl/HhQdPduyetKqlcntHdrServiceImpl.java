@@ -314,16 +314,20 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		if(qdKhlcntDtl.isPresent()){
 			List<HhQdKhlcntDsgthau> listDsgThau = hhQdKhlcntDsgthauRepository.findByIdQdDtl(qdKhlcntDtl.get().getId());
 			for (HhQdKhlcntDsgthau dsgthau : listDsgThau) {
+				HhQdPduyetKqlcntDtl hhQdPduyetKqlcntDtl = hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndIdQdPdHdr(dsgthau.getId(), kqlcntHdr.getId());
 				if (dsgthau.getTrangThaiDt().equals(TrangThaiAllEnum.THANH_CONG.getId())) {
 					Optional<HhHopDongHdr> hhHopDongHdr = hhHopDongRepository.findBySoQdKqLcntAndIdGoiThau(kqlcntHdr.getSoQd(), dsgthau.getId());
 					if (hhHopDongHdr.isPresent()) {
 						if (!hhHopDongHdr.get().getTrangThai().equals(TrangThaiAllEnum.DA_KY.getId())){
 							dsgthau.setTrangThaiDt(TrangThaiAllEnum.KHONG_KY_HD.getId());
+							hhQdPduyetKqlcntDtl.setTrangThai(TrangThaiAllEnum.KHONG_KY_HD.getId());
 						}
 					} else {
 						dsgthau.setTrangThaiDt(TrangThaiAllEnum.KHONG_KY_HD.getId());
+						hhQdPduyetKqlcntDtl.setTrangThai(TrangThaiAllEnum.KHONG_KY_HD.getId());
 					}
 					hhQdKhlcntDsgthauRepository.save(dsgthau);
+					hhQdPduyetKqlcntDtlRepository.save(hhQdPduyetKqlcntDtl);
 				}
 			}
 		}
