@@ -22,6 +22,7 @@ public interface XhXkVtBhPhieuKdclRepository extends JpaRepository<XhXkVtBhPhieu
       "AND (:#{#param.soPhieu} IS NULL OR LOWER(c.soPhieu) LIKE CONCAT('%',LOWER(:#{#param.soPhieu}),'%')) " +
       "AND (:#{#param.soQdGiaoNvXh} IS NULL OR LOWER(c.soQdGiaoNvXh) LIKE CONCAT('%',LOWER(:#{#param.soQdGiaoNvXh}),'%')) " +
       "AND (:#{#param.soQdGiaoNvNh} IS NULL OR LOWER(c.soQdGiaoNvNh) LIKE CONCAT('%',LOWER(:#{#param.soQdGiaoNvNh}),'%')) " +
+      "AND (:#{#param.soBbLayMau} IS NULL OR LOWER(c.soBbLayMau) LIKE CONCAT('%',LOWER(:#{#param.soBbLayMau}),'%')) " +
       "AND (:#{#param.dviKiemDinh} IS NULL OR LOWER(c.dviKiemDinh) LIKE CONCAT('%',LOWER(:#{#param.dviKiemDinh}),'%')) " +
       "AND ((:#{#param.ngayKiemDinhTu}  IS NULL OR c.ngayKiemDinh >= :#{#param.ngayKiemDinhTu})" +
       "AND (:#{#param.ngayKiemDinhDen}  IS NULL OR c.ngayKiemDinh <= :#{#param.ngayKiemDinhDen}) ) " +
@@ -38,4 +39,7 @@ public interface XhXkVtBhPhieuKdclRepository extends JpaRepository<XhXkVtBhPhieu
 
   List<XhXkVtBhPhieuKdclHdr> findByIdQdGiaoNvXh(Long ids);
 
+  List<XhXkVtBhPhieuKdclHdr> findByIdQdGiaoNvXhIn(List<Long> list);
+
+  List<XhXkVtBhPhieuKdclHdr> findAllByIdBaoCaoKdm(Long ids);
 }

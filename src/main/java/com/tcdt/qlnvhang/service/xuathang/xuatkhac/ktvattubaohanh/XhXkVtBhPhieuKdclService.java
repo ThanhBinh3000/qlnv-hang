@@ -99,7 +99,7 @@ public class XhXkVtBhPhieuKdclService extends BaseServiceImpl {
       s.setId(null);
     });
     XhXkVtBhPhieuKdclHdr created = xhXkVtBhPhieuKdclRepository.save(data);
-    this.updateQdGiaoNvXh(created, false);
+//    this.updateQdGiaoNvXh(created, false);
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtBhPhieuKdclHdr.TABLE_NAME);
     created.setFileDinhKems(fileDinhKems);
     return created;
@@ -125,7 +125,7 @@ public class XhXkVtBhPhieuKdclService extends BaseServiceImpl {
     dx.getPhieuKdclDtl().forEach(e -> e.setPhieuKdclHdr(dx));
     dx.setPhieuKdclDtl(objReq.getPhieuKdclDtl());
     XhXkVtBhPhieuKdclHdr created = xhXkVtBhPhieuKdclRepository.save(dx);
-    this.updateQdGiaoNvXh(created, false);
+//    this.updateQdGiaoNvXh(created, false);
     fileDinhKemService.delete(dx.getId(), Collections.singleton(XhXkVtBhPhieuKdclHdr.TABLE_NAME));
     //save file đính kèm
     fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtBhPhieuKdclHdr.TABLE_NAME);
@@ -162,7 +162,7 @@ public class XhXkVtBhPhieuKdclService extends BaseServiceImpl {
       throw new Exception("Bản ghi có trạng thái khác dự thảo, không thể xóa.");
     }
     XhXkVtBhPhieuKdclHdr data = optional.get();
-    this.updateQdGiaoNvXh(data, true);
+//    this.updateQdGiaoNvXh(data, true);
     fileDinhKemService.deleteMultiple(Collections.singleton(data.getId()), Collections.singleton(XhXkVtBhPhieuKdclHdr.TABLE_NAME));
     xhXkVtBhPhieuKdclRepository.delete(data);
   }

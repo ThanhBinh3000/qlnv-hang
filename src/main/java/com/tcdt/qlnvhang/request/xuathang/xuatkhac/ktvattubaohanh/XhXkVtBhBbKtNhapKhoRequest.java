@@ -23,6 +23,8 @@ public class XhXkVtBhBbKtNhapKhoRequest extends BaseRequest {
     private String maDiaDiem; // mã địa điểm (mã lô/ngăn kho)
     private String loaiVthh;
     private String cloaiVthh;
+    private String donViTinh;
+    private String maDviTsan;
     private String canBoLapBb;
     private String ldChiCuc;
     private String ktvBaoQuan;
