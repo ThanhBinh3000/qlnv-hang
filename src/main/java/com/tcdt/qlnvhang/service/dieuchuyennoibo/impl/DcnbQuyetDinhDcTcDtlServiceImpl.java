@@ -534,7 +534,7 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
 
         headerColumns.add(new HeaderColumn("Thời gian dự kiến điều chuyển", 0,"thoiGianDkDc", "java.lang.String"));
         headerColumns.add(new HeaderColumn("Lý do điều chuyển", 0,"lyDo", "java.lang.String"));
-        headerColumns.add(new HeaderColumn("Dự toán kinh phí đề xuất (triệu đồng)", 0,"duToanKphi", "java.lang.Double"));
+        headerColumns.add(new HeaderColumn("Dự toán kinh phí đề xuất (triệu đồng)", 0,"duToanKphi", "java.lang.Double", true));
 
         HeaderColumn ccndcd = new HeaderColumn("Chi cục nhận điều chỉnh đến", 0);
         ccndcd.getChildren().add(new HeaderColumn("Chi cục DTNN", 1, "tenChiCucNhan", "java.lang.String"));
@@ -572,7 +572,7 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
 
         headerColumns.add(new HeaderColumn("Thời gian dự kiến điều chuyển", 0,"thoiGianDkDc", "java.lang.String"));
         headerColumns.add(new HeaderColumn("Lý do điều chuyển", 0,"lyDo", "java.lang.String"));
-        headerColumns.add(new HeaderColumn("Dự toán kinh phí đề xuất (triệu đồng)", 0,"duToanKphi", "java.lang.Double"));
+        headerColumns.add(new HeaderColumn("Dự toán kinh phí đề xuất (triệu đồng)", 0,"duToanKphi", "java.lang.Double", true));
 
         HeaderColumn ccndcd = new HeaderColumn("Chi cục nhận điều chỉnh đến", 0);
         ccndcd.getChildren().add(new HeaderColumn("Chi cục DTNN", 1, "tenChiCucNhan", "java.lang.String"));
