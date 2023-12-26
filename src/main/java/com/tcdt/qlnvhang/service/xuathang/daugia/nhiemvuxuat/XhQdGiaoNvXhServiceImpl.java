@@ -316,13 +316,13 @@ public class XhQdGiaoNvXhServiceImpl extends BaseServiceImpl {
             if (isVattuType) {
                 excelRow[5] = proposal.getTenLoaiVthh();
                 excelRow[6] = proposal.getTenCloaiVthh();
-                excelRow[7] = proposal.getTgianGiaoHang();
+                excelRow[7] = LocalDateTimeUtils.localDateToString(proposal.getTgianGiaoHang());
                 excelRow[8] = proposal.getTrichYeu();
                 excelRow[9] = proposal.getTenTrangThai();
                 excelRow[10] = proposal.getTenTrangThaiXh();
             } else {
                 excelRow[5] = proposal.getTenCloaiVthh();
-                excelRow[6] = proposal.getTgianGiaoHang();
+                excelRow[6] = LocalDateTimeUtils.localDateToString(proposal.getTgianGiaoHang());
                 excelRow[7] = proposal.getTrichYeu();
                 excelRow[8] = proposal.getTenTrangThai();
                 excelRow[9] = proposal.getTenTrangThaiXh();

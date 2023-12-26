@@ -1,11 +1,16 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Map;
+import java.util.Objects;
 
 @Entity
 @Table(name = XhThopDxKhBttDtl.TABLE_NAME)
@@ -30,6 +35,18 @@ public class XhThopDxKhBttDtl implements Serializable {
     private String tenDvi;
     @Transient
     private String tenTrangThai;
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucDvi;
+
+    public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+        boolean isNewValue = !Objects.equals(this.mapDmucDvi, mapDmucDvi);
+        this.mapDmucDvi = mapDmucDvi;
+        if (isNewValue && !DataUtils.isNullObject(getMaDvi())) {
+            setTenDvi(mapDmucDvi.getOrDefault(getMaDvi(), null));
+        }
+    }
 
     public String getTrangThai() {
         setTenTrangThai(TrangThaiAllEnum.getLabelById(trangThai));

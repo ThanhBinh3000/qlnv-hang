@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.dexuat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
@@ -8,6 +9,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Entity
 @Table(name = XhDxKhBanTrucTiepDtl.TABLE_NAME)
@@ -33,6 +36,19 @@ public class XhDxKhBanTrucTiepDtl implements Serializable {
     private BigDecimal donGiaDeXuat;
     @Transient
     private BigDecimal tienDuocDuyet;
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucDvi;
+
+    public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+        boolean isNewValue = !Objects.equals(this.mapDmucDvi, mapDmucDvi);
+        this.mapDmucDvi = mapDmucDvi;
+        if (isNewValue && !DataUtils.isNullObject(getMaDvi())) {
+            setTenDvi(mapDmucDvi.getOrDefault(getMaDvi(), null));
+        }
+    }
+
     @Transient
     private List<XhDxKhBanTrucTiepDdiem> children = new ArrayList<>();
 }

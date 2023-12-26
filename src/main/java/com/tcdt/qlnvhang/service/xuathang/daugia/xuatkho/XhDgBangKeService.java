@@ -70,7 +70,7 @@ public class XhDgBangKeService extends BaseServiceImpl {
 
     @Transactional
     public XhDgBangKeHdr create(CustomUserDetails currentUser, XhDgBangKeReq request) throws Exception {
-        if (currentUser == null) {
+        if (currentUser == null || request == null) {
             throw new Exception("Bad request.");
         }
         if (!StringUtils.isEmpty(request.getSoBangKeHang()) && xhDgBangKeHdrRepository.existsBySoBangKeHang(request.getSoBangKeHang())) {
@@ -212,7 +212,7 @@ public class XhDgBangKeService extends BaseServiceImpl {
         proposal.setTrangThai(statusReq.getTrangThai());
         XhDgBangKeHdr updateData = xhDgBangKeHdrRepository.save(proposal);
         if (updateData.getTrangThai().equals(Contains.DADUYET_LDCC)) {
-            xhDgPhieuXuatKhoRepository.findById(proposal.getIdPhieuXuatKho()).ifPresent(shipment -> {
+            xhDgPhieuXuatKhoRepository.findById(updateData.getIdPhieuXuatKho()).ifPresent(shipment -> {
                 shipment.setIdBangKeHang(updateData.getId());
                 shipment.setSoBangKeHang(updateData.getSoBangKeHang());
                 xhDgPhieuXuatKhoRepository.save(shipment);
