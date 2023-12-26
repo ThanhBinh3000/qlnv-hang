@@ -1,10 +1,12 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.dieuchinh;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.HhSlNhapHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.*;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.*;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.HhSlNhapHangRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -33,6 +35,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -74,6 +77,9 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 
 	@Autowired
 	private FileDinhKemService fileDinhKemService;
+
+	@Autowired
+	private HhSlNhapHangRepository hhSlNhapHangRepository;
 
 	public Page<HhDchinhDxKhLcntHdr> getAllPage(QlnvQdLcntHdrDChinhSearchReq objReq) throws Exception {
 		int page = objReq.getPaggingReq().getPage();
@@ -375,8 +381,12 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		}
 		optional.get().setTrangThai(stReq.getTrangThai());
 		hdrRepository.save(optional.get());
-		if (stReq.getTrangThai().equals(Contains.BAN_HANH) && !optional.get().getLoaiVthh().startsWith("02")) {
-			this.updateDataQdGoc(optional.get());
+		if (stReq.getTrangThai().equals(Contains.BAN_HANH)) {
+			if (optional.get().getLoaiVthh().startsWith("02")) {
+				capNhatSoLuongNhap(optional.get());
+			}else {
+				this.updateDataQdGoc(optional.get());
+			}
 		}
 		return optional.get();
 	}
@@ -387,6 +397,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 //		BeanUtils.copyProperties(dchinh, hdr, "id", "soQd");
 //		hhQdKhlcntHdrRepository.save(hdr);
 //		hhQdKhlcntDtlRepository.deleteAllByIdQdHdr(hdr.getId());
+		hhSlNhapHangRepository.deleteAllByIdQdKhlcnt(hdr.getId());
 		for (HhQdKhlcntDtl qdDtl : hdr.getChildren()) {
 			for (HhDchinhDxKhLcntDtl dtl : dchinh.getChildren()) {
 				if (dtl.getIdHhQdKhlcntDtl().equals(qdDtl.getId())) {
@@ -399,7 +410,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 					qdDtl.setTgianMoHoSo(dtl.getTgianMoHoSo());
 					qdDtl.setTgianMoHoSoTime(dtl.getTgianMoHoSoTime());
 					qdDtl.setGiaBanHoSo(dtl.getGiaBanHoSo());
-					hhQdKhlcntDtlRepository.save(qdDtl);
+					BigDecimal tongSl = BigDecimal.ZERO;
 					if (dtl.getChildren() != null && dtl.getChildren().size() > 0) {
 						hhQdKhlcntDsgthauRepository.deleteByIdQdDtl(qdDtl.getId());
 						for (HhDchinhDxKhLcntDsgthau dsgThau : dtl.getChildren()) {
@@ -408,6 +419,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 							gThau.setIdQdDtl(qdDtl.getId());
 							hhQdKhlcntDsgthauRepository.save(gThau);
 							hhQdKhlcntDsgthauCtietRepository.deleteAllByIdGoiThau(gThau.getId());
+							tongSl = tongSl.add(gThau.getSoLuong());
 							for (HhDchinhDxKhLcntDsgthauCtiet dsDdNhap : dsgThau.getChildren()) {
 								HhQdKhlcntDsgthauCtiet ddNhap = new HhQdKhlcntDsgthauCtiet();
 								BeanUtils.copyProperties(dsDdNhap, ddNhap, "id");
@@ -422,7 +434,39 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 							}
 						}
 					}
+					qdDtl.setSoLuong(tongSl);
+					hhQdKhlcntDtlRepository.save(qdDtl);
+					HhSlNhapHang slNhapHang = HhSlNhapHang.builder()
+							.loaiVthh(hdr.getLoaiVthh())
+							.cloaiVthh(hdr.getCloaiVthh())
+							.idQdKhlcnt(hdr.getId())
+							.namKhoach(hdr.getNamKhoach())
+							.soLuong(qdDtl.getSoLuong())
+							.maDvi(qdDtl.getMaDvi())
+							.kieuNhap("NHAP_DAU_THAU")
+							.build();
+					hhSlNhapHangRepository.save(slNhapHang);
 				}
+			}
+		}
+	}
+
+	private void capNhatSoLuongNhap(HhDchinhDxKhLcntHdr data) {
+		hhSlNhapHangRepository.deleteAllByIdQdKhlcnt(data.getIdQdGoc());
+		List<HhDchinhDxKhLcntDsgthau> gThauList = gThauRepository.findAllByIdDcDxHdrOrderByGoiThau(data.getId());
+		for(HhDchinhDxKhLcntDsgthau gThau : gThauList) {
+			List<HhDchinhDxKhLcntDsgthauCtiet> gthauCtietList = gThauCietRepository.findAllByIdGoiThau(gThau.getId());
+			for(HhDchinhDxKhLcntDsgthauCtiet ctiet : gthauCtietList) {
+				HhSlNhapHang slNhapHang = HhSlNhapHang.builder()
+						.loaiVthh(gThau.getLoaiVthh())
+						.cloaiVthh(gThau.getCloaiVthh())
+						.idQdKhlcnt(data.getIdQdGoc())
+						.namKhoach(data.getNam())
+						.soLuong(ctiet.getSoLuong())
+						.maDvi(ctiet.getMaDvi())
+						.kieuNhap("NHAP_DAU_THAU")
+						.build();
+				hhSlNhapHangRepository.save(slNhapHang);
 			}
 		}
 	}

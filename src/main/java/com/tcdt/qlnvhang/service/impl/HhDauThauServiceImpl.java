@@ -477,7 +477,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
             if (qOptional.get().getDieuChinh().equals(Boolean.TRUE)) {
                 Optional<HhDchinhDxKhLcntHdr> dchinhDxKhLcntHdr = hhDchinhDxKhLcntHdrRepository.findByIdQdGocAndLastest(qOptional.get().getId(), Boolean.TRUE);
                 if (dchinhDxKhLcntHdr.isPresent()) {
-                    List<HhDchinhDxKhLcntDsgthau> gThauList = dchinhDxKhLcntDsgthauRepository.findAllByIdDcDxHdr(dchinhDxKhLcntHdr.get().getId());
+                    List<HhDchinhDxKhLcntDsgthau> gThauList = dchinhDxKhLcntDsgthauRepository.findAllByIdDcDxHdrOrderByGoiThau(dchinhDxKhLcntHdr.get().getId());
 
                     for(HhDchinhDxKhLcntDsgthau gThau : gThauList){
                         DsGthauPreview gthauPreview = new DsGthauPreview();
@@ -497,7 +497,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
                     }
                 }
             } else {
-                List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauData = goiThauRepository.findByIdQdHdr(qOptional.get().getId());
+                List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauData = goiThauRepository.findByIdQdHdrOrderByGoiThauAsc(qOptional.get().getId());
                 for(HhQdKhlcntDsgthau gThau : hhQdKhlcntDsgthauData){
                     DsGthauPreview gthauPreview = new DsGthauPreview();
                     gthauPreview.setGoiThau(gThau.getGoiThau());

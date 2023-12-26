@@ -27,4 +27,5 @@ public interface HhSlNhapHangRepository extends BaseRepository<HhSlNhapHang, Lon
     BigDecimal countSLDalenQd(Integer namKh, String loaiVthh, String maDvi);
 
     List<HhSlNhapHang> findAllByIdQdKhlcnt(Long id);
+    void deleteAllByIdQdKhlcnt (Long id);
 }
