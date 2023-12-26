@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.HhSlNhapHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.*;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
@@ -806,6 +807,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 //			this.cloneProject(dataDB.getId());
 		}
 		HhQdKhlcntHdr createCheck = hhQdKhlcntHdrRepository.save(dataDB);
+		capNhatSoLuongNhap(dataDB);
 		return createCheck;
 	}
 
@@ -874,6 +876,16 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			dxClone.setId(null);
 			dxClone.setIdQdHdr(hdrClone.getId());
 			hhQdKhlcntDtlRepository.save(dxClone);
+			HhSlNhapHang slNhapHang = HhSlNhapHang.builder()
+					.loaiVthh(hdr.getLoaiVthh())
+					.cloaiVthh(hdr.getCloaiVthh())
+					.idQdKhlcnt(hdrClone.getId())
+					.namKhoach(hdr.getNamKhoach())
+					.soLuong(dx.getSoLuong())
+					.maDvi(dx.getMaDvi())
+					.kieuNhap("NHAP_DAU_THAU")
+					.build();
+			hhSlNhapHangRepository.save(slNhapHang);
 			for (HhQdKhlcntDsgthau gthau : dx.getChildren()){
 				HhQdKhlcntDsgthau gThauClone = new HhQdKhlcntDsgthau();
 				BeanUtils.copyProperties(gthau, gThauClone);
@@ -894,6 +906,23 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 						hhQdKhlcntDsgthauCtietVtRepository.save(ctietVtClone);
 					}
 				}
+			}
+		}
+	}
+
+	private void capNhatSoLuongNhap (HhQdKhlcntHdr hdr) throws Exception {
+		for (HhQdKhlcntDsgthau gthau : hdr.getDsGthau()){
+			for (HhQdKhlcntDsgthauCtiet ctiet : gthau.getChildren()){
+				HhSlNhapHang slNhapHang = HhSlNhapHang.builder()
+						.loaiVthh(hdr.getLoaiVthh())
+						.cloaiVthh(hdr.getCloaiVthh())
+						.idDxKhlcnt(hdr.getId())
+						.namKhoach(hdr.getNamKhoach())
+						.soLuong(ctiet.getSoLuong())
+						.maDvi(ctiet.getMaDvi())
+						.kieuNhap("NHAP_DAU_THAU")
+						.build();
+				hhSlNhapHangRepository.save(slNhapHang);
 			}
 		}
 	}
