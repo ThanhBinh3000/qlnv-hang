@@ -56,7 +56,8 @@ public class DcnbQuyetDinhDcTcHdr extends BaseEntity implements Serializable, Cl
   private String soQdinhXuatCuc;
   private String tenLoaiHinhNhapXuat;
   private String tenKieuNhapXuat;
-  private String yKienVuKhac;
+  @Column(name = "Y_KIEN_VU_KHAC")
+  private String ysKienVuKhac;
   @Transient
   private String tenTrangThai;
   @Transient
