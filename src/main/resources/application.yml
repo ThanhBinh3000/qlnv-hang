@@ -51,8 +51,13 @@ management:
 
 #Logging
 
-#path font pdf
-path:
-  url: "/u01/QLNV/font/times.ttf"
+##path font pdf
+#path:
+##  url: "/u01/QLNV/font/times.ttf"
 #  url: "src/main/resources/font/times.ttf"
-  base-report-folder: "src/main/resources/reports/"
+#  base-report-folder: "src/main/resources/reports/"
+#  base-jasper-folder: "src/main/resources/jasper/"
+path:
+  url: /u01/QLNV/font/times.ttf
+  base-report-folder: /u01/QLNV/reports/${info.app.name}/
+  base-jasper-folder: /u01/QLNV/jasper/
