@@ -506,11 +506,29 @@ public class JasperReportManager {
         int nextX = getNextX(i, staticText);
         Set<StaticText> collect = staticText.stream().filter(it -> it.getLevel() == i || !it.getHaveChildren()).filter(item -> item.getReportElement().getX() <= nextX && nextX < item.getReportElement().getX() + item.getReportElement().getWidth()).collect(Collectors.toSet());
         Optional<StaticText> first = collect.stream().findFirst();
-        return first.map(text -> text.getReportElement().getX() + text.getReportElement().getWidth()).orElse(0);
+        int nextXTinhLai = first.map(text -> text.getReportElement().getX() + text.getReportElement().getWidth()).orElse(0);
+        nextXTinhLai = getNextXOverrideL(i, nextXTinhLai, staticText);
+        return nextXTinhLai;
+    }
+
+    private static int getNextXOverrideL(int i, int nextX, Set<StaticText> staticText) {
+        if (isOverride(i, nextX, staticText)) {
+            Set<StaticText> collect = staticText.stream().filter(it -> it.getLevel() == i || !it.getHaveChildren()).filter(item -> item.getReportElement().getX() <= nextX && nextX < item.getReportElement().getX() + item.getReportElement().getWidth()).collect(Collectors.toSet());
+            Optional<StaticText> first = collect.stream().findFirst();
+            int nextXTinhLai = first.map(text -> text.getReportElement().getX() + text.getReportElement().getWidth()).orElse(0);
+            nextXTinhLai = getNextXOverrideL(i, nextXTinhLai, staticText);
+            return nextXTinhLai;
+        }
+        return nextX;
     }
 
     private static boolean isOverride(int i, Set<StaticText> staticText) {
         int nextX = getNextX(i, staticText);
+        Set<StaticText> collect = staticText.stream().filter(it -> it.getLevel() == i || !it.getHaveChildren()).filter(item -> item.getReportElement().getX() <= nextX && nextX < item.getReportElement().getX() + item.getReportElement().getWidth()).collect(Collectors.toSet());
+        return !collect.isEmpty();
+    }
+
+    private static boolean isOverride(int i, int nextX, Set<StaticText> staticText) {
         Set<StaticText> collect = staticText.stream().filter(it -> it.getLevel() == i || !it.getHaveChildren()).filter(item -> item.getReportElement().getX() <= nextX && nextX < item.getReportElement().getX() + item.getReportElement().getWidth()).collect(Collectors.toSet());
         return !collect.isEmpty();
     }
@@ -604,7 +622,7 @@ public class JasperReportManager {
         return yValuesArray[yValuesArray.length - 1] + margin;
     }
 
-    public static void addTableTitle(JasperReport jasperReport, String text,  boolean isBold) {
+    public static void addTableTitle(JasperReport jasperReport, String text, boolean isBold) {
         Title title = jasperReport.getTitle();
         if (title == null) {
             title = new Title(null);
