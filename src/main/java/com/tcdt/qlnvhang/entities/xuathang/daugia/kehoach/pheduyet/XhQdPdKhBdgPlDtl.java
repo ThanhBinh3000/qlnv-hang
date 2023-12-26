@@ -72,6 +72,18 @@ public class XhQdPdKhBdgPlDtl implements Serializable {
         if (isNewValue && !DataUtils.isNullObject(getMaLoKho())) {
             setTenLoKho(mapDmucDvi.getOrDefault(getMaLoKho(), null));
         }
+        if (isNewValue && !DataUtils.isNullObject(getMaNganKho())) {
+            setTenNganKho(mapDmucDvi.getOrDefault(getMaNganKho(), null));
+            if (getTenNganKho() != null) {
+                setTenNganLoKho(getTenDiemKho() + " - " + getTenNhaKho() + " - " + getTenNganKho());
+            }
+        }
+        if (isNewValue && !DataUtils.isNullObject(getMaLoKho())) {
+            setTenLoKho(mapDmucDvi.getOrDefault(getMaLoKho(), null));
+            if (getTenLoKho() != null) {
+                setTenNganLoKho(getTenDiemKho() + " - " + getTenNhaKho() + " - " + getTenNganKho() + " - " + getTenLoKho());
+            }
+        }
     }
 
     @JsonIgnore

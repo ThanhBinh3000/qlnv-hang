@@ -47,8 +47,6 @@ public class XhDgBbHaoDoiService extends BaseServiceImpl {
     @Autowired
     private XhBbLayMauRepository xhBbLayMauRepository;
     @Autowired
-    private XhQdGiaoNvXhRepository xhQdGiaoNvXhRepository;
-    @Autowired
     private UserInfoRepository userInfoRepository;
 
     public Page<XhDgBbHaoDoiHdr> searchPage(CustomUserDetails currentUser, XhDgBbHaoDoiHdrReq request) throws Exception {
@@ -116,9 +114,9 @@ public class XhDgBbHaoDoiService extends BaseServiceImpl {
         return updatedData;
     }
 
-    void saveDetail(XhDgBbHaoDoiHdrReq req, Long headerId, Boolean isCheckRequired) {
+    void saveDetail(XhDgBbHaoDoiHdrReq request, Long headerId, Boolean isCheckRequired) {
         xhDgBbHaoDoiDtlRepository.deleteAllByIdHdr(isCheckRequired ? headerId : null);
-        for (XhDgBbHaoDoiDtl detailRequest : req.getChildren()) {
+        for (XhDgBbHaoDoiDtl detailRequest : request.getChildren()) {
             XhDgBbHaoDoiDtl detail = new XhDgBbHaoDoiDtl();
             BeanUtils.copyProperties(detailRequest, detail, "id");
             detail.setId(null);
@@ -281,10 +279,8 @@ public class XhDgBbHaoDoiService extends BaseServiceImpl {
             FileInputStream templateInputStream = new FileInputStream(baseReportFolder + templatePath);
             XhDgBbHaoDoiHdr reportDetail = this.detail(DataUtils.safeToLong(requestParams.get("id")));
             return docxToPdfConverter.convertDocxToPdf(templateInputStream, reportDetail);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XDocReportException e) {
-            e.printStackTrace();
+        } catch (IOException | XDocReportException exception) {
+            exception.printStackTrace();
         }
         return null;
     }

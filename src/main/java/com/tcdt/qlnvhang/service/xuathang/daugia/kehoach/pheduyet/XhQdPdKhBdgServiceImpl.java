@@ -344,7 +344,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
         }
         XhQdPdKhBdg proposalData = xhQdPdKhBdgRepository.findById(idSearchReq.getId())
                 .orElseThrow(() -> new Exception("Bản ghi không tồn tại"));
-        List<String> allowedStatusList = Arrays.asList(Contains.DANG_NHAP_DU_LIEU, Contains.DA_LAP);
+        List<String> allowedStatusList = Arrays.asList(Contains.DANG_NHAP_DU_LIEU, Contains.DA_LAP, Contains.TUCHOI_LDV, Contains.TUCHOI_LDTC);
         if (!allowedStatusList.contains(proposalData.getTrangThai())) {
             throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối.");
         }
@@ -621,14 +621,10 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
     }
 
     public Page<XhQdPdKhBdgDtl> searchPageDtl(CustomUserDetails currentUser, XhQdPdKhBdgDtlReq request) throws Exception {
-        Integer lastest = 1;
-        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
-            request.setLastest(lastest);
-            request.setTrangThaiHdr(Contains.BAN_HANH);
-        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
+        request.setLastest(Integer.valueOf(1));
+        request.setTrangThaiHdr(Contains.BAN_HANH);
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
             request.setDvql(currentUser.getDvql());
-            request.setLastest(lastest);
-            request.setTrangThaiHdr(Contains.BAN_HANH);
         }
         Pageable pageable = PageRequest.of(request.getPaggingReq().getPage(), request.getPaggingReq().getLimit());
         Page<XhQdPdKhBdgDtl> searchResultPage = xhQdPdKhBdgDtlRepository.searchDtl(request, pageable);

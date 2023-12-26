@@ -4,7 +4,6 @@ import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.phieukiemnghiemcl.X
 import com.tcdt.qlnvhang.entities.xuathang.daugia.ktracluong.phieukiemnghiemcl.XhPhieuKnghiemCluongCt;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
-import com.tcdt.qlnvhang.repository.xuathang.daugia.ktracluong.bienbanlaymau.XhBbLayMauRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.ktracluong.kiemnghiemcl.XhPhieuKnghiemCluongCtRepository;
 import com.tcdt.qlnvhang.repository.xuathang.daugia.ktracluong.kiemnghiemcl.XhPhieuKnghiemCluongRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -135,6 +134,7 @@ public class XhPhieuKnghiemCluongServiceImpl extends BaseServiceImpl {
             item.setMapDmucDvi(mapDmucDvi);
             item.setMapDmucVthh(mapDmucVthh);
             item.setMapDmucHinhThuc(mapDmucHinhThuc);
+            item.setTrangThai(item.getTrangThai());
             this.setFullNameIfNotNull(item.getIdThuKho(), item::setTenThuKho);
             this.setFullNameIfNotNull(item.getIdNguoiKiemNghiem(), item::setTenNguoiKiemNghiem);
             this.setFullNameIfNotNull(item.getIdTruongPhongKtvbq(), item::setTenTruongPhongKtvbq);
