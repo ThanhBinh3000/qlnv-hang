@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fontFamilies>
+
+	<fontFamily name="KhmerWing2">
+		<normal><![CDATA[fonts/KhmerWing2/wingdings2.ttf]]></normal>
+		<pdfEncoding><![CDATA[Identity-H]]></pdfEncoding>
+		<pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+		<exportFonts/>
+	</fontFamily>
+
+	<fontFamily name="Tacteing">
+		<normal><![CDATA[fonts/Tacteing/Tacteing.TTF]]></normal>
+		<pdfEncoding><![CDATA[Identity-H]]></pdfEncoding>
+		<pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+		<exportFonts/>
+	</fontFamily>
+
+	<fontFamily name="Times New Roman">
+		<normal><![CDATA[fonts/TimesNewRoman/times.ttf]]></normal>
+		<bold><![CDATA[fonts/TimesNewRoman/timesbd.ttf]]></bold>
+		<italic><![CDATA[fonts/TimesNewRoman/timesi.ttf]]></italic>
+		<boldItalic><![CDATA[fonts/TimesNewRoman/timesbi.ttf]]></boldItalic>
+		<pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+		<exportFonts/>
+	</fontFamily>
+
+	<fontFamily name="Arial Black">
+		<normal><![CDATA[fonts/ArialBlack/Arial-Black.ttf]]></normal>
+		<bold><![CDATA[fonts/ArialBlack/Arial-Bold.ttf]]></bold>
+		<italic><![CDATA[fonts/ArialBlack/Arial-Italic.ttf]]></italic>
+		<boldItalic><![CDATA[fonts/ArialBlack/Arial-Bold-Italic.ttf]]></boldItalic>
+		<pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+		<exportFonts/>
+	</fontFamily>
+
+	<fontFamily name="Khmer OS Muol Light">
+		<normal><![CDATA[fonts/KhmerOSMuolLight/Khmer-OS-Muol-Light.ttf]]></normal>
+		<pdfEncoding><![CDATA[Identity-H]]></pdfEncoding>
+		<pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+		<exportFonts/>
+	</fontFamily>
+	<fontFamily name="SVN-Times New Roman 2">
+		<normal><![CDATA[fonts/SVN_TimesNewRoman2/SVN-Times New Roman 2.ttf]]></normal>
+		<bold><![CDATA[fonts/SVN_TimesNewRoman2/SVN-Times New Roman Bold.ttf]]></bold>
+		<italic><![CDATA[fonts/SVN_TimesNewRoman2/SVN-Times New Roman 2 italic.ttf]]></italic>
+		<boldItalic><![CDATA[fonts/SVN_TimesNewRoman2/SVN-Times New Roman 2 bold italic.ttf]]></boldItalic>
+		<pdfEncoding><![CDATA[Identity-H]]></pdfEncoding>
+		<exportFonts/>
+	</fontFamily>
+</fontFamilies>

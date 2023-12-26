@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = DcnbPhieuKnChatLuongDtl.TABLE_NAME)
@@ -22,6 +23,14 @@ public class DcnbPhieuKnChatLuongDtl {
 
     @Column(name = "HDR_ID")
     private Long hdrId;
+    @Column(name = "MA_CHIEU_TIEU")
+    private String maChiTieu;
+    @Column(name = "TOAN_TU")
+    private String toanTu;
+    @Column(name = "CHI_TIEU_CL_TOI_THIEU")
+    private BigDecimal chiSoClToiThieu;
+    @Column(name = "CHI_TIEU_CL_TOI_DA")
+    private BigDecimal chiSoClToiDa;
     @Column(name = "CHI_TIEU_CL")
     private String chiTieuCl;
     @Column(name = "CHI_SO_CL")
