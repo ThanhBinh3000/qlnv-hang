@@ -145,6 +145,7 @@ public class XhDgPhieuXuatKhoService extends BaseServiceImpl {
             item.setMapDmucLoaiXuat(mapDmucLoaiXuat);
             item.setMapDmucKieuXuat(mapDmucKieuXuat);
             item.setMapDmucHinhThuc(mapDmucHinhThuc);
+            item.setTrangThai(item.getTrangThai());
             this.setFullNameIfNotNull(item.getIdThuKho(), item::setTenThuKho);
             this.setFullNameIfNotNull(item.getIdKtvBaoQuan(), item::setTenKtvBaoQuan);
             this.setFullNameIfNotNull(item.getIdLanhDaoChiCuc(), item::setTenLanhDaoChiCuc);

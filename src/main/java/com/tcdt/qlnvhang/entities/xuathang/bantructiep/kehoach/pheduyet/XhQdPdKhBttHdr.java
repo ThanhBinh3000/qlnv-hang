@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Entity
 @Table(name = XhQdPdKhBttHdr.TABLE_NAME)
@@ -89,45 +90,49 @@ public class XhQdPdKhBttHdr implements Serializable {
     private Map<String, String> mapDmucDvi;
 
     public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+        boolean isNewValue = !Objects.equals(this.mapDmucDvi, mapDmucDvi);
         this.mapDmucDvi = mapDmucDvi;
-        if (!DataUtils.isNullObject(getMaDvi())) {
-            setTenDvi(mapDmucDvi.containsKey(getMaDvi()) ? mapDmucDvi.get(getMaDvi()) : null);
+        if (isNewValue && !DataUtils.isNullObject(getMaDvi())) {
+            setTenDvi(mapDmucDvi.getOrDefault(getMaDvi(), null));
         }
     }
 
     @JsonIgnore
     @Transient
-    private Map<String, String> mapLoaiHinhNx;
+    private Map<String, String> mapDmucVthh;
 
-    public void setMapLoaiHinhNx(Map<String, String> mapLoaiHinhNx) {
-        this.mapLoaiHinhNx = mapLoaiHinhNx;
-        if (!DataUtils.isNullObject(getLoaiHinhNx())) {
-            setTenLoaiHinhNx(mapLoaiHinhNx.containsKey(getLoaiHinhNx()) ? mapLoaiHinhNx.get(getLoaiHinhNx()) : null);
+    public void setMapDmucVthh(Map<String, String> mapDmucVthh) {
+        boolean isNewValue = !Objects.equals(this.mapDmucVthh, mapDmucVthh);
+        this.mapDmucVthh = mapDmucVthh;
+        if (isNewValue && !DataUtils.isNullObject(getLoaiVthh())) {
+            setTenLoaiVthh(mapDmucVthh.getOrDefault(getLoaiVthh(), null));
+        }
+        if (isNewValue && !DataUtils.isNullObject(getCloaiVthh())) {
+            setTenCloaiVthh(mapDmucVthh.getOrDefault(getCloaiVthh(), null));
         }
     }
 
     @JsonIgnore
     @Transient
-    private Map<String, String> mapKieuNx;
+    private Map<String, String> mapDmucLoaiXuat;
 
-    public void setMapKieuNx(Map<String, String> mapKieuNx) {
-        this.mapKieuNx = mapKieuNx;
-        if (!DataUtils.isNullObject(getKieuNx())) {
-            setTenKieuNx(mapKieuNx.containsKey(getKieuNx()) ? mapKieuNx.get(getKieuNx()) : null);
+    public void setMapDmucLoaiXuat(Map<String, String> mapDmucLoaiXuat) {
+        boolean isNewValue = !Objects.equals(this.mapDmucLoaiXuat, mapDmucLoaiXuat);
+        this.mapDmucLoaiXuat = mapDmucLoaiXuat;
+        if (isNewValue && !DataUtils.isNullObject(getLoaiHinhNx())) {
+            setTenLoaiHinhNx(mapDmucLoaiXuat.getOrDefault(getLoaiHinhNx(), null));
         }
     }
 
     @JsonIgnore
     @Transient
-    private Map<String, String> mapVthh;
+    private Map<String, String> mapDmucKieuXuat;
 
-    public void setMapVthh(Map<String, String> mapVthh) {
-        this.mapVthh = mapVthh;
-        if (!DataUtils.isNullObject(getLoaiVthh())) {
-            setTenLoaiVthh(mapVthh.containsKey(getLoaiVthh()) ? mapVthh.get(getLoaiVthh()) : null);
-        }
-        if (!DataUtils.isNullObject(getCloaiVthh())) {
-            setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
+    public void setMapDmucKieuXuat(Map<String, String> mapDmucKieuXuat) {
+        boolean isNewValue = !Objects.equals(this.mapDmucKieuXuat, mapDmucKieuXuat);
+        this.mapDmucKieuXuat = mapDmucKieuXuat;
+        if (isNewValue && !DataUtils.isNullObject(getKieuNx())) {
+            setTenKieuNx(mapDmucKieuXuat.getOrDefault(getKieuNx(), null));
         }
     }
 

@@ -1,9 +1,13 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.nhiemvuxuat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Map;
+import java.util.Objects;
 
 @Entity
 @Table(name = XhQdNvXhBttDvi.TABLE_NAME)
@@ -33,4 +37,25 @@ public class XhQdNvXhBttDvi {
     private String tenNganKho;
     @Transient
     private String tenLoKho;
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucDvi;
+
+    public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+        boolean isNewValue = !Objects.equals(this.mapDmucDvi, mapDmucDvi);
+        this.mapDmucDvi = mapDmucDvi;
+        if (isNewValue && !DataUtils.isNullObject(getMaDiemKho())) {
+            setTenDiemKho(mapDmucDvi.getOrDefault(getMaDiemKho(), null));
+        }
+        if (isNewValue && !DataUtils.isNullObject(getMaNhaKho())) {
+            setTenNhaKho(mapDmucDvi.getOrDefault(getMaNhaKho(), null));
+        }
+        if (isNewValue && !DataUtils.isNullObject(getMaNganKho())) {
+            setTenNganKho(mapDmucDvi.getOrDefault(getMaNganKho(), null));
+        }
+        if (isNewValue && !DataUtils.isNullObject(getMaLoKho())) {
+            setTenLoKho(mapDmucDvi.getOrDefault(getMaLoKho(), null));
+        }
+    }
 }
