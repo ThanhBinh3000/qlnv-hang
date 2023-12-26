@@ -45,6 +45,8 @@ public class XhXkVtBhPhieuXuatNhapKho extends BaseEntity implements Serializable
   private LocalDate ngayKdcl;
   private String loaiVthh;
   private String cloaiVthh;
+  private String donViTinh;
+  private String maDviTsan;
   private Integer namNhap;
   private String canBoLapPhieu;
   private String ldChiCuc;
@@ -63,7 +65,6 @@ public class XhXkVtBhPhieuXuatNhapKho extends BaseEntity implements Serializable
   private String maSo;
   private BigDecimal slTonKho;
   private BigDecimal slLayMau;
-  private String donViTinh;
 
   private Long idBbLayMau;
   private String soBbLayMau;
