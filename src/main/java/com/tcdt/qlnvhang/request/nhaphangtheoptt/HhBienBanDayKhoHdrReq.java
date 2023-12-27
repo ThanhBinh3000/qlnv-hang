@@ -54,6 +54,7 @@ public class HhBienBanDayKhoHdrReq {
     private String maNganKho;
 
     private String maLoKho;
+    private String soBangKe;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayBdauNhap;
