@@ -57,6 +57,8 @@ public class THKeHoachDieuChuyenTongCucDtl implements Serializable {
 
     @Column(name = "DU_TOAN_KP")
     private BigDecimal tongDuToanKp;
+    @Transient
+    private BigDecimal tongDuToanKpPd;
 
 
     @ManyToOne(fetch = FetchType.EAGER)
