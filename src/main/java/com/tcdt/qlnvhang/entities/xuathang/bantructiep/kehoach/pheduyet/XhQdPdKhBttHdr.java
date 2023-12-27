@@ -84,6 +84,8 @@ public class XhQdPdKhBttHdr implements Serializable {
     private BigDecimal tongSoLuongCuc;
     @Transient
     private BigDecimal tongTienCuc;
+    @Transient
+    private String donViTinh;
 
     @JsonIgnore
     @Transient

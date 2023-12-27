@@ -48,6 +48,8 @@ public class XhQdPdKhBttDviDtl implements Serializable {
     @Transient
     private String tenLoKho;
     @Transient
+    private String tenNganLoKho;
+    @Transient
     private String tenLoaiVthh;
     @Transient
     private String tenCloaiVthh;
@@ -70,6 +72,18 @@ public class XhQdPdKhBttDviDtl implements Serializable {
         }
         if (isNewValue && !DataUtils.isNullObject(getMaLoKho())) {
             setTenLoKho(mapDmucDvi.getOrDefault(getMaLoKho(), null));
+        }
+        if (isNewValue && !DataUtils.isNullObject(getMaNganKho())) {
+            setTenNganKho(mapDmucDvi.getOrDefault(getMaNganKho(), null));
+            if (getTenNganKho() != null) {
+                setTenNganLoKho(getTenDiemKho() + " - " + getTenNhaKho() + " - " + getTenNganKho());
+            }
+        }
+        if (isNewValue && !DataUtils.isNullObject(getMaLoKho())) {
+            setTenLoKho(mapDmucDvi.getOrDefault(getMaLoKho(), null));
+            if (getTenLoKho() != null) {
+                setTenNganLoKho(getTenDiemKho() + " - " + getTenNhaKho() + " - " + getTenNganKho() + " - " + getTenLoKho());
+            }
         }
     }
 

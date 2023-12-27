@@ -265,6 +265,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
                 detailItem.setMapDmucDvi(mapDmucDvi);
                 detailItem.setMapDmucVthh(mapDmucVthh);
                 detailItem.setMapDmucThanhToan(mapDmucThanhToan);
+                item.setDonViTinh(detailItem.getDonViTinh());
                 detailItem.setChildren(subCategoryList.stream().filter(type -> !type.getIsKetQua()).collect(Collectors.toList()));
             }
             List<FileDinhKem> canCuPhapLy = fileDinhKemService.search(item.getId(), Arrays.asList(XhQdPdKhBttHdr.TABLE_NAME));

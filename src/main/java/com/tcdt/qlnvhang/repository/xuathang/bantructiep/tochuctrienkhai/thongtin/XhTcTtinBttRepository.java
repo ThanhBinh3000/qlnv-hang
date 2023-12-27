@@ -15,4 +15,6 @@ public interface XhTcTtinBttRepository extends JpaRepository<XhTcTtinBtt, Long> 
     List<XhTcTtinBtt> findAllByIdDviDtl(Long idDviDtl);
 
     List<XhTcTtinBtt> findByIdDviDtlIn(List<Long> listId);
+
+    List<XhTcTtinBtt> findAllByOrderByTochucCanhan();
 }
