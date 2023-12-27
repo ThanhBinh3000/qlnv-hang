@@ -23,6 +23,20 @@ public interface ScDanhSachRepository extends JpaRepository<ScDanhSachHdr, Long>
   )
   Page<ScDanhSachHdr> searchPage(@Param("param") XhTlDanhSachRequest param, Pageable pageable);
 
+  @Query(value = "SELECT" +
+          "    CASE" +
+          "        WHEN LENGTH(:ma) = 14 THEN kk.nam_nhap" +
+          "        WHEN LENGTH(:ma) = 16 THEN kl.nam_nhap" +
+          "        ELSE NULL " +
+          "    END AS nam_nhap_result " +
+          " FROM" +
+          "    sc_danh_sach_hdr yt" +
+          " LEFT JOIN" +
+          "    kt_ngan_kho kk ON yt.ma_dia_diem = kk.ma_ngankho" +
+          " LEFT JOIN" +
+          "    kt_ngan_lo kl ON yt.ma_dia_diem = kl.ma_nganlo where yt.id = :id " ,nativeQuery = true)
+  Integer getNamNhap(String ma, Long id);
+
   @Query("SELECT c FROM ScDanhSachHdr c  " +
           " LEFT JOIN ScTongHopDtl th on c.id = th.idDsHdr WHERE 1=1 " +
           " AND th.id is null " +

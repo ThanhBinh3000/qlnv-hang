@@ -356,9 +356,9 @@ public class THKeHoachDieuChuyenTongCucServiceImpl extends BaseServiceImpl {
         ccdexdc.getChildren().add(new HeaderColumn("SL điều chuyền", 1, "soLuongDc", "java.lang.Double"));
         headerColumns.add(ccdexdc);
 
-        headerColumns.add(new HeaderColumn("Thời gian dự kiến điều chuyển", 0,"thoiGianDkDc", "java.lang.String"));
+        headerColumns.add(new HeaderColumn("Thời gian dự kiến điều chuyển", 0,"thoiGianDkDc", "java.time.LocalDate",100));
         headerColumns.add(new HeaderColumn("Lý do điều chuyển", 0,"lyDo", "java.lang.String"));
-        headerColumns.add(new HeaderColumn("Dự toán kinh phí đề xuất (triệu đồng)", 0,"duToanKphi", "java.lang.Double", true));
+        headerColumns.add(new HeaderColumn("Dự toán kinh phí đề xuất (triệu đồng)", 0,"duToanKphi", "java.lang.Double",100, true));
 
         HeaderColumn ccndcd = new HeaderColumn("Chi cục nhận điều chỉnh đến", 0);
         ccndcd.getChildren().add(new HeaderColumn("Chi cục DTNN", 1, "tenChiCucNhan", "java.lang.String"));
@@ -394,9 +394,9 @@ public class THKeHoachDieuChuyenTongCucServiceImpl extends BaseServiceImpl {
         ccdexdc.getChildren().add(new HeaderColumn("SL điều chuyền", 1, "soLuongDc", "java.lang.Double"));
         headerColumns.add(ccdexdc);
 
-        headerColumns.add(new HeaderColumn("Thời gian dự kiến điều chuyển", 0,"thoiGianDkDc", "java.lang.String"));
+        headerColumns.add(new HeaderColumn("Thời gian dự kiến điều chuyển", 0,"thoiGianDkDc", "java.time.LocalDate",100));
         headerColumns.add(new HeaderColumn("Lý do điều chuyển", 0,"lyDo", "java.lang.String"));
-        headerColumns.add(new HeaderColumn("Dự toán kinh phí đề xuất (triệu đồng)", 0,"duToanKphi", "java.lang.Double", true));
+        headerColumns.add(new HeaderColumn("Dự toán kinh phí đề xuất (triệu đồng)", 0,"duToanKphi", "java.lang.Double",100, true));
 
         HeaderColumn ccndcd = new HeaderColumn("Chi cục nhận điều chỉnh đến", 0);
         ccndcd.getChildren().add(new HeaderColumn("Chi cục DTNN", 1, "tenChiCucNhan", "java.lang.String"));

@@ -34,6 +34,7 @@ public class XhDxKhBanDauGiaPhanLo implements Serializable {
     private BigDecimal soTienDtruocDx;
     private String loaiVthh;
     private String cloaiVthh;
+    private Integer namNhap;
     @Transient
     private String tenDiemKho;
     @Transient

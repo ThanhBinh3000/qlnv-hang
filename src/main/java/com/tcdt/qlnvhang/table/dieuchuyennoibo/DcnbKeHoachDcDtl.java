@@ -49,6 +49,8 @@ public class DcnbKeHoachDcDtl implements Cloneable,Serializable {
     private BigDecimal soLuongDc;
     @Column(name = "DU_TOAN_KPHI")
     private BigDecimal duToanKphi;
+    @Column(name = "DU_TOAN_KPHI_PD")
+    private BigDecimal duToanKphiPd;
     @Column(name = "TICH_LUONG_KD")
     private BigDecimal tichLuongKd;
     @Column(name = "SO_LUONG_PHAN_BO")
