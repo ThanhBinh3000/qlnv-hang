@@ -433,7 +433,9 @@ public class JasperReportManager {
             String pattern = null;
             if (hc.getClazz().equalsIgnoreCase("java.lang.String")) {
                 textElement = new TextElement(new Font("SVN-Times New Roman 2", null, true), "Left", "Middle");
-            } else {
+            } else if (hc.getClazz().equalsIgnoreCase("java.time.LocalDate")) {
+                textElement = new TextElement(new Font("SVN-Times New Roman 2", null, true), "Center", "Middle");
+            }else {
                 textElement = new TextElement(new Font("SVN-Times New Roman 2", null, true), "Right", "Middle");
                 if (hc.getPattern() != null) {
                     pattern = hc.getPattern();

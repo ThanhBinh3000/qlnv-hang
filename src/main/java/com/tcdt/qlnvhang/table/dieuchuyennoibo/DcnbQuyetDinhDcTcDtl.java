@@ -38,6 +38,7 @@ public class DcnbQuyetDinhDcTcDtl implements Serializable {
     private String soDxuat;
     private LocalDate ngayTrinhTc;
     private BigDecimal tongDuToanKp;
+    private BigDecimal tongDuToanKpPd;
     private String trichYeu;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)

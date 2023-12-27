@@ -27,6 +27,7 @@ public class DcnbQuyetDinhDcCHdrReq implements Serializable {
   private String loaiQdinh;
   private String tenLoaiQdinh;
   private BigDecimal tongDuToanKp;
+  private BigDecimal tongDuToanKpPd;
   private Long canCuQdTc;
   private String soCanCuQdTc;
   private Long dxuatId;
