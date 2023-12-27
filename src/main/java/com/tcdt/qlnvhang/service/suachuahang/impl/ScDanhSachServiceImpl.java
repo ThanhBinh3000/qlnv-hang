@@ -65,6 +65,7 @@ public class ScDanhSachServiceImpl extends BaseServiceImpl {
       data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
       data.setMapDmucDvi(mapDmucDvi);
       data.setMapVthh(mapVthh);
+      data.setNamNhap(scDanhSachRepository.getNamNhap(data.getMaDiaDiem(), data.getId()));
     });
     return allById;
   }
@@ -81,6 +82,7 @@ public class ScDanhSachServiceImpl extends BaseServiceImpl {
     optional.get().setTenTrangThai(TrangThaiAllEnum.getLabelById(optional.get().getTrangThai()));
     optional.get().setMapDmucDvi(mapDmucDvi);
     optional.get().setMapVthh(mapVthh);
+    optional.get().setNamNhap(scDanhSachRepository.getNamNhap(optional.get().getMaDiaDiem(), optional.get().getId()));
     return optional.get();
   }
 
