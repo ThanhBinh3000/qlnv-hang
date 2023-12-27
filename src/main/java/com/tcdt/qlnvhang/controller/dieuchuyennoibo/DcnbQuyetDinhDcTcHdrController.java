@@ -222,23 +222,5 @@ public class DcnbQuyetDinhDcTcHdrController extends BaseController {
     }
     return ResponseEntity.ok(resp);
   }
-  @ApiOperation(value = "Kết xuất danh sách", response = List.class)
-  @PostMapping(value =  PathContains.URL_XEM_TRUOC +"-tong-hop", produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.OK)
-  public void preview(@CurrentUser CustomUserDetails currentUser , @Valid @RequestBody DcnbQuyetDinhDcTcHdrPreviewReq objReq, HttpServletResponse response) throws Exception {
-    try {
-      dcnbQuyetDinhDcTcDtlServiceImpl.preview( currentUser,objReq, response);
-    } catch (Exception e) {
-      log.error("Kết xuất danh sách: {}", e);
-      final Map<String, Object> body = new HashMap<>();
-      body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      body.put("msg", e.getMessage());
-      response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-      response.setCharacterEncoding("UTF-8");
-      final ObjectMapper mapper = new ObjectMapper();
-      mapper.writeValue(response.getOutputStream(), body);
-
-    }
-  }
 
 }
