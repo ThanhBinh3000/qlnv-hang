@@ -242,7 +242,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
             e.setDcnbQuyetDinhDcCHdr(data);
         }
         data.setTongDuToanKp(total);
-        data.setTongDuToanKpPd(totalPd);
+//        data.setTongDuToanKpPd(totalPd);
         List<Long> longs = data.getDanhSachQuyetDinh().stream().map(DcnbQuyetDinhDcCDtl::getKeHoachDcHdrId).collect(Collectors.toList());
 
         List<Long> duplicates = longs.stream()
