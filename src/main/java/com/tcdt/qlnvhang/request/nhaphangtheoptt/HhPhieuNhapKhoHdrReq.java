@@ -28,6 +28,7 @@ public class HhPhieuNhapKhoHdrReq  {
     private String maQhns;
 
     private String soPhieuNhapKho;
+    private String soBangKe;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayNkho;

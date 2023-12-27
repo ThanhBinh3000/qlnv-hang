@@ -47,6 +47,7 @@ public class HhPhieuKiemTraChatLuongReq {
     private String kqDanhGia;
     private String trangThai;
     private String ldoTuChoi;
+    private String soBangKe;
     private Long idDdiemGiaoNvNh;
     private FileDinhKemReq fileDinhKem;
     private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();

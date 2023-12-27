@@ -67,6 +67,8 @@ public class HhDcQdPduyetKhmttHdr implements Serializable {
     private Date ngayTaoCv;
     private String loaiHinhNx;
     private String kieuNx;
+    private String noiDungToTrinh;
+    private String noiDungQdDc;
 
     @Transient
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
