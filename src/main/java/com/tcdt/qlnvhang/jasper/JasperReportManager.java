@@ -250,7 +250,7 @@ public class JasperReportManager {
         Set<TextField> textField = jasperReport.getTitle().getBand().getTextField();
         Set<StaticText> staticText = jasperReport.getTitle().getBand().getStaticText();
 
-        if (textField == null || textField.isEmpty() && staticText == null || staticText.isEmpty()) {
+        if ((textField == null || textField.isEmpty()) && (staticText == null || staticText.isEmpty())) {
             return 0;
         }
         Integer[] yTextFieldValuesArray = textField.stream().map(item -> item.getReportElement().getY() + item.getReportElement().getHeight()).toArray(Integer[]::new);
@@ -431,11 +431,17 @@ public class JasperReportManager {
             ReportElement reportElement = new ReportElement(property, x, y, getWidth(hc), 33, UUID.randomUUID().toString());
             TextElement textElement = null;
             String pattern = null;
+            String textFieldExpression = "$V{col_" + hc.getVariableName() + "}";
             if (hc.getClazz().equalsIgnoreCase("java.lang.String")) {
                 textElement = new TextElement(new Font("SVN-Times New Roman 2", null, true), "Left", "Middle");
-            } else if (hc.getClazz().equalsIgnoreCase("java.time.LocalDate")) {
+            } else if (hc.getClazz().equalsIgnoreCase("java.time.LocalDate") || hc.getClazz().equalsIgnoreCase("java.time.LocalDateTime")) {
                 textElement = new TextElement(new Font("SVN-Times New Roman 2", null, true), "Center", "Middle");
-            }else {
+                if (hc.getClazz().equalsIgnoreCase("java.time.LocalDateTime")) {
+                    textFieldExpression = textFieldExpression + " != null ? " + textFieldExpression + ".format(java.time.format.DateTimeFormatter.ofPattern(\"HH:mm dd/MM/yyyy\")) : \"\"";
+                } else {
+                    textFieldExpression = textFieldExpression + " != null ? " + textFieldExpression + ".format(java.time.format.DateTimeFormatter.ofPattern(\"dd/MM/yyyy\")) : \"\"";
+                }
+            } else {
                 textElement = new TextElement(new Font("SVN-Times New Roman 2", null, true), "Right", "Middle");
                 if (hc.getPattern() != null) {
                     pattern = hc.getPattern();
@@ -444,7 +450,7 @@ public class JasperReportManager {
                 }
             }
             Box box = new Box(new Pen(1.0d, "Solid"), 4, 4);
-            detail.getBand().getTextField().add(new TextField(reportElement, textElement, "$V{col_" + hc.getVariableName() + "}", box, pattern, true));
+            detail.getBand().getTextField().add(new TextField(reportElement, textElement, textFieldExpression, box, pattern, true));
         }
     }
 

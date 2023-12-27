@@ -290,8 +290,6 @@ class TextField {
     private String textFieldExpression;
     @XmlElement(name = "box", namespace = "http://jasperreports.sourceforge.net/jasperreports")
     private Box box;
-//    @XmlAttribute
-//    private String textAdjust;
     @XmlAttribute
     private String pattern;
     @XmlAttribute
@@ -309,7 +307,6 @@ class TextField {
         this.textElement = textElement;
         this.textFieldExpression = textFieldExpression;
         this.box = box;
-//        this.textAdjust = textAdjust;
         this.pattern = pattern;
         this.isBlankWhenNull = isBlankWhenNull;
     }

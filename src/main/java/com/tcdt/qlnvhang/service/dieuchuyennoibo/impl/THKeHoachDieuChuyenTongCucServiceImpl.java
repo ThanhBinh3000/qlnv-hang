@@ -317,14 +317,14 @@ public class THKeHoachDieuChuyenTongCucServiceImpl extends BaseServiceImpl {
 
     public void preview(CustomUserDetails currentUser, DcnbQuyetDinhDcTcHdrPreviewReq objReq, HttpServletResponse response) throws Exception {
         Map map = new HashMap();
-        JasperReport jasperReport = getJasperReportTo1(objReq.getNam(), objReq.getListDtl().get(0), 1);
+        JasperReport jasperReport = getJasperReportTo1(objReq.getNam(), objReq.getListDtl().get(0), 1, objReq.getType());
         byte[] pdf = reportTemplateService.exportReport(map, objReq.getListDtl().get(0).getListData(), jasperReport);
         List<InputStream> listFile = new ArrayList<>();
         listFile.add(new ByteArrayInputStream(pdf));
         if (objReq.getListDtl().size() > 1) {
             for (int i = 1; i < objReq.getListDtl().size(); i++) {
                 DcnbQuyetDinhDcTcDtlPreviewReq dtl = objReq.getListDtl().get(i);
-                JasperReport jasperReportN = getJasperReportToN(objReq.getNam(), dtl, (i+1));
+                JasperReport jasperReportN = getJasperReportToN(objReq.getNam(), dtl, (i+1), objReq.getType());
                 byte[] pdfN = reportTemplateService.exportReport(map, dtl.getListData(), jasperReportN);
                 listFile.add(new ByteArrayInputStream(pdfN));
             }
@@ -335,7 +335,7 @@ public class THKeHoachDieuChuyenTongCucServiceImpl extends BaseServiceImpl {
         merger.mergeDocuments(null);
     }
 
-    private JasperReport getJasperReportToN(Integer nam, DcnbQuyetDinhDcTcDtlPreviewReq dtl,int i) {
+    private JasperReport getJasperReportToN(Integer nam, DcnbQuyetDinhDcTcDtlPreviewReq dtl,int i, String type) {
         JasperReport jasperReport = new JasperReport();
         JasperReportManager.createQueryString(jasperReport, "select * from user");
         JasperReportManager.createProperty(jasperReport, "com.jaspersoft.studio.data.defaultdataadapter", "Orcale");
@@ -347,64 +347,83 @@ public class THKeHoachDieuChuyenTongCucServiceImpl extends BaseServiceImpl {
         headerColumns.add(new HeaderColumn("STT", 0, "stt", "java.lang.String"));
         HeaderColumn ccdexdc = new HeaderColumn("Chi cục đề xuất điều chuyển", 0);
         ccdexdc.getChildren().add(new HeaderColumn("Chi cục DTNN", 1, "tenChiCucXuat", "java.lang.String"));
-        ccdexdc.getChildren().add(new HeaderColumn("Lô kho", 1, "tenLoKho", "java.lang.String"));
+        ccdexdc.getChildren().add(new HeaderColumn("Lô kho", 1, "tenLoKho", "java.lang.String",200));
         ccdexdc.getChildren().add(new HeaderColumn("Loại hàng", 1, "tenLoaiVthh", "java.lang.String"));
         ccdexdc.getChildren().add(new HeaderColumn("Chủng loại hàng", 1, "tenCloaiVthh", "java.lang.String"));
         ccdexdc.getChildren().add(new HeaderColumn("Năm nhập kho", 1, "namNhap", "java.lang.Double"));
         ccdexdc.getChildren().add(new HeaderColumn("ĐVT", 1, "donViTinh", "java.lang.String"));
         ccdexdc.getChildren().add(new HeaderColumn("Tồn kho", 1, "tonKho", "java.lang.Double"));
         ccdexdc.getChildren().add(new HeaderColumn("SL điều chuyền", 1, "soLuongDc", "java.lang.Double"));
+        if("CUC".equals(type)) {
+            headerColumns.add(new HeaderColumn("Dự toán kinh phí đề xuất (triệu đồng)", 0, "duToanKphi", "java.lang.Double", 100, true));
+        }
         headerColumns.add(ccdexdc);
 
         headerColumns.add(new HeaderColumn("Thời gian dự kiến điều chuyển", 0,"thoiGianDkDc", "java.time.LocalDate",100));
         headerColumns.add(new HeaderColumn("Lý do điều chuyển", 0,"lyDo", "java.lang.String"));
-        headerColumns.add(new HeaderColumn("Dự toán kinh phí đề xuất (triệu đồng)", 0,"duToanKphi", "java.lang.Double",100, true));
-
-        HeaderColumn ccndcd = new HeaderColumn("Chi cục nhận điều chỉnh đến", 0);
-        ccndcd.getChildren().add(new HeaderColumn("Chi cục DTNN", 1, "tenChiCucNhan", "java.lang.String"));
-        ccndcd.getChildren().add(new HeaderColumn("Điểm kho", 1, "tenDiemKhoNhan", "java.lang.String"));
-        ccndcd.getChildren().add(new HeaderColumn("Lô kho", 1, "tenLoKhoNhan", "java.lang.String"));
-        ccndcd.getChildren().add(new HeaderColumn("Tích lượng khả dụng", 1, "tichLuongKd", "java.lang.Double"));
-        ccndcd.getChildren().add(new HeaderColumn("SL nhập điều chuyển", 1, "soLuongPhanBo", "java.lang.Double"));
-        headerColumns.add(ccndcd);
+        if("CHI_CUC".equals(type)) {
+            headerColumns.add(new HeaderColumn("Dự toán kinh phí đề xuất (triệu đồng)", 0,"duToanKphi", "java.lang.Double",100, true));
+            HeaderColumn ccndcd = new HeaderColumn("Chi cục nhận điều chỉnh đến", 0);
+            ccndcd.getChildren().add(new HeaderColumn("Chi cục DTNN", 1, "tenChiCucNhan", "java.lang.String"));
+            ccndcd.getChildren().add(new HeaderColumn("Điểm kho", 1, "tenDiemKhoNhan", "java.lang.String"));
+            ccndcd.getChildren().add(new HeaderColumn("Lô kho", 1, "tenLoKhoNhan", "java.lang.String"));
+            ccndcd.getChildren().add(new HeaderColumn("Tích lượng khả dụng", 1, "tichLuongKd", "java.lang.Double"));
+            ccndcd.getChildren().add(new HeaderColumn("SL nhập điều chuyển", 1, "soLuongPhanBo", "java.lang.Double"));
+            headerColumns.add(ccndcd);
+        }
+        if("CUC".equals(type)) {
+            headerColumns.add(new HeaderColumn("Chi cục nhận điều chỉnh đến", 0, "tenChiCucNhan", "java.lang.String", 100));
+        }
 
         JasperReportManager.setColumnHeader(jasperReport, headerColumns);
         return jasperReport;
     }
 
-    private JasperReport getJasperReportTo1(Integer nam, DcnbQuyetDinhDcTcDtlPreviewReq dtl, int i) {
+    private JasperReport getJasperReportTo1(Integer nam, DcnbQuyetDinhDcTcDtlPreviewReq dtl, int i, String type) {
         JasperReport jasperReport = new JasperReport();
         JasperReportManager.createQueryString(jasperReport, "select * from user");
         JasperReportManager.createProperty(jasperReport, "com.jaspersoft.studio.data.defaultdataadapter", "Orcale");
 
         JasperReportManager.createBackground(jasperReport, null, null);
-        JasperReportManager.addTitle(jasperReport, "TỔNG HỢP KẾ HOẠCH ĐIỀU CHUYỂN NỘI BỘ GIỮA CÁC CHI CỤC TRONG CÙNG 1 CỤC - Năm " + nam, null, true);
+        if("CHI_CUC".equals(type)){
+            JasperReportManager.addTitle(jasperReport, "TỔNG HỢP KẾ HOẠCH ĐIỀU CHUYỂN NỘI BỘ GIỮA CÁC CHI CỤC TRONG CÙNG 1 CỤC - Năm " + nam, null, true);
+        }
+        if("CUC".equals(type)){
+            JasperReportManager.addTitle(jasperReport, "TỔNG HỢP KẾ HOẠCH ĐIỀU CHUYỂN NỘI BỘ GIỮA 2 CỤC DTNN KHU VỰC - Năm " + nam, null, true);
+        }
         JasperReportManager.addTableTitle(jasperReport, i+". Cục DTNN KV " + dtl.getTenCuc() + " - Số tờ trình: " + dtl.getSoToTrinh() + ", dự toán kinh phí đề xuất: " + dtl.getTongDuToanKinhPhi() + " (triệu đồng)", false);
         JasperReportManager.createPageHeader(jasperReport, null, null);
         List<HeaderColumn> headerColumns = new ArrayList<>();
         headerColumns.add(new HeaderColumn("STT", 0, "stt", "java.lang.String"));
         HeaderColumn ccdexdc = new HeaderColumn("Chi cục đề xuất điều chuyển", 0);
         ccdexdc.getChildren().add(new HeaderColumn("Chi cục DTNN", 1, "tenChiCucXuat", "java.lang.String"));
-        ccdexdc.getChildren().add(new HeaderColumn("Lô kho", 1, "tenLoKho", "java.lang.String"));
+        ccdexdc.getChildren().add(new HeaderColumn("Lô kho", 1, "tenLoKho", "java.lang.String",200));
         ccdexdc.getChildren().add(new HeaderColumn("Loại hàng", 1, "tenLoaiVthh", "java.lang.String"));
         ccdexdc.getChildren().add(new HeaderColumn("Chủng loại hàng", 1, "tenCloaiVthh", "java.lang.String"));
         ccdexdc.getChildren().add(new HeaderColumn("Năm nhập kho", 1, "namNhap", "java.lang.Double"));
         ccdexdc.getChildren().add(new HeaderColumn("ĐVT", 1, "donViTinh", "java.lang.String"));
         ccdexdc.getChildren().add(new HeaderColumn("Tồn kho", 1, "tonKho", "java.lang.Double"));
         ccdexdc.getChildren().add(new HeaderColumn("SL điều chuyền", 1, "soLuongDc", "java.lang.Double"));
+        if("CUC".equals(type)) {
+            headerColumns.add(new HeaderColumn("Dự toán kinh phí đề xuất (triệu đồng)", 0, "duToanKphi", "java.lang.Double", 100, true));
+        }
         headerColumns.add(ccdexdc);
 
         headerColumns.add(new HeaderColumn("Thời gian dự kiến điều chuyển", 0,"thoiGianDkDc", "java.time.LocalDate",100));
         headerColumns.add(new HeaderColumn("Lý do điều chuyển", 0,"lyDo", "java.lang.String"));
-        headerColumns.add(new HeaderColumn("Dự toán kinh phí đề xuất (triệu đồng)", 0,"duToanKphi", "java.lang.Double",100, true));
-
-        HeaderColumn ccndcd = new HeaderColumn("Chi cục nhận điều chỉnh đến", 0);
-        ccndcd.getChildren().add(new HeaderColumn("Chi cục DTNN", 1, "tenChiCucNhan", "java.lang.String"));
-        ccndcd.getChildren().add(new HeaderColumn("Điểm kho", 1, "tenDiemKhoNhan", "java.lang.String"));
-        ccndcd.getChildren().add(new HeaderColumn("Lô kho", 1, "tenLoKhoNhan", "java.lang.String"));
-        ccndcd.getChildren().add(new HeaderColumn("Tích lượng khả dụng", 1, "tichLuongKd", "java.lang.Double"));
-        ccndcd.getChildren().add(new HeaderColumn("SL nhập điều chuyển", 1, "soLuongPhanBo", "java.lang.Double"));
-        headerColumns.add(ccndcd);
+        if("CHI_CUC".equals(type)) {
+            headerColumns.add(new HeaderColumn("Dự toán kinh phí đề xuất (triệu đồng)", 0,"duToanKphi", "java.lang.Double",100, true));
+            HeaderColumn ccndcd = new HeaderColumn("Chi cục nhận điều chỉnh đến", 0);
+            ccndcd.getChildren().add(new HeaderColumn("Chi cục DTNN", 1, "tenChiCucNhan", "java.lang.String"));
+            ccndcd.getChildren().add(new HeaderColumn("Điểm kho", 1, "tenDiemKhoNhan", "java.lang.String"));
+            ccndcd.getChildren().add(new HeaderColumn("Lô kho", 1, "tenLoKhoNhan", "java.lang.String"));
+            ccndcd.getChildren().add(new HeaderColumn("Tích lượng khả dụng", 1, "tichLuongKd", "java.lang.Double"));
+            ccndcd.getChildren().add(new HeaderColumn("SL nhập điều chuyển", 1, "soLuongPhanBo", "java.lang.Double"));
+            headerColumns.add(ccndcd);
+        }
+        if("CUC".equals(type)) {
+            headerColumns.add(new HeaderColumn("Chi cục nhận điều chỉnh đến", 0, "tenChiCucNhan", "java.lang.String", 100));
+        }
 
         JasperReportManager.setColumnHeader(jasperReport, headerColumns);
         return jasperReport;
