@@ -38,6 +38,8 @@ public class HhDcQdPduyetKhmttHdrReq {
     private Date ngayTaoCv;
     private String loaiHinhNx;
     private String kieuNx;
+    private String noiDungToTrinh;
+    private String noiDungQdDc;
 
     private List<FileDinhKemReq> fileDinhkems =new ArrayList<>();
 

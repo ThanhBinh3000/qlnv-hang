@@ -98,6 +98,7 @@ public class HhPhieuNhapKhoHdr implements Serializable {
     private String donViGiao;
 
     private String diaChiNguoiGiao;
+    private String soBangKe;
 
     @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)

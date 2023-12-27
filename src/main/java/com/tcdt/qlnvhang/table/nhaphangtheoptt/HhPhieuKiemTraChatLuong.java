@@ -83,6 +83,7 @@ public class HhPhieuKiemTraChatLuong implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date ngayPduyet;
     private String nguoiPduyet;
+    private String soBangKe;
     @Transient
     private FileDinhKem fileDinhKem;
     @Transient
