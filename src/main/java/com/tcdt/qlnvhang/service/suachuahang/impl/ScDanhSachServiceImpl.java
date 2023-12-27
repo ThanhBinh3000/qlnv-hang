@@ -47,6 +47,7 @@ public class ScDanhSachServiceImpl extends BaseServiceImpl {
       s.setMapDmucDvi(mapDmucDvi);
       s.setMapVthh(mapVthh);
       s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
+      s.setNamNhap(scDanhSachRepository.getNamNhap(s.getMaDiaDiem(), s.getId()));
     });
     return search;
   }
@@ -57,7 +58,6 @@ public class ScDanhSachServiceImpl extends BaseServiceImpl {
     if (DataUtils.isNullOrEmpty(optional)) {
       throw new Exception("Không tìm thấy dữ liệu");
     }
-
     List<ScDanhSachHdr> allById = scDanhSachRepository.findAllById(ids);
     Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
     Map<String, String> mapVthh = getListDanhMucHangHoa();
