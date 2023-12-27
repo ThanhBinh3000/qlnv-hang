@@ -362,6 +362,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         switch (status){
             case Contains.CHODUYET_LDV + Contains.DA_LAP:
             case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
+            case Contains.CHODUYET_LDV + Contains.TUCHOI_LDTC:
                 optional.get().setNguoiGduyet(userInfo.getUsername());
                 optional.get().setNgayGduyet(getDateTimeNow());
                 break;
