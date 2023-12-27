@@ -194,6 +194,10 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
         return details.isEmpty() ? null : details.get(0);
     }
 
+    public List<XhTcTtinBtt> getToChucCaNhan() throws Exception {
+        return xhTcTtinBttRepository.findAllByOrderByTochucCanhan();
+    }
+
     public XhQdPdKhBttDtl approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
         if (currentUser == null || StringUtils.isEmpty(statusReq.getId())) {
             throw new Exception("Bad request.");

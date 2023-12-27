@@ -88,6 +88,23 @@ public class XhTcTtinBttControler extends BaseController {
         return ResponseEntity.ok(resp);
     }
 
+    @ApiOperation(value = "Lấy danh sách tổ chức cá nhân chào giá", response = List.class)
+    @GetMapping(value = "to-chuc-ca-nhan", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> getToChucCaNhan() {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(xhTcTtinBttService.getToChucCaNhan());
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Lấy danh sách nhà thầu dự thầu trace: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
     @ApiOperation(value = "Trình duyệt", response = List.class)
     @PostMapping(value = PathContains.URL_PHE_DUYET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody StatusReq stReq) {
