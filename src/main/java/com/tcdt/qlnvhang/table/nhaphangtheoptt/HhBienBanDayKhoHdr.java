@@ -87,6 +87,7 @@ public class HhBienBanDayKhoHdr implements Serializable {
     private String ktvBanQuan;
 
     private String keToanTruong;
+    private String soBangKe;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayTao;
