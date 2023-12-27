@@ -31,6 +31,7 @@ public class HhBcanKeHangHdrReq {
     private String maDvi;
 
     private String maQhns;
+    private String soBangKe;
 
     private String soBangKeCanHang;
 

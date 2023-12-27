@@ -30,6 +30,7 @@ public class HhBcanKeHangHdr  implements Serializable {
     private Long idDdiemGiaoNvNh;
 
     private Integer namKh;
+    private String soBangKe;
 
     private String maDvi;
     @Transient
