@@ -33,6 +33,7 @@ public class XhDxKhBanTrucTiepDdiem implements Serializable {
     private BigDecimal thanhTienDeXuat;
     private String loaiVthh;
     private String cloaiVthh;
+    private Integer namNhap;
     @Transient
     private BigDecimal donGiaDuocDuyet;
     @Transient
