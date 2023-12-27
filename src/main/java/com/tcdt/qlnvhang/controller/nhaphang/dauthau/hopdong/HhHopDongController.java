@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tcdt.qlnvhang.request.object.HhHopDongDtlReq;
 import com.tcdt.qlnvhang.request.search.ListHdSearhReq;
 import com.tcdt.qlnvhang.service.impl.HhHopDongServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -266,6 +267,23 @@ public class HhHopDongController {
     } catch (Exception e) {
       resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
       resp.setMsg(e.getMessage());
+    }
+    return ResponseEntity.ok(resp);
+  }
+
+  @ApiOperation(value = "Lưu số tiền tính phạt", response = List.class)
+  @PostMapping(value = "/tinh-tien-phat", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.CREATED)
+  public ResponseEntity<BaseResponse> saveSoTienTinhPhat( @RequestBody HhHopDongDtlReq objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      service.saveSoTienTinhPhat(objReq);
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Lưu số tiền tính phạt trace: {}", e);
     }
     return ResponseEntity.ok(resp);
   }
