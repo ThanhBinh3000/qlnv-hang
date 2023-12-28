@@ -190,6 +190,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
                     });
                     subCategoryDetailItem.setChildren(organization);
                 }
+                item.setDonViTinh(subCategoryItem.getDonViTinh());
                 subCategoryItem.setMapDmucDvi(mapDmucDvi);
                 subCategoryItem.setChildren(subCategoryDetailList);
             }
