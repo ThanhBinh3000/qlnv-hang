@@ -370,13 +370,13 @@ public class XhThHoSoService extends BaseServiceImpl {
       String templatePath = "xuattieuhuy/" + templateName;
       FileInputStream templateInputStream = new FileInputStream(baseReportFolder + templatePath);
       XhThHoSoHdr data = this.detail(DataUtils.safeToLong(requestParams.get("id")));
-      List<Map<String, Object>> detail1 = data.getChildren().stream().collect(Collectors.groupingBy(item -> item.getXhThDanhSachHdr().getTenChiCuc(), Collectors.collectingAndThen(Collectors.toList(), item1 -> {
+      List<Map<String, Object>> detail = data.getChildren().stream().collect(Collectors.groupingBy(item -> item.getXhThDanhSachHdr().getTenChiCuc(), Collectors.collectingAndThen(Collectors.toList(), item1 -> {
         Map<String, Object> newData = new HashMap<>();
         newData.put("name", item1.get(0).getXhThDanhSachHdr().getTenChiCuc());
         newData.put("child", item1);
         return newData;
       }))).values().stream().collect(Collectors.toList());
-      return docxToPdfConverter.convertDocxToPdf(templateInputStream, data, detail1);
+      return docxToPdfConverter.convertDocxToPdf(templateInputStream, data, detail);
     } catch (IOException | XDocReportException exception) {
       exception.printStackTrace();
     }
