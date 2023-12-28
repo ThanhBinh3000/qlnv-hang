@@ -36,6 +36,7 @@ public class XhXkVtBhPhieuKdclRequest extends BaseRequest {
     private String cloaiVthh;
     private Integer namNhap;
     private String donViTinh;
+    private String maDviTsan;
     private String maDiaDiem;
     private String ppLayMau;
     private String nhanXetKetLuan;
