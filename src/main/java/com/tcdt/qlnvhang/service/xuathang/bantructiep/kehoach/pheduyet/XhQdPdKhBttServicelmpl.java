@@ -316,17 +316,17 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
                         .reduce(BigDecimal.ZERO, BigDecimal::add);
                 detailItem.setThanhTienDuocDuyet(sumThanhTienDuocDuyet);
             }
-            BigDecimal sumTongSoTienCuc = detailList.stream()
-                    .map(XhQdPdKhBttDtl::getTongSoLuong)
-                    .filter(Objects::nonNull)
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-            item.setTongSoLuongCuc(sumTongSoTienCuc);
-            BigDecimal sumTongTienCuc = detailList.stream()
-                    .map(XhQdPdKhBttDtl::getThanhTien)
-                    .filter(Objects::nonNull)
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-            item.setTongTienCuc(sumTongTienCuc);
         }
+        BigDecimal sumTongSoTienCuc = detailList.stream()
+                .map(XhQdPdKhBttDtl::getTongSoLuong)
+                .filter(Objects::nonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        item.setTongSoLuongCuc(sumTongSoTienCuc);
+        BigDecimal sumTongTienCuc = detailList.stream()
+                .map(XhQdPdKhBttDtl::getThanhTien)
+                .filter(Objects::nonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        item.setTongTienCuc(sumTongTienCuc);
         return giaDuocDuyet;
     }
 

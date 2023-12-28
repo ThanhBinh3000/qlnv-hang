@@ -82,6 +82,8 @@ public class XhKqBttHdr implements Serializable {
     private String tenTrangThaiHd;
     @Transient
     private String tenTrangThaiXh;
+    @Transient
+    private String donViTinh;
 
     @JsonIgnore
     @Transient
