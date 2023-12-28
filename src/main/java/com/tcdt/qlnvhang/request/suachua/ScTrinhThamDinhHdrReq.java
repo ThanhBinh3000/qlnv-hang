@@ -25,6 +25,7 @@ public class ScTrinhThamDinhHdrReq extends BaseRequest {
     private LocalDate thoiHanXuatDk;
     private LocalDate thoiHanXuat;
     private String trichYeu;
+    private String yKien;
     private String lyDoTuChoi;
     private String trangThai;
     private String ketQua;

@@ -38,6 +38,7 @@ public class ScTrinhThamDinhHdr extends BaseEntity implements Serializable {
   private String soQdSc;
   private Long idQdSc;
   private String trichYeu;
+  private String yKien;
   private String lyDoTuChoi;
   private String trangThai;
   private String ketQua;
