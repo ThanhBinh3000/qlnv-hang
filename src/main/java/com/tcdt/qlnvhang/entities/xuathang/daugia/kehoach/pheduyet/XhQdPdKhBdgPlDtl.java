@@ -38,6 +38,7 @@ public class XhQdPdKhBdgPlDtl implements Serializable {
     private BigDecimal donGiaDuocDuyet;
     private BigDecimal thanhTienDuocDuyet;
     private BigDecimal tienDatTruocDuocDuyet;
+    private Integer namNhap;
     @Transient
     private String tenDiemKho;
     @Transient
