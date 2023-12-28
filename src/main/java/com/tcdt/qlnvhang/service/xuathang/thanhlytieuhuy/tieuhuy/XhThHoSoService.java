@@ -1,6 +1,11 @@
 package com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.tieuhuy;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.common.DocxToPdfConverter;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
@@ -10,17 +15,13 @@ import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoHdrR
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoRequest;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.xuathang.suachuahang.ScTrinhThamDinhHdr;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlDanhSachHdr;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoDtl;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThDanhSachHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoDtl;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoHdr;
@@ -28,6 +29,7 @@ import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,8 +41,15 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class XhThHoSoService extends BaseServiceImpl {
@@ -350,5 +359,27 @@ public class XhThHoSoService extends BaseServiceImpl {
     }
     ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
     ex.export();
+  }
+
+  public ReportTemplateResponse preview(HashMap<String, Object> requestParams, CustomUserDetails currentUser) throws Exception {
+    if (currentUser == null || requestParams == null) {
+      throw new Exception("Bad request.");
+    }
+    try {
+      String templateName = DataUtils.safeToString(requestParams.get("tenBaoCao"));
+      String templatePath = "xuattieuhuy/" + templateName;
+      FileInputStream templateInputStream = new FileInputStream(baseReportFolder + templatePath);
+      XhThHoSoHdr data = this.detail(DataUtils.safeToLong(requestParams.get("id")));
+      List<Map<String, Object>> detail1 = data.getChildren().stream().collect(Collectors.groupingBy(item -> item.getXhThDanhSachHdr().getTenChiCuc(), Collectors.collectingAndThen(Collectors.toList(), item1 -> {
+        Map<String, Object> newData = new HashMap<>();
+        newData.put("name", item1.get(0).getXhThDanhSachHdr().getTenChiCuc());
+        newData.put("child", item1);
+        return newData;
+      }))).values().stream().collect(Collectors.toList());
+      return docxToPdfConverter.convertDocxToPdf(templateInputStream, data, detail1);
+    } catch (IOException | XDocReportException exception) {
+      exception.printStackTrace();
+    }
+    return null;
   }
 }
