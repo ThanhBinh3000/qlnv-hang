@@ -30,8 +30,9 @@ public class XhXkVtBhQdXuatGiamVtDtl {
   BigDecimal slLayMau;
   BigDecimal slTonKho;
   String maDviTsan;
-  String soPhieuKdcl;
-  Long idPhieuKdcl;
+  String soPhieu;
+  Long idPhieu;
+  Integer soLuongMauKd;
   Boolean isDat;
   Boolean mauBiHuy;
   @ManyToOne(fetch = FetchType.LAZY)
