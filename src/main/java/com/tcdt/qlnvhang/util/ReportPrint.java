@@ -10,6 +10,7 @@ import java.util.*;
 
 import com.tcdt.qlnvhang.table.ReportTemplate;
 import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.export.*;
 import org.springframework.core.io.ClassPathResource;
@@ -69,6 +70,7 @@ public class ReportPrint {
         this.params = params;
         this.listData = listData;
     }
+
     public ReportPrint(Map params, String typeFile, List listData, String fileName, HttpServletResponse response, ReportTemplate model, Connection conn) {
         this.params = params;
         this.typeFile = typeFile;
@@ -252,6 +254,63 @@ public class ReportPrint {
             jasperPrint.setProperty("net.sf.jasperreports.export.xls.wrap.text", "true");
 
             return JasperExportManager.exportReportToPdf(jasperPrint);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public byte[] jasperReport(Map<String, Object> parameters, String typeFile, List list, InputStream inputStream) {
+        try {
+            JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
+            JasperPrint jasperPrint;
+            parameters.put(JRParameter.REPORT_LOCALE, new Locale("vi", "VN"));
+            if (!list.isEmpty()) {
+                JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(list);
+                jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+                jasperPrint.setLocaleCode("vi");
+            } else {
+                if (DataUtils.isNullObject(conn)) {
+                    jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+                } else {
+                    jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, conn);
+                }
+            }
+            jasperPrint.setProperty("net.sf.jasperreports.export.xls.remove.empty.space.between.rows", "true");
+            jasperPrint.setProperty("net.sf.jasperreports.export.xls.remove.empty.space.between.columns", "true");
+            jasperPrint.setProperty("net.sf.jasperreports.export.xls.detect.cell.type", "true");
+            jasperPrint.setProperty("net.sf.jasperreports.export.xls.wrap.text", "true");
+            if ("pdf".equals(typeFile)) {
+                return JasperExportManager.exportReportToPdf(jasperPrint);
+            } else if ("xlsx".equals(typeFile)) {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                JRXlsxExporter exporter = new JRXlsxExporter();
+                // Set input and output ...
+                exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+                exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(out));
+                SimpleXlsxReportConfiguration reportConfig = new SimpleXlsxReportConfiguration();
+                reportConfig.setSheetNames(new String[]{"Data"});
+                reportConfig.setWhitePageBackground(false);
+                exporter.setConfiguration(reportConfig);
+                exporter.exportReport();
+                byte[] reportBytes = out.toByteArray();
+                out.close();
+                return reportBytes;
+            }else if ("docx".equals(typeFile)) {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+                JRDocxExporter exporter = new JRDocxExporter();
+                exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+                exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(out));
+                SimpleDocxReportConfiguration reportConfig = new SimpleDocxReportConfiguration();
+                reportConfig.setFlexibleRowHeight(true); // Ví dụ về cấu hình
+                reportConfig.setNewLineAsParagraph(true);
+                exporter.setConfiguration(reportConfig);
+                exporter.exportReport();
+                byte[] reportBytes = out.toByteArray();
+                out.close();
+                return reportBytes;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

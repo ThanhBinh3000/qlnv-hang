@@ -178,5 +178,24 @@ public class XhXkVtBhQdGiaonvNhController {
     return ResponseEntity.ok(resp);
   }
 
+  @ApiOperation(value = "Tra cứu list", response = List.class)
+  @PostMapping(value = "/listQd", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> listSoQd(CustomUserDetails currentUser, @RequestBody XhXkVtBhQdGiaonvXnRequest objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(xhXkVtBhQdGiaonvXnService.listSoQd(currentUser, objReq));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      e.printStackTrace();
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Tra cứu thông tin : {}", e);
+    }
+
+    return ResponseEntity.ok(resp);
+  }
+
 
 }

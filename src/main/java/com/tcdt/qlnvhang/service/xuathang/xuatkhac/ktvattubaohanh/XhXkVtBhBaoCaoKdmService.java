@@ -345,8 +345,6 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
           item.setTenDvi(mapDmucDvi.get(item.getMaDvi()));
           return item;
         }).collect(Collectors.toList());
-        Map<String, List< XhXkVtBhPhieuKdclHdr>> map = qdDtl.stream().collect(Collectors.groupingBy( f -> f.getSoQdGiaoNvXh()));
-
       } else {
         pktcl = xhXkVtBhPhieuKtclRepository.findByIdIn(Arrays.asList(idCanCu)).stream().map(item -> {
           item.setMapVthh(mapVthh);

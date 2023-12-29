@@ -105,6 +105,16 @@ public class ReportTemplateService {
             throw new Exception("Lỗi: " + e.getMessage());
         }
     }
+    public <T> byte[] exportReport(Map params,String typeFile, List<T> list, JasperReport jasperReport) throws Exception {
+        try {
+            ReportPrint reportPrint = new ReportPrint(params, list);
+            String xml = JasperReportManager.buildReport(jasperReport);
+            return reportPrint.jasperReport(params, typeFile, list, new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Lỗi: " + e.getMessage());
+        }
+    }
 
     public ResponseEntity<byte[]> exportTemplateResource(String tenFile) throws Exception {
         try {

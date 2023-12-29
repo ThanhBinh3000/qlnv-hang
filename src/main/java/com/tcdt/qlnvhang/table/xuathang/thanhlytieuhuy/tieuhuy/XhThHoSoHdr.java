@@ -18,64 +18,66 @@ import java.util.List;
 @Setter
 public class XhThHoSoHdr extends BaseEntity implements Serializable {
 
-  private static final long serialVersionUID = 1L;
-  public static final String TABLE_NAME = "XH_TH_HO_SO_HDR";
-  public static final String FILE_DK = "XH_TH_HO_SO_HDR_DK";
-  public static final String FILE_CC = "XH_TH_HO_SO_HDR_CC";
+    private static final long serialVersionUID = 1L;
+    public static final String TABLE_NAME = "XH_TH_HO_SO_HDR";
+    public static final String FILE_DK = "XH_TH_HO_SO_HDR_DK";
+    public static final String FILE_CC = "XH_TH_HO_SO_HDR_CC";
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhThHoSoHdr.TABLE_NAME + "_SEQ")
-  @SequenceGenerator(sequenceName = XhThHoSoHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhThHoSoHdr.TABLE_NAME + "_SEQ")
-  private Long id;
-  private Integer nam;
-  private String maDvi;
-  private String soHoSo;
-  private LocalDate ngayTaoHs;
-  private Long idDanhSach;
-  private String maDanhSach;
-  private Long idQd;
-  private String soQd;
-  private Long idTb;
-  private String soTb;
-  private LocalDate thoiGianThTu;
-  private LocalDate thoiGianThDen;
-  private LocalDate thoiGianPdTu;
-  private LocalDate thoiGianPdDen;
-  private String trangThai;
-  private String trangThaiTc;
-  private String ketQua;
-  private String trichYeu;
-  private LocalDate ngayKyQd;
-  private LocalDate ngayDuyetLdc;
-  private Long idLdc;
-  private LocalDate ngayDuyetLdv;
-  private Long idLdv;
-  private LocalDate ngayDuyetLdtc;
-  private Long idLdtc;
-  private String lyDoTuChoi;
-  @Transient
-  private List<FileDinhKem> fileDinhKem = new ArrayList<>();;
-  @Transient
-  private List<FileDinhKem> fileCanCu = new ArrayList<>();
-  @Transient
-  private List<XhThHoSoDtl> children = new ArrayList<>();
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhThHoSoHdr.TABLE_NAME + "_SEQ")
+    @SequenceGenerator(sequenceName = XhThHoSoHdr.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhThHoSoHdr.TABLE_NAME + "_SEQ")
+    private Long id;
+    private Integer nam;
+    private String maDvi;
+    private String soHoSo;
+    private String soTtrinhVu;
+    private LocalDate ngayTaoHs;
+    private Long idDanhSach;
+    private String maDanhSach;
+    private Long idQd;
+    private String soQd;
+    private Long idTb;
+    private String soTb;
+    private LocalDate thoiGianThTu;
+    private LocalDate thoiGianThDen;
+    private LocalDate thoiGianPdTu;
+    private LocalDate thoiGianPdDen;
+    private String trangThai;
+    private String trangThaiTc;
+    private String ketQua;
+    private String trichYeu;
+    private LocalDate ngayKyQd;
+    private LocalDate ngayDuyetLdc;
+    private Long idLdc;
+    private LocalDate ngayDuyetLdv;
+    private Long idLdv;
+    private LocalDate ngayDuyetLdtc;
+    private Long idLdtc;
+    private String lyDoTuChoi;
+    @Transient
+    private List<FileDinhKem> fileDinhKem = new ArrayList<>();
+    ;
+    @Transient
+    private List<FileDinhKem> fileCanCu = new ArrayList<>();
+    @Transient
+    private List<XhThHoSoDtl> children = new ArrayList<>();
 
 
-  @Transient
-  private String tenTrangThai;
+    @Transient
+    private String tenTrangThai;
 
-  @Transient
-  private String tenTrangThaiTc;
+    @Transient
+    private String tenTrangThaiTc;
 
-  @Transient
-  private String tenDvi;
+    @Transient
+    private String tenDvi;
 
-  public String getTenTrangThai(){
-    return TrangThaiAllEnum.getLabelById(getTrangThai());
-  }
+    public String getTenTrangThai() {
+        return TrangThaiAllEnum.getLabelById(getTrangThai());
+    }
 
-  public String getTenTrangThaiTc(){
-    return TrangThaiAllEnum.getLabelById(getTrangThaiTc());
-  }
+    public String getTenTrangThaiTc() {
+        return TrangThaiAllEnum.getLabelById(getTrangThaiTc());
+    }
 
 }

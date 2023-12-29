@@ -10,6 +10,7 @@ import java.util.List;
 public class DcnbQuyetDinhDcTcHdrPreviewReq implements Serializable {
     private Long id;
     private Integer nam;
+    private String fileType;
     private String type;
     private List<DcnbQuyetDinhDcTcDtlPreviewReq> listDtl =  new ArrayList<>();
 
