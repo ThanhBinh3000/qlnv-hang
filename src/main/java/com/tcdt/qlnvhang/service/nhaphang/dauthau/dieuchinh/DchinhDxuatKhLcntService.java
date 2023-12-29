@@ -156,6 +156,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 			hhQdKhlcntDtlRepository.save(item);
 		});
 		this.saveCtietLT(dataMap.getId(),objReq, true);
+		dataMap.setChildren(dtlRepository.findAllByIdDxDcHdrOrderByMaDvi(dataMap.getId()));
 		return dataMap;
 	}
 

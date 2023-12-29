@@ -126,7 +126,9 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
         HhDxuatKhLcntHdr dataMap = new ModelMapper().map(objReq, HhDxuatKhLcntHdr.class);
         dataMap.setNgayTao(objReq.getNgayTao());
         dataMap.setTrangThai(Contains.DUTHAO);
-        dataMap.setTrangThaiTh(Contains.CHUATONGHOP);
+        if (!objReq.getLoaiVthh().startsWith("02")){
+            dataMap.setTrangThaiTh(Contains.CHUATONGHOP);
+        }
         dataMap.setNguoiTao(getUser().getUsername());
         dataMap.setFileDinhKems(fileDinhKemList);
         this.validateData(dataMap, dataMap.getTrangThai());
