@@ -88,6 +88,8 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
 
     @Autowired
     private HhQdPduyetKqcgRepository hhQdPduyetKqcgRepository;
+    @Autowired
+    private HhQdGiaoNvNhapHangService hhQdGiaoNvNhapHangService;
 
 
     @Autowired
@@ -269,9 +271,11 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
     public HhQdPheduyetKhMttHdr detail(Long ids) throws Exception{
         if (StringUtils.isEmpty(ids))
             throw new UnsupportedOperationException("Không tồn tại bản ghi");
-
+        HhQdGiaoNvNhapHang hhQdGiaoNvNhapHang = new HhQdGiaoNvNhapHang();
         Optional<HhQdPheduyetKhMttHdr> qOptional = hhQdPheduyetKhMttHdrRepository.findById(ids);
-
+        if(qOptional.get().getIdQdGnvu() != null){
+            hhQdGiaoNvNhapHang = hhQdGiaoNvNhapHangService.detail(qOptional.get().getIdQdGnvu().toString());
+        }
 
         if (!qOptional.isPresent()){
             throw new UnsupportedOperationException("Bản ghi không tồn tại");
@@ -300,6 +304,9 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
                 sldd.setTenDvi(hashMapDvi.get(sldd.getMaDvi()));
                 sldd.setChildren(slddDtlList);
                 slddList.add(sldd);
+            }
+            if(dx.getMaDvi().equals(hhQdGiaoNvNhapHang.getMaDvi())){
+                dx.setIdQdGiaoNvuNh(hhQdGiaoNvNhapHang.getId());
             }
             dx.setTenNguonVon(hashMapNguonVon.get(dx.getNguonVon()));
             dx.setTenDvi(StringUtils.isEmpty(dx.getMaDvi()) ? null : hashMapDvi.get(dx.getMaDvi()));

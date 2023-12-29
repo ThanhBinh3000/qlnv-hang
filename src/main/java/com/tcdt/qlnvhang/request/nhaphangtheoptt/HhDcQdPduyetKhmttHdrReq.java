@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.nhaphangtheoptt;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
+import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
 import java.time.LocalDate;
@@ -52,4 +53,6 @@ public class HhDcQdPduyetKhmttHdrReq {
 
 //    đánh dấu có thay đổi ở QD
     private Boolean isChange;
+
+    private ReportTemplateRequest reportTemplateRequest;
 }

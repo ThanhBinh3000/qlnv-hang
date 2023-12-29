@@ -86,6 +86,9 @@ public class HhQdPheduyetKhMttDx implements Serializable {
     private Integer namKh;
 
     @Transient
+    private Long idQdGiaoNvuNh;
+
+    @Transient
     private List<HhQdPheduyetKhMttSLDD> children = new ArrayList<>();
 
     @Transient

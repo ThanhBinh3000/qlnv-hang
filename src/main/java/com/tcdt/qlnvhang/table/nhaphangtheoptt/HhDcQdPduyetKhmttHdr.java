@@ -79,4 +79,17 @@ public class HhDcQdPduyetKhmttHdr implements Serializable {
 
     @Transient
     private List<HhDcQdPduyetKhmttDx> hhDcQdPduyetKhmttDxList=new ArrayList<>();
+
+
+    //preview
+    @Transient
+    private String tongThanhTienStr;
+    @Transient
+    private String ngayPduyetStr;
+    @Transient
+    private String ngayPduyetGocStr;
+    @Transient
+    private String tongSoLuongGocStr;
+    @Transient
+    private String tongSoLuongStr;
 }
