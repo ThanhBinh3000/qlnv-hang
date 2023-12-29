@@ -28,6 +28,7 @@ public class ScTrinhThamDinhHdr extends BaseEntity implements Serializable {
   private Integer nam;
   private String maDvi;
   private String soTtr;
+  private String soTtrTcuc;
   private Long idThHdr;
   private String maThHdr;
   private LocalDate ngayDuyetLdc;
