@@ -87,9 +87,13 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
                     List<Long> idDx = listdx.stream().map(HhDcQdPduyetKhmttDx::getId).collect(Collectors.toList());
                     List<HhDcQdPduyetKhmttSldd> listSlDd = hhDcQdPduyetKhmttSlddRepository.findAllByIdDcKhmttIn(idDx);
                     if(listSlDd.size() > 0 && this.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)){
-                        f.setTongSoLuong(listSlDd.stream().filter(x -> x.getMaDvi().equals(this.getUser().getDvql())).collect(Collectors.toList()).get(0).getTongSoLuong());
+                        if(listSlDd.stream().filter(x -> x.getMaDvi().equals(this.getUser().getDvql())).collect(Collectors.toList()).size() > 0){
+                            f.setTongSoLuong(listSlDd.stream().filter(x -> x.getMaDvi().equals(this.getUser().getDvql())).collect(Collectors.toList()).get(0).getTongSoLuong());
+                        }
                     }else{
-                        f.setTongSoLuong(listSlDd.stream().filter(x -> x.getMaDvi().contains(this.getUser().getDvql())).collect(Collectors.toList()).stream().map(item -> item.getTongSoLuong()).reduce(BigDecimal.ZERO, BigDecimal::add));
+                        if(listSlDd.stream().filter(x -> x.getMaDvi().contains(this.getUser().getDvql())).collect(Collectors.toList()).size() > 0){
+                            f.setTongSoLuong(listSlDd.stream().filter(x -> x.getMaDvi().contains(this.getUser().getDvql())).collect(Collectors.toList()).stream().map(item -> item.getTongSoLuong()).reduce(BigDecimal.ZERO, BigDecimal::add));
+                        }
                     }
                     hdr.setSoQdDc(data.getSoQdDc());
                 }
