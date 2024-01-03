@@ -39,6 +39,8 @@ public class XhTlHoSoHdr extends BaseEntity implements Serializable {
     private LocalDate ngayTaoHs;
     private LocalDate thoiGianTlTu;
     private LocalDate thoiGianTlDen;
+    private LocalDate thoiGianPdTu;
+    private LocalDate thoiGianPdDen;
     private String trangThai;
     private LocalDate ngayDuyetLan1;
     private LocalDate ngayDuyetLan2;
