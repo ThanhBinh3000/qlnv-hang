@@ -22,6 +22,20 @@ public interface XhXkDanhSachRepository extends JpaRepository<XhXkDanhSachHdr, L
   )
   Page<XhXkDanhSachHdr> searchPage(@Param("param") XhXkDanhSachRequest param, Pageable pageable);
 
+  @Query(value = "SELECT" +
+      "    CASE" +
+      "        WHEN LENGTH(:ma) = 14 THEN kk.nam_nhap" +
+      "        WHEN LENGTH(:ma) = 16 THEN kl.nam_nhap" +
+      "        ELSE NULL " +
+      "    END AS nam_nhap_result " +
+      " FROM" +
+      "    xh_xk_danh_sach_hdr yt" +
+      " LEFT JOIN" +
+      "    kt_ngan_kho kk ON yt.ma_dia_diem = kk.ma_ngankho" +
+      " LEFT JOIN" +
+      "    kt_ngan_lo kl ON yt.ma_dia_diem = kl.ma_nganlo where yt.id = :id " ,nativeQuery = true)
+  Integer getNamNhap(String ma, Long id);
+
 
   void deleteAllByIdIn(List<Long> listId);
 

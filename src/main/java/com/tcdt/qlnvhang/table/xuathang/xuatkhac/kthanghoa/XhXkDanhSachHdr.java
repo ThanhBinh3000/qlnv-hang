@@ -71,7 +71,8 @@ public class XhXkDanhSachHdr extends BaseEntity implements Serializable {
     private String tenNganKho;
     @Transient
     private String tenLoKho;
-
+    @Transient
+    private Integer namNhap;
     public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
         this.mapDmucDvi = mapDmucDvi;
         if (!DataUtils.isNullObject(getMaDiaDiem())) {

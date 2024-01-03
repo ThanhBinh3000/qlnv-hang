@@ -84,6 +84,8 @@ public class XhXkTongHopDtl implements Serializable {
   @Transient
   private String tenLoKho;
 
+  @Transient
+  private Integer namNhap;
   public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
     this.mapDmucDvi = mapDmucDvi;
     if (!DataUtils.isNullObject(getMaDiaDiem())) {
