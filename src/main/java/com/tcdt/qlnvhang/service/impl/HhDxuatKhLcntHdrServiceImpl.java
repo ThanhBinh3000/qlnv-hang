@@ -953,16 +953,16 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
                 if (qdKhlcntHdr.isPresent()){
                     f.setSoQdPdKhLcnt(qdKhlcntHdr.get().getSoQd());
                     f.setIdQdPdKhLcnt(qdKhlcntHdr.get().getId());
-                    Optional<QdPdHsmt> qdPdHsmt = qdPdHsmtRepository.findByIdQdPdKhlcnt(qdKhlcntHdr.get().getId());
-                    qdPdHsmt.ifPresent(pdHsmt -> f.setTgianDongMothau(pdHsmt.getTgianDthau()));
+//                    Optional<QdPdHsmt> qdPdHsmt = qdPdHsmtRepository.findByIdQdPdKhlcnt(qdKhlcntHdr.get().getId());
+//                    qdPdHsmt.ifPresent(pdHsmt -> f.setTgianDongMothau(pdHsmt.getTgianDthau()));
                 }
             } else {
                 Optional<HhQdKhlcntDtl> qdKhlcntDtl = hhQdKhlcntDtlRepository.findByIdDxHdrAndHdrLastest(f.getId());
                 if (qdKhlcntDtl.isPresent()){
                     Optional<HhQdKhlcntHdr> qdKhlcntHdr = hhQdKhlcntHdrRepository.findById(qdKhlcntDtl.get().getIdQdHdr());
                     qdKhlcntHdr.ifPresent(hhQdKhlcntHdr -> f.setSoQdPdKhLcnt(hhQdKhlcntHdr.getSoQd()));
-                    Optional<QdPdHsmt> qdPdHsmt = qdPdHsmtRepository.findByIdQdPdKhlcntDtl(qdKhlcntDtl.get().getId());
-                    qdPdHsmt.ifPresent(pdHsmt -> f.setTgianDongMothau(pdHsmt.getTgianDthau()));
+//                    Optional<QdPdHsmt> qdPdHsmt = qdPdHsmtRepository.findByIdQdPdKhlcntDtl(qdKhlcntDtl.get().getId());
+//                    qdPdHsmt.ifPresent(pdHsmt -> f.setTgianDongMothau(pdHsmt.getTgianDthau()));
                 }
             }
         });

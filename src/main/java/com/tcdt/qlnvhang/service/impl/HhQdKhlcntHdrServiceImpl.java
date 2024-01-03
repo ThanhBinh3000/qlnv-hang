@@ -480,13 +480,14 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 					dxuatKhLcntHdr.get().setTenLoaiHdong(hashMapLoaiHdong.get(dxuatKhLcntHdr.get().getLoaiHdong()));
 					dxuatKhLcntHdr.get().setTenDvi(mapDmucDvi.get(dxuatKhLcntHdr.get().getMaDvi()));
 					dxuatKhLcntHdr.get().setTenCloaiVthh(hashMapDmHh.get(dxuatKhLcntHdr.get().getCloaiVthh()));
+					dxuatKhLcntHdr.get().setTenLoaiVthh(hashMapDmHh.get(dxuatKhLcntHdr.get().getLoaiVthh()));
 					dtl.setDxuatKhLcntHdr(dxuatKhLcntHdr.get());
 				}
 			}
 			List<FileDinhKem> fileDinhKems = fileDinhKemService.search(dtl.getId(), Collections.singletonList("HH_QD_KHLCNT_DTL"));
 			dtl.setFileDinhKem(fileDinhKems);
-			Optional<QdPdHsmt> qOptional = qdPdHsmtRepository.findByIdQdPdKhlcntDtl(dtl.getId());
-			qOptional.ifPresent(dtl::setQdPdHsmt);
+//			Optional<QdPdHsmt> qOptional = qdPdHsmtRepository.findByIdQdPdKhlcntDtl(dtl.getId());
+//			qOptional.ifPresent(dtl::setQdPdHsmt);
 			List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauList = new ArrayList<>();
 			hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdDtlOrderByGoiThauAsc(dtl.getId());
 			Set<Long> goiThauSet = new HashSet<>();
@@ -620,8 +621,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				data.setSoQdDc(dchinhDxKhLcntHdr.get().getSoQdDc());
 			}
 		}
-		Optional<QdPdHsmt> qOptional = qdPdHsmtRepository.findByIdQdPdKhlcnt(data.getId());
-		qOptional.ifPresent(data::setQdPdHsmt);
+//		Optional<QdPdHsmt> qOptional = qdPdHsmtRepository.findByIdQdPdKhlcnt(data.getId());
+//		qOptional.ifPresent(data::setQdPdHsmt);
 	}
 
 	@Override
@@ -1057,8 +1058,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 						f.setSoTrHdr(item.getSoDxuat());
 					});
 				}
-				Optional<QdPdHsmt> qOptional = qdPdHsmtRepository.findByIdQdPdKhlcnt(f.getId());
-				qOptional.ifPresent(f::setQdPdHsmt);
+//				Optional<QdPdHsmt> qOptional = qdPdHsmtRepository.findByIdQdPdKhlcnt(f.getId());
+//				qOptional.ifPresent(f::setQdPdHsmt);
 				f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
 				f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
 				f.setNamKhoach(f.getNamKhoach());

@@ -763,16 +763,34 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 			BigDecimal tongSoLuong = BigDecimal.ZERO;
 			BigDecimal tongSoLuongDc = BigDecimal.ZERO;
 			List<HhDchinhDxKhLcntDtlPreview> hhDchinhDxKhLcntDtlPreviews = new ArrayList<>();
-			for(HhDchinhDxKhLcntDtl dtl : dtlRepository.findAllByIdDxDcHdrOrderByMaDvi(qOptional.get().getId())){
-				Optional<HhQdKhlcntDtl> qdKhlcntDtl = hhQdKhlcntDtlRepository.findById(dtl.getIdHhQdKhlcntDtl());
-				if (!qdKhlcntDtl.isPresent()) {
+			HhDchinhDxKhLcntHdr dcLanTruoc = new HhDchinhDxKhLcntHdr();
+			if (qOptional.get().getLanDieuChinh() > 1) {
+				Optional<HhDchinhDxKhLcntHdr> dcLanTruocOptional = hdrRepository.findByIdQdGocAndLanDieuChinh(objReq.getIdQdGoc(), objReq.getLanDieuChinh() - 1);
+				if (!dcLanTruocOptional.isPresent()) {
 					throw new UnsupportedOperationException("Không tồn tại bản ghi");
 				}
+				dcLanTruoc = dcLanTruocOptional.get();
+			}
+			for(HhDchinhDxKhLcntDtl dtl : dtlRepository.findAllByIdDxDcHdrOrderByMaDvi(qOptional.get().getId())){
 				HhDchinhDxKhLcntDtlPreview hhDchinhDxKhLcntDtlPreview = HhDchinhDxKhLcntDtlPreview.builder()
 						.tenDvi(mapDmucDvi.get(dtl.getMaDvi()))
-						.tgianNhang(convertDate(qdKhlcntDtl.get().getTgianNhang()))
 						.tgianNhangDc(convertDate(dtl.getTgianNhang()))
 						.build();
+				HhQdKhlcntDtl qdKhlcntDtl = new HhQdKhlcntDtl();
+				HhDchinhDxKhLcntDtl dcLanTruocDtl = new HhDchinhDxKhLcntDtl();
+				if (qOptional.get().getLanDieuChinh() > 1) {
+					dcLanTruocDtl = dtlRepository.findFirstByIdDxDcHdrAndMaDvi(dcLanTruoc.getId(), dtl.getMaDvi());
+					if (dcLanTruocDtl != null) {
+						hhDchinhDxKhLcntDtlPreview.setTgianNhang(convertDate(dcLanTruocDtl.getTgianNhang()));
+					}
+				} else {
+					Optional<HhQdKhlcntDtl> qdKhlcntDtlOptional = hhQdKhlcntDtlRepository.findById(dtl.getIdHhQdKhlcntDtl());
+					if (!qdKhlcntDtlOptional.isPresent()) {
+						throw new UnsupportedOperationException("Không tồn tại bản ghi");
+					}
+					qdKhlcntDtl = qdKhlcntDtlOptional.get();
+					hhDchinhDxKhLcntDtlPreview.setTgianNhang(convertDate(qdKhlcntDtl.getTgianNhang()));
+				}
 				List<HhDchinhDxKhLcntGthauPreview> children = new ArrayList<>();
 				for(HhDchinhDxKhLcntDsgthau gThau : gThauRepository.findAllByIdDcDxDtlOrderByGoiThau(dtl.getId())){
 					HhDchinhDxKhLcntGthauPreview hhDchinhDxKhLcntGthauPreview = HhDchinhDxKhLcntGthauPreview.builder()
@@ -780,10 +798,20 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 							.soLuongDc(docxToPdfConverter.convertBigDecimalToStr(gThau.getSoLuong()))
 							.build();
 					tongSoLuongDc = tongSoLuongDc.add(gThau.getSoLuong());
-					HhQdKhlcntDsgthau hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByGoiThauAndIdQdDtl(gThau.getGoiThau(), qdKhlcntDtl.get().getId());
-					if (hhQdKhlcntDsgthauData != null && hhQdKhlcntDsgthauData.getSoLuong() != null) {
-						hhDchinhDxKhLcntGthauPreview.setSoLuong(docxToPdfConverter.convertBigDecimalToStr(hhQdKhlcntDsgthauData.getSoLuong()));
-						tongSoLuong = tongSoLuong.add(hhQdKhlcntDsgthauData.getSoLuong());
+					if (qOptional.get().getLanDieuChinh() > 1) {
+						if (dcLanTruocDtl != null) {
+							HhDchinhDxKhLcntDsgthau gthauDcLanTruoc = gThauRepository.findFirstByIdDcDxDtlAndGoiThau(dcLanTruocDtl.getId(), gThau.getGoiThau());
+							if (gthauDcLanTruoc != null && gthauDcLanTruoc.getSoLuong() != null) {
+								hhDchinhDxKhLcntGthauPreview.setSoLuong(docxToPdfConverter.convertBigDecimalToStr(gthauDcLanTruoc.getSoLuong()));
+								tongSoLuong = tongSoLuong.add(gthauDcLanTruoc.getSoLuong());
+							}
+						}
+					} else {
+						HhQdKhlcntDsgthau hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByGoiThauAndIdQdDtl(gThau.getGoiThau(), qdKhlcntDtl.getId());
+						if (hhQdKhlcntDsgthauData != null && hhQdKhlcntDsgthauData.getSoLuong() != null) {
+							hhDchinhDxKhLcntGthauPreview.setSoLuong(docxToPdfConverter.convertBigDecimalToStr(hhQdKhlcntDsgthauData.getSoLuong()));
+							tongSoLuong = tongSoLuong.add(hhQdKhlcntDsgthauData.getSoLuong());
+						}
 					}
 					List<HhDchinhDxKhLcntGthauCtietPreview> hhDchinhDxKhLcntGthauCtietPreviews = new ArrayList<>();
 					for (HhDchinhDxKhLcntDsgthauCtiet ctiet : gThauCietRepository.findAllByIdGoiThau(gThau.getId())) {

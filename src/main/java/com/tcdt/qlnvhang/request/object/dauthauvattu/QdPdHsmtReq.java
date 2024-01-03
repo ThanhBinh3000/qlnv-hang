@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.object.dauthauvattu;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDsgthau;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
@@ -33,4 +34,5 @@ public class QdPdHsmtReq {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date tgianBdauTchuc;
     private List<FileDinhKemReq> listCcPhapLy;
+    private List<Long> listIdGthau;
 }
