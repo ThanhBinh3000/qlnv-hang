@@ -35,6 +35,8 @@ public class XhXkDanhSachService extends BaseServiceImpl {
             s.setMapDmucDvi(mapDmucDvi);
             s.setMapVthh(mapVthh);
             s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
+            s.setNamNhap(xhXkDanhSachRepository.getNamNhap(s.getMaDiaDiem(), s.getId()));
+
         });
         return search;
     }
@@ -52,6 +54,7 @@ public class XhXkDanhSachService extends BaseServiceImpl {
             data.setTenTrangThai(TrangThaiAllEnum.getLabelById(data.getTrangThai()));
             data.setMapDmucDvi(mapDmucDvi);
             data.setMapVthh(mapVthh);
+            data.setNamNhap(xhXkDanhSachRepository.getNamNhap(data.getMaDiaDiem(), data.getId()));
         });
         return allById;
     }

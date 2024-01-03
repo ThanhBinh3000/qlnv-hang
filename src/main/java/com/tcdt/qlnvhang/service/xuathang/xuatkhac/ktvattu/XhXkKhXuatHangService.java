@@ -68,6 +68,7 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
             s.getXhXkKhXuatHangDtl().forEach(item -> {
                 item.setMapVthh(mapVthh);
                 item.setMapDmucDvi(mapDmucDvi);
+                item.setNamNhap(xhXkKhXuatHangRepository.getNamNhap(item.getMaDiaDiem(), item.getId()));
             });
         });
         return search;
@@ -183,6 +184,7 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
         model.getXhXkKhXuatHangDtl().forEach(s -> {
             s.setMapDmucDvi(mapDmucDvi);
             s.setMapVthh(mapVthh);
+            s.setNamNhap(xhXkKhXuatHangRepository.getNamNhap(s.getMaDiaDiem(), s.getId()));
         });
         model.setTenDvi(mapDmucDvi.get(model.getMaDvi()));
         model.setSoDviTaiSan(model.getXhXkKhXuatHangDtl().size());

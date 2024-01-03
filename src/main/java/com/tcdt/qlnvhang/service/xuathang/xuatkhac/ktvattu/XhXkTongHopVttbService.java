@@ -70,6 +70,7 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
             s.getTongHopDtl().forEach(s1 -> {
                 s1.setMapDmucDvi(mapDmucDvi);
                 s1.setMapVthh(mapVthh);
+                s1.setNamNhap(xhXkDanhSachRepository.getNamNhap(s1.getMaDiaDiem(), s1.getId()));
             });
             s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
             s.setTenDvi(mapDmucDvi.containsKey(s.getMaDvi()) ? mapDmucDvi.get(s.getMaDvi()) : null);
@@ -143,6 +144,7 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
             data.getTongHopDtl().forEach(s -> {
                 s.setMapDmucDvi(mapDmucDvi);
                 s.setMapVthh(mapVthh);
+                s.setNamNhap(xhXkDanhSachRepository.getNamNhap(s.getMaDiaDiem(), s.getId()));
             });
             List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Arrays.asList(XhXkVtBbLayMauHdr.TABLE_NAME));
             data.setFileDinhKems(fileDinhKem);
