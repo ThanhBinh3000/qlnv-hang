@@ -12,7 +12,7 @@ public interface HhDchinhDxKhLcntDtlRepository extends CrudRepository<HhDchinhDx
 
     List<HhDchinhDxKhLcntDtl> findAllByIdDxDcHdr (Long idDxDcHdr);
     List<HhDchinhDxKhLcntDtl> findAllByIdDxDcHdrOrderByMaDvi (Long idDxDcHdr);
-
+    HhDchinhDxKhLcntDtl findFirstByIdDxDcHdrAndMaDvi (Long idDxDcHdr, String maDvi);
     void deleteAllByIdDxDcHdr(Long IdDxDcHdr);
 
 

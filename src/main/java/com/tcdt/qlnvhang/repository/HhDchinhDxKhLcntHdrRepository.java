@@ -18,6 +18,7 @@ public interface HhDchinhDxKhLcntHdrRepository extends CrudRepository<HhDchinhDx
     Optional<HhDchinhDxKhLcntHdr> findBySoQdDc(String soQd);
     Optional<HhDchinhDxKhLcntHdr> findTopByIdQdGocOrderByLanDieuChinhDesc(Long idQdGoc);
     Optional<HhDchinhDxKhLcntHdr> findByIdQdGocAndLastest(Long idQdGoc, Boolean lastest);
+    Optional<HhDchinhDxKhLcntHdr> findByIdQdGocAndLanDieuChinh(Long idQdGoc, Integer lanDieuChinh);
 
     List<HhDchinhDxKhLcntHdr> findAllByIdIn (List<Long> ids);
     List<HhDchinhDxKhLcntHdr> findAllByIdQdGocAndTrangThaiNot (Long idQdGoc, String trangThai);

@@ -141,4 +141,6 @@ public class HhDchinhDxKhLcntHdr extends TrangThaiBaseEntity implements Serializ
 	private List<FileDinhKem> fileDinhKems;
 	@Transient
 	private List<FileDinhKem> fileDinhKemsTtr;
+	@Transient
+	private List<Long> listIdGthau = new ArrayList<>();
 }

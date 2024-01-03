@@ -112,6 +112,8 @@ public class HhQdKhlcntDtl implements Serializable {
 	@Transient
 	private List<HhQdKhlcntDsgthau> children = new ArrayList<>();
 	@Transient
+	private List<Long> listIdGthau = new ArrayList<>();
+	@Transient
 	private QdPdHsmt qdPdHsmt;
 	@Transient
 	private List<FileDinhKem> fileDinhKem;
