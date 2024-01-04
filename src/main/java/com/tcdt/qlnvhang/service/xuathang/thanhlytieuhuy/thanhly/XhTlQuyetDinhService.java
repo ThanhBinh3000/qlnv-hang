@@ -17,12 +17,14 @@ import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlHoSoHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.XhTlQuyetDinhHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import fr.opensagres.xdocreport.core.XDocReportException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,6 +36,8 @@ import org.springframework.util.ObjectUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
@@ -279,5 +283,26 @@ public class XhTlQuyetDinhService extends BaseServiceImpl {
         req.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
         List<XhTlQuyetDinhHdr> list = hdrRepository.listTaoBaoCaoThanhLy(req);
         return list;
+    }
+    public ReportTemplateResponse preview(HashMap<String, Object> requestParams, CustomUserDetails currentUser) throws Exception {
+        if (currentUser == null || requestParams == null) {
+            throw new Exception("Bad request.");
+        }
+        try {
+            String templateName = DataUtils.safeToString(requestParams.get("tenBaoCao"));
+            String templatePath = "xuatthanhly/" + templateName;
+            FileInputStream templateInputStream = new FileInputStream(baseReportFolder + templatePath);
+            XhTlQuyetDinhHdr data = this.detail(DataUtils.safeToLong(requestParams.get("id")));
+            List<Map<String, Object>> detail = data.getXhTlHoSoHdr().getChildren().stream().collect(Collectors.groupingBy(item -> item.getXhTlDanhSachHdr().getTenChiCuc(), Collectors.collectingAndThen(Collectors.toList(), item1 -> {
+                Map<String, Object> newData = new HashMap<>();
+                newData.put("name", item1.get(0).getXhTlDanhSachHdr().getTenChiCuc());
+                newData.put("child", item1);
+                return newData;
+            }))).values().stream().collect(Collectors.toList());
+            return docxToPdfConverter.convertDocxToPdf(templateInputStream, data, detail);
+        } catch (IOException | XDocReportException exception) {
+            exception.printStackTrace();
+        }
+        return null;
     }
 }
