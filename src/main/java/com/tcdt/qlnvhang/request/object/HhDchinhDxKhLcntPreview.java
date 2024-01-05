@@ -20,5 +20,11 @@ public class HhDchinhDxKhLcntPreview {
     private String tongSl;
     private String tongSlDc;
     private String tongThanhTien;
+    private String tenNguonVon;
+    private String tenHthucLcnt;
+    private String tenPthucLcnt;
+    private String quy;
+    private String tenLoaiHd;
     private List<HhDchinhDxKhLcntDtlPreview> children;
+    private List<HhDchinhDxKhLcntGthauPreview> dsGthauVt;
 }

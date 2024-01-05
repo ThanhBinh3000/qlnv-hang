@@ -2,11 +2,13 @@ package com.tcdt.qlnvhang.service.nhaphang.dauthau.dieuchinh;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.HhSlNhapHang;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.*;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.*;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.HhSlNhapHangRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdrRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -82,6 +84,36 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 
 	@Autowired
 	private HhSlNhapHangRepository hhSlNhapHangRepository;
+
+	@Autowired
+	private HhDxuatKhLcntHdrRepository hhDxuatKhLcntHdrRepository;
+
+	private static final LinkedHashMap<String, Integer> romanNumeralMap = new LinkedHashMap<>();
+	static {
+		romanNumeralMap.put("M", 1000);
+		romanNumeralMap.put("CM", 900);
+		romanNumeralMap.put("D", 500);
+		romanNumeralMap.put("CD", 400);
+		romanNumeralMap.put("C", 100);
+		romanNumeralMap.put("XC", 90);
+		romanNumeralMap.put("L", 50);
+		romanNumeralMap.put("XL", 40);
+		romanNumeralMap.put("X", 10);
+		romanNumeralMap.put("IX", 9);
+		romanNumeralMap.put("V", 5);
+		romanNumeralMap.put("IV", 4);
+		romanNumeralMap.put("I", 1);
+	}
+	public static String intToRoman(int num) {
+		StringBuilder result = new StringBuilder();
+		for (Map.Entry<String, Integer> entry : romanNumeralMap.entrySet()) {
+			while (num >= entry.getValue()) {
+				result.append(entry.getKey());
+				num -= entry.getValue();
+			}
+		}
+		return result.toString();
+	}
 
 	public Page<HhDchinhDxKhLcntHdr> getAllPage(QlnvQdLcntHdrDChinhSearchReq objReq) throws Exception {
 		int page = objReq.getPaggingReq().getPage();
@@ -757,7 +789,44 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 				.ngayPdDcKhlcnt(convertDate(qOptional.get().getNgayQdDc()))
 				.build();
 		if (qOptional.get().getLoaiVthh().startsWith("02")) {
-
+			Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
+			Map<String,String> hashMapNguonVon = getListDanhMucChung("NGUON_VON");
+			Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
+			Map<String,String> hashMapLoaiHdong = getListDanhMucChung("HINH_THUC_HOP_DONG");
+			data.setTenPthucLcnt(hashMapPthucDthau.get(qOptional.get().getPthucLcnt()));
+			data.setTenHthucLcnt(hashMapHtLcnt.get(qOptional.get().getHthucLcnt()));
+			data.setTenNguonVon(hashMapNguonVon.get(qOptional.get().getNguonVon()));
+			data.setTenLoaiHd(hashMapLoaiHdong.get(qOptional.get().getLoaiHdong()));
+			if (qdKhlcntHdrOptional.get().getIdTrHdr() != null) {
+				Optional<HhDxuatKhLcntHdr> dxuatKhLcntHdr = hhDxuatKhLcntHdrRepository.findById(qdKhlcntHdrOptional.get().getIdTrHdr());
+				if (dxuatKhLcntHdr.isPresent() && dxuatKhLcntHdr.get().getQuy() != null) {
+					data.setQuy("Quý " + intToRoman(dxuatKhLcntHdr.get().getQuy()) + "/" + dxuatKhLcntHdr.get().getNamKhoach());
+				}
+			}
+			List<HhDchinhDxKhLcntGthauPreview> dsGthauVt = new ArrayList<>();
+			for(HhDchinhDxKhLcntDsgthau gThau : gThauRepository.findAllByIdDcDxHdrOrderByGoiThau(qOptional.get().getId())) {
+				HhDchinhDxKhLcntGthauPreview hhDchinhDxKhLcntGthauPreview = HhDchinhDxKhLcntGthauPreview.builder()
+						.gthau(gThau.getGoiThau())
+						.tenCloaiVthh(hashMapDmHh.get(gThau.getCloaiVthh()))
+						.tgianThienHdDc(gThau.getTgianThienHd())
+						.build();
+				if (qOptional.get().getLanDieuChinh() > 1) {
+					Optional<HhDchinhDxKhLcntHdr> dcLanTruocOptional = hdrRepository.findByIdQdGocAndLanDieuChinh(objReq.getIdQdGoc(), objReq.getLanDieuChinh() - 1);
+					dcLanTruocOptional.ifPresent(hhDchinhDxKhLcntHdr -> hhDchinhDxKhLcntGthauPreview.setTgianThienHd(hhDchinhDxKhLcntHdr.getTgianThienHd()));
+				} else {
+					hhDchinhDxKhLcntGthauPreview.setTgianThienHd(qdKhlcntHdrOptional.get().getTgianThienHd());
+				}
+				List<HhDchinhDxKhLcntGthauCtietPreview> hhDchinhDxKhLcntGthauCtietPreviews = new ArrayList<>();
+				for (HhDchinhDxKhLcntDsgthauCtiet ctiet : gThauCietRepository.findAllByIdGoiThau(gThau.getId())) {
+					HhDchinhDxKhLcntGthauCtietPreview hhDchinhDxKhLcntGthauCtietPreview = HhDchinhDxKhLcntGthauCtietPreview.builder()
+							.tenDvi(mapDmucDvi.get(ctiet.getMaDvi()))
+							.build();
+					hhDchinhDxKhLcntGthauCtietPreviews.add(hhDchinhDxKhLcntGthauCtietPreview);
+				}
+				hhDchinhDxKhLcntGthauPreview.setChildren(hhDchinhDxKhLcntGthauCtietPreviews);
+				dsGthauVt.add(hhDchinhDxKhLcntGthauPreview);
+			}
+			data.setDsGthauVt(dsGthauVt);
 		} else {
 			BigDecimal tongThanhTien = BigDecimal.ZERO;
 			BigDecimal tongSoLuong = BigDecimal.ZERO;
