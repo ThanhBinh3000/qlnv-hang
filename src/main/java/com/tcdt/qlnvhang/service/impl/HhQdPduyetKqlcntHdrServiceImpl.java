@@ -355,6 +355,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 						gThau.setDonGiaNhaThau(hhQdPduyetKqlcntDtl.getDonGiaVat());
 						gThau.setIdNhaThau(hhQdPduyetKqlcntDtl.getIdNhaThau());
 						gThau.setThanhTien(hhQdPduyetKqlcntDtl.getThanhTienNhaThau());
+						gThau.setDienGiaiNhaThau(hhQdPduyetKqlcntDtl.getDienGiaiNhaThau());
 						dchinhDxKhLcntDsgthauRepository.save(gThau);
 					}
 				}
@@ -368,6 +369,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 						dsgthau.setTenNhaThau(hhQdPduyetKqlcntDtl.getTenNhaThau());
 						dsgthau.setDonGiaNhaThau(hhQdPduyetKqlcntDtl.getDonGiaVat());
 						dsgthau.setIdNhaThau(hhQdPduyetKqlcntDtl.getIdNhaThau());
+						dsgthau.setDienGiaiNhaThau(hhQdPduyetKqlcntDtl.getDienGiaiNhaThau());
 						hhQdKhlcntDsgthauRepository.save(dsgthau);
 					}
 				}
@@ -404,6 +406,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 					dsgthau.setTenNhaThau(hhQdPduyetKqlcntDtl.getTenNhaThau());
 					dsgthau.setDonGiaNhaThau(hhQdPduyetKqlcntDtl.getDonGiaVat());
 					dsgthau.setIdNhaThau(hhQdPduyetKqlcntDtl.getIdNhaThau());
+					dsgthau.setDienGiaiNhaThau(hhQdPduyetKqlcntDtl.getDienGiaiNhaThau());
 					hhQdKhlcntDsgthauRepository.save(dsgthau);
 				}
 			}

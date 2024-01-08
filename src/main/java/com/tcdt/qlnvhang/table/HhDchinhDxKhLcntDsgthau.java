@@ -42,7 +42,7 @@ public class HhDchinhDxKhLcntDsgthau implements Serializable {
 	String tgianBdauLcnt;
 	Integer tgianThienHd;
 	String trangThai;
-	String lyDoHuy;
+	String dienGiaiNhaThau;
 	String diaDiemNhap;
 
 	String tgianBdauThien;

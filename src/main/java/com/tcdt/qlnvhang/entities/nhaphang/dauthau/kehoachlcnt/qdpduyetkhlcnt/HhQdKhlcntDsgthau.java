@@ -49,7 +49,7 @@ public class HhQdKhlcntDsgthau implements Serializable {
 	Integer tgianThienHd;
 	String trangThai;
 	String trangThaiDt;
-	String lyDoHuy;
+	String dienGiaiNhaThau;
 	String diaDiemNhap;
 
 	String tgianBdauThien;
