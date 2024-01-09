@@ -45,6 +45,7 @@ public class XhCtvtQuyetDinhGnvHdrReq {
   Long nguoiPduyetId;
   String loaiNhapXuat;
   String kieuNhapXuat;
+  String phanLoai;
   String mucDichXuat;
   String tenDvi;
   String tenLoaiVthh;
