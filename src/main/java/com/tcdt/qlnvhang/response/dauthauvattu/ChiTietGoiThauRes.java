@@ -12,6 +12,10 @@ public class ChiTietGoiThauRes {
     private String ghiChuTtdt;
     private Date tgianTrinhKqTcg;
     private Date tgianTrinhTtd;
+    private Date tgianBdauTchuc;
+    private Date tgianMthau;
+    private Date tgianDthau;
+    private Integer quy;
     private List<FileDinhKem> fileDinhKems = new ArrayList<>();
     private List<HhDthauNthauDuthau> dsNhaThauDthau = new ArrayList<>();
 }
