@@ -516,6 +516,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				dsg.setTenHthucLcnt(hashMapHtLcnt.get(dsg.getHthucLcnt()));
 				dsg.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dsg.getTrangThai()));
 				dsg.setChildren(listGtCtiet);
+				if (dsg.getIdQdPdHsmt() != null) {
+					Optional<QdPdHsmt> qOptional = qdPdHsmtRepository.findById(dsg.getIdQdPdHsmt());
+					qOptional.ifPresent(dsg::setQdPdHsmt);
+				}
 				hhQdKhlcntDsgthauList.add(dsg);
 			};
 			countSlGThau += count;
@@ -542,6 +546,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		data.setTenTrangThaiDt(NhapXuatHangTrangThaiEnum.getTenById(data.getTrangThaiDt()));
 		data.setTenNguonVon(hashMapNguonVon.get(data.getNguonVon()));
 		data.setLanDieuChinh(hhDchinhDxKhLcntHdrRepository.findMaxLanDieuChinh(data.getId()));
+		Optional<HhDchinhDxKhLcntHdr> dchinhDxKhLcntHdr = hhDchinhDxKhLcntHdrRepository.findTopByIdQdGocAndTrangThaiOrderByLanDieuChinhDesc(data.getId(), Contains.BAN_HANH);
+		dchinhDxKhLcntHdr.ifPresent(hhDchinhDxKhLcntHdr -> data.setSoQdDc(hhDchinhDxKhLcntHdr.getSoQdDc()));
 	}
 
 	private void detailVt (HhQdKhlcntHdr data) {
@@ -581,6 +587,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			if (dsg.getTrangThaiDt() != null && dsg.getTrangThaiDt().equals(NhapXuatHangTrangThaiEnum.THANH_CONG.getId())) {
 				countGoiTrung += 1L;
 			}
+			if (dsg.getIdQdPdHsmt() != null) {
+				Optional<QdPdHsmt> qOptional = qdPdHsmtRepository.findById(dsg.getIdQdPdHsmt());
+				qOptional.ifPresent(dsg::setQdPdHsmt);
+			}
 		}
 		data.setDsGthau(hhQdKhlcntDsgthauData);
 		data.setSoGthau((long)hhQdKhlcntDsgthauData.size());
@@ -615,6 +625,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 					gThau.setTenCloaiVthh(hashMapDmHh.get(gThau.getCloaiVthh()));
 					gThau.setChildren(gthauCtietList);
 					gThau.setKqlcntDtl(hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndType(gThau.getId(), "DC"));
+					if (gThau.getIdQdPdHsmt() != null) {
+						Optional<QdPdHsmt> qOptional = qdPdHsmtRepository.findById(gThau.getIdQdPdHsmt());
+						qOptional.ifPresent(gThau::setQdPdHsmt);
+					}
 				}
 				dchinhDxKhLcntHdr.get().setDsGthau(gThauList);
 				data.setDchinhDxKhLcntHdr(dchinhDxKhLcntHdr.get());
@@ -1121,10 +1135,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			Map<String,String> soGthau3 = new HashMap<>();
 			for (HhQdKhlcntHdr f : data.getContent()) {
 				List<HhQdKhlcntDtl> children = hhQdKhlcntDtlRepository.findAllByIdQdHdr(f.getId());
-				for (HhQdKhlcntDtl child : children) {
-					Optional<QdPdHsmt> qOptional = qdPdHsmtRepository.findByIdQdPdKhlcntDtl(child.getId());
-					qOptional.ifPresent(child::setQdPdHsmt);
-				}
+//				for (HhQdKhlcntDtl child : children) {
+//					Optional<QdPdHsmt> qOptional = qdPdHsmtRepository.findByIdQdPdKhlcntDtl(child.getId());
+//					qOptional.ifPresent(child::setQdPdHsmt);
+//				}
 				f.setChildren(children);
 //				if(f.getIdTrHdr() == null){
 //					List<HhQdKhlcntDtl> hhQdKhlcntDtl = hhQdKhlcntDtlRepository.findAllByIdQdHdrOrderByMaDvi(f.getId());
@@ -1136,7 +1150,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
 				f.setTongTien(StringUtils.isEmpty(hashMapSum.get(f.getId().toString())) ? BigDecimal.valueOf(0) : BigDecimal.valueOf(Long.parseLong(hashMapSum.get(f.getId().toString()))));
 //				f.setNamKhoach(f.getNamKhoach());
-				Optional<HhDchinhDxKhLcntHdr> dchinh = hhDchinhDxKhLcntHdrRepository.findTopByIdQdGocOrderByLanDieuChinhDesc(f.getId());
+				Optional<HhDchinhDxKhLcntHdr> dchinh = hhDchinhDxKhLcntHdrRepository.findTopByIdQdGocAndTrangThaiOrderByLanDieuChinhDesc(f.getId(), Contains.BAN_HANH);
 				dchinh.ifPresent(hhDchinhDxKhLcntHdr -> f.setSoQdDc(hhDchinhDxKhLcntHdr.getSoQdDc()));
 			}
 			for (Object[] it: listGthau) {
@@ -1182,7 +1196,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			listData.forEach(f -> {
 				f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
 				f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
-				Optional<HhDchinhDxKhLcntHdr> dchinh = hhDchinhDxKhLcntHdrRepository.findTopByIdQdGocOrderByLanDieuChinhDesc(f.getId());
+				Optional<HhDchinhDxKhLcntHdr> dchinh = hhDchinhDxKhLcntHdrRepository.findTopByIdQdGocAndTrangThaiOrderByLanDieuChinhDesc(f.getId(), Contains.BAN_HANH);
 				dchinh.ifPresent(hhDchinhDxKhLcntHdr -> f.setSoQdDc(hhDchinhDxKhLcntHdr.getSoQdDc()));
 				detailLt(f);
 			});

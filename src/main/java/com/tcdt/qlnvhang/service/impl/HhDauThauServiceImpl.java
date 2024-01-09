@@ -282,7 +282,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
                     Optional<HhQdPduyetKqlcntHdr> bySoQd = hhQdPduyetKqlcntHdrRepository.findBySoQd(item.getSoQdPdKqLcnt());
                     bySoQd.ifPresent(item::setHhQdPduyetKqlcntHdr);
                 }
-                Optional<HhDchinhDxKhLcntHdr> dchinh = hhDchinhDxKhLcntHdrRepository.findTopByIdQdGocOrderByLanDieuChinhDesc(item.getIdQdHdr());
+                Optional<HhDchinhDxKhLcntHdr> dchinh = hhDchinhDxKhLcntHdrRepository.findTopByIdQdGocAndTrangThaiOrderByLanDieuChinhDesc(item.getIdQdHdr(), Contains.BAN_HANH);
                 dchinh.ifPresent(hhDchinhDxKhLcntHdr -> item.setSoQdDc(hhDchinhDxKhLcntHdr.getSoQdDc()));
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -360,9 +360,17 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
             if(!byId.isPresent()){
                 throw new Exception("Gói thầu không tồn tại");
             }
-            chiTietGoiThauRes.setTgianTrinhKqTcg(byId.get().getTgianTrinhKqTcg());
-            chiTietGoiThauRes.setTgianTrinhTtd(byId.get().getTgianTrinhTtd());
+//            chiTietGoiThauRes.setTgianTrinhKqTcg(byId.get().getTgianTrinhKqTcg());
+//            chiTietGoiThauRes.setTgianTrinhTtd(byId.get().getTgianTrinhTtd());
+            chiTietGoiThauRes.setTgianBdauTchuc(byId.get().getTgianBdauTchuc());
+            chiTietGoiThauRes.setTgianDthau(byId.get().getTgianDthau());
+            chiTietGoiThauRes.setTgianMthau(byId.get().getTgianMthau());
             chiTietGoiThauRes.setGhiChuTtdt(byId.get().getGhiChuTtdt());
+            Optional<HhQdKhlcntDtl> qdKhlcntDtl = dtlRepository.findById(byId.get().getIdQdDtl());
+            if (qdKhlcntDtl.isPresent()) {
+                Optional<HhDxuatKhLcntHdr> dxuatKhLcntHdr = hhDxuatKhLcntHdrRepository.findById(qdKhlcntDtl.get().getIdDxHdr());
+                dxuatKhLcntHdr.ifPresent(hhDxuatKhLcntHdr -> chiTietGoiThauRes.setQuy(hhDxuatKhLcntHdr.getQuy()));
+            }
             List<FileDinhKem> fileDinhKems = fileDinhKemService.search(byId.get().getId(), Collections.singletonList("HH_QD_KHLCNT_DSGTHAU" + "_NHA_THAU"));
             chiTietGoiThauRes.setFileDinhKems(fileDinhKems);
             byIdDtGt = nhaThauDuthauRepository.findByIdDtGtAndType(Long.parseLong(ids), null);

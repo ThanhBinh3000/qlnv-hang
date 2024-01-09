@@ -117,13 +117,13 @@ public class DchinhDxuatKhLcntController extends BaseController {
 	}
 
 	@ApiOperation(value = "Lấy chi tiết thông tin by idQdGoc", response = List.class)
-	@GetMapping(value = PathContains.URL_CHI_TIET + "/findByIdQdGoc/{idQdGoc}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = PathContains.URL_CHI_TIET + "/findByIdQdGoc/{idQdGoc}/{lanDieuChinh}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<BaseResponse> findByIdQdGoc(
-			@ApiParam(value = "ID", example = "1", required = true) @PathVariable("idQdGoc") Long idQdGoc) {
+			@ApiParam(value = "ID", example = "1", required = true) @PathVariable("idQdGoc") Long idQdGoc, @PathVariable("lanDieuChinh") Integer lanDieuChinh) {
 		BaseResponse resp = new BaseResponse();
 		try {
-			resp.setData(dchinhDxuatKhLcntService.findByIdQdGoc(idQdGoc));
+			resp.setData(dchinhDxuatKhLcntService.findByIdQdGoc(idQdGoc, lanDieuChinh));
 			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
 			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
 		} catch (Exception e) {
