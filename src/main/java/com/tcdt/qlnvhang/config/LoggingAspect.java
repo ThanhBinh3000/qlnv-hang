@@ -225,6 +225,9 @@ public class LoggingAspect {
                 phieuNhapXuatHistory.setLoaiHinhNhapXuat("84");
               }
             }
+            if(rowData.getType().equals("XC")){
+              phieuNhapXuatHistory.setLoaiHinhNhapXuat("101");
+            }
 
             luuKhoClient.synchronizeData(phieuNhapXuatHistory);
             logger.info("Cập nhật kho theo Phiếu nhập kho XhCtvtPhieuXuatKhoController {}", rowData);
