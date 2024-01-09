@@ -193,8 +193,8 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 	}
 
 	private void validateCreate (DchinhDxKhLcntHdrReq objReq) throws Exception {
-		List<HhQdKhlcntHdr> checkSoQdGoc = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQdGoc());
-		if (checkSoQdGoc.isEmpty()){
+		Optional<HhQdKhlcntHdr> checkSoQdGoc = hhQdKhlcntHdrRepository.findById(objReq.getIdQdGoc());
+		if (!checkSoQdGoc.isPresent()){
 			throw new Exception("Không tìm thấy số đề xuất để điều chỉnh kế hoạch lựa chọn nhà thầu");
 		}
 
@@ -256,8 +256,8 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 			throw new Exception("Không tìm thấy dữ liệu cần sửa");
 		}
 
-		List<HhQdKhlcntHdr> checkSoQdGoc = hhQdKhlcntHdrRepository.findBySoQd(objReq.getSoQdGoc());
-		if (checkSoQdGoc.isEmpty()){
+		Optional<HhQdKhlcntHdr> checkSoQdGoc = hhQdKhlcntHdrRepository.findById(objReq.getIdQdGoc());
+		if (!checkSoQdGoc.isPresent()){
 			throw new Exception("Không tìm thấy số đề xuất để điều chỉnh kế hoạch lựa chọn nhà thầu");
 		}
 
@@ -703,18 +703,22 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 
 	}
 	@Transient
-	public HhDchinhDxKhLcntHdr findByIdQdGoc(Long idQdGoc) {
-		Optional<HhDchinhDxKhLcntHdr> qOptional = hdrRepository.findTopByIdQdGocOrderByLanDieuChinhDesc(idQdGoc);
-		System.out.println(qOptional);
-		if (!qOptional.isPresent())
+	public HhDchinhDxKhLcntHdr findByIdQdGoc(Long idQdGoc, Integer lanDieuChinh) {
+		Optional<HhDchinhDxKhLcntHdr> qOptional = null;
+		if (lanDieuChinh > 0) {
+			qOptional = hdrRepository.findByIdQdGocAndLanDieuChinh(idQdGoc, lanDieuChinh);
+		} else {
+			qOptional = hdrRepository.findTopByIdQdGocAndTrangThaiOrderByLanDieuChinhDesc(idQdGoc, Contains.BAN_HANH);
+		}
+		if (!qOptional.isPresent()) {
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
-
+		}
 		Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
 		Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");
 		Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
 		Map<String,String> hashMapNguonVon = getListDanhMucChung("NGUON_VON");
 		Map<String,String> hashMapHtLcnt = getListDanhMucChung("HT_LCNT");
-		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("LOAI_HDONG");
+		Map<String,String> hashMapLoaiHdong = getListDanhMucChung("HINH_THUC_HOP_DONG");
 
 		qOptional.get().setTenLoaiVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getCloaiVthh()));
@@ -722,6 +726,20 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		List<HhDchinhDxKhLcntDtl> dtlList = new ArrayList<>();
 		for(HhDchinhDxKhLcntDtl dtl : dtlRepository.findAllByIdDxDcHdrOrderByMaDvi(qOptional.get().getId())){
 			List<HhDchinhDxKhLcntDsgthau> gThauList = new ArrayList<>();
+			Optional<HhQdKhlcntDtl> qdKhlcntDtl = hhQdKhlcntDtlRepository.findById(dtl.getIdHhQdKhlcntDtl());
+			if (qdKhlcntDtl.isPresent()) {
+				Optional<HhDxuatKhLcntHdr> dxuatKhLcntHdr = hhDxuatKhLcntHdrRepository.findById(qdKhlcntDtl.get().getIdDxHdr());
+				if (dxuatKhLcntHdr.isPresent()) {
+					dxuatKhLcntHdr.get().setTenPthucLcnt(hashMapPthucDthau.get(dxuatKhLcntHdr.get().getPthucLcnt()));
+					dxuatKhLcntHdr.get().setTenHthucLcnt(hashMapHtLcnt.get(dxuatKhLcntHdr.get().getHthucLcnt()));
+					dxuatKhLcntHdr.get().setTenNguonVon(hashMapNguonVon.get(dxuatKhLcntHdr.get().getNguonVon()));
+					dxuatKhLcntHdr.get().setTenLoaiHdong(hashMapLoaiHdong.get(dxuatKhLcntHdr.get().getLoaiHdong()));
+					dxuatKhLcntHdr.get().setTenDvi(mapDmucDvi.get(dxuatKhLcntHdr.get().getMaDvi()));
+					dxuatKhLcntHdr.get().setTenCloaiVthh(hashMapDmHh.get(dxuatKhLcntHdr.get().getCloaiVthh()));
+					dxuatKhLcntHdr.get().setTenLoaiVthh(hashMapDmHh.get(dxuatKhLcntHdr.get().getLoaiVthh()));
+					dtl.setDxuatKhLcntHdr(dxuatKhLcntHdr.get());
+				}
+			}
 			for(HhDchinhDxKhLcntDsgthau gThau : gThauRepository.findAllByIdDcDxDtl(dtl.getId())){
 				List<HhDchinhDxKhLcntDsgthauCtiet> gthauCtietList = gThauCietRepository.findAllByIdGoiThau(gThau.getId());
 				gthauCtietList.forEach(f -> {

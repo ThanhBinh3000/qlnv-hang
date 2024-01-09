@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.table;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtl;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.tochuctrienkhai.QdPdHsmt;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -91,5 +92,6 @@ public class HhDchinhDxKhLcntDsgthau implements Serializable {
 
 	@Transient
 	private List<HhDchinhDxKhLcntDsgthauCtiet> children = new ArrayList<>();
-
+	@Transient
+	private QdPdHsmt qdPdHsmt;
 }

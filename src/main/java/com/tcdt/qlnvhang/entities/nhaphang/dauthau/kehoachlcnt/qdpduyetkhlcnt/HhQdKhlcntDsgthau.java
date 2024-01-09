@@ -9,6 +9,7 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.tochuctrienkhai.QdPdHsmt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.HhDthauNthauDuthau;
@@ -116,4 +117,6 @@ public class HhQdKhlcntDsgthau implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date tgianDthau;
 	private Long idQdPdHsmt;
+	@Transient
+	private QdPdHsmt qdPdHsmt;
 }
