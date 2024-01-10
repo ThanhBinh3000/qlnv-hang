@@ -57,6 +57,7 @@ public class XhCtvtPhieuXuatKhoReq {
   private Long nguoiPduyetId;
   private String lyDoTuChoi;
   private String type;
+  private String phanLoai;
   private String mucDichXuat;
   private String noiDungDx;
   private BigDecimal soLuong;

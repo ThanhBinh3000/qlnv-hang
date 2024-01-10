@@ -32,7 +32,7 @@ public class UserInfo {
 	String description;
 	String region;
 	String department;
-	long notifyViewId;
+	Long notifyViewId;
 	String groupsArr;
 	String userType;
 	
