@@ -1096,6 +1096,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 								soHdDaKy += 1;
 							}
 						}
+						f.setSoQdDc(dchinhDxKhLcntHdr.get().getSoQdDc());
 					}
 				} else {
 					for (HhQdKhlcntDsgthau gthau : hhQdKhlcntDsgthauData) {
