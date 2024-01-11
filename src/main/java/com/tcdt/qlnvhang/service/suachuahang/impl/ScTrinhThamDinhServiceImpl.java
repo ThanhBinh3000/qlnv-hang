@@ -84,7 +84,7 @@ public class ScTrinhThamDinhServiceImpl extends BaseServiceImpl implements ScTri
         hdr.setMaDvi(userInfo.getDvql());
         hdr.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         ScTrinhThamDinhHdr created = hdrRepository.save(hdr);
-        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), ScTrinhThamDinhHdr.TABLE_NAME + "_CAN_CU");
+        List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), ScTrinhThamDinhHdr.TABLE_NAME + "_CAN_CU");
         created.setFileCanCu(canCu);
         List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), ScTrinhThamDinhHdr.TABLE_NAME + "_DINH_KEM");
         created.setFileDinhKem(fileDinhKem);
@@ -153,7 +153,7 @@ public class ScTrinhThamDinhServiceImpl extends BaseServiceImpl implements ScTri
         List<FileDinhKem> canCu = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), ScTrinhThamDinhHdr.TABLE_NAME + "_CAN_CU");
         created.setFileCanCu(canCu);
         fileDinhKemService.delete(req.getId(), Lists.newArrayList(ScTrinhThamDinhHdr.TABLE_NAME + "_DINH_KEM"));
-        List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileCanCuReq(), created.getId(), ScTrinhThamDinhHdr.TABLE_NAME + "_DINH_KEM");
+        List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), ScTrinhThamDinhHdr.TABLE_NAME + "_DINH_KEM");
         created.setFileDinhKem(fileDinhKemList);
         List<ScTrinhThamDinhDtl> scTrinhThamDinhDtls = this.saveDtl(req, created.getId());
         created.setChildren(scTrinhThamDinhDtls);
