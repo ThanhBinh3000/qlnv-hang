@@ -36,9 +36,9 @@ public interface XhXkKhXuatHangRepository extends JpaRepository<XhXkKhXuatHang, 
         "        ELSE NULL " +
         "    END AS nam_nhap_result " +
         " FROM" +
-        "    xh_xk_kh_xuathang_dtl yt" +
+        "    sc_danh_sach_hdr yt" +
         " LEFT JOIN" +
-        "    kt_ngan_kho kk ON yt.ma_dia_diem = kk.ma_ngankho" +
+        "    xh_xk_kh_xuathang_dtl kk ON yt.ma_dia_diem = kk.ma_dia_diem" +
         " LEFT JOIN" +
         "    kt_ngan_lo kl ON yt.ma_dia_diem = kl.ma_nganlo where yt.id = :id " ,nativeQuery = true)
     Integer getNamNhap(String ma, Long id);

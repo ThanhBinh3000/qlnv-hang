@@ -268,7 +268,6 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
-
         String status = statusReq.getTrangThai() + optional.get().getTrangThai();
         switch (status) {
             case Contains.CHO_DUYET_TP + Contains.DUTHAO:
