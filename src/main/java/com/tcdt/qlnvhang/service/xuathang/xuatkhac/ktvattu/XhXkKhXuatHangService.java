@@ -68,7 +68,7 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
             s.getXhXkKhXuatHangDtl().forEach(item -> {
                 item.setMapVthh(mapVthh);
                 item.setMapDmucDvi(mapDmucDvi);
-                item.setNamNhap(xhXkKhXuatHangRepository.getNamNhap(item.getMaDiaDiem(), item.getId()));
+//                item.setNamNhap(xhXkKhXuatHangRepository.getNamNhap(item.getMaDiaDiem(), item.getId()));
             });
         });
         return search;
