@@ -31,7 +31,7 @@ public interface XhXkKhXuatHangRepository extends JpaRepository<XhXkKhXuatHang, 
 
     @Query(value = "SELECT" +
         "    CASE" +
-        "        WHEN LENGTH(:ma) = 14 THEN kk.nam_nhap" +
+        "        WHEN LENGTH(:ma) = 14 THEN kl.nam_nhap" +
         "        WHEN LENGTH(:ma) = 16 THEN kl.nam_nhap" +
         "        ELSE NULL " +
         "    END AS nam_nhap_result " +
