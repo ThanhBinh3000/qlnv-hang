@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.table;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtl;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.tochuctrienkhai.QdPdHsmt;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -42,14 +43,22 @@ public class HhDchinhDxKhLcntDsgthau implements Serializable {
 	String tgianBdauLcnt;
 	Integer tgianThienHd;
 	String trangThai;
-	String lyDoHuy;
+	String dienGiaiNhaThau;
 	String diaDiemNhap;
 
 	String tgianBdauThien;
 	private String tenNhaThau;
 	private Long idNhaThau;
 	private BigDecimal donGiaNhaThau;
+	private BigDecimal thanhTienNhaThau;;
 	private String trangThaiDt;
+	@Temporal(TemporalType.DATE)
+	Date tgianBdauTchuc;
+	@Temporal(TemporalType.DATE)
+	private Date tgianMthau;
+	@Temporal(TemporalType.DATE)
+	private Date tgianDthau;
+	private Long idQdPdHsmt;
 //	private String ghiChuTtdt;
 //	@Temporal(TemporalType.DATE)
 //	private Date tgianTrinhKqTcg;
@@ -83,5 +92,6 @@ public class HhDchinhDxKhLcntDsgthau implements Serializable {
 
 	@Transient
 	private List<HhDchinhDxKhLcntDsgthauCtiet> children = new ArrayList<>();
-
+	@Transient
+	private QdPdHsmt qdPdHsmt;
 }

@@ -1,11 +1,16 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.nhiemvuxuat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Entity
 @Table(name = XhQdGiaoNvXhDtl.TABLE_NAME)
@@ -27,6 +32,24 @@ public class XhQdGiaoNvXhDtl {
     private String tenDvi;
     @Transient
     private String tenTrangThai;
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucDvi;
+
+    public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+        boolean isNewValue = !Objects.equals(this.mapDmucDvi, mapDmucDvi);
+        this.mapDmucDvi = mapDmucDvi;
+        if (isNewValue && !DataUtils.isNullObject(getMaDvi())) {
+            setTenDvi(mapDmucDvi.getOrDefault(getMaDvi(), null));
+        }
+    }
+
+    public String getTrangThai() {
+        setTenTrangThai(TrangThaiAllEnum.getLabelById(trangThai));
+        return trangThai;
+    }
+
     @Transient
     private List<XhQdGiaoNvXhDdiem> children = new ArrayList<>();
 }

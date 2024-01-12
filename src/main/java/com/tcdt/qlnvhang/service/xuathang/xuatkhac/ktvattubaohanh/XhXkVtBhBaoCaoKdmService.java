@@ -4,10 +4,7 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhBaoCaoKdmRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhPhieuKtclRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhPhieuXuatNhapKhoRepository;
-import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhQdGiaonvXnRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -16,7 +13,10 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.*;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhBaoCaoKdm;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuKdclHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuKtclHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuXuatNhapKho;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -38,6 +38,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @Service
 public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
@@ -61,6 +63,9 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
 
   @Autowired
   private XhXkVtBhPhieuKtclRepository xhXkVtBhPhieuKtclRepository;
+
+  @Autowired
+  private XhXkVtBhPhieuKdclRepository xhXkVtBhPhieuKdclRepository;
 
 
   @Autowired
@@ -146,13 +151,13 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
         });
         xhXkVtBhPhieuXuatNhapKhoRepository.saveAll(allByIdCanCuIn);
       }
-      List<XhXkVtBhQdGiaonvXnHdr> listQdGiaoNvXh = xhXkVtBhQdGiaonvXnRepository.findByIdIn(Arrays.asList(idCanCu));
-      if (!listQdGiaoNvXh.isEmpty()) {
-        listQdGiaoNvXh.forEach(item -> {
+      List<XhXkVtBhPhieuKdclHdr> listPhieuKdcl = xhXkVtBhPhieuKdclRepository.findByIdQdGiaoNvXhIn(Arrays.asList(idCanCu));
+      if (!listPhieuKdcl.isEmpty()) {
+        listPhieuKdcl.forEach(item -> {
           item.setSoBaoCaoKdm(data.getSoBaoCao());
           item.setIdBaoCaoKdm(data.getId());
         });
-        xhXkVtBhQdGiaonvXnRepository.saveAll(listQdGiaoNvXh);
+        xhXkVtBhPhieuKdclRepository.saveAll(listPhieuKdcl);
       }
     } else {
       List<XhXkVtBhPhieuKtclHdr> listPhieuKtcl = xhXkVtBhPhieuKtclRepository.findByIdIn(Arrays.asList(idCanCu));
@@ -185,17 +190,13 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
         .map(Long::valueOf)
         .toArray(Long[]::new);
     if (model.getLoaiCanCu().equals(Contains.QD_GNV)) {
-      List<XhXkVtBhQdGiaonvXnHdr> listQdGiaoNv = xhXkVtBhQdGiaonvXnRepository.findByIdIn(Arrays.asList(listIdCanCu));
-      listQdGiaoNv.forEach(s -> {
-        s.setTenLoai(Contains.getLoaiHinhXuat(s.getLoai()));
+      List<XhXkVtBhPhieuKdclHdr> listPhieuKdcl = xhXkVtBhPhieuKdclRepository.findAllByIdBaoCaoKdm(model.getId());
+      listPhieuKdcl.forEach(s -> {
         s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
-        s.setTenTrangThaiXh(TrangThaiAllEnum.getLabelById(s.getTrangThaiXh()));
-        s.getQdGiaonvXhDtl().forEach(item -> {
-          item.setMapVthh(mapVthh);
-          item.setMapDmucDvi(mapDmucDvi);
-        });
+        s.setMapVthh(mapVthh);
+        s.setMapDmucDvi(mapDmucDvi);
       });
-      model.setQdGiaonvXn(listQdGiaoNv);
+      model.setPhieuKdcl(listPhieuKdcl);
     } else {
       List<XhXkVtBhPhieuKtclHdr> listPhieuKtcl = xhXkVtBhPhieuKtclRepository.findByIdIn(Arrays.asList(listIdCanCu));
       listPhieuKtcl.forEach(s -> {
@@ -231,13 +232,13 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
           });
           xhXkVtBhPhieuXuatNhapKhoRepository.saveAll(allByIdCanCuIn);
         }
-        List<XhXkVtBhQdGiaonvXnHdr> listQdGiaoNvXh = xhXkVtBhQdGiaonvXnRepository.findByIdIn(Arrays.asList(idCanCu));
-        if (!listQdGiaoNvXh.isEmpty()) {
-          listQdGiaoNvXh.forEach(item -> {
+        List<XhXkVtBhPhieuKdclHdr> listPhieuKdcl = xhXkVtBhPhieuKdclRepository.findAllByIdBaoCaoKdm(data.getId());
+        if (!listPhieuKdcl.isEmpty()) {
+          listPhieuKdcl.forEach(item -> {
             item.setSoBaoCaoKdm(null);
             item.setIdBaoCaoKdm(null);
           });
-          xhXkVtBhQdGiaonvXnRepository.saveAll(listQdGiaoNvXh);
+          xhXkVtBhPhieuKdclRepository.saveAll(listPhieuKdcl);
         }
       } else {
         List<XhXkVtBhPhieuKtclHdr> listPhieuKtcl = xhXkVtBhPhieuKtclRepository.findByIdIn(Arrays.asList(idCanCu));
@@ -332,17 +333,20 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
       XhXkVtBhBaoCaoKdm detail = this.detail(DataUtils.safeToLong(body.get("id")));
       Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
       Map<String, String> mapVthh = getListDanhMucHangHoa();
-      List<XhXkVtBhQdGiaonvXnDtl> qdDtl = null;
+      List<XhXkVtBhPhieuKdclHdr> qdDtl = null;
       List<XhXkVtBhPhieuKtclHdr> pktcl = null;
       Long[] idCanCu = Arrays.stream(detail.getIdCanCu().split(","))
           .map(String::trim)
           .map(Long::valueOf)
           .toArray(Long[]::new);
       if (detail.getLoaiCanCu().equals(Contains.QD_GNV)) {
-        XhXkVtBhQdGiaonvXnHdr qd = xhXkVtBhQdGiaonvXnService.detail(Long.valueOf(detail.getIdCanCu()));
-        qdDtl = qd.getQdGiaonvXhDtl().stream().filter(i -> i.getMauBiHuy() == true).collect(Collectors.toList());
+        qdDtl = xhXkVtBhPhieuKdclRepository.findAllByIdBaoCaoKdm(detail.getId()).stream().map(item -> {
+          item.setMapVthh(mapVthh);
+          item.setTenDvi(mapDmucDvi.get(item.getMaDvi()));
+          return item;
+        }).collect(Collectors.toList());
       } else {
-        pktcl = xhXkVtBhPhieuKtclRepository.findByIdIn(Arrays.asList(idCanCu)).stream().map(item->{
+        pktcl = xhXkVtBhPhieuKtclRepository.findByIdIn(Arrays.asList(idCanCu)).stream().map(item -> {
           item.setMapVthh(mapVthh);
           item.setTenDvi(mapDmucDvi.get(item.getMaDvi()));
           return item;

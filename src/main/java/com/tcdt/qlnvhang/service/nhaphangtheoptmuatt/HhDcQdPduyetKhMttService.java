@@ -5,21 +5,22 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.HhSlNhapHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
+import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttHdrSearchReq;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.request.object.HhSlNhapHangReq;
+import com.tcdt.qlnvhang.response.DcQdPduyetKhMttDTO;
+import com.tcdt.qlnvhang.response.HopDongMttHdrDTO;
 import com.tcdt.qlnvhang.service.HhSlNhapHangService;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
-import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.DataUtils;
-import com.tcdt.qlnvhang.util.ExportExcel;
-import com.tcdt.qlnvhang.util.ObjectMapperUtils;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
+import com.tcdt.qlnvhang.util.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,11 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.beans.Transient;
+import java.io.ByteArrayInputStream;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,6 +57,9 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
 
     @Autowired
     private HhQdPheduyetKhMttHdrRepository hhQdPheduyetKhMttHdrRepository;
+
+    @Autowired
+    private HhQdPheduyetKhMttHdrService hhQdPheduyetKhMttHdrService;
 
     @Autowired
     private HhSlNhapHangService hhSlNhapHangService;
@@ -95,9 +102,9 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         UserInfo userInfo= SecurityContextService.getUser();
         if (userInfo == null)
             throw new Exception("Bad request.");
-        Optional<HhDcQdPduyetKhmttHdr> optional = hhDcQdPduyetKhMttRepository.findBySoQdDc(objReq.getSoQdDc());
+        Optional<HhDcQdPduyetKhmttHdr> optional = hhDcQdPduyetKhMttRepository.findBySoToTrinh(objReq.getSoToTrinh());
         if(optional.isPresent()){
-            throw new Exception("số quyết định đã tồn tại");
+            throw new Exception("số công văn/tờ trình đã tồn tại");
         }
         HhDcQdPduyetKhmttHdr data = new ModelMapper().map(objReq,HhDcQdPduyetKhmttHdr.class);
         data.setNgayTao(new Date());
@@ -142,8 +149,10 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
 
     private void updateQdPduyet(HhDcQdPduyetKhmttHdr dcHdr, HhDcQdPduyetKhmttHdrReq objReq){
         Optional<HhQdPheduyetKhMttHdr> qdHdr = hhQdPheduyetKhMttHdrRepository.findById(dcHdr.getIdQdGoc());
-        qdHdr.get().setIsChange(objReq.getIsChange());
-        hhQdPheduyetKhMttHdrRepository.save(qdHdr.get());
+        if(qdHdr.isPresent()){
+            qdHdr.get().setIsChange(objReq.getIsChange());
+            hhQdPheduyetKhMttHdrRepository.save(qdHdr.get());
+        }
     }
 
     @Transactional
@@ -153,11 +162,11 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
             throw new Exception(" Bar request.");
         }
         Optional<HhDcQdPduyetKhmttHdr> optional = hhDcQdPduyetKhMttRepository.findById(objReq.getId());
-        Optional<HhDcQdPduyetKhmttHdr> soQdDc = hhDcQdPduyetKhMttRepository.findBySoQdDc(objReq.getSoQdDc());
-        if (soQdDc.isPresent()){
-            if (soQdDc.isPresent()){
+        Optional<HhDcQdPduyetKhmttHdr> soQdDc = hhDcQdPduyetKhMttRepository.findBySoToTrinh(objReq.getSoToTrinh());
+        if(soQdDc.isPresent()){
+            if (optional.isPresent()){
                 if (!soQdDc.get().getId().equals(objReq.getId())){
-                    throw new Exception("Số quyết định đã tồn tại");
+                    throw new Exception("số công văn/tờ trình đã tồn tại");
                 }
             }
         }
@@ -362,16 +371,19 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         switch (status){
             case Contains.CHODUYET_LDV + Contains.DA_LAP:
             case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
+            case Contains.CHODUYET_LDV + Contains.TUCHOI_LDTC:
                 optional.get().setNguoiGduyet(userInfo.getUsername());
                 optional.get().setNgayGduyet(getDateTimeNow());
                 break;
             case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
+            case Contains.TUCHOI_LDTC + Contains.CHODUYET_LDV:
+            case Contains.TUCHOI_LDTC + Contains.DADUYET_LDV:
                 optional.get().setNguoiGduyet(getUser().getUsername());
                 optional.get().setNgayGduyet(getDateTimeNow());
                 optional.get().setLdoTchoi(statusReq.getLyDo());
                 break;
-//            case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
-            case Contains.BAN_HANH + Contains.CHODUYET_LDV:
+            case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
+            case Contains.BAN_HANH + Contains.DADUYET_LDV:
                 optional.get().setNguoiPduyet(getUser().getUsername());
                 optional.get().setNgayPduyet(getDateTimeNow());
                 break;
@@ -398,6 +410,105 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         }
 
         return created;
+    }
+
+    public ReportTemplateResponse preview(HhDcQdPduyetKhmttHdrReq req) throws Exception {
+        HhDcQdPduyetKhmttHdr hhDcQdPduyetKhmttHdr = detail(req.getId().toString());
+        if (hhDcQdPduyetKhmttHdr == null) {
+            throw new Exception("Biên bản không tồn tại.");
+        }
+
+        ReportTemplate model = findByTenFile(req.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        AtomicReference<BigDecimal> tongSoLuongGoc = new AtomicReference<>(BigDecimal.ZERO);
+        AtomicReference<BigDecimal> tongSoLuong = new AtomicReference<>(BigDecimal.ZERO);
+        AtomicReference<BigDecimal> tongThanhTien = new AtomicReference<>(BigDecimal.ZERO);
+        if(hhDcQdPduyetKhmttHdr.getSoLanDieuChinh() > 0){
+            Optional<HhDcQdPduyetKhmttHdr> hhDcQdPduyetKhmttHdrGoc = hhDcQdPduyetKhMttRepository.findById(hhDcQdPduyetKhmttHdr.getId());
+            for (HhDcQdPduyetKhmttDx hhDcQdPduyetKhmttDx : hhDcQdPduyetKhmttHdr.getHhDcQdPduyetKhmttDxList()) {
+                Optional<HhDcQdPduyetKhmttDx> listDxGoc = hhDcQdPduyetKhmttHdrGoc.get().getHhDcQdPduyetKhmttDxList().stream().filter(x -> x.getId().equals(hhDcQdPduyetKhmttDx.getId())).findFirst();
+                hhDcQdPduyetKhmttDx.setTgianKthucGoc(Contains.convertDateToString(listDxGoc.get().getTgianKthuc()));
+                hhDcQdPduyetKhmttDx.setTgianKthucStr(Contains.convertDateToString(hhDcQdPduyetKhmttDx.getTgianKthuc()));
+                for (HhDcQdPduyetKhmttSldd child : hhDcQdPduyetKhmttDx.getChildren()) {
+                    Optional<HhDcQdPduyetKhmttSldd> listSlddGoc = listDxGoc.get().getChildren().stream().filter(x -> x.getId().equals(child.getId())).findFirst();
+                    child.setSoLuongGocStr(docxToPdfConverter.convertBigDecimalToStr(listSlddGoc.get().getSoLuong()));
+                    child.setSoLuongStr(docxToPdfConverter.convertBigDecimalToStr(child.getSoLuong()));
+                    child.setTongThanhTienVatStr(docxToPdfConverter.convertBigDecimalToStr(child.getDonGiaVat().multiply(child.getSoLuong())));
+                    tongSoLuongGoc.updateAndGet(v -> v.add(listSlddGoc.get().getTongSoLuong()));
+                    tongSoLuong.updateAndGet(v -> v.add(child.getTongSoLuong()));
+                    tongThanhTien.updateAndGet(v -> v.add(child.getDonGiaVat().multiply(child.getSoLuong())));
+                }
+            }
+            hhDcQdPduyetKhmttHdr.setNgayPduyetGocStr(Contains.convertDateToString(hhDcQdPduyetKhmttHdrGoc.get().getNgayPduyet()));
+            hhDcQdPduyetKhmttHdr.setNgayPduyetStr(Contains.convertDateToString(hhDcQdPduyetKhmttHdr.getNgayPduyet()));
+            hhDcQdPduyetKhmttHdr.setTongSoLuongGocStr(docxToPdfConverter.convertBigDecimalToStr(tongSoLuongGoc.get()));
+            hhDcQdPduyetKhmttHdr.setTongSoLuongStr(docxToPdfConverter.convertBigDecimalToStr(tongSoLuong.get()));
+            hhDcQdPduyetKhmttHdr.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(tongThanhTien.get()));
+        }else{
+            HhQdPheduyetKhMttHdr hhQdPheduyetKhMttHdr = hhQdPheduyetKhMttHdrService.detail(hhDcQdPduyetKhmttHdr.getIdQdGoc());
+            for (HhDcQdPduyetKhmttDx hhDcQdPduyetKhmttDx : hhDcQdPduyetKhmttHdr.getHhDcQdPduyetKhmttDxList()) {
+                Optional<HhQdPheduyetKhMttDx> listDxGoc = hhQdPheduyetKhMttHdr.getChildren().stream().filter(x -> x.getMaDvi().equals(hhDcQdPduyetKhmttDx.getMaDvi())).findFirst();
+                if(listDxGoc.isPresent()){
+                    hhDcQdPduyetKhmttDx.setTgianKthucGoc(Contains.convertDateToString(listDxGoc.get().getTgianKthuc()));
+                    hhDcQdPduyetKhmttDx.setTgianKthucStr(Contains.convertDateToString(hhDcQdPduyetKhmttDx.getTgianKthuc()));
+                    for (HhDcQdPduyetKhmttSldd child : hhDcQdPduyetKhmttDx.getChildren()) {
+                        Optional<HhQdPheduyetKhMttSLDD> listSlddGoc = listDxGoc.get().getChildren().stream().filter(x -> x.getMaDvi().equals(child.getMaDvi())).findFirst();
+                        if(listSlddGoc.isPresent()){
+                            child.setSoLuongGocStr(docxToPdfConverter.convertBigDecimalToStr(listSlddGoc.get().getTongSoLuong()));
+                            child.setSoLuongStr(docxToPdfConverter.convertBigDecimalToStr(child.getTongSoLuong()));
+                            child.setTongThanhTienVatStr(docxToPdfConverter.convertBigDecimalToStr(child.getDonGiaVat().multiply(child.getTongSoLuong())));
+                            tongSoLuongGoc.updateAndGet(v -> v.add(listSlddGoc.get().getTongSoLuong()));
+                            tongSoLuong.updateAndGet(v -> v.add(child.getTongSoLuong()));
+                            tongThanhTien.updateAndGet(v -> v.add(child.getDonGiaVat().multiply(child.getTongSoLuong())));
+                        }
+                    }
+                }
+            }
+            hhDcQdPduyetKhmttHdr.setNgayPduyetGocStr(Contains.convertDateToString(hhQdPheduyetKhMttHdr.getNgayPduyet()));
+            hhDcQdPduyetKhmttHdr.setNgayPduyetStr(Contains.convertDateToString(hhDcQdPduyetKhmttHdr.getNgayPduyet()));
+            hhDcQdPduyetKhmttHdr.setTongSoLuongGocStr(docxToPdfConverter.convertBigDecimalToStr(tongSoLuongGoc.get()));
+            hhDcQdPduyetKhmttHdr.setTongSoLuongStr(docxToPdfConverter.convertBigDecimalToStr(tongSoLuong.get()));
+            hhDcQdPduyetKhmttHdr.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(tongThanhTien.get()));
+        }
+
+
+
+        return docxToPdfConverter.convertDocxToPdf(inputStream, hhDcQdPduyetKhmttHdr);
+    }
+
+
+    public List<DcQdPduyetKhMttDTO> danhSachQdDc(SearchHhDcQdPduyetKhMttReqDTO req) throws Exception {
+        Map<String, String> listDanhMucHangHoa = getListDanhMucHangHoa();
+        HhQdPheduyetKhMttHdrSearchReq objQd = new HhQdPheduyetKhMttHdrSearchReq();
+        BeanUtils.copyProperties(req, objQd);
+        List<HhQdPheduyetKhMttHdr> listQdPd = hhQdPheduyetKhMttHdrService.searchDsTaoQdDc(objQd);
+        listQdPd = listQdPd.stream().filter(x -> x.getIsChange() == null).collect(Collectors.toList());
+        List<HhDcQdPduyetKhmttHdr> listDcPd = hhDcQdPduyetKhMttRepository.searchDsLastest();
+        for (HhDcQdPduyetKhmttHdr hhDcQdPduyetKhmttHdr : listDcPd) {
+            hhDcQdPduyetKhmttHdr.setTenCloaiVthh(listDanhMucHangHoa.get(hhDcQdPduyetKhmttHdr.getCloaiVthh()));
+            hhDcQdPduyetKhmttHdr.setTenLoaiVthh(listDanhMucHangHoa.get(hhDcQdPduyetKhmttHdr.getLoaiVthh()));
+        }
+        List<DcQdPduyetKhMttDTO> result = mergeLists(listQdPd, listDcPd);
+        return result;
+    }
+
+    public static List<DcQdPduyetKhMttDTO> mergeLists(List<HhQdPheduyetKhMttHdr> list1, List<HhDcQdPduyetKhmttHdr> list2) {
+        Map<Long, DcQdPduyetKhMttDTO> dtoMap = new HashMap<>();
+
+        for (HhQdPheduyetKhMttHdr item : list1) {
+            DcQdPduyetKhMttDTO dto = new DcQdPduyetKhMttDTO();
+            BeanUtils.copyProperties(item, dto);
+            dtoMap.put(item.getId(), dto);
+        }
+
+        for (HhDcQdPduyetKhmttHdr item : list2) {
+            DcQdPduyetKhMttDTO dto = new DcQdPduyetKhMttDTO();
+            BeanUtils.copyProperties(item, dto);
+            dtoMap.put(item.getId(), dto);
+        }
+        List<DcQdPduyetKhMttDTO> result = new ArrayList<>(dtoMap.values());
+        return result;
     }
 
 

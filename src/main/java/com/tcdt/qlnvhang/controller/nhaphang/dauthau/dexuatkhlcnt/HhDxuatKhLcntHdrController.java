@@ -372,4 +372,22 @@ public class HhDxuatKhLcntHdrController {
 		return ResponseEntity.ok(resp);
 	}
 
+	@ApiOperation(value = "Danh sách gói thầu trượt hoặc hủy thầu", response = List.class)
+	@PostMapping(value = "/ds-gthau-truot", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> danhSachGthauTruot(@Valid HttpServletRequest request,
+												  @RequestBody HhDxuatKhLcntHdrReq objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.danhSachGthauTruot(objReq));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Danh sách gói thầu trượt hoặc hủy thầu trace: {?}", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
+
 }

@@ -125,6 +125,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
         data.setTrangThai(Contains.DUTHAO);
         data.setType(null);
         BigDecimal total = new BigDecimal(0l);
+        BigDecimal totalPd = new BigDecimal(0l);
         if (data.getDanhSachQuyetDinh() == null || data.getDanhSachQuyetDinh().isEmpty()) {
             throw new Exception("DanhSachQuyetDinh không được để trống!");
         }
@@ -203,6 +204,12 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
                                     .map(kphi -> kphi != null ? kphi : BigDecimal.ZERO)
                                     .reduce(BigDecimal.ZERO, BigDecimal::add);
                             total = total.add(totalDuT);
+
+                            BigDecimal totalDuTPd = e.getDcnbKeHoachDcHdr().getDanhSachHangHoa().stream()
+                                    .map(DcnbKeHoachDcDtl::getDuToanKphiPd)
+                                    .map(kphi -> kphi != null ? kphi : BigDecimal.ZERO)
+                                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+                            totalPd=  totalPd.add(totalDuTPd);
                         }
                         // check hàng hóa trong kho xuất, kho nhận
                         // Check số lượng hiện thời từng lo kho - (tổng đề kế hoạch xuất - tổng xuất trong thực tế)> 0 ;
@@ -235,6 +242,7 @@ public class DcnbQuyetDinhDcCHdrServiceImpl extends BaseServiceImpl {
             e.setDcnbQuyetDinhDcCHdr(data);
         }
         data.setTongDuToanKp(total);
+//        data.setTongDuToanKpPd(totalPd);
         List<Long> longs = data.getDanhSachQuyetDinh().stream().map(DcnbQuyetDinhDcCDtl::getKeHoachDcHdrId).collect(Collectors.toList());
 
         List<Long> duplicates = longs.stream()

@@ -1,5 +1,7 @@
 package com.tcdt.qlnvhang.entities.xuathang.daugia.hopdong;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -7,6 +9,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Entity
 @Table(name = XhHopDongDtl.TABLE_NAME)
@@ -32,8 +36,19 @@ public class XhHopDongDtl implements Serializable {
     private String diaChiHd;
     @Transient
     private String tenDvi;
+
+    @JsonIgnore
     @Transient
-    private BigDecimal tongDonGia;
+    private Map<String, String> mapDmucDvi;
+
+    public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+        boolean isNewValue = !Objects.equals(this.mapDmucDvi, mapDmucDvi);
+        this.mapDmucDvi = mapDmucDvi;
+        if (isNewValue && !DataUtils.isNullObject(getMaDvi())) {
+            setTenDvi(mapDmucDvi.getOrDefault(getMaDvi(), null));
+        }
+    }
+
     @Transient
     private List<XhHopDongDdiemNhapKho> children = new ArrayList<>();
 }

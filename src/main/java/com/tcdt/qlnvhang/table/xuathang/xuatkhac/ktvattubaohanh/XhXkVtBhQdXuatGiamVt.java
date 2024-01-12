@@ -30,7 +30,7 @@ public class XhXkVtBhQdXuatGiamVt extends BaseEntity implements Serializable {
     private String loai;
     private String trichYeu;
     private LocalDate ngayKy;
-    private LocalDate thoiHanXuatGiam;
+    private LocalDate ngayHieuLuc;
     private String soCanCu;
     private Long idCanCu;
     private String trangThai;

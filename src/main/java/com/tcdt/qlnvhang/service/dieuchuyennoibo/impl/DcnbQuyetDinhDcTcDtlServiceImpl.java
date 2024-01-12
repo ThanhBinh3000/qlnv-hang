@@ -2,13 +2,19 @@ package com.tcdt.qlnvhang.service.dieuchuyennoibo.impl;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.jasper.HeaderColumn;
+import com.tcdt.qlnvhang.jasper.JasperReport;
+import com.tcdt.qlnvhang.jasper.JasperReportManager;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbQuyetDinhDcTcDtlPreviewReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbQuyetDinhDcTcHdrPreviewReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbQuyetDinhDcTcHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcTc;
+import com.tcdt.qlnvhang.service.ReportTemplateService;
 import com.tcdt.qlnvhang.service.feign.LuuKhoClient;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -17,6 +23,7 @@ import com.tcdt.qlnvhang.table.dieuchuyennoibo.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
+import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -30,7 +37,13 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -59,10 +72,15 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
     @Autowired
     private LuuKhoClient luuKhoClient;
 
+
     public Page<DcnbQuyetDinhDcTcHdr> searchPage(CustomUserDetails currentUser, SearchDcnbQuyetDinhDcTc req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
         req.setMaDvi(currentUser.getDvql());
-        Page<DcnbQuyetDinhDcTcHdr> search = dcnbQuyetDinhDcTcHdrRepository.search(req, pageable);
+        if ("1".equals(currentUser.getUser().getCapDvi())) {
+            Page<DcnbQuyetDinhDcTcHdr> search = dcnbQuyetDinhDcTcHdrRepository.search(req, pageable);
+            return search;
+        }
+        Page<DcnbQuyetDinhDcTcHdr> search = dcnbQuyetDinhDcTcHdrRepository.searchCuc(req, pageable);
         return search;
     }
 
@@ -80,7 +98,7 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
             throw new Exception("Mã tổng hợp đã được tạo Quyết định!");
         }
         DcnbQuyetDinhDcTcHdr data = new DcnbQuyetDinhDcTcHdr();
-        BeanUtils.copyProperties(objReq, data,"id");
+        BeanUtils.copyProperties(objReq, data, "id");
         data.setMaDvi(currentUser.getDvql());
         data.setType(Contains.DIEU_CHUYEN);
         data.setTrangThai(Contains.DUTHAO);
@@ -168,11 +186,12 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
             qdtc.setHdrId(isUpdate ? qd.getHdrId() : null);
             qdtc.setMaCucXuat(qd.getMaCucDxuat() == null ? qd.getMaCucXuat() : qd.getMaCucDxuat());
             qdtc.setTenCucXuat(qd.getTenCucDxuat() == null ? qd.getTenCucXuat() : qd.getTenCucDxuat());
-            qdtc.setMaCucNhan("CHI_CUC".equals(objReq.getLoaiDc())? qdtc.getMaCucXuat(): qd.getMaCucNhan());
-            qdtc.setTenCucNhan("CHI_CUC".equals(objReq.getLoaiDc())? qdtc.getTenCucXuat(): qd.getTenCucNhan());
+            qdtc.setMaCucNhan("CHI_CUC".equals(objReq.getLoaiDc()) ? qdtc.getMaCucXuat() : qd.getMaCucNhan());
+            qdtc.setTenCucNhan("CHI_CUC".equals(objReq.getLoaiDc()) ? qdtc.getTenCucXuat() : qd.getTenCucNhan());
             qdtc.setSoDxuat(qd.getSoDxuat());
             qdtc.setNgayTrinhTc(qd.getThKeHoachDieuChuyenCucHdr() == null ? qd.getNgayTrinhTc() : qd.getThKeHoachDieuChuyenCucHdr().getNgayTrinhDuyetTc());
             qdtc.setTongDuToanKp(qd.getTongDuToanKp());
+            qdtc.setTongDuToanKpPd(qd.getTongDuToanKpPd());
             qdtc.setTrichYeu(qd.getThKeHoachDieuChuyenCucHdr() == null ? qd.getTrichYeu() : qd.getThKeHoachDieuChuyenCucHdr().getTrichYeu());
             List<DcnbQuyetDinhDcTcTTDtl> danhSachQuyetDinhChiTiet = new ArrayList<>();
             if (qd.getThKeHoachDieuChuyenCucKhacCucDtl() != null && !qd.getThKeHoachDieuChuyenCucKhacCucDtl().getDcnbKeHoachDcHdr().isEmpty()) {
@@ -344,6 +363,7 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
                     thKeHoachDCTCHdrRepository.save(thKeHoachDieu.get());
                 }
                 break;
+            case Contains.CHODUYET_LDV + Contains.DADUYET_LDV:
             case Contains.CHODUYET_LDV + Contains.CHODUYET_LDTC:
                 optional.get().setNgayPduyet(LocalDate.now());
                 optional.get().setNguoiPduyetId(currentUser.getUser().getId());
@@ -353,6 +373,7 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
                     thKeHoachDCTCHdrRepository.save(thKeHoachDieu.get());
                 }
                 break;
+            case Contains.DADUYET_LDV + Contains.TUCHOI_LDTC:
             case Contains.CHODUYET_LDTC + Contains.TUCHOI_LDTC:
                 optional.get().setNgayDuyetTc(LocalDate.now());
                 optional.get().setNguoiDuyetTcId(currentUser.getUser().getId());
@@ -363,6 +384,7 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
                     thKeHoachDCTCHdrRepository.save(thKeHoachDieu.get());
                 }
                 break;
+            case Contains.DADUYET_LDV + Contains.DADUYET_LDTC:
             case Contains.CHODUYET_LDTC + Contains.DADUYET_LDTC:
                 optional.get().setNgayDuyetTc(LocalDate.now());
                 optional.get().setNguoiDuyetTcId(currentUser.getUser().getId());
@@ -372,6 +394,7 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
                     thKeHoachDCTCHdrRepository.save(thKeHoachDieu.get());
                 }
                 break;
+            case Contains.DADUYET_LDV + Contains.BAN_HANH:
             case Contains.CHODUYET_LDTC + Contains.BAN_HANH:
             case Contains.DADUYET_LDTC + Contains.BAN_HANH:
                 optional.get().setNgayBanHanhTc(LocalDate.now());
@@ -467,4 +490,6 @@ public class DcnbQuyetDinhDcTcDtlServiceImpl extends BaseServiceImpl {
         });
         return allById;
     }
+
+
 }

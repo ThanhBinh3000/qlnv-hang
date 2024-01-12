@@ -1,7 +1,10 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -10,6 +13,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Entity
 @Table(name = XhQdPdKhBttDtl.TABLE_NAME)
@@ -45,8 +50,6 @@ public class XhQdPdKhBttDtl implements Serializable {
     private String pthucGnhan;
     private String thongBao;
     @Transient
-    private String tenDvi;
-    @Transient
     private List<XhQdPdKhBttDvi> children = new ArrayList<>();
 
     // thông tin chào giá
@@ -73,6 +76,8 @@ public class XhQdPdKhBttDtl implements Serializable {
     private BigDecimal tongSlDaKyHdong;
     private BigDecimal tongSlChuaKyHdong;
     @Transient
+    private String tenDvi;
+    @Transient
     private String tenLoaiHinhNx;
     @Transient
     private String tenKieuNx;
@@ -88,6 +93,85 @@ public class XhQdPdKhBttDtl implements Serializable {
     private String tenTrangThaiHd;
     @Transient
     private String tenPthucTtoan;
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucDvi;
+
+    public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+        boolean isNewValue = !Objects.equals(this.mapDmucDvi, mapDmucDvi);
+        this.mapDmucDvi = mapDmucDvi;
+        if (isNewValue && !DataUtils.isNullObject(getMaDvi())) {
+            setTenDvi(mapDmucDvi.getOrDefault(getMaDvi(), null));
+        }
+    }
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucVthh;
+
+    public void setMapDmucVthh(Map<String, String> mapDmucVthh) {
+        boolean isNewValue = !Objects.equals(this.mapDmucVthh, mapDmucVthh);
+        this.mapDmucVthh = mapDmucVthh;
+        if (isNewValue && !DataUtils.isNullObject(getLoaiVthh())) {
+            setTenLoaiVthh(mapDmucVthh.getOrDefault(getLoaiVthh(), null));
+        }
+        if (isNewValue && !DataUtils.isNullObject(getCloaiVthh())) {
+            setTenCloaiVthh(mapDmucVthh.getOrDefault(getCloaiVthh(), null));
+        }
+    }
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucLoaiXuat;
+
+    public void setMapDmucLoaiXuat(Map<String, String> mapDmucLoaiXuat) {
+        boolean isNewValue = !Objects.equals(this.mapDmucLoaiXuat, mapDmucLoaiXuat);
+        this.mapDmucLoaiXuat = mapDmucLoaiXuat;
+        if (isNewValue && !DataUtils.isNullObject(getLoaiHinhNx())) {
+            setTenLoaiHinhNx(mapDmucLoaiXuat.getOrDefault(getLoaiHinhNx(), null));
+        }
+    }
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucKieuXuat;
+
+    public void setMapDmucKieuXuat(Map<String, String> mapDmucKieuXuat) {
+        boolean isNewValue = !Objects.equals(this.mapDmucKieuXuat, mapDmucKieuXuat);
+        this.mapDmucKieuXuat = mapDmucKieuXuat;
+        if (isNewValue && !DataUtils.isNullObject(getKieuNx())) {
+            setTenKieuNx(mapDmucKieuXuat.getOrDefault(getKieuNx(), null));
+        }
+    }
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucThanhToan;
+
+    public void setMapDmucThanhToan(Map<String, String> mapDmucThanhToan) {
+        boolean isNewValue = !Objects.equals(this.mapDmucThanhToan, mapDmucThanhToan);
+        this.mapDmucThanhToan = mapDmucThanhToan;
+        if (isNewValue && !DataUtils.isNullObject(getPthucTtoan())) {
+            setTenPthucTtoan(mapDmucThanhToan.getOrDefault(getPthucTtoan(), null));
+        }
+    }
+
+    public String getTrangThai() {
+        setTenTrangThai(TrangThaiAllEnum.getLabelById(trangThai));
+        return trangThai;
+    }
+
+    public String getTenTrangThaiXh() {
+        setTenTrangThaiXh(TrangThaiAllEnum.getLabelById(trangThaiXh));
+        return trangThaiXh;
+    }
+
+    public String getTenTrangThaiHd() {
+        setTenTrangThaiHd(TrangThaiAllEnum.getLabelById(trangThaiHd));
+        return trangThaiHd;
+    }
+
     @Transient
     private XhQdPdKhBttHdr xhQdPdKhBttHdr;
     @Transient

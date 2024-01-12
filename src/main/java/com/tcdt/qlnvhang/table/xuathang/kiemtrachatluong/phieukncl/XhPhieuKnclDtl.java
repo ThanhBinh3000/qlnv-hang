@@ -21,6 +21,7 @@ public class XhPhieuKnclDtl extends BaseEntity implements Serializable {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhPhieuKnclDtl.TABLE_NAME + "_SEQ")
   @SequenceGenerator(sequenceName = XhPhieuKnclDtl.TABLE_NAME + "_SEQ", allocationSize = 1, name = XhPhieuKnclDtl.TABLE_NAME + "_SEQ")
   private Long id;
+  private String ma;
   private String ten;
   private String loai;
   private Long soLuong;
@@ -36,6 +37,9 @@ public class XhPhieuKnclDtl extends BaseEntity implements Serializable {
   //phan rieng
   private String chiTieuCl;
   private String chiSoCl;
+  private String chiSoClToiThieu;
+  private String chiSoClToiDa;
+  private String toanTu;
   private String ketQua;
   private String phuongPhap;
   private String danhGia;

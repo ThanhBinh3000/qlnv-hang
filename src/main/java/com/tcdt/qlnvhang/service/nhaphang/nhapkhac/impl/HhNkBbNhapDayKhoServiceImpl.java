@@ -1,18 +1,23 @@
 package com.tcdt.qlnvhang.service.nhaphang.nhapkhac.impl;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhNkBangKeCanHangHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhNkBbNhapDayKhoHdr;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.dieuchuyennoibo.DcnbDataLinkHdrRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhNkBbNhapDayKhoDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.nhapkhac.HhNkBbNhapDayKhoHdrRepository;
+import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhNkBangKeCanHangHdrReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapkhac.HhNkBbNhapDayKhoHdrReq;
 import com.tcdt.qlnvhang.response.nhaphang.nhapkhac.HhNkBbNhapDayKhoHdrDTO;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
+import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.nhaphang.nhapkhac.HhNkBbNhapDayKhoService;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
@@ -23,11 +28,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.util.*;
 
 @Service
-public class HhNkBbNhapDayKhoServiceImpl implements HhNkBbNhapDayKhoService {
+public class HhNkBbNhapDayKhoServiceImpl extends BaseServiceImpl implements HhNkBbNhapDayKhoService {
 
     @Autowired
     private HhNkBbNhapDayKhoHdrRepository hdrRepository;
@@ -217,5 +223,13 @@ public class HhNkBbNhapDayKhoServiceImpl implements HhNkBbNhapDayKhoService {
     public List<HhNkBbNhapDayKhoHdrDTO> searchList(CustomUserDetails currentUser, HhNkBbNhapDayKhoHdrReq param) {
         param.setMaDvi(currentUser.getDvql());
         return hdrRepository.searchList(param);
+    }
+
+    public ReportTemplateResponse preview(HhNkBbNhapDayKhoHdrReq objReq) throws Exception {
+        HhNkBbNhapDayKhoHdr optional = detail(objReq.getId());
+        ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
+        byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+        return docxToPdfConverter.convertDocxToPdf(inputStream, optional);
     }
 }

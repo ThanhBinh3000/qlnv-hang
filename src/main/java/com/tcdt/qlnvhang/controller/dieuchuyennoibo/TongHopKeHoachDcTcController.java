@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbQuyetDinhDcTcHdrPreviewReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.ThKeHoachDieuChuyenTongCucHdrReq;
 import com.tcdt.qlnvhang.request.search.TongHopKeHoachDieuChuyenSearch;
 import com.tcdt.qlnvhang.response.BaseResponse;
@@ -181,6 +182,25 @@ public class TongHopKeHoachDcTcController extends BaseController {
         try {
             thKeHoachDieuChuyenTongCucServiceImpl.export( currentUser,objReq, response);
 
+        } catch (Exception e) {
+            log.error("Kết xuất danh sách: {}", e);
+            final Map<String, Object> body = new HashMap<>();
+            body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            body.put("msg", e.getMessage());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.writeValue(response.getOutputStream(), body);
+
+        }
+    }
+
+    @ApiOperation(value = "Kết xuất danh sách", response = List.class)
+    @PostMapping(value =  PathContains.URL_XEM_TRUOC +"-tong-hop", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public void preview(@CurrentUser CustomUserDetails currentUser , @Valid @RequestBody DcnbQuyetDinhDcTcHdrPreviewReq objReq, HttpServletResponse response) throws Exception {
+        try {
+            thKeHoachDieuChuyenTongCucServiceImpl.preview( currentUser,objReq, response);
         } catch (Exception e) {
             log.error("Kết xuất danh sách: {}", e);
             final Map<String, Object> body = new HashMap<>();

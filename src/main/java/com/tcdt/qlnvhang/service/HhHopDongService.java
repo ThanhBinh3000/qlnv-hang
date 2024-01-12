@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import com.tcdt.qlnvhang.request.object.HhHopDongDtlReq;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import org.springframework.data.domain.Page;
 
@@ -38,6 +39,7 @@ public interface HhHopDongService {
 
 
 	void deleteMulti(IdSearchReq idSearchReq) throws Exception;
+	void saveSoTienTinhPhat(HhHopDongDtlReq dataMap) throws Exception;
 
 	void exportList(HhHopDongSearchReq objReq, HttpServletResponse response) throws Exception;
 

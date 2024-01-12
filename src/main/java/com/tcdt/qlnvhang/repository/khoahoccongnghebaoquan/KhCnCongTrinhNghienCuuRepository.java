@@ -17,7 +17,7 @@ public interface KhCnCongTrinhNghienCuuRepository extends JpaRepository<KhCnCong
 
     @Query("SELECT c FROM KhCnCongTrinhNghienCuu c WHERE 1=1" +
             " AND (:#{#param.dvpl} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvpl},'%'))" +
-            " AND (:#{#param.maDeTai} IS NULL OR c.maDeTai LIKE CONCAT(:#{#param.maDeTai},'%'))" +
+            " AND (:#{#param.maDeTai} IS NULL OR c.maDeTai LIKE CONCAT('%',CONCAT(:#{#param.maDeTai},'%')))" +
             " AND (:#{#param.tenDeTai} IS NULL OR c.tenDeTai LIKE CONCAT('%',CONCAT(:#{#param.tenDeTai},'%')))" +
             " AND (:#{#param.capDeTai} IS NULL OR c.capDeTai =:#{#param.capDeTai})" +
             " AND ((:#{#param.thoiGianThTu}  IS NULL OR (c.ngayKyTu >= :#{#param.thoiGianThTu} AND c.ngayKyTu >= :#{#param.thoiGianThTu}))" +

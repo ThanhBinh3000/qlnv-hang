@@ -236,7 +236,7 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         List<KhCnCongTrinhNghienCuu> data = page.getContent();
 
         String title = "Danh sách công trình nghiên cứu";
-        String[] rowsName = new String[]{"STT", "Mã đề tài", "Tên đề tài", "Cấp đề tài", "Đơn vị chủ trì", "Chủ nhiệm đề tài", "Từ năm", "Đến năm", "Trang Thái"};
+        String[] rowsName = new String[]{"STT","Đề tài năm", "Mã đề tài", "Tên đề tài", "Cấp đề tài", "Đơn vị chủ trì", "Chủ nhiệm đề tài", "Từ năm", "Đến năm", "Trang Thái"};
         String fileName = "danh-sach-cong-trinh-nghien-cuu.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
@@ -244,14 +244,15 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
             KhCnCongTrinhNghienCuu dx = data.get(i);
             objs = new Object[rowsName.length];
             objs[0] = i;
-            objs[1] = dx.getMaDeTai();
-            objs[2] = dx.getTenDeTai();
-            objs[3] = dx.getCapDeTai();
-            objs[4] = dx.getTenDviChuTri();
-            objs[5] = dx.getChuNhiem();
-            objs[6] = dx.getNgayKyTu();
-            objs[7] = dx.getNgayKyDen();
-            objs[8] = dx.getTenTrangThai();
+            objs[1] = dx.getNgayKyTu().getYear() + 1900;
+            objs[2] = dx.getMaDeTai();
+            objs[3] = dx.getTenDeTai();
+            objs[4] = dx.getCapDeTai();
+            objs[5] = dx.getTenDviChuTri();
+            objs[6] = dx.getChuNhiem();
+            objs[7] = dx.getNgayKyTu();
+            objs[8] = dx.getNgayKyDen();
+            objs[9] = dx.getTenTrangThai();
             dataList.add(objs);
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
@@ -267,7 +268,6 @@ public class KhCnCongTrinhNghienCuuService extends BaseServiceImpl {
         if (!optional.isPresent()) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
-
         String status = statusReq.getTrangThai() + optional.get().getTrangThai();
         switch (status) {
             case Contains.CHO_DUYET_TP + Contains.DUTHAO:

@@ -24,6 +24,7 @@ public class XhXkVtBhPhieuKdclRequest extends BaseRequest {
     private Long idBbLayMau;
     private Integer soLanLm;
     private Integer soLuongMau;
+    private Integer soLuongMauKd;
     private Integer slTonKho;
     private String soBbLayMau;
     private LocalDate ngayLayMau;
@@ -33,7 +34,9 @@ public class XhXkVtBhPhieuKdclRequest extends BaseRequest {
     private String dviKiemDinh;
     private String loaiVthh;
     private String cloaiVthh;
+    private Integer namNhap;
     private String donViTinh;
+    private String maDviTsan;
     private String maDiaDiem;
     private String ppLayMau;
     private String nhanXetKetLuan;
@@ -46,6 +49,10 @@ public class XhXkVtBhPhieuKdclRequest extends BaseRequest {
     private Long nguoiPduyetId;
     private String lyDoTuChoi;
     private String type;
+    private String canBoTao;
+    private String thuKho;
+    private String tpKtbq;
+    private String lanhDaoCuc;
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();
     private List<XhXkVtBhPhieuKdclDtl> phieuKdclDtl = new ArrayList<>();
 

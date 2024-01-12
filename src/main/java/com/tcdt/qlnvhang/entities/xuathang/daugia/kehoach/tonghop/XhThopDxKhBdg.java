@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Entity
 @Table(name = XhThopDxKhBdg.TABLE_NAME)
@@ -53,15 +54,16 @@ public class XhThopDxKhBdg implements Serializable {
 
     @JsonIgnore
     @Transient
-    private Map<String, String> mapVthh;
+    private Map<String, String> mapDmucVthh;
 
-    public void setMapVthh(Map<String, String> mapVthh) {
-        this.mapVthh = mapVthh;
-        if (!DataUtils.isNullObject(getLoaiVthh())) {
-            setTenLoaiVthh(mapVthh.containsKey(getLoaiVthh()) ? mapVthh.get(getLoaiVthh()) : null);
+    public void setMapDmucVthh(Map<String, String> mapDmucVthh) {
+        boolean isNewValue = !Objects.equals(this.mapDmucVthh, mapDmucVthh);
+        this.mapDmucVthh = mapDmucVthh;
+        if (isNewValue && !DataUtils.isNullObject(getLoaiVthh())) {
+            setTenLoaiVthh(mapDmucVthh.getOrDefault(getLoaiVthh(), null));
         }
-        if (!DataUtils.isNullObject(getCloaiVthh())) {
-            setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
+        if (isNewValue && !DataUtils.isNullObject(getCloaiVthh())) {
+            setTenCloaiVthh(mapDmucVthh.getOrDefault(getCloaiVthh(), null));
         }
     }
 
@@ -75,10 +77,8 @@ public class XhThopDxKhBdg implements Serializable {
 
     public void setChildren(List<XhThopDxKhBdgDtl> children) {
         this.getChildren().clear();
-        if (!DataUtils.isNullOrEmpty(children)) {
-            children.forEach(f -> {
-                f.setTongHopHdr(this);
-            });
+        if (children != null) {
+            children.forEach(child -> child.setTongHopHdr(this));
             this.children.addAll(children);
         }
     }

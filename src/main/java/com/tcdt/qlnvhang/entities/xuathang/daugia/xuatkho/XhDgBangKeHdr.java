@@ -13,9 +13,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Entity
 @Table(name = XhDgBangKeHdr.TABLE_NAME)
@@ -117,24 +115,25 @@ public class XhDgBangKeHdr implements Serializable {
     private Map<String, String> mapDmucDvi;
 
     public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+        boolean isNewValue = !Objects.equals(this.mapDmucDvi, mapDmucDvi);
         this.mapDmucDvi = mapDmucDvi;
-        if (!DataUtils.isNullObject(getMaDvi())) {
-            setTenDvi(mapDmucDvi.containsKey(getMaDvi()) ? mapDmucDvi.get(getMaDvi()) : null);
+        if (isNewValue && !DataUtils.isNullObject(getMaDvi())) {
+            setTenDvi(mapDmucDvi.getOrDefault(getMaDvi(), null));
         }
-        if (!DataUtils.isNullObject(getMaDiemKho())) {
-            setTenDiemKho(mapDmucDvi.containsKey(getMaDiemKho()) ? mapDmucDvi.get(getMaDiemKho()) : null);
+        if (isNewValue && !DataUtils.isNullObject(getMaDiemKho())) {
+            setTenDiemKho(mapDmucDvi.getOrDefault(getMaDiemKho(), null));
         }
-        if (!DataUtils.isNullObject(getMaNhaKho())) {
-            setTenNhaKho(mapDmucDvi.containsKey(getMaNhaKho()) ? mapDmucDvi.get(getMaNhaKho()) : null);
+        if (isNewValue && !DataUtils.isNullObject(getMaNhaKho())) {
+            setTenNhaKho(mapDmucDvi.getOrDefault(getMaNhaKho(), null));
         }
-        if (!DataUtils.isNullObject(getMaNganKho())) {
-            setTenNganKho(mapDmucDvi.containsKey(getMaNganKho()) ? mapDmucDvi.get(getMaNganKho()) : null);
+        if (isNewValue && !DataUtils.isNullObject(getMaNganKho())) {
+            setTenNganKho(mapDmucDvi.getOrDefault(getMaNganKho(), null));
             if (getTenNganKho() != null) {
                 setTenNganLoKho(getTenNganKho());
             }
         }
-        if (!DataUtils.isNullObject(getMaLoKho())) {
-            setTenLoKho(mapDmucDvi.containsKey(getMaLoKho()) ? mapDmucDvi.get(getMaLoKho()) : null);
+        if (isNewValue && !DataUtils.isNullObject(getMaLoKho())) {
+            setTenLoKho(mapDmucDvi.getOrDefault(getMaLoKho(), null));
             if (getTenLoKho() != null) {
                 setTenNganLoKho(getTenLoKho() + " - " + getTenNganKho());
             }
@@ -143,37 +142,40 @@ public class XhDgBangKeHdr implements Serializable {
 
     @JsonIgnore
     @Transient
-    private Map<String, String> mapVthh;
+    private Map<String, String> mapDmucVthh;
 
-    public void setMapVthh(Map<String, String> mapVthh) {
-        this.mapVthh = mapVthh;
-        if (!DataUtils.isNullObject(getLoaiVthh())) {
-            setTenLoaiVthh(mapVthh.containsKey(getLoaiVthh()) ? mapVthh.get(getLoaiVthh()) : null);
+    public void setMapDmucVthh(Map<String, String> mapDmucVthh) {
+        boolean isNewValue = !Objects.equals(this.mapDmucVthh, mapDmucVthh);
+        this.mapDmucVthh = mapDmucVthh;
+        if (isNewValue && !DataUtils.isNullObject(getLoaiVthh())) {
+            setTenLoaiVthh(mapDmucVthh.getOrDefault(getLoaiVthh(), null));
         }
-        if (!DataUtils.isNullObject(getCloaiVthh())) {
-            setTenCloaiVthh(mapVthh.containsKey(getCloaiVthh()) ? mapVthh.get(getCloaiVthh()) : null);
-        }
-    }
-
-    @JsonIgnore
-    @Transient
-    private Map<String, String> mapLoaiHinhNx;
-
-    public void setMapLoaiHinhNx(Map<String, String> mapLoaiHinhNx) {
-        this.mapLoaiHinhNx = mapLoaiHinhNx;
-        if (!DataUtils.isNullObject(getLoaiHinhNx())) {
-            setTenLoaiHinhNx(mapLoaiHinhNx.containsKey(getLoaiHinhNx()) ? mapLoaiHinhNx.get(getLoaiHinhNx()) : null);
+        if (isNewValue && !DataUtils.isNullObject(getCloaiVthh())) {
+            setTenCloaiVthh(mapDmucVthh.getOrDefault(getCloaiVthh(), null));
         }
     }
 
     @JsonIgnore
     @Transient
-    private Map<String, String> mapKieuNhapXuat;
+    private Map<String, String> mapDmucLoaiXuat;
 
-    public void setMapKieuNhapXuat(Map<String, String> mapKieuNhapXuat) {
-        this.mapKieuNhapXuat = mapKieuNhapXuat;
-        if (!DataUtils.isNullObject(getKieuNhapXuat())) {
-            setTenKieuNhapXuat(mapKieuNhapXuat.containsKey(getKieuNhapXuat()) ? mapKieuNhapXuat.get(getKieuNhapXuat()) : null);
+    public void setMapDmucLoaiXuat(Map<String, String> mapDmucLoaiXuat) {
+        boolean isNewValue = !Objects.equals(this.mapDmucLoaiXuat, mapDmucLoaiXuat);
+        this.mapDmucLoaiXuat = mapDmucLoaiXuat;
+        if (isNewValue && !DataUtils.isNullObject(getLoaiHinhNx())) {
+            setTenLoaiHinhNx(mapDmucLoaiXuat.getOrDefault(getLoaiHinhNx(), null));
+        }
+    }
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucKieuXuat;
+
+    public void setMapDmucKieuXuat(Map<String, String> mapDmucKieuXuat) {
+        boolean isNewValue = !Objects.equals(this.mapDmucKieuXuat, mapDmucKieuXuat);
+        this.mapDmucKieuXuat = mapDmucKieuXuat;
+        if (isNewValue && !DataUtils.isNullObject(getKieuNhapXuat())) {
+            setTenKieuNhapXuat(mapDmucKieuXuat.getOrDefault(getKieuNhapXuat(), null));
         }
     }
 
@@ -186,16 +188,17 @@ public class XhDgBangKeHdr implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinColumn(name = "dataId")
     @Where(clause = "data_type='" + XhDgBangKeHdr.TABLE_NAME + "_DINH_KEM'")
-    private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
+    private Set<FileDinhKemJoinTable> fileDinhKem = new HashSet<>();
 
     public void setFileDinhKem(List<FileDinhKemJoinTable> fileDinhKem) {
         this.fileDinhKem.clear();
         if (!DataUtils.isNullObject(fileDinhKem)) {
-            fileDinhKem.forEach(s -> {
-                s.setDataType(XhDgBangKeHdr.TABLE_NAME + "_DINH_KEM");
-                s.setXhDgBangKeHdr(this);
-            });
-            this.fileDinhKem.addAll(fileDinhKem);
+            Set<FileDinhKemJoinTable> uniqueFiles = new HashSet<>(fileDinhKem);
+            for (FileDinhKemJoinTable file : uniqueFiles) {
+                file.setDataType(XhDgBangKeHdr.TABLE_NAME + "_DINH_KEM");
+                file.setXhDgBangKeHdr(this);
+            }
+            this.fileDinhKem.addAll(uniqueFiles);
         }
     }
 

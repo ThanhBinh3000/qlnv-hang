@@ -116,6 +116,8 @@ public class HhHopDongHdr extends BaseEntity implements Serializable  {
 	private Date tgianBdamThienHd;
 	@Temporal(TemporalType.DATE)
 	private Date tgianGiaoThucTe;
+	@Temporal(TemporalType.DATE)
+	private Date tgianGiaoDuHang;
 
 	@Transient
 	private List<HhHopDongDtl> details;

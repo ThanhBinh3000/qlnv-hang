@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface HhDcQdPduyetKhMttRepository extends JpaRepository<HhDcQdPduyetKhmttHdr ,Long> {
-    @Query(value = "select * from HH_DC_QD_PDUYET_KHMTT_HDR DC LEFT JOIN HH_DC_QD_PDUYET_KHMTT_DX DX ON DC.ID = DX.ID_DC_HDR where (:namKh IS NULL OR DC.NAM_KH =TO_NUMBER(:namKh))" +
+    @Query(value = "select DISTINCT DC.* from HH_DC_QD_PDUYET_KHMTT_HDR DC LEFT JOIN HH_DC_QD_PDUYET_KHMTT_DX DX ON DC.ID = DX.ID_DC_HDR where (:namKh IS NULL OR DC.NAM_KH =TO_NUMBER(:namKh))" +
             " AND (:soQdDc IS NULL OR LOWER(DC.SO_QD_DC) LIKE LOWER(CONCAT(CONCAT('%', :soQdDc),'%'))) "+
             " AND (:trichYeu IS NULL OR LOWER(DC.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) "+
             " AND (:ngayKyDcTu IS NULL OR DC.NGAY_KY_DC >=  TO_DATE(:ngayKyDcTu,'yyyy-MM-dd')) " +
@@ -24,8 +24,23 @@ public interface HhDcQdPduyetKhMttRepository extends JpaRepository<HhDcQdPduyetK
     Page<HhDcQdPduyetKhmttHdr> searchPage(Integer namKh, String soQdDc, String trichYeu, String ngayKyDcTu, String ngayKyDcDen, String trangThai, String maDvi, Pageable pageable);
 
     Optional<HhDcQdPduyetKhmttHdr> findBySoQdDc(String soQdDc);
+    Optional<HhDcQdPduyetKhmttHdr> findBySoToTrinh(String soToTrinh);
 
     List<HhDcQdPduyetKhmttHdr> findAllByIdIn(List<Long> listId);
 
     List<HhDcQdPduyetKhmttHdr> findAllByIdQdGocOrderByIdDesc(Long id);
+
+    HhDcQdPduyetKhmttHdr findBySoLanDieuChinh(Long soLanDc);
+
+    @Query(value = "select * from HH_DC_QD_PDUYET_KHMTT_HDR" +
+            " where 1=1 "+
+            " AND TRANG_THAI = 29 "+
+            " AND so_lan_dieu_chinh IN (select b.so_lan_dieu_chinh from ( "+
+            " SELECT ID_QD_GOC, MAX(so_lan_dieu_chinh) as so_lan_dieu_chinh " +
+            " FROM HH_DC_QD_PDUYET_KHMTT_HDR" +
+            " where 1=1" +
+            " AND TRANG_THAI = 29" +
+            " GROUP BY ID_QD_GOC ) b) "
+            ,nativeQuery = true)
+    List<HhDcQdPduyetKhmttHdr> searchDsLastest();
 }

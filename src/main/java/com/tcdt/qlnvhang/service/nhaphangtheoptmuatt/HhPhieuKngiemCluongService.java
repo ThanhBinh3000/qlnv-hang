@@ -103,6 +103,13 @@ public class HhPhieuKngiemCluongService extends BaseServiceImpl {
             HhPhieuKnCluongDtl dtl = ObjectMapperUtils.map(list,HhPhieuKnCluongDtl.class);
             dtl.setId(null);
             dtl.setIdHdr(data.getId());
+            dtl.setMaCtieuCl(list.getMaChiTieu());
+            dtl.setTenTchuan(list.getMucYeuCauNhap());
+            dtl.setPhuongPhap(list.getPhuongPhapXd());
+            dtl.setChiSoNhap(list.getMucYeuCauNhap());
+            dtl.setDanhGia(list.getDanhGia());
+            dtl.setTenTchuan(list.getTenChiTieu());
+            dtl.setKetQuaKiemTra(list.getKetQuaKiemTra());
             hhPhieuKnCluongDtlRepository.save(dtl);
         }
 

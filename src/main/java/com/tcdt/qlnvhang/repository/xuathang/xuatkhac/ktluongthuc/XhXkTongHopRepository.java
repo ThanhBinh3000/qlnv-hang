@@ -27,7 +27,19 @@ public interface XhXkTongHopRepository extends JpaRepository<XhXkTongHopHdr, Lon
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
   Page<XhXkTongHopHdr> searchPage(@Param("param") XhXkTongHopRequest param, Pageable pageable);
-
+  @Query(value = "SELECT" +
+      "    CASE" +
+      "        WHEN LENGTH(:ma) = 14 THEN kk.nam_nhap" +
+      "        WHEN LENGTH(:ma) = 16 THEN kl.nam_nhap" +
+      "        ELSE NULL " +
+      "    END AS nam_nhap_result " +
+      " FROM" +
+      "    xh_xk_tong_hop_hdr yt" +
+      " LEFT JOIN" +
+      "    kt_ngan_kho kk ON yt.ma_dia_diem = kk.ma_ngankho" +
+      " LEFT JOIN" +
+      "    kt_ngan_lo kl ON yt.ma_dia_diem = kl.ma_nganlo where yt.id = :id " ,nativeQuery = true)
+  Integer getNamNhap(String ma, Long id);
 
   void deleteAllByIdIn(List<Long> listId);
 

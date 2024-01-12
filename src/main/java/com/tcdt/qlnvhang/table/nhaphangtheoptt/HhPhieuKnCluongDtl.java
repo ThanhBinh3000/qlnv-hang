@@ -16,8 +16,12 @@ public class HhPhieuKnCluongDtl implements Serializable {
     @SequenceGenerator(sequenceName = "HH_PHIEU_KN_CLUONG_DTL_SEQ", allocationSize = 1, name = "HH_PHIEU_KN_CLUONG_DTL_SEQ")
     private Long id;
     private Long idHdr;
-    private String ctieuCl;
-    private String soCtieuCl;
-    private String ketQuaPt;
+    private String tenTchuan;
+    private String ketQuaKiemTra; // Ket qua phan tich
     private String phuongPhap;
+    private String trangThai;
+    private String chiSoNhap;
+    private String kieu;
+    private String danhGia;
+    private String maCtieuCl;
 }

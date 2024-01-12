@@ -536,4 +536,20 @@ public class HhHopDongServiceImpl extends BaseServiceImpl implements HhHopDongSe
     }
     return null;
   }
+
+  @Transactional()
+  @Override
+  public void saveSoTienTinhPhat(HhHopDongDtlReq dataMap) throws Exception {
+    Optional<HhHopDongDtl> hhHopDongDtl = hhHopDongDtlRepository.findById(dataMap.getId());
+    if (!hhHopDongDtl.isPresent()) {
+      throw new Exception("Không tìm thấy dữ liệu");
+    }
+    HhHopDongDtl hopDongDtl = hhHopDongDtl.get();
+    hopDongDtl.setTgianGiaoThucTe(dataMap.getTgianGiaoThucTe());
+    hopDongDtl.setSoNgayGiaoCham(dataMap.getSoNgayGiaoCham());
+    hopDongDtl.setSlGiaoCham(dataMap.getSlGiaoCham());
+    hopDongDtl.setMucPhat(dataMap.getMucPhat());
+    hopDongDtl.setThanhTienTinhPhat(dataMap.getThanhTienTinhPhat());
+    hhHopDongDtlRepository.save(hopDongDtl);
+  }
 }

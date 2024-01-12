@@ -34,6 +34,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -80,6 +81,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 	}
 
 	@Override
+	@Transactional
 	public BienBanLayMau create(BienBanLayMauReq req) throws Exception {
 		UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null){
@@ -117,6 +119,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 	}
 
 	@Override
+	@Transactional
 	public BienBanLayMau update(BienBanLayMauReq req) throws Exception {
 				UserInfo userInfo = SecurityContextService.getUser();
 		if (userInfo == null)
@@ -178,6 +181,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 	}
 
 	@Override
+	@Transactional
 	public BienBanLayMau approve(BienBanLayMauReq req) throws Exception {
 		UserInfo userInfo = UserUtils.getUserInfo();
 
@@ -221,6 +225,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 	}
 
 	@Override
+	@Transactional
 	public void delete(Long id) throws Exception {
 		Optional<BienBanLayMau> optional = bienBanLayMauRepository.findById(id);
 		if (!optional.isPresent())

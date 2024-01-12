@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.dto.HopDongMttChildrenDTO;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttHdr;
@@ -157,6 +158,9 @@ public class HopDongMttHdr extends TrangThaiBaseEntity implements Serializable {
 
   @Transient
   private List<HhQdPheduyetKqMttSLDD> children = new ArrayList<>();
+
+  @Transient
+  private List<HopDongMttChildrenDTO> hopDongChildren = new ArrayList<>();
 
 
 //  Phụ lục

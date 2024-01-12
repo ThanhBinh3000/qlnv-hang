@@ -181,6 +181,13 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
         objReq.setType(data.getType());
         objReq.setMaDviPq(data.getMaDviPq());
         BeanUtils.copyProperties(objReq, data);
+        if(!StringUtils.isEmpty(objReq.getSoDxuat())){
+            if(!objReq.getSoDxuat().contains("/DCNB")){
+                data.setSoDxuat(objReq.getSoDxuat() + "/DCNB");
+            }else {
+                data.setSoDxuat(objReq.getSoDxuat());
+            }
+        }
         data.setDanhSachHangHoa(objReq.getDanhSachHangHoa());
         data.setPhuongAnDieuChuyen(objReq.getPhuongAnDieuChuyen());
         data.setDaXdinhDiemNhap(false);

@@ -14,6 +14,8 @@ public class DsGthauPreview {
     private String donGia;
     private String thanhTien;
     private String donGiaNhaThau;
+    private String donGiaDuThau;
+    private String thanhTienDuThau;
     private String thanhTienNhaThau;
     private String chenhLech;
     private List<HhDthauNthauDuthau> dsNhaThau;

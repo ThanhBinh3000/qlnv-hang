@@ -26,6 +26,7 @@ public class HhQdPduyetKqlcntDtl implements Serializable {
     private Long idQdPdHdr;
     private Long idNhaThau;
     private BigDecimal donGiaVat;
+    private BigDecimal thanhTienNhaThau;
     private String trangThai;
     private String type;
     private String tenNhaThau;

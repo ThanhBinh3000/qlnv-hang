@@ -31,6 +31,9 @@ public class XhXkVtBhPhieuXuatNhapKhoRequest extends BaseRequest {
     private LocalDate ngayKdcl;
     private String loaiVthh;
     private String cloaiVthh;
+    private String donViTinh;
+    private String maDviTsan;
+    private Integer namNhap;
     private String canBoLapPhieu;
     private String ldChiCuc;
     private String ktvBaoQuan;
@@ -48,7 +51,6 @@ public class XhXkVtBhPhieuXuatNhapKhoRequest extends BaseRequest {
     private String maSo;
     private BigDecimal slTonKho;
     private BigDecimal slLayMau;
-    private String donViTinh;
     private Boolean mauBiHuy;
     private String loaiPhieu;
     private List<FileDinhKemReq> fileDinhKems = new ArrayList<>();

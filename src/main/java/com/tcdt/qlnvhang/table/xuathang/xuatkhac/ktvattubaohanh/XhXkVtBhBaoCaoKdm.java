@@ -15,43 +15,43 @@ import java.util.List;
 @Data
 public class XhXkVtBhBaoCaoKdm extends BaseEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    public static final String TABLE_NAME = "XH_XK_VT_BH_BCKQ_KDM";
+  private static final long serialVersionUID = 1L;
+  public static final String TABLE_NAME = "XH_XK_VT_BH_BCKQ_KDM";
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXkVtBhBaoCaoKdm.TABLE_NAME + "_SEQ")
-    @SequenceGenerator(sequenceName = XhXkVtBhBaoCaoKdm.TABLE_NAME
-            + "_SEQ", allocationSize = 1, name = XhXkVtBhBaoCaoKdm.TABLE_NAME + "_SEQ")
-    private Long id;
-    private Integer nam;
-    private String maDvi;
-    private String maDviNhan;
-    private String soBaoCao;
-    private String tenBaoCao;
-    private String idCanCu;
-    private String soCanCu;
-    private String loaiCanCu;
-    private LocalDate ngayBaoCao;
-    private String trangThai;
-    private LocalDate ngayGduyet;
-    private Long nguoiGduyetId;
-    private LocalDate ngayPduyet;
-    private Long nguoiPduyetId;
-    private String lyDoTuChoi;
-    private Long idQdXuatGiamVt;
-    private String soQdXuatGiamVt;
-    
-    @Transient
-    private String tenDvi;
-    @Transient
-    private String tenDviNhan;
-    @Transient
-    private String tenTrangThai;
-    @Transient
-    private List<FileDinhKem> fileDinhKems = new ArrayList<>();
-    @Transient
-    private List<XhXkVtBhQdGiaonvXnHdr> qdGiaonvXn = new ArrayList<>();
-    @Transient
-    private List<XhXkVtBhPhieuKtclHdr> phieuKtcl = new ArrayList<>();
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = XhXkVtBhBaoCaoKdm.TABLE_NAME + "_SEQ")
+  @SequenceGenerator(sequenceName = XhXkVtBhBaoCaoKdm.TABLE_NAME
+      + "_SEQ", allocationSize = 1, name = XhXkVtBhBaoCaoKdm.TABLE_NAME + "_SEQ")
+  private Long id;
+  private Integer nam;
+  private String maDvi;
+  private String maDviNhan;
+  private String soBaoCao;
+  private String tenBaoCao;
+  private String idCanCu;
+  private String soCanCu;
+  private String loaiCanCu;
+  private LocalDate ngayBaoCao;
+  private String trangThai;
+  private LocalDate ngayGduyet;
+  private Long nguoiGduyetId;
+  private LocalDate ngayPduyet;
+  private Long nguoiPduyetId;
+  private String lyDoTuChoi;
+  private Long idQdXuatGiamVt;
+  private String soQdXuatGiamVt;
+
+  @Transient
+  private String tenDvi;
+  @Transient
+  private String tenDviNhan;
+  @Transient
+  private String tenTrangThai;
+  @Transient
+  private List<FileDinhKem> fileDinhKems = new ArrayList<>();
+  @Transient
+  private List<XhXkVtBhPhieuKdclHdr> phieuKdcl = new ArrayList<>();
+  @Transient
+  private List<XhXkVtBhPhieuKtclHdr> phieuKtcl = new ArrayList<>();
 
 }

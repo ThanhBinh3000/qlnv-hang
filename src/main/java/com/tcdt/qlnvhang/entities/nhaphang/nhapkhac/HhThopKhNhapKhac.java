@@ -50,6 +50,7 @@ public class HhThopKhNhapKhac {
     private String tenTrangThai;
     private String dvt;
     private BigDecimal tongSlNhap;
+    private Long idQd;
     private String soQd;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyQd;

@@ -1,7 +1,8 @@
 <configuration>
 <!--    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>-->
     <springProperty scope="context" name="applicationName" source="spring.application.name"/>
-    <springProperty scope="context" name="loggingPath" source="logging.file.path"/>
+    <property name="loggingPath" value="./logs" />
+
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>

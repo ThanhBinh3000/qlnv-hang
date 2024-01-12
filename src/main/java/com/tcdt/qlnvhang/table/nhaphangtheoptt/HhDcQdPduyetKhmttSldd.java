@@ -44,4 +44,11 @@ public class HhDcQdPduyetKhmttSldd implements Serializable {
     List<HhDcQdPdKhmttSlddDtl> children= new ArrayList<>();
     @Transient
     private List<HhChiTietTTinChaoGia> listChaoGia = new ArrayList<>();
+    //preview
+    @Transient
+    private String soLuongGocStr;
+    @Transient
+    private String soLuongStr;
+    @Transient
+    private String tongThanhTienVatStr;
 }

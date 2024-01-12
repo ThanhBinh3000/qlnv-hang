@@ -16,8 +16,9 @@ import java.util.Optional;
 public interface HhDchinhDxKhLcntHdrRepository extends CrudRepository<HhDchinhDxKhLcntHdr, Long> {
 
     Optional<HhDchinhDxKhLcntHdr> findBySoQdDc(String soQd);
-    Optional<HhDchinhDxKhLcntHdr> findByIdQdGoc(Long idQdGoc);
+    Optional<HhDchinhDxKhLcntHdr> findTopByIdQdGocAndTrangThaiOrderByLanDieuChinhDesc(Long idQdGoc, String trangThai);
     Optional<HhDchinhDxKhLcntHdr> findByIdQdGocAndLastest(Long idQdGoc, Boolean lastest);
+    Optional<HhDchinhDxKhLcntHdr> findByIdQdGocAndLanDieuChinh(Long idQdGoc, Integer lanDieuChinh);
 
     List<HhDchinhDxKhLcntHdr> findAllByIdIn (List<Long> ids);
     List<HhDchinhDxKhLcntHdr> findAllByIdQdGocAndTrangThaiNot (Long idQdGoc, String trangThai);

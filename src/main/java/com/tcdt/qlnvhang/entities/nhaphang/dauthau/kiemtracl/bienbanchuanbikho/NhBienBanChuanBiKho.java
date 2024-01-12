@@ -115,6 +115,7 @@ public class NhBienBanChuanBiKho extends TrangThaiBaseEntity implements Serializ
 
     @Column(name = "CLOAI_VTHH")
     private String cloaiVthh;
+    private String tenKeToan;
 
     @Transient
     private String tenCloaiVthh;

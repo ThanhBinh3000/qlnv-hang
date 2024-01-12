@@ -25,6 +25,19 @@ public interface XhXkVtBhQdGiaonvXnRepository extends JpaRepository<XhXkVtBhQdGi
   )
   Page<XhXkVtBhQdGiaonvXnHdr> searchPage(@Param("param") XhXkVtBhQdGiaonvXnRequest param, Pageable pageable);
 
+  @Query("SELECT DISTINCT qd FROM XhXkVtBhQdGiaonvXnHdr qd" +
+      " LEFT JOIN XhXkVtBhPhieuKdclHdr pkd ON qd.id IN (pkd.idQdGiaoNvXh) WHERE 1=1 " +
+      " AND (pkd.idBaoCaoKdm IS NULL) " +
+      " AND (:#{#param.dvql} IS NULL OR qd.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
+      " AND (:#{#param.nam} IS NULL OR qd.nam = :#{#param.nam}) " +
+      " AND (:#{#param.loai} IS NULL OR qd.loai = :#{#param.loai}) " +
+      " AND (:#{#param.loaiXn} IS NULL OR qd.loaiXn = :#{#param.loaiXn}) " +
+      " AND (:#{#param.trangThai} IS NULL OR qd.trangThai = :#{#param.trangThai}) " +
+      " ORDER BY qd.ngaySua DESC, qd.ngayTao DESC, qd.id DESC"
+  )
+  List<XhXkVtBhQdGiaonvXnHdr> listQuyetDinhChuaTaoBaoCao(@Param("param") XhXkVtBhQdGiaonvXnRequest param);
+
+
 
   void deleteAllByIdIn(List<Long> listId);
 

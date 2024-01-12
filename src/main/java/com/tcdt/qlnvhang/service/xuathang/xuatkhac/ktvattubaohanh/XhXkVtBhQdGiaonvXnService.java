@@ -220,6 +220,7 @@ public class XhXkVtBhQdGiaonvXnService extends BaseServiceImpl {
       case Contains.DADUYET_LDC + Contains.CHODUYET_LDC:
         optional.get().setNguoiPduyetId(currentUser.getUser().getId());
         optional.get().setNgayPduyet(LocalDate.now());
+        optional.get().setNgayKy(optional.get().getNgayKy() != null ? optional.get().getNgayKy() : LocalDate.now());
         break;
       default:
         throw new Exception("Phê duyệt không thành công");
@@ -346,7 +347,7 @@ public class XhXkVtBhQdGiaonvXnService extends BaseServiceImpl {
           }
           xhXkVtBhPhieuKdclRepository.save(item);
         }
-      }else {
+      } else {
         Optional<XhXkVtBhPhieuKtclHdr> phieuKtcl = xhXkVtBhPhieuKtclRepository.findById(Long.valueOf(qdGiaonvNh.getIdCanCu()));
         if (phieuKtcl.isPresent()) {
           XhXkVtBhPhieuKtclHdr item = phieuKtcl.get();
@@ -363,4 +364,8 @@ public class XhXkVtBhQdGiaonvXnService extends BaseServiceImpl {
     }
   }
 
+  public  List<XhXkVtBhQdGiaonvXnHdr> listSoQd(CustomUserDetails currentUser, XhXkVtBhQdGiaonvXnRequest req) {
+    List<XhXkVtBhQdGiaonvXnHdr> data = xhXkVtBhQdGiaonvXnRepository.listQuyetDinhChuaTaoBaoCao(req);
+    return data;
+  }
 }

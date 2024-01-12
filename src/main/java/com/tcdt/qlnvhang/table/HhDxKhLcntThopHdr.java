@@ -46,7 +46,10 @@ public class HhDxKhLcntThopHdr implements Serializable {
 
 	@Temporal(TemporalType.DATE)
 	Date ngayThop;
+	@Temporal(TemporalType.DATE)
+	Date ngayTrinh;
 
+	String soTtr;
 	String loaiVthh;
 	@Transient
 	String tenLoaiVthh;

@@ -27,6 +27,7 @@ public class HhBienBanLayMau implements Serializable {
     private String tenDvi;
     private String soBienBan;
     private String maQhns;
+    private String soBangKe;
     private Long idQdGiaoNvNh;
     private String soQdGiaoNvNh;
     @Temporal(TemporalType.DATE)

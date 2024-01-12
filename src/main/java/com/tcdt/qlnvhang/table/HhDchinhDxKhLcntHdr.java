@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tcdt.qlnvhang.entities.FileDKemJoinHhDchinhDxKhLcntHdr;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
@@ -90,6 +91,8 @@ public class HhDchinhDxKhLcntHdr extends TrangThaiBaseEntity implements Serializ
 	private Boolean lastest;
 	private Integer lanDieuChinh;
 	String noiDungQd;
+	String noiDungTtr;
+	String trichYeuQd;
 	String tenDuAn;
 	String dienGiaiTongMucDt;
 	String dienGiai;
@@ -139,4 +142,8 @@ public class HhDchinhDxKhLcntHdr extends TrangThaiBaseEntity implements Serializ
 	private List<FileDinhKem> fileDinhKems;
 	@Transient
 	private List<FileDinhKem> fileDinhKemsTtr;
+	@Transient
+	private List<Long> listIdGthau = new ArrayList<>();
+	@Transient
+	private HhDxuatKhLcntHdr dxuatKhLcntHdr;
 }

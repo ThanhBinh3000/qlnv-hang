@@ -26,11 +26,13 @@ public class XhXkVtBhQdXuatGiamVtDtl {
   String loaiVthh;
   String donViTinh;
   String cloaiVthh;
+  String namNhap;
   BigDecimal slLayMau;
   BigDecimal slTonKho;
   String maDviTsan;
-  String soPhieuKdcl;
-  Long idPhieuKdcl;
+  String soPhieu;
+  Long idPhieu;
+  Integer soLuongMauKd;
   Boolean isDat;
   Boolean mauBiHuy;
   @ManyToOne(fetch = FetchType.LAZY)

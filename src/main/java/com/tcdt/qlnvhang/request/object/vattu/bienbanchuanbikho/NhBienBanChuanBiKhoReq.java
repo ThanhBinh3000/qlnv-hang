@@ -65,6 +65,7 @@ public class NhBienBanChuanBiKhoReq extends BaseRequest {
     private String loaiVthh;
 
     private String cloaiVthh;
+    private String tenKeToan;
 
     private BigDecimal soLuongDdiemGiaoNvNh;
 

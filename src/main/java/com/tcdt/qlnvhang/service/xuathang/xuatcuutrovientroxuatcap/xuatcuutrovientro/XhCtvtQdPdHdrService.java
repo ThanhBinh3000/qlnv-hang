@@ -17,12 +17,14 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtTongHopHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import fr.opensagres.xdocreport.core.XDocReportException;
+import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -343,7 +345,28 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
       XhCtvtQuyetDinhPdHdr xuatCapRow = xhCtvtQdPdHdrRepository.save(data);
       pheDuyetRow.setIdXc(xuatCapRow.getId());
     }*/
+
     XhCtvtQuyetDinhPdHdr created = xhCtvtQdPdHdrRepository.save(pheDuyetRow);
+    if (created.isXuatCap() && statusReq.getTrangThai().equals(TrangThaiAllEnum.BAN_HANH.getId()) && !created.getType().equals("XC")) {
+      List<XhCtvtQuyetDinhPdDtl> listXuatCapDtl = new ArrayList<>();
+      XhCtvtQuyetDinhPdHdr xuatCapRow = objectMapper.readValue(objectMapper.writeValueAsString(created), XhCtvtQuyetDinhPdHdr.class);
+      xuatCapRow.getQuyetDinhPdDtl().forEach(s -> {
+        if(s.isXuatCap()) {
+          XhCtvtQuyetDinhPdDtl dtl = new XhCtvtQuyetDinhPdDtl();
+          BeanUtils.copyProperties(s, dtl, "id","mapVthh");
+          dtl.setXhCtvtQuyetDinhPdHdr(xuatCapRow);
+          listXuatCapDtl.add(dtl);
+        }
+      });
+      xuatCapRow.setQuyetDinhPdDtl(listXuatCapDtl);
+      xuatCapRow.setId(null);
+      xuatCapRow.setSoBbQd(xuatCapRow.getSoBbQd().replace("QĐPDCTVT","QĐPDXC"));
+      xuatCapRow.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
+      xuatCapRow.setPaXuatGaoChuyenXc(true);
+      xuatCapRow.setType("XC");
+      xuatCapRow.setLoaiNhapXuat("Xuất cấp");
+      xhCtvtQdPdHdrRepository.save(xuatCapRow);
+    }
     return created;
   }
 

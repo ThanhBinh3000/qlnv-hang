@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,8 +48,8 @@ public class ThongTinDauGiaReq extends BaseRequest {
     private String stkThuHuong;
     private String nganHangThuHuong;
     private String chiNhanhNganHang;
-    private LocalDate tgianDauGiaTu;
-    private LocalDate tgianDauGiaDen;
+    private LocalDateTime tgianDauGiaTu;
+    private LocalDateTime tgianDauGiaDen;
     private String diaDiemDauGia;
     private String hthucDgia;
     private String pthucDgia;
@@ -68,6 +69,7 @@ public class ThongTinDauGiaReq extends BaseRequest {
     private String trangThai;
     private Long idQdDc;
     private String soQdDc;
+    private String qdLcTcBdg;
     private List<FileDinhKemJoinTable> canCu;
     private List<FileDinhKemJoinTable> fileDinhKem;
     private List<ThongTinDauGiaDtlReq> children = new ArrayList<>();

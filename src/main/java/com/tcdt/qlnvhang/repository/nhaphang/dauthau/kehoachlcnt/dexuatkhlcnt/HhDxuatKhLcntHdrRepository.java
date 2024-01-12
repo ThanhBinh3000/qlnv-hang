@@ -47,7 +47,8 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 					"  AND (:trichYeu IS NULL OR LOWER(KHLCNT.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%')))" +
 					"  AND (:trangThai IS NULL OR KHLCNT.TRANG_THAI = :trangThai) "+
 					"  AND (:trangThaiTh IS NULL OR KHLCNT.TRANG_THAI_TH = :trangThaiTh) " +
-					"  AND (:maDvi IS NULL OR KHLCNT.MA_DVI = :maDvi) "
+					"  AND (:maDvi IS NULL OR KHLCNT.MA_DVI = :maDvi) " +
+					"  ORDER BY KHLCNT.ID DESC "
 			,nativeQuery = true)
 	Page<HhDxuatKhLcntHdr> select(String namKh, String soTr,String soQd, String ngayKyTu,String ngayKyDen, String ngayTaoTu,String ngayTaoDen,String loaiVthh,String trichYeu,String trangThai,String trangThaiTh,String maDvi, Pageable pageable);
 
@@ -172,7 +173,8 @@ public interface HhDxuatKhLcntHdrRepository extends BaseRepository<HhDxuatKhLcnt
 					"  AND (:trichYeu IS NULL OR LOWER(KHLCNT.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%')))" +
 					"  AND (:trangThai IS NULL OR KHLCNT.TRANG_THAI = :trangThai) "+
 					"  AND (:trangThaiTh IS NULL OR KHLCNT.TRANG_THAI_TH = :trangThaiTh) " +
-					"  AND (:maDvi IS NULL OR CT.MA_DVI LIKE CONCAT(:maDvi,'%')) ",
+					"  AND (:maDvi IS NULL OR CT.MA_DVI LIKE CONCAT(:maDvi,'%')) " +
+					"  ORDER BY KHLCNT.ID DESC ",
 			countQuery = " SELECT COUNT(*) FROM (SELECT DISTINCT KHLCNT.* " +
 					" FROM HH_DX_KHLCNT_HDR KHLCNT " +
 					" LEFT JOIN HH_DX_KHLCNT_DSGTHAU GTHAU ON KHLCNT.ID = GTHAU.ID_DX_KHLCNT " +

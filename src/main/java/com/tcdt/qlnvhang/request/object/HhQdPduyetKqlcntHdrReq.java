@@ -53,6 +53,10 @@ public class HhQdPduyetKqlcntHdrReq {
 
 	String cloaiVthh;
 	String noiDungQd;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	private Date tgianTrinhKqTcg;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	private Date tgianTrinhTtd;
 
 	private List<HhQdPduyetKqlcntDtlReq> detailList;
 

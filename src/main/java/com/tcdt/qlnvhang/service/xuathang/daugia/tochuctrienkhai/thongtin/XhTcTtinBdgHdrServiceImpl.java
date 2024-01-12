@@ -35,6 +35,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 @Service
@@ -51,137 +52,171 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl {
     @Autowired
     private XhQdPdKhBdgDtlRepository xhQdPdKhBdgDtlRepository;
 
-    public Page<XhTcTtinBdgHdr> searchPage(CustomUserDetails currentUser, ThongTinDauGiaReq req) throws Exception {
-        String dvql = currentUser.getDvql();
-        String capDvi = currentUser.getUser().getCapDvi();
-        req.setDvql(capDvi.equals(Contains.CAP_CUC) ? dvql : capDvi.equals(Contains.CAP_TONG_CUC) ? dvql.substring(0, 4) : null);
-        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-        Page<XhTcTtinBdgHdr> search = xhTcTtinBdgHdrRepository.searchPage(req, pageable);
+    public Page<XhTcTtinBdgHdr> searchPage(CustomUserDetails currentUser, ThongTinDauGiaReq request) throws Exception {
+        if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
+            request.setDvql(currentUser.getDvql());
+        } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
+            request.setDvql(currentUser.getDvql().substring(0, 4));
+        }
+        Pageable pageable = PageRequest.of(request.getPaggingReq().getPage(), request.getPaggingReq().getLimit());
+        Page<XhTcTtinBdgHdr> searchResultPage = xhTcTtinBdgHdrRepository.searchPage(request, pageable);
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-        search.getContent().forEach(data -> {
-            data.setMapVthh(mapDmucVthh);
-            data.setMapDmucDvi(mapDmucDvi);
-            data.setTrangThai(data.getTrangThai());
+        searchResultPage.getContent().forEach(data -> {
+            try {
+                data.setMapDmucDvi(mapDmucDvi);
+                data.setMapDmucVthh(mapDmucVthh);
+                data.setTrangThai(data.getTrangThai());
+            } catch (Exception exception) {
+                throw new RuntimeException(exception);
+            }
         });
-        return search;
+        return searchResultPage;
     }
 
     @Transactional
-    public XhTcTtinBdgHdr create(CustomUserDetails currentUser, ThongTinDauGiaReq req) throws Exception {
-        if (currentUser == null) {
+    public XhTcTtinBdgHdr create(CustomUserDetails currentUser, ThongTinDauGiaReq request) throws Exception {
+        if (currentUser == null || request == null) {
             throw new Exception("Bad request.");
         }
-        XhTcTtinBdgHdr data = new XhTcTtinBdgHdr();
-        BeanUtils.copyProperties(req, data);
-        data.setMaDvi(currentUser.getDvql());
-        data.setNgayTao(LocalDate.now());
-        data.setNguoiTaoId(currentUser.getUser().getId());
-        data.setTrangThai(Contains.DANG_THUC_HIEN);
-        Long maThongBao = Long.valueOf(req.getMaThongBao().split("/")[0]);
-        data.setId(maThongBao);
-        Optional<XhQdPdKhBdgDtl> optional = xhQdPdKhBdgDtlRepository.findById(data.getIdQdPdDtl());
-        XhQdPdKhBdgDtl xhQdPdKhBdgDtl = optional.orElseThrow(()
-                -> new Exception("Không tìm thấy Quyết định phê duyệt kế hoạch bán đấu giá"));
-        xhQdPdKhBdgDtl.setTrangThai(Contains.DANG_THUC_HIEN);
-        xhQdPdKhBdgDtlRepository.save(xhQdPdKhBdgDtl);
-        List<XhTcTtinBdgHdr> byIdQdPdDtl = xhTcTtinBdgHdrRepository.findByIdQdPdDtlOrderByLanDauGia(data.getIdQdPdDtl());
-        data.setLanDauGia(byIdQdPdDtl.size() + 1);
-        XhTcTtinBdgHdr created = xhTcTtinBdgHdrRepository.save(data);
-        this.saveDetail(req, created.getId(), false);
-        return created;
-    }
-
-    void saveDetail(ThongTinDauGiaReq req, Long idHdr, Boolean check) {
-        if (check) {
-            xhTcTtinBdgDtlRepository.deleteAllByIdHdr(idHdr);
+        if (!DataUtils.isNullObject(request.getIdQdPdDtl())) {
+            xhQdPdKhBdgDtlRepository.findById(request.getIdQdPdDtl()).map(checkDecision -> {
+                checkDecision.setTrangThai(Contains.DANG_THUC_HIEN);
+                return xhQdPdKhBdgDtlRepository.save(checkDecision);
+            }).orElseThrow(() -> new Exception("Không tìm thấy Quyết định phê duyệt kế hoạch bán đấu giá."));
         }
-        for (ThongTinDauGiaDtlReq dtlReq : req.getChildren()) {
-            XhTcTtinBdgDtl dtl = new XhTcTtinBdgDtl();
-            BeanUtils.copyProperties(dtlReq, dtl, "id");
-            dtl.setIdHdr(idHdr);
-            xhTcTtinBdgDtlRepository.save(dtl);
-            if (check) {
-                xhTcTtinBdgPloRepository.deleteAllByIdDtl(dtlReq.getId());
-            }
-            for (ThongTinDauGiaPloReq ploReq : dtlReq.getChildren()) {
-                XhTcTtinBdgPlo ploDtl = new XhTcTtinBdgPlo();
-                BeanUtils.copyProperties(ploReq, ploDtl, "id");
-                ploDtl.setIdDtl(dtl.getId());
-                ploDtl.setId(null);
-                if (req.getKetQua().equals(0) && check) {
-                    ploDtl.setSoLanTraGia(null);
-                    ploDtl.setDonGiaTraGia(null);
-                    ploDtl.setToChucCaNhan(null);
-                }
-                xhTcTtinBdgPloRepository.save(ploDtl);
-            }
+        XhTcTtinBdgHdr newData = new XhTcTtinBdgHdr();
+        BeanUtils.copyProperties(request, newData);
+        newData.setMaDvi(currentUser.getDvql());
+        newData.setNgayTao(LocalDate.now());
+        newData.setNguoiTaoId(currentUser.getUser().getId());
+        newData.setTrangThai(Contains.DANG_THUC_HIEN);
+        newData.setId(Long.valueOf(request.getMaThongBao().split("/")[0]));
+        if (request.getTgianDauGiaTu() != null) {
+            newData.setTgianDauGiaTu(request.getTgianDauGiaTu()
+                    .atZone(ZoneId.of("UTC"))
+                    .withZoneSameInstant(ZoneId.systemDefault())
+                    .toLocalDateTime());
         }
-
-        if (check) {
-            xhTcTtinBdgNlqRepository.deleteAllByIdHdr(idHdr);
+        if (request.getTgianDauGiaDen() != null) {
+            newData.setTgianDauGiaDen(request.getTgianDauGiaDen()
+                    .atZone(ZoneId.of("UTC"))
+                    .withZoneSameInstant(ZoneId.systemDefault())
+                    .toLocalDateTime());
         }
-        if (req.getKetQua().equals(1)) {
-            for (ThongTinDauGiaNtgReq nlqReq : req.getListNguoiTgia()) {
-                XhTcTtinBdgNlq nlq = new XhTcTtinBdgNlq();
-                BeanUtils.copyProperties(nlqReq, nlq, "id");
-                nlq.setId(null);
-                nlq.setIdHdr(idHdr);
-                xhTcTtinBdgNlqRepository.save(nlq);
-            }
-        }
+        List<XhTcTtinBdgHdr> byDecisionId = xhTcTtinBdgHdrRepository.findByIdQdPdDtlOrderByLanDauGia(newData.getIdQdPdDtl());
+        newData.setLanDauGia(byDecisionId.size() + 1);
+        XhTcTtinBdgHdr createdRecord = xhTcTtinBdgHdrRepository.save(newData);
+        this.saveDetail(request, createdRecord.getId(), false);
+        return createdRecord;
     }
 
     @Transactional
-    public XhTcTtinBdgHdr update(CustomUserDetails currentUser, ThongTinDauGiaReq req) throws Exception {
-        if (currentUser == null) {
+    public XhTcTtinBdgHdr update(CustomUserDetails currentUser, ThongTinDauGiaReq request) throws Exception {
+        if (currentUser == null || request == null || request.getId() == null) {
             throw new Exception("Bad request.");
         }
-        XhTcTtinBdgHdr data = xhTcTtinBdgHdrRepository.findById(req.getId())
+        XhTcTtinBdgHdr existingData = xhTcTtinBdgHdrRepository.findById(request.getId())
                 .orElseThrow(() -> new Exception("Không tìm thấy dữ liệu cần sửa"));
-        BeanUtils.copyProperties(req, data, "id", "maDvi");
-        data.setNgaySua(LocalDate.now());
-        data.setNguoiSuaId(currentUser.getUser().getId());
-        XhTcTtinBdgHdr updated = xhTcTtinBdgHdrRepository.save(data);
-        this.saveDetail(req, updated.getId(), true);
-        return updated;
+        BeanUtils.copyProperties(request, existingData, "id", "maDvi");
+        existingData.setNgaySua(LocalDate.now());
+        existingData.setNguoiSuaId(currentUser.getUser().getId());
+        if (request.getTgianDauGiaTu() != null) {
+            existingData.setTgianDauGiaTu(request.getTgianDauGiaTu()
+                    .atZone(ZoneId.of("UTC"))
+                    .withZoneSameInstant(ZoneId.systemDefault())
+                    .toLocalDateTime());
+        }
+        if (request.getTgianDauGiaDen() != null) {
+            existingData.setTgianDauGiaDen(request.getTgianDauGiaDen()
+                    .atZone(ZoneId.of("UTC"))
+                    .withZoneSameInstant(ZoneId.systemDefault())
+                    .toLocalDateTime());
+        }
+        XhTcTtinBdgHdr updatedData = xhTcTtinBdgHdrRepository.save(existingData);
+        this.saveDetail(request, updatedData.getId(), true);
+        return updatedData;
+    }
+
+    void saveDetail(ThongTinDauGiaReq request, Long idHdr, Boolean isCheckRequired) {
+        xhTcTtinBdgDtlRepository.deleteAllByIdHdr(isCheckRequired ? idHdr : null);
+        for (ThongTinDauGiaDtlReq detailRequest : request.getChildren()) {
+            XhTcTtinBdgDtl detail = new XhTcTtinBdgDtl();
+            BeanUtils.copyProperties(detailRequest, detail, "id");
+            detail.setIdHdr(idHdr);
+            xhTcTtinBdgDtlRepository.save(detail);
+            xhTcTtinBdgPloRepository.deleteAllByIdDtl(isCheckRequired ? detailRequest.getId() : null);
+            for (ThongTinDauGiaPloReq phanLoRequest : detailRequest.getChildren()) {
+                XhTcTtinBdgPlo phanLoDetail = new XhTcTtinBdgPlo();
+                BeanUtils.copyProperties(phanLoRequest, phanLoDetail, "id");
+                phanLoDetail.setIdDtl(detail.getId());
+                phanLoDetail.setId(null);
+                if (request.getKetQua().equals(0) && isCheckRequired) {
+                    phanLoDetail.setSoLanTraGia(null);
+                    phanLoDetail.setDonGiaTraGia(null);
+                    phanLoDetail.setToChucCaNhan(null);
+                }
+                xhTcTtinBdgPloRepository.save(phanLoDetail);
+            }
+        }
+        xhTcTtinBdgNlqRepository.deleteAllByIdHdr(isCheckRequired ? idHdr : null);
+        if (request.getKetQua().equals(1)) {
+            for (ThongTinDauGiaNtgReq nlqRequest : request.getListNguoiTgia()) {
+                XhTcTtinBdgNlq nlqDetail = new XhTcTtinBdgNlq();
+                BeanUtils.copyProperties(nlqRequest, nlqDetail, "id");
+                nlqDetail.setId(null);
+                nlqDetail.setIdHdr(idHdr);
+                xhTcTtinBdgNlqRepository.save(nlqDetail);
+            }
+        }
     }
 
     public List<XhTcTtinBdgHdr> detail(List<Long> ids) throws Exception {
-        List<XhTcTtinBdgHdr> list = xhTcTtinBdgHdrRepository.findByIdIn(ids);
-        if (DataUtils.isNullOrEmpty(list)) {
+        List<XhTcTtinBdgHdr> resultList = xhTcTtinBdgHdrRepository.findByIdIn(ids);
+        if (DataUtils.isNullOrEmpty(resultList)) {
             throw new Exception("Không tìm thấy dữ liệu");
         }
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-        for (XhTcTtinBdgHdr data : list) {
-            List<XhTcTtinBdgDtl> listDtl = xhTcTtinBdgDtlRepository.findAllByIdHdr(data.getId());
-            for (XhTcTtinBdgDtl dataDtl : listDtl) {
-                List<XhTcTtinBdgPlo> listPhanLo = xhTcTtinBdgPloRepository.findAllByIdDtl(dataDtl.getId());
-                for (XhTcTtinBdgPlo dataPhanLo : listPhanLo) {
-                    dataPhanLo.setTenDiemKho(mapDmucDvi.getOrDefault(dataPhanLo.getMaDiemKho(), null));
-                    dataPhanLo.setTenNhaKho(mapDmucDvi.getOrDefault(dataPhanLo.getMaNhaKho(), null));
-                    dataPhanLo.setTenNganKho(mapDmucDvi.getOrDefault(dataPhanLo.getMaNganKho(), null));
-                    dataPhanLo.setTenLoKho(mapDmucDvi.getOrDefault(dataPhanLo.getMaLoKho(), null));
-                    Optional<BigDecimal> donGiaOptional = Optional.ofNullable(dataPhanLo.getDonGiaTraGia());
-                    Optional<BigDecimal> soLuongOptional = Optional.ofNullable(dataPhanLo.getSoLuongDeXuat());
-                    dataPhanLo.setThanhTien(donGiaOptional.flatMap(donGia -> soLuongOptional.map(soLuong -> donGia.multiply(soLuong))).orElse(null));
-                }
-                dataDtl.setTenDvi(mapDmucDvi.getOrDefault(dataDtl.getMaDvi(), null));
-                BigDecimal sumThanhTien = listPhanLo.stream().map(XhTcTtinBdgPlo::getThanhTien).filter(Objects::nonNull).reduce((a, b) -> a.add(b)).orElse(null);
-                BigDecimal sumDonGiaDeXuat = listPhanLo.stream().map(XhTcTtinBdgPlo::getDonGiaDeXuat).filter(Objects::nonNull).reduce((a, b) -> a.add(b)).orElse(null);
-                dataDtl.setThanhTien(sumThanhTien);
-                dataDtl.setDonGiaDeXuat(sumDonGiaDeXuat);
-                dataDtl.setChildren(listPhanLo);
+        for (XhTcTtinBdgHdr item : resultList) {
+            List<XhTcTtinBdgDtl> detailList = xhTcTtinBdgDtlRepository.findAllByIdHdr(item.getId());
+            for (XhTcTtinBdgDtl detailItem : detailList) {
+                List<XhTcTtinBdgPlo> subDetailList = xhTcTtinBdgPloRepository.findAllByIdDtl(detailItem.getId());
+                subDetailList.forEach(subDetailItem -> {
+                    subDetailItem.setMapDmucDvi(mapDmucDvi);
+                    this.calculate(subDetailItem, detailItem, item, subDetailList, detailList);
+                });
+                detailItem.setMapDmucDvi(mapDmucDvi);
+                detailItem.setChildren(subDetailList);
             }
-            data.setMapDmucDvi(mapDmucDvi);
-            data.setMapVthh(mapDmucVthh);
-            BigDecimal sumTongTien = listDtl.stream().map(XhTcTtinBdgDtl::getThanhTien).filter(Objects::nonNull).reduce((a, b) -> a.add(b)).orElse(null);
-            data.setTongTien(sumTongTien);
-            data.setChildren(listDtl);
-            data.setListNguoiTgia(xhTcTtinBdgNlqRepository.findAllByIdHdr(data.getId()));
+            item.setMapDmucDvi(mapDmucDvi);
+            item.setMapDmucVthh(mapDmucVthh);
+            item.setChildren(detailList);
+            item.setListNguoiTgia(xhTcTtinBdgNlqRepository.findAllByIdHdr(item.getId()));
         }
-        return list;
+        return resultList;
+    }
+
+    private void calculate(XhTcTtinBdgPlo subDetailItem, XhTcTtinBdgDtl detailItem, XhTcTtinBdgHdr item, List<XhTcTtinBdgPlo> subDetailList, List<XhTcTtinBdgDtl> detailList) {
+        Optional<BigDecimal> donGiaOptional = Optional.ofNullable(subDetailItem.getDonGiaTraGia());
+        Optional<BigDecimal> soLuongOptional = Optional.ofNullable(subDetailItem.getSoLuongDeXuat());
+        BigDecimal thanhTien = donGiaOptional.flatMap(donGia -> soLuongOptional.map(soLuong -> donGia.multiply(soLuong))).orElse(null);
+        subDetailItem.setThanhTien(thanhTien);
+        BigDecimal sumThanhTien = subDetailList.stream()
+                .map(XhTcTtinBdgPlo::getThanhTien)
+                .filter(Objects::nonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal sumDonGiaDeXuat = subDetailList.stream()
+                .map(XhTcTtinBdgPlo::getDonGiaDeXuat)
+                .filter(Objects::nonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        detailItem.setThanhTien(sumThanhTien);
+        detailItem.setDonGiaDeXuat(sumDonGiaDeXuat);
+        BigDecimal sumTongTien = detailList.stream()
+                .map(XhTcTtinBdgDtl::getThanhTien)
+                .filter(Objects::nonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        item.setTongTien(sumTongTien);
     }
 
     public XhTcTtinBdgHdr detail(Long id) throws Exception {
@@ -194,76 +229,76 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl {
 
     @Transactional
     public void delete(IdSearchReq idSearchReq) throws Exception {
-        XhTcTtinBdgHdr data = xhTcTtinBdgHdrRepository.findById(idSearchReq.getId())
+        if (idSearchReq == null || idSearchReq.getId() == null) {
+            throw new Exception("Bad request.");
+        }
+        XhTcTtinBdgHdr proposalData = xhTcTtinBdgHdrRepository.findById(idSearchReq.getId())
                 .orElseThrow(() -> new Exception("Bản ghi không tồn tại"));
-        if (!data.getTrangThai().equals(Contains.DANG_THUC_HIEN)) {
-            throw new Exception("Chỉ thực hiện xóa bản ghi ở chưa cập nhập");
+        if (!proposalData.getTrangThai().equals(Contains.DANG_THUC_HIEN)) {
+            throw new Exception("Chỉ thực hiện xóa với đề xuất ở trạng thái bản nháp.");
         }
-        List<XhTcTtinBdgDtl> listDtl = xhTcTtinBdgDtlRepository.findAllByIdHdr(data.getId());
-        for (XhTcTtinBdgDtl dtl : listDtl) {
-            xhTcTtinBdgPloRepository.deleteAllByIdDtl(dtl.getId());
+        List<XhTcTtinBdgDtl> proposalDetailsList = xhTcTtinBdgDtlRepository.findAllByIdHdr(proposalData.getId());
+        for (XhTcTtinBdgDtl proposalDetail : proposalDetailsList) {
+            xhTcTtinBdgPloRepository.deleteAllByIdDtl(proposalDetail.getId());
         }
-        xhTcTtinBdgDtlRepository.deleteAllByIdHdr(data.getId());
-        xhTcTtinBdgNlqRepository.deleteAllByIdHdr(data.getId());
-        xhTcTtinBdgHdrRepository.delete(data);
+        xhTcTtinBdgDtlRepository.deleteAllByIdHdr(proposalData.getId());
+        xhTcTtinBdgNlqRepository.deleteAllByIdHdr(proposalData.getId());
+        xhTcTtinBdgHdrRepository.delete(proposalData);
     }
 
     @Transactional
     public XhTcTtinBdgHdr approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
-        if (currentUser == null) {
+        if (currentUser == null || StringUtils.isEmpty(statusReq.getId())) {
             throw new Exception("Bad request.");
         }
-        if (StringUtils.isEmpty(statusReq.getId())) {
-            throw new Exception("Không tìm thấy dữ liệu");
-        }
-        XhTcTtinBdgHdr data = xhTcTtinBdgHdrRepository.findById(Long.valueOf(statusReq.getId()))
+        XhTcTtinBdgHdr proposal = xhTcTtinBdgHdrRepository.findById(Long.valueOf(statusReq.getId()))
                 .orElseThrow(() -> new Exception("Không tìm thấy dữ liệu"));
-        String status = statusReq.getTrangThai() + data.getTrangThai();
-        switch (status) {
+        String statusCombination = statusReq.getTrangThai() + proposal.getTrangThai();
+        switch (statusCombination) {
             case Contains.DA_HOAN_THANH + Contains.DANG_THUC_HIEN:
-                data.setNguoiPduyetId(currentUser.getUser().getId());
-                data.setNgayPduyet(LocalDate.now());
-                data.setTrangThai(statusReq.getTrangThai());
+                proposal.setNguoiPduyetId(currentUser.getUser().getId());
+                proposal.setNgayPduyet(LocalDate.now());
+                proposal.setTrangThai(statusReq.getTrangThai());
                 break;
             default:
                 throw new Exception("Phê duyệt không thành công");
         }
-        XhTcTtinBdgHdr created = xhTcTtinBdgHdrRepository.save(data);
+        XhTcTtinBdgHdr updatedData = xhTcTtinBdgHdrRepository.save(proposal);
         if (statusReq.getTrangThai().equals(Contains.DA_HOAN_THANH)) {
-            updateDauGiaDetails(data);
+            updateDauGiaDetails(updatedData);
         }
-        return created;
+        return updatedData;
     }
 
-    private void updateDauGiaDetails(XhTcTtinBdgHdr data) {
-        Optional<XhQdPdKhBdgDtl> dauGia = xhQdPdKhBdgDtlRepository.findById(data.getIdQdPdDtl());
-        dauGia.ifPresent(dauGiaDtl -> {
-            int slDviTsan = dauGiaDtl.getSlDviTsan();
-            BigDecimal soDviTsanThanhCong = xhQdPdKhBdgDtlRepository.countSlDviTsanThanhCong(data.getIdQdPdDtl(), data.getLoaiVthh(), data.getMaDvi());
-            BigDecimal soDviTsanKhongThanh = new BigDecimal(slDviTsan).subtract(soDviTsanThanhCong);
-            dauGiaDtl.setSoDviTsanThanhCong(soDviTsanThanhCong);
-            dauGiaDtl.setSoDviTsanKhongThanh(soDviTsanKhongThanh);
-            dauGiaDtl.setKetQuaDauGia(dauGiaDtl.getSoDviTsanThanhCong() + "/" + slDviTsan);
-            xhQdPdKhBdgDtlRepository.save(dauGiaDtl);
+    private void updateDauGiaDetails(XhTcTtinBdgHdr proposal) {
+        xhQdPdKhBdgDtlRepository.findById(proposal.getIdQdPdDtl()).ifPresent(decision -> {
+            int quantityUnitsApproved = decision.getSlDviTsan();
+            BigDecimal successfulUnits = xhQdPdKhBdgDtlRepository.countSlDviTsanThanhCong(
+                    proposal.getIdQdPdDtl(),
+                    proposal.getLoaiVthh(),
+                    proposal.getMaDvi());
+            BigDecimal unsuccessfulUnits = new BigDecimal(quantityUnitsApproved).subtract(successfulUnits);
+            decision.setSoDviTsanThanhCong(successfulUnits);
+            decision.setSoDviTsanKhongThanh(unsuccessfulUnits);
+            decision.setKetQuaDauGia(decision.getSoDviTsanThanhCong() + "/" + quantityUnitsApproved);
+            xhQdPdKhBdgDtlRepository.save(decision);
         });
     }
 
-    public ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception {
-        if (currentUser == null) {
+    public ReportTemplateResponse preview(HashMap<String, Object> requestParams, CustomUserDetails currentUser) throws Exception {
+        if (currentUser == null || requestParams == null) {
             throw new Exception("Bad request.");
         }
         try {
-            String templatePath = DataUtils.safeToString(body.get("tenBaoCao"));
-            String fileTemplate = "bandaugia/" + templatePath;
-            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
-            XhTcTtinBdgHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
-            detail.setTenDvi(detail.getTenDvi().toUpperCase());
-            detail.setTenCloaiVthh(detail.getTenCloaiVthh().toUpperCase());
-            return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XDocReportException e) {
-            e.printStackTrace();
+            String templateName = DataUtils.safeToString(requestParams.get("tenBaoCao"));
+            String templatePath = "bandaugia/" + templateName;
+            FileInputStream templateInputStream = new FileInputStream(baseReportFolder + templatePath);
+            XhTcTtinBdgHdr reportDetail = this.detail(DataUtils.safeToLong(requestParams.get("id")));
+            reportDetail.setTenDvi(reportDetail.getTenDvi().toUpperCase());
+            reportDetail.setTenCloaiVthh(reportDetail.getTenCloaiVthh().toUpperCase());
+            return docxToPdfConverter.convertDocxToPdf(templateInputStream, reportDetail);
+        } catch (IOException | XDocReportException exception) {
+            exception.printStackTrace();
         }
         return null;
     }

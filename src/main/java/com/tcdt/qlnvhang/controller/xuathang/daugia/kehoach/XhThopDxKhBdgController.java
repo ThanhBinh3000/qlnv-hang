@@ -186,6 +186,7 @@ public class XhThopDxKhBdgController extends BaseController {
         } catch (Exception e) {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
+            log.error("Xem trước thông tin : {}", e);
         }
         return ResponseEntity.ok(resp);
     }

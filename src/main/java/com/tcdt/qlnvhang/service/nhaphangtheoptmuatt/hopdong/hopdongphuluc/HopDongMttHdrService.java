@@ -1,5 +1,8 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.hopdong.hopdongphuluc;
 
+import com.tcdt.qlnvhang.dto.HopDongMttChildrenDTO;
+import com.tcdt.qlnvhang.dto.HopDongMttChildrenDtlDTO;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhNkPhieuKtcl;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
@@ -32,6 +35,7 @@ import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import org.apache.poi.ss.formula.functions.T;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -670,9 +674,24 @@ public class HopDongMttHdrService extends BaseServiceImpl {
   }
 
   public ReportTemplateResponse preview(HopDongMttHdrReq objReq) throws Exception {
-    if(getUser().getCapDvi().equals(Contains.CAP_CUC)){
+    if(getUser().getCapDvi().equals(Contains.CAP_CUC) || getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)){
 
       HopDongMttHdr hopDongMttHdr = this.detail(objReq.getId());
+      List<HopDongMttChildrenDTO> hopDongChildrens = new ArrayList<>();
+      HopDongMttChildrenDTO hopDongChildren = new HopDongMttChildrenDTO();
+      if (hopDongMttHdr.getIdKqCgia() == null) {
+        for (HhQdGiaoNvNhangDtl hhQdGiaoNvNhangDtl : hopDongMttHdr.getQdGiaoNvuDtlList()) {
+//          BeanUtils.copyProperties(hhQdGiaoNvNhangDtl, hopDongChildren);
+
+          HopDongMttChildrenDTO dataMap = new ModelMapper().map(hhQdGiaoNvNhangDtl, HopDongMttChildrenDTO.class);
+          hopDongChildrens.add(dataMap);
+        }
+      }else{
+        for (HhQdPheduyetKqMttSLDD hhQdPheduyetKqMttSLDD : hopDongMttHdr.getChildren()) {
+          HopDongMttChildrenDTO dataMap = new ModelMapper().map(hhQdPheduyetKqMttSLDD, HopDongMttChildrenDTO.class);
+          hopDongChildrens.add(dataMap);
+        }
+      }
       hopDongMttHdr.setTenLoaiVthh(hopDongMttHdr.getTenLoaiVthh().toUpperCase());
       hopDongMttHdr.setNgayMkhoStr(Contains.convertDateToStringSecond(hopDongMttHdr.getNgayMkho()));
 
@@ -680,16 +699,21 @@ public class HopDongMttHdrService extends BaseServiceImpl {
       BigDecimal soLuongChild = new BigDecimal(0);
       BigDecimal tongThanhTienChild = new BigDecimal(0);
       BigDecimal tongThanhTien = new BigDecimal(0);
-      for (HhQdPheduyetKqMttSLDD sldd : hopDongMttHdr.getChildren()) {
-        tongThanhTien = tongThanhTien.add(sldd.getTongThanhTien());
+      hopDongMttHdr.setHopDongChildren(hopDongChildrens);
+      for (HopDongMttChildrenDTO sldd : hopDongMttHdr.getHopDongChildren()) {
+        if(sldd.getTongThanhTien() != null){
+          tongThanhTien = tongThanhTien.add(sldd.getTongThanhTien());
+        }else{
+          tongThanhTien = tongThanhTien.add(sldd.getSoLuong().multiply(sldd.getDonGiaVat()).multiply(BigDecimal.valueOf(1000)));
+        }
         sldd.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(sldd.getTongThanhTien()));
-        for (HhQdPdKQMttSlddDtl child : sldd.getChildren()) {
+        for (HopDongMttChildrenDtlDTO child : sldd.getChildren()) {
           soLuongChild = soLuongChild.add(child.getSoLuong());
-          tongThanhTienChild = child.getSoLuong().multiply(child.getDonGiaVat()).multiply(new BigDecimal(1000));
+          tongThanhTienChild = child.getSoLuong().multiply(child.getDonGiaVat() != null ? child.getDonGiaVat() : sldd.getDonGiaVat()).multiply(new BigDecimal(1000));
           child.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(tongThanhTienChild));
         }
       }
-
+      hopDongMttHdr.setSoLuong(soLuongChild);
       hopDongMttHdr.setTongThanhTienStr(docxToPdfConverter.convertBigDecimalToStr(tongThanhTien));
       ReportTemplate model = findByTenFile(objReq.getReportTemplateRequest());
       byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());

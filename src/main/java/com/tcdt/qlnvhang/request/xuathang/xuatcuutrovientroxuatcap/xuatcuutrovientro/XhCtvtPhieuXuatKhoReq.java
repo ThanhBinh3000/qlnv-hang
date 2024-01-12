@@ -57,9 +57,11 @@ public class XhCtvtPhieuXuatKhoReq {
   private Long nguoiPduyetId;
   private String lyDoTuChoi;
   private String type;
+  private String phanLoai;
   private String mucDichXuat;
   private String noiDungDx;
   private BigDecimal soLuong;
   private String soLuongBc;
+  private Long idDtlQdGiaoNvXh;
   private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
 }

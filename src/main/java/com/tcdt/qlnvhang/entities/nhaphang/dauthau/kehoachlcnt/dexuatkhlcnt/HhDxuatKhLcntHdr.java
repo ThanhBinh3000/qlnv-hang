@@ -133,9 +133,11 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	Date ngayKyQdPdGiaCuThe;
 	String soQdPdGiaCuThe;
 	@Transient
-	String soQdPdKqLcnt;
+	String soQdPdKhLcnt;
 	@Transient
-	Long idQdPdKqLcnt;
+	Long idQdPdKhLcnt;
+	@Transient
+	Date tgianDongMothau;
 	@Transient
 	Integer soGthauTrung;
 

@@ -33,6 +33,7 @@ public class XhCtvtQuyetDinhPdHdrReq {
   private String tenVthh;
   private String loaiNhapXuat;
   private String kieuNhapXuat;
+  private String phanLoai;
   private String mucDichXuat;
   private String trichYeu;
   private String trangThai;
@@ -46,9 +47,10 @@ public class XhCtvtQuyetDinhPdHdrReq {
   private Long nguoiPduyetId;
   private String donViTinh;
   private LocalDate ngayKetThuc;
-
   private Long idQdGiaoNv;
   private String soQdGiaoNv;
+  private LocalDate ngayTapKet;
+  private LocalDate ngayGiaoHang;
 
   private List<FileDinhKemJoinTable> fileDinhKem;
 

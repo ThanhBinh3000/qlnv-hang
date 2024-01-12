@@ -24,4 +24,5 @@ public class XhQdPdKhBdgPlDtlReq {
     private BigDecimal donGiaDuocDuyet;
     private BigDecimal thanhTienDuocDuyet;
     private BigDecimal tienDatTruocDuocDuyet;
+    private Integer namNhap;
 }

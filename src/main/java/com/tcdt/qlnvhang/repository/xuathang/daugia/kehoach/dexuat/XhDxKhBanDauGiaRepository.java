@@ -56,9 +56,9 @@ public interface XhDxKhBanDauGiaRepository extends JpaRepository<XhDxKhBanDauGia
             "  AND DSG.MA_DVI = :maDvi " +
             "  AND HDR.LASTEST = :lastest",
             nativeQuery = true)
-    BigDecimal countSLDalenKh(@Param("namKh") Integer namKh,
+    BigDecimal countSLDalenKh(@Param("maDvi") String maDvi,
+                              @Param("namKh") Integer namKh,
                               @Param("loaiVthh") String loaiVthh,
-                              @Param("maDvi") String maDvi,
                               @Param("lastest") Integer lastest);
 
     @Transactional

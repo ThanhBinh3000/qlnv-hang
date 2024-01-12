@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.util.*;
@@ -96,6 +97,10 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
             KquaKnghiem kq = new KquaKnghiem();
             BeanUtils.copyProperties(kquaReq, kq, "id");
             kq.setPhieuKnghiemId(id);
+            kq.setMaTchuan(kquaReq.getMaChiTieu());
+            kq.setTenTchuan(kquaReq.getTenChiTieu());
+            kq.setChiSoNhap(kquaReq.getMucYeuCauNhap());
+            kq.setPhuongPhap(kquaReq.getPhuongPhapXd());
             kquaKnghiemRepository.save(kq);
         }
     }
@@ -168,6 +173,7 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
     }
 
     @Override
+    @Transactional
     public void delete(Long id) throws Exception {
         UserInfo userInfo = UserUtils.getUserInfo();
         Optional<PhieuKnghiemCluongHang> optional = phieuKnghiemCluongHangRepository.findById(id);

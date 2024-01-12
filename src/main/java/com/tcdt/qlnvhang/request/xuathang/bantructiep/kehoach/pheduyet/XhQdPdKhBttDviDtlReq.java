@@ -25,5 +25,6 @@ public class XhQdPdKhBttDviDtlReq {
     private BigDecimal thanhTienDuocDuyet;
     private String loaiVthh;
     private String cloaiVthh;
+    private Integer namNhap;
     private List<XhTcTtinBttReq> children = new ArrayList<>();
 }

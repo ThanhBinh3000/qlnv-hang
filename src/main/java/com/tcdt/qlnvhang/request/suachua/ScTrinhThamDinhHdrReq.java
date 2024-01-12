@@ -17,6 +17,7 @@ public class ScTrinhThamDinhHdrReq extends BaseRequest {
     private Integer nam;
     private String maDvi;
     private String soTtr;
+    private String soTtrTcuc;
     private Long idThHdr;
     private String maThHdr;
     private LocalDate ngayDuyetLdc;
@@ -25,6 +26,7 @@ public class ScTrinhThamDinhHdrReq extends BaseRequest {
     private LocalDate thoiHanXuatDk;
     private LocalDate thoiHanXuat;
     private String trichYeu;
+    private String ysKien;
     private String lyDoTuChoi;
     private String trangThai;
     private String ketQua;

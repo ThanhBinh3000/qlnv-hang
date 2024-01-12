@@ -39,6 +39,7 @@ public class XhCtvtDeXuatHdr extends BaseEntity implements Serializable {
   private String maDvi;
   private String loaiNhapXuat;
   private String kieuNhapXuat;
+  private String phanLoai;
   private String mucDichXuat;
   private String soDx;
   private String trichYeu;
@@ -64,6 +65,8 @@ public class XhCtvtDeXuatHdr extends BaseEntity implements Serializable {
   private String lyDoTuChoi;
   private String type;
   private BigDecimal tonKhoDvi;
+  private LocalDate ngayTapKet;
+  private LocalDate ngayGiaoHang;
   @JsonIgnore
   @Transient
   private Map<String, String> mapDmucDvi = new ArrayMap<>();

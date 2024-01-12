@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbQuyetDinhDcTcHdrPreviewReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.DcnbQuyetDinhDcTcHdrReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchDcnbQuyetDinhDcTc;
 import com.tcdt.qlnvhang.response.BaseResponse;
@@ -221,4 +222,5 @@ public class DcnbQuyetDinhDcTcHdrController extends BaseController {
     }
     return ResponseEntity.ok(resp);
   }
+
 }

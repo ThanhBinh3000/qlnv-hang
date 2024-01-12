@@ -45,12 +45,15 @@ public class XhCtvtQuyetDinhGnvHdrReq {
   Long nguoiPduyetId;
   String loaiNhapXuat;
   String kieuNhapXuat;
+  String phanLoai;
   String mucDichXuat;
   String tenDvi;
   String tenLoaiVthh;
   String tenCloaiVthh;
   String tenTrangThai;
   String tenTrangThaiXh;
+  LocalDate ngayTapKet;
+  LocalDate ngayGiaoHang;
   List<XhCtvtQuyetDinhGnvDtl> dataDtl;
   List<FileDinhKemJoinTable> fileDinhKem;
   List<FileDinhKemJoinTable> canCu;

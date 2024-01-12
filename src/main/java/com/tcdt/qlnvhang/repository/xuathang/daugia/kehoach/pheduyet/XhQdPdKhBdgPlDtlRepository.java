@@ -19,7 +19,7 @@ public interface XhQdPdKhBdgPlDtlRepository extends JpaRepository<XhQdPdKhBdgPlD
 
     List<XhQdPdKhBdgPlDtl> findByIdPhanLoIn(List<Long> listId);
 
-    @Query(value = "SELECT dtl.GIA_QD_TCDTNN " +
+    @Query(value = "SELECT COALESCE(NULLIF(dtl.GIA_QD_DC_TCDTNN, 0), dtl.GIA_QD_TCDTNN) " +
             "FROM KH_PAG_TONG_HOP_CTIET dtl " +
             "JOIN KH_PAG_GCT_QD_TCDTNN hdr ON dtl.QD_TCDTNN_ID = hdr.ID " +
             "WHERE hdr.CLOAI_VTHH = :cloaiVthh " +
@@ -28,7 +28,8 @@ public interface XhQdPdKhBdgPlDtlRepository extends JpaRepository<XhQdPdKhBdgPlD
             "AND hdr.LOAI_GIA = 'LG04' " +
             "AND dtl.MA_CHI_CUC = :maDvi " +
             "AND hdr.TRANG_THAI = '" + Contains.BAN_HANH + "'" +
-            "AND hdr.NGAY_HIEU_LUC <= CURRENT_DATE " +
+            "AND hdr.NGAY_KY <= CURRENT_DATE " +
+            "ORDER BY hdr.NGAY_KY DESC " +
             "FETCH FIRST 1 ROWS ONLY",
             nativeQuery = true)
     BigDecimal getGiaDuocDuyetLuongThuc(
@@ -37,7 +38,7 @@ public interface XhQdPdKhBdgPlDtlRepository extends JpaRepository<XhQdPdKhBdgPlD
             @Param("namKh") Long namKh,
             @Param("maDvi") String maDvi);
 
-    @Query(value = "SELECT dtl.GIA_QD_TCDT " +
+    @Query(value = "SELECT COALESCE(NULLIF(dtl.GIA_QD_DC_TCDT, 0), dtl.GIA_QD_TCDT) " +
             "FROM KH_PAG_TT_CHUNG dtl " +
             "JOIN KH_PAG_GCT_QD_TCDTNN hdr ON dtl.QD_TCDTNN_ID = hdr.ID " +
             "WHERE (dtl.CLOAI_VTHH = :cloaiVthh OR dtl.CLOAI_VTHH IS NULL) " +
@@ -45,7 +46,8 @@ public interface XhQdPdKhBdgPlDtlRepository extends JpaRepository<XhQdPdKhBdgPlD
             "AND hdr.NAM_KE_HOACH = :namKh " +
             "AND hdr.LOAI_GIA = 'LG04' " +
             "AND hdr.TRANG_THAI = '" + Contains.BAN_HANH + "'" +
-            "AND hdr.NGAY_HIEU_LUC <= CURRENT_DATE " +
+            "AND hdr.NGAY_KY <= CURRENT_DATE " +
+            "ORDER BY hdr.NGAY_KY DESC " +
             "FETCH FIRST 1 ROWS ONLY",
             nativeQuery = true)
     BigDecimal getGiaDuocDuyetVatTu(

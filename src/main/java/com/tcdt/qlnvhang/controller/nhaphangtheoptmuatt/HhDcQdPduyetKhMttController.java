@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhBienBanNghiemThuReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhDcQdPduyetKhmttHdrReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhDcQdPduyetKhMttReq;
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhDcQdPduyetKhMttReqDTO;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.HhDcQdPduyetKhMttService;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -170,6 +172,40 @@ public class HhDcQdPduyetKhMttController {
             resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
             resp.setMsg(e.getMessage());
             log.error(e.getMessage());
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Xem trước", response = List.class)
+    @PostMapping(value = PathContains.DC_QD_PD + PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BaseResponse> preview(@RequestBody HhDcQdPduyetKhmttHdrReq objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(hhDcQdPduyetKhMttService.preview(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Xem trước: {?}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Tra cứu quyết định ", response = List.class)
+    @PostMapping(value=  PathContains.DC_QD_PD + PathContains.URL_TRA_CUU + "/dieu-chinh", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> danhSachQdDc(@Valid @RequestBody SearchHhDcQdPduyetKhMttReqDTO objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(hhDcQdPduyetKhMttService.danhSachQdDc(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu: {}", e);
         }
         return ResponseEntity.ok(resp);
     }
