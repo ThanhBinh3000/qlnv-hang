@@ -710,7 +710,7 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 	}
 	@Transient
 	public HhDchinhDxKhLcntHdr findByIdQdGoc(Long idQdGoc, Integer lanDieuChinh) {
-		Optional<HhDchinhDxKhLcntHdr> qOptional = null;
+		Optional<HhDchinhDxKhLcntHdr> qOptional;
 		if (lanDieuChinh > 0) {
 			qOptional = hdrRepository.findByIdQdGocAndLanDieuChinh(idQdGoc, lanDieuChinh);
 		} else {
@@ -729,6 +729,20 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		qOptional.get().setTenLoaiVthh(StringUtils.isEmpty(qOptional.get().getLoaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getLoaiVthh()));
 		qOptional.get().setTenCloaiVthh(StringUtils.isEmpty(qOptional.get().getCloaiVthh()) ? null : hashMapDmHh.get(qOptional.get().getCloaiVthh()));
 		qOptional.get().setTenTrangThai(TrangThaiAllEnum.getLabelById(qOptional.get().getTrangThai()));
+		Optional<HhQdKhlcntHdr> hhQdKhlcntHdr = hhQdKhlcntHdrRepository.findById(qOptional.get().getIdQdGoc());
+		if (hhQdKhlcntHdr.isPresent()) {
+			Optional<HhDxuatKhLcntHdr> dxuatKhLcntHdr = hhDxuatKhLcntHdrRepository.findById(hhQdKhlcntHdr.get().getIdTrHdr());
+			if (dxuatKhLcntHdr.isPresent()) {
+				dxuatKhLcntHdr.get().setTenPthucLcnt(hashMapPthucDthau.get(dxuatKhLcntHdr.get().getPthucLcnt()));
+				dxuatKhLcntHdr.get().setTenHthucLcnt(hashMapHtLcnt.get(dxuatKhLcntHdr.get().getHthucLcnt()));
+				dxuatKhLcntHdr.get().setTenNguonVon(hashMapNguonVon.get(dxuatKhLcntHdr.get().getNguonVon()));
+				dxuatKhLcntHdr.get().setTenLoaiHdong(hashMapLoaiHdong.get(dxuatKhLcntHdr.get().getLoaiHdong()));
+				dxuatKhLcntHdr.get().setTenDvi(mapDmucDvi.get(dxuatKhLcntHdr.get().getMaDvi()));
+				dxuatKhLcntHdr.get().setTenCloaiVthh(hashMapDmHh.get(dxuatKhLcntHdr.get().getCloaiVthh()));
+				dxuatKhLcntHdr.get().setTenLoaiVthh(hashMapDmHh.get(dxuatKhLcntHdr.get().getLoaiVthh()));
+				qOptional.get().setDxuatKhLcntHdr(dxuatKhLcntHdr.get());
+			}
+		}
 		if (qOptional.get().getLoaiVthh().startsWith("02")) {
 			getDetailVt(qOptional.get());
 		} else {
