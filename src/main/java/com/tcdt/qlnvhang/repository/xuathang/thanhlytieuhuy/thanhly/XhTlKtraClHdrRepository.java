@@ -48,6 +48,7 @@ public interface XhTlKtraClHdrRepository extends JpaRepository<XhTlKtraClHdr, Lo
             " AND (:#{#param.maDviSr} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDviSr},'%'))" +
             " AND (:#{#param.trangThai} IS NULL OR c.trangThai =:#{#param.trangThai})" +
             " AND (:#{#param.idQdXh} IS NULL OR c.idQdXh =:#{#param.idQdXh})" +
+            "AND  ((:#{#param.ngayTu} IS NULL OR c.ngayKnghiem >= :#{#param.ngayTu}) AND (:#{#param.ngayDen}  IS NULL OR c.ngayKnghiem <= :#{#param.ngayDen})) " +
             " ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
     )
     List<XhTlKtraClHdr> findAllByIdQdXh(@Param("param") XhTlKtraClReq param);
