@@ -31,6 +31,7 @@ public class XhTlBbLayMauReq extends BaseRequest {
   private Boolean ketQuaNiemPhong;
   private String ghiChu;
   private List<XhTlBbLayMauDtl> children = new ArrayList<>();
+  private String soBbQd;
 
   //
   private String maDviSr;

@@ -257,6 +257,8 @@ public class XhTlBbLayMauImpl extends BaseServiceImpl implements XhTlBbLayMauSer
         reqQd.setNam(req.getNam());
         reqQd.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
         reqQd.setPhanLoai(req.getPhanLoai());
+        reqQd.setSoBbQd(req.getSoBbQd());
+
         if(userInfo.getCapDvi().equals(Contains.CAP_CUC)){
             reqQd.setMaDviSr(userInfo.getDvql());
         }
