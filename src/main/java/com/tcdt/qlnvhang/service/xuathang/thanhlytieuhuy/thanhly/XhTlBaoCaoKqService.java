@@ -53,7 +53,7 @@ public class XhTlBaoCaoKqService extends BaseServiceImpl {
   public Page<XhTlBaoCaoKqHdr> searchPage(CustomUserDetails currentUser, SearchXhTlQuyetDinh req) throws Exception {
     String dvql = currentUser.getDvql();
     if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
-      req.setDvql(dvql.substring(0, 4));
+      req.setDvql(dvql.substring(0, 6));
     } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
       req.setDvql(dvql);
     }
