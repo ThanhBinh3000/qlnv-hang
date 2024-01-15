@@ -34,6 +34,9 @@ public class XhTlBbLayMauReq extends BaseRequest {
   private String soBbQd;
 
   //
+
+  private LocalDate ngayTu;
+  private LocalDate ngayDen;
   private String maDviSr;
   private String phanLoai;
   private String typeLt;

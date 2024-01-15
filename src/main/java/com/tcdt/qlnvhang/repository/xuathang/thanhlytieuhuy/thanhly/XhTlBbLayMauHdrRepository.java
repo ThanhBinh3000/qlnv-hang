@@ -46,6 +46,7 @@ public interface XhTlBbLayMauHdrRepository extends JpaRepository<XhTlBbLayMauHdr
             " AND (:#{#param.trangThai} IS NULL OR c.trangThai =:#{#param.trangThai})" +
             " AND (:#{#param.idQdXh} IS NULL OR c.idQdXh =:#{#param.idQdXh})" +
             " AND (:#{#param.soBienBan} IS NULL OR c.soBienBan LIKE CONCAT(:#{#param.soBienBan},'%'))" +
+            "AND ((:#{#param.ngayTu} IS NULL OR c.ngayLayMau >= :#{#param.ngayTu}) AND (:#{#param.ngayDen}  IS NULL OR c.ngayLayMau <= :#{#param.ngayDen})) " +
             " ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
     )
     List<XhTlBbLayMauHdr> findAllByIdQdXh(@Param("param") XhTlBbLayMauReq param);

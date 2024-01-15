@@ -30,6 +30,5 @@ public interface XhThThongBaoKqRepository extends JpaRepository<XhThThongBaoKq, 
   List<XhThThongBaoKq> findByIdIn(List<Long> ids);
 
   List<XhThThongBaoKq> findAllByIdIn(List<Long> listId);
-
   Optional<XhThThongBaoKq> findBySoThongBao(String soQd);
 }
