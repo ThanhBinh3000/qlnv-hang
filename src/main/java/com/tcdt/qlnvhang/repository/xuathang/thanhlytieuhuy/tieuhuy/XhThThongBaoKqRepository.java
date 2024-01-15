@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public interface XhThThongBaoKqRepository extends JpaRepository<XhThThongBaoKq, Long> {
 
-  @Query("SELECT   c FROM XhThThongBaoKq c " +
+  @Query("SELECT distinct c FROM XhThThongBaoKq c " +
       " LEFT JOIN XhThHoSoHdr hdr on c.idHoSo = hdr.id " +
       " LEFT JOIN XhThHoSoDtl dtl on hdr.id = dtl.idHdr " +
       " LEFT JOIN XhThDanhSachHdr ds on dtl.idDsHdr = ds.id " +
