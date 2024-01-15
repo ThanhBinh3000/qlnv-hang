@@ -14,8 +14,11 @@ import java.util.Optional;
 public interface XhThThongBaoKqRepository extends JpaRepository<XhThThongBaoKq, Long> {
 
   @Query("SELECT   c FROM XhThThongBaoKq c " +
+      " LEFT JOIN XhThHoSoHdr hdr on c.idHoSo = hdr.id " +
+      " LEFT JOIN XhThHoSoDtl dtl on hdr.id = dtl.idHdr " +
+      " LEFT JOIN XhThDanhSachHdr ds on dtl.idDsHdr = ds.id " +
       " WHERE 1=1 " +
-      "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
+      "AND (:#{#param.dvql} IS NULL OR ds.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
       "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
       "AND (:#{#param.soThongBao} IS NULL OR LOWER(c.soThongBao) LIKE CONCAT('%',LOWER(:#{#param.soThongBao}),'%')) " +
       "AND (:#{#param.soHoSo} IS NULL OR LOWER(c.soHoSo) LIKE CONCAT('%',LOWER(:#{#param.soHoSo}),'%')) " +
@@ -23,7 +26,6 @@ public interface XhThThongBaoKqRepository extends JpaRepository<XhThThongBaoKq, 
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
   Page<XhThThongBaoKq> search(@Param("param") SearchXhThQuyetDinh param, Pageable pageable);
-
 
   void deleteAllByIdIn(List<Long> listId);
 

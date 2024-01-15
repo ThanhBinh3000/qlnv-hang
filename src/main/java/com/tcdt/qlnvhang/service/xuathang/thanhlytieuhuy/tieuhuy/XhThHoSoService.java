@@ -71,11 +71,7 @@ public class XhThHoSoService extends BaseServiceImpl {
 
   public Page<XhThHoSoHdr> searchPage(CustomUserDetails currentUser, XhThHoSoRequest req) throws Exception {
     String dvql = currentUser.getDvql();
-    if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
-      req.setMaDviSr(dvql.substring(0, 4));
-    } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
-      req.setMaDviSr(dvql);
-    }
+    req.setMaDviSr(dvql);
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<XhThHoSoHdr> search = hdrRepository.searchPage(req, pageable);
     Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");

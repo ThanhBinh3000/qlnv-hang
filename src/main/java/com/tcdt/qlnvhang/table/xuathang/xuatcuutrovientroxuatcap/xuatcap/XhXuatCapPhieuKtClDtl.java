@@ -26,4 +26,9 @@ public class XhXuatCapPhieuKtClDtl implements Serializable {
   private String trangThai;
   private String ketQuaPt;
   private Long thuTu;
+  private String chiSoClToiThieu;
+  private String chiSoClToiDa;
+  private String toanTu;
+  private String maChiTieu;
+  private String danhGia;
 }
