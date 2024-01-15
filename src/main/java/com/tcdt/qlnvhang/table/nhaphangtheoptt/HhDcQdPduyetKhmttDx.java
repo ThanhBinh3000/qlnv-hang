@@ -55,7 +55,7 @@ public class HhDcQdPduyetKhmttDx implements Serializable {
     private String tenNguonVon;
     private String tenChuDt;
     @Temporal(TemporalType.DATE)
-    private Date ngayKy;
+    private Date ngayPduyet;
     private String trichYeu;
     private String tenDuAn;
 
