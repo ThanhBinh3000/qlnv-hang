@@ -104,6 +104,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	private HhQdPduyetKqlcntHdrRepository hhQdPduyetKqlcntHdrRepository;
 	@Autowired
 	private HhSlNhapHangRepository hhSlNhapHangRepository;
+	@Autowired
+	HhDthauNthauDuthauRepository nhaThauDuthauRepository;
 	@Override
 	@Transactional
 	public HhQdKhlcntHdr create(HhQdKhlcntHdrReq objReq) throws Exception {
@@ -578,6 +580,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				});
 				f.setChildren(byIdGoiThauCtiet);
 			});
+			dsg.setDsNhaThauDthau(nhaThauDuthauRepository.findByIdDtGtAndType(dsg.getId(), "GOC"));
 			dsg.setTenDvi(mapDmucDvi.get(dsg.getMaDvi()));
 			dsg.setTenCloaiVthh(hashMapDmHh.get(dsg.getCloaiVthh()));
 			dsg.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dsg.getTrangThai()));
@@ -621,6 +624,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 						});
 						f.setChildren(gthauCtietVtList);
 					});
+					gThau.setDsNhaThauDthau(nhaThauDuthauRepository.findByIdDtGtAndType(gThau.getId(), "DC"));
 					gThau.setTenTrangThaiDt(NhapXuatHangTrangThaiEnum.getTenById(gThau.getTrangThaiDt()));
 					gThau.setTenCloaiVthh(hashMapDmHh.get(gThau.getCloaiVthh()));
 					gThau.setChildren(gthauCtietList);
@@ -676,6 +680,11 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		List<HhQdKhlcntDsgthau> byIdQdDtl = hhQdKhlcntDsgthauRepository.findByIdQdDtlOrderByGoiThauAsc(dtl.getId());
 		Long countSlGThau = 0L;
 		for (HhQdKhlcntDsgthau x : byIdQdDtl )  {
+			if (x.getIdQdPdHsmt() != null) {
+				Optional<QdPdHsmt> qOptional = qdPdHsmtRepository.findById(x.getIdQdPdHsmt());
+				qOptional.ifPresent(x::setQdPdHsmt);
+			}
+			x.setDsNhaThauDthau(nhaThauDuthauRepository.findByIdDtGtAndType(x.getId(), null));
 			x.setTenDvi(hashMapDvi.get(x.getMaDvi()));
 			x.setFileDinhKems(fileDinhKemService.search(x.getId(), Collections.singleton("HH_QD_KHLCNT_DSGTHAU")));
 			List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauList = new ArrayList<>();

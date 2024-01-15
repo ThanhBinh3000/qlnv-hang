@@ -8,6 +8,7 @@ import java.util.List;
 public interface HhQdPduyetKqlcntDtlRepository extends JpaRepository<HhQdPduyetKqlcntDtl, Long> {
     HhQdPduyetKqlcntDtl findByIdGoiThauAndType (Long id, String type);
     HhQdPduyetKqlcntDtl findByIdGoiThauAndIdQdPdHdr (Long id, Long hdrId);
+    List<HhQdPduyetKqlcntDtl> findAllByIdQdPdHdr (Long id);
     void deleteAllByIdQdPdHdr (Long id);
     void deleteAllByIdQdPdHdrIn (List<Long> id);
 }

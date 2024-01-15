@@ -111,4 +111,7 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 
 	@Transient
 	private List<FileDinhKem> canCuPhapLy = new ArrayList<>();
+
+	@Transient
+	private List<Long> listIdGthau = new ArrayList<>();
 }

@@ -48,6 +48,7 @@ public class HhBienBanNghiemThu implements Serializable {
     private String maDvi;
     private Integer namKh;
     private String loaiVthh;
+    private String loaiHinhBaoQuan;
     @Transient
     private String tenLoaiVthh;
     private String cloaiVthh;

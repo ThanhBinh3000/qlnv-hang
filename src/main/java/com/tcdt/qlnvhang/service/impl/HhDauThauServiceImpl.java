@@ -328,6 +328,54 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
     }
 
     @Override
+    public List<HhQdKhlcntDtl> getDsTtDthau(HhQdKhlcntSearchReq objReq) throws Exception {
+        List<HhQdKhlcntDtl> hhQdKhlcntDtls = dtlRepository.getDsTtDthau(objReq.getNamKhoach(), objReq.getLoaiVthh(),
+                objReq.getMaDvi(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+        Map<String,String> hashMapPthucDthau = getListDanhMucChung("PT_DTHAU");
+        Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+        hhQdKhlcntDtls.forEach(item -> {
+            Optional<HhQdKhlcntHdr> hhQdKhlcntHdr = hhQdKhlcntHdrRepository.findById(item.getIdQdHdr());
+            if (hhQdKhlcntHdr.isPresent()) {
+                hhQdKhlcntHdr.get().setTenPthucLcnt(hashMapPthucDthau.get(hhQdKhlcntHdr.get().getPthucLcnt()));
+                hhQdKhlcntHdr.get().setTenCloaiVthh(hashMapDmHh.get(hhQdKhlcntHdr.get().getCloaiVthh()));
+                hhQdKhlcntHdr.get().setTenLoaiVthh(hashMapDmHh.get(hhQdKhlcntHdr.get().getLoaiVthh()));
+                item.setHhQdKhlcntHdr(hhQdKhlcntHdr.get());
+                item.setNamKhoach(hhQdKhlcntHdr.get().getNamKhoach().toString());
+            }
+            List<HhQdKhlcntDsgthau> byIdQdDtl = goiThauRepository.findByIdQdDtl(item.getId());
+            item.setSoGthau((long) byIdQdDtl.size());
+            List<HhQdKhlcntDsgthau> listGthau = goiThauRepository.dsGthauDaCoTtNthau(item.getId());
+            item.setChildren(listGthau);
+            Optional<HhDchinhDxKhLcntHdr> dchinh = hhDchinhDxKhLcntHdrRepository.findTopByIdQdGocAndTrangThaiOrderByLanDieuChinhDesc(item.getIdQdHdr(), Contains.BAN_HANH);
+            dchinh.ifPresent(hhDchinhDxKhLcntHdr -> item.setSoQdDc(hhDchinhDxKhLcntHdr.getSoQdDc()));
+        });
+        return hhQdKhlcntDtls;
+    }
+
+    @Override
+    public List<HhQdKhlcntHdr> getDsTtDthauVt(HhQdKhlcntSearchReq objReq) throws Exception {
+        List<HhQdKhlcntHdr> hhQdKhlcntHdrs = hhQdKhlcntHdrRepository.getDsTtDthauVt(objReq.getNamKhoach(), objReq.getLoaiVthh(),
+                objReq.getMaDvi(), NhapXuatHangTrangThaiEnum.BAN_HANH.getId());
+        Map<String,String> hashMapDmHh = getListDanhMucHangHoa();
+        hhQdKhlcntHdrs.forEach(f -> {
+            f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
+            List<HhQdKhlcntDsgthau> listGthau = goiThauRepository.dsGthauDaCoTtNthauVt(f.getId());
+            f.setDsGthau(listGthau);
+            if (f.getDieuChinh() != null && f.getDieuChinh().equals(Boolean.TRUE)) {
+                Optional<HhDchinhDxKhLcntHdr> dchinhDxKhLcntHdr = hhDchinhDxKhLcntHdrRepository.findByIdQdGocAndLastest(f.getId(), Boolean.TRUE);
+                if (dchinhDxKhLcntHdr.isPresent()) {
+                    List<HhDchinhDxKhLcntDsgthau> gThauList = dchinhDxKhLcntDsgthauRepository.findAllByIdDcDxHdr(dchinhDxKhLcntHdr.get().getId());
+                    dchinhDxKhLcntHdr.get().setDsGthau(gThauList);
+                    f.setDchinhDxKhLcntHdr(dchinhDxKhLcntHdr.get());
+                    f.setSoQdDc(dchinhDxKhLcntHdr.get().getSoQdDc());
+                }
+            }
+            f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+        });
+        return hhQdKhlcntHdrs;
+    }
+
+    @Override
     public ChiTietGoiThauRes detail(String ids, String loaiVthh, String type) throws Exception {
         ChiTietGoiThauRes chiTietGoiThauRes = new ChiTietGoiThauRes();
         List<HhDthauNthauDuthau> byIdDtGt = new ArrayList<>();
