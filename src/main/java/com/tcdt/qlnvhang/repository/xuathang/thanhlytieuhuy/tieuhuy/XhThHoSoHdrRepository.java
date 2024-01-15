@@ -16,8 +16,10 @@ import java.util.Optional;
 public interface XhThHoSoHdrRepository extends JpaRepository<XhThHoSoHdr, Long> {
 
   @Query("SELECT DISTINCT  c FROM XhThHoSoHdr c " +
+      " LEFT JOIN XhThHoSoDtl dtl on c.id = dtl.idHdr " +
+      " LEFT JOIN XhThDanhSachHdr ds on dtl.idDsHdr = ds.id " +
       " WHERE 1=1 " +
-      "AND (:#{#param.maDviSr} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDviSr},'%')) " +
+      "AND (:#{#param.maDviSr} IS NULL OR ds.maDvi LIKE CONCAT(:#{#param.maDviSr},'%')) " +
       "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
       "AND (:#{#param.soQdSr} IS NULL OR LOWER(c.soQd) LIKE CONCAT('%',LOWER(:#{#param.soQdSr}),'%')) " +
       "AND (:#{#param.soHoSo} IS NULL OR LOWER(c.soHoSo) LIKE CONCAT('%',LOWER(:#{#param.soHoSo}),'%')) " +
