@@ -41,6 +41,7 @@ public class XhXuatCapPhieuKtClHdrReq {
   private String lyDoTuChoi;
   private String type;
   private String soBbTinhKho;
+  private String chungLoaiGao;
 
   private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
   private List<XhXuatCapPhieuKtClDtlReq> ketQuaPhanTich= new ArrayList<>();
