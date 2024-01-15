@@ -29,4 +29,6 @@ public class XhXuatCapPhieuKtClDtl implements Serializable {
   private String chiSoClToiThieu;
   private String chiSoClToiDa;
   private String toanTu;
+  private String maChiTieu;
+  private String danhGia;
 }
