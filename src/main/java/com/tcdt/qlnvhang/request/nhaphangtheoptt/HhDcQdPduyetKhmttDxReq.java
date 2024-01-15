@@ -21,7 +21,7 @@ public class HhDcQdPduyetKhmttDxReq {
     private String namKh;
     @Transient
     private String tenDvi;
-    private String diaChiDvi;
+    private String diaChi;
     private String loaiVthh;
     @Transient
     private String tenLoaiVthh;
@@ -46,7 +46,7 @@ public class HhDcQdPduyetKhmttDxReq {
     private String nguonVon;
     private String tenChuDt;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
-    private Date ngayKy;
+    private Date ngayPduyet;
     private String trichYeu;
     private String tenDuAn;
 

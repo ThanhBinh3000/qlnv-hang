@@ -112,6 +112,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         data.setTrangThai(Contains.DA_LAP);
         data.setMaDvi(userInfo.getDvql());
         HhDcQdPduyetKhmttHdr created=hhDcQdPduyetKhMttRepository.save(data);
+        created.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(created.getTrangThai()));
 //        objReq.setIsChange(true);
 //        updateQdPduyet(created, objReq);
         if (!DataUtils.isNullOrEmpty(objReq.getCanCuPhapLy())) {
