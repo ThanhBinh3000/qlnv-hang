@@ -17,8 +17,11 @@ import java.util.Optional;
 public interface XhThQuyetDinhRepository extends JpaRepository<XhThQuyetDinhHdr, Long> {
 
   @Query("SELECT   c FROM XhThQuyetDinhHdr c " +
+      " LEFT JOIN XhThHoSoHdr hdr on c.idHoSo = hdr.id " +
+      " LEFT JOIN XhThHoSoDtl dtl on hdr.id = dtl.idHdr " +
+      " LEFT JOIN XhThDanhSachHdr ds on dtl.idDsHdr = ds.id " +
       " WHERE 1=1 " +
-      "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
+      "AND (:#{#param.dvql} IS NULL OR ds.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
       "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
       "AND (:#{#param.soQd} IS NULL OR LOWER(c.soQd) LIKE CONCAT('%',LOWER(:#{#param.soQd}),'%')) " +
       "AND (:#{#param.soHoSo} IS NULL OR LOWER(c.soHoSo) LIKE CONCAT('%',LOWER(:#{#param.soHoSo}),'%')) " +
