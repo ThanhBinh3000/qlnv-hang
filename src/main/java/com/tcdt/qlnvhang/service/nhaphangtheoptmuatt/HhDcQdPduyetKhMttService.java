@@ -433,12 +433,12 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
                 hhDcQdPduyetKhmttDx.setTgianKthucStr(Contains.convertDateToString(hhDcQdPduyetKhmttDx.getTgianKthuc()));
                 for (HhDcQdPduyetKhmttSldd child : hhDcQdPduyetKhmttDx.getChildren()) {
                     Optional<HhDcQdPduyetKhmttSldd> listSlddGoc = listDxGoc.get().getChildren().stream().filter(x -> x.getId().equals(child.getId())).findFirst();
-                    child.setSoLuongGocStr(docxToPdfConverter.convertBigDecimalToStr(listSlddGoc.get().getSoLuong()));
-                    child.setSoLuongStr(docxToPdfConverter.convertBigDecimalToStr(child.getSoLuong()));
-                    child.setTongThanhTienVatStr(docxToPdfConverter.convertBigDecimalToStr(child.getDonGiaVat().multiply(child.getSoLuong())));
+                    child.setSoLuongGocStr(docxToPdfConverter.convertBigDecimalToStr(listSlddGoc.get().getTongSoLuong()));
+                    child.setSoLuongStr(docxToPdfConverter.convertBigDecimalToStr(child.getTongSoLuong()));
+                    child.setTongThanhTienVatStr(docxToPdfConverter.convertBigDecimalToStr(child.getDonGiaVat().multiply(child.getTongSoLuong())));
                     tongSoLuongGoc.updateAndGet(v -> v.add(listSlddGoc.get().getTongSoLuong()));
                     tongSoLuong.updateAndGet(v -> v.add(child.getTongSoLuong()));
-                    tongThanhTien.updateAndGet(v -> v.add(child.getDonGiaVat().multiply(child.getSoLuong())));
+                    tongThanhTien.updateAndGet(v -> v.add(child.getDonGiaVat().multiply(child.getTongSoLuong())));
                 }
             }
             hhDcQdPduyetKhmttHdr.setNgayPduyetGocStr(Contains.convertDateToString(hhDcQdPduyetKhmttHdrGoc.get().getNgayPduyet()));
