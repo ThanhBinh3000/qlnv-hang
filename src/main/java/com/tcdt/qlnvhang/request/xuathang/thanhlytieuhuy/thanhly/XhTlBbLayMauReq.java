@@ -17,7 +17,7 @@ public class XhTlBbLayMauReq extends BaseRequest {
   private Integer nam;
   private String maQhns;
   private String soBienBan;
-  private String ngayLayMau;
+  private LocalDate ngayLayMau;
   private Long idQdXh;
   private String soQdXh;
   private String dviKnghiem;
