@@ -15,10 +15,8 @@ public interface XhThThongBaoKqRepository extends JpaRepository<XhThThongBaoKq, 
 
   @Query("SELECT distinct c FROM XhThThongBaoKq c " +
       " LEFT JOIN XhThHoSoHdr hdr on c.idHoSo = hdr.id " +
-      " LEFT JOIN XhThHoSoDtl dtl on hdr.id = dtl.idHdr " +
-      " LEFT JOIN XhThDanhSachHdr ds on dtl.idDsHdr = ds.id " +
       " WHERE 1=1 " +
-      "AND (:#{#param.dvql} IS NULL OR ds.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
+      "AND (:#{#param.dvql} IS NULL OR hdr.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
       "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
       "AND (:#{#param.soThongBao} IS NULL OR LOWER(c.soThongBao) LIKE CONCAT('%',LOWER(:#{#param.soThongBao}),'%')) " +
       "AND (:#{#param.soHoSo} IS NULL OR LOWER(c.soHoSo) LIKE CONCAT('%',LOWER(:#{#param.soHoSo}),'%')) " +
