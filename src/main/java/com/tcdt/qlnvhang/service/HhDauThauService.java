@@ -30,6 +30,8 @@ public interface HhDauThauService {
 
 	Page<HhQdKhlcntDtl> selectPage(HhQdKhlcntSearchReq objReq) throws Exception;
 	Page<HhQdKhlcntHdr> selectPageVt(HhQdKhlcntSearchReq objReq) throws Exception;
+	List<HhQdKhlcntDtl> getDsTtDthau(HhQdKhlcntSearchReq objReq) throws Exception;
+	List<HhQdKhlcntHdr> getDsTtDthauVt(HhQdKhlcntSearchReq objReq) throws Exception;
 //
 //	List<ThongTinDauThauRes> selectAll(HhDthauSearchReq objReq) throws Exception;
 //

@@ -99,4 +99,15 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
                                    String tuNgayQd, String denNgayQd,
                                    String soQdPdKhlcnt, String soQdPdKqlcnt, Pageable pageable);
 
+    @Query(value = " SELECT * FROM HH_QD_KHLCNT_DTL DTL " +
+            " LEFT JOIN HH_QD_KHLCNT_HDR HDR ON HDR.ID = DTL.ID_QD_HDR " +
+            " LEFT JOIN HH_QD_PDUYET_KQLCNT_HDR PD_HDR ON PD_HDR.ID_QD_PD_KHLCNT_DTL = DTL.ID " +
+            " WHERE (:namKh IS NULL OR HDR.NAM_KHOACH = TO_NUMBER(:namKh)) " +
+            " AND (:loaiVthh IS NULL OR HDR.LOAI_VTHH LIKE LOWER(CONCAT(:loaiVthh,'%')))" +
+            " AND (:maDvi IS NULL OR DTL.MA_DVI LIKE LOWER(CONCAT(:maDvi,'%')))" +
+            " AND HDR.TRANG_THAI = :trangThai " +
+            " AND HDR.LASTEST = 1 " ,
+            nativeQuery = true )
+    List<HhQdKhlcntDtl> getDsTtDthau(Integer namKh , String loaiVthh, String maDvi,  String trangThai );
+
 }

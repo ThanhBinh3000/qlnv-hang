@@ -60,4 +60,20 @@ public interface HhQdKhlcntDsgthauRepository extends BaseRepository<HhQdKhlcntDs
             " AND gthau.TRANG_THAI_DT IN ('41', '36', '84')"
             , nativeQuery = true)
     List<HhQdKhlcntDsgthau> danhSachGthauTruotVt (String cloaiVthh, String loaiVthh, Integer namKh);
+
+    @Query(value = "SELECT gthau.* FROM HH_QD_KHLCNT_DSGTHAU gthau" +
+            " WHERE 1 = 1 " +
+            " AND (:idQdDtl IS NULL OR gthau.ID_QD_DTL = :idQdDtl)" +
+            " AND gthau.ID_NHA_THAU IS NULL" +
+            " AND gthau.ID IN (SELECT nt.ID_DT_GT FROM HH_DTHAU_NTHAU_DUTHAU nt)"
+            , nativeQuery = true)
+    List<HhQdKhlcntDsgthau> dsGthauDaCoTtNthau(Long idQdDtl);
+
+    @Query(value = "SELECT gthau.* FROM HH_QD_KHLCNT_DSGTHAU gthau" +
+            " WHERE 1 = 1 " +
+            " AND (:idQdDtl IS NULL OR gthau.ID_QD_HDR = :idQdDtl)" +
+            " AND gthau.ID_NHA_THAU IS NULL" +
+            " AND gthau.ID IN (SELECT nt.ID_DT_GT FROM HH_DTHAU_NTHAU_DUTHAU nt)"
+            , nativeQuery = true)
+    List<HhQdKhlcntDsgthau> dsGthauDaCoTtNthauVt(Long idQdDtl);
 }

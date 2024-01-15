@@ -273,5 +273,29 @@ public class HhDauThauController {
 		return ResponseEntity.ok(resp);
 	}
 
+	@ApiOperation(value = "Lấy danh sách thông tin đấu thầu để tạo qđ pd kqlcnt", response = List.class)
+	@PostMapping(value = "/ds-tt-dthau", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> getDsTtDthau(HttpServletRequest request,
+												  @Valid @RequestBody HhQdKhlcntSearchReq objReq) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			if(objReq.getLoaiVthh().startsWith("02")){
+				resp.setData(service.getDsTtDthauVt(objReq));
+			}else{
+				resp.setData(service.getDsTtDthau(objReq));
+			}
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (
+
+				Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Tra cứu thông tin đấu thầu gạo trace: {}", e);
+		}
+
+		return ResponseEntity.ok(resp);
+	}
 
 }
