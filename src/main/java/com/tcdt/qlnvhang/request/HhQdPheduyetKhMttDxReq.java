@@ -25,7 +25,8 @@ public class HhQdPheduyetKhMttDxReq {
     private Long idDxHdr;
 
     private String maDvi;
-
+    private Long idSoQdCc;
+    private String soQdCc;
     private String diaChi;
 
     private String soDxuat;

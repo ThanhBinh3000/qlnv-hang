@@ -26,6 +26,15 @@ public interface HhSlNhapHangRepository extends BaseRepository<HhSlNhapHang, Lon
             nativeQuery = true)
     BigDecimal countSLDalenQd(Integer namKh, String loaiVthh, String maDvi);
 
+    @Query(value = " SELECT NVL(SUM(sl.SO_LUONG),0) FROM HH_SL_NHAP_HANG sl " +
+            " WHERE 1 = 1 " +
+            " AND sl.NAM_KHOACH = :namKh " +
+            " AND sl.MA_DVI LIKE CONCAT(:maDvi,'%') " +
+            " AND sl.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%') " +
+            " AND sl.ID_QD_KHLCNT = :idQd",
+            nativeQuery = true)
+    BigDecimal countSLDalenQdByIdQd(Integer namKh, String loaiVthh, String maDvi, Integer idQd);
+
     List<HhSlNhapHang> findAllByIdQdKhlcnt(Long id);
     void deleteAllByIdQdKhlcnt (Long id);
 }
