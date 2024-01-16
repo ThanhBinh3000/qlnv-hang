@@ -13,9 +13,14 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ScTongHopHdrRepository extends JpaRepository<ScTongHopHdr, Long> {
-  @Query(value = "SELECT c FROM ScTongHopHdr c " +
+  @Query(value = "SELECT DISTINCT c FROM ScTongHopHdr c " +
+      " LEFT JOIN ScTongHopDtl dtl on c.id = dtl.idHdr " +
+      " LEFT JOIN ScDanhSachHdr ds on dtl.idDsHdr = ds.id " +
       " WHERE 1 = 1 " +
-      " AND (:#{#param.maDviSr} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDviSr},'%')) " +
+      " AND (:#{#param.namSr} IS NULL OR c.nam = :#{#param.namSr}) " +
+      "AND ((:#{#param.ngayTu} IS NULL OR c.ngayTao >= :#{#param.ngayTu}) AND (:#{#param.ngayDen}  IS NULL OR c.ngayTao <= :#{#param.ngayDen})) " +
+      " AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
+      " AND (:#{#param.maDviSr} IS NULL OR ds.maDvi LIKE CONCAT(:#{#param.maDviSr},'%')) " +
       " ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc "
   )
   Page<ScTongHopHdr> searchPage(@Param("param") ScTongHopReq param, Pageable pageable);
