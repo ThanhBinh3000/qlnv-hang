@@ -20,10 +20,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
-import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.DataUtils;
-import com.tcdt.qlnvhang.util.ExportExcel;
-import com.tcdt.qlnvhang.util.ObjectMapperUtils;
+import com.tcdt.qlnvhang.util.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,10 +116,24 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		int page = objReq.getPaggingReq().getPage();
 		int limit = objReq.getPaggingReq().getLimit();
 		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
-		Page<HhDchinhDxKhLcntHdr> data = hdrRepository.selectPage(objReq.getNam(),objReq.getSoQdDc(), objReq.getTrichYeu(),objReq.getLoaiVthh(),
-				convertDateToString(objReq.getTuNgayQd()),
-				convertDateToString(objReq.getDenNgayQd()),
-				pageable);
+		UserInfo userInfo = UserUtils.getUserInfo();
+		if (!Contains.CAP_TONG_CUC.equalsIgnoreCase(userInfo.getCapDvi())) {
+			objReq.setMaDvi(userInfo.getDvql());
+		}
+		Page<HhDchinhDxKhLcntHdr> data;
+		if (objReq.getLoaiVthh().startsWith("02")) {
+			data = hdrRepository.selectPageVt(objReq.getNam(),objReq.getSoQdDc(), objReq.getTrichYeu(),objReq.getLoaiVthh(),
+					convertDateToString(objReq.getTuNgayQd()),
+					convertDateToString(objReq.getDenNgayQd()),
+					objReq.getMaDvi(),
+					pageable);
+		} else {
+			data = hdrRepository.selectPage(objReq.getNam(),objReq.getSoQdDc(), objReq.getTrichYeu(),objReq.getLoaiVthh(),
+					convertDateToString(objReq.getTuNgayQd()),
+					convertDateToString(objReq.getDenNgayQd()),
+					objReq.getMaDvi(),
+					pageable);
+		}
 		List<Long> ids = data.getContent().stream().map(HhDchinhDxKhLcntHdr::getId).collect(Collectors.toList());
 		List<Object[]> listGthau = hdrRepository.countAllBySoGthau(ids);
 		List<Object[]> listGthau2 = hdrRepository.countAllBySoGthauStatus(ids, NhapXuatHangTrangThaiEnum.THANH_CONG.getId());
