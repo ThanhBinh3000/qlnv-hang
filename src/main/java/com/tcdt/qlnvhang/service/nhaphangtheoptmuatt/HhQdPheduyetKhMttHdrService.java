@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.HhSlNhapHangRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
 import com.tcdt.qlnvhang.request.*;
 import com.tcdt.qlnvhang.request.nhaphang.nhaptructiep.HhQdPheduyetKhMttPreview;
@@ -54,6 +55,8 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
 
     @Autowired
     private HhQdPheduyetKhMttSLDDRepository hhQdPheduyetKhMttSLDDRepository;
+    @Autowired
+    private HhSlNhapHangRepository hhSlNhapHangRepository;
 
     @Autowired
     private HhQdPdKhMttSlddDtlRepository hhQdPdKhMttSlddDtlRepository;
@@ -301,6 +304,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
                 slddDtlList.forEach(f ->{
                     f.setTenDiemKho(hashMapDvi.get(f.getMaDiemKho()));
                 });
+                sldd.setSoLuongKhDd(hhSlNhapHangRepository.countSLDalenQd(data.getNamKh(), data.getLoaiVthh(), sldd.getMaDvi()));
                 sldd.setTenDvi(hashMapDvi.get(sldd.getMaDvi()));
                 sldd.setChildren(slddDtlList);
                 slddList.add(sldd);
@@ -316,7 +320,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
             dxList.add(dx);
         }
         data.setSoLanDieuChinh(Long.valueOf(hhDcQdPduyetKhMttRepository.findAllByIdQdGocOrderByIdDesc(data.getId()).size()));
-        data.setChildren(dxList);
+        data.setChildren(dxList.stream().sorted(Comparator.comparing(HhQdPheduyetKhMttDx::getMaDvi)).collect(Collectors.toList()));
         return data;
     }
 

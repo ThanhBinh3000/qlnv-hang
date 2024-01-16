@@ -31,6 +31,8 @@ public class HhDcQdPduyetKhmttDxReq {
     private String moTaHangHoa;
     private String ptMua;
     private String tchuanCluong;
+    private Long idSoQdCc;
+    private String soQdCc;
     private String giaMua;
     private BigDecimal donGia;
     private BigDecimal donGiaVat;
