@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.service.feign;
 import com.tcdt.qlnvhang.request.QlnvDmDonviSearchReq;
 import com.tcdt.qlnvhang.request.QlnvDmVattuSearchReq;
 import com.tcdt.qlnvhang.request.object.HhDmDviLquanSearchReq;
+import com.tcdt.qlnvhang.util.PathClientConstants;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -74,4 +75,12 @@ public interface CategoryServiceProxy {
 	@Headers({ "Accept: application/json; charset=utf-8", "Content-Type: application/x-www-form-urlencoded" })
 	public ResponseEntity<String> getDanhMucDviByMaDviIn(
 			@RequestHeader(value = "Authorization", required = true) String authorizationHeader,@RequestBody QlnvDmDonviSearchReq objReq);
+
+	@GetMapping(PathClientConstants.URL_DM_HANG_HOA_GET_ALL)
+	@Headers({"Accept: application/json; charset=utf-8", "Content-Type: application/x-www-form-urlencoded"})
+	public ResponseEntity<String> getDanhMucHangHoa();
+
+	@GetMapping(PathClientConstants.URL_DM_DUNG_CHUNG)
+	@Headers({"Accept: application/json; charset=utf-8", "Content-Type: application/x-www-form-urlencoded"})
+	public ResponseEntity<String> getDanhMucChung(@PathVariable("loai") String loai);
 }

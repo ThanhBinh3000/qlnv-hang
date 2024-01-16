@@ -29,4 +29,6 @@ public class QthtChotGiaNhapXuatReq extends BaseRequest {
     private LocalDate ngayHlucSr;
     private LocalDate ngayHuySr;
     private String taiKhoanSr;
+
+    private String maDvi;
 }
