@@ -61,7 +61,7 @@ public class ScTongHopServiceImpl extends BaseServiceImpl implements ScTongHopSe
     }
     String dvql = currentUser.getDvql();
     if (currentUser.getCapDvi().equals(Contains.CAP_CUC)) {
-      req.setMaDviSr(dvql);
+      req.setDvql(dvql);
     }
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<ScTongHopHdr> search = hdrRepository.searchPage(req, pageable);
