@@ -70,6 +70,7 @@ public class ThongTinDauGiaReq extends BaseRequest {
     private Long idQdDc;
     private String soQdDc;
     private String qdLcTcBdg;
+    private LocalDate ngayQdBdg;
     private List<FileDinhKemJoinTable> canCu;
     private List<FileDinhKemJoinTable> fileDinhKem;
     private List<ThongTinDauGiaDtlReq> children = new ArrayList<>();

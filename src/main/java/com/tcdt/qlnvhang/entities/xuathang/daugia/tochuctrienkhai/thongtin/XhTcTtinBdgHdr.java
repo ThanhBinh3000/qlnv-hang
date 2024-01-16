@@ -89,6 +89,7 @@ public class XhTcTtinBdgHdr implements Serializable {
     private Long idQdDc;
     private String soQdDc;
     private String qdLcTcBdg;
+    private LocalDate ngayQdBdg;
     @Transient
     private String tenDvi;
     @Transient
