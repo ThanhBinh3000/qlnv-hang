@@ -1,6 +1,8 @@
 package com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.hopdong.hopdongphuluc;
 
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdrReq;
+import com.tcdt.qlnvhang.response.HopDongMttHdrDTO;
+import com.tcdt.qlnvhang.response.SoLuongDaKyHopDongDTO;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdr;
 
 import org.springframework.data.domain.Page;
@@ -61,5 +63,14 @@ public interface HopDongMttHdrRepository extends JpaRepository<HopDongMttHdr, Lo
 
   @Transactional
   List<HopDongMttHdr> findByIdIn(Collection<Long> ids);
+
+  @Query(value = "SELECT new com.tcdt.qlnvhang.response.SoLuongDaKyHopDongDTO(HD.soHd, QD_HDR.soQd, SLDD.maDvi, HD.soLuong, HD.soQdGiaoNvNh, HD.idQdGiaoNvNh ) "
+          + "FROM HopDongMttHdr HD "
+          + "JOIN HhQdPheduyetKhMttHdr QD_HDR ON QD_HDR.soQd = HD.soQd "
+          + "LEFT JOIN HhQdPheduyetKqMttSLDD SLDD ON SLDD.id = HD.idQdPdSldd "
+          + "WHERE 1=1 "
+          + "AND HD.trangThai = '30' "
+          + "AND ((:#{#param.soQd} IS NULL OR QD_HDR.soQd = :#{#param.soQd})) ")
+  List<SoLuongDaKyHopDongDTO> findAllBySoQd(@Param("param") HopDongMttHdrReq param);
 
 }
