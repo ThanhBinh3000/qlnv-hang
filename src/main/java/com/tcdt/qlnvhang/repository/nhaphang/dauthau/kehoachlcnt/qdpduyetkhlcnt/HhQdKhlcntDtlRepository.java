@@ -101,7 +101,7 @@ public interface HhQdKhlcntDtlRepository extends JpaRepository<HhQdKhlcntDtl, Lo
 
     @Query(value = " SELECT * FROM HH_QD_KHLCNT_DTL DTL " +
             " LEFT JOIN HH_QD_KHLCNT_HDR HDR ON HDR.ID = DTL.ID_QD_HDR " +
-            " LEFT JOIN HH_QD_PDUYET_KQLCNT_HDR PD_HDR ON PD_HDR.ID_QD_PD_KHLCNT_DTL = DTL.ID " +
+//            " LEFT JOIN HH_QD_PDUYET_KQLCNT_HDR PD_HDR ON PD_HDR.ID_QD_PD_KHLCNT_DTL = DTL.ID " +
             " WHERE (:namKh IS NULL OR HDR.NAM_KHOACH = TO_NUMBER(:namKh)) " +
             " AND (:loaiVthh IS NULL OR HDR.LOAI_VTHH LIKE LOWER(CONCAT(:loaiVthh,'%')))" +
             " AND (:maDvi IS NULL OR DTL.MA_DVI LIKE LOWER(CONCAT(:maDvi,'%')))" +

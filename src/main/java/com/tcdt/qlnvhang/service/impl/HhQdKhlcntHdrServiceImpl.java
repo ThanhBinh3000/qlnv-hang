@@ -732,9 +732,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				dsg.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dsg.getTrangThai()));
 				dsg.setTenTrangThaiDt(NhapXuatHangTrangThaiEnum.getTenById(dsg.getTrangThaiDt()));
 				dsg.setChildren(listGtCtiet);
-//				if (hhQdPduyetKqlcntHdr.getId() != null) {
-//					dsg.setKqlcntDtl(hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndIdQdPdHdr(dsg.getId(), hhQdPduyetKqlcntHdr.getId()));
-//				}
+				HhQdPduyetKqlcntDtl qdPduyetKqlcntDtl = hhQdPduyetKqlcntDtlRepository.findFirstByIdGoiThau(dsg.getId());
+				if (qdPduyetKqlcntDtl != null) {
+					dsg.setKqlcntDtl(qdPduyetKqlcntDtl);
+				}
 				hhQdKhlcntDsgthauList.add(dsg);
 			};
 			countSlGThau += count;
