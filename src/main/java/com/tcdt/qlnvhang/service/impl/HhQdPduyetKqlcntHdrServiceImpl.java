@@ -398,14 +398,18 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		Optional<HhQdKhlcntDtl> byId = hhQdKhlcntDtlRepository.findById(optional.get().getIdQdPdKhlcntDtl());
 		if(byId.isPresent()){
 			HhQdKhlcntDtl hhQdKhlcntDtl = byId.get();
-			if(!StringUtils.isEmpty(hhQdKhlcntDtl.getSoQdPdKqLcnt())){
-				throw new Exception(
-						"Thông tin gói thầu đã được ban hành quyết định phê duyệt kế quả lựa chọn nhà thầu, xin vui lòng chọn thông tin gối thầu khác");
-			}
-			hhQdKhlcntDtl.setSoQdPdKqLcnt(optional.get().getSoQd());
-			hhQdKhlcntDtlRepository.save(hhQdKhlcntDtl);
+//			if(!StringUtils.isEmpty(hhQdKhlcntDtl.getSoQdPdKqLcnt())){
+//				throw new Exception(
+//						"Thông tin gói thầu đã được ban hành quyết định phê duyệt kế quả lựa chọn nhà thầu, xin vui lòng chọn thông tin gối thầu khác");
+//			}
+//			hhQdKhlcntDtl.setSoQdPdKqLcnt(optional.get().getSoQd());
+//			hhQdKhlcntDtlRepository.save(hhQdKhlcntDtl);
 			List<HhQdKhlcntDsgthau> listDsgThau = hhQdKhlcntDsgthauRepository.findByIdQdDtl(hhQdKhlcntDtl.getId());
 			for (HhQdKhlcntDsgthau dsgthau : listDsgThau) {
+				if (dsgthau.getIdNhaThau() != null) {
+					throw new Exception(
+							"Thông tin gói thầu đã được ban hành quyết định phê duyệt kết quả lựa chọn nhà thầu, xin vui lòng chọn thông tin gói thầu khác");
+				}
 				HhQdPduyetKqlcntDtl hhQdPduyetKqlcntDtl = hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndIdQdPdHdr(dsgthau.getId(), optional.get().getId());
 				if (hhQdPduyetKqlcntDtl != null) {
 					dsgthau.setTrangThaiDt(hhQdPduyetKqlcntDtl.getTrangThai());
