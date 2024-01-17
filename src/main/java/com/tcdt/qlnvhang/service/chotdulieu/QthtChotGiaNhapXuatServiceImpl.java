@@ -157,7 +157,7 @@ public class QthtChotGiaNhapXuatServiceImpl extends BaseServiceImpl implements Q
         // qthtQuyetDinhChinhGia
         List<QthtQuyetDinhChinhGia> qthtQuyetDinhChinhGias = new ArrayList<>();
         List<KhPagGctQdTcdtnn> lastest = new ArrayList<>();
-        if(objReq.getLoaiVthh().startsWith("01") || objReq.getLoaiVthh().startsWith("02")){
+        if(objReq.getLoaiVthh().startsWith("01") || objReq.getLoaiVthh().startsWith("04")){
            lastest = khPagGctQdTcdtnnRepository.getGiaTcdtLastestLt("29", objReq.getLoaiGia(), objReq.getNam(), objReq.getLoaiVthh(), objReq.getCloaiVthh(), objReq.getMaCucs());
         }else {
             lastest = khPagGctQdTcdtnnRepository.getGiaTcdtLastestVt("29", objReq.getLoaiGia(), objReq.getNam(), objReq.getLoaiVthh(), objReq.getCloaiVthh(), objReq.getMaCucs());

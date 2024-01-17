@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.tochuctrienkhai.QdPdHsmt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.response.chotdulieu.QthtChotGiaInfoRes;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.HhDchinhDxKhLcntHdr;
 import com.tcdt.qlnvhang.util.Contains;
@@ -205,6 +206,8 @@ public class HhQdKhlcntHdr implements Serializable {
 	private Integer lanDieuChinh;
 	@Transient
 	private List<Long> listIdGthau = new ArrayList<>();
+	@Transient
+	private QthtChotGiaInfoRes qthtChotGiaInfoRes;
 
 	public String getTenTrangThai() {
 		return NhapXuatHangTrangThaiEnum.getTenById(this.getTrangThai());

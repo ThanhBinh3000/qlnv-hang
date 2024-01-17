@@ -24,8 +24,11 @@ import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.Hh
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.*;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.tochuctrienkhai.QdPdHsmtRepository;
 import com.tcdt.qlnvhang.request.PaggingReq;
+import com.tcdt.qlnvhang.request.chotdulieu.QthtChotGiaInfoReq;
 import com.tcdt.qlnvhang.request.object.*;
+import com.tcdt.qlnvhang.response.chotdulieu.QthtChotGiaInfoRes;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.chotdulieu.QthtChotGiaNhapXuatService;
 import com.tcdt.qlnvhang.service.feign.KeHoachService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.table.*;
@@ -79,6 +82,8 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 	@Autowired
 	private FileDinhKemService fileDinhKemService;
+	@Autowired
+	private QthtChotGiaNhapXuatService qthtChotGiaNhapXuatService;
 
 	@Autowired
 	private HhDchinhDxKhLcntHdrRepository hhDchinhDxKhLcntHdrRepository;
@@ -455,6 +460,18 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			detailVt(qOptional.get());
 		} else {
 			detailLt(qOptional.get());
+		}
+
+		if(qOptional.get().getTrangThai().equals("29")){
+			QthtChotGiaInfoReq objReq = new QthtChotGiaInfoReq();
+			objReq.setLoaiGia("LG03");
+			objReq.setNam(qOptional.get().getNamKhoach());
+			objReq.setLoaiVthh(qOptional.get().getLoaiVthh());
+			objReq.setCloaiVthh(qOptional.get().getCloaiVthh());
+			objReq.setMaCucs(qOptional.get().getChildren().stream().map(HhQdKhlcntDtl::getMaDvi).collect(Collectors.toList()));
+			objReq.setIdQuyetDinhCanDieuChinh(qOptional.get().getId());
+			QthtChotGiaInfoRes qthtChotGiaInfoRes = qthtChotGiaNhapXuatService.thongTinChotDieuChinhGia(objReq);
+			qOptional.get().setQthtChotGiaInfoRes(qthtChotGiaInfoRes);
 		}
 		return qOptional.get();
 	}
