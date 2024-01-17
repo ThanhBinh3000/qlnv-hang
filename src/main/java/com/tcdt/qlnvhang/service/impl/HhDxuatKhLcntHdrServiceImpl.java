@@ -960,7 +960,11 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
                 Optional<HhQdKhlcntDtl> qdKhlcntDtl = hhQdKhlcntDtlRepository.findByIdDxHdrAndHdrLastest(f.getId());
                 if (qdKhlcntDtl.isPresent()){
                     Optional<HhQdKhlcntHdr> qdKhlcntHdr = hhQdKhlcntHdrRepository.findById(qdKhlcntDtl.get().getIdQdHdr());
-                    qdKhlcntHdr.ifPresent(hhQdKhlcntHdr -> f.setSoQdPdKhLcnt(hhQdKhlcntHdr.getSoQd()));
+                    qdKhlcntHdr.ifPresent(hhQdKhlcntHdr -> {
+                        f.setSoQdPdKhLcnt(hhQdKhlcntHdr.getSoQd());
+                        f.setIdQdPdKhLcnt(hhQdKhlcntHdr.getId());
+                            }
+                    );
 //                    Optional<QdPdHsmt> qdPdHsmt = qdPdHsmtRepository.findByIdQdPdKhlcntDtl(qdKhlcntDtl.get().getId());
 //                    qdPdHsmt.ifPresent(pdHsmt -> f.setTgianDongMothau(pdHsmt.getTgianDthau()));
                 }
