@@ -14,9 +14,10 @@ import java.util.Optional;
 
 public interface XhTlThongBaoKqRepository extends JpaRepository<XhTlThongBaoKq, Long> {
 
-  @Query("SELECT   c FROM XhTlThongBaoKq c " +
+  @Query("SELECT distinct  c FROM XhTlThongBaoKq c " +
+      " LEFT JOIN XhTlHoSoHdr hdr on c.idHoSo = hdr.id " +
       " WHERE 1=1 " +
-      "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
+      "AND (:#{#param.dvql} IS NULL OR hdr.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
       "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
       "AND (:#{#param.soThongBao} IS NULL OR LOWER(c.soThongBao) LIKE CONCAT('%',LOWER(:#{#param.soThongBao}),'%')) " +
       "AND (:#{#param.soHoSo} IS NULL OR LOWER(c.soHoSo) LIKE CONCAT('%',LOWER(:#{#param.soHoSo}),'%')) " +
