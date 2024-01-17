@@ -223,6 +223,7 @@ public class XhTlKtraClImpl extends BaseServiceImpl implements XhTlKtraClService
         reqQd.setNam(req.getNam());
         reqQd.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
         reqQd.setPhanLoai(req.getPhanLoai());
+        reqQd.setSoBbQd(req.getSoQdXh());
         if(userInfo.getCapDvi().equals(Contains.CAP_CUC)){
             reqQd.setMaDviSr(userInfo.getDvql());
         }
