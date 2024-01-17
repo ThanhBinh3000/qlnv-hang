@@ -87,6 +87,8 @@ public interface HhDchinhDxKhLcntHdrRepository extends CrudRepository<HhDchinhDx
             , nativeQuery = true)
     List<Object[]> countAllBySoGthauStatus(Collection<Long> qdIds,String trangThai);
 
+    Optional<HhDchinhDxKhLcntHdr> findByIdQdGoc(Long idQuyetDinhCanDieuChinh);
+
 //    @Query(value = "SELECT * FROM HH_QD_KHLCNT_HDR DC_DX " +
 //            " WHERE (:namKh IS NULL OR DC_DX.NAM_KHOACH = TO_NUMBER(:namKh)) "+
 //            " AND (:loaiVthh IS NULL OR DC_DX.LOAI_VTHH = :loaiVthh) "+

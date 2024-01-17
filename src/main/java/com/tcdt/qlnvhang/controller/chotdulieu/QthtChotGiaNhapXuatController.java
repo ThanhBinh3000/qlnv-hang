@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.controller.chotdulieu;
 
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
+import com.tcdt.qlnvhang.request.chotdulieu.QthtChotGiaInfoReq;
 import com.tcdt.qlnvhang.request.chotdulieu.QthtChotGiaNhapXuatReq;
 import com.tcdt.qlnvhang.request.suachua.ScBaoCaoReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
@@ -37,6 +38,40 @@ public class QthtChotGiaNhapXuatController {
     BaseResponse resp = new BaseResponse();
     try {
       resp.setData(service.searchPage(objReq));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Tra cứu thông tin : {}", e);
+    }
+    return ResponseEntity.ok(resp);
+  }
+
+  @ApiOperation(value = "Thông tin chốt điều chỉnh giá", response = List.class)
+  @PostMapping(value = "/thong-tin-chot-dieu-chinh-gia", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> colection(@RequestBody QthtChotGiaInfoReq objReq) {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(service.thongTinChotDieuChinhGia(objReq));
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Tra cứu thông tin : {}", e);
+    }
+    return ResponseEntity.ok(resp);
+  }
+
+  @ApiOperation(value = "Check khóa điều chỉnh giá", response = List.class)
+  @PostMapping(value = "/check-khoa-chot-dieu-chinh-gia", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> colection() {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(service.checkKhoaChotDieuChinhGia());
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {

@@ -177,6 +177,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         data.setNguoiSua(userInfo.getUsername());
         data.setNgaySua(new Date());
         HhDcQdPduyetKhmttHdr cerated = hhDcQdPduyetKhMttRepository.save(data);
+        cerated.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(cerated.getTrangThai()));
         if (!DataUtils.isNullOrEmpty(objReq.getCanCuPhapLy())) {
             fileDinhKemService.saveListFileDinhKem(objReq.getCanCuPhapLy(), cerated.getId(), HhDcQdPduyetKhmttHdr.TABLE_NAME + "_CAN_CU");
         }
@@ -255,7 +256,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
                 }
             }
         }
-        data.setHhDcQdPduyetKhmttDxList(listdx);
+        data.setHhDcQdPduyetKhmttDxList(listdx.stream().sorted(Comparator.comparing(HhDcQdPduyetKhmttDx::getMaDvi)).collect(Collectors.toList()));
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Collections.singletonList(HhDcQdPduyetKhmttHdr.TABLE_NAME));
         data.setFileDinhKems(fileDinhKem);
         List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Collections.singletonList(HhDcQdPduyetKhmttHdr.TABLE_NAME + "_CAN_CU"));
