@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.service.xuathang.daugia.tochuctrienkhai.thongtin;
 
-import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgDtl;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgDtl;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdr;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgNlq;
@@ -67,6 +66,12 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl {
                 data.setMapDmucDvi(mapDmucDvi);
                 data.setMapDmucVthh(mapDmucVthh);
                 data.setTrangThai(data.getTrangThai());
+                List<XhTcTtinBdgDtl> listDtl = xhTcTtinBdgDtlRepository.findAllByIdHdr(data.getId());
+                for (XhTcTtinBdgDtl dtl : listDtl) {
+                    List<XhTcTtinBdgPlo> ploList = xhTcTtinBdgPloRepository.findAllByIdDtl(dtl.getId());
+                    dtl.setChildren(ploList != null && !ploList.isEmpty() ? ploList : Collections.emptyList());
+                }
+                data.setChildren(listDtl != null && !listDtl.isEmpty() ? listDtl : Collections.emptyList());
             } catch (Exception exception) {
                 throw new RuntimeException(exception);
             }

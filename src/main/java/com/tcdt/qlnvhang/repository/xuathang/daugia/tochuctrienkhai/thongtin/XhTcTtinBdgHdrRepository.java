@@ -15,11 +15,14 @@ public interface XhTcTtinBdgHdrRepository extends JpaRepository<XhTcTtinBdgHdr, 
     @Query("SELECT TT FROM XhTcTtinBdgHdr TT " +
             "WHERE (:#{#param.dvql} IS NULL OR TT.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
             "AND (:#{#param.nam} IS NULL OR TT.nam = :#{#param.nam}) " +
+            "AND (:#{#param.soQdPd} IS NULL OR LOWER(TT.soQdPd) LIKE LOWER(CONCAT('%', :#{#param.soQdPd}, '%'))) " +
             "AND (:#{#param.loaiVthh} IS NULL OR TT.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
             "AND (:#{#param.trangThai} IS NULL OR TT.trangThai = :#{#param.trangThai}) " +
             "ORDER BY TT.ngaySua DESC, TT.ngayTao DESC, TT.id DESC"
     )
     Page<XhTcTtinBdgHdr> searchPage(@Param("param") ThongTinDauGiaReq param, Pageable pageable);
+
+    List<XhTcTtinBdgHdr> findAllBySoQdPd(String soQdPd);
 
     List<XhTcTtinBdgHdr> findByIdQdPdDtlOrderByLanDauGia(Long idQdPdDtl);
 
