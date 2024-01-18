@@ -673,7 +673,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
                 });
                 detailItem.setChildren(subCategoryList);
             }
-            List<XhTcTtinBdgHdr> biddingInfoList = xhTcTtinBdgHdrRepository.findByIdQdPdDtlOrderByLanDauGia(item.getId());
+            List<XhTcTtinBdgHdr> biddingInfoList = xhTcTtinBdgHdrRepository.findAllBySoQdPd(item.getSoQdPd());
             for (XhTcTtinBdgHdr biddingInfo : biddingInfoList) {
                 biddingInfo.setMapDmucDvi(mapDmucDvi);
                 biddingInfo.setMapDmucVthh(mapDmucVthh);
