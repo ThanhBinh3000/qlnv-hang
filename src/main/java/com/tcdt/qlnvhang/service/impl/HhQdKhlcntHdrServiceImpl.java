@@ -1264,7 +1264,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 					object.setTgianBdauTchuc("Quý " + dxuatKhLcntHdr.get().getQuy() + "/" + dxuatKhLcntHdr.get().getNamKhoach());
 				}
 			}
-			List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdHdr(qOptional.get().getId());
+			List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdHdrOrderByGoiThauAsc(qOptional.get().getId());
 			for(HhQdKhlcntDsgthau dsg : hhQdKhlcntDsgthauData){
 				List<HhQdKhlcntDsgthauCtiet> listGtCtiet = hhQdKhlcntDsgthauCtietRepository.findByIdGoiThau(dsg.getId());
 				listGtCtiet.forEach(f -> {
@@ -1287,7 +1287,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			BigDecimal tongThanhTien = BigDecimal.ZERO;
 			for(HhQdKhlcntDtl dtl : hhQdKhlcntDtlRepository.findAllByIdQdHdrOrderByMaDvi(objReq.getId())){
 				dtl.setTenDvi(mapDmucDvi.get(dtl.getMaDvi()));
-				hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdDtl(dtl.getId());
+				hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdDtlOrderByGoiThauAsc(dtl.getId());
 				for(HhQdKhlcntDsgthau dsg : hhQdKhlcntDsgthauData){
 					List<HhQdKhlcntDsgthauCtiet> listGtCtiet = hhQdKhlcntDsgthauCtietRepository.findByIdGoiThau(dsg.getId());
 					for (HhQdKhlcntDsgthauCtiet chiCuc : listGtCtiet) {
