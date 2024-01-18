@@ -44,7 +44,7 @@ public interface HhDchinhDxKhLcntHdrRepository extends CrudRepository<HhDchinhDx
             nativeQuery = true)
     Page<HhDchinhDxKhLcntHdr> selectPage(Integer nam, String soQdDc,String trichYeu,String loaiVthh, String tuNgayQd, String denNgayQd, String maDvi, Pageable pageable);
 
-    @Query(value = " SELECT * FROM HH_DC_DX_LCNT_HDR  HDR"+
+    @Query(value = " SELECT DISTINCT HDR.* FROM HH_DC_DX_LCNT_HDR  HDR"+
             " LEFT JOIN HH_DC_DX_LCNT_DSGTHAU GT ON HDR.ID = GT.ID_DC_DX_HDR "+
             " LEFT JOIN HH_DC_DX_LCNT_DSGTHAU_CTIET CT ON GT.ID = CT.ID_GOI_THAU "+
             " WHERE (:nam IS NULL OR HDR.NAM = TO_NUMBER(:nam)) "+
@@ -54,7 +54,7 @@ public interface HhDchinhDxKhLcntHdrRepository extends CrudRepository<HhDchinhDx
             " AND (:tuNgayQd IS NULL OR HDR.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
             " AND (:maDvi IS NULL OR CT.MA_DVI LIKE CONCAT(:maDvi,'%')) "+
             " AND (:denNgayQd IS NULL OR HDR.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) ",
-            countQuery = " SELECT count(1) FROM HH_DC_DX_LCNT_HDR  HDR "+
+            countQuery = " SELECT count(*) FROM ( SELECT DISTINCT HDR.* FROM HH_DC_DX_LCNT_HDR  HDR "+
                     " LEFT JOIN HH_DC_DX_LCNT_DSGTHAU GT ON HDR.ID = GT.ID_DC_DX_HDR "+
                     " LEFT JOIN HH_DC_DX_LCNT_DSGTHAU_CTIET CT ON GT.ID = CT.ID_GOI_THAU "+
                     " WHERE (:nam IS NULL OR HDR.NAM = TO_NUMBER(:nam)) "+
@@ -63,7 +63,7 @@ public interface HhDchinhDxKhLcntHdrRepository extends CrudRepository<HhDchinhDx
                     " AND (:loaiVthh IS NULL OR HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
                     " AND (:tuNgayQd IS NULL OR HDR.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
                     " AND (:maDvi IS NULL OR CT.MA_DVI LIKE CONCAT(:maDvi,'%')) "+
-                    " AND (:denNgayQd IS NULL OR HDR.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) ",
+                    " AND (:denNgayQd IS NULL OR HDR.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd'))) ",
             nativeQuery = true)
     Page<HhDchinhDxKhLcntHdr> selectPageVt(Integer nam, String soQdDc,String trichYeu,String loaiVthh, String tuNgayQd, String denNgayQd, String maDvi, Pageable pageable);
 
