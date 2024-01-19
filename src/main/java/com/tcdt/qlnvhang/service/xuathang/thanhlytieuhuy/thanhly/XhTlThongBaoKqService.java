@@ -52,7 +52,6 @@ public class XhTlThongBaoKqService extends BaseServiceImpl {
     Page<XhTlThongBaoKq> search = xhTlThongBaoKqRepository.search(req, pageable);
     Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
 
-    Map<String, String> mapVthh = getListDanhMucHangHoa();
     search.getContent().forEach(s -> {
       if (mapDmucDvi.containsKey((s.getMaDvi()))) {
         Map<String, Object> objDonVi = mapDmucDvi.get(s.getMaDvi());
