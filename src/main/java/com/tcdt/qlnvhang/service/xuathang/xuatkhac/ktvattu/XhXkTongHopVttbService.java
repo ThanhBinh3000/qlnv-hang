@@ -41,6 +41,8 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.BanDauGiaDiaDiemGiaoNhan_.tenChiCuc;
+
 @Service
 public class XhXkTongHopVttbService extends BaseServiceImpl {
 
@@ -251,33 +253,30 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
         List<XhXkTongHopHdr> data = this.searchPage(currentUser, objReq).getContent();
 
         String title = "Danh sách vật tư thiết bị có thời hạn lưu kho lớn hơn 12 tháng";
-        String[] rowsName = new String[]{"STT", "Năm KH", "Mã danh sách", "Chi cục DTNN", "Loại hàng hóa", "Chủng loại",
-                "Điểm kho", "Ngăn/lô kho", "Ngày nhập kho", "SL hết hạn 12 tháng", "SL tồn", "DVT", "Ngày đề xuất", "Trạng thái"};
+        String[] rowsName = new String[]{"STT", "Chi cục DTNN", "Loại hàng hóa", "Chủng loại","Điểm kho", "Ngăn/lô kho", "Ngày nhập kho", "SL hết hạn (12 tháng) đề xất xuất bán", "SL tồn", "DVT", "Ngày đề xuất"};
         String fileName = "danh-sach-vat-tu-thiet-bi-co-thoi-han-luu-kho-lon-hon-12-thang.xlsx";
         List<Object[]> dataList = new ArrayList<Object[]>();
         Object[] objs = null;
         for (int i = 0; i < data.size(); i++) {
             XhXkTongHopHdr qd = data.get(i);
-            objs = new Object[rowsName.length];
             for (XhXkTongHopDtl dtl : qd.getTongHopDtl()) {
+                objs = new Object[rowsName.length];
                 objs[0] = i;
-                objs[1] = qd.getNam();
-                objs[2] = qd.getMaDanhSach();
-                objs[3] = dtl.getTenChiCuc();
-                objs[4] = dtl.getTenLoaiVthh();
-                objs[5] = dtl.getTenCloaiVthh();
-                objs[6] = dtl.getTenDiemKho();
-                objs[7] = dtl.getTenLoKho();
-                objs[8] = dtl.getNgayNhapKho();
-                objs[9] = dtl.getSlHetHan();
-                objs[10] = dtl.getSlTonKho();
-                objs[11] = dtl.getDonViTinh();
-                objs[12] = dtl.getNgayDeXuat();
-                objs[13] = qd.getTenTrangThai();
+                objs[1] = dtl.getTenChiCuc();
+                objs[2] = dtl.getTenLoaiVthh();
+                objs[3] = dtl.getTenCloaiVthh();
+                objs[4] = dtl.getTenDiemKho();
+                objs[5] = dtl.getTenNganKho() +  (dtl.getTenLoKho() != null ? ' ' + dtl.getTenLoKho() : "");
+                objs[6] = dtl.getNgayNhapKho();
+                objs[7] = dtl.getSlHetHan();
+                objs[8] = dtl.getSlTonKho();
+                objs[9] = dtl.getDonViTinh();
+                objs[10] = dtl.getNgayDeXuat();
                 dataList.add(objs);
             }
         }
-        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+        Comparator<Object[]> chiCuc = Comparator.comparing(obj -> (String) obj[1]);
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList.stream().sorted(chiCuc).collect(Collectors.toList()), response);
         ex.export();
     }
     public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
