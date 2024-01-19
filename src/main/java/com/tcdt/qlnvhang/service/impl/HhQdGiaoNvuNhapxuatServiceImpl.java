@@ -782,6 +782,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					item.setTenNhaKho(mapDmucDvi.get(item.getMaNhaKho()));
 					item.setTenNganKho(mapDmucDvi.get(item.getMaNganKho()));
 					item.setTenLoKho(mapDmucDvi.get(item.getMaLoKho()));
+					item.setTenNganLoKho(item.getMaLoKho() != null ? mapDmucDvi.get(item.getMaLoKho()) + " - " + mapDmucDvi.get(item.getMaNganKho()): mapDmucDvi.get(item.getMaNganKho()));
 					this.setDataPhieu(null,item, req);
 				});
 				dtl.setChildren(allByIdCt);

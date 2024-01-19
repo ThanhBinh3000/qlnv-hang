@@ -67,6 +67,9 @@ public class NhQdGiaoNvuNxDdiem implements Serializable {
 	private String maLoKho;
 
 	@Transient
+	private String tenNganLoKho;
+
+	@Transient
 	private String tenLoKho;
 
 	@Column(name="SO_LUONG")

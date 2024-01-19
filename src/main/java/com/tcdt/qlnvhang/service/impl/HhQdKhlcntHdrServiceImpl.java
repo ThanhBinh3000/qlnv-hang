@@ -732,9 +732,10 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				dsg.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dsg.getTrangThai()));
 				dsg.setTenTrangThaiDt(NhapXuatHangTrangThaiEnum.getTenById(dsg.getTrangThaiDt()));
 				dsg.setChildren(listGtCtiet);
-//				if (hhQdPduyetKqlcntHdr.getId() != null) {
-//					dsg.setKqlcntDtl(hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndIdQdPdHdr(dsg.getId(), hhQdPduyetKqlcntHdr.getId()));
-//				}
+				HhQdPduyetKqlcntDtl qdPduyetKqlcntDtl = hhQdPduyetKqlcntDtlRepository.findFirstByIdGoiThau(dsg.getId());
+				if (qdPduyetKqlcntDtl != null) {
+					dsg.setKqlcntDtl(qdPduyetKqlcntDtl);
+				}
 				hhQdKhlcntDsgthauList.add(dsg);
 			};
 			countSlGThau += count;
@@ -1263,7 +1264,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 					object.setTgianBdauTchuc("Quý " + dxuatKhLcntHdr.get().getQuy() + "/" + dxuatKhLcntHdr.get().getNamKhoach());
 				}
 			}
-			List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdHdr(qOptional.get().getId());
+			List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdHdrOrderByGoiThauAsc(qOptional.get().getId());
 			for(HhQdKhlcntDsgthau dsg : hhQdKhlcntDsgthauData){
 				List<HhQdKhlcntDsgthauCtiet> listGtCtiet = hhQdKhlcntDsgthauCtietRepository.findByIdGoiThau(dsg.getId());
 				listGtCtiet.forEach(f -> {
@@ -1286,7 +1287,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			BigDecimal tongThanhTien = BigDecimal.ZERO;
 			for(HhQdKhlcntDtl dtl : hhQdKhlcntDtlRepository.findAllByIdQdHdrOrderByMaDvi(objReq.getId())){
 				dtl.setTenDvi(mapDmucDvi.get(dtl.getMaDvi()));
-				hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdDtl(dtl.getId());
+				hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdDtlOrderByGoiThauAsc(dtl.getId());
 				for(HhQdKhlcntDsgthau dsg : hhQdKhlcntDsgthauData){
 					List<HhQdKhlcntDsgthauCtiet> listGtCtiet = hhQdKhlcntDsgthauCtietRepository.findByIdGoiThau(dsg.getId());
 					for (HhQdKhlcntDsgthauCtiet chiCuc : listGtCtiet) {

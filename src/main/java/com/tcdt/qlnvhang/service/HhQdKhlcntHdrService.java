@@ -17,7 +17,6 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.Hh
 import java.util.List;
 
 public interface HhQdKhlcntHdrService {
-
 	@Transactional(rollbackOn = Exception.class)
 	HhQdKhlcntHdr create(HhQdKhlcntHdrReq objReq) throws Exception;
 
