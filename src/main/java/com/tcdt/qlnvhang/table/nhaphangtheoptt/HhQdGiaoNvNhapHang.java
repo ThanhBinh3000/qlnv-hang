@@ -34,6 +34,10 @@ public class HhQdGiaoNvNhapHang implements Serializable {
     private String maDvi;
     private String tenDvi;
     private String loaiQd;
+    @Transient
+    private String tenLoaiQd;
+    @Transient
+    private BigDecimal tongMucDt;
     private Long idHd;
     private String soHd;
     private String tenHd;

@@ -10,8 +10,11 @@ import java.util.Date;
 @Data
 public class SearchHhQdGiaoNvNhReq extends BaseRequest {
     private Integer namNhap;
+    private Integer namKh;
     private String soQd;
     private String soPnk;
+    private String soHd;
+    private String tenHd;
     private String loaiVthh;
     private String cloaiVthh;
     private String trichyeu;
