@@ -91,11 +91,17 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
     @Autowired
     private HhQdPheduyetKhMttHdrRepository hhQdPheduyetKhMttHdrRepository;
 
+    @Autowired
+    private HhQdPheduyetKhMttHdrService hhQdPheduyetKhMttHdrService;
+
     public Page<HhQdGiaoNvNhapHang> searchPage(SearchHhQdGiaoNvNhReq objReq) throws Exception{
         UserInfo userInfo= SecurityContextService.getUser();
         Pageable pageable= PageRequest.of(objReq.getPaggingReq().getPage(),
                 objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
         Page<HhQdGiaoNvNhapHang> data = null;
+        if(objReq.getNamKh() != null){
+            objReq.setNamNhap(objReq.getNamKh());
+        }
 //        if(userInfo.getCapDvi().equalsIgnoreCase(Contains.CAP_CHI_CUC)){
             data =hhQdGiaoNvNhapHangRepository.searchPageChiCuc(
                     objReq.getNamNhap(),
@@ -121,6 +127,8 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                     objReq.getTrangThai(),
                     userInfo.getDvql(),
                     objReq.getLoaiQd(),
+                    objReq.getSoHd(),
+                    objReq.getTenHd(),
                     pageable);
 //        }else {
 //            data =hhQdGiaoNvNhapHangRepository.searchPageCuc(
@@ -148,6 +156,12 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
             f.setTenCloaiVthh(StringUtils.isEmpty(f.getCloaiVthh()) ? null : hashMapDmHh.get(f.getCloaiVthh()));
             f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
             f.setTenTrangThaiHd(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThaiHd()));
+            if(f.getLoaiQd().equals(Contains.MUA_LE)){
+                f.setTenLoaiQd(Contains.getPthucMtt(f.getLoaiQd()));
+            }
+            if(f.getLoaiQd().equals(Contains.UY_QUYEN)){
+                f.setTenLoaiQd(Contains.getPthucMtt(f.getLoaiQd()));
+            }
 
             // dtl
             List<HhQdGiaoNvNhangDtl> hhQdGiaoNvNhangDtl = hhQdGiaoNvNhangDtlRepository.findAllByIdQdHdr(f.getId());
@@ -444,6 +458,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
             throw new Exception("Bản ghi không tồn tại");
         }
         HhQdGiaoNvNhapHang data= optional.get();
+        BigDecimal donGiaVat = BigDecimal.ZERO;
         Map<String,String> hashMapDmhh = getListDanhMucHangHoa();
         Map<String,String> hashMapDmdv = getListDanhMucDvi(null,null,"01");
         data.setTenLoaiVthh(StringUtils.isEmpty(data.getLoaiVthh())?null:hashMapDmhh.get(data.getLoaiVthh()));
@@ -469,6 +484,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
             dtl.setTenDvi(StringUtils.isEmpty(dtl.getMaDvi())?null:hashMapDmdv.get(dtl.getMaDvi()));
             dtl.setTenDiemKho(StringUtils.isEmpty(dtl.getMaDiemKho())?null:hashMapDmdv.get(dtl.getMaDiemKho()));
             dtl.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(dtl.getTrangThai()));
+            donGiaVat = dtl.getDonGiaVat();
             BigDecimal tongSl = BigDecimal.ZERO;
             for (HhQdGiaoNvNhDdiem dDiem : listDd){
                 dDiem.setTenCuc(StringUtils.isEmpty(dDiem.getMaCuc())?null:hashMapDmdv.get(dDiem.getMaCuc()));
@@ -498,6 +514,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
             dtl.setSoLuong(tongSl);
             dtl.setChildren(qdGiaoNvNhDdiem);
         }
+        data.setTongMucDt(data.getSoLuong().multiply(donGiaVat).multiply(new BigDecimal(1000)));
         data.setHhQdGiaoNvNhangDtlList(listDtl);
 
         List<HopDongMttHdr> listHd = hopDongMttHdrRepository.findAllByIdQdGiaoNvNh(data.getId());
