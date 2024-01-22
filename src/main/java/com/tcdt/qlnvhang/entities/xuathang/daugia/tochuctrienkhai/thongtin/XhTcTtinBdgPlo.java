@@ -35,6 +35,7 @@ public class XhTcTtinBdgPlo implements Serializable {
     private Integer soLanTraGia;
     private BigDecimal donGiaTraGia;
     private String toChucCaNhan;
+    private Integer namNhap;
     @Transient
     private String tenDiemKho;
     @Transient

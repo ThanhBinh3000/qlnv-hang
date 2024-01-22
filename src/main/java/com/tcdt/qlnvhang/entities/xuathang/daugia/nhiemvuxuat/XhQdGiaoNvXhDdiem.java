@@ -35,6 +35,7 @@ public class XhQdGiaoNvXhDdiem {
     private Long idBbTinhKho;
     private String soBbTinhKho;
     private LocalDate ngayLapBbTinhKho;
+    private Integer namNhap;
     @Transient
     private String tenDiemKho;
     @Transient

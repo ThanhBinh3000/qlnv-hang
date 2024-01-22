@@ -10,11 +10,11 @@ import java.util.Map;
 import java.util.Objects;
 
 @Entity
-@Table(name = "XH_HOP_DONG_DDIEM_NHAP_KHO")
+@Table(name = XhHopDongDdiemNhapKho.TABLE_NAME)
 @Data
 public class XhHopDongDdiemNhapKho {
     private static final long serialVersionUID = 1L;
-
+    public static final String TABLE_NAME = "XH_HOP_DONG_DDIEM_NHAP_KHO";
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_HD_DDIEM_NHAP_KHO_SEQ")
     @SequenceGenerator(sequenceName = "XH_HD_DDIEM_NHAP_KHO_SEQ", allocationSize = 1, name = "XH_HD_DDIEM_NHAP_KHO_SEQ")
@@ -32,6 +32,7 @@ public class XhHopDongDdiemNhapKho {
     private BigDecimal thanhTien;
     private String donViTinh;
     private String diaDiemKho;
+    private Integer namNhap;
     @Transient
     private String tenDiemKho;
     @Transient
