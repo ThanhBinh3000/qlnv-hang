@@ -223,7 +223,6 @@ public class ScTongHopServiceImpl extends BaseServiceImpl implements ScTongHopSe
       req.setMaDviSr(dvql);
     }
     req.setTrangThai(TrangThaiAllEnum.GUI_DUYET.getId());
-    List<ScTongHopHdr> list = hdrRepository.listTongHopTrinhThamDinh(req);
-    return list;
+    return hdrRepository.listTongHopTrinhThamDinh(req);
   }
 }
