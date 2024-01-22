@@ -106,6 +106,16 @@ public class XhThQuyetDinhService extends BaseServiceImpl {
     created.setFileCanCu(canCu);
     List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), XhThQuyetDinhHdr.TABLE_NAME + "_DINH_KEM");
     created.setFileDinhKem(fileDinhKem);
+
+    if (!DataUtils.isNullObject(req.getIdHoSo())) {
+      Optional<XhThHoSoHdr> hoSo = xhThHoSoHdrRepository.findById(req.getIdHoSo());
+      if (hoSo.isPresent()) {
+        hoSo.get().setIdQd(created.getId());
+        hoSo.get().setSoQd(created.getSoQd());
+        xhThHoSoHdrRepository.save(hoSo.get());
+      }
+    }
+
     return created;
   }
 
@@ -142,6 +152,14 @@ public class XhThQuyetDinhService extends BaseServiceImpl {
     fileDinhKemService.delete(req.getId(), Lists.newArrayList(XhThQuyetDinhHdr.TABLE_NAME + "_TAI_LIEU_DINH_KEM"));
     List<FileDinhKem> fileDinhKemList = fileDinhKemService.saveListFileDinhKem(req.getFileDinhKemReq(), created.getId(), XhThQuyetDinhHdr.TABLE_NAME + "_DINH_KEM");
     created.setFileDinhKem(fileDinhKemList);
+    if (!DataUtils.isNullObject(req.getIdHoSo())) {
+      Optional<XhThHoSoHdr> hoSo = xhThHoSoHdrRepository.findById(req.getIdHoSo());
+      if (hoSo.isPresent()) {
+        hoSo.get().setIdQd(created.getId());
+        hoSo.get().setSoQd(created.getSoQd());
+        xhThHoSoHdrRepository.save(hoSo.get());
+      }
+    }
     return created;
   }
 
