@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -75,5 +76,6 @@ public class PhieuKnghiemCluongHang extends TrangThaiBaseEntity {
 	private String ketQuaDanhGia;
 	@Transient
 	List<KquaKnghiem> listKquaKngiem;
-
+	@Transient
+	private List<FileDinhKem> fileDinhKems;
 }

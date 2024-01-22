@@ -1090,7 +1090,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 					req.getMaDvi(),
 //					req.getTrangThaiDtl(),
 					req.getTrangThaiDt(),
-					req.getSoQdPdKhlcnt(), req.getSoQdPdKqlcnt(),
+					req.getSoQdPdKhlcnt(),
 					pageable);
 			for (HhQdKhlcntHdr f : data.getContent()) {
 				if(f.getIdTrHdr() == null){
