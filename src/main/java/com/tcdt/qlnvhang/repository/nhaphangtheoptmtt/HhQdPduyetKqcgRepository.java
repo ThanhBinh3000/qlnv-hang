@@ -27,6 +27,8 @@ public interface HhQdPduyetKqcgRepository extends JpaRepository<HhQdPduyetKqcgHd
             "AND (:#{#param.tuNgayKy} IS NULL OR HD.ngayPduyet >= TO_DATE(:#{#param.tuNgayKy},'YYYY-MM-DD HH24:MI:SS')) " +
             "AND (:#{#param.denNgayKy} IS NULL OR HD.ngayPduyet <= TO_DATE(:#{#param.denNgayKy},'YYYY-MM-DD HH24:MI:SS')) " +
             "AND (:#{#param.loaiVthh } IS NULL OR LOWER(QD.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
+            "AND (:#{#param.soHd } IS NULL OR LOWER(HD.soHd) LIKE CONCAT(:#{#param.soHd},'%')) " +
+            "AND (:#{#param.tenHd } IS NULL OR LOWER(HD.tenHd) LIKE CONCAT(:#{#param.tenHd},'%')) " +
             "AND (:#{#param.trangThai } IS NULL OR LOWER(QD.trangThai) = :#{#param.trangThai}) " +
             "AND (:#{#param.maDvi} IS NULL OR QD.maDvi = :#{#param.maDvi}) "
     )

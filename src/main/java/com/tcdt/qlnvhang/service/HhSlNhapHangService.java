@@ -28,6 +28,7 @@ public interface HhSlNhapHangService {
 	HhSlNhapHang detail(Long id) throws Exception;
 
 	BigDecimal countSoLuongKeHoachNam(CountKhlcntSlReq objReq) throws Exception;
+	BigDecimal countSoLuongKeHoachNamByIdQd(CountKhlcntSlReq objReq) throws Exception;
 	BigDecimal countSoLuongKeHoachNamTheoKh(CountKhlcntSlReq objReq) throws Exception;
 
 	@Transactional(rollbackOn = Exception.class)

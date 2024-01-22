@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.dexuatkhlcnt.HhDxuatKhLcntHdr;
@@ -235,6 +236,11 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			item.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(item.getTrangThai()));
 		});
 		qOptional.get().setListHopDong(allByIdQdKqLcnt);
+		List<HhQdPduyetKqlcntDtl> dtlList = hhQdPduyetKqlcntDtlRepository.findAllByIdQdPdHdr(qOptional.get().getId());
+		List<Long> listIdGthau = dtlList.stream()
+				.map(HhQdPduyetKqlcntDtl::getIdGoiThau)
+				.collect(Collectors.toList());
+		qOptional.get().setListIdGthau(listIdGthau);
 		return qOptional.get();
 	}
 
@@ -334,6 +340,7 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 	}
 
 	void updateDataApproveVt(HhQdPduyetKqlcntHdr qdPduyetKqlcntHdr) throws Exception {
+		List<HhQdPduyetKqlcntDtl> qdPduyetKqlcntDtls =  hhQdPduyetKqlcntDtlRepository.findAllByIdQdPdHdr(qdPduyetKqlcntHdr.getId());
 		Optional<HhQdKhlcntHdr> byId = hhQdKhlcntHdrRepository.findById(qdPduyetKqlcntHdr.getIdQdPdKhlcnt());
 		if(byId.isPresent()){
 			HhQdKhlcntHdr hdr = byId.get();
@@ -344,35 +351,69 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			hdr.setSoQdPdKqLcnt(qdPduyetKqlcntHdr.getSoQd());
 			hhQdKhlcntHdrRepository.save(hdr);
 			if (hdr.getDieuChinh().equals(Boolean.TRUE)) {
-				Optional<HhDchinhDxKhLcntHdr> dchinhDxKhLcntHdr = hhDchinhDxKhLcntHdrRepository.findByIdQdGocAndLastest(hdr.getId(), Boolean.TRUE);
-				if (dchinhDxKhLcntHdr.isPresent()) {
-				List<HhDchinhDxKhLcntDsgthau> gThauList = dchinhDxKhLcntDsgthauRepository.findAllByIdDcDxHdr(dchinhDxKhLcntHdr.get().getId());
-				for(HhDchinhDxKhLcntDsgthau gThau : gThauList) {
-					HhQdPduyetKqlcntDtl hhQdPduyetKqlcntDtl = hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndType(gThau.getId(), "DC");
-					if (hhQdPduyetKqlcntDtl != null) {
-						gThau.setTrangThaiDt(hhQdPduyetKqlcntDtl.getTrangThai());
-						gThau.setTenNhaThau(hhQdPduyetKqlcntDtl.getTenNhaThau());
-						gThau.setDonGiaNhaThau(hhQdPduyetKqlcntDtl.getDonGiaVat());
-						gThau.setIdNhaThau(hhQdPduyetKqlcntDtl.getIdNhaThau());
-						gThau.setThanhTien(hhQdPduyetKqlcntDtl.getThanhTienNhaThau());
-						gThau.setDienGiaiNhaThau(hhQdPduyetKqlcntDtl.getDienGiaiNhaThau());
-						dchinhDxKhLcntDsgthauRepository.save(gThau);
+				for (HhQdPduyetKqlcntDtl kqDtl : qdPduyetKqlcntDtls) {
+					Optional<HhDchinhDxKhLcntDsgthau> gthau = dchinhDxKhLcntDsgthauRepository.findById(kqDtl.getIdGoiThau());
+					if (!gthau.isPresent()) {
+						throw new Exception("Không tìm thấy gói thầu.");
 					}
+					if (gthau.get().getIdNhaThau() != null) {
+						throw new Exception(
+								"Thông tin gói thầu đã được ban hành quyết định phê duyệt kết quả lựa chọn nhà thầu, xin vui lòng chọn thông tin gói thầu khác");
+					}
+					gthau.get().setTrangThaiDt(kqDtl.getTrangThai());
+					gthau.get().setTenNhaThau(kqDtl.getTenNhaThau());
+					gthau.get().setDonGiaNhaThau(kqDtl.getDonGiaVat());
+					gthau.get().setThanhTienNhaThau(kqDtl.getThanhTienNhaThau());
+					gthau.get().setIdNhaThau(kqDtl.getIdNhaThau());
+					gthau.get().setDienGiaiNhaThau(kqDtl.getDienGiaiNhaThau());
+					dchinhDxKhLcntDsgthauRepository.save(gthau.get());
 				}
-				}
+//				Optional<HhDchinhDxKhLcntHdr> dchinhDxKhLcntHdr = hhDchinhDxKhLcntHdrRepository.findByIdQdGocAndLastest(hdr.getId(), Boolean.TRUE);
+//				if (dchinhDxKhLcntHdr.isPresent()) {
+//				List<HhDchinhDxKhLcntDsgthau> gThauList = dchinhDxKhLcntDsgthauRepository.findAllByIdDcDxHdr(dchinhDxKhLcntHdr.get().getId());
+//				for(HhDchinhDxKhLcntDsgthau gThau : gThauList) {
+//					HhQdPduyetKqlcntDtl hhQdPduyetKqlcntDtl = hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndType(gThau.getId(), "DC");
+//					if (hhQdPduyetKqlcntDtl != null) {
+//						gThau.setTrangThaiDt(hhQdPduyetKqlcntDtl.getTrangThai());
+//						gThau.setTenNhaThau(hhQdPduyetKqlcntDtl.getTenNhaThau());
+//						gThau.setDonGiaNhaThau(hhQdPduyetKqlcntDtl.getDonGiaVat());
+//						gThau.setIdNhaThau(hhQdPduyetKqlcntDtl.getIdNhaThau());
+//						gThau.setThanhTien(hhQdPduyetKqlcntDtl.getThanhTienNhaThau());
+//						gThau.setDienGiaiNhaThau(hhQdPduyetKqlcntDtl.getDienGiaiNhaThau());
+//						dchinhDxKhLcntDsgthauRepository.save(gThau);
+//					}
+//				}
+//				}
 			} else {
-				List<HhQdKhlcntDsgthau> listDsgThau = hhQdKhlcntDsgthauRepository.findByIdQdHdr(hdr.getId());
-				for (HhQdKhlcntDsgthau dsgthau : listDsgThau) {
-					HhQdPduyetKqlcntDtl hhQdPduyetKqlcntDtl = hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndType(dsgthau.getId(), "GOC");
-					if (hhQdPduyetKqlcntDtl != null) {
-						dsgthau.setTrangThaiDt(hhQdPduyetKqlcntDtl.getTrangThai());
-						dsgthau.setTenNhaThau(hhQdPduyetKqlcntDtl.getTenNhaThau());
-						dsgthau.setDonGiaNhaThau(hhQdPduyetKqlcntDtl.getDonGiaVat());
-						dsgthau.setIdNhaThau(hhQdPduyetKqlcntDtl.getIdNhaThau());
-						dsgthau.setDienGiaiNhaThau(hhQdPduyetKqlcntDtl.getDienGiaiNhaThau());
-						hhQdKhlcntDsgthauRepository.save(dsgthau);
+				for (HhQdPduyetKqlcntDtl kqDtl : qdPduyetKqlcntDtls) {
+					Optional<HhQdKhlcntDsgthau> gthau = hhQdKhlcntDsgthauRepository.findById(kqDtl.getIdGoiThau());
+					if (!gthau.isPresent()) {
+						throw new Exception("Không tìm thấy gói thầu.");
 					}
+					if (gthau.get().getIdNhaThau() != null) {
+						throw new Exception(
+								"Thông tin gói thầu đã được ban hành quyết định phê duyệt kết quả lựa chọn nhà thầu, xin vui lòng chọn thông tin gói thầu khác");
+					}
+					gthau.get().setTrangThaiDt(kqDtl.getTrangThai());
+					gthau.get().setTenNhaThau(kqDtl.getTenNhaThau());
+					gthau.get().setDonGiaNhaThau(kqDtl.getDonGiaVat());
+					gthau.get().setThanhTienNhaThau(kqDtl.getThanhTienNhaThau());
+					gthau.get().setIdNhaThau(kqDtl.getIdNhaThau());
+					gthau.get().setDienGiaiNhaThau(kqDtl.getDienGiaiNhaThau());
+					hhQdKhlcntDsgthauRepository.save(gthau.get());
 				}
+//				List<HhQdKhlcntDsgthau> listDsgThau = hhQdKhlcntDsgthauRepository.findByIdQdHdr(hdr.getId());
+//				for (HhQdKhlcntDsgthau dsgthau : listDsgThau) {
+//					HhQdPduyetKqlcntDtl hhQdPduyetKqlcntDtl = hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndType(dsgthau.getId(), "GOC");
+//					if (hhQdPduyetKqlcntDtl != null) {
+//						dsgthau.setTrangThaiDt(hhQdPduyetKqlcntDtl.getTrangThai());
+//						dsgthau.setTenNhaThau(hhQdPduyetKqlcntDtl.getTenNhaThau());
+//						dsgthau.setDonGiaNhaThau(hhQdPduyetKqlcntDtl.getDonGiaVat());
+//						dsgthau.setIdNhaThau(hhQdPduyetKqlcntDtl.getIdNhaThau());
+//						dsgthau.setDienGiaiNhaThau(hhQdPduyetKqlcntDtl.getDienGiaiNhaThau());
+//						hhQdKhlcntDsgthauRepository.save(dsgthau);
+//					}
+//				}
 			}
 			List<HhQdKhlcntDtl> dtl = hhQdKhlcntDtlRepository.findAllByIdQdHdr(hdr.getId());
 			dtl.forEach(item ->{
@@ -389,35 +430,58 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 	}
 
 	void updateDataApproveLt(Optional<HhQdPduyetKqlcntHdr> optional) throws Exception {
-		Optional<HhQdKhlcntDtl> byId = hhQdKhlcntDtlRepository.findById(optional.get().getIdQdPdKhlcntDtl());
-		if(byId.isPresent()){
-			HhQdKhlcntDtl hhQdKhlcntDtl = byId.get();
-			if(!StringUtils.isEmpty(hhQdKhlcntDtl.getSoQdPdKqLcnt())){
+		List<HhQdPduyetKqlcntDtl> qdPduyetKqlcntDtls =  hhQdPduyetKqlcntDtlRepository.findAllByIdQdPdHdr(optional.get().getId());
+		for (HhQdPduyetKqlcntDtl kqDtl : qdPduyetKqlcntDtls) {
+			Optional<HhQdKhlcntDsgthau> gthau = hhQdKhlcntDsgthauRepository.findById(kqDtl.getIdGoiThau());
+			if (!gthau.isPresent()) {
+				throw new Exception("Không tìm thấy gói thầu.");
+			}
+			if (gthau.get().getIdNhaThau() != null) {
 				throw new Exception(
-						"Thông tin gói thầu đã được ban hành quyết định phê duyệt kế quả lựa chọn nhà thầu, xin vui lòng chọn thông tin gối thầu khác");
+						"Thông tin gói thầu đã được ban hành quyết định phê duyệt kết quả lựa chọn nhà thầu, xin vui lòng chọn thông tin gói thầu khác");
 			}
-			hhQdKhlcntDtl.setSoQdPdKqLcnt(optional.get().getSoQd());
-			hhQdKhlcntDtlRepository.save(hhQdKhlcntDtl);
-			List<HhQdKhlcntDsgthau> listDsgThau = hhQdKhlcntDsgthauRepository.findByIdQdDtl(hhQdKhlcntDtl.getId());
-			for (HhQdKhlcntDsgthau dsgthau : listDsgThau) {
-				HhQdPduyetKqlcntDtl hhQdPduyetKqlcntDtl = hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndIdQdPdHdr(dsgthau.getId(), optional.get().getId());
-				if (hhQdPduyetKqlcntDtl != null) {
-					dsgthau.setTrangThaiDt(hhQdPduyetKqlcntDtl.getTrangThai());
-					dsgthau.setTenNhaThau(hhQdPduyetKqlcntDtl.getTenNhaThau());
-					dsgthau.setDonGiaNhaThau(hhQdPduyetKqlcntDtl.getDonGiaVat());
-					dsgthau.setIdNhaThau(hhQdPduyetKqlcntDtl.getIdNhaThau());
-					dsgthau.setDienGiaiNhaThau(hhQdPduyetKqlcntDtl.getDienGiaiNhaThau());
-					hhQdKhlcntDsgthauRepository.save(dsgthau);
-				}
-			}
-			hhQdKhlcntDtl.getChildren().forEach(item ->{
-				item.setTrangThai(hhQdKhlcntDtl.getTrangThai().equals(NhapXuatHangTrangThaiEnum.THANH_CONG.getId()) ? NhapXuatHangTrangThaiEnum.THANH_CONG.getId() : NhapXuatHangTrangThaiEnum.THAT_BAI.getId());
-					hhQdKhlcntDsgthauRepository.save(item);
-			});
-		}else{
-			throw new Exception(
-					"Số quyết định phê duyệt kế hoạch lựa chọn nhà thầu " + optional.get().getSoQdPdKhlcnt() + " không tồn tại");
+			gthau.get().setTrangThaiDt(kqDtl.getTrangThai());
+			gthau.get().setTenNhaThau(kqDtl.getTenNhaThau());
+			gthau.get().setDonGiaNhaThau(kqDtl.getDonGiaVat());
+			gthau.get().setThanhTienNhaThau(kqDtl.getThanhTienNhaThau());
+			gthau.get().setIdNhaThau(kqDtl.getIdNhaThau());
+			gthau.get().setDienGiaiNhaThau(kqDtl.getDienGiaiNhaThau());
+			hhQdKhlcntDsgthauRepository.save(gthau.get());
 		}
+//		Optional<HhQdKhlcntDtl> byId = hhQdKhlcntDtlRepository.findById(optional.get().getIdQdPdKhlcntDtl());
+//		if(byId.isPresent()){
+//			HhQdKhlcntDtl hhQdKhlcntDtl = byId.get();
+//			if(!StringUtils.isEmpty(hhQdKhlcntDtl.getSoQdPdKqLcnt())){
+//				throw new Exception(
+//						"Thông tin gói thầu đã được ban hành quyết định phê duyệt kế quả lựa chọn nhà thầu, xin vui lòng chọn thông tin gối thầu khác");
+//			}
+//			hhQdKhlcntDtl.setSoQdPdKqLcnt(optional.get().getSoQd());
+//			hhQdKhlcntDtlRepository.save(hhQdKhlcntDtl);
+//			List<HhQdKhlcntDsgthau> listDsgThau = hhQdKhlcntDsgthauRepository.findByIdQdDtl(hhQdKhlcntDtl.getId());
+//			for (HhQdKhlcntDsgthau dsgthau : listDsgThau) {
+//				if (dsgthau.getIdNhaThau() != null) {
+//					throw new Exception(
+//							"Thông tin gói thầu đã được ban hành quyết định phê duyệt kết quả lựa chọn nhà thầu, xin vui lòng chọn thông tin gói thầu khác");
+//				}
+//				HhQdPduyetKqlcntDtl hhQdPduyetKqlcntDtl = hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndIdQdPdHdr(dsgthau.getId(), optional.get().getId());
+//				if (hhQdPduyetKqlcntDtl != null) {
+//					dsgthau.setTrangThaiDt(hhQdPduyetKqlcntDtl.getTrangThai());
+//					dsgthau.setTenNhaThau(hhQdPduyetKqlcntDtl.getTenNhaThau());
+//					dsgthau.setDonGiaNhaThau(hhQdPduyetKqlcntDtl.getDonGiaVat());
+//					dsgthau.setThanhTienNhaThau(hhQdPduyetKqlcntDtl.getThanhTienNhaThau());
+//					dsgthau.setIdNhaThau(hhQdPduyetKqlcntDtl.getIdNhaThau());
+//					dsgthau.setDienGiaiNhaThau(hhQdPduyetKqlcntDtl.getDienGiaiNhaThau());
+//					hhQdKhlcntDsgthauRepository.save(dsgthau);
+//				}
+//			}
+//			hhQdKhlcntDtl.getChildren().forEach(item ->{
+//				item.setTrangThai(hhQdKhlcntDtl.getTrangThai().equals(NhapXuatHangTrangThaiEnum.THANH_CONG.getId()) ? NhapXuatHangTrangThaiEnum.THANH_CONG.getId() : NhapXuatHangTrangThaiEnum.THAT_BAI.getId());
+//					hhQdKhlcntDsgthauRepository.save(item);
+//			});
+//		}else{
+//			throw new Exception(
+//					"Số quyết định phê duyệt kế hoạch lựa chọn nhà thầu " + optional.get().getSoQdPdKhlcnt() + " không tồn tại");
+//		}
 	}
 
 	@Override
@@ -697,12 +761,14 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 				if (dchinhDxKhLcntHdr.isPresent()) {
 					List<HhDchinhDxKhLcntDsgthau> gThauList = dchinhDxKhLcntDsgthauRepository.findAllByIdDcDxHdr(dchinhDxKhLcntHdr.get().getId());
 					for(HhDchinhDxKhLcntDsgthau gThau : gThauList){
-						Optional<HhDthauNthauDuthau> nthau = nhaThauDuthauRepository.findById(gThau.getIdNhaThau());
 						DsGthauPreview gthauPreview = new DsGthauPreview();
-						if (nthau.isPresent()){
-							gthauPreview.setDonGiaDuThau(docxToPdfConverter.convertBigDecimalToStr(checkNullAsZero(nthau.get().getDonGia()).divide(gThau.getSoLuong(),2, RoundingMode.HALF_UP)));
-							gthauPreview.setThanhTienDuThau(docxToPdfConverter.convertBigDecimalToStr(nthau.get().getDonGia()));
-							tongThanhTienDuThau = tongThanhTienDuThau.add(nthau.get().getDonGia());
+						if (gThau.getIdNhaThau() != null) {
+							Optional<HhDthauNthauDuthau> nthau = nhaThauDuthauRepository.findById(gThau.getIdNhaThau());
+							if (nthau.isPresent()){
+								gthauPreview.setDonGiaDuThau(docxToPdfConverter.convertBigDecimalToStr(checkNullAsZero(nthau.get().getDonGia()).divide(gThau.getSoLuong(),2, RoundingMode.HALF_UP)));
+								gthauPreview.setThanhTienDuThau(docxToPdfConverter.convertBigDecimalToStr(nthau.get().getDonGia()));
+								tongThanhTienDuThau = tongThanhTienDuThau.add(nthau.get().getDonGia());
+							}
 						}
 						gthauPreview.setGoiThau(gThau.getGoiThau());
 						gthauPreview.setSoLuong(gThau.getSoLuong());
@@ -729,12 +795,14 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 			} else {
 				List<HhQdKhlcntDsgthau> hhQdKhlcntDsgthauData = hhQdKhlcntDsgthauRepository.findByIdQdHdr(qOptional.get().getId());
 				for(HhQdKhlcntDsgthau gThau : hhQdKhlcntDsgthauData){
-					Optional<HhDthauNthauDuthau> nthau = nhaThauDuthauRepository.findById(gThau.getIdNhaThau());
 					DsGthauPreview gthauPreview = new DsGthauPreview();
-					if (nthau.isPresent()){
-						gthauPreview.setDonGiaDuThau(docxToPdfConverter.convertBigDecimalToStr(checkNullAsZero(nthau.get().getDonGia()).divide(gThau.getSoLuong(),2, RoundingMode.HALF_UP)));
-						gthauPreview.setThanhTienDuThau(docxToPdfConverter.convertBigDecimalToStr(nthau.get().getDonGia()));
-						tongThanhTienDuThau = tongThanhTienDuThau.add(nthau.get().getDonGia());
+					if (gThau.getIdNhaThau() != null) {
+						Optional<HhDthauNthauDuthau> nthau = nhaThauDuthauRepository.findById(gThau.getIdNhaThau());
+						if (nthau.isPresent()){
+							gthauPreview.setDonGiaDuThau(docxToPdfConverter.convertBigDecimalToStr(checkNullAsZero(nthau.get().getDonGia()).divide(gThau.getSoLuong(),2, RoundingMode.HALF_UP)));
+							gthauPreview.setThanhTienDuThau(docxToPdfConverter.convertBigDecimalToStr(nthau.get().getDonGia()));
+							tongThanhTienDuThau = tongThanhTienDuThau.add(nthau.get().getDonGia());
+						}
 					}
 					gthauPreview.setGoiThau(gThau.getGoiThau());
 					gthauPreview.setSoLuong(gThau.getSoLuong());

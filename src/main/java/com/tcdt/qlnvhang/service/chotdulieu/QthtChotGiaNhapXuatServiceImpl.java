@@ -1,12 +1,24 @@
 package com.tcdt.qlnvhang.service.chotdulieu;
 
+import com.tcdt.qlnvhang.repository.HhDchinhDxKhLcntHdrRepository;
+import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
+import com.tcdt.qlnvhang.repository.xuathang.chotdulieu.KhLtPagTongHopCTietRepository;
+import com.tcdt.qlnvhang.repository.xuathang.chotdulieu.KhPagGctQdTcdtnnRepository;
 import com.tcdt.qlnvhang.repository.xuathang.chotdulieu.QthtChotGiaNhapXuatRepository;
+import com.tcdt.qlnvhang.request.chotdulieu.QthtChotGiaInfoReq;
 import com.tcdt.qlnvhang.request.chotdulieu.QthtChotGiaNhapXuatReq;
+import com.tcdt.qlnvhang.response.chotdulieu.QthtChotDieuChinhGia;
+import com.tcdt.qlnvhang.response.chotdulieu.QthtChotGiaInfoRes;
+import com.tcdt.qlnvhang.response.chotdulieu.QthtDieuChinhKHLCNT;
+import com.tcdt.qlnvhang.response.chotdulieu.QthtQuyetDinhChinhGia;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.HhDchinhDxKhLcntHdr;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
+import com.tcdt.qlnvhang.table.chotdulieu.KhPagGctQdTcdtnn;
+import com.tcdt.qlnvhang.table.chotdulieu.KhPagTongHopCTiet;
 import com.tcdt.qlnvhang.table.chotdulieu.QthtChotGiaNhapXuat;
-import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,95 +28,181 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.time.ZoneId;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class QthtChotGiaNhapXuatServiceImpl extends BaseServiceImpl implements QthtChotGiaNhapXuatService {
 
-  @Autowired
-  private QthtChotGiaNhapXuatRepository hdrRepository;
+    @Autowired
+    private QthtChotGiaNhapXuatRepository hdrRepository;
 
-  @Autowired
-  private UserInfoRepository userInfoRepository;
-
-  @Override
-  public Page<QthtChotGiaNhapXuat> searchPage(QthtChotGiaNhapXuatReq req) throws Exception {
-    Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
-    Page<QthtChotGiaNhapXuat> search = hdrRepository.searchPage(req, pageable);
-    search.getContent().forEach( item -> {
-      item.setTenNguoiTao(userInfoRepository.findById(item.getNguoiTaoId()).get().getFullName());
-    });
-    return search;
-  }
-
-  @Override
-  public QthtChotGiaNhapXuat create(QthtChotGiaNhapXuatReq req) throws Exception {
-    UserInfo userInfo = UserUtils.getUserInfo();
-    QthtChotGiaNhapXuat hdr = new QthtChotGiaNhapXuat();
-    BeanUtils.copyProperties(req,hdr);
-    hdr.setNguoiTaoId(userInfo.getId());
-    hdr.setNgayTao(LocalDateTime.now());
-    hdr.setMaDonVi(String.  join(",", req.getListMaDvi()));
-    QthtChotGiaNhapXuat save = hdrRepository.save(hdr);
-    return save;
-  }
-
-  @Override
-  public QthtChotGiaNhapXuat update(QthtChotGiaNhapXuatReq req) throws Exception {
-    UserInfo userInfo = UserUtils.getUserInfo();
-
-    Optional<QthtChotGiaNhapXuat> optional = hdrRepository.findById(req.getId());
-    if (!optional.isPresent()) {
-      throw new Exception("Không tìm thấy dữ liệu");
+    @Autowired
+    private UserInfoRepository userInfoRepository;
+    @Autowired
+    private QlnvDmDonviRepository qlnvDmDonviRepository;
+    @Autowired
+    private KhPagGctQdTcdtnnRepository khPagGctQdTcdtnnRepository;
+    @Autowired
+    private KhLtPagTongHopCTietRepository lhLtPagTongHopCTietRepository;
+    @Autowired
+    private HhDchinhDxKhLcntHdrRepository hhDchinhDxKhLcntHdrRepository;
+    @Override
+    public Page<QthtChotGiaNhapXuat> searchPage(QthtChotGiaNhapXuatReq req) throws Exception {
+        Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+        Page<QthtChotGiaNhapXuat> search = hdrRepository.searchPage(req, pageable);
+        search.getContent().forEach(item -> {
+            item.setTenNguoiTao(userInfoRepository.findById(item.getNguoiTaoId()).get().getFullName());
+        });
+        return search;
     }
-    if(optional.get().getNgayHuy() != null){
-      throw new Exception("Dữ liệu đã bị hủy bỏ ");
+
+    @Override
+    public QthtChotGiaNhapXuat create(QthtChotGiaNhapXuatReq req) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        QthtChotGiaNhapXuat hdr = new QthtChotGiaNhapXuat();
+        BeanUtils.copyProperties(req, hdr);
+        hdr.setNguoiTaoId(userInfo.getId());
+        hdr.setNgayTao(LocalDateTime.now());
+        hdr.setMaDonVi(String.join(",", req.getListMaDvi()));
+        QthtChotGiaNhapXuat save = hdrRepository.save(hdr);
+        return save;
     }
-    QthtChotGiaNhapXuat data = optional.get();
-    BeanUtils.copyProperties(req, data);
-    return data;
-  }
 
-  @Override
-  public QthtChotGiaNhapXuat detail(Long id) throws Exception {
-    Optional<QthtChotGiaNhapXuat> optional = hdrRepository.findById(id);
-    if (!optional.isPresent()) {
-      throw new Exception("Không tìm thấy dữ liệu");
+    @Override
+    public QthtChotGiaNhapXuat update(QthtChotGiaNhapXuatReq req) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+
+        Optional<QthtChotGiaNhapXuat> optional = hdrRepository.findById(req.getId());
+        if (!optional.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        if (optional.get().getNgayHuy() != null) {
+            throw new Exception("Dữ liệu đã bị hủy bỏ ");
+        }
+        QthtChotGiaNhapXuat data = optional.get();
+        BeanUtils.copyProperties(req, data);
+        return data;
     }
-    return optional.get();
-  }
 
-  @Override
-  public QthtChotGiaNhapXuat approve(QthtChotGiaNhapXuatReq req) throws Exception {
-    return null;
-  }
-
-  @Override
-  public void delete(Long id) throws Exception {
-    Optional<QthtChotGiaNhapXuat> optional = hdrRepository.findById(id);
-    if (!optional.isPresent()) {
-      throw new Exception("Không tìm thấy dữ liệu");
+    @Override
+    public QthtChotGiaNhapXuat detail(Long id) throws Exception {
+        Optional<QthtChotGiaNhapXuat> optional = hdrRepository.findById(id);
+        if (!optional.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        return optional.get();
     }
-    QthtChotGiaNhapXuat data = optional.get();
-    if(data.getNgayHuy() != null){
-      throw new Exception("Dữ liệu đã bị hủy bỏ ");
+
+    @Override
+    public QthtChotGiaNhapXuat approve(QthtChotGiaNhapXuatReq req) throws Exception {
+        return null;
     }
-    data.setNgayHuy(LocalDate.now());
-    hdrRepository.save(data);
-  }
 
-  @Override
-  public void deleteMulti(List<Long> listMulti) throws Exception {
+    @Override
+    public void delete(Long id) throws Exception {
+        Optional<QthtChotGiaNhapXuat> optional = hdrRepository.findById(id);
+        if (!optional.isPresent()) {
+            throw new Exception("Không tìm thấy dữ liệu");
+        }
+        QthtChotGiaNhapXuat data = optional.get();
+        if (data.getNgayHuy() != null) {
+            throw new Exception("Dữ liệu đã bị hủy bỏ ");
+        }
+        data.setNgayHuy(LocalDate.now());
+        hdrRepository.save(data);
+    }
 
-  }
+    @Override
+    public void deleteMulti(List<Long> listMulti) throws Exception {
 
-  @Override
-  public void export(QthtChotGiaNhapXuatReq req, HttpServletResponse response) throws Exception {
+    }
 
-  }
+    @Override
+    public void export(QthtChotGiaNhapXuatReq req, HttpServletResponse response) throws Exception {
+
+    }
+
+    @Override
+    public QthtChotGiaInfoRes thongTinChotDieuChinhGia(QthtChotGiaInfoReq objReq) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        QthtChotGiaInfoRes res = new QthtChotGiaInfoRes();
+
+        // chốt điều chỉnh giá
+        List<QthtChotDieuChinhGia> qthtChotDieuChinhGias = new ArrayList<>();
+        QthtChotGiaNhapXuatReq filter = new QthtChotGiaNhapXuatReq();
+        filter.setType("CHOT_GIA");
+        filter.setNgayChotSr(LocalDate.now());
+        filter.setMaDvi(userInfo.getDvql());
+        List<QthtChotGiaNhapXuat> ngayChotAndHieuLuc = hdrRepository.findBetweenNgayChotAndHieuLuc(filter);
+        if (ngayChotAndHieuLuc.isEmpty()) {
+            return res;
+        }
+        for (QthtChotGiaNhapXuat chotnx : ngayChotAndHieuLuc) {
+            QthtChotDieuChinhGia qthtChotDieuChinhGia = new QthtChotDieuChinhGia();
+            qthtChotDieuChinhGia.setNgayChotDieuChinh(chotnx.getNgayChot());
+            qthtChotDieuChinhGia.setNgayHieuLuc(chotnx.getNgayHluc());
+
+            List<QlnvDmDonvi> byMaDviIn = qlnvDmDonviRepository.findByMaDviIn(new HashSet<>(chotnx.getListMaDvi()));
+            qthtChotDieuChinhGia.setDanhSachTenCuc(byMaDviIn.stream().map(QlnvDmDonvi::getTenDvi).collect(Collectors.toList()));
+            qthtChotDieuChinhGia.setDanhSachMaCuc(chotnx.getListMaDvi());
+            qthtChotDieuChinhGias.add(qthtChotDieuChinhGia);
+        }
+        res.setQthtChotDieuChinhGia(qthtChotDieuChinhGias);
+
+        // qthtQuyetDinhChinhGia
+        List<QthtQuyetDinhChinhGia> qthtQuyetDinhChinhGias = new ArrayList<>();
+        List<KhPagGctQdTcdtnn> lastest = new ArrayList<>();
+        if(objReq.getLoaiVthh().startsWith("01") || objReq.getLoaiVthh().startsWith("04")){
+           lastest = khPagGctQdTcdtnnRepository.getGiaTcdtLastestLt("29", objReq.getLoaiGia(), objReq.getNam(), objReq.getLoaiVthh(), objReq.getCloaiVthh(), objReq.getMaCucs());
+        }else {
+            lastest = khPagGctQdTcdtnnRepository.getGiaTcdtLastestVt("29", objReq.getLoaiGia(), objReq.getNam(), objReq.getLoaiVthh(), objReq.getCloaiVthh(), objReq.getMaCucs());
+        }
+
+        Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
+        for(KhPagGctQdTcdtnn khPagGctQdTcdtnn: lastest){
+            QthtQuyetDinhChinhGia qthtQuyetDinhChinhGia = new QthtQuyetDinhChinhGia();
+            qthtQuyetDinhChinhGia.setSoQuyetDinhDieuChinhGia(khPagGctQdTcdtnn.getSoQdDc());
+            qthtQuyetDinhChinhGia.setNgayKyQuyetDinhDieuChinh(khPagGctQdTcdtnn.getNgayKy());
+            List<KhPagTongHopCTiet> lists = lhLtPagTongHopCTietRepository.findAllByQdTcdtnnId(khPagGctQdTcdtnn.getId());
+
+            qthtQuyetDinhChinhGia.setDanhSachMaCuc(lists.stream().map(KhPagTongHopCTiet::getMaDvi).collect(Collectors.toList()));
+            List<String> danhSachTenCuc = new ArrayList<>();
+            for(String maCuc: qthtQuyetDinhChinhGia.getDanhSachMaCuc()){
+                danhSachTenCuc.add(mapDmucDvi.get(maCuc).get("tenDvi").toString());
+            }
+            qthtQuyetDinhChinhGia.setDanhSachTenCuc(danhSachTenCuc);
+            qthtQuyetDinhChinhGias.add(qthtQuyetDinhChinhGia);
+        }
+        res.setQthtQuyetDinhChinhGia(qthtQuyetDinhChinhGias);
+
+
+        Optional<HhDchinhDxKhLcntHdr> hhDchinhDxKhLcntHdr = hhDchinhDxKhLcntHdrRepository.findByIdQdGocAndLastest(objReq.getIdQuyetDinhCanDieuChinh(), true);
+        if(hhDchinhDxKhLcntHdr.isPresent()){
+            QthtDieuChinhKHLCNT qthtDieuChinhKHLCNT = new QthtDieuChinhKHLCNT();
+            qthtDieuChinhKHLCNT.setSoQuyetDinhDieuKHLCNT(hhDchinhDxKhLcntHdr.get().getSoQdDc());
+            LocalDate localDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(hhDchinhDxKhLcntHdr.get().getNgayQdDc()) );
+            qthtDieuChinhKHLCNT.setNgayQuyetDinhDieuKHLCNT(localDate);
+            res.setQthtDieuChinhKHLCNT(qthtDieuChinhKHLCNT);
+        }
+
+        return res;
+    }
+
+    @Override
+    public boolean checkKhoaChotDieuChinhGia() throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        QthtChotGiaNhapXuatReq filter = new QthtChotGiaNhapXuatReq();
+        filter.setType("CHOT_GIA");
+        filter.setNgayChotSr(LocalDate.now());
+        filter.setMaDvi(userInfo.getDvql());
+        List<QthtChotGiaNhapXuat> ngayChotAndHieuLuc = hdrRepository.findBetweenNgayChotAndHieuLuc(filter);
+        return !ngayChotAndHieuLuc.isEmpty(); // true là khóa, false là không khóa
+    }
 //
 //  @Override
 //  public Page<ScBaoCaoHdr> searchPage(ScBaoCaoReq req) throws Exception {

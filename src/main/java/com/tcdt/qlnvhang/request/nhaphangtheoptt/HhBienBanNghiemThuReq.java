@@ -34,6 +34,7 @@ public class HhBienBanNghiemThuReq {
     private String hthucBquan;
     private Double dinhMuc;
     private String ketLuan;
+    private String loaiHinhBaoQuan;
     private String trangThai;
     private String ldoTuChoi;
     private String capDvi;

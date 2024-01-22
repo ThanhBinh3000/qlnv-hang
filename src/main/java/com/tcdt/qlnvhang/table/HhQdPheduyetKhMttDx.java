@@ -34,10 +34,15 @@ public class HhQdPheduyetKhMttDx implements Serializable {
     private String maDvi;
     @Transient
     private String tenDvi;
+    @Transient
+    private String soQdDc;
 
     private String diaChi;
 
     private String soDxuat;
+
+    private Long idSoQdCc;
+    private String soQdCc;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayPduyet;

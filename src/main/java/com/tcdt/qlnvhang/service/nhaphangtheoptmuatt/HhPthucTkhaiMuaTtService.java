@@ -100,6 +100,7 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
                 hdr.setTenLoaiVthh(hashMapVthh.get(hdr.getLoaiVthh()));
                 hdr.setTenCloaiVthh(hashMapVthh.get(hdr.getCloaiVthh()));
                 f.setHhQdPheduyetKhMttHdr(hdr);
+                f.setSoQdDc(f.getHhQdPheduyetKhMttHdr().getSoQdDc());
 
 
                 List<HhQdPheduyetKhMttSLDD> obj = hhQdPheduyetKhMttSLDDRepository.findAllByIdQdDtl(f.getId());

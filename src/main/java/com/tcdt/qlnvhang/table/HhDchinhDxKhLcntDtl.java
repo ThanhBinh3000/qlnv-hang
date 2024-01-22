@@ -96,4 +96,15 @@ public class HhDchinhDxKhLcntDtl implements Serializable {
 	private List<HhDchinhDxKhLcntDsgthau> children = new ArrayList<>();
 	@Transient
 	private HhDxuatKhLcntHdr dxuatKhLcntHdr;
+
+	@Transient
+	String diaChiDvi;
+	@Transient
+	String trichYeu;
+	@Transient
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayTao;
+	@Transient
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+	Date ngayPduyet;
 }

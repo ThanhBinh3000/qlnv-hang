@@ -5,20 +5,24 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.HhSlNhapHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.hopdong.hopdongphuluc.HopDongMttHdrRepository;
 import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttHdrSearchReq;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.*;
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdrReq;
 import com.tcdt.qlnvhang.request.object.HhSlNhapHangReq;
 import com.tcdt.qlnvhang.response.DcQdPduyetKhMttDTO;
 import com.tcdt.qlnvhang.response.HopDongMttHdrDTO;
+import com.tcdt.qlnvhang.response.SoLuongDaKyHopDongDTO;
 import com.tcdt.qlnvhang.service.HhSlNhapHangService;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.*;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdr;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.*;
 import org.modelmapper.ModelMapper;
@@ -60,6 +64,9 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
 
     @Autowired
     private HhQdPheduyetKhMttHdrService hhQdPheduyetKhMttHdrService;
+
+    @Autowired
+    private HopDongMttHdrRepository hopDongMttHdrRepository;
 
     @Autowired
     private HhSlNhapHangService hhSlNhapHangService;
@@ -112,6 +119,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         data.setTrangThai(Contains.DA_LAP);
         data.setMaDvi(userInfo.getDvql());
         HhDcQdPduyetKhmttHdr created=hhDcQdPduyetKhMttRepository.save(data);
+        created.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(created.getTrangThai()));
 //        objReq.setIsChange(true);
 //        updateQdPduyet(created, objReq);
         if (!DataUtils.isNullOrEmpty(objReq.getCanCuPhapLy())) {
@@ -176,6 +184,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         data.setNguoiSua(userInfo.getUsername());
         data.setNgaySua(new Date());
         HhDcQdPduyetKhmttHdr cerated = hhDcQdPduyetKhMttRepository.save(data);
+        cerated.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(cerated.getTrangThai()));
         if (!DataUtils.isNullOrEmpty(objReq.getCanCuPhapLy())) {
             fileDinhKemService.saveListFileDinhKem(objReq.getCanCuPhapLy(), cerated.getId(), HhDcQdPduyetKhmttHdr.TABLE_NAME + "_CAN_CU");
         }
@@ -254,7 +263,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
                 }
             }
         }
-        data.setHhDcQdPduyetKhmttDxList(listdx);
+        data.setHhDcQdPduyetKhmttDxList(listdx.stream().sorted(Comparator.comparing(HhDcQdPduyetKhmttDx::getMaDvi)).collect(Collectors.toList()));
         List<FileDinhKem> fileDinhKem = fileDinhKemService.search(data.getId(), Collections.singletonList(HhDcQdPduyetKhmttHdr.TABLE_NAME));
         data.setFileDinhKems(fileDinhKem);
         List<FileDinhKem> canCu = fileDinhKemService.search(data.getId(), Collections.singletonList(HhDcQdPduyetKhmttHdr.TABLE_NAME + "_CAN_CU"));
@@ -432,12 +441,12 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
                 hhDcQdPduyetKhmttDx.setTgianKthucStr(Contains.convertDateToString(hhDcQdPduyetKhmttDx.getTgianKthuc()));
                 for (HhDcQdPduyetKhmttSldd child : hhDcQdPduyetKhmttDx.getChildren()) {
                     Optional<HhDcQdPduyetKhmttSldd> listSlddGoc = listDxGoc.get().getChildren().stream().filter(x -> x.getId().equals(child.getId())).findFirst();
-                    child.setSoLuongGocStr(docxToPdfConverter.convertBigDecimalToStr(listSlddGoc.get().getSoLuong()));
-                    child.setSoLuongStr(docxToPdfConverter.convertBigDecimalToStr(child.getSoLuong()));
-                    child.setTongThanhTienVatStr(docxToPdfConverter.convertBigDecimalToStr(child.getDonGiaVat().multiply(child.getSoLuong())));
+                    child.setSoLuongGocStr(docxToPdfConverter.convertBigDecimalToStr(listSlddGoc.get().getTongSoLuong()));
+                    child.setSoLuongStr(docxToPdfConverter.convertBigDecimalToStr(child.getTongSoLuong()));
+                    child.setTongThanhTienVatStr(docxToPdfConverter.convertBigDecimalToStr(child.getDonGiaVat().multiply(child.getTongSoLuong())));
                     tongSoLuongGoc.updateAndGet(v -> v.add(listSlddGoc.get().getTongSoLuong()));
                     tongSoLuong.updateAndGet(v -> v.add(child.getTongSoLuong()));
-                    tongThanhTien.updateAndGet(v -> v.add(child.getDonGiaVat().multiply(child.getSoLuong())));
+                    tongThanhTien.updateAndGet(v -> v.add(child.getDonGiaVat().multiply(child.getTongSoLuong())));
                 }
             }
             hhDcQdPduyetKhmttHdr.setNgayPduyetGocStr(Contains.convertDateToString(hhDcQdPduyetKhmttHdrGoc.get().getNgayPduyet()));
@@ -484,10 +493,39 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         BeanUtils.copyProperties(req, objQd);
         List<HhQdPheduyetKhMttHdr> listQdPd = hhQdPheduyetKhMttHdrService.searchDsTaoQdDc(objQd);
         listQdPd = listQdPd.stream().filter(x -> x.getIsChange() == null).collect(Collectors.toList());
+        for (HhQdPheduyetKhMttHdr hhQdPheduyetKhMttHdr : listQdPd) {
+            hhQdPheduyetKhMttHdr = hhQdPheduyetKhMttHdrService.detail(hhQdPheduyetKhMttHdr.getId());
+            HopDongMttHdrReq hopDongreq = new HopDongMttHdrReq();
+            hopDongreq.setSoQd(hhQdPheduyetKhMttHdr.getSoQd());
+            List<SoLuongDaKyHopDongDTO> dsHd = hopDongMttHdrRepository.findAllBySoQd(hopDongreq);
+            for (HhQdPheduyetKhMttDx child : hhQdPheduyetKhMttHdr.getChildren()) {
+                List<HhQdPheduyetKhMttSLDD> retainedList = new ArrayList<>();
+                for (HhQdPheduyetKhMttSLDD sldd : child.getChildren()) {
+                    Optional<SoLuongDaKyHopDongDTO> soLuongDaKyHopDongDTO = dsHd.stream().filter(x -> !x.getMaDvi().equals(child.getMaDvi())).findFirst();
+                    if(soLuongDaKyHopDongDTO.isPresent() && soLuongDaKyHopDongDTO.get().getSoLuong().compareTo(child.getTongSoLuong()) <= 0){
+                        retainedList.add(sldd);
+                    }
+                }
+                child.setChildren(retainedList);
+            }
+        }
+
         List<HhDcQdPduyetKhmttHdr> listDcPd = hhDcQdPduyetKhMttRepository.searchDsLastest();
         for (HhDcQdPduyetKhmttHdr hhDcQdPduyetKhmttHdr : listDcPd) {
             hhDcQdPduyetKhmttHdr.setTenCloaiVthh(listDanhMucHangHoa.get(hhDcQdPduyetKhmttHdr.getCloaiVthh()));
             hhDcQdPduyetKhmttHdr.setTenLoaiVthh(listDanhMucHangHoa.get(hhDcQdPduyetKhmttHdr.getLoaiVthh()));
+            for (HhDcQdPduyetKhmttDx hhDcQdPduyetKhmttDx : hhDcQdPduyetKhmttHdr.getHhDcQdPduyetKhmttDxList()) {
+                List<HhDcQdPduyetKhmttSldd> retainedList = new ArrayList<>();
+                HopDongMttHdrReq hopDongreq = new HopDongMttHdrReq();
+                hopDongreq.setSoQd(hhDcQdPduyetKhmttHdr.getSoQdDc());
+                List<SoLuongDaKyHopDongDTO> dsHd = hopDongMttHdrRepository.findAllBySoQd(hopDongreq);
+                for (HhDcQdPduyetKhmttSldd child : hhDcQdPduyetKhmttDx.getChildren()) {
+                    Optional<SoLuongDaKyHopDongDTO> soLuongDaKyHopDongDTO = dsHd.stream().filter(x -> !x.getMaDvi().equals(child.getMaDvi())).findFirst();
+                    if(soLuongDaKyHopDongDTO.isPresent() && soLuongDaKyHopDongDTO.get().getSoLuong().compareTo(child.getTongSoLuong()) <= 0 ){
+                        retainedList.add(child);
+                    }
+                }
+            }
         }
         List<DcQdPduyetKhMttDTO> result = mergeLists(listQdPd, listDcPd);
         return result;

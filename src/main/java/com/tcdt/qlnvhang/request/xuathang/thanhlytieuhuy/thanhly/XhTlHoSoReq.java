@@ -13,7 +13,6 @@ import java.util.List;
 public class XhTlHoSoReq extends BaseRequest {
     private Long id;
     private Integer nam;
-    private String maDvi;
     private String soHoSo;
     private String soTtrinhVu;
     private Long idDanhSach;

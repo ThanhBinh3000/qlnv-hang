@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class CountKhlcntSlReq {
     Integer year;
+    Integer idQd;
     String loaiVthh;
     String maDvi;
     Integer lastest ;

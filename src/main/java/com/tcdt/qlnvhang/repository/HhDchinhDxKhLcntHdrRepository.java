@@ -33,14 +33,39 @@ public interface HhDchinhDxKhLcntHdrRepository extends CrudRepository<HhDchinhDx
     int findMaxLanDieuChinh (Long idQdGoc);
 
     @Query(value = " SELECT * FROM HH_DC_DX_LCNT_HDR  HDR"+
+            " LEFT JOIN HH_DC_DX_LCNT_DTL DTL ON HDR.ID = DTL.ID_DX_DC_HDR "+
             " WHERE (:nam IS NULL OR HDR.NAM = TO_NUMBER(:nam)) "+
             " AND (:soQdDc IS NULL OR LOWER(HDR.SO_QD_DC) LIKE LOWER(CONCAT(CONCAT('%', :soQdDc),'%'))) "+
             " AND (:trichYeu IS NULL OR LOWER(HDR.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) "+
             " AND (:loaiVthh IS NULL OR HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
             " AND (:tuNgayQd IS NULL OR HDR.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
+            " AND (:maDvi IS NULL OR DTL.MA_DVI LIKE CONCAT(:maDvi,'%')) "+
             " AND (:denNgayQd IS NULL OR HDR.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) ",
             nativeQuery = true)
-    Page<HhDchinhDxKhLcntHdr> selectPage(Integer nam, String soQdDc,String trichYeu,String loaiVthh, String tuNgayQd, String denNgayQd, Pageable pageable);
+    Page<HhDchinhDxKhLcntHdr> selectPage(Integer nam, String soQdDc,String trichYeu,String loaiVthh, String tuNgayQd, String denNgayQd, String maDvi, Pageable pageable);
+
+    @Query(value = " SELECT DISTINCT HDR.* FROM HH_DC_DX_LCNT_HDR  HDR"+
+            " LEFT JOIN HH_DC_DX_LCNT_DSGTHAU GT ON HDR.ID = GT.ID_DC_DX_HDR "+
+            " LEFT JOIN HH_DC_DX_LCNT_DSGTHAU_CTIET CT ON GT.ID = CT.ID_GOI_THAU "+
+            " WHERE (:nam IS NULL OR HDR.NAM = TO_NUMBER(:nam)) "+
+            " AND (:soQdDc IS NULL OR LOWER(HDR.SO_QD_DC) LIKE LOWER(CONCAT(CONCAT('%', :soQdDc),'%'))) "+
+            " AND (:trichYeu IS NULL OR LOWER(HDR.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) "+
+            " AND (:loaiVthh IS NULL OR HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
+            " AND (:tuNgayQd IS NULL OR HDR.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
+            " AND (:maDvi IS NULL OR CT.MA_DVI LIKE CONCAT(:maDvi,'%')) "+
+            " AND (:denNgayQd IS NULL OR HDR.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd')) ",
+            countQuery = " SELECT count(*) FROM ( SELECT DISTINCT HDR.* FROM HH_DC_DX_LCNT_HDR  HDR "+
+                    " LEFT JOIN HH_DC_DX_LCNT_DSGTHAU GT ON HDR.ID = GT.ID_DC_DX_HDR "+
+                    " LEFT JOIN HH_DC_DX_LCNT_DSGTHAU_CTIET CT ON GT.ID = CT.ID_GOI_THAU "+
+                    " WHERE (:nam IS NULL OR HDR.NAM = TO_NUMBER(:nam)) "+
+                    " AND (:soQdDc IS NULL OR LOWER(HDR.SO_QD_DC) LIKE LOWER(CONCAT(CONCAT('%', :soQdDc),'%'))) "+
+                    " AND (:trichYeu IS NULL OR LOWER(HDR.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) "+
+                    " AND (:loaiVthh IS NULL OR HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
+                    " AND (:tuNgayQd IS NULL OR HDR.NGAY_QD >= TO_DATE(:tuNgayQd, 'yyyy-MM-dd')) "+
+                    " AND (:maDvi IS NULL OR CT.MA_DVI LIKE CONCAT(:maDvi,'%')) "+
+                    " AND (:denNgayQd IS NULL OR HDR.NGAY_QD <= TO_DATE(:denNgayQd, 'yyyy-MM-dd'))) ",
+            nativeQuery = true)
+    Page<HhDchinhDxKhLcntHdr> selectPageVt(Integer nam, String soQdDc,String trichYeu,String loaiVthh, String tuNgayQd, String denNgayQd, String maDvi, Pageable pageable);
 
     @Query(value = "SELECT HDR.ID,COUNT( DISTINCT GT.ID ) AS C " +
             " FROM HH_DC_DX_LCNT_HDR HDR " +
@@ -61,6 +86,8 @@ public interface HhDchinhDxKhLcntHdrRepository extends CrudRepository<HhDchinhDx
             "  AND (:trangThai is null or GT.TRANG_THAI = :trangThai) GROUP BY HDR.ID"
             , nativeQuery = true)
     List<Object[]> countAllBySoGthauStatus(Collection<Long> qdIds,String trangThai);
+
+    Optional<HhDchinhDxKhLcntHdr> findByIdQdGoc(Long idQuyetDinhCanDieuChinh);
 
 //    @Query(value = "SELECT * FROM HH_QD_KHLCNT_HDR DC_DX " +
 //            " WHERE (:namKh IS NULL OR DC_DX.NAM_KHOACH = TO_NUMBER(:namKh)) "+

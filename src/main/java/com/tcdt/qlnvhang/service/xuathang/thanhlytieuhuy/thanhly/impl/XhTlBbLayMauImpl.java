@@ -7,12 +7,14 @@ import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScPhieuXuatKhoHdrReposi
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhNhapHangRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.ScQuyetDinhXuatHangRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.thanhly.*;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.suachua.ScPhieuXuatKhoReq;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhNhapHangReq;
 import com.tcdt.qlnvhang.request.suachua.ScQuyetDinhXuatHangReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlBbLayMauReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlKtraClReq;
 import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.thanhly.XhTlQdGiaoNvHdrReq;
+import com.tcdt.qlnvhang.response.dieuChuyenNoiBo.DcnbPhieuNhapKhoHdrDTO;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -27,6 +29,7 @@ import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.*;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.thanhly.*;
 import com.tcdt.qlnvhang.util.Contains;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -204,7 +207,38 @@ public class XhTlBbLayMauImpl extends BaseServiceImpl implements XhTlBbLayMauSer
 
     @Override
     public void export(XhTlBbLayMauReq req, HttpServletResponse response) throws Exception {
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        Page<XhTlBbLayMauHdr> page = searchPage(req);
+        List<XhTlBbLayMauHdr> data = page.getContent();
 
+        String title = "Danh sách biên bản lấy mẫu";
+        String[] rowsName = new String[]{"STT", "Số QĐ giao NVXH của Cục", "Năm KH", "Thời hạn thanh lý",
+            "Điểm kho / Nhà kho / Ngăn kho / Lô kho", "Số BB LM/BGM", "Ngày lấy mẫu", "Số BB tịnh kho",
+                "Ngày lập BB tịnh kho", "Số BB tịnh kho", "Trạng thái"};
+        String fileName = "danh-sach-bien-ban-lay-mau.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        for (int i = 0; i < data.size(); i++) {
+            XhTlBbLayMauHdr dx = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i + 1;
+//            objs[1] = ;
+//            objs[2] = dx.getNamKh();
+//            objs[3] = dx.getThoiHanDieuChuyen();
+            objs[4] = dx.getTenDiemKho() + "/" + dx.getTenNhaKho() + "/" + dx.getTenNganKho() + "/" + dx.getTenLoKho();
+            objs[5] = dx.getSoBienBan();
+            objs[6] = dx.getNgayLayMau();
+//            objs[7] = dx.getSoPhieuNhapKho();
+//            objs[8] = dx.getNgayNhapKho();
+//            objs[9] = dx.getSoPhieuKiemTraCl();
+            objs[10] = dx.getTenTrangThai();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
+        ex.export();
     }
 
     @Override
@@ -223,6 +257,8 @@ public class XhTlBbLayMauImpl extends BaseServiceImpl implements XhTlBbLayMauSer
         reqQd.setNam(req.getNam());
         reqQd.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
         reqQd.setPhanLoai(req.getPhanLoai());
+        reqQd.setSoBbQd(req.getSoBbQd());
+
         if(userInfo.getCapDvi().equals(Contains.CAP_CUC)){
             reqQd.setMaDviSr(userInfo.getDvql());
         }

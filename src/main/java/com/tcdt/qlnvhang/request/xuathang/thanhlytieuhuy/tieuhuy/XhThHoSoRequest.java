@@ -39,4 +39,6 @@ public class XhThHoSoRequest extends BaseRequest {
 
     private String soQdSr;
 
+    private String soTbSr;
+
 }

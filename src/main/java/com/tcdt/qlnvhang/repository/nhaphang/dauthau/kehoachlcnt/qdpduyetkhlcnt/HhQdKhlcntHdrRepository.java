@@ -51,7 +51,7 @@ public interface HhQdKhlcntHdrRepository extends BaseRepository<HhQdKhlcntHdr, L
 			" LEFT JOIN HH_QD_KHLCNT_DSGTHAU GT ON QD_HDR.ID = GT.ID_QD_HDR " +
 			" LEFT JOIN HH_QD_KHLCNT_DSGTHAU_CTIET CT ON GT.ID = CT.ID_GOI_THAU " +
 			" LEFT JOIN HH_QD_PDUYET_KQLCNT_HDR QD_PD_HDR ON QD_HDR.ID = QD_PD_HDR.ID_QD_PD_KHLCNT " +
-			" LEFT JOIN HH_QD_PD_HSMT HSMT ON QD_HDR.ID = HSMT.ID_QD_PD_KHLCNT " +
+//			" LEFT JOIN HH_QD_PD_HSMT HSMT ON QD_HDR.ID = HSMT.ID_QD_PD_KHLCNT " +
 			" WHERE (:namKh IS NULL OR QD_HDR.NAM_KHOACH = TO_NUMBER(:namKh)) "+
 			" AND (:loaiVthh IS NULL OR QD_HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) "+
 			" AND (:soQdPdKqlcnt IS NULL OR LOWER(QD_PD_HDR.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQdPdKqlcnt),'%')))" +
@@ -63,10 +63,12 @@ public interface HhQdKhlcntHdrRepository extends BaseRepository<HhQdKhlcntHdr, L
 			" AND (:trangThai IS NULL OR QD_HDR.TRANG_THAI = :trangThai)" +
 			" AND (:lastest IS NULL OR QD_HDR.LASTEST = :lastest) " +
 			" AND (:maDvi IS NULL OR CT.MA_DVI = :maDvi) " +
-			" AND HSMT.TRANG_THAI = '29' " +
+//			" AND HSMT.TRANG_THAI = '29' " +
 //			" AND (:trangThaiDtl IS NULL OR QD_DTL.TRANG_THAI = :trangThaiDtl) " +
 			" AND (:trangThaiDt IS NULL OR QD_HDR.TRANG_THAI_DT = :trangThaiDt )"
-			, countQuery = " SELECT COUNT(DISTINCT QD_HDR.ID) FROM HH_QD_KHLCNT_HDR  QD_HDR LEFT JOIN HH_QD_KHLCNT_DSGTHAU GT ON QD_HDR.ID = GT.ID_QD_HDR LEFT JOIN HH_QD_KHLCNT_DSGTHAU_CTIET CT ON GT.ID = CT.ID_GOI_THAU LEFT JOIN HH_QD_PDUYET_KQLCNT_HDR QD_PD_HDR ON QD_HDR.ID = QD_PD_HDR.ID_QD_PD_KHLCNT LEFT JOIN HH_QD_PD_HSMT HSMT ON QD_HDR.ID = HSMT.ID_QD_PD_KHLCNT WHERE (:namKh IS NULL OR QD_HDR.NAM_KHOACH = TO_NUMBER(:namKh)) "+
+			, countQuery = " SELECT COUNT(DISTINCT QD_HDR.ID) FROM HH_QD_KHLCNT_HDR  QD_HDR LEFT JOIN HH_QD_KHLCNT_DSGTHAU GT ON QD_HDR.ID = GT.ID_QD_HDR LEFT JOIN HH_QD_KHLCNT_DSGTHAU_CTIET CT ON GT.ID = CT.ID_GOI_THAU LEFT JOIN HH_QD_PDUYET_KQLCNT_HDR QD_PD_HDR ON QD_HDR.ID = QD_PD_HDR.ID_QD_PD_KHLCNT " +
+//			" LEFT JOIN HH_QD_PD_HSMT HSMT ON QD_HDR.ID = HSMT.ID_QD_PD_KHLCNT" +
+			" WHERE (:namKh IS NULL OR QD_HDR.NAM_KHOACH = TO_NUMBER(:namKh)) "+
 			" AND (:loaiVthh IS NULL OR QD_HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) "+
 			" AND (:soQdPdKqlcnt IS NULL OR LOWER(QD_PD_HDR.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQdPdKqlcnt),'%')))" +
 			" AND (:soQdPdKhlcnt IS NULL OR LOWER(QD_HDR.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQdPdKhlcnt),'%')))" +
@@ -77,7 +79,7 @@ public interface HhQdKhlcntHdrRepository extends BaseRepository<HhQdKhlcntHdr, L
 			" AND (:trangThai IS NULL OR QD_HDR.TRANG_THAI = :trangThai) " +
 			" AND (:lastest IS NULL OR QD_HDR.LASTEST = :lastest)" +
 			" AND (:maDvi IS NULL OR CT.MA_DVI = :maDvi) " +
-			" AND HSMT.TRANG_THAI = '29' " +
+//			" AND HSMT.TRANG_THAI = '29' " +
 //			" AND (:trangThaiDtl IS NULL OR QD_DTL.TRANG_THAI = :trangThaiDtl) " +
 			" AND (:trangThaiDt IS NULL OR QD_HDR.TRANG_THAI_DT = :trangThaiDt )"
 			, nativeQuery = true)
@@ -105,4 +107,16 @@ public interface HhQdKhlcntHdrRepository extends BaseRepository<HhQdKhlcntHdr, L
 
 	Optional<HhQdKhlcntHdr> findByIdThHdrAndLastest(Long id, Boolean lastest);
 	Optional<HhQdKhlcntHdr> findByIdTrHdr(Long id);
+	@Query(value = " SELECT DISTINCT QD_HDR.* FROM HH_QD_KHLCNT_HDR QD_HDR " +
+			" LEFT JOIN HH_QD_KHLCNT_DSGTHAU GT ON QD_HDR.ID = GT.ID_QD_HDR " +
+			" LEFT JOIN HH_QD_KHLCNT_DSGTHAU_CTIET CT ON GT.ID = CT.ID_GOI_THAU " +
+//			" LEFT JOIN HH_QD_PDUYET_KQLCNT_HDR QD_PD_HDR ON QD_HDR.ID = QD_PD_HDR.ID_QD_PD_KHLCNT " +
+//			" LEFT JOIN HH_QD_PD_HSMT HSMT ON QD_HDR.ID = HSMT.ID_QD_PD_KHLCNT " +
+			" WHERE (:namKh IS NULL OR QD_HDR.NAM_KHOACH = TO_NUMBER(:namKh)) "+
+			" AND (:loaiVthh IS NULL OR QD_HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) "+
+			" AND (:trangThai IS NULL OR QD_HDR.TRANG_THAI = :trangThai)" +
+			" AND QD_HDR.LASTEST = 0 " +
+			" AND (:maDvi IS NULL OR CT.MA_DVI = :maDvi) "
+			, nativeQuery = true)
+	List<HhQdKhlcntHdr> getDsTtDthauVt(Integer namKh , String loaiVthh, String maDvi,  String trangThai );
 }

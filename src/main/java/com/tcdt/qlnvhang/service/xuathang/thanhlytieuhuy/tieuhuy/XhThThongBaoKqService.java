@@ -3,6 +3,8 @@ package com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.tieuhuy;
 import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThDanhSachRepository;
+import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThThongBaoKqRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -13,6 +15,8 @@ import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.tieuhuy.XhThThongBaoKqR
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThDanhSachHdr;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoDtl;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThThongBaoKq;
 import com.tcdt.qlnvhang.util.Contains;
@@ -40,18 +44,20 @@ public class XhThThongBaoKqService extends BaseServiceImpl {
   private XhThThongBaoKqRepository xhThThongBaoKqRepository;
 
   @Autowired
-  private XhThHoSoHdrRepository xhThHoSoHdrRepository;
+  private XhThHoSoHdrRepository xhThHoSoHdrRepository;  
+  
+  @Autowired
+  private XhThHoSoDtlRepository xhThHoSoDtlRepository;
+
+  @Autowired
+  private XhThDanhSachRepository xhThDanhSachRepository;
 
   @Autowired
   private FileDinhKemService fileDinhKemService;
 
   public Page<XhThThongBaoKq> searchPage(CustomUserDetails currentUser, SearchXhThQuyetDinh req) throws Exception {
     String dvql = currentUser.getDvql();
-    if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
-      req.setDvql(dvql.substring(0, 4));
-    } else if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
-      req.setDvql(dvql);
-    }
+    req.setDvql(dvql);
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<XhThThongBaoKq> search = xhThThongBaoKqRepository.search(req, pageable);
     Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
@@ -212,6 +218,7 @@ public class XhThThongBaoKqService extends BaseServiceImpl {
       case Contains.DA_HOAN_THANH + Contains.DUTHAO:
 //        optional.get().setNguoiPduyetId(currentUser.getUser().getId());
 //        optional.get().setNgayPduyet(LocalDate.now());
+//        this.updateStatusDanhSach(optional.get());
         break;
       default:
         throw new Exception("Phê duyệt không thành công");
@@ -219,6 +226,22 @@ public class XhThThongBaoKqService extends BaseServiceImpl {
     optional.get().setTrangThai(statusReq.getTrangThai());
     XhThThongBaoKq created = xhThThongBaoKqRepository.save(optional.get());
     return created;
+  }
+
+
+  public void updateStatusDanhSach(XhThThongBaoKq dataThongBao){
+    Optional<XhThHoSoHdr> hoSoOpt = xhThHoSoHdrRepository.findById(dataThongBao.getIdHoSo());
+    if (hoSoOpt.isPresent()) {
+      XhThHoSoHdr hoSo = hoSoOpt.get();
+      List<XhThHoSoDtl> allByIdHdr = xhThHoSoDtlRepository.findAllByIdHdr(hoSo.getId());
+      for ( XhThHoSoDtl dtl : allByIdHdr) {
+        Optional<XhThDanhSachHdr> byId = xhThDanhSachRepository.findById(dtl.getIdDsHdr());
+        if(byId.isPresent()){
+          byId.get().setTrangThai(TrangThaiAllEnum.DA_TIEU_HUY.getId());
+          xhThDanhSachRepository.save(byId.get());
+        }
+      }
+    }
   }
 
 

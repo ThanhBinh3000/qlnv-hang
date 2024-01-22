@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.service.suachuahang.impl;
 
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.suachuahang.*;
 import com.tcdt.qlnvhang.request.PaggingReq;
@@ -13,6 +14,7 @@ import com.tcdt.qlnvhang.service.suachuahang.ScPhieuXuatKhoService;
 import com.tcdt.qlnvhang.service.suachuahang.ScQuyetDinhScService;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
+import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.table.xuathang.suachuahang.*;
 import com.tcdt.qlnvhang.util.Contains;
@@ -63,6 +65,9 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
     private ScDanhSachServiceImpl scDanhSachServiceImpl;
     @Autowired
     private ScBangKeNhapVtHdrRepository scBangKeNhapVtHdrRepository;
+
+    @Autowired
+    private QlnvDmDonviRepository dmDonviRepository;
 
     @Override
     public Page<ScPhieuXuatKhoHdr> searchPage(ScPhieuXuatKhoReq req) throws Exception {
@@ -146,6 +151,10 @@ public class ScPhieuXuatKhoServiceImpl extends BaseServiceImpl implements ScPhie
         if(data.getIdScDanhSachHdr() != null){
             ScDanhSachHdr byId = scDanhSachServiceImpl.detail(data.getIdScDanhSachHdr());
             data.setScDanhSachHdr(byId);
+        }
+        QlnvDmDonvi byMaDvi = dmDonviRepository.findByMaDvi(data.getMaDiaDiem());
+        if(byMaDvi != null){
+            data.setDiaDiemKho(byMaDvi.getDiaChi());
         }
         return data;
     }

@@ -679,7 +679,7 @@ public class HopDongMttHdrService extends BaseServiceImpl {
       HopDongMttHdr hopDongMttHdr = this.detail(objReq.getId());
       List<HopDongMttChildrenDTO> hopDongChildrens = new ArrayList<>();
       HopDongMttChildrenDTO hopDongChildren = new HopDongMttChildrenDTO();
-      if (hopDongMttHdr.getIdKqCgia() == null) {
+      if (hopDongMttHdr.getIdQdGiaoNvNh() != null) {
         for (HhQdGiaoNvNhangDtl hhQdGiaoNvNhangDtl : hopDongMttHdr.getQdGiaoNvuDtlList()) {
 //          BeanUtils.copyProperties(hhQdGiaoNvNhangDtl, hopDongChildren);
 

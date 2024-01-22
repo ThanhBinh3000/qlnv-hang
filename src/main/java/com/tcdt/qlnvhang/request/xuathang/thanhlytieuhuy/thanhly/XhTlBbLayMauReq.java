@@ -17,7 +17,7 @@ public class XhTlBbLayMauReq extends BaseRequest {
   private Integer nam;
   private String maQhns;
   private String soBienBan;
-  private String ngayLayMau;
+  private LocalDate ngayLayMau;
   private Long idQdXh;
   private String soQdXh;
   private String dviKnghiem;
@@ -31,8 +31,12 @@ public class XhTlBbLayMauReq extends BaseRequest {
   private Boolean ketQuaNiemPhong;
   private String ghiChu;
   private List<XhTlBbLayMauDtl> children = new ArrayList<>();
+  private String soBbQd;
 
   //
+
+  private LocalDate ngayTu;
+  private LocalDate ngayDen;
   private String maDviSr;
   private String phanLoai;
   private String typeLt;

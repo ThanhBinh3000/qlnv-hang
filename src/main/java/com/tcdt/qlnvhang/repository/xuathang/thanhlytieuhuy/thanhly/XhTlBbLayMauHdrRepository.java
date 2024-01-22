@@ -43,8 +43,11 @@ public interface XhTlBbLayMauHdrRepository extends JpaRepository<XhTlBbLayMauHdr
             " AND (:#{#param.typeLt} IS NULL OR c.loaiVthh NOT LIKE CONCAT('02','%')) " +
             " AND (:#{#param.typeVt} IS NULL OR c.loaiVthh LIKE CONCAT('02','%')) " +
             " AND (:#{#param.maDviSr} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.maDviSr},'%'))" +
+            " AND (:#{#param.dviKnghiem} IS NULL OR c.dviKnghiem LIKE concat('%',CONCAT(:#{#param.dviKnghiem},'%')))" +
             " AND (:#{#param.trangThai} IS NULL OR c.trangThai =:#{#param.trangThai})" +
             " AND (:#{#param.idQdXh} IS NULL OR c.idQdXh =:#{#param.idQdXh})" +
+            " AND (:#{#param.soBienBan} IS NULL OR c.soBienBan LIKE CONCAT(:#{#param.soBienBan},'%'))" +
+            "AND ((:#{#param.ngayTu} IS NULL OR c.ngayLayMau >= :#{#param.ngayTu}) AND (:#{#param.ngayDen}  IS NULL OR c.ngayLayMau <= :#{#param.ngayDen})) " +
             " ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
     )
     List<XhTlBbLayMauHdr> findAllByIdQdXh(@Param("param") XhTlBbLayMauReq param);

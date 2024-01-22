@@ -33,6 +33,8 @@ public class XhTlKtraClReq extends BaseRequest {
   private String nhanXet;
   private List<XhTlKtraClDtl> children = new ArrayList<>();
 
+  private LocalDate ngayTu;
+  private LocalDate ngayDen;
   //
   private String maDviSr;
   private String phanLoai;

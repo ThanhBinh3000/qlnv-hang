@@ -20,10 +20,7 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
-import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.DataUtils;
-import com.tcdt.qlnvhang.util.ExportExcel;
-import com.tcdt.qlnvhang.util.ObjectMapperUtils;
+import com.tcdt.qlnvhang.util.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,10 +116,24 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		int page = objReq.getPaggingReq().getPage();
 		int limit = objReq.getPaggingReq().getLimit();
 		Pageable pageable = PageRequest.of(page, limit, Sort.by("id").descending());
-		Page<HhDchinhDxKhLcntHdr> data = hdrRepository.selectPage(objReq.getNam(),objReq.getSoQdDc(), objReq.getTrichYeu(),objReq.getLoaiVthh(),
-				convertDateToString(objReq.getTuNgayQd()),
-				convertDateToString(objReq.getDenNgayQd()),
-				pageable);
+		UserInfo userInfo = UserUtils.getUserInfo();
+		if (!Contains.CAP_TONG_CUC.equalsIgnoreCase(userInfo.getCapDvi())) {
+			objReq.setMaDvi(userInfo.getDvql());
+		}
+		Page<HhDchinhDxKhLcntHdr> data;
+		if (objReq.getLoaiVthh().startsWith("02")) {
+			data = hdrRepository.selectPageVt(objReq.getNam(),objReq.getSoQdDc(), objReq.getTrichYeu(),objReq.getLoaiVthh(),
+					convertDateToString(objReq.getTuNgayQd()),
+					convertDateToString(objReq.getDenNgayQd()),
+					objReq.getMaDvi(),
+					pageable);
+		} else {
+			data = hdrRepository.selectPage(objReq.getNam(),objReq.getSoQdDc(), objReq.getTrichYeu(),objReq.getLoaiVthh(),
+					convertDateToString(objReq.getTuNgayQd()),
+					convertDateToString(objReq.getDenNgayQd()),
+					objReq.getMaDvi(),
+					pageable);
+		}
 		List<Long> ids = data.getContent().stream().map(HhDchinhDxKhLcntHdr::getId).collect(Collectors.toList());
 		List<Object[]> listGthau = hdrRepository.countAllBySoGthau(ids);
 		List<Object[]> listGthau2 = hdrRepository.countAllBySoGthauStatus(ids, NhapXuatHangTrangThaiEnum.THANH_CONG.getId());
@@ -548,6 +559,13 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 							  Map<String,String> hashMapHtLcnt) {
 		List<HhDchinhDxKhLcntDtl> dtlList = new ArrayList<>();
 		for(HhDchinhDxKhLcntDtl dtl : dtlRepository.findAllByIdDxDcHdrOrderByMaDvi(data.getId())){
+			Optional<HhQdKhlcntDtl> qdKhlcntDtl = hhQdKhlcntDtlRepository.findById(dtl.getIdHhQdKhlcntDtl());
+			if (qdKhlcntDtl.isPresent()) {
+				dtl.setNgayTao(qdKhlcntDtl.get().getNgayTao());
+				dtl.setNgayPduyet(qdKhlcntDtl.get().getNgayPduyet());
+				dtl.setDiaChiDvi(qdKhlcntDtl.get().getDiaChiDvi());
+				dtl.setTrichYeu(qdKhlcntDtl.get().getTrichYeu());
+			}
 			List<HhDchinhDxKhLcntDsgthau> gThauList = new ArrayList<>();
 			for(HhDchinhDxKhLcntDsgthau gThau : gThauRepository.findAllByIdDcDxDtlOrderByGoiThau(dtl.getId())){
 				List<HhDchinhDxKhLcntDsgthauCtiet> gthauCtietList = gThauCietRepository.findAllByIdGoiThau(gThau.getId());
@@ -620,8 +638,19 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 		Page<HhDchinhDxKhLcntHdr> page=this.getAllPage(objReq);
 		List<HhDchinhDxKhLcntHdr> data=page.getContent();
 
-		String title="Danh sách quyết định điều chỉnh kế hoạch lựa chọn nhà thầu";
-		String[] rowsName=new String[]{"STT","Số quyết định điều chỉnh KH LCNT","Ngày ký","Trích yếu","Số QĐ duyệt KHLCNT","Năm kế hoạch","Loại hàng hóa","số gói thầu","Trạng thái"};
+		String title="Danh sách phương án và quyết định điều chỉnh kế hoạch lựa chọn nhà thầu";
+		String[] rowsName;
+		if (objReq.getLoaiVthh().startsWith("02")) {
+			rowsName=new String[]{
+					"STT","Số công văn/tờ trình","Năm kế hoạch","Số QĐ điều chỉnh KH LCNT", "Ngày ký QĐ điều chỉnh","Số QĐ trước điều chỉnh","Trích yếu","Loại hàng DTQG","Tổng số gói thầu"
+					,"Số gói thầu đã trúng","SL HĐ đã ký","Thời gian thực hiện dự án","Trạng thái"
+			};
+		} else {
+			rowsName=new String[]{
+					"STT","Số công văn/tờ trình","Năm kế hoạch","Số QĐ điều chỉnh KH LCNT", "Ngày ký QĐ điều chỉnh","Số QĐ trước điều chỉnh","Trích yếu","Loại hàng DTQG","Chủng loại hàng DTQG","Tổng số gói thầu"
+					,"Số gói thầu đã trúng","SL HĐ đã ký","Trạng thái"
+			};
+		}
 		String fileName="danh-sach-qd-dieu-chinh-khlcnt.xlsx";
 		List<Object[]> dataList = new ArrayList<Object[]>();
 		Object[] objs=null;
@@ -629,14 +658,26 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 			HhDchinhDxKhLcntHdr dx=data.get(i);
 			objs=new Object[rowsName.length];
 			objs[0]=i;
-			objs[1]=dx.getSoQdDc();
-			objs[2]=dx.getNgayQd();
-			objs[3]=dx.getTrichYeu();
-			objs[4]=dx.getSoQdGoc();
-			objs[5]=dx.getNam();
-			objs[6]=dx.getTenLoaiVthh();
-			objs[7]=dx.getSoGoiThau();
-			objs[8]=dx.getTenTrangThai();
+			objs[1]=dx.getSoTtrDc();
+			objs[2]=dx.getNam();
+			objs[3]=dx.getSoQdDc();
+			objs[4]=convertDate(dx.getNgayQd());
+			objs[5]=dx.getSoQdGoc();
+			objs[6]=dx.getTrichYeu();
+			objs[7]=dx.getTenLoaiVthh();
+			if (objReq.getLoaiVthh().startsWith("02")) {
+				objs[8]=dx.getSoGoiThau();
+				objs[9]=dx.getGthauTrung();
+				objs[10]=dx.getSoHdKy();
+				objs[11]=dx.getTgianThien();
+				objs[12]=dx.getTenTrangThai();
+			} else {
+				objs[8]=dx.getTenCloaiVthh();
+				objs[9]=dx.getSoGoiThau();
+				objs[10]=dx.getGthauTrung();
+				objs[11]=dx.getSoHdKy();
+				objs[12]=dx.getTenTrangThai();
+			}
 			dataList.add(objs);
 		}
 		ExportExcel ex =new ExportExcel(title,fileName,rowsName,dataList,response);

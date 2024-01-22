@@ -11,6 +11,7 @@ import org.olap4j.impl.ArrayMap;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class XhTlBbLayMauHdr extends BaseEntity implements Serializable {
     private String maDvi;
     private String maQhns;
     private String soBienBan;
-    private String ngayLayMau;
+    private LocalDate ngayLayMau;
     private Long idQdXh;
     private String soQdXh;
     private String dviKnghiem;

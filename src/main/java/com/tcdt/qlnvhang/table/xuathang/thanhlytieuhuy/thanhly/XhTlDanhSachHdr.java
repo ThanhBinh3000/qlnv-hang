@@ -31,6 +31,7 @@ public class XhTlDanhSachHdr extends BaseEntity implements Serializable {
   private String maDiaDiem;
   private String loaiVthh;
   private String cloaiVthh;
+  private String tenHangHoa;
   private String donViTinh;
   private BigDecimal slHienTai;
   private BigDecimal slDeXuat;

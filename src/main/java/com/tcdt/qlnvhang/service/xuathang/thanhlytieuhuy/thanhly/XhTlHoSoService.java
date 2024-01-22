@@ -194,9 +194,7 @@ public class XhTlHoSoService extends BaseServiceImpl {
     validateData(req);
     XhTlHoSoHdr hdr = optional.get();
     BeanUtils.copyProperties(req, hdr);
-
     hdr.setNam(LocalDate.now().getYear());
-    hdr.setMaDvi(userInfo.getDvql());
     if(hdr.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDC.getId())){
       hdr.setTrangThai(TrangThaiAllEnum.DANG_DUYET_CB_VU.getId());
     }

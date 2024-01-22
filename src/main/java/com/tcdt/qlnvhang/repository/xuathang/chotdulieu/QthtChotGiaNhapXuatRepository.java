@@ -27,4 +27,14 @@ public interface QthtChotGiaNhapXuatRepository extends JpaRepository<QthtChotGia
     )
     Page<QthtChotGiaNhapXuat> searchPage(@Param("param") QthtChotGiaNhapXuatReq req, Pageable pageable);
 
+    @Query(value = "SELECT q FROM QthtChotGiaNhapXuat q " +
+            " WHERE 1 = 1 " +
+            " AND (:#{#param.type} IS NULL OR q.type = :#{#param.type}) " +
+            " AND (:#{#param.ngayChotSr} IS NULL OR q.ngayChot <= :#{#param.ngayChotSr}) " +
+            " AND (:#{#param.ngayHlucSr} IS NULL OR q.ngayHluc <= :#{#param.ngayChotSr}) " +
+            " AND (:#{#param.maDvi} IS NULL OR q.maDonVi LIKE LOWER(CONCAT(CONCAT('%', :#{#param.maDvi}),'%')) OR q.maDonVi LIKE LOWER(CONCAT(:#{#param.maDvi},'%'))  OR q.maDonVi LIKE LOWER(CONCAT('%', :#{#param.maDvi})))" +
+            " ORDER BY q.ngaySua desc , q.ngayTao desc, q.id desc "
+    )
+    List<QthtChotGiaNhapXuat> findBetweenNgayChotAndHieuLuc(@Param("param") QthtChotGiaNhapXuatReq req);
+
 }
