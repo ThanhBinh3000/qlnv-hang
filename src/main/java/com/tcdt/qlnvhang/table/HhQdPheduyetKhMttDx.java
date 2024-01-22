@@ -34,6 +34,8 @@ public class HhQdPheduyetKhMttDx implements Serializable {
     private String maDvi;
     @Transient
     private String tenDvi;
+    @Transient
+    private String soQdDc;
 
     private String diaChi;
 

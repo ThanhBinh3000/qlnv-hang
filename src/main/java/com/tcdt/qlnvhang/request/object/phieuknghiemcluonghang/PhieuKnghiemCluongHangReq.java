@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.request.object.phieuknghiemcluonghang;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.request.BaseRequest;
+import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import com.tcdt.qlnvhang.request.object.SoBienBanPhieuReq;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.Data;
@@ -45,4 +46,5 @@ public class PhieuKnghiemCluongHangReq extends BaseRequest {
 	private String ketLuan;
 	private String ketQuaDanhGia;
 	private List<KquaKnghiemReq> kquaKnghiem = new ArrayList<>();
+	private List<FileDinhKemReq> fileDinhKems;
 }

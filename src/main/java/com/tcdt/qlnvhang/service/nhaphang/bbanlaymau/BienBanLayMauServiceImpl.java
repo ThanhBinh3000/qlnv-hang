@@ -5,15 +5,21 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMauCt;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatDtl;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNxDdiem;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauCtRepository;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKhoRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.kiemtrachatluong.BienBanLayMauPreview;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauCtReq;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauReq;
+import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
+import com.tcdt.qlnvhang.service.HhQdGiaoNvuNhapxuatService;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -23,6 +29,7 @@ import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
@@ -39,6 +46,7 @@ import java.io.ByteArrayInputStream;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -60,6 +68,8 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 	private NhBienBanGuiHangRepository nhBienBanGuiHangRepository;
 	@Autowired
 	private FileDinhKemService fileDinhKemService;
+	@Autowired
+	private HhQdGiaoNvuNhapxuatService hhQdGiaoNvuNhapxuatService;
 
 	@Override
 	public Page<BienBanLayMau> searchPage(BienBanLayMauReq objReq) {
@@ -247,6 +257,72 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 
 	@Override
 	public void export(BienBanLayMauReq req, HttpServletResponse response) throws Exception {
+
+	}
+
+	@Override
+	public void exportBblm(HhQdNhapxuatSearchReq req, HttpServletResponse response) throws Exception {
+		UserInfo userInfo = UserUtils.getUserInfo();
+		PaggingReq paggingReq = new PaggingReq();
+		paggingReq.setPage(0);
+		paggingReq.setLimit(Integer.MAX_VALUE);
+		req.setPaggingReq(paggingReq);
+		Page<NhQdGiaoNvuNhapxuatHdr> page = hhQdGiaoNvuNhapxuatService.searchPage(req);
+		List<NhQdGiaoNvuNhapxuatHdr> data = page.getContent();
+		String title = "Danh sách biên bản lấy mẫu";
+		String[] rowsName = new String[]{"STT", "Số QĐ giao NVNH", "Năm kế hoạch", "Thời hạn NH trước ngày", "Điểm kho", "Lô kho",
+				"Số BB LM/BGM", "Ngày lấy mẫu", "Số BB nhập đầy kho", "Ngày nhập đầy kho", "Trạng thái"};
+		String filename = "danh-sach-bien-ban-lay-mau.xlsx";
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs = null;
+		Object[] objsb = null;
+		for (int i = 0; i < data.size(); i++) {
+			NhQdGiaoNvuNhapxuatHdr qd = data.get(i);
+			objs = new Object[rowsName.length];
+			objs[0] = i;
+			objs[1] = qd.getSoQd();
+			objs[2] = qd.getNamNhap();
+			objs[3] = convertDate(qd.getTgianNkho());
+			dataList.add(objs);
+			if (userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+				qd.setDetail(qd.getDtlList().stream().filter(item -> item.getMaDvi().equals(userInfo.getDvql())).collect(Collectors.toList()).get(0));
+			} else {
+				List<NhQdGiaoNvuNxDdiem> dataDd = new ArrayList<>();
+				for (NhQdGiaoNvuNhapxuatDtl nhQdGiaoNvuNhapxuatDtl : qd.getDtlList()) {
+					dataDd.addAll(nhQdGiaoNvuNhapxuatDtl.getChildren());
+				}
+				qd.getDetail().setChildren(dataDd);
+			}
+			for (int j = 0; j < qd.getDetail().getChildren().size(); j++) {
+				objsb = new Object[rowsName.length];
+				objsb[4] = qd.getDetail().getChildren().get(j).getTenDiemKho();
+				if (qd.getDetail().getChildren().get(j).getMaLoKho() != null) {
+					objsb[5] =  qd.getDetail().getChildren().get(j).getTenNganKho() + " - " +qd.getDetail().getChildren().get(j).getTenLoKho();
+				} else {
+					objsb[5] =  qd.getDetail().getChildren().get(j).getTenNganKho();
+				}
+				if (qd.getDetail().getChildren().get(j).getBienBanLayMau() != null) {
+					objsb[6] = qd.getDetail().getChildren().get(j).getBienBanLayMau().getSoBienBan();
+					objsb[7] = convertDate(qd.getDetail().getChildren().get(j).getBienBanLayMau().getNgayLayMau());
+					if (req.getLoaiVthh().startsWith("02")) {
+						if (qd.getDetail().getChildren().get(j).getBienBanGuiHang() != null) {
+							objsb[8] = qd.getDetail().getChildren().get(j).getBienBanGuiHang().getSoBienBanGuiHang();
+							objsb[9] = convertDate(qd.getDetail().getChildren().get(j).getBienBanGuiHang().getNgayTao());
+						}
+					} else {
+						if (qd.getDetail().getChildren().get(j).getBienBanNhapDayKho() != null) {
+							objsb[8] = qd.getDetail().getChildren().get(j).getBienBanNhapDayKho().getSoBienBanNhapDayKho();
+							objsb[9] = convertDate(qd.getDetail().getChildren().get(j).getBienBanNhapDayKho().getNgayKetThucNhap());
+						}
+					}
+					objsb[10] = qd.getDetail().getChildren().get(j).getBienBanLayMau().getTenTrangThai();
+				}
+				dataList.add(objsb);
+			}
+		}
+
+		ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+		ex.export();
 	}
 
 //	@Override

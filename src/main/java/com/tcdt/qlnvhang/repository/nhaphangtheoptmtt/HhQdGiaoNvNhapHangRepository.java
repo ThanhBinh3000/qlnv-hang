@@ -35,6 +35,8 @@ public interface HhQdGiaoNvNhapHangRepository extends JpaRepository<HhQdGiaoNvNh
             " where 1=1" +
             " AND (:namNhap IS NULL OR QD.NAM_NHAP = TO_NUMBER(:namNhap))" +
             " AND (:soQd IS NULL OR LOWER(QD.SO_QD) LIKE LOWER(CONCAT(CONCAT('%',:soQd),'%')))" +
+            " AND (:soHd IS NULL OR LOWER(HD.SO_HD) LIKE LOWER(CONCAT(CONCAT('%',:soHd),'%')))" +
+            " AND (:tenHd IS NULL OR LOWER(HD.TEN_HD) LIKE LOWER(CONCAT(CONCAT('%',:tenHd),'%')))" +
             " AND (:loaiVthh IS NULL OR QD.LOAI_VTHH = :loaiVthh)" +
             " AND (:loaiQd IS NULL OR QD.LOAI_QD = :loaiQd)" +
             " AND (:cloaiVthh IS NULL OR QD.CLOAI_VTHH = :cloaiVthh)" +
@@ -59,7 +61,7 @@ public interface HhQdGiaoNvNhapHangRepository extends JpaRepository<HhQdGiaoNvNh
             " AND (:maDvi IS NULL OR LOWER(QD_DTL.MA_DVI) LIKE LOWER(CONCAT(:maDvi,'%')))",
 //            " AND (:maDvi IS NULL OR QD_DTL.MA_DVI = :maDvi)" ,
             nativeQuery = true)
-    Page<HhQdGiaoNvNhapHang> searchPageChiCuc(Integer namNhap, String soQd, String loaiVthh, String cloaiVthh, String trichYeu, String ngayQdTu, String ngayQdDen, String tuNgayKy, String denNgayKy, String tuNgayTao, String denNgayTao, String tuNgayKetThuc, String denNgayKetThuc, String tuLapPhieu, String denLapPhieu, String tuNgayGiamDinh, String denNgayGiamDinh, String tuNgayNkho, String denNgayNkho, String soPnk, String trangThai, String maDvi, String loaiQd, Pageable pageable);
+    Page<HhQdGiaoNvNhapHang> searchPageChiCuc(Integer namNhap, String soQd, String loaiVthh, String cloaiVthh, String trichYeu, String ngayQdTu, String ngayQdDen, String tuNgayKy, String denNgayKy, String tuNgayTao, String denNgayTao, String tuNgayKetThuc, String denNgayKetThuc, String tuLapPhieu, String denLapPhieu, String tuNgayGiamDinh, String denNgayGiamDinh, String tuNgayNkho, String denNgayNkho, String soPnk, String trangThai, String maDvi, String loaiQd, String soHd, String tenHd, Pageable pageable);
 
     Optional<HhQdGiaoNvNhapHang> findAllBySoQd(String soQd);
 
