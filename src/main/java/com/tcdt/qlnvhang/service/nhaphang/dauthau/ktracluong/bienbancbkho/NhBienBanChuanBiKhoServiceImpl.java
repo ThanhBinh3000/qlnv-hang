@@ -1,27 +1,28 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.bienbancbkho;
 
 import com.google.common.collect.Lists;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstDtl;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bienbanchuanbikho.NhBienBanChuanBiKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bienbanchuanbikho.NhBienBanChuanBiKhoCt;
-import com.tcdt.qlnvhang.entities.nhaphang.nhapkhac.HhBbNghiemThuNhapKhac;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.bienbanchuanbikho.NhBienBanChuanBiKhoCtRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.bienbanchuanbikho.NhBienBanChuanBiKhoRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.kiemtrachatluong.NhBienBanChuanBiKhoPreview;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoReq;
+import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
+import com.tcdt.qlnvhang.service.HhQdGiaoNvuNhapxuatService;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.HhQdPduyetKqlcntHdr;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.NumberToWord;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
@@ -61,6 +62,9 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
 
     @Autowired
     private FileDinhKemService fileDinhKemService;
+
+    @Autowired
+    private HhQdGiaoNvuNhapxuatService hhQdGiaoNvuNhapxuatService;
 
     @Override
     public Page<NhBienBanChuanBiKho> searchPage(NhBienBanChuanBiKhoReq req) {
@@ -214,7 +218,50 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
 
     @Override
     public void export(NhBienBanChuanBiKhoReq req, HttpServletResponse response) throws Exception {
-//        return false;
+
+    }
+
+    @Override
+    public void exportBbcbk(HhQdNhapxuatSearchReq req, HttpServletResponse response) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        req.setMaDvi(userInfo.getDvql());
+        Page<NhQdGiaoNvuNhapxuatHdr> page = hhQdGiaoNvuNhapxuatService.searchPage(req);
+        List<NhQdGiaoNvuNhapxuatHdr> data = page.getContent();
+
+        String title = "Danh sách biên bản chuẩn bị kho";
+        String[] rowsName = new String[]{"STT", "Số QĐ giao NVNH", "Năm kế hoạch", "Thời hạn NH trước ngày", "Điểm kho", "Ngăn/Lô kho",
+                "Số BB chuẩn bị kho", "Ngày lập biên bản", "Trạng thái"};
+        String filename = "Danh_sach_bien_ban_chuan_bi_kho.xlsx";
+
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        Object[] objsb = null;
+        for (int i = 0; i < data.size(); i++) {
+            NhQdGiaoNvuNhapxuatHdr qd = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = qd.getSoQd();
+            objs[2] = qd.getNamNhap();
+            objs[3] = qd.getTgianNkho();
+            dataList.add(objs);
+            for (int j = 0; j < qd.getDtlList().get(0).getChildren().size(); j++) {
+                objsb = new Object[rowsName.length];
+                objsb[4] = qd.getDtlList().get(0).getChildren().get(j).getTenDiemKho();
+                objsb[5] = qd.getDtlList().get(0).getChildren().get(j).getTenNganLoKho();
+                if (qd.getDtlList().get(0).getChildren().get(j).getBienBanChuanBiKho() != null) {
+                    objsb[6] = qd.getDtlList().get(0).getChildren().get(j).getBienBanChuanBiKho().getSoBienBan();
+                    objsb[7] = convertDate(qd.getDtlList().get(0).getChildren().get(j).getBienBanChuanBiKho().getNgayTao());
+                    objsb[8] = qd.getDtlList().get(0).getChildren().get(j).getBienBanChuanBiKho().getTenTrangThai();
+                }
+                dataList.add(objsb);
+            }
+        }
+        ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+        ex.export();
     }
 
     @Override
