@@ -309,7 +309,7 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
             case Contains.TU_CHOI_LDC + Contains.CHO_DUYET_TP:
                 break;
             case Contains.CHO_DUYET_TP + Contains.TU_CHOI_TP:
-            case Contains.CHO_DUYET_LDC + Contains.CHO_DUYET_TP:
+            case Contains.CHO_DUYET_LDC + Contains.TU_CHOI_LDC:
             case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
             case Contains.CHO_DUYET_BTC + Contains.TU_CHOI_BTC:
             case Contains.CHODUYET_LDTC + Contains.TUCHOI_LDTC:
@@ -318,6 +318,7 @@ public class XhXkKhXuatHangService extends BaseServiceImpl {
             case Contains.CHO_DUYET_LDC + Contains.DA_DUYET_LDC:
             case Contains.CHO_DUYET_TP + Contains.CHO_DUYET_LDC:
             case Contains.CHODUYET_LDV + Contains.CHODUYET_LDTC:
+            case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
             case Contains.CHODUYET_LDTC + Contains.CHO_DUYET_BTC:
             case Contains.CHO_DUYET_BTC + Contains.DA_DUYET_BTC:
             case Contains.DU_THAO + Contains.CHODUYET_LDV:
