@@ -34,7 +34,7 @@ public interface XhXkTongHopRepository extends JpaRepository<XhXkTongHopHdr, Lon
       "        ELSE NULL " +
       "    END AS nam_nhap_result " +
       " FROM" +
-      "    xh_xk_tong_hop_hdr yt" +
+      "    xh_xk_tong_hop_dtl yt" +
       " LEFT JOIN" +
       "    kt_ngan_kho kk ON yt.ma_dia_diem = kk.ma_ngankho" +
       " LEFT JOIN" +

@@ -29,7 +29,7 @@ public class XhXkTongHopHdr extends BaseEntity implements Serializable {
   private String maDvi;
   private String maDanhSach;
   private String tenDanhSach;
-  private LocalDateTime ngayDeXuat;
+//  private LocalDateTime ngayDeXuat;
   private String trangThai;
   private LocalDate ngayGduyet;
   private Long nguoiGduyetId;
