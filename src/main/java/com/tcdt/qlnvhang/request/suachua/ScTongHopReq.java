@@ -25,7 +25,7 @@ public class ScTongHopReq extends BaseRequest {
     // #Region Search
     private String dvql;
     private String maDviSr;
-    private int namSr;
+    private Integer namSr;
 
     private LocalDate ngayTu;
 
