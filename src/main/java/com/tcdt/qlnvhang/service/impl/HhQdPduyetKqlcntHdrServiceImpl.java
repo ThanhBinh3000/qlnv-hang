@@ -344,11 +344,11 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		Optional<HhQdKhlcntHdr> byId = hhQdKhlcntHdrRepository.findById(qdPduyetKqlcntHdr.getIdQdPdKhlcnt());
 		if(byId.isPresent()){
 			HhQdKhlcntHdr hdr = byId.get();
-			if(!StringUtils.isEmpty(hdr.getSoQdPdKqLcnt())){
-				throw new Exception(
-						"Thông tin gói thầu đã được ban hành quyết định phê duyệt kế quả lựa chọn nhà thầu, xin vui lòng chọn thông tin gối thầu khác");
-			}
-			hdr.setSoQdPdKqLcnt(qdPduyetKqlcntHdr.getSoQd());
+//			if(!StringUtils.isEmpty(hdr.getSoQdPdKqLcnt())){
+//				throw new Exception(
+//						"Thông tin gói thầu đã được ban hành quyết định phê duyệt kế quả lựa chọn nhà thầu, xin vui lòng chọn thông tin gối thầu khác");
+//			}
+//			hdr.setSoQdPdKqLcnt(qdPduyetKqlcntHdr.getSoQd());
 			hhQdKhlcntHdrRepository.save(hdr);
 			if (hdr.getDieuChinh().equals(Boolean.TRUE)) {
 				for (HhQdPduyetKqlcntDtl kqDtl : qdPduyetKqlcntDtls) {
@@ -415,14 +415,14 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 //					}
 //				}
 			}
-			List<HhQdKhlcntDtl> dtl = hhQdKhlcntDtlRepository.findAllByIdQdHdr(hdr.getId());
-			dtl.forEach(item ->{
-				List<HhQdKhlcntDsgthau> listDsgThau = hhQdKhlcntDsgthauRepository.findByIdQdDtl(item.getId());
-				for (HhQdKhlcntDsgthau dsgthau : listDsgThau) {
-					dsgthau.setTrangThai(item.getTrangThai().equals(NhapXuatHangTrangThaiEnum.THANH_CONG.getId()) ? NhapXuatHangTrangThaiEnum.THANH_CONG.getId() : NhapXuatHangTrangThaiEnum.THAT_BAI.getId());
-					hhQdKhlcntDsgthauRepository.save(dsgthau);
-				}
-			});
+//			List<HhQdKhlcntDtl> dtl = hhQdKhlcntDtlRepository.findAllByIdQdHdr(hdr.getId());
+//			dtl.forEach(item ->{
+//				List<HhQdKhlcntDsgthau> listDsgThau = hhQdKhlcntDsgthauRepository.findByIdQdDtl(item.getId());
+//				for (HhQdKhlcntDsgthau dsgthau : listDsgThau) {
+//					dsgthau.setTrangThai(item.getTrangThai().equals(NhapXuatHangTrangThaiEnum.THANH_CONG.getId()) ? NhapXuatHangTrangThaiEnum.THANH_CONG.getId() : NhapXuatHangTrangThaiEnum.THAT_BAI.getId());
+//					hhQdKhlcntDsgthauRepository.save(dsgthau);
+//				}
+//			});
 		}else{
 			throw new Exception(
 					"Số quyết định phê duyệt kế hoạch lựa chọn nhà thầu " + qdPduyetKqlcntHdr.getSoQdPdKhlcnt() + " không tồn tại");

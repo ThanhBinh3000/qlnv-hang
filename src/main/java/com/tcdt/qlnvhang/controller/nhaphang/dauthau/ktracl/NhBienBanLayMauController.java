@@ -9,6 +9,7 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.dieuchuyennoibo.SearchBangKeCanHang;
 import com.tcdt.qlnvhang.request.object.bbanlaymau.BienBanLayMauReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangReq;
+import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.response.bbanlaymau.BienBanLayMauRes;
 import com.tcdt.qlnvhang.service.nhaphang.bbanlaymau.BienBanLayMauService;
@@ -170,9 +171,9 @@ public class NhBienBanLayMauController {
 	@ApiOperation(value = "Export", response = List.class)
 	@PostMapping(value=  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody BienBanLayMauReq req) {
+	public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody HhQdNhapxuatSearchReq req) {
 		try {
-			service.export(req,response);
+			service.exportBblm(req,response);
 		} catch (Exception e) {
 			log.error("Error can not export", e);
 		}

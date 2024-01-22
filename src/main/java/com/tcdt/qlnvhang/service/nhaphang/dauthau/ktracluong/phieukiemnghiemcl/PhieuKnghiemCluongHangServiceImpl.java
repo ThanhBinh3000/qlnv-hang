@@ -1,8 +1,10 @@
 package com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.phieukiemnghiemcl;
 
+import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl.KquaKnghiem;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl.PhieuKnghiemCluongHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.phieuknghiemcluonghang.KquaKnghiemRepository;
@@ -12,10 +14,13 @@ import com.tcdt.qlnvhang.request.object.phieuknghiemcluonghang.KquaKnghiemReq;
 import com.tcdt.qlnvhang.request.object.phieuknghiemcluonghang.PhieuKnghiemCluongHangReq;
 import com.tcdt.qlnvhang.request.search.PhieuKnghiemCluongHangSearchReq;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
+import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
@@ -43,6 +48,9 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
     @Autowired
     private UserInfoRepository userInfoRepository;
 
+    @Autowired
+    private FileDinhKemService fileDinhKemService;
+
     @Override
     public Page<PhieuKnghiemCluongHang> searchPage(PhieuKnghiemCluongHangReq req) {
         return null;
@@ -65,6 +73,9 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
         phieuKnclh.setNam(LocalDate.now().getYear());
         phieuKnclh.setId(Long.parseLong(phieuKnclh.getSoPhieuKiemNghiemCl().split("/")[0]));
         phieuKnghiemCluongHangRepository.save(phieuKnclh);
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+            fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), phieuKnclh.getId(), "NH_PHIEU_KNGHIEM_CLUONG");
+        }
         saveDetail(req, phieuKnclh.getId());
         return phieuKnclh;
     }
@@ -86,6 +97,10 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
         phieuKnclh.setNgaySua(new Date());
 
         phieuKnghiemCluongHangRepository.save(phieuKnclh);
+        fileDinhKemService.delete(req.getId(), Lists.newArrayList("NH_PHIEU_KNGHIEM_CLUONG"));
+        if (!DataUtils.isNullOrEmpty(req.getFileDinhKems())) {
+            fileDinhKemService.saveListFileDinhKem(req.getFileDinhKems(), phieuKnclh.getId(), "NH_PHIEU_KNGHIEM_CLUONG");
+        }
         saveDetail(req, phieuKnclh.getId());
         return phieuKnclh;
     }
@@ -126,7 +141,8 @@ public class PhieuKnghiemCluongHangServiceImpl extends BaseServiceImpl implement
         item.setTenTruongPhong(ObjectUtils.isEmpty(item.getIdTruongPhong()) ? null : userInfoRepository.findById(item.getIdTruongPhong()).get().getFullName());
 
         item.setListKquaKngiem(kquaKnghiemRepository.findByPhieuKnghiemId(id));
-
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(item.getId(), Collections.singletonList("NH_PHIEU_KNGHIEM_CLUONG"));
+        item.setFileDinhKems(fileDinhKem);
         return item;
     }
 

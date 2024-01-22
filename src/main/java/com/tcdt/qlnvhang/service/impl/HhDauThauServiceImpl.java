@@ -311,7 +311,7 @@ public class HhDauThauServiceImpl extends BaseServiceImpl implements HhDauThauSe
                 convertDateToString(req.getDenNgayQd()),
                 req.getTrangThai(), req.getLastest(),
                 req.getMaDvi(),
-                req.getTrangThaiDt(), req.getSoQdPdKhlcnt(), req.getSoQdPdKqlcnt(),
+                req.getTrangThaiDt(), req.getSoQdPdKhlcnt(),
                 pageable);
         data.getContent().forEach(f -> {
             f.setTenLoaiVthh(StringUtils.isEmpty(f.getLoaiVthh()) ? null : hashMapDmHh.get(f.getLoaiVthh()));
