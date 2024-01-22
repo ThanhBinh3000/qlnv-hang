@@ -23,4 +23,5 @@ public class XhQdGiaoNvXhDdiemReq {
     private Long idBbTinhKho;
     private String soBbTinhKho;
     private LocalDate ngayLapBbTinhKho;
+    private Integer namNhap;
 }

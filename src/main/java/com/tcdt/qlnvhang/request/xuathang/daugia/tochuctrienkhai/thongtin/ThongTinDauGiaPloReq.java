@@ -23,6 +23,7 @@ public class ThongTinDauGiaPloReq extends BaseRequest {
     private Integer soLanTraGia;
     private BigDecimal donGiaTraGia;
     private String toChucCaNhan;
+    private Integer namNhap;
 
     public void setSoLuongDeXuat(BigDecimal soLuongDeXuat) {
         this.soLuongDeXuat = soLuongDeXuat;

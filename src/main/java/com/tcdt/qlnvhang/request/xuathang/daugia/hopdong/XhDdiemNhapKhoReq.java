@@ -21,4 +21,5 @@ public class XhDdiemNhapKhoReq {
     private BigDecimal thanhTien;
     private String donViTinh;
     private String diaDiemKho;
+    private Integer namNhap;
 }
