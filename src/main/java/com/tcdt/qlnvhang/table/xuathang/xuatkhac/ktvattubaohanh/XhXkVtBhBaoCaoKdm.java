@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh;
 
 import com.tcdt.qlnvhang.entities.BaseEntity;
 import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = XhXkVtBhBaoCaoKdm.TABLE_NAME)
@@ -53,5 +55,19 @@ public class XhXkVtBhBaoCaoKdm extends BaseEntity implements Serializable {
   private List<XhXkVtBhPhieuKdclHdr> phieuKdcl = new ArrayList<>();
   @Transient
   private List<XhXkVtBhPhieuKtclHdr> phieuKtcl = new ArrayList<>();
+
+  @Transient
+  private Map<String, String> mapDmucDvi;
+  public void setMapDmucDvi(Map<String, String> mapDmucDvi) {
+    this.mapDmucDvi = mapDmucDvi;
+    if (!DataUtils.isNullObject(getMaDvi())) {
+      String tenDvi = mapDmucDvi.containsKey(maDvi) ? mapDmucDvi.get(maDvi) : null;
+      setTenDvi(tenDvi);
+    }
+    if (!DataUtils.isNullObject(getMaDviNhan())) {
+      String tenDviNhan = mapDmucDvi.containsKey(maDviNhan) ? mapDmucDvi.get(maDviNhan) : null;
+      setTenDviNhan(tenDviNhan);
+    }
+  }
 
 }
