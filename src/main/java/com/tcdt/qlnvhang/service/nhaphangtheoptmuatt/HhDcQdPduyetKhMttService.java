@@ -166,11 +166,14 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
     @Transactional
     public HhDcQdPduyetKhmttHdr update(HhDcQdPduyetKhmttHdrReq objReq) throws Exception{
         UserInfo userInfo = SecurityContextService.getUser();
+        Optional<HhDcQdPduyetKhmttHdr> soQdDc = Optional.empty();
         if (userInfo == null){
             throw new Exception(" Bar request.");
         }
         Optional<HhDcQdPduyetKhmttHdr> optional = hhDcQdPduyetKhMttRepository.findById(objReq.getId());
-        Optional<HhDcQdPduyetKhmttHdr> soQdDc = hhDcQdPduyetKhMttRepository.findBySoToTrinh(objReq.getSoToTrinh());
+        if(objReq.getSoToTrinh() != null){
+            soQdDc = hhDcQdPduyetKhMttRepository.findBySoToTrinh(objReq.getSoToTrinh());
+        }
         if(soQdDc.isPresent()){
             if (optional.isPresent()){
                 if (!soQdDc.get().getId().equals(objReq.getId())){
