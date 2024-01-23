@@ -16,8 +16,9 @@ import java.util.Optional;
 public interface XhTlQuyetDinhHdrRepository extends JpaRepository<XhTlQuyetDinhHdr,Long> {
 
   @Query("SELECT DISTINCT  c FROM XhTlQuyetDinhHdr c " +
+      " LEFT JOIN XhTlHoSoHdr hdr on c.idHoSo = hdr.id " +
       " WHERE 1=1 " +
-      "AND (:#{#param.dvql} IS NULL OR c.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
+      "AND (:#{#param.dvql} IS NULL OR hdr.maDvi LIKE CONCAT(:#{#param.dvql},'%')) " +
       "AND (:#{#param.nam} IS NULL OR c.nam = :#{#param.nam}) " +
       "AND (:#{#param.soQd} IS NULL OR LOWER(c.soQd) LIKE CONCAT('%',LOWER(:#{#param.soQd}),'%')) " +
       "AND (:#{#param.soHoSo} IS NULL OR LOWER(c.soHoSo) LIKE CONCAT('%',LOWER(:#{#param.soHoSo}),'%')) " +

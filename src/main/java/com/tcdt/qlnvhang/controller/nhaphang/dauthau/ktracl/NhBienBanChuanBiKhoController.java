@@ -1,10 +1,12 @@
 package com.tcdt.qlnvhang.controller.nhaphang.dauthau.ktracl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.DeleteReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.HhQdKhlcntHdrReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoReq;
+import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
 import com.tcdt.qlnvhang.request.search.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.nhaphang.dauthau.ktracluong.bienbancbkho.NhBienBanChuanBiKhoService;
@@ -20,7 +22,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -156,6 +160,27 @@ public class NhBienBanChuanBiKhoController {
 //            log.error("Error can not export", e);
 //        }
 //    }
+
+    @ApiOperation(value = "Kết xuất Danh sách", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(PathContains.URL_KET_XUAT)
+    @ResponseStatus(HttpStatus.OK)
+    public void export(@Valid @RequestBody HhQdNhapxuatSearchReq searchReq, HttpServletResponse response)
+            throws Exception {
+        try {
+            service.exportBbcbk(searchReq, response);
+        } catch (Exception e) {
+            log.error("Kết xuất Danh sách trace: {}", e);
+            final Map<String, Object> body = new HashMap<>();
+            body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            body.put("msg", e.getMessage());
+
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.writeValue(response.getOutputStream(), body);
+        }
+    }
 
     @ApiOperation(value = "Xem trước", response = List.class)
     @PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
