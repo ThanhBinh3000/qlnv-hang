@@ -506,7 +506,9 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
                         retainedList.add(sldd);
                     }
                 }
-                child.setChildren(retainedList);
+                if(retainedList.size() > 0){
+                    child.setChildren(retainedList);
+                }
             }
         }
 
@@ -524,6 +526,9 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
                     if(soLuongDaKyHopDongDTO.isPresent() && soLuongDaKyHopDongDTO.get().getSoLuong().compareTo(child.getTongSoLuong()) <= 0 ){
                         retainedList.add(child);
                     }
+                }
+                if(retainedList.size() > 0){
+                    hhDcQdPduyetKhmttDx.setChildren(retainedList);
                 }
             }
         }
