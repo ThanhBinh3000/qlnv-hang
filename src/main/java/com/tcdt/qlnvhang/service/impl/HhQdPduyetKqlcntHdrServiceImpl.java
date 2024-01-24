@@ -315,24 +315,43 @@ public class HhQdPduyetKqlcntHdrServiceImpl extends BaseServiceImpl implements H
 		return createCheck;
 	}
 
-	void updateTrangThaiDt (HhQdPduyetKqlcntHdr kqlcntHdr) {
-		Optional<HhQdKhlcntDtl> qdKhlcntDtl = hhQdKhlcntDtlRepository.findById(kqlcntHdr.getIdQdPdKhlcntDtl());
-		if(qdKhlcntDtl.isPresent()){
-			List<HhQdKhlcntDsgthau> listDsgThau = hhQdKhlcntDsgthauRepository.findByIdQdDtl(qdKhlcntDtl.get().getId());
-			for (HhQdKhlcntDsgthau dsgthau : listDsgThau) {
-				HhQdPduyetKqlcntDtl hhQdPduyetKqlcntDtl = hhQdPduyetKqlcntDtlRepository.findByIdGoiThauAndIdQdPdHdr(dsgthau.getId(), kqlcntHdr.getId());
-				if (dsgthau.getTrangThaiDt().equals(TrangThaiAllEnum.THANH_CONG.getId())) {
-					Optional<HhHopDongHdr> hhHopDongHdr = hhHopDongRepository.findBySoQdKqLcntAndIdGoiThau(kqlcntHdr.getSoQd(), dsgthau.getId());
+	void updateTrangThaiDt (HhQdPduyetKqlcntHdr kqlcntHdr) throws Exception {
+		Optional<HhQdKhlcntHdr> qdKhlcntHdr = hhQdKhlcntHdrRepository.findById(kqlcntHdr.getIdQdPdKhlcnt());
+		if(!qdKhlcntHdr.isPresent()) {
+			throw new Exception("Không tìm thấy dữ liệu");
+		}
+		List<HhQdPduyetKqlcntDtl> hhQdPduyetKqlcntDtls = hhQdPduyetKqlcntDtlRepository.findAllByIdQdPdHdr(kqlcntHdr.getId());
+		for (HhQdPduyetKqlcntDtl hhQdPduyetKqlcntDtl : hhQdPduyetKqlcntDtls) {
+			if (kqlcntHdr.getLoaiVthh().startsWith("02") && qdKhlcntHdr.get().getDieuChinh().equals(Boolean.TRUE)) {
+				Optional<HhDchinhDxKhLcntDsgthau> dchinhDxKhLcntDsgthau = dchinhDxKhLcntDsgthauRepository.findById(hhQdPduyetKqlcntDtl.getIdGoiThau());
+				if (dchinhDxKhLcntDsgthau.isPresent() && dchinhDxKhLcntDsgthau.get().getTrangThaiDt().equals(TrangThaiAllEnum.THANH_CONG.getId())) {
+					Optional<HhHopDongHdr> hhHopDongHdr = hhHopDongRepository.findBySoQdKqLcntAndIdGoiThau(kqlcntHdr.getSoQd(), dchinhDxKhLcntDsgthau.get().getId());
 					if (hhHopDongHdr.isPresent()) {
-						if (!hhHopDongHdr.get().getTrangThai().equals(TrangThaiAllEnum.DA_KY.getId())){
-							dsgthau.setTrangThaiDt(TrangThaiAllEnum.KHONG_KY_HD.getId());
+						if (!hhHopDongHdr.get().getTrangThai().equals(TrangThaiAllEnum.DA_KY.getId())) {
+							dchinhDxKhLcntDsgthau.get().setTrangThaiDt(TrangThaiAllEnum.KHONG_KY_HD.getId());
 							hhQdPduyetKqlcntDtl.setTrangThai(TrangThaiAllEnum.KHONG_KY_HD.getId());
 						}
 					} else {
-						dsgthau.setTrangThaiDt(TrangThaiAllEnum.KHONG_KY_HD.getId());
+						dchinhDxKhLcntDsgthau.get().setTrangThaiDt(TrangThaiAllEnum.KHONG_KY_HD.getId());
 						hhQdPduyetKqlcntDtl.setTrangThai(TrangThaiAllEnum.KHONG_KY_HD.getId());
 					}
-					hhQdKhlcntDsgthauRepository.save(dsgthau);
+					dchinhDxKhLcntDsgthauRepository.save(dchinhDxKhLcntDsgthau.get());
+					hhQdPduyetKqlcntDtlRepository.save(hhQdPduyetKqlcntDtl);
+				}
+			} else {
+				Optional<HhQdKhlcntDsgthau> hHhQdKhlcntDsgthau = hhQdKhlcntDsgthauRepository.findById(hhQdPduyetKqlcntDtl.getIdGoiThau());
+				if (hHhQdKhlcntDsgthau.isPresent() && hHhQdKhlcntDsgthau.get().getTrangThaiDt().equals(TrangThaiAllEnum.THANH_CONG.getId())) {
+					Optional<HhHopDongHdr> hhHopDongHdr = hhHopDongRepository.findBySoQdKqLcntAndIdGoiThau(kqlcntHdr.getSoQd(), hHhQdKhlcntDsgthau.get().getId());
+					if (hhHopDongHdr.isPresent()) {
+						if (!hhHopDongHdr.get().getTrangThai().equals(TrangThaiAllEnum.DA_KY.getId())) {
+							hHhQdKhlcntDsgthau.get().setTrangThaiDt(TrangThaiAllEnum.KHONG_KY_HD.getId());
+							hhQdPduyetKqlcntDtl.setTrangThai(TrangThaiAllEnum.KHONG_KY_HD.getId());
+						}
+					} else {
+						hHhQdKhlcntDsgthau.get().setTrangThaiDt(TrangThaiAllEnum.KHONG_KY_HD.getId());
+						hhQdPduyetKqlcntDtl.setTrangThai(TrangThaiAllEnum.KHONG_KY_HD.getId());
+					}
+					hhQdKhlcntDsgthauRepository.save(hHhQdKhlcntDsgthau.get());
 					hhQdPduyetKqlcntDtlRepository.save(hhQdPduyetKqlcntDtl);
 				}
 			}
