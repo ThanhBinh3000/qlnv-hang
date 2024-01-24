@@ -415,10 +415,12 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
             for (HhDcQdPduyetKhmttDx hhDcQdPduyetKhmttDx : dxList) {
                 List<HhDcQdPduyetKhmttSldd> slddList = hhDcQdPduyetKhmttSlddRepository.findAllByIdDcKhmtt(hhDcQdPduyetKhmttDx.getId());
                 for (HhDcQdPduyetKhmttSldd hhDcQdPduyetKhmttSldd : slddList) {
-                    hhSlNhapHang = hhSlNhapHangs.stream().filter(x -> x.getMaDvi().equals(hhDcQdPduyetKhmttSldd.getMaDvi())).findFirst();
-                    hhSlNhapHang.get().setSoLuong(hhDcQdPduyetKhmttSldd.getTongSoLuong());
-                    BeanUtils.copyProperties(hhSlNhapHang.get(), hhSlNhapHangReq);
-                    hhSlNhapHangService.update(hhSlNhapHangReq);
+                    if(hhSlNhapHangs.size() > 0){
+                        hhSlNhapHang = hhSlNhapHangs.stream().filter(x -> x.getMaDvi().equals(hhDcQdPduyetKhmttSldd.getMaDvi())).findFirst();
+                        hhSlNhapHang.get().setSoLuong(hhDcQdPduyetKhmttSldd.getTongSoLuong());
+                        BeanUtils.copyProperties(hhSlNhapHang.get(), hhSlNhapHangReq);
+                        hhSlNhapHangService.update(hhSlNhapHangReq);
+                    }
                 }
             }
         }
