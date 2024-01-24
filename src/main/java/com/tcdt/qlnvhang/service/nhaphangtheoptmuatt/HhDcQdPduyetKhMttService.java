@@ -517,8 +517,9 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
 
         List<HhDcQdPduyetKhmttHdr> listDcPd = hhDcQdPduyetKhMttRepository.searchDsLastest();
         for (HhDcQdPduyetKhmttHdr hhDcQdPduyetKhmttHdr : listDcPd) {
-            hhDcQdPduyetKhmttHdr.setTenCloaiVthh(listDanhMucHangHoa.get(hhDcQdPduyetKhmttHdr.getCloaiVthh()));
-            hhDcQdPduyetKhmttHdr.setTenLoaiVthh(listDanhMucHangHoa.get(hhDcQdPduyetKhmttHdr.getLoaiVthh()));
+            hhDcQdPduyetKhmttHdr = this.detail(hhDcQdPduyetKhmttHdr.getId().toString());
+//            hhDcQdPduyetKhmttHdr.setTenCloaiVthh(listDanhMucHangHoa.get(hhDcQdPduyetKhmttHdr.getCloaiVthh()));
+//            hhDcQdPduyetKhmttHdr.setTenLoaiVthh(listDanhMucHangHoa.get(hhDcQdPduyetKhmttHdr.getLoaiVthh()));
             for (HhDcQdPduyetKhmttDx hhDcQdPduyetKhmttDx : hhDcQdPduyetKhmttHdr.getHhDcQdPduyetKhmttDxList()) {
                 List<HhDcQdPduyetKhmttSldd> retainedList = new ArrayList<>();
                 HopDongMttHdrReq hopDongreq = new HopDongMttHdrReq();
