@@ -261,8 +261,12 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
         for (XhHopDongBttHdr item : resultList) {
             UserInfo userInfo = SecurityContextService.getUser();
             String capDvi = userInfo.getCapDvi();
-            boolean isCapCuc = Contains.CAP_CUC.equals(capDvi);
-            if (isCapCuc) {
+            boolean isChiCuc = Contains.CAP_CHI_CUC.equals(capDvi);
+            if (isChiCuc) {
+                List<XhHopDongBttDvi> detailList = xhHopDongBttDviRepository.findAllByIdHdr(item.getId());
+                detailList.forEach(detailItem -> detailItem.setMapDmucDvi(mapDmucDvi));
+                item.setXhHopDongBttDviList(detailList);
+            } else {
                 List<XhHopDongBttDtl> detailList = xhHopDongBttDtlRepository.findAllByIdHdr(item.getId());
                 for (XhHopDongBttDtl detailItem : detailList) {
                     List<XhHopDongBttDvi> deliveryPointList = xhHopDongBttDviRepository.findAllByIdDtl(detailItem.getId());
@@ -278,10 +282,6 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
                 }
                 this.detailPhuLuc(item, mapDmucDvi);
                 item.setChildren(detailList);
-            } else {
-                List<XhHopDongBttDvi> detailList = xhHopDongBttDviRepository.findAllByIdHdr(item.getId());
-                detailList.forEach(detailItem -> detailItem.setMapDmucDvi(mapDmucDvi));
-                item.setXhHopDongBttDviList(detailList);
             }
             if (!DataUtils.isNullObject(item.getMaDviTsan())) {
                 item.setListMaDviTsan(Arrays.asList(item.getMaDviTsan().split(",")));
