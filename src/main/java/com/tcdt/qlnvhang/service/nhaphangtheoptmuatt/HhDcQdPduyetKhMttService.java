@@ -133,12 +133,14 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         }
         for (HhDcQdPduyetKhmttDxReq listDx :objReq.getHhDcQdPduyetKhmttDxList()){
             HhDcQdPduyetKhmttDx dx = ObjectMapperUtils.map(listDx, HhDcQdPduyetKhmttDx.class);
+            dx.setId(null);
             dx.setIdDxHdr(listDx.getIdDxHdr());
             dx.setIdQdHdr(listDx.getIdQdHdr());
             dx.setIdDcHdr(data.getId());
             HhDcQdPduyetKhmttDx save = hhDcQdPduyetKhMttDxRepository.save(dx);
             for (HhDcQdPduyetKhmttSlddReq listSLDD : listDx.getChildren()){
                 HhDcQdPduyetKhmttSldd slDd =ObjectMapperUtils.map(listSLDD, HhDcQdPduyetKhmttSldd.class);
+                slDd.setId(null);
                 slDd.setIdDxKhmtt(save.getIdDxHdr());
                 slDd.setIdDcKhmtt(save.getId());
                 slDd.setMaDiemKho(userInfo.getDvql());
