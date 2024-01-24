@@ -268,7 +268,16 @@ public class XhXkLtBaoCaoKqService extends BaseServiceImpl {
       byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
       ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
       List<XhXkLtBaoCaoKq>  detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
-      return docxToPdfConverter.convertDocxToPdf(inputStream, detail.get(0));
+      Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+      Map<String, String> mapVthh = getListDanhMucHangHoa();
+      List<XhXkTongHopHdr> tongHopHdrList = xhXkTongHopRepository.findByIdIn(detail.get(0).getListIdTongHop());
+      for (XhXkTongHopHdr xhXkTongHopHdr : tongHopHdrList) {
+        xhXkTongHopHdr.getTongHopDtl().forEach(tongHopDtl -> {
+          tongHopDtl.setMapDmucDvi(mapDmucDvi);
+          tongHopDtl.setMapVthh(mapVthh);
+        });
+      }
+      return docxToPdfConverter.convertDocxToPdf(inputStream, detail.get(0),tongHopHdrList);
     } catch (IOException e) {
       e.printStackTrace();
     } catch (XDocReportException e) {
