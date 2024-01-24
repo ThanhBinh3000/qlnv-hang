@@ -22,7 +22,7 @@ public class XhXkVtBhQdXuatGiamVtRequest extends BaseRequest {
     private LocalDate ngayKy;
     private LocalDate ngayHieuLuc;
     private String soCanCu;
-    private Long idCanCu;
+    private String idCanCu;
     private String trangThai;
     private String lyDoTuChoi;
     private LocalDate ngayGduyet;
