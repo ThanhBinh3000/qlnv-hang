@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.response.chotdulieu.QthtChotGiaInfoRes;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
@@ -78,7 +79,8 @@ public class XhQdPdKhBdg implements Serializable {
     private String tenCloaiVthh;
     @Transient
     private String tenTrangThai;
-
+    @Transient
+    private QthtChotGiaInfoRes qthtChotGiaInfoRes;
     @JsonIgnore
     @Transient
     private Map<String, String> mapDmucDvi;

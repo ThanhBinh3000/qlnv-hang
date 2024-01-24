@@ -1,11 +1,15 @@
 package com.tcdt.qlnvhang.service.chotdulieu;
 
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdg;
 import com.tcdt.qlnvhang.repository.HhDchinhDxKhLcntHdrRepository;
 import com.tcdt.qlnvhang.repository.QlnvDmDonviRepository;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhDcQdPduyetKhMttRepository;
+import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhQdPheduyetKhMttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.chotdulieu.KhLtPagTongHopCTietRepository;
 import com.tcdt.qlnvhang.repository.xuathang.chotdulieu.KhPagGctQdTcdtnnRepository;
 import com.tcdt.qlnvhang.repository.xuathang.chotdulieu.QthtChotGiaNhapXuatRepository;
+import com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgRepository;
 import com.tcdt.qlnvhang.request.chotdulieu.QthtChotGiaInfoReq;
 import com.tcdt.qlnvhang.request.chotdulieu.QthtChotGiaNhapXuatReq;
 import com.tcdt.qlnvhang.response.chotdulieu.QthtChotDieuChinhGia;
@@ -19,6 +23,7 @@ import com.tcdt.qlnvhang.table.catalog.QlnvDmDonvi;
 import com.tcdt.qlnvhang.table.chotdulieu.KhPagGctQdTcdtnn;
 import com.tcdt.qlnvhang.table.chotdulieu.KhPagTongHopCTiet;
 import com.tcdt.qlnvhang.table.chotdulieu.QthtChotGiaNhapXuat;
+import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhDcQdPduyetKhmttHdr;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +56,10 @@ public class QthtChotGiaNhapXuatServiceImpl extends BaseServiceImpl implements Q
     private KhLtPagTongHopCTietRepository lhLtPagTongHopCTietRepository;
     @Autowired
     private HhDchinhDxKhLcntHdrRepository hhDchinhDxKhLcntHdrRepository;
+    @Autowired
+    private HhDcQdPduyetKhMttRepository hhDcQdPduyetKhMttRepository;
+    @Autowired
+    private XhQdPdKhBdgRepository xhQdPdKhBdgRepository;
     @Override
     public Page<QthtChotGiaNhapXuat> searchPage(QthtChotGiaNhapXuatReq req) throws Exception {
         Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
@@ -180,14 +189,35 @@ public class QthtChotGiaNhapXuatServiceImpl extends BaseServiceImpl implements Q
         }
         res.setQthtQuyetDinhChinhGia(qthtQuyetDinhChinhGias);
 
-
-        Optional<HhDchinhDxKhLcntHdr> hhDchinhDxKhLcntHdr = hhDchinhDxKhLcntHdrRepository.findByIdQdGocAndLastest(objReq.getIdQuyetDinhCanDieuChinh(), true);
-        if(hhDchinhDxKhLcntHdr.isPresent()){
-            QthtDieuChinhKHLCNT qthtDieuChinhKHLCNT = new QthtDieuChinhKHLCNT();
-            qthtDieuChinhKHLCNT.setSoQuyetDinhDieuKHLCNT(hhDchinhDxKhLcntHdr.get().getSoQdDc());
-            LocalDate localDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(hhDchinhDxKhLcntHdr.get().getNgayQdDc()) );
-            qthtDieuChinhKHLCNT.setNgayQuyetDinhDieuKHLCNT(localDate);
-            res.setQthtDieuChinhKHLCNT(qthtDieuChinhKHLCNT);
+        if("NHAP_DAU_THAU".equals(objReq.getType())){
+            Optional<HhDchinhDxKhLcntHdr> hhDchinhDxKhLcntHdr = hhDchinhDxKhLcntHdrRepository.findByIdQdGocAndLastest(objReq.getIdQuyetDinhCanDieuChinh(), true);
+            if(hhDchinhDxKhLcntHdr.isPresent()){
+                QthtDieuChinhKHLCNT qthtDieuChinhKHLCNT = new QthtDieuChinhKHLCNT();
+                qthtDieuChinhKHLCNT.setSoQuyetDinhDieuKHLCNT(hhDchinhDxKhLcntHdr.get().getSoQdDc());
+                LocalDate localDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(hhDchinhDxKhLcntHdr.get().getNgayQdDc()) );
+                qthtDieuChinhKHLCNT.setNgayQuyetDinhDieuKHLCNT(localDate);
+                res.setQthtDieuChinhKHLCNT(qthtDieuChinhKHLCNT);
+            }
+        }
+        if("NHAP_TRUC_TIEP".equals(objReq.getType())){
+            Optional<HhDcQdPduyetKhmttHdr> hhDchinhDxKhLcntHdr = hhDcQdPduyetKhMttRepository.findByIdQdGocAndLastest(objReq.getIdQuyetDinhCanDieuChinh());
+            if(hhDchinhDxKhLcntHdr.isPresent()){
+                QthtDieuChinhKHLCNT qthtDieuChinhKHLCNT = new QthtDieuChinhKHLCNT();
+                qthtDieuChinhKHLCNT.setSoQuyetDinhDieuKHLCNT(hhDchinhDxKhLcntHdr.get().getSoQdDc());
+                LocalDate localDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(hhDchinhDxKhLcntHdr.get().getNgayKyQdGoc()) );
+                qthtDieuChinhKHLCNT.setNgayQuyetDinhDieuKHLCNT(localDate);
+                res.setQthtDieuChinhKHLCNT(qthtDieuChinhKHLCNT);
+            }
+        }
+        if("XUAT_DAU_GIA".equals(objReq.getType())){
+            Optional<XhQdPdKhBdg> hhDchinhDxKhLcntHdr = xhQdPdKhBdgRepository.findByIdGocAndLastest(objReq.getIdQuyetDinhCanDieuChinh(), true);
+            if(hhDchinhDxKhLcntHdr.isPresent()){
+                QthtDieuChinhKHLCNT qthtDieuChinhKHLCNT = new QthtDieuChinhKHLCNT();
+                qthtDieuChinhKHLCNT.setSoQuyetDinhDieuKHLCNT(hhDchinhDxKhLcntHdr.get().getSoQdDc());
+                LocalDate localDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(hhDchinhDxKhLcntHdr.get().getNgayKyQd()) );
+                qthtDieuChinhKHLCNT.setNgayQuyetDinhDieuKHLCNT(localDate);
+                res.setQthtDieuChinhKHLCNT(qthtDieuChinhKHLCNT);
+            }
         }
 
         return res;
