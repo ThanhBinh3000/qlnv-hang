@@ -246,7 +246,7 @@ public class NhBienBanChuanBiKhoServiceImpl extends BaseServiceImpl implements N
             objs[0] = i;
             objs[1] = qd.getSoQd();
             objs[2] = qd.getNamNhap();
-            objs[3] = qd.getTgianNkho();
+            objs[3] = convertDate(qd.getTgianNkho());
             dataList.add(objs);
             for (int j = 0; j < qd.getDtlList().get(0).getChildren().size(); j++) {
                 objsb = new Object[rowsName.length];
