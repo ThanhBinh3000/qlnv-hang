@@ -64,10 +64,24 @@ public class XhHopDongBttServiceImpI extends BaseServiceImpl {
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         searchResultPage.getContent().forEach(data -> {
             try {
+                String maCuc = data.getMaDvi().length() >= 6 ? data.getMaDvi().substring(0, 6) : "";
+                String maChiCuc = data.getMaDvi().length() >= 8 ? data.getMaDvi().substring(0, 8) : "";
                 data.setMapDmucDvi(mapDmucDvi);
                 data.setMapDmucVthh(mapDmucVthh);
                 data.setTrangThai(data.getTrangThai());
-                if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+                if (!maCuc.isEmpty()) {
+                    List<XhHopDongBttDtl> listDtl = xhHopDongBttDtlRepository.findAllByIdHdr(data.getId());
+                    for (XhHopDongBttDtl item : listDtl) {
+                        item.setMapDmucDvi(mapDmucDvi);
+                        List<XhHopDongBttDvi> listDiaDiemKho = xhHopDongBttDviRepository.findAllByIdDtl(item.getId());
+                        listDiaDiemKho.forEach(child -> {
+                            child.setMapDmucDvi(mapDmucDvi);
+                        });
+                        item.setChildren(listDiaDiemKho != null && !listDiaDiemKho.isEmpty() ? listDiaDiemKho : Collections.emptyList());
+                    }
+                    data.setChildren(listDtl != null && !listDtl.isEmpty() ? listDtl : Collections.emptyList());
+                }
+                if (!maChiCuc.isEmpty()) {
                     List<XhHopDongBttDvi> listDiaDiemKho = xhHopDongBttDviRepository.findAllByIdHdr(data.getId());
                     listDiaDiemKho.forEach(child -> {
                         child.setMapDmucDvi(mapDmucDvi);

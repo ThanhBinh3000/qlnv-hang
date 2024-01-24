@@ -162,12 +162,12 @@ public class XhQdPdKhBttDtl implements Serializable {
         return trangThai;
     }
 
-    public String getTenTrangThaiXh() {
+    public String getTrangThaiXh() {
         setTenTrangThaiXh(TrangThaiAllEnum.getLabelById(trangThaiXh));
         return trangThaiXh;
     }
 
-    public String getTenTrangThaiHd() {
+    public String getTrangThaiHd() {
         setTenTrangThaiHd(TrangThaiAllEnum.getLabelById(trangThaiHd));
         return trangThaiHd;
     }

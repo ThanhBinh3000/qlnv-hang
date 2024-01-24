@@ -22,6 +22,7 @@ public interface XhHopDongBttHdrRepository extends JpaRepository<XhHopDongBttHdr
             "AND (:#{#param.tenBenMua} IS NULL OR LOWER(HD.tenBenMua) LIKE LOWER(CONCAT('%', :#{#param.tenBenMua}, '%'))) " +
             "AND (:#{#param.loaiVthh} IS NULL OR HD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
             "AND (:#{#param.soQdKq} IS NULL OR LOWER(HD.soQdKq) LIKE LOWER(CONCAT('%', :#{#param.soQdKq}, '%'))) " +
+            "AND (:#{#param.soQdPd} IS NULL OR LOWER(HD.soQdPd) LIKE LOWER(CONCAT('%', :#{#param.soQdPd}, '%'))) " +
             "AND (:#{#param.soQdNv} IS NULL OR LOWER(HD.soQdNv) LIKE LOWER(CONCAT('%', :#{#param.soQdNv}, '%'))) " +
             "AND (:#{#param.trangThai} IS NULL OR HD.trangThai = :#{#param.trangThai}) " +
             "ORDER BY HD.ngaySua DESC, HD.ngayTao DESC, HD.id DESC")
