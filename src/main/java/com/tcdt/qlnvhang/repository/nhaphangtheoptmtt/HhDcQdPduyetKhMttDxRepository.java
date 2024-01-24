@@ -12,4 +12,6 @@ public interface HhDcQdPduyetKhMttDxRepository extends JpaRepository<HhDcQdPduye
     List<HhDcQdPduyetKhmttDx> findAllByIdDcHdr(Long idDcHdr);
 
     List<HhDcQdPduyetKhmttDx> findAllByIdDcHdrIn(List<Long> ids);
+
+    void deleteAllByIdQdHdr(Long idQdHdr);
 }
