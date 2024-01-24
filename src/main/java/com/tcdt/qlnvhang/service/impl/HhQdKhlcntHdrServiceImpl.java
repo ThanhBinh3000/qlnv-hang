@@ -444,6 +444,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 
 	@Override
 	public HhQdKhlcntHdr detail(String ids) throws Exception {
+		// chốt điều chỉnh giá
 		if (StringUtils.isEmpty(ids)) {
 			throw new UnsupportedOperationException("Không tồn tại bản ghi");
 		}
@@ -470,6 +471,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 			objReq.setCloaiVthh(qOptional.get().getCloaiVthh());
 			objReq.setMaCucs(qOptional.get().getChildren().stream().map(HhQdKhlcntDtl::getMaDvi).collect(Collectors.toList()));
 			objReq.setIdQuyetDinhCanDieuChinh(qOptional.get().getId());
+			objReq.setType("NHAP_DAU_THAU");
 			QthtChotGiaInfoRes qthtChotGiaInfoRes = qthtChotGiaNhapXuatService.thongTinChotDieuChinhGia(objReq);
 			qOptional.get().setQthtChotGiaInfoRes(qthtChotGiaInfoRes);
 		}

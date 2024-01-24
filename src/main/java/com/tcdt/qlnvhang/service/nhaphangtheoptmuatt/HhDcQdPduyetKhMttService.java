@@ -133,12 +133,14 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         }
         for (HhDcQdPduyetKhmttDxReq listDx :objReq.getHhDcQdPduyetKhmttDxList()){
             HhDcQdPduyetKhmttDx dx = ObjectMapperUtils.map(listDx, HhDcQdPduyetKhmttDx.class);
+            dx.setId(null);
             dx.setIdDxHdr(listDx.getIdDxHdr());
             dx.setIdQdHdr(listDx.getIdQdHdr());
             dx.setIdDcHdr(data.getId());
             HhDcQdPduyetKhmttDx save = hhDcQdPduyetKhMttDxRepository.save(dx);
             for (HhDcQdPduyetKhmttSlddReq listSLDD : listDx.getChildren()){
                 HhDcQdPduyetKhmttSldd slDd =ObjectMapperUtils.map(listSLDD, HhDcQdPduyetKhmttSldd.class);
+                slDd.setId(null);
                 slDd.setIdDxKhmtt(save.getIdDxHdr());
                 slDd.setIdDcKhmtt(save.getId());
                 slDd.setMaDiemKho(userInfo.getDvql());
@@ -166,11 +168,14 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
     @Transactional
     public HhDcQdPduyetKhmttHdr update(HhDcQdPduyetKhmttHdrReq objReq) throws Exception{
         UserInfo userInfo = SecurityContextService.getUser();
+        Optional<HhDcQdPduyetKhmttHdr> soQdDc = Optional.empty();
         if (userInfo == null){
             throw new Exception(" Bar request.");
         }
         Optional<HhDcQdPduyetKhmttHdr> optional = hhDcQdPduyetKhMttRepository.findById(objReq.getId());
-        Optional<HhDcQdPduyetKhmttHdr> soQdDc = hhDcQdPduyetKhMttRepository.findBySoToTrinh(objReq.getSoToTrinh());
+        if(objReq.getSoToTrinh() != null){
+            soQdDc = hhDcQdPduyetKhMttRepository.findBySoToTrinh(objReq.getSoToTrinh());
+        }
         if(soQdDc.isPresent()){
             if (optional.isPresent()){
                 if (!soQdDc.get().getId().equals(objReq.getId())){
@@ -506,14 +511,17 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
                         retainedList.add(sldd);
                     }
                 }
-                child.setChildren(retainedList);
+                if(retainedList.size() > 0){
+                    child.setChildren(retainedList);
+                }
             }
         }
 
         List<HhDcQdPduyetKhmttHdr> listDcPd = hhDcQdPduyetKhMttRepository.searchDsLastest();
         for (HhDcQdPduyetKhmttHdr hhDcQdPduyetKhmttHdr : listDcPd) {
-            hhDcQdPduyetKhmttHdr.setTenCloaiVthh(listDanhMucHangHoa.get(hhDcQdPduyetKhmttHdr.getCloaiVthh()));
-            hhDcQdPduyetKhmttHdr.setTenLoaiVthh(listDanhMucHangHoa.get(hhDcQdPduyetKhmttHdr.getLoaiVthh()));
+            hhDcQdPduyetKhmttHdr = this.detail(hhDcQdPduyetKhmttHdr.getId().toString());
+//            hhDcQdPduyetKhmttHdr.setTenCloaiVthh(listDanhMucHangHoa.get(hhDcQdPduyetKhmttHdr.getCloaiVthh()));
+//            hhDcQdPduyetKhmttHdr.setTenLoaiVthh(listDanhMucHangHoa.get(hhDcQdPduyetKhmttHdr.getLoaiVthh()));
             for (HhDcQdPduyetKhmttDx hhDcQdPduyetKhmttDx : hhDcQdPduyetKhmttHdr.getHhDcQdPduyetKhmttDxList()) {
                 List<HhDcQdPduyetKhmttSldd> retainedList = new ArrayList<>();
                 HopDongMttHdrReq hopDongreq = new HopDongMttHdrReq();
@@ -524,6 +532,9 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
                     if(soLuongDaKyHopDongDTO.isPresent() && soLuongDaKyHopDongDTO.get().getSoLuong().compareTo(child.getTongSoLuong()) <= 0 ){
                         retainedList.add(child);
                     }
+                }
+                if(retainedList.size() > 0){
+                    hhDcQdPduyetKhmttDx.setChildren(retainedList);
                 }
             }
         }

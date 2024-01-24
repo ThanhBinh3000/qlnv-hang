@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.repository.nhaphangtheoptmtt;
 
 import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttHdrSearchReq;
+import com.tcdt.qlnvhang.table.HhDchinhDxKhLcntHdr;
 import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -82,4 +83,5 @@ public interface HhQdPheduyetKhMttHdrRepository extends JpaRepository<HhQdPheduy
     )
     List<HhQdPheduyetKhMttHdr> searchDsTaoQdDc(@Param("param") HhQdPheduyetKhMttHdrSearchReq param);
 
+    Optional<HhDchinhDxKhLcntHdr> findByIdGocAndLastest(Long idQuyetDinhCanDieuChinh, boolean lastest);
 }

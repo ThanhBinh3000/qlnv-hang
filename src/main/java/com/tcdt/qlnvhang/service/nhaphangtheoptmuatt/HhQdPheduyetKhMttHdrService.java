@@ -1,16 +1,20 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtl;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.FileDinhKemRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kehoachlcnt.HhSlNhapHangRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.*;
 import com.tcdt.qlnvhang.request.*;
+import com.tcdt.qlnvhang.request.chotdulieu.QthtChotGiaInfoReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhaptructiep.HhQdPheduyetKhMttPreview;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhChiTietTTinChaoGiaReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhQdPdKhMttSlddDtlReq;
 import com.tcdt.qlnvhang.request.object.HhSlNhapHangReq;
+import com.tcdt.qlnvhang.response.chotdulieu.QthtChotGiaInfoRes;
 import com.tcdt.qlnvhang.service.HhSlNhapHangService;
 import com.tcdt.qlnvhang.service.UserService;
+import com.tcdt.qlnvhang.service.chotdulieu.QthtChotGiaNhapXuatService;
 import com.tcdt.qlnvhang.service.feign.KeHoachService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -93,7 +97,8 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
     private HhQdPduyetKqcgRepository hhQdPduyetKqcgRepository;
     @Autowired
     private HhQdGiaoNvNhapHangService hhQdGiaoNvNhapHangService;
-
+    @Autowired
+    private QthtChotGiaNhapXuatService qthtChotGiaNhapXuatService;
 
     @Autowired
     private KeHoachService keHoachService;
@@ -272,6 +277,7 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
 
 
     public HhQdPheduyetKhMttHdr detail(Long ids) throws Exception{
+        // chốt điều chỉnh giá
         if (StringUtils.isEmpty(ids))
             throw new UnsupportedOperationException("Không tồn tại bản ghi");
         HhQdGiaoNvNhapHang hhQdGiaoNvNhapHang = new HhQdGiaoNvNhapHang();
@@ -321,6 +327,20 @@ public class HhQdPheduyetKhMttHdrService extends BaseServiceImpl {
         }
         data.setSoLanDieuChinh(Long.valueOf(hhDcQdPduyetKhMttRepository.findAllByIdQdGocOrderByIdDesc(data.getId()).size()));
         data.setChildren(dxList.stream().sorted(Comparator.comparing(HhQdPheduyetKhMttDx::getMaDvi)).collect(Collectors.toList()));
+
+        if(qOptional.get().getTrangThai().equals("29")){
+            QthtChotGiaInfoReq objReq = new QthtChotGiaInfoReq();
+            objReq.setLoaiGia("LG03");
+            objReq.setNam(qOptional.get().getNamKh());
+            objReq.setLoaiVthh(qOptional.get().getLoaiVthh());
+            objReq.setCloaiVthh(qOptional.get().getCloaiVthh());
+            objReq.setMaCucs(qOptional.get().getChildren().stream().map(HhQdPheduyetKhMttDx::getMaDvi).collect(Collectors.toList()));
+            objReq.setIdQuyetDinhCanDieuChinh(qOptional.get().getId());
+            objReq.setType("NHAP_TRUC_TIEP");
+            QthtChotGiaInfoRes qthtChotGiaInfoRes = qthtChotGiaNhapXuatService.thongTinChotDieuChinhGia(objReq);
+            qOptional.get().setQthtChotGiaInfoRes(qthtChotGiaInfoRes);
+        }
+
         return data;
     }
 

@@ -78,10 +78,18 @@ public class XhXkVtBhBaoCaoKdmService extends BaseServiceImpl {
     req.setDvql(currentUser.getDvql());
     Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
     Page<XhXkVtBhBaoCaoKdm> search = xhXkVtBhBaoCaoKdmRepository.search(req, pageable);
-//        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
-//        Map<String, String> mapVthh = getListDanhMucHangHoa();
-    search.getContent().forEach(s -> {
-      s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
+        Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+        Map<String, String> mapVthh = getListDanhMucHangHoa();
+    search.getContent().forEach(f -> {
+      f.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(f.getTrangThai()));
+      List<XhXkVtBhPhieuKdclHdr> listPhieuKdcl = xhXkVtBhPhieuKdclRepository.findAllByIdBaoCaoKdm(f.getId());
+      listPhieuKdcl.forEach(s -> {
+        s.setTenTrangThai(TrangThaiAllEnum.getLabelById(s.getTrangThai()));
+        s.setMapVthh(mapVthh);
+        s.setMapDmucDvi(mapDmucDvi);
+      });
+      f.setMapDmucDvi(mapDmucDvi);
+      f.setPhieuKdcl(listPhieuKdcl);
     });
     return search;
   }

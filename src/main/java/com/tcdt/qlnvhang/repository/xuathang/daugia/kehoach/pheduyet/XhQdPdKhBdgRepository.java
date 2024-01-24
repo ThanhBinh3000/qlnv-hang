@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.repository.xuathang.daugia.kehoach.pheduyet;
 
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdg;
 import com.tcdt.qlnvhang.request.xuathang.daugia.kehoachbdg.pheduyet.XhQdPdKhBdgReq;
+import com.tcdt.qlnvhang.table.HhDchinhDxKhLcntHdr;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface XhQdPdKhBdgRepository extends JpaRepository<XhQdPdKhBdg, Long> {
@@ -47,4 +49,6 @@ public interface XhQdPdKhBdgRepository extends JpaRepository<XhQdPdKhBdg, Long> 
     boolean existsBySoQdDcAndIdNot(String soQdDc, Long id);
 
     long countBySoQdPdAndType(String soQdPd, String type);
+
+    Optional<XhQdPdKhBdg> findByIdGocAndLastest(Long idQuyetDinhCanDieuChinh, boolean lastest);
 }

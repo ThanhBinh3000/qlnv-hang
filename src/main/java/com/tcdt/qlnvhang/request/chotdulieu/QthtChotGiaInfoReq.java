@@ -12,4 +12,5 @@ public class QthtChotGiaInfoReq {
     private String loaiVthh;
     private String cloaiVthh;
     private String loaiGia;
+    private String type; // NHAP_DAU_THAU, NHAP_TRUC_TIEP, XUAT_DAU_GIA
 }
