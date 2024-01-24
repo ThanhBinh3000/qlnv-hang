@@ -162,6 +162,8 @@ public class XhDxKhBanDauGiaServiceImpl extends BaseServiceImpl {
             item.setMapDmucDvi(mapDmucDvi);
             item.setTrangThai(item.getTrangThai());
             item.setChildren(detailList);
+
+
         }
         return resultList;
     }

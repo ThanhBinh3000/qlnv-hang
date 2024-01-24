@@ -3,6 +3,7 @@ package com.tcdt.qlnvhang.table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tcdt.qlnvhang.entities.TrangThaiBaseEntity;
+import com.tcdt.qlnvhang.response.chotdulieu.QthtChotGiaInfoRes;
 import com.tcdt.qlnvhang.util.Contains;
 import lombok.*;
 
@@ -90,5 +91,6 @@ public class HhQdPheduyetKhMttHdr extends TrangThaiBaseEntity implements Seriali
 
     @Transient
     private Long soLanDieuChinh;
-
+    @Transient
+    private QthtChotGiaInfoRes qthtChotGiaInfoRes;
 }
