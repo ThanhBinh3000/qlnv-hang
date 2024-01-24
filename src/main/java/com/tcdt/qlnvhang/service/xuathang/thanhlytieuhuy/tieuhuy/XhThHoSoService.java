@@ -12,6 +12,7 @@ import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThDanhSachRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoHdrRepository;
+import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThTongHopHdrRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -25,6 +26,7 @@ import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThDanhSachHdr;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoDtl;
 import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoHdr;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThTongHopHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -59,6 +61,9 @@ public class XhThHoSoService extends BaseServiceImpl {
 
   @Autowired
   private XhThHoSoDtlRepository dtlRepository;
+
+  @Autowired
+  private XhThTongHopHdrRepository xhThTongHopHdrRepository;
 
   @Autowired
   private XhThDanhSachRepository xhThDanhSachRepository;
@@ -105,7 +110,13 @@ public class XhThHoSoService extends BaseServiceImpl {
     created.setFileCanCu(canCu);
     List<XhThHoSoDtl> dtlList = this.saveDtl(req, created.getId());
     created.setChildren(dtlList);
-
+    if(created.getIdDanhSach() != null){
+      Optional<XhThTongHopHdr> byId = xhThTongHopHdrRepository.findById(created.getIdDanhSach());
+      if(byId.isPresent()){
+        byId.get().setTrangThaiTh(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
+        xhThTongHopHdrRepository.save(byId.get());
+      }
+    }
     return created;
   }
 
@@ -188,6 +199,13 @@ public class XhThHoSoService extends BaseServiceImpl {
 
     List<XhThHoSoDtl> dtlList = this.saveDtl(req, created.getId());
     created.setChildren(dtlList);
+    if(created.getIdDanhSach() != null){
+      Optional<XhThTongHopHdr> byId = xhThTongHopHdrRepository.findById(created.getIdDanhSach());
+      if(byId.isPresent()){
+        byId.get().setTrangThaiTh(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
+        xhThTongHopHdrRepository.save(byId.get());
+      }
+    }
     return created;
   }
 
