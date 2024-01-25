@@ -94,7 +94,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
                 List<XhQdPdKhBttDtl> listDtl = xhQdPdKhBttDtlRepository.findAllByIdHdr(data.getId());
                 data.setChildren(listDtl != null && !listDtl.isEmpty() ? listDtl : Collections.emptyList());
 
-                if(data.getTrangThai().equals("29")){
+                if(data.getTrangThai().equals("29") && data.getType().equals("QDDC")){
                     List<XhQdPdKhBttDtl> detailList = xhQdPdKhBttDtlRepository.findAllByIdHdr(data.getId());
                     QthtChotGiaInfoReq objReq = new QthtChotGiaInfoReq();
                     objReq.setLoaiGia("LG04");
@@ -329,7 +329,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
             item.setFileDinhKemDc(fileDinhKemDc);
             item.setChildren(detailList);
 
-            if(item.getTrangThai().equals("29")){
+            if(item.getTrangThai().equals("29") && item.getType().equals("QDDC")){
                 QthtChotGiaInfoReq objReq = new QthtChotGiaInfoReq();
                 objReq.setLoaiGia("LG04");
                 objReq.setNam(item.getNamKh());
