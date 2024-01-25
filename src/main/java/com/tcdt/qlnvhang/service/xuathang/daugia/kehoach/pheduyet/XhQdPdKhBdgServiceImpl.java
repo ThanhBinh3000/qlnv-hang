@@ -93,7 +93,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
                 data.setTrangThai(data.getTrangThai());
                 List<XhQdPdKhBdgDtl> listDtl = xhQdPdKhBdgDtlRepository.findAllByIdHdr(data.getId());
                 data.setChildren(listDtl != null && !listDtl.isEmpty() ? listDtl : Collections.emptyList());
-                if(data.getTrangThai().equals("29") && data.getType().equals("QDDC")){
+                if (data.getTrangThai().equals(Contains.BAN_HANH) && data.getType().equals("QDDC")) {
                     List<XhQdPdKhBdgDtl> detailList = xhQdPdKhBdgDtlRepository.findAllByIdHdr(data.getId());
                     QthtChotGiaInfoReq objReq = new QthtChotGiaInfoReq();
                     objReq.setLoaiGia("LG04");
@@ -297,7 +297,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
             item.setFileDinhKem(fileDinhKem);
             item.setFileDinhKemDc(fileDinhKemDc);
             item.setChildren(detailList);
-            if(item.getTrangThai().equals("29") && item.getType().equals("QDDC")){
+            if (item.getTrangThai().equals(Contains.BAN_HANH)) {
                 QthtChotGiaInfoReq objReq = new QthtChotGiaInfoReq();
                 objReq.setLoaiGia("LG04");
                 objReq.setNam(item.getNam());

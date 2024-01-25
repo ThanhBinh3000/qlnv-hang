@@ -214,12 +214,11 @@ public class QthtChotGiaNhapXuatServiceImpl extends BaseServiceImpl implements Q
             }
         }
         if("XUAT_DAU_GIA".equals(objReq.getType())){
-            Optional<XhQdPdKhBdg> hhDchinhDxKhLcntHdr = xhQdPdKhBdgRepository.findByIdQdPdAndLastest(objReq.getIdQuyetDinhCanDieuChinh(), true);
-            if(hhDchinhDxKhLcntHdr.isPresent()){
+            Optional<XhQdPdKhBdg> xhQdPdKhBdg = xhQdPdKhBdgRepository.findByIdQdPdAndLastest(objReq.getIdQuyetDinhCanDieuChinh(), true);
+            if(xhQdPdKhBdg.isPresent()){
                 QthtDieuChinhKHLCNT qthtDieuChinhKHLCNT = new QthtDieuChinhKHLCNT();
-                qthtDieuChinhKHLCNT.setSoQuyetDinhDieuKHLCNT(hhDchinhDxKhLcntHdr.get().getSoQdDc());
-                LocalDate localDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(hhDchinhDxKhLcntHdr.get().getNgayKyQd()) );
-                qthtDieuChinhKHLCNT.setNgayQuyetDinhDieuKHLCNT(localDate);
+                qthtDieuChinhKHLCNT.setSoQuyetDinhDieuKHLCNT(xhQdPdKhBdg.get().getSoQdDc());
+                qthtDieuChinhKHLCNT.setNgayQuyetDinhDieuKHLCNT(xhQdPdKhBdg.get().getNgayKyDc());
                 res.setQthtDieuChinhKHLCNT(qthtDieuChinhKHLCNT);
             }
         }
@@ -228,8 +227,7 @@ public class QthtChotGiaNhapXuatServiceImpl extends BaseServiceImpl implements Q
             if(xhQdPdKhBttHdr.isPresent()){
                 QthtDieuChinhKHLCNT qthtDieuChinhKHLCNT = new QthtDieuChinhKHLCNT();
                 qthtDieuChinhKHLCNT.setSoQuyetDinhDieuKHLCNT(xhQdPdKhBttHdr.get().getSoQdDc());
-                LocalDate localDate = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(xhQdPdKhBttHdr.get().getNgayKyQd()) );
-                qthtDieuChinhKHLCNT.setNgayQuyetDinhDieuKHLCNT(localDate);
+                qthtDieuChinhKHLCNT.setNgayQuyetDinhDieuKHLCNT(xhQdPdKhBttHdr.get().getNgayKyDc());
                 res.setQthtDieuChinhKHLCNT(qthtDieuChinhKHLCNT);
             }
         }
