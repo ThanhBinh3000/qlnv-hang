@@ -1206,6 +1206,20 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				}
 			}
 		}
+		for(HhQdKhlcntHdr qd:data.getContent()){
+			if(qd.getTrangThai().equals("29")){
+				QthtChotGiaInfoReq objReq = new QthtChotGiaInfoReq();
+				objReq.setLoaiGia("LG03");
+				objReq.setNam(qd.getNamKhoach());
+				objReq.setLoaiVthh(qd.getLoaiVthh());
+				objReq.setCloaiVthh(qd.getCloaiVthh());
+				objReq.setMaCucs(qd.getChildren().stream().map(HhQdKhlcntDtl::getMaDvi).collect(Collectors.toList()));
+				objReq.setIdQuyetDinhCanDieuChinh(qd.getId());
+				objReq.setType("NHAP_DAU_THAU");
+				QthtChotGiaInfoRes qthtChotGiaInfoRes = qthtChotGiaNhapXuatService.thongTinChotDieuChinhGia(objReq);
+				qd.setQthtChotGiaInfoRes(qthtChotGiaInfoRes);
+			}
+		}
 		return data;
 	}
 
