@@ -119,6 +119,13 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
             newData.setTrangThai(Contains.DA_LAP);
             long occurrenceCount = xhQdPdKhBttHdrRepository.countBySoQdPdAndType(newData.getSoQdPd(), newData.getType());
             newData.setLanDieuChinh(Integer.valueOf((int) (occurrenceCount + 1)));
+            int uniqueMaDviTsanCount = request.getChildren().stream()
+                    .flatMap(item -> item.getChildren().stream())
+                    .flatMap(child -> child.getChildren().stream())
+                    .map(XhQdPdKhBttDviDtlReq::getMaDviTsan)
+                    .collect(Collectors.toSet())
+                    .size();
+            newData.setSlDviTsan(uniqueMaDviTsanCount);
         }
         XhQdPdKhBttHdr createdRecord = xhQdPdKhBttHdrRepository.save(newData);
         if (!DataUtils.isNullOrEmpty(request.getCanCuPhapLy())) {
@@ -181,6 +188,15 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
                 xhThopDxKhBttRepository.save(summary);
             });
         }
+        if ("QDDC".equals(updatedData.getType())) {
+            int uniqueMaDviTsanCount = request.getChildren().stream()
+                    .flatMap(item -> item.getChildren().stream())
+                    .flatMap(child -> child.getChildren().stream())
+                    .map(XhQdPdKhBttDviDtlReq::getMaDviTsan)
+                    .collect(Collectors.toSet())
+                    .size();
+            updatedData.setSlDviTsan(uniqueMaDviTsanCount);
+        }
         this.saveDetail(request, updatedData.getId(), true);
         return updatedData;
     }
@@ -197,6 +213,16 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
             detail.setTrangThai(Contains.CHUA_THUC_HIEN);
             detail.setTrangThaiHd(Contains.CHUA_THUC_HIEN);
             detail.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
+            if ("QDDC".equals(request.getType())) {
+                detail.setPthucBanTrucTiep(null);
+                detail.setNgayNhanCgia(null);
+                detail.setIdQdKq(null);
+                detail.setSoQdKq(null);
+                detail.setDiaDiemChaoGia(null);
+                detail.setGhiChuChaoGia(null);
+                detail.setIdQdNv(null);
+                detail.setSoQdNv(null);
+            }
             xhQdPdKhBttDtlRepository.save(detail);
             xhQdPdKhBttDviRepository.deleteAllByIdDtl(isCheckRequired ? detailRequest.getId() : null);
             for (XhQdPdKhBttDviReq donViReq : detailRequest.getChildren()) {
