@@ -21,10 +21,10 @@ public interface NhHoSoKyThuatRepository extends BaseRepository<NhHoSoKyThuat, L
     void deleteByIdIn(Collection<Long> ids);
 
     @Query(
-            value = "SELECT * FROM NH_HO_SO_KY_THUAT  HS ",
-            countQuery = "SELECT COUNT(1) FROM NH_HO_SO_KY_THUAT  HS",
+            value = "SELECT * FROM NH_HO_SO_KY_THUAT  HS  WHERE :maDvi LIKE CONCAT(HS.MA_DVI, '%')",
+            countQuery = "SELECT COUNT(1) FROM NH_HO_SO_KY_THUAT  HS WHERE :maDvi LIKE CONCAT(HS.MA_DVI, '%')",
             nativeQuery = true)
-    Page<NhHoSoKyThuat> selectPage(Pageable pageable);
+    Page<NhHoSoKyThuat> selectPage(String maDvi, Pageable pageable);
 
     NhHoSoKyThuat findBySoBbLayMau(String soBienBanLayMau);
     NhHoSoKyThuat findByIdBbLayMau(Long id);
