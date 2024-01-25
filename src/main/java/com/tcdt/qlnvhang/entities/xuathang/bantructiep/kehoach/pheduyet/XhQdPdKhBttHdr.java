@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
+import com.tcdt.qlnvhang.response.chotdulieu.QthtChotGiaInfoRes;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.util.DataUtils;
 import lombok.Data;
@@ -86,6 +87,8 @@ public class XhQdPdKhBttHdr implements Serializable {
     private BigDecimal tongTienCuc;
     @Transient
     private String donViTinh;
+    @Transient
+    private QthtChotGiaInfoRes qthtChotGiaInfoRes;
 
     @JsonIgnore
     @Transient

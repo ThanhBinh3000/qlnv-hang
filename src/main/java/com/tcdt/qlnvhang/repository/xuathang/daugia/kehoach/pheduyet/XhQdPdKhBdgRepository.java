@@ -51,4 +51,6 @@ public interface XhQdPdKhBdgRepository extends JpaRepository<XhQdPdKhBdg, Long> 
     long countBySoQdPdAndType(String soQdPd, String type);
 
     Optional<XhQdPdKhBdg> findByIdGocAndLastest(Long idQuyetDinhCanDieuChinh, boolean lastest);
+
+    Optional<XhQdPdKhBdg> findByIdQdPdAndLastest(Long idQuyetDinhCanDieuChinh, boolean b);
 }

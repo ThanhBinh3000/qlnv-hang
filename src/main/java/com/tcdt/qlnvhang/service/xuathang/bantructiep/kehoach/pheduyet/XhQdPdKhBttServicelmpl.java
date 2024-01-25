@@ -7,6 +7,7 @@ import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKh
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdg;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgDtl;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtlRepository;
@@ -16,11 +17,14 @@ import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPd
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.chotdulieu.QthtChotGiaInfoReq;
 import com.tcdt.qlnvhang.request.getGiaDuocDuyet;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviDtlReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdrReq;
+import com.tcdt.qlnvhang.response.chotdulieu.QthtChotGiaInfoRes;
+import com.tcdt.qlnvhang.service.chotdulieu.QthtChotGiaNhapXuatService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.service.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBttServiceImpl;
@@ -68,6 +72,8 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
     private XhTcTtinBttServiceImpl xhTcTtinBttServiceImpl;
     @Autowired
     private FileDinhKemService fileDinhKemService;
+    @Autowired
+    private QthtChotGiaNhapXuatService qthtChotGiaNhapXuatService;
 
     public Page<XhQdPdKhBttHdr> searchPage(CustomUserDetails currentUser, XhQdPdKhBttHdrReq request) throws Exception {
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
@@ -87,6 +93,21 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
                 data.setTrangThai(data.getTrangThai());
                 List<XhQdPdKhBttDtl> listDtl = xhQdPdKhBttDtlRepository.findAllByIdHdr(data.getId());
                 data.setChildren(listDtl != null && !listDtl.isEmpty() ? listDtl : Collections.emptyList());
+
+                if(data.getTrangThai().equals("29") && data.getType().equals("QDDC")){
+                    List<XhQdPdKhBttDtl> detailList = xhQdPdKhBttDtlRepository.findAllByIdHdr(data.getId());
+                    QthtChotGiaInfoReq objReq = new QthtChotGiaInfoReq();
+                    objReq.setLoaiGia("LG04");
+                    objReq.setNam(data.getNamKh());
+                    objReq.setLoaiVthh(data.getLoaiVthh());
+                    objReq.setCloaiVthh(data.getCloaiVthh());
+                    objReq.setMaCucs(detailList.stream().map(XhQdPdKhBttDtl::getMaDvi).collect(Collectors.toList()));
+                    objReq.setIdQuyetDinhCanDieuChinh(data.getId());
+                    objReq.setType("XUAT_TRUC_TIEP");
+                    QthtChotGiaInfoRes qthtChotGiaInfoRes = qthtChotGiaNhapXuatService.thongTinChotDieuChinhGia(objReq);
+                    data.setQthtChotGiaInfoRes(qthtChotGiaInfoRes);
+                }
+
             } catch (Exception exception) {
                 throw new RuntimeException(exception);
             }
@@ -262,6 +283,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
     }
 
     public List<XhQdPdKhBttHdr> detail(List<Long> ids) throws Exception {
+        // chốt điều chỉnh giá
         if (DataUtils.isNullOrEmpty(ids)) {
             throw new Exception("Tham số không hợp lệ.");
         }
@@ -306,6 +328,20 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
             item.setFileDinhKem(fileDinhKem);
             item.setFileDinhKemDc(fileDinhKemDc);
             item.setChildren(detailList);
+
+            if(item.getTrangThai().equals("29") && item.getType().equals("QDDC")){
+                QthtChotGiaInfoReq objReq = new QthtChotGiaInfoReq();
+                objReq.setLoaiGia("LG04");
+                objReq.setNam(item.getNamKh());
+                objReq.setLoaiVthh(item.getLoaiVthh());
+                objReq.setCloaiVthh(item.getCloaiVthh());
+                objReq.setMaCucs(item.getChildren().stream().map(XhQdPdKhBttDtl::getMaDvi).collect(Collectors.toList()));
+                objReq.setIdQuyetDinhCanDieuChinh(item.getId());
+                objReq.setType("XUAT_TRUC_TIEP");
+                QthtChotGiaInfoRes qthtChotGiaInfoRes = qthtChotGiaNhapXuatService.thongTinChotDieuChinhGia(objReq);
+                item.setQthtChotGiaInfoRes(qthtChotGiaInfoRes);
+            }
+
         }
         return resultList;
     }
