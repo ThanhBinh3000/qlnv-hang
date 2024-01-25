@@ -24,6 +24,7 @@ import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangCtR
 import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangReq;
 import com.tcdt.qlnvhang.request.object.vattu.hosokythuat.NhHoSoKyThuatCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.hosokythuat.NhHoSoKyThuatReq;
+import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -84,9 +85,13 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
     private UserInfoRepository userInfoRepository;
 
     @Override
-    public Page<NhHoSoKyThuat> searchPage(NhHoSoKyThuatReq objReq) {
+    public Page<NhHoSoKyThuat> searchPage(NhHoSoKyThuatReq objReq) throws Exception {
+        UserInfo userInfo = SecurityContextService.getUser();
+        if (userInfo == null) {
+            throw new Exception("Bad request.");
+        }
         Pageable pageable = PageRequest.of(objReq.getPaggingReq().getPage(),objReq.getPaggingReq().getLimit(), Sort.by("id").descending());
-        Page<NhHoSoKyThuat> nhHoSoKyThuatPage = nhHoSoKyThuatRepository.selectPage(pageable);
+        Page<NhHoSoKyThuat> nhHoSoKyThuatPage = nhHoSoKyThuatRepository.selectPage(userInfo.getDvql(), pageable);
         Map<String, String> listDanhMucDvi = getListDanhMucDvi(null, null, "01");
         nhHoSoKyThuatPage.getContent().forEach(i -> {
             Optional<BienBanLayMau> firstBySoBienBan = bienBanLayMauRepository.findFirstBySoBienBan(i.getSoBbLayMau());
