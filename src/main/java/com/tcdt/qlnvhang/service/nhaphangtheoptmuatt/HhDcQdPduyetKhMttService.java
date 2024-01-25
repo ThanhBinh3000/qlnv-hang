@@ -10,14 +10,17 @@ import com.tcdt.qlnvhang.request.HhQdPheduyetKhMttHdrSearchReq;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
+import com.tcdt.qlnvhang.request.chotdulieu.QthtChotGiaInfoReq;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.request.nhaphangtheoptt.hopdong.hopdongphuluc.HopDongMttHdrReq;
 import com.tcdt.qlnvhang.request.object.HhSlNhapHangReq;
 import com.tcdt.qlnvhang.response.DcQdPduyetKhMttDTO;
 import com.tcdt.qlnvhang.response.HopDongMttHdrDTO;
 import com.tcdt.qlnvhang.response.SoLuongDaKyHopDongDTO;
+import com.tcdt.qlnvhang.response.chotdulieu.QthtChotGiaInfoRes;
 import com.tcdt.qlnvhang.service.HhSlNhapHangService;
 import com.tcdt.qlnvhang.service.SecurityContextService;
+import com.tcdt.qlnvhang.service.chotdulieu.QthtChotGiaNhapXuatService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.*;
@@ -79,7 +82,8 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
 
     @Autowired
     FileDinhKemService fileDinhKemService;
-
+    @Autowired
+    private QthtChotGiaNhapXuatService qthtChotGiaNhapXuatService;
 
 
     public Page<HhDcQdPduyetKhmttHdr> searchPage(SearchHhDcQdPduyetKhMttReq objReq) throws Exception{
@@ -541,6 +545,21 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
             }
         }
         List<DcQdPduyetKhMttDTO> result = mergeLists(listQdPd, listDcPd);
+        for(DcQdPduyetKhMttDTO data: result){
+            if(data.getTrangThai().equals("29")){
+                List<HhQdPheduyetKhMttDx> qdHdr = hhQdPheduyetKhMttDxRepository.findAllByIdQdHdr(data.getId());
+                QthtChotGiaInfoReq objReq = new QthtChotGiaInfoReq();
+                objReq.setLoaiGia("LG03");
+                objReq.setNam(data.getNamKh());
+                objReq.setLoaiVthh(data.getLoaiVthh());
+                objReq.setCloaiVthh(data.getCloaiVthh());
+                objReq.setMaCucs(qdHdr.stream().map(HhQdPheduyetKhMttDx::getMaDvi).collect(Collectors.toList()));
+                objReq.setIdQuyetDinhCanDieuChinh(data.getId());
+                objReq.setType("NHAP_TRUC_TIEP");
+                QthtChotGiaInfoRes qthtChotGiaInfoRes = qthtChotGiaNhapXuatService.thongTinChotDieuChinhGia(objReq);
+                data.setQthtChotGiaInfoRes(qthtChotGiaInfoRes);
+            }
+        }
         return result;
     }
 
