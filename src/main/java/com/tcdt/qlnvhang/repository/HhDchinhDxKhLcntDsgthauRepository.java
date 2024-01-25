@@ -38,8 +38,8 @@ public interface HhDchinhDxKhLcntDsgthauRepository extends CrudRepository<HhDchi
             " WHERE 1 = 1 " +
             " AND (:cloaiVthh IS NULL OR dc.CLOAI_VTHH = :cloaiVthh)" +
             " AND (:loaiVthh IS NULL OR dc.LOAI_VTHH = :loaiVthh)" +
-            " AND (:namKh IS NULL OR hdr.NAM_KHOACH = :namKh)" +
-            " AND dc.TRANG_THAI_DT IN ('41', '36')"
+            " AND (:namKh IS NULL OR hdr.NAM = :namKh)" +
+            " AND dc.TRANG_THAI_DT IN ('41', '36', '84')"
             , nativeQuery = true)
     List<HhDchinhDxKhLcntDsgthau> danhSachGthauTruotVt (String cloaiVthh, String loaiVthh, Integer namKh);
 
