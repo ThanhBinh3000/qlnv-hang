@@ -82,7 +82,7 @@ public class DcQdPduyetKhMttDTO {
     private Long soLanDieuChinh;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayKyDc;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE)
     private Date ngayKyQdGoc;
     private String trichYeuDc;
     private Long idQdGoc;
