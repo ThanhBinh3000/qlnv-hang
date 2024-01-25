@@ -523,7 +523,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
             }
         }
 
-        List<HhDcQdPduyetKhmttHdr> listDcPd = hhDcQdPduyetKhMttRepository.searchDsLastest();
+        List<HhDcQdPduyetKhmttHdr> listDcPd = hhDcQdPduyetKhMttRepository.searchDsLastest(req.getNamKh());
         for (HhDcQdPduyetKhmttHdr hhDcQdPduyetKhmttHdr : listDcPd) {
             hhDcQdPduyetKhmttHdr = this.detail(hhDcQdPduyetKhmttHdr.getId().toString());
 //            hhDcQdPduyetKhmttHdr.setTenCloaiVthh(listDanhMucHangHoa.get(hhDcQdPduyetKhmttHdr.getCloaiVthh()));
@@ -578,6 +578,29 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
             dtoMap.put(item.getId(), dto);
         }
         List<DcQdPduyetKhMttDTO> result = new ArrayList<>(dtoMap.values());
+        return result;
+    }
+
+    public DcQdPduyetKhMttDTO findByIdFromDcDx(HhDcQdPduyetKhmttDxReq hhDcQdPduyetKhmttDxReq) throws Exception {
+        DcQdPduyetKhMttDTO result = new DcQdPduyetKhMttDTO();
+        Optional<HhDcQdPduyetKhmttHdr> hhDcQdPduyetKhmttHdr = this.hhDcQdPduyetKhMttRepository.findById(hhDcQdPduyetKhmttDxReq.getIdDcHdr());
+        if(!hhDcQdPduyetKhmttHdr.isPresent()){
+            throw new Exception("Bản ghi không tồn tại");
+        }
+        if(this.hhDcQdPduyetKhMttRepository.findById(hhDcQdPduyetKhmttHdr.get().getIdQdGoc()).isPresent()){
+            HhDcQdPduyetKhmttHdr dcHdt = this.detail(hhDcQdPduyetKhmttHdr.get().getIdQdGoc().toString());
+            if(dcHdt != null){
+                BeanUtils.copyProperties(dcHdt, result);
+                result.setType("DC_HDR");
+            }
+        }
+        if(this.hhQdPheduyetKhMttHdrRepository.findById(hhDcQdPduyetKhmttHdr.get().getIdQdGoc()).isPresent()){
+            HhQdPheduyetKhMttHdr qdHdr = this.hhQdPheduyetKhMttHdrService.detail(hhDcQdPduyetKhmttHdr.get().getIdQdGoc());
+            if(qdHdr != null){
+                BeanUtils.copyProperties(qdHdr, result);
+                result.setType("QD_HDR");
+            }
+        }
         return result;
     }
 

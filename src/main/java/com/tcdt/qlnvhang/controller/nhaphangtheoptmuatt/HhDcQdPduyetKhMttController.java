@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhBienBanNghiemThuReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.HhDcQdPduyetKhmttHdrReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhDcQdPduyetKhMttReq;
-import com.tcdt.qlnvhang.request.nhaphangtheoptt.SearchHhDcQdPduyetKhMttReqDTO;
+import com.tcdt.qlnvhang.request.nhaphangtheoptt.*;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.nhaphangtheoptmuatt.HhDcQdPduyetKhMttService;
 import com.tcdt.qlnvhang.util.PathContains;
@@ -200,6 +197,22 @@ public class HhDcQdPduyetKhMttController {
         BaseResponse resp = new BaseResponse();
         try {
             resp.setData(hhDcQdPduyetKhMttService.danhSachQdDc(objReq));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tra cứu: {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Tra cứu quyết định ", response = List.class)
+    @PostMapping(value=  PathContains.DC_QD_PD + PathContains.URL_CHI_TIET + "-dc-lan-dau", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BaseResponse> findByIdFromDcDx(@Valid @RequestBody HhDcQdPduyetKhmttDxReq objReq) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(hhDcQdPduyetKhMttService.findByIdFromDcDx(objReq));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
