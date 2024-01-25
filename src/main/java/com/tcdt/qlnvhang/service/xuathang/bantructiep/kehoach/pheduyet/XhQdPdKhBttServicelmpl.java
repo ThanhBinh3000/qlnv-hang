@@ -93,8 +93,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
                 data.setTrangThai(data.getTrangThai());
                 List<XhQdPdKhBttDtl> listDtl = xhQdPdKhBttDtlRepository.findAllByIdHdr(data.getId());
                 data.setChildren(listDtl != null && !listDtl.isEmpty() ? listDtl : Collections.emptyList());
-
-                if(data.getTrangThai().equals("29") && data.getType().equals("QDDC")){
+                if (data.getTrangThai().equals(Contains.BAN_HANH) && data.getType().equals("QDDC")) {
                     List<XhQdPdKhBttDtl> detailList = xhQdPdKhBttDtlRepository.findAllByIdHdr(data.getId());
                     QthtChotGiaInfoReq objReq = new QthtChotGiaInfoReq();
                     objReq.setLoaiGia("LG04");
@@ -328,8 +327,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
             item.setFileDinhKem(fileDinhKem);
             item.setFileDinhKemDc(fileDinhKemDc);
             item.setChildren(detailList);
-
-            if(item.getTrangThai().equals("29") && item.getType().equals("QDDC")){
+            if (item.getTrangThai().equals(Contains.BAN_HANH)) {
                 QthtChotGiaInfoReq objReq = new QthtChotGiaInfoReq();
                 objReq.setLoaiGia("LG04");
                 objReq.setNam(item.getNamKh());
@@ -341,7 +339,6 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
                 QthtChotGiaInfoRes qthtChotGiaInfoRes = qthtChotGiaNhapXuatService.thongTinChotDieuChinhGia(objReq);
                 item.setQthtChotGiaInfoRes(qthtChotGiaInfoRes);
             }
-
         }
         return resultList;
     }
