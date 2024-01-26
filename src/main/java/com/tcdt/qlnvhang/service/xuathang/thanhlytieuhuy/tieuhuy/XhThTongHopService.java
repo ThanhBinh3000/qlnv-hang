@@ -138,6 +138,7 @@ public class XhThTongHopService extends BaseServiceImpl {
       item.setIdTongHop(hdr.getId());
       item.setMaTongHop(hdr.getMaDanhSach());
       item.setNgayTongHop(LocalDate.now());
+      item.setKetQuaTieuHuy("Chưa thực hiện");
       XhThTongHopDtl dtl = new XhThTongHopDtl();
       dtl.setIdTongHop(hdr.getId());
       dtl.setIdDsHdr(item.getId());
