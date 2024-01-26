@@ -54,6 +54,7 @@ public class HhQdGiaoNvuNhapxuatHdrReq extends BaseRequest {
 	String tenGoiThau;
 
 	String donViTinh;
+	String dviCungCap;
 
 	Long soLuong;
 

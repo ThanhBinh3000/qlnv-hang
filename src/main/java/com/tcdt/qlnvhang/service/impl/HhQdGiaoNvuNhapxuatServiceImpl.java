@@ -149,7 +149,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 		NhQdGiaoNvuNhapxuatHdr dataMap = new NhQdGiaoNvuNhapxuatHdr();
 		BeanUtils.copyProperties(objReq, dataMap, "id");
 
-		dataMap.setNguoiTao(userInfo.getUsername());
+		dataMap.setNguoiTao(userInfo.getFullName());
 		dataMap.setNgayTao(getDateTimeNow());
 		dataMap.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
 		dataMap.setMaDvi(userInfo.getDvql());
@@ -389,8 +389,11 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			case Contains.CHODUYET_TP + Contains.DUTHAO:
 			case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
 			case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
-			case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
 				optional.get().setNguoiGuiDuyet(getUser().getFullName());
+				optional.get().setNgayGuiDuyet(getDateTimeNow());
+				break;
+			case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+				optional.get().setTenTruongPhong(getUser().getFullName());
 				optional.get().setNgayGuiDuyet(getDateTimeNow());
 				break;
 			case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
