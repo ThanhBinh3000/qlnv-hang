@@ -129,7 +129,6 @@ public class XhThTongHopService extends BaseServiceImpl {
     hdr.setNam(LocalDate.now().getYear());
     hdr.setMaDvi(userInfo.getDvql());
     hdr.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
-    hdr.setTrangThaiTh(NhapXuatHangTrangThaiEnum.CHUA_THUC_HIEN.getId());
     hdr.setId(Long.parseLong(req.getMaDanhSach().split("-")[1]));
     XhThTongHopHdr save = hdrRepository.save(hdr);
     saveFileDinhKem(req.getFileDinhKemReq(),save.getId(),XhThTongHopHdr.TABLE_NAME);

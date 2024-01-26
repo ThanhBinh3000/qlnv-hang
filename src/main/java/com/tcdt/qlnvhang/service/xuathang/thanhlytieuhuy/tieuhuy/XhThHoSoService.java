@@ -110,13 +110,6 @@ public class XhThHoSoService extends BaseServiceImpl {
     created.setFileCanCu(canCu);
     List<XhThHoSoDtl> dtlList = this.saveDtl(req, created.getId());
     created.setChildren(dtlList);
-    if(created.getIdDanhSach() != null){
-      Optional<XhThTongHopHdr> byId = xhThTongHopHdrRepository.findById(created.getIdDanhSach());
-      if(byId.isPresent()){
-        byId.get().setTrangThaiTh(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
-        xhThTongHopHdrRepository.save(byId.get());
-      }
-    }
     return created;
   }
 
@@ -199,13 +192,6 @@ public class XhThHoSoService extends BaseServiceImpl {
 
     List<XhThHoSoDtl> dtlList = this.saveDtl(req, created.getId());
     created.setChildren(dtlList);
-    if(created.getIdDanhSach() != null){
-      Optional<XhThTongHopHdr> byId = xhThTongHopHdrRepository.findById(created.getIdDanhSach());
-      if(byId.isPresent()){
-        byId.get().setTrangThaiTh(NhapXuatHangTrangThaiEnum.DANG_THUC_HIEN.getId());
-        xhThTongHopHdrRepository.save(byId.get());
-      }
-    }
     return created;
   }
 
