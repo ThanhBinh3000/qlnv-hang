@@ -1,12 +1,10 @@
 package com.tcdt.qlnvhang.service.xuathang.thanhlytieuhuy.tieuhuy;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThDanhSachRepository;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoDtlRepository;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoHdrRepository;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThThongBaoKqRepository;
+import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -15,10 +13,7 @@ import com.tcdt.qlnvhang.request.xuathang.thanhlytieuhuy.tieuhuy.XhThThongBaoKqR
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThDanhSachHdr;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoDtl;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThHoSoHdr;
-import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.XhThThongBaoKq;
+import com.tcdt.qlnvhang.table.xuathang.thanhlytieuhuy.tieuhuy.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -44,7 +39,10 @@ public class XhThThongBaoKqService extends BaseServiceImpl {
   private XhThThongBaoKqRepository xhThThongBaoKqRepository;
 
   @Autowired
-  private XhThHoSoHdrRepository xhThHoSoHdrRepository;  
+  private XhThHoSoHdrRepository xhThHoSoHdrRepository;
+
+  @Autowired
+  private XhThTongHopHdrRepository xhThTongHopHdrRepository;
   
   @Autowired
   private XhThHoSoDtlRepository xhThHoSoDtlRepository;
@@ -225,6 +223,19 @@ public class XhThThongBaoKqService extends BaseServiceImpl {
     }
     optional.get().setTrangThai(statusReq.getTrangThai());
     XhThThongBaoKq created = xhThThongBaoKqRepository.save(optional.get());
+
+    if (!DataUtils.isNullObject(optional.get().getIdHoSo())) {
+      Optional<XhThHoSoHdr> hoSo = xhThHoSoHdrRepository.findById(optional.get().getIdHoSo());
+      if (hoSo.isPresent()) {
+        if (hoSo.get().getIdDanhSach() != null) {
+          Optional<XhThTongHopHdr> byId = xhThTongHopHdrRepository.findById(hoSo.get().getIdDanhSach());
+          if (byId.isPresent()) {
+            byId.get().setTrangThaiTh(NhapXuatHangTrangThaiEnum.DA_HOAN_THANH.getId());
+            xhThTongHopHdrRepository.save(byId.get());
+          }
+        }
+      }
+    }
     return created;
   }
 

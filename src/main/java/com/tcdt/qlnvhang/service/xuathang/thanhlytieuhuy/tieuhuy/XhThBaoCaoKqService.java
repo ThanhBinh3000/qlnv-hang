@@ -56,6 +56,15 @@ public class XhThBaoCaoKqService extends BaseServiceImpl {
   private XhThDanhSachService xhThDanhSachService;
 
   @Autowired
+  private XhThQuyetDinhRepository xhThQuyetDinhRepository;
+
+  @Autowired
+  private XhThHoSoHdrRepository xhThHoSoHdrRepository;
+
+  @Autowired
+  private XhThTongHopHdrRepository xhThTongHopHdrRepository;
+
+  @Autowired
   private FileDinhKemService fileDinhKemService;
 
   public Page<XhThBaoCaoKqHdr> searchPage(CustomUserDetails currentUser, SearchXhThQuyetDinh req) throws Exception {
@@ -273,6 +282,24 @@ public class XhThBaoCaoKqService extends BaseServiceImpl {
     }
     optional.get().setTrangThai(statusReq.getTrangThai());
     XhThBaoCaoKqHdr created = xhThBaoCaoKqHdrRepository.save(optional.get());
+
+    if (!DataUtils.isNullObject(created.getIdQd())) {
+      Optional<XhThQuyetDinhHdr> byId1 = xhThQuyetDinhRepository.findById(created.getIdQd());
+      if(byId1.isPresent()){
+        if (!DataUtils.isNullObject(byId1.get().getIdHoSo())) {
+          Optional<XhThHoSoHdr> hoSo = xhThHoSoHdrRepository.findById(byId1.get().getIdHoSo());
+          if (hoSo.isPresent()) {
+            if (hoSo.get().getIdDanhSach() != null) {
+              Optional<XhThTongHopHdr> byId = xhThTongHopHdrRepository.findById(hoSo.get().getIdDanhSach());
+              if (byId.isPresent()) {
+                byId.get().setTrangThaiTh(NhapXuatHangTrangThaiEnum.DA_HOAN_THANH.getId());
+                xhThTongHopHdrRepository.save(byId.get());
+              }
+            }
+          }
+        }
+      }
+    }
     return created;
   }
 
