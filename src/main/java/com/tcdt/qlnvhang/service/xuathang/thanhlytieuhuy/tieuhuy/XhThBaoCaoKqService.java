@@ -4,10 +4,7 @@ import com.google.common.collect.Lists;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThBaoCaoKqDtlRepository;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThBaoCaoKqHdrRepository;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThDanhSachRepository;
-import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.XhThQuyetDinhRepository;
+import com.tcdt.qlnvhang.repository.xuathang.thanhlytieuhuy.tieuhuy.*;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.StatusReq;
@@ -57,6 +54,15 @@ public class XhThBaoCaoKqService extends BaseServiceImpl {
 
   @Autowired
   private XhThDanhSachService xhThDanhSachService;
+
+  @Autowired
+  private XhThQuyetDinhRepository xhThQuyetDinhRepository;
+
+  @Autowired
+  private XhThHoSoHdrRepository xhThHoSoHdrRepository;
+
+  @Autowired
+  private XhThTongHopHdrRepository xhThTongHopHdrRepository;
 
   @Autowired
   private FileDinhKemService fileDinhKemService;
@@ -276,6 +282,24 @@ public class XhThBaoCaoKqService extends BaseServiceImpl {
     }
     optional.get().setTrangThai(statusReq.getTrangThai());
     XhThBaoCaoKqHdr created = xhThBaoCaoKqHdrRepository.save(optional.get());
+
+    if (!DataUtils.isNullObject(created.getIdQd())) {
+      Optional<XhThQuyetDinhHdr> byId1 = xhThQuyetDinhRepository.findById(created.getIdQd());
+      if(byId1.isPresent()){
+        if (!DataUtils.isNullObject(byId1.get().getIdHoSo())) {
+          Optional<XhThHoSoHdr> hoSo = xhThHoSoHdrRepository.findById(byId1.get().getIdHoSo());
+          if (hoSo.isPresent()) {
+            if (hoSo.get().getIdDanhSach() != null) {
+              Optional<XhThTongHopHdr> byId = xhThTongHopHdrRepository.findById(hoSo.get().getIdDanhSach());
+              if (byId.isPresent()) {
+                byId.get().setTrangThaiTh(NhapXuatHangTrangThaiEnum.DA_HOAN_THANH.getId());
+                xhThTongHopHdrRepository.save(byId.get());
+              }
+            }
+          }
+        }
+      }
+    }
     return created;
   }
 
