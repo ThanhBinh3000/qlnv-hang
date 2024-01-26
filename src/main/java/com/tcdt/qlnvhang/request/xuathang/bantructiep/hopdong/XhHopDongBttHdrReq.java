@@ -77,6 +77,8 @@ public class XhHopDongBttHdrReq extends BaseRequest {
     private String soQdNv;
     private String trangThai;
     private String trangThaiXh;
+    private Long idQdDc;
+    private String soQdDc;
     private List<String> listMaDviTsan = new ArrayList<>();
     private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
     private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();

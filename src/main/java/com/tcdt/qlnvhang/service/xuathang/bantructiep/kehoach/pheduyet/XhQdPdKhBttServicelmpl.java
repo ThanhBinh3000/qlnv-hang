@@ -240,6 +240,8 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
                 detail.setSoQdKq(null);
                 detail.setDiaDiemChaoGia(null);
                 detail.setGhiChuChaoGia(null);
+                detail.setSlHdDaKy(null);
+                detail.setSlHdChuaKy(null);
                 detail.setIdQdNv(null);
                 detail.setSoQdNv(null);
             }
