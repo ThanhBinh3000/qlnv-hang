@@ -93,6 +93,19 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
                 data.setTrangThai(data.getTrangThai());
                 List<XhQdPdKhBdgDtl> listDtl = xhQdPdKhBdgDtlRepository.findAllByIdHdr(data.getId());
                 data.setChildren(listDtl != null && !listDtl.isEmpty() ? listDtl : Collections.emptyList());
+                if (data.getTrangThai().equals(Contains.BAN_HANH) && data.getType().equals("QDDC")) {
+                    List<XhQdPdKhBdgDtl> detailList = xhQdPdKhBdgDtlRepository.findAllByIdHdr(data.getId());
+                    QthtChotGiaInfoReq objReq = new QthtChotGiaInfoReq();
+                    objReq.setLoaiGia("LG04");
+                    objReq.setNam(data.getNam());
+                    objReq.setLoaiVthh(data.getLoaiVthh());
+                    objReq.setCloaiVthh(data.getCloaiVthh());
+                    objReq.setMaCucs(detailList.stream().map(XhQdPdKhBdgDtl::getMaDvi).collect(Collectors.toList()));
+                    objReq.setIdQuyetDinhCanDieuChinh(data.getId());
+                    objReq.setType("XUAT_DAU_GIA");
+                    QthtChotGiaInfoRes qthtChotGiaInfoRes = qthtChotGiaNhapXuatService.thongTinChotDieuChinhGia(objReq);
+                    data.setQthtChotGiaInfoRes(qthtChotGiaInfoRes);
+                }
             } catch (Exception exception) {
                 throw new RuntimeException(exception);
             }
@@ -284,7 +297,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
             item.setFileDinhKem(fileDinhKem);
             item.setFileDinhKemDc(fileDinhKemDc);
             item.setChildren(detailList);
-            if(item.getTrangThai().equals("29")){
+            if (item.getTrangThai().equals(Contains.BAN_HANH)) {
                 QthtChotGiaInfoReq objReq = new QthtChotGiaInfoReq();
                 objReq.setLoaiGia("LG04");
                 objReq.setNam(item.getNam());

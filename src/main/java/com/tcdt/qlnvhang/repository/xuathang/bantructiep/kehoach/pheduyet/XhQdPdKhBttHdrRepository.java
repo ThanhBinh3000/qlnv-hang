@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface XhQdPdKhBttHdrRepository extends JpaRepository<XhQdPdKhBttHdr, Long> {
@@ -47,4 +48,6 @@ public interface XhQdPdKhBttHdrRepository extends JpaRepository<XhQdPdKhBttHdr, 
     boolean existsBySoQdDcAndIdNot(String soQdDc, Long id);
 
     long countBySoQdPdAndType(String soQdPd, String type);
+
+    Optional<XhQdPdKhBttHdr> findByIdQdPdAndLastest(Long idQuyetDinhCanDieuChinh, boolean lastest);
 }

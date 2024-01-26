@@ -31,19 +31,17 @@ public interface HhDcQdPduyetKhMttRepository extends JpaRepository<HhDcQdPduyetK
 
     List<HhDcQdPduyetKhmttHdr> findAllByIdQdGocOrderByIdDesc(Long id);
 
-    HhDcQdPduyetKhmttHdr findBySoLanDieuChinh(Long soLanDc);
-
     @Query(value = "select * from HH_DC_QD_PDUYET_KHMTT_HDR" +
             " where 1=1 "+
-            " AND TRANG_THAI = 29 "+
-            " AND so_lan_dieu_chinh IN (select b.so_lan_dieu_chinh from ( "+
-            " SELECT ID_QD_GOC, MAX(so_lan_dieu_chinh) as so_lan_dieu_chinh " +
-            " FROM HH_DC_QD_PDUYET_KHMTT_HDR" +
+            " AND NAM_KH = :namKh "+
+            " AND so_lan_dieu_chinh NOT IN (select b.so_lan_dieu_chinh from ( "+
+            " SELECT HDR1.ID, MAX(HDR1.so_lan_dieu_chinh) as so_lan_dieu_chinh " +
+            " FROM HH_DC_QD_PDUYET_KHMTT_HDR HDR1 JOIN HH_DC_QD_PDUYET_KHMTT_HDR HDR2 ON HDR1.ID = HDR2.ID_QD_GOC" +
             " where 1=1" +
-            " AND TRANG_THAI = 29" +
-            " GROUP BY ID_QD_GOC ) b) "
+            " AND HDR1.TRANG_THAI = 29" +
+            " GROUP BY HDR1.ID ) b) "
             ,nativeQuery = true)
-    List<HhDcQdPduyetKhmttHdr> searchDsLastest();
+    List<HhDcQdPduyetKhmttHdr> searchDsLastest(Integer namKh);
     @Query(value = "select * from HH_DC_QD_PDUYET_KHMTT_HDR" +
             " where 1=1 "+
             " AND TRANG_THAI = 29 "+

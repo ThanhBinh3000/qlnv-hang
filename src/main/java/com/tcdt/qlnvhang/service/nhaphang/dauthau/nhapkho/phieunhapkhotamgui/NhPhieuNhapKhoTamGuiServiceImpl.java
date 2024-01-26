@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.common.DocxToPdfConverter;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkhotamgui.NhPhieuNhapKhoTamGui;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
@@ -11,8 +12,11 @@ import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiCtRepository;
 import com.tcdt.qlnvhang.repository.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiReq;
+import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
+import com.tcdt.qlnvhang.service.HhQdGiaoNvuNhapxuatService;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -20,6 +24,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.MoneyConvert;
 import com.tcdt.qlnvhang.util.UserUtils;
 import fr.opensagres.xdocreport.core.XDocReportException;
@@ -72,6 +77,8 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
   private final UserInfoRepository userInfoRepository;
   @Autowired
   private final KtNganLoRepository ktNganLoRepository;
+  @Autowired
+  private HhQdGiaoNvuNhapxuatService hhQdGiaoNvuNhapxuatService;
 
   public static void main(String[] args) throws Exception {
     String data = "{ \"trangThai\": \"00\", \"tenTrangThai\": \"Dự Thảo\", \"ngayTao\": \"2023-11-21\", \"nguoiTaoId\": 2505, \"tenNguoiTao\": \"tvqt_phongchau\", \"ngaySua\": \"2023-11-23\", \"nguoiSuaId\": 2505, \"nguoiGuiDuyetId\": null, \"ngayGuiDuyet\": null, \"nguoiPduyetId\": 2505, \"tenNguoiPduyet\": null, \"ngayPduyet\": \"2023-11-23\", \"lyDoTuChoi\": null, \"id\": 1201, \"idQdGiaoNvNh\": 2162, \"soQdGiaoNvNh\": \"233/QĐ-CDTVP\", \"soPhieuNhapKhoTamGui\": \"1201/2023/PNKTG-CCDTVP\", \"ngayNhapKho\": \"2023-11-21\", \"soHd\": \"22/2023/HĐMB\", \"ngayHd\": \"2023-11-21\", \"soNo\": 150, \"soCo\": 200, \"nguoiGiaoHang\": \"Nguyễn Văn Lợi\", \"cmtNguoiGiaoHang\": \"013243367\", \"donViGiaoHang\": \"Công ty giao hàng GHN\", \"diaChiNguoiGiao\": \"Số 194 đường Trường Chinh, phường Khương Thượng, quận Đống đa, TP Hà nội\", \"keToanTruong\": \"Lê Thị Hồng Hạnh\", \"thoiGianGiaoNhan\": \"2023-11-01 17:16\", \"idDdiemGiaoNvNh\": 1372, \"maDiemKho\": \"0101020201\", \"tenDiemKho\": \"Điểm kho Dục Mỹ\", \"maNhaKho\": \"010102020104\", \"tenNhaKho\": \"Nhà kho C4\", \"maNganKho\": \"01010202010406\", \"tenNganKho\": \"Ngăn kho C4/6\", \"maLoKho\": null, \"tenLoKho\": null, \"soLuongDdiemGiaoNvNh\": 2, \"loaiVthh\": \"0205\", \"tenLoaiVthh\": \"Xuồng cao tốc các loại (xuồng tàu cứu hộ)\", \"cloaiVthh\": \"020501\", \"tenCloaiVthh\": \"Xuồng DT 1\", \"maDvi\": \"01010202\", \"tenDvi\": \"Chi cục Dự trữ Nhà nước Phong Châu\", \"nam\": 2023, \"ghiChu\": \"ghi chú\", \"children\": [ { \"id\": 603, \"phieuNkTgId\": 1201, \"moTaHangHoa\": \"Xuồng DT 1\", \"maSo\": \"001\", \"donViTinh\": \"bộ\", \"soLuongChungTu\": 2, \"soLuongThucNhap\": 2, \"donGia\": 220000000 } ], \"fileDinhKems\": [], \"tongSoLuong\": 2, \"tongTien\": 440000000, \"tongSoLuongBangChu\": \"Hai bộ\", \"tongTienBangChu\": \"Bốn trăm bốn mươi triệu đồng\", \"dviTinh\": \"bộ\" }";
@@ -266,6 +273,49 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
   @Override
   public void export(NhPhieuNhapKhoTamGuiReq req, HttpServletResponse response) throws Exception {
 //        return false;
+  }
+
+  @Override
+  public void exportPnktg(HhQdNhapxuatSearchReq req, HttpServletResponse response) throws Exception {
+    UserInfo userInfo = UserUtils.getUserInfo();
+    PaggingReq paggingReq = new PaggingReq();
+    paggingReq.setPage(0);
+    paggingReq.setLimit(Integer.MAX_VALUE);
+    req.setPaggingReq(paggingReq);
+    req.setMaDvi(userInfo.getDvql());
+    Page<NhQdGiaoNvuNhapxuatHdr> page = hhQdGiaoNvuNhapxuatService.searchPage(req);
+    List<NhQdGiaoNvuNhapxuatHdr> data = page.getContent();
+
+    String title = "Danh sách phiếu nhập kho tạm gửi";
+    String[] rowsName = new String[]{"STT", "Số QĐ giao NVNH", "Năm kế hoạch", "Thời hạn NH trước ngày", "Điểm kho", "Ngăn/Lô kho",
+            "Số phiếu tạm giao, nhận hàng", "Ngày tạm giao, nhận hàng", "Số BB tạm giao, nhận hàng", "Số BB lấy mẫu/BG mẫu", "Trạng thái"};
+    String filename = "Danh_sach_phieu_nhap_kho_tam_gui.xlsx";
+
+    List<Object[]> dataList = new ArrayList<Object[]>();
+    Object[] objs = null;
+    Object[] objsb = null;
+    for (int i = 0; i < data.size(); i++) {
+      NhQdGiaoNvuNhapxuatHdr qd = data.get(i);
+      objs = new Object[rowsName.length];
+      objs[0] = i;
+      objs[1] = qd.getSoQd();
+      objs[2] = qd.getNamNhap();
+      objs[3] = convertDate(qd.getTgianNkho());
+      dataList.add(objs);
+      for (int j = 0; j < qd.getDtlList().get(0).getChildren().size(); j++) {
+        objsb = new Object[rowsName.length];
+        objsb[4] = qd.getDtlList().get(0).getChildren().get(j).getTenDiemKho();
+        objsb[5] = qd.getDtlList().get(0).getChildren().get(j).getTenNganLoKho();
+        if (qd.getDtlList().get(0).getChildren().get(j).getPhieuNhapKhoTamGui() != null) {
+          objsb[6] = qd.getDtlList().get(0).getChildren().get(j).getPhieuNhapKhoTamGui().getSoPhieuNhapKhoTamGui();
+          objsb[7] = convertDate(qd.getDtlList().get(0).getChildren().get(j).getPhieuNhapKhoTamGui().getNgayNhapKho());
+          objsb[10] = qd.getDtlList().get(0).getChildren().get(j).getPhieuNhapKhoTamGui().getTenTrangThai();
+        }
+        dataList.add(objsb);
+      }
+    }
+    ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+    ex.export();
   }
 
   @Override

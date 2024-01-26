@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tcdt.qlnvhang.response.chotdulieu.QthtChotGiaInfoRes;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttDx;
 import com.tcdt.qlnvhang.table.HhQdPheduyetKhMttHdr;
@@ -111,5 +112,6 @@ public class DcQdPduyetKhMttDTO {
     private List<FileDinhKem> canCuPhapLy = new ArrayList<>();
     private List<FileDinhKem> cvanToTrinh = new ArrayList<>();
     private List<HhDcQdPduyetKhmttDx> hhDcQdPduyetKhmttDxList = new ArrayList<>();
-
+    private QthtChotGiaInfoRes qthtChotGiaInfoRes;
+    private String type;
 }
