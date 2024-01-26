@@ -77,6 +77,8 @@ public class NhQdGiaoNvuNhapxuatHdr implements Serializable {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
 	Date ngayPduyet;
 	String nguoiPduyet;
+	String tenTruongPhong;
+	String dviCungCap;
 
 	String ghiChu;
 
