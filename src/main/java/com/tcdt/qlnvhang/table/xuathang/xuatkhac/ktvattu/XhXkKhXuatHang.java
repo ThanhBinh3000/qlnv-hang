@@ -56,11 +56,13 @@ public class XhXkKhXuatHang extends BaseEntity implements Serializable {
 
     //Entity Tổng hợp kế hoạch xuất hàng
     private String loai;
+    private String loaiVthh;
     private LocalDate thoiGianTh;
     private String noiDungTh;
     private String ghiChu;
     //Dùng cho Tổng hợp và kế hoạch của Tổng cục - TH thì là ID bản ghi kế hoạch của Cục, KH của Tổng cục là ID của bản ghi TH
     private Long idCanCu;
+    private String idCanCuTh;
 
     @Transient
     private List<FileDinhKem> fileDinhKems;
