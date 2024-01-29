@@ -74,6 +74,7 @@ public class NhQdGiaoNvuNxDdiem implements Serializable {
 
 	@Column(name="SO_LUONG")
 	private BigDecimal soLuong;
+	private BigDecimal slTon;
 
 	@Column(name = "SO_LUONG_DIEM_KHO")
 	BigDecimal soLuongDiemKho;
