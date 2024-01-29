@@ -1,11 +1,9 @@
 package com.tcdt.qlnvhang.service.xuathang.bantructiep.tochuctrienkhai.ketqua;
 
-import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDvi;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBtt;
-import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtlRepository;
@@ -105,7 +103,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
         newData.setTrangThaiHd(Contains.CHUA_THUC_HIEN);
         newData.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
         XhKqBttHdr createdRecord = xhKqBttHdrRepository.save(newData);
-        this.saveDetail(request, createdRecord.getId(), false);
+        this.saveDetail(request, createdRecord.getId());
         return createdRecord;
     }
 
@@ -123,32 +121,30 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
         existingData.setNgaySua(LocalDate.now());
         existingData.setNguoiSuaId(currentUser.getUser().getId());
         XhKqBttHdr updatedData = xhKqBttHdrRepository.save(existingData);
-        this.saveDetail(request, updatedData.getId(), true);
+        this.saveDetail(request, updatedData.getId());
         return updatedData;
     }
 
-    void saveDetail(XhKqBttHdrReq request, Long headerId, Boolean isCheckRequired) {
-        xhQdPdKhBttDviRepository.deleteAllByIdQdKqHdr(isCheckRequired ? headerId : null);
+    void saveDetail(XhKqBttHdrReq request, Long headerId) {
+        xhQdPdKhBttDviRepository.deleteAllByIdQdKqHdr(headerId);
         for (XhQdPdKhBttDviReq childReq : request.getChildren().stream().filter(item -> item.getIsKetQua()).collect(Collectors.toList())) {
             XhQdPdKhBttDvi child = new XhQdPdKhBttDvi();
             BeanUtils.copyProperties(childReq, child, "id");
-            child.setId(null);
             child.setIdQdKqHdr(headerId);
             child.setIsKetQua(true);
-            XhQdPdKhBttDvi saveDvi = xhQdPdKhBttDviRepository.save(child);
-            xhQdPdKhBttDviDtlRepository.deleteAllByIdDvi(isCheckRequired ? childReq.getId() : null);
+            xhQdPdKhBttDviRepository.save(child);
+            xhQdPdKhBttDviDtlRepository.deleteAllByIdDvi(childReq.getId());
             for (XhQdPdKhBttDviDtlReq childDtlReq : childReq.getChildren()) {
                 XhQdPdKhBttDviDtl childDtl = new XhQdPdKhBttDviDtl();
                 BeanUtils.copyProperties(childDtlReq, childDtl, "id");
-                childDtl.setId(null);
-                childDtl.setIdDvi(saveDvi.getId());
-                XhQdPdKhBttDviDtl saveDviDtl = xhQdPdKhBttDviDtlRepository.save(childDtl);
-                xhTcTtinBttRepository.deleteAllByIdDviDtl(isCheckRequired ? childDtlReq.getId() : null);
+                childDtl.setIdDvi(child.getId());
+                xhQdPdKhBttDviDtlRepository.save(childDtl);
+                xhTcTtinBttRepository.deleteAllByIdDviDtl(childDtlReq.getId());
                 for (XhTcTtinBttReq tTinReq : childDtlReq.getChildren()) {
                     XhTcTtinBtt tTtin = new XhTcTtinBtt();
                     BeanUtils.copyProperties(tTinReq, tTtin, "id");
                     tTtin.setId(null);
-                    tTtin.setIdDviDtl(saveDviDtl.getId());
+                    tTtin.setIdDviDtl(childDtl.getId());
                     XhTcTtinBtt saveTtin = xhTcTtinBttRepository.save(tTtin);
                     if (!DataUtils.isNullObject(tTinReq.getFileDinhKems())) {
                         tTinReq.getFileDinhKems().setId(null);
