@@ -40,10 +40,12 @@ public class XhXkKhXuatHangRequest extends BaseRequest {
     List<FileDinhKem> fileDinhKems;
     //Entity Tổng hợp kế hoạch xuất hàng
     String loai;
+    String loaiVthh;
     LocalDate thoiGianTh;
     String noiDungTh;
     String ghiChu;
     Long idCanCu;
+    String idCanCuTh;
     List<Long> listIdKeHoachs;
     //search params
     LocalDate ngayKeHoachTu;

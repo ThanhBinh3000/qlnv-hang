@@ -27,6 +27,7 @@ public class XhXkKhXuatHangDtl {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XH_XK_KH_XUATHANG_DTL_SEQ")
     @SequenceGenerator(sequenceName = "XH_XK_KH_XUATHANG_DTL_SEQ", allocationSize = 1, name = "XH_XK_KH_XUATHANG_DTL_SEQ")
     Long id;
+    Long idTh;
     String maDiaDiem;
     String loaiVthh;
     String donViTinh;
