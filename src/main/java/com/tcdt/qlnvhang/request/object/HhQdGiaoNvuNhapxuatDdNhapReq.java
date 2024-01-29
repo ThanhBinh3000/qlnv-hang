@@ -29,5 +29,6 @@ public class HhQdGiaoNvuNhapxuatDdNhapReq {
 	private BigDecimal soLuong;
 
 	private BigDecimal soLuongDiemKho;
+	private BigDecimal slTon;
 
 }
