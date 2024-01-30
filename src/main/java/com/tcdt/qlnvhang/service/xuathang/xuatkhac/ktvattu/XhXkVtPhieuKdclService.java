@@ -19,6 +19,7 @@ import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuKnClHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktluongthuc.XhXkLtPhieuKnClHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtBbLayMauHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuKdclHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatNhapKho;
@@ -206,16 +207,16 @@ public class XhXkVtPhieuKdclService extends BaseServiceImpl {
             throw new Exception("Không tìm thấy dữ liệu");
         }
         String status = statusReq.getTrangThai() + optional.get().getTrangThai();
-        switch (status) {
-            case Contains.CHODUYET_LDC + Contains.DUTHAO:
+        switch (status){
             case Contains.CHODUYET_TP + Contains.DUTHAO:
-            case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
-            case Contains.CHODUYET_LDC + Contains.CHO_DUYET_TP:
+            case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+            case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+            case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
                 optional.get().setNguoiGduyetId(currentUser.getUser().getId());
                 optional.get().setNgayGduyet(LocalDate.now());
                 break;
-            case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
             case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+            case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
                 optional.get().setNguoiPduyetId(currentUser.getUser().getId());
                 optional.get().setNgayPduyet(LocalDate.now());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
@@ -264,6 +265,20 @@ public class XhXkVtPhieuKdclService extends BaseServiceImpl {
         }
         ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
+    }
+    public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
+        try {
+            String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "xuatkhac/luongthuc/" + fileName;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
+            XhXkVtPhieuKdclHdr  detail = this.detail(DataUtils.safeToLong(body.get("id")));
+            return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (XDocReportException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

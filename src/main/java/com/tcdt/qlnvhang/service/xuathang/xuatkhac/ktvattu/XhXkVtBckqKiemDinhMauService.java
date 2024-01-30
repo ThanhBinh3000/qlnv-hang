@@ -219,16 +219,16 @@ public class XhXkVtBckqKiemDinhMauService extends BaseServiceImpl {
             throw new Exception("Không tìm thấy dữ liệu");
         }
         String status = statusReq.getTrangThai() + optional.get().getTrangThai();
-        switch (status) {
-            case Contains.CHODUYET_LDC + Contains.DUTHAO:
+        switch (status){
             case Contains.CHODUYET_TP + Contains.DUTHAO:
-            case Contains.CHODUYET_LDC + Contains.TUCHOI_LDC:
-            case Contains.CHODUYET_LDC + Contains.CHO_DUYET_TP:
+            case Contains.CHODUYET_LDC + Contains.CHODUYET_TP:
+            case Contains.CHODUYET_TP + Contains.TUCHOI_TP:
+            case Contains.CHODUYET_TP + Contains.TUCHOI_LDC:
                 optional.get().setNguoiGduyetId(currentUser.getUser().getId());
                 optional.get().setNgayGduyet(LocalDate.now());
                 break;
-            case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
             case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
+            case Contains.TUCHOI_LDC + Contains.CHODUYET_LDC:
                 optional.get().setNguoiPduyetId(currentUser.getUser().getId());
                 optional.get().setNgayPduyet(LocalDate.now());
                 optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
