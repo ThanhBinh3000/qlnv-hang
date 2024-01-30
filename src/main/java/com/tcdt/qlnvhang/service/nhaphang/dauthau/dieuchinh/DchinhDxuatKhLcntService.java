@@ -876,12 +876,14 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 			Map<String,String> hashMapLoaiHdong = getListDanhMucChung("HINH_THUC_HOP_DONG");
 			data.setTenPthucLcnt(hashMapPthucDthau.get(qOptional.get().getPthucLcnt()));
 			data.setTenHthucLcnt(hashMapHtLcnt.get(qOptional.get().getHthucLcnt()));
-			data.setTenNguonVon(hashMapNguonVon.get(qOptional.get().getNguonVon()));
 			data.setTenLoaiHd(hashMapLoaiHdong.get(qOptional.get().getLoaiHdong()));
 			if (qdKhlcntHdrOptional.get().getIdTrHdr() != null) {
 				Optional<HhDxuatKhLcntHdr> dxuatKhLcntHdr = hhDxuatKhLcntHdrRepository.findById(qdKhlcntHdrOptional.get().getIdTrHdr());
-				if (dxuatKhLcntHdr.isPresent() && dxuatKhLcntHdr.get().getQuy() != null) {
-					data.setQuy("Quý " + intToRoman(dxuatKhLcntHdr.get().getQuy()) + "/" + dxuatKhLcntHdr.get().getNamKhoach());
+				if (dxuatKhLcntHdr.isPresent() ) {
+					if (dxuatKhLcntHdr.get().getQuy() != null) {
+						data.setQuy("Quý " + intToRoman(dxuatKhLcntHdr.get().getQuy()) + "/" + dxuatKhLcntHdr.get().getNamKhoach());
+					}
+					data.setTenNguonVon(hashMapNguonVon.get(dxuatKhLcntHdr.get().getNguonVon()));
 				}
 			}
 			List<HhDchinhDxKhLcntGthauPreview> dsGthauVt = new ArrayList<>();
@@ -889,8 +891,11 @@ public class DchinhDxuatKhLcntService extends BaseServiceImpl  {
 				HhDchinhDxKhLcntGthauPreview hhDchinhDxKhLcntGthauPreview = HhDchinhDxKhLcntGthauPreview.builder()
 						.gthau(gThau.getGoiThau())
 						.tenCloaiVthh(hashMapDmHh.get(gThau.getCloaiVthh()))
-						.tgianThienHdDc(gThau.getTgianThienHd())
+						.tgianThienHdDc(qOptional.get().getTgianThienHd())
 						.build();
+				if (gThau.getDonGiaVat() != null && gThau.getSoLuong() != null) {
+					hhDchinhDxKhLcntGthauPreview.setGiaGthau(docxToPdfConverter.convertBigDecimalToStr(gThau.getDonGiaVat().multiply(gThau.getSoLuong())));
+				}
 				if (qOptional.get().getLanDieuChinh() > 1) {
 					Optional<HhDchinhDxKhLcntHdr> dcLanTruocOptional = hdrRepository.findByIdQdGocAndLanDieuChinh(objReq.getIdQdGoc(), objReq.getLanDieuChinh() - 1);
 					dcLanTruocOptional.ifPresent(hhDchinhDxKhLcntHdr -> hhDchinhDxKhLcntGthauPreview.setTgianThienHd(hhDchinhDxKhLcntHdr.getTgianThienHd()));
