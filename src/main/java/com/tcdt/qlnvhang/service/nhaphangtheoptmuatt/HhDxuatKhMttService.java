@@ -60,6 +60,8 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
     @Autowired
     private HhDxuatKhMttSlddDtlRepository hhDxuatKhMttSlddDtlRepository;
     @Autowired
+    private HhSlNhapHangRepository hhSlNhapHangRepository;
+    @Autowired
     private FileDinhKemService fileDinhKemService;
 
     public Page<HhDxuatKhMttHdr> searchPage(SearchHhDxKhMttHdrReq req)throws Exception{
@@ -267,6 +269,7 @@ public class HhDxuatKhMttService extends BaseServiceImpl {
         List<HhDxuatKhMttSldd> dsSlDdList = hhDxuatKhMttSlddRepository.findAllByIdHdr(qOptional.get().getId());
         for(HhDxuatKhMttSldd dsG : dsSlDdList){
             dsG.setTenDvi(mapDmucDvi.get(dsG.getMaDvi()));
+//            dsG.setSoLuongKhDd(hhSlNhapHangRepository.countSLDalenQd(data.getNamKh(), data.getLoaiVthh(), dsG.getMaDvi()));
             List<HhDxuatKhMttSlddDtl> listDdNhap = hhDxuatKhMttSlddDtlRepository.findAllByIdDtl(dsG.getId());
             listDdNhap.forEach( f -> {
                 f.setTenDiemKho(StringUtils.isEmpty(f.getMaDiemKho()) ? null : mapDmucDvi.get(f.getMaDiemKho()));
