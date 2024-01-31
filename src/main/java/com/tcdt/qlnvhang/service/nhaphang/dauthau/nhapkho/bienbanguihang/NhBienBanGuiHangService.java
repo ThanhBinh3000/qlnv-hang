@@ -3,9 +3,11 @@ package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bienbanguihang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHang;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangReq;
+import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
 import com.tcdt.qlnvhang.service.BaseService;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 
 public interface NhBienBanGuiHangService extends BaseService<NhBienBanGuiHang, NhBienBanGuiHangReq, Long> {
@@ -32,5 +34,6 @@ public interface NhBienBanGuiHangService extends BaseService<NhBienBanGuiHang, N
 //
 //    BaseNhapHangCount count(Set<String> maDvis) throws Exception;
 //    ReportTemplateResponse preview(NhBienBanGuiHangReq req) throws Exception;
+  void exportBbgh(HhQdNhapxuatSearchReq searchReq, HttpServletResponse response) throws Exception;
   ReportTemplateResponse preview(HashMap<String, Object> body, CustomUserDetails currentUser) throws Exception;
 }
