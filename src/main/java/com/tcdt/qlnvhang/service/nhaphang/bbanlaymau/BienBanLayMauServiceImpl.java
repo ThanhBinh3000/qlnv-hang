@@ -291,6 +291,7 @@ public class BienBanLayMauServiceImpl extends BaseServiceImpl implements BienBan
 				for (NhQdGiaoNvuNhapxuatDtl nhQdGiaoNvuNhapxuatDtl : qd.getDtlList()) {
 					dataDd.addAll(nhQdGiaoNvuNhapxuatDtl.getChildren());
 				}
+				qd.setDetail(new NhQdGiaoNvuNhapxuatDtl());
 				qd.getDetail().setChildren(dataDd);
 			}
 			for (int j = 0; j < qd.getDetail().getChildren().size(); j++) {

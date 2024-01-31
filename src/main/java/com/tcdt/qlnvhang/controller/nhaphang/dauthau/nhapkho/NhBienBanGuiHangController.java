@@ -8,6 +8,7 @@ import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanchuanbikho.NhBienBanChuanBiKhoReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangReq;
+import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
 import com.tcdt.qlnvhang.request.search.vattu.bienbanguihang.NhBienBanGuiHangSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangService;
@@ -160,6 +161,17 @@ public class NhBienBanGuiHangController {
             log.error("Error can not export", e);
         }
 
+    }
+
+    @ApiOperation(value = "Export", response = List.class)
+    @PostMapping(value=  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public void exportListQdDcToExcel(HttpServletResponse response, @RequestBody HhQdNhapxuatSearchReq req) {
+        try {
+            service.exportBbgh(req,response);
+        } catch (Exception e) {
+            log.error("Error can not export", e);
+        }
     }
 
     @ApiOperation(value = "Xem trước", response = List.class)

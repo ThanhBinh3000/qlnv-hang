@@ -2,6 +2,9 @@ package com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bienbanguihang;
 
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatDtl;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNxDdiem;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
@@ -9,14 +12,18 @@ import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangCtRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbanguihang.NhBienBanGuiHangReq;
+import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
+import com.tcdt.qlnvhang.service.HhQdGiaoNvuNhapxuatService;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
 import fr.opensagres.xdocreport.core.XDocReportException;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +44,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -62,7 +70,8 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
   private final UserInfoRepository userInfoRepository;
   @Autowired
   private final HhHopDongRepository hhHopDongRepository;
-
+  @Autowired
+  private HhQdGiaoNvuNhapxuatService hhQdGiaoNvuNhapxuatService;
   /*public static void main(String[] args) throws Exception {
     String data = "{ \"trangThai\": \"45\", \"tenTrangThai\": \"Đã hoàn thành\", \"ngayTao\": \"2023-11-21\", \"nguoiTaoId\": 3445, \"tenNguoiTao\": \"Thủ kho Phong Châu\", \"ngaySua\": \"2023-11-22\", \"nguoiSuaId\": 3445, \"nguoiGuiDuyetId\": null, \"ngayGuiDuyet\": null, \"nguoiPduyetId\": 3445, \"tenNguoiPduyet\": null, \"ngayPduyet\": \"2023-11-22\", \"lyDoTuChoi\": null, \"id\": 561, \"maDvi\": \"01010202\", \"tenDvi\": \"Chi cục Dự trữ Nhà nước Phong Châu\", \"soQdGiaoNvNh\": \"233/QĐ-CDTVP\", \"idQdGiaoNvNh\": 2162, \"soBienBanGuiHang\": \"561/2023/BBGH-CCDTPC\", \"soHd\": \"22/2023/HĐMB\", \"ngayHd\": \"\", \"loaiVthh\": \"0205\", \"tenLoaiVthh\": \"Xuồng cao tốc các loại (xuồng tàu cứu hộ)\", \"cloaiVthh\": \"020501\", \"tenCloaiVthh\": \"Xuồng DT 1\", \"donViTinh\": null, \"tinhTrang\": \"Đủ giấy tờ niêm phong\", \"chatLuong\": \"Mới 100% chưa qua sử dụng\", \"phuongPhap\": null, \"ghiChu\": null, \"benNhan\": \"Chi cục Dự trữ Nhà nước Phong Châu\", \"benGiao\": null, \"trachNhiemBenNhan\": \"Có trách nhiệm bảo quản đầy đủ số lượng máy phát điện nêu trên trong khi chờ lấy kết quả kiểm tra chỉ tiêu chất lượng\", \"trachNhiemBenGiao\": \"Bên gửi có trách nhiệm khẩn trương hoàn thiện hồ sơ liên quan để hai bên tiến hành làm biên bản nghiệm thu và nhập kho theo đúng quy định\", \"nam\": 2023, \"idDdiemGiaoNvNh\": 1372, \"maDiemKho\": \"0101020201\", \"tenDiemKho\": \"Điểm kho Dục Mỹ\", \"maNhaKho\": \"010102020104\", \"tenNhaKho\": \"Nhà kho C4\", \"maNganKho\": \"01010202010406\", \"tenNganKho\": \"Ngăn kho C4/6\", \"maLoKho\": null, \"tenLoKho\": null, \"soLuongDdiemGiaoNvNh\": 2, \"children\": [ { \"id\": 285, \"chucVu\": \"Kỹ thuật viên bảo quản\", \"daiDien\": \"Nguyễn Văn Nho\", \"bienBanGuiHangId\": 561, \"loaiBen\": \"00\" }, { \"id\": 286, \"chucVu\": \"Cán bộ kỹ thuật\", \"daiDien\": \"Bùi Hữu Sơn\", \"bienBanGuiHangId\": 561, \"loaiBen\": \"01\" }, { \"id\": 284, \"chucVu\": \"Chi cục trưởng\", \"daiDien\": \"Tạ Văn Thiệm\", \"bienBanGuiHangId\": 561, \"loaiBen\": \"00\" } ] }";
     String path = "D:\\code\\2023\\qlnv-hang\\src\\main\\resources\\reports\\nhapdauthau\\13. Biên bản gửi hàng.docx";
@@ -252,6 +261,67 @@ public class NhBienBanGuiHangServiceImpl extends BaseServiceImpl implements NhBi
   @Override
   public void export(NhBienBanGuiHangReq req, HttpServletResponse response) throws Exception {
 //        return false;
+  }
+
+  @Override
+  public void exportBbgh(HhQdNhapxuatSearchReq req, HttpServletResponse response) throws Exception {
+    UserInfo userInfo = UserUtils.getUserInfo();
+    PaggingReq paggingReq = new PaggingReq();
+    paggingReq.setPage(0);
+    paggingReq.setLimit(Integer.MAX_VALUE);
+    req.setPaggingReq(paggingReq);
+    Page<NhQdGiaoNvuNhapxuatHdr> page = hhQdGiaoNvuNhapxuatService.searchPage(req);
+    List<NhQdGiaoNvuNhapxuatHdr> data = page.getContent();
+    String title = "Danh sách biên bản tạm giao, gửi hàng";
+    String[] rowsName = new String[]{"STT", "Số QĐ giao NVNH", "Năm kế hoạch", "Thời hạn NH trước ngày", "Điểm kho", "Lô kho",
+            "Số BB tạm giao, nhận hàng", "Ngày tạm giao, nhận hàng", "Số phiếu tạm giao, nhận hàng", "Số BB LM/BGM", "Trạng thái"};
+    String filename = "danh-sach-bien-ban-lay-mau.xlsx";
+    List<Object[]> dataList = new ArrayList<Object[]>();
+    Object[] objs = null;
+    Object[] objsb = null;
+    for (int i = 0; i < data.size(); i++) {
+      NhQdGiaoNvuNhapxuatHdr qd = data.get(i);
+      objs = new Object[rowsName.length];
+      objs[0] = i;
+      objs[1] = qd.getSoQd();
+      objs[2] = qd.getNamNhap();
+      objs[3] = convertDate(qd.getTgianNkho());
+      dataList.add(objs);
+      if (userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+        qd.setDetail(qd.getDtlList().stream().filter(item -> item.getMaDvi().equals(userInfo.getDvql())).collect(Collectors.toList()).get(0));
+      } else {
+        List<NhQdGiaoNvuNxDdiem> dataDd = new ArrayList<>();
+        for (NhQdGiaoNvuNhapxuatDtl nhQdGiaoNvuNhapxuatDtl : qd.getDtlList()) {
+          dataDd.addAll(nhQdGiaoNvuNhapxuatDtl.getChildren());
+        }
+        qd.setDetail(new NhQdGiaoNvuNhapxuatDtl());
+        qd.getDetail().setChildren(dataDd);
+      }
+      for (int j = 0; j < qd.getDetail().getChildren().size(); j++) {
+        objsb = new Object[rowsName.length];
+        objsb[4] = qd.getDetail().getChildren().get(j).getTenDiemKho();
+        if (qd.getDetail().getChildren().get(j).getMaLoKho() != null) {
+          objsb[5] =  qd.getDetail().getChildren().get(j).getTenNganKho() + " - " +qd.getDetail().getChildren().get(j).getTenLoKho();
+        } else {
+          objsb[5] =  qd.getDetail().getChildren().get(j).getTenNganKho();
+        }
+        if (qd.getDetail().getChildren().get(j).getBienBanGuiHang() != null) {
+          objsb[6] = qd.getDetail().getChildren().get(j).getBienBanGuiHang().getSoBienBanGuiHang();
+          objsb[10] = qd.getDetail().getChildren().get(j).getBienBanGuiHang().getTenTrangThai();
+        }
+        if (qd.getDetail().getChildren().get(j).getPhieuNhapKhoTamGui() != null) {
+          objsb[7] = convertDate(qd.getDetail().getChildren().get(j).getPhieuNhapKhoTamGui().getNgayNhapKho());
+          objsb[8] = qd.getDetail().getChildren().get(j).getPhieuNhapKhoTamGui().getSoPhieuNhapKhoTamGui();
+        }
+        if (qd.getDetail().getChildren().get(j).getBienBanLayMau() != null) {
+          objsb[9] = qd.getDetail().getChildren().get(j).getBienBanLayMau().getSoBienBan();
+        }
+        dataList.add(objsb);
+      }
+    }
+
+    ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+    ex.export();
   }
 
   @Override
