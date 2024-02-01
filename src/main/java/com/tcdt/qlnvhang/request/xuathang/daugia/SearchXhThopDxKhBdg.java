@@ -20,7 +20,7 @@ public class SearchXhThopDxKhBdg extends BaseRequest {
     private String loaiHinhNx;
     private String kieuNx;
     private String trangThai;
-    private LocalDateTime ngayThopTu;
-    private LocalDateTime ngayThopDen;
+    private LocalDate ngayThopTu;
+    private LocalDate ngayThopDen;
     private String dvql;
 }

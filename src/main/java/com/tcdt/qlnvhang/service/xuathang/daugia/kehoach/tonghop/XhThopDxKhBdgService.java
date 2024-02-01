@@ -46,12 +46,6 @@ public class XhThopDxKhBdgService extends BaseServiceImpl {
 
     public Page<XhThopDxKhBdg> searchPage(CustomUserDetails currentUser, SearchXhThopDxKhBdg request) throws Exception {
         request.setDvql(currentUser.getDvql());
-        if (request.getNgayThopTu() != null) {
-            request.setNgayThopTu(request.getNgayThopTu().toLocalDate().atTime(LocalTime.MAX));
-        }
-        if (request.getNgayThopDen() != null) {
-            request.setNgayThopDen(request.getNgayThopDen().toLocalDate().atTime(LocalTime.MIN));
-        }
         Pageable pageable = PageRequest.of(request.getPaggingReq().getPage(), request.getPaggingReq().getLimit());
         Page<XhThopDxKhBdg> searchResultPage = xhThopDxKhBdgRepository.searchPage(request, pageable);
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
