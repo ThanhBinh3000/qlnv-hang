@@ -159,6 +159,17 @@ public class NhBbGiaoNhanVtController {
         }
     }
 
+    @ApiOperation(value = "Export", response = List.class)
+    @PostMapping(value=  PathContains.URL_KET_XUAT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public void exportBbgn (HttpServletResponse response, @RequestBody NhBbGiaoNhanVtSearchReq req) {
+        try {
+            service.exportBbgn(req,response);
+        } catch (Exception e) {
+            log.error("Error can not export", e);
+        }
+    }
+
     @ApiOperation(value = "Xem trước", response = List.class)
     @PostMapping(value = PathContains.URL_XEM_TRUOC, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
