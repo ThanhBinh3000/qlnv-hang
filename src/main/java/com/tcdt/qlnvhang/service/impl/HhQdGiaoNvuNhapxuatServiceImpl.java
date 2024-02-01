@@ -879,7 +879,11 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			ddNhap.setListPhieuKtraCl(nhPhieuKtChatLuongService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
 //			ddNhap.setListPhieuNhapKho(nhPhieuNhapKhoService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
 			ddNhap.setListBangKeCanHang(nhBangKeCanHangService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
-			ddNhap.setBienBanNhapDayKho(nhBbNhapDayKhoRepository.findByIdDdiemGiaoNvNh(ddNhap.getId()));
+			NhBbNhapDayKho nhBbNhapDayKho = nhBbNhapDayKhoRepository.findByIdDdiemGiaoNvNh(ddNhap.getId());
+			if (nhBbNhapDayKho != null) {
+				nhBbNhapDayKho.setTenNguoiPduyet(ObjectUtils.isEmpty(nhBbNhapDayKho.getNguoiPduyetId()) ? null : userInfoRepository.findById(nhBbNhapDayKho.getNguoiPduyetId()).get().getFullName());
+				ddNhap.setBienBanNhapDayKho(nhBbNhapDayKho);
+			}
 			ddNhap.setPhieuNhapKhoTamGui(nhPhieuNhapKhoTamGuiRepository.findByIdDdiemGiaoNvNh(ddNhap.getId()));
 			NhBienBanGuiHang nhBienBanGuiHang = nhBienBanGuiHangRepository.findByIdDdiemGiaoNvNh(ddNhap.getId());
 			if (nhBienBanGuiHang != null) {

@@ -10,7 +10,9 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbangiaonhan.NhBbG
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatDtl;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNxDdiem;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
@@ -21,10 +23,13 @@ import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhap
 import com.tcdt.qlnvhang.repository.vattu.bienbangiaonhan.NhBbGiaoNhanVtCtRepository;
 import com.tcdt.qlnvhang.repository.vattu.bienbangiaonhan.NhBbGiaoNhanVtRepository;
 import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.nhapkho.NhBbGiaoNhanVtPreview;
 import com.tcdt.qlnvhang.request.object.vattu.bienbangiaonhan.NhBbGiaoNhanVtCtReq;
 import com.tcdt.qlnvhang.request.object.vattu.bienbangiaonhan.NhBbGiaoNhanVtReq;
+import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
 import com.tcdt.qlnvhang.request.search.vattu.bienbangiaonhan.NhBbGiaoNhanVtSearchReq;
+import com.tcdt.qlnvhang.service.HhQdGiaoNvuNhapxuatService;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
@@ -33,9 +38,9 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcap.XhXcapQdGnvXhHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -55,6 +60,7 @@ import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -85,6 +91,8 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
     private NhPhieuNhapKhoService nhPhieuNhapKhoService;
     @Autowired
     private FileDinhKemService fileDinhKemService;
+    @Autowired
+    private HhQdGiaoNvuNhapxuatService hhQdGiaoNvuNhapxuatService;
     @Override
     public Page<NhBbGiaoNhanVt> searchPage(NhBbGiaoNhanVtReq req) {
         return null;
@@ -313,6 +321,66 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
             f.setListBienBanGiaoNhan(bbGiaoNhanVt);
         });
         return data;
+    }
+
+    @Override
+    public void exportBbgn(NhBbGiaoNhanVtSearchReq req, HttpServletResponse response) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        Page<NhQdGiaoNvuNhapxuatHdr> page = search(req);
+        List<NhQdGiaoNvuNhapxuatHdr> data = page.getContent();
+        String title = "Danh sách biên bản tạm giao, gửi hàng";
+        String[] rowsName = new String[]{"STT", "Số QĐ giao NVNH", "Năm kế hoạch", "Thời hạn NH trước ngày", "Điểm kho", "Ngăn Lô kho",
+                "Số BB giao nhận", "Số BB kết thúc NK", "Ngày kết thúc NK", "Số BB gửi hàng", "Số BB LM/BGM", "Số HSKT", "Trạng thái"};
+        String filename = "danh-sach-bien-ban-lay-mau.xlsx";
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        Object[] objsb = null;
+        Object[] objsc = null;
+        for (int i = 0; i < data.size(); i++) {
+            NhQdGiaoNvuNhapxuatHdr qd = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = qd.getSoQd();
+            objs[2] = qd.getNamNhap();
+            objs[3] = convertDate(qd.getTgianNkho());
+            dataList.add(objs);
+            Map<String, List<NhBbGiaoNhanVt>> groupedByDiemKho = qd.getListBienBanGiaoNhan().stream()
+                    .collect(Collectors.groupingBy(NhBbGiaoNhanVt::getTenDiemKho));
+            for (Map.Entry<String, List<NhBbGiaoNhanVt>> entry : groupedByDiemKho.entrySet()) {
+                objsb = new Object[rowsName.length];
+                objsb[4] = entry.getKey();
+                dataList.add(objsb);
+                for (int j = 0; j < entry.getValue().size(); j++) {
+                    objsc = new Object[rowsName.length];
+                    if (entry.getValue().get(j).getMaLoKho() != null) {
+                        objsc[5] = entry.getValue().get(j).getTenNganKho() + " - " +entry.getValue().get(j).getTenLoKho();
+                    } else {
+                        objsc[5] =  entry.getValue().get(j).getTenNganKho();
+                    }
+                    objsc[6] = entry.getValue().get(j).getSoBbGiaoNhan();
+                    objsc[7] = entry.getValue().get(j).getSoBbNhapDayKho();
+                    if (entry.getValue().get(j).getBbNhapDayKho() != null) {
+                        objsc[8] = convertDate(entry.getValue().get(j).getBbNhapDayKho().getNgayKetThucNhap());
+                    }
+                    if (entry.getValue().get(j).getBbGuiHang() != null) {
+                        objsc[9] = entry.getValue().get(j).getBbGuiHang().getSoBienBanGuiHang();
+                    }
+                    if (entry.getValue().get(j).getBbLayMau() != null) {
+                        objsc[10] = entry.getValue().get(j).getBbLayMau().getSoBienBan();
+                        objsc[11] = entry.getValue().get(j).getBbLayMau().getSoHskt();
+                    }
+                    objsc[12] = entry.getValue().get(j).getTenTrangThai();
+                    dataList.add(objsc);
+                }
+            }
+        }
+
+        ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+        ex.export();
     }
 
     @Override
