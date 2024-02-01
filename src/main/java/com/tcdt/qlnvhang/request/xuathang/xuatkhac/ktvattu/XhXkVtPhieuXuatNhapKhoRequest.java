@@ -46,6 +46,7 @@ public class XhXkVtPhieuXuatNhapKhoRequest extends BaseRequest {
     private BigDecimal slTonKho;
     private BigDecimal slLayMau;
     private String donViTinh;
+    private String maDviTsan;
     private Boolean mauBiHuy;
     private String loaiPhieu;
     private String soBcKqkdMau;

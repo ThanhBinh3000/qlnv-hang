@@ -146,7 +146,7 @@ public class XhXkVtPhieuKdclService extends BaseServiceImpl {
         XhXkVtPhieuKdclHdr created = xhXkVtPhieuKdclHdrRepository.save(dx);
         fileDinhKemService.delete(dx.getId(), Collections.singleton(XhXkVtPhieuKdclHdr.TABLE_NAME));
         //save file đính kèm
-        fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtPhieuKdclHdr.TABLE_NAME);
+        fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkVtPhieuKdclHdr.TABLE_NAME);
         return detail(created.getId());
     }
 

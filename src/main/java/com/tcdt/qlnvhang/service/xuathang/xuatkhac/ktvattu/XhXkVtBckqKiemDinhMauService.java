@@ -6,6 +6,7 @@ import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtBckqKiemDinhMauRepository;
+import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtPhieuKdclHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtQdGiaonvXhRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -18,10 +19,7 @@ import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtBckqKiemDinhMau;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatNhapKho;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtQdGiaonvXhHdr;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtQdXuatGiamVattu;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -39,6 +37,7 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
@@ -279,14 +278,26 @@ public class XhXkVtBckqKiemDinhMauService extends BaseServiceImpl {
 
     public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
         try {
-            ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
-            reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
-            ReportTemplate model = findByTenFile(reportTemplateRequest);
-            byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-//            FileInputStream inputStream = new FileInputStream("src/main/resources/reports/xuatcuutrovientro/Phiếu kiểm nghiệm chất lượng.docx");
+            String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "xuatkhac/luongthuc/" + fileName;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
             XhXkVtBckqKiemDinhMau detail = this.detail(DataUtils.safeToLong(body.get("id")));
-            return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+            Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+            Map<String, String> mapVthh = getListDanhMucHangHoa();
+            Long[] idsQdGiaoNvXh = Arrays.stream(detail.getIdQdGiaoNvXh().split(","))
+                .map(String::trim)
+                .map(Long::valueOf)
+                .toArray(Long[]::new);
+
+            List<XhXkVtPhieuXuatNhapKho> list = xhXkVtPhieuXuatNhapKhoRepository.findByIdCanCuIn(Arrays.asList(idsQdGiaoNvXh));
+            list.forEach(i -> {
+                i.setMapDmucDvi(mapDmucDvi);
+                i.setMapVthh(mapVthh);
+            });
+            List<XhXkVtPhieuXuatNhapKho> listPhieu = list.stream()
+                .filter(i -> "XUAT_MAU".equals(i.getLoai()) && "XUAT".equals(i.getLoaiPhieu()))
+                .collect(Collectors.toList());
+            return docxToPdfConverter.convertDocxToPdf(inputStream, detail,listPhieu);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (XDocReportException e) {

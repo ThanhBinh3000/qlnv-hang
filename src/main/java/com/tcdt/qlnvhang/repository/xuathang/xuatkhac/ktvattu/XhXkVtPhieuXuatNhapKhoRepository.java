@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu;
 
 import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattu.XhXkVtBbKtNhapKhoRequest;
 import com.tcdt.qlnvhang.request.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatNhapKhoRequest;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuKdclHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatNhapKho;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,6 +53,7 @@ public interface XhXkVtPhieuXuatNhapKhoRepository extends JpaRepository<XhXkVtPh
 
     List<XhXkVtPhieuXuatNhapKho> findAllByIdQdXuatGiamVt(Long idQdXuatGiamVt);
 
+    List<XhXkVtPhieuXuatNhapKho> findByIdCanCuIn(List<Long> ids);
 
     @Query("SELECT c FROM XhXkVtPhieuXuatNhapKho c, XhXkVtBbKtNhapKho b WHERE 1=1 " +
             "AND (c.idBbKtNhapKho = b.id) " +
