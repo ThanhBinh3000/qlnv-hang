@@ -148,6 +148,12 @@ public class XhXkVtBckqKiemDinhMauService extends BaseServiceImpl {
         XhXkVtBckqKiemDinhMau dx = optional.get();
         BeanUtils.copyProperties(objReq, dx);
         XhXkVtBckqKiemDinhMau created = xhXkVtBckqKiemDinhMauRepository.save(dx);
+        //save lại pxk -- update mẫu bị hủy hay ko và số bc,id bc
+        objReq.getListDetailPxk().forEach(item -> {
+            item.setSoBcKqkdMau(created.getSoBaoCao());
+            item.setIdBcKqkdMau(created.getId());
+        });
+        xhXkVtPhieuXuatNhapKhoRepository.saveAll(objReq.getListDetailPxk());
         fileDinhKemService.delete(dx.getId(), Collections.singleton(XhXkVtBckqKiemDinhMau.TABLE_NAME));
         //save file đính kèm
         fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtBckqKiemDinhMau.TABLE_NAME);
