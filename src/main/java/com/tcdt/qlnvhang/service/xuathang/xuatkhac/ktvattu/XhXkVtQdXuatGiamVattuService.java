@@ -20,6 +20,7 @@ import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkKhXuatHang;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatNhapKho;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtQdGiaonvXhHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtQdXuatGiamVattu;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhQdXuatGiamVt;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -181,24 +182,36 @@ public class XhXkVtQdXuatGiamVattuService extends BaseServiceImpl {
     }
 
 
-    public XhXkVtQdXuatGiamVattu pheDuyet(CustomUserDetails currentUser, StatusReq req) throws Exception {
-        Optional<XhXkVtQdXuatGiamVattu> dx = xhXkVtQdXuatGiamVattuRepository.findById(req.getId());
-        if (!dx.isPresent()) {
+    public XhXkVtQdXuatGiamVattu pheDuyet(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
+        Optional<XhXkVtQdXuatGiamVattu> optional = xhXkVtQdXuatGiamVattuRepository.findById(statusReq.getId());
+        if (!optional.isPresent()) {
             throw new Exception("Không tồn tại bản ghi");
         }
-        XhXkVtQdXuatGiamVattu xhXkVtQdXuatGiamVattu = dx.get();
-        String status = xhXkVtQdXuatGiamVattu.getTrangThai() + req.getTrangThai();
+        String status = statusReq.getTrangThai() + optional.get().getTrangThai();
         switch (status) {
-            case Contains.DU_THAO + Contains.BAN_HANH:
-                xhXkVtQdXuatGiamVattu.setNguoiDuyetId(currentUser.getUser().getId());
-                xhXkVtQdXuatGiamVattu.setNgayDuyet(LocalDate.now());
+            case Contains.CHODUYET_LDV + Contains.DUTHAO:
+            case Contains.CHODUYET_LDTC + Contains.CHODUYET_LDV:
+            case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
+            case Contains.CHODUYET_LDV + Contains.TUCHOI_LDTC:
+                optional.get().setNguoiGduyetId(currentUser.getUser().getId());
+                optional.get().setNgayGduyet(LocalDate.now());
+                break;
+            case Contains.TUCHOI_LDV + Contains.CHODUYET_LDV:
+            case Contains.TUCHOI_LDTC + Contains.CHODUYET_LDTC:
+                optional.get().setNguoiDuyetId(currentUser.getUser().getId());
+                optional.get().setNgayDuyet(LocalDate.now());
+                optional.get().setLyDoTuChoi(statusReq.getLyDoTuChoi());
+                break;
+            case Contains.BAN_HANH + Contains.CHODUYET_LDTC:
+                optional.get().setNguoiDuyetId(currentUser.getUser().getId());
+                optional.get().setNgayDuyet(LocalDate.now());
                 break;
             default:
-                throw new Exception("Phê duyệt không thành công.");
+                throw new Exception("Phê duyệt không thành công");
         }
-        xhXkVtQdXuatGiamVattu.setTrangThai(req.getTrangThai());
-        XhXkVtQdXuatGiamVattu model = xhXkVtQdXuatGiamVattuRepository.save(xhXkVtQdXuatGiamVattu);
-        return detail(model.getId());
+        optional.get().setTrangThai(statusReq.getTrangThai());
+        XhXkVtQdXuatGiamVattu created = xhXkVtQdXuatGiamVattuRepository.save(optional.get());
+        return created;
     }
 
 
