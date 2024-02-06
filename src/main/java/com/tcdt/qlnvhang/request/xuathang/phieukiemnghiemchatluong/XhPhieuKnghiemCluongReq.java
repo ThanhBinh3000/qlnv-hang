@@ -56,6 +56,6 @@ public class XhPhieuKnghiemCluongReq extends BaseRequest {
     private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
     private List<XhPhieuKnghiemCluongCtReq> children = new ArrayList<>();
     private String dvql;
-    private String ngayKiemNghiemMauTu;
-    private String ngayKiemNghiemMauDen;
+    private LocalDate ngayKiemNghiemMauTu;
+    private LocalDate ngayKiemNghiemMauDen;
 }
