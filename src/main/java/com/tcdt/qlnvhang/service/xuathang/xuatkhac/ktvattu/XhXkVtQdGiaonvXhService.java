@@ -90,7 +90,8 @@ public class XhXkVtQdGiaonvXhService extends BaseServiceImpl {
         });
         XhXkVtQdGiaonvXhHdr created = xhXkVtQdGiaonvXhRepository.save(data);
         //save file đính kèm
-        fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtQdGiaonvXhHdr.TABLE_NAME);
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtQdGiaonvXhHdr.TABLE_NAME);
+        created.setFileDinhKems(fileDinhKem);
         return detail(created.getId());
     }
 
@@ -117,7 +118,8 @@ public class XhXkVtQdGiaonvXhService extends BaseServiceImpl {
         XhXkVtQdGiaonvXhHdr created = xhXkVtQdGiaonvXhRepository.save(dx);
         fileDinhKemService.delete(dx.getId(), Collections.singleton(XhXkVtQdGiaonvXhHdr.TABLE_NAME));
         //save file đính kèm
-        fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtQdGiaonvXhHdr.TABLE_NAME);
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtQdGiaonvXhHdr.TABLE_NAME);
+        created.setFileDinhKems(fileDinhKem);
         return detail(created.getId());
     }
 
@@ -131,7 +133,7 @@ public class XhXkVtQdGiaonvXhService extends BaseServiceImpl {
         XhXkVtQdGiaonvXhHdr model = optional.get();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
-        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(model.getId(), Arrays.asList(XhXkKhXuatHang.TABLE_NAME));
+        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(model.getId(), Arrays.asList(XhXkVtQdGiaonvXhHdr.TABLE_NAME));
         model.setFileDinhKems(fileDinhKem);
         model.getXhXkVtQdGiaonvXhDtl().forEach(s -> {
             s.setMapDmucDvi(mapDmucDvi);
@@ -175,7 +177,7 @@ public class XhXkVtQdGiaonvXhService extends BaseServiceImpl {
         switch (status) {
             case Contains.DU_THAO + Contains.CHODUYET_TP:
             case Contains.TUCHOI_TP + Contains.CHODUYET_TP:
-            case Contains.TU_CHOI_LDC + Contains.CHO_DUYET_LDC:
+            case Contains.TU_CHOI_LDC + Contains.CHODUYET_TP:
                 break;
             case Contains.CHO_DUYET_LDC + Contains.TU_CHOI_LDC:
             case Contains.CHODUYET_TP + Contains.TUCHOI_TP:

@@ -17,6 +17,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkKhXuatHang;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtQdGiaonvXhHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtQdXuatGiamVattu;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhBbBaoHanh;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuKdclHdr;
@@ -104,7 +105,8 @@ public class XhXkVtBhQdGiaonvXnService extends BaseServiceImpl {
     this.updateQdXuat(created, false);
     this.updateQdGiaonvNhap(created, false);
     //save file đính kèm
-    fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtBhQdGiaonvXnHdr.TABLE_NAME);
+    List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtQdGiaonvXhHdr.TABLE_NAME);
+    created.setFileDinhKems(fileDinhKem);
     return detail(created.getId());
   }
 
@@ -134,7 +136,8 @@ public class XhXkVtBhQdGiaonvXnService extends BaseServiceImpl {
     this.updateQdGiaonvNhap(created, false);
     fileDinhKemService.delete(dx.getId(), Collections.singleton(XhXkVtBhQdGiaonvXnHdr.TABLE_NAME));
     //save file đính kèm
-    fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtBhQdGiaonvXnHdr.TABLE_NAME);
+    List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKemReq(), created.getId(), XhXkVtQdGiaonvXhHdr.TABLE_NAME);
+    created.setFileDinhKems(fileDinhKem);
     return detail(created.getId());
   }
 

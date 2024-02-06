@@ -81,7 +81,7 @@ public class XhXkVtPhieuKdclService extends BaseServiceImpl {
         search.getContent().forEach(s -> {
             s.setMapDmucDvi(mapDmucDvi);
             s.setMapVthh(mapVthh);
-            s.setNgayXuatLayMau(mapBbLayMau.get(s.getIdBbLayMau()).getNgayXuatLayMau());
+//            s.setNgayXuatLayMau(mapBbLayMau.get(s.getIdBbLayMau()).getNgayXuatLayMau());
             if (s.getNguoiPduyetId() != null) {
                 s.setTenThuKho(ObjectUtils.isEmpty(s.getNguoiPduyetId()) ? null : userInfoRepository.findById(s.getNguoiPduyetId()).get().getFullName());
             }
