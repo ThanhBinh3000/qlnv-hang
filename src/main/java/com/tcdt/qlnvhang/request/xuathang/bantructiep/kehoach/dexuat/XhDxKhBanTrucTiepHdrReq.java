@@ -52,6 +52,7 @@ public class XhDxKhBanTrucTiepHdrReq extends BaseRequest {
     private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
     private List<XhDxKhBanTrucTiepDtl> children = new ArrayList<>();
     private String dvql;
+    private String maDviCuc;
     private LocalDate ngayTaoTu;
     private LocalDate ngayTaoDen;
     private LocalDate ngayDuyetTu;

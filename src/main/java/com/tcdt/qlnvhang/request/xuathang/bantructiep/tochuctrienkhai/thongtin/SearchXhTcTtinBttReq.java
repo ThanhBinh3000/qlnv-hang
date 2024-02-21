@@ -29,6 +29,7 @@ public class SearchXhTcTtinBttReq extends BaseRequest {
     private List<String> pthucBanTrucTiep = new ArrayList<>();
     private String dvql;
     private String maChiCuc;
+    private String maCuc;
     private String trangThaiHdr;
     private String soHopDong;
     private String tenHopDong;
