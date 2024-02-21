@@ -40,6 +40,7 @@ public interface XhQdPdKhBttDtlRepository extends JpaRepository<XhQdPdKhBttDtl, 
             " AND (:#{#param.loaiVthh} IS NULL OR LOWER(dtl.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh}, '%'))" +
             " AND (:#{#param.pthucBanTrucTiep == null || #param.pthucBanTrucTiep.isEmpty()} = TRUE OR dtl.pthucBanTrucTiep IN :#{#param.pthucBanTrucTiep})" +
             " AND (:#{#param.maChiCuc} IS NULL OR dvi.maDvi LIKE CONCAT(:#{#param.maChiCuc}, '%')) " +
+            " AND (:#{#param.maCuc} IS NULL OR dtl.maDvi LIKE CONCAT(:#{#param.maCuc}, '%')) " +
             " ORDER BY dtl.namKh DESC, dtl.ngayNhanCgia DESC, dtl.id DESC")
     Page<XhQdPdKhBttDtl> searchPage(@Param("param") SearchXhTcTtinBttReq param, Pageable pageable);
 
