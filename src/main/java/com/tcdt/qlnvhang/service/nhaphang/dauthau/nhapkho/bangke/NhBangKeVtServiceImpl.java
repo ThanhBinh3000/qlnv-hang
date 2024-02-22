@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangke.NhBangKeVt;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangke.NhBangKeVtCt;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKho;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
+import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.vattu.bangke.NhBangKeVtCtRepository;
 import com.tcdt.qlnvhang.repository.vattu.bangke.NhBangKeVtRepository;
@@ -169,15 +170,15 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
 
         String trangThai = req.getTrangThai() + item.getTrangThai();
         if (
-            (NhapXuatHangTrangThaiEnum.CHODUYET_TBP_KTBQ.getId() + NhapXuatHangTrangThaiEnum.DUTHAO.getId()).equals(trangThai) ||
-            (NhapXuatHangTrangThaiEnum.CHODUYET_TBP_KTBQ.getId() + NhapXuatHangTrangThaiEnum.TUCHOI_TBP_KTBQ.getId()).equals(trangThai) ||
-            (NhapXuatHangTrangThaiEnum.CHODUYET_TBP_KTBQ.getId() + NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId()).equals(trangThai)
+            (TrangThaiAllEnum.CHODUYET_TBP_TVQT.getId() + NhapXuatHangTrangThaiEnum.DUTHAO.getId()).equals(trangThai) ||
+            (TrangThaiAllEnum.CHODUYET_TBP_TVQT.getId() + TrangThaiAllEnum.TUCHOI_TBP_TVQT.getId()).equals(trangThai) ||
+            (TrangThaiAllEnum.CHODUYET_TBP_TVQT.getId() + NhapXuatHangTrangThaiEnum.TUCHOI_LDCC.getId()).equals(trangThai)
         ) {
             item.setNguoiGuiDuyetId(userInfo.getId());
             item.setNgayGuiDuyet(new Date());
         } else if (
-            (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_TBP_KTBQ.getId()).equals(trangThai) ||
-            (NhapXuatHangTrangThaiEnum.TUCHOI_TBP_KTBQ.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_TBP_KTBQ.getId()).equals(trangThai)
+            (NhapXuatHangTrangThaiEnum.CHODUYET_LDCC.getId() + TrangThaiAllEnum.CHODUYET_TBP_TVQT.getId()).equals(trangThai) ||
+            (TrangThaiAllEnum.TUCHOI_TBP_TVQT.getId() + TrangThaiAllEnum.CHODUYET_TBP_TVQT.getId()).equals(trangThai)
         ) {
             item.setIdTruongPhong(userInfo.getId());
             item.setLyDoTuChoi(req.getLyDoTuChoi());
