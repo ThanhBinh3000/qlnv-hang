@@ -434,7 +434,11 @@ public class QuyChuanQuocGiaHdrService extends BaseServiceImpl {
             List<QuyChuanQuocGiaHdr> allHdrCoHieuLuc = quyChuanQuocGiaHdrRepository.findAllByIdIn(idsHdr).stream().filter(item -> item.getTrangThaiHl().equals("01")).collect(Collectors.toList());
             if (!allHdrCoHieuLuc.isEmpty()) {
                 List<Long> idsHdrCoHieuLuc = allHdrCoHieuLuc.stream().map(QuyChuanQuocGiaHdr::getId).collect(Collectors.toList());
+                String soHieu = allHdrCoHieuLuc.stream()
+                        .map(QuyChuanQuocGiaHdr::getSoHieuQuyChuan)
+                        .collect(Collectors.joining(", "));
                 listQuyChuanApDung = quyChuanQuocGiaDtlRepository.getAllQuyChuanByCloaiVthhApDung(loaiVthh, idsHdrCoHieuLuc);
+                listQuyChuanApDung.forEach(item -> item.setSoHieuQuyChuan(soHieu));
             }
         }
         return listQuyChuanApDung;

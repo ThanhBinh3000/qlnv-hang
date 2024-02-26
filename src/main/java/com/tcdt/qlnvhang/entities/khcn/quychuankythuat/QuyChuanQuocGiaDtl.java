@@ -50,5 +50,7 @@ public class QuyChuanQuocGiaDtl extends BaseEntity {
   @Transient
   String tenNhomCtieu;
   @Transient
+  String soHieuQuyChuan;
+  @Transient
   private FileDinhKem fileDinhKem;
 }

@@ -72,7 +72,7 @@ public class NhBienBanNhapDayKhoServiceImpl extends BaseServiceImpl implements N
         }
         NhBbNhapDayKho item = new NhBbNhapDayKho();
         BeanUtils.copyProperties(req, item, "id");
-        item.setNgayTao(new Date());
+//        item.setNgayTao(new Date());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         item.setMaDvi(userInfo.getDvql());
