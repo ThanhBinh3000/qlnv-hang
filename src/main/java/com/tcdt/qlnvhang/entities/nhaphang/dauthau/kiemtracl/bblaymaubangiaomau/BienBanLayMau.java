@@ -144,6 +144,7 @@ public class BienBanLayMau extends TrangThaiBaseEntity implements Serializable  
 	@Column(name = "LOAI_BIEN_BAN")
 	private String loaiBienBan;
 	private String truongBpKtbq;
+	private String kyHieuSeri;
 
 	@Transient
 	private List<BienBanLayMauCt> chiTiets = new ArrayList<>();
