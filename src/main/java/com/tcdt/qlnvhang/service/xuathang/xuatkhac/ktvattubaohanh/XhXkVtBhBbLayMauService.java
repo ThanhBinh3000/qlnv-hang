@@ -38,6 +38,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class XhXkVtBhBbLayMauService extends BaseServiceImpl {
@@ -258,7 +259,32 @@ public class XhXkVtBhBbLayMauService extends BaseServiceImpl {
       String fileTemplate = "xuatkhac/" + fileName;
       FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
       XhXkVtBhBbLayMauHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
-      return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+      String[] chiTieus = detail.getChiTieuKiemTra().split(";");
+      List<Map<String, Object>> chiTieuList = Arrays.stream(chiTieus)
+          .map(chiTieu -> {
+            String[] parts = chiTieu.split("-");
+            String label = parts[0].trim();
+            boolean checked = Boolean.parseBoolean(parts[1].trim());
+            Map<String, Object> chiTieuObj = new HashMap<>();
+            chiTieuObj.put("chiTieu", label);
+            chiTieuObj.put("isDat", checked);
+            return chiTieuObj;
+          })
+          .collect(Collectors.toList());
+      String[] phuongPhaps = detail.getPpLayMau().split(";");
+      List<Map<String, Object>> phuongPhapList = Arrays.stream(phuongPhaps)
+          .map(phuongPhap -> {
+            String[] parts = phuongPhap.split("-");
+            String label = parts[0].trim();
+            boolean checked = Boolean.parseBoolean(parts[1].trim());
+            Map<String, Object> chiTieuObj = new HashMap<>();
+            chiTieuObj.put("phuongPhap", label);
+            chiTieuObj.put("isDat", checked);
+            return chiTieuObj;
+          })
+          .collect(Collectors.toList());
+
+      return docxToPdfConverter.convertDocxToPdf(inputStream, detail ,phuongPhapList ,chiTieuList);
     } catch (IOException e) {
       e.printStackTrace();
     } catch (XDocReportException e) {
