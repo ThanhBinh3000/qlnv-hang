@@ -149,6 +149,7 @@ public class XhPhieuKnclHdr extends BaseEntity implements Serializable {
   private String ketLuan;
   private String loaiBb;
   private String type;
+  private String tieuDe;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @Fetch(value = FetchMode.SUBSELECT)
