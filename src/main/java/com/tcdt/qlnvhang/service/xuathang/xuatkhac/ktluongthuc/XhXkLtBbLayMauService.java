@@ -40,6 +40,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class XhXkLtBbLayMauService extends BaseServiceImpl {
@@ -289,7 +290,11 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
       String fileTemplate = "xuatkhac/luongthuc/" + fileName;
       FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
       List<XhXkLtBbLayMauHdr>  detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
-      return docxToPdfConverter.convertDocxToPdf(inputStream, detail.get(0));
+      String chiTieuData = detail.get(0).getChiTieuKiemTra();
+      String phuongPhapData = detail.get(0).getPpLayMau();
+      List<Map<String, Object>> chiTieuList = parseData(chiTieuData);
+      List<Map<String, Object>> phuongPhapList = parseData(phuongPhapData);
+      return docxToPdfConverter.convertDocxToPdf(inputStream, detail.get(0) ,phuongPhapList ,chiTieuList);
     } catch (IOException e) {
       e.printStackTrace();
     } catch (XDocReportException e) {

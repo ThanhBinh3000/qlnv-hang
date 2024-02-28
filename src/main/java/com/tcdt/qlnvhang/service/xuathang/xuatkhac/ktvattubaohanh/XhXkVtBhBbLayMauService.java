@@ -38,6 +38,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class XhXkVtBhBbLayMauService extends BaseServiceImpl {
@@ -258,7 +259,12 @@ public class XhXkVtBhBbLayMauService extends BaseServiceImpl {
       String fileTemplate = "xuatkhac/" + fileName;
       FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
       XhXkVtBhBbLayMauHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
-      return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
+      String chiTieuData = detail.getChiTieuKiemTra();
+      String phuongPhapData = detail.getPpLayMau();
+      List<Map<String, Object>> chiTieuList = parseData(chiTieuData);
+      List<Map<String, Object>> phuongPhapList = parseData(phuongPhapData);
+
+      return docxToPdfConverter.convertDocxToPdf(inputStream, detail ,phuongPhapList ,chiTieuList);
     } catch (IOException e) {
       e.printStackTrace();
     } catch (XDocReportException e) {
