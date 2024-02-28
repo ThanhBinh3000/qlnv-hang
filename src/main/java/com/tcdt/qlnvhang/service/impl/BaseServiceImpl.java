@@ -58,6 +58,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -581,6 +582,24 @@ public abstract class BaseServiceImpl {
         List<FileDinhKem> bienBanLayMauDinhKem = fileDinhKemService.saveListFileDinhKem(fileDinhKems, idHdr, tableName);
     }
 
+    public List<Map<String, Object>> parseData(String data) {
+        List<Map<String, Object>> dataList = new ArrayList<>();
+        if (data != null && !data.isEmpty()) {
+            String[] items = data.split(";");
+            dataList = Arrays.stream(items)
+                .map(item -> {
+                    String[] parts = item.split("=>");
+                    String label = parts[0].trim();
+                    boolean checked = Boolean.parseBoolean(parts[1].trim());
+                    Map<String, Object> itemMap = new HashMap<>();
+                    itemMap.put("chiTieu", label);
+                    itemMap.put("isDat", checked);
+                    return itemMap;
+                })
+                .collect(Collectors.toList());
+        }
+        return dataList;
+    }
 
 }
 
