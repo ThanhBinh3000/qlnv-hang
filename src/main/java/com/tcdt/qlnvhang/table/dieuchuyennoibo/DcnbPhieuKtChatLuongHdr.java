@@ -223,6 +223,8 @@ public class DcnbPhieuKtChatLuongHdr extends BaseEntity implements Serializable,
     private String soBBNtLd;
     @Column(name = "KE_HOACH_DC_DTL_ID")
     private Long keHoachDcDtlId;
+    @Column(name = "CHI_SO_CHAT_LUONG_TITLE")
+    private String chiSoChatLuongTitle;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
     private List<DcnbPhieuKtChatLuongDtl> dcnbPhieuKtChatLuongDtl = new ArrayList<>();
