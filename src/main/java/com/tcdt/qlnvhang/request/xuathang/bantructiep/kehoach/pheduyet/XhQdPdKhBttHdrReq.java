@@ -4,6 +4,7 @@ import com.tcdt.qlnvhang.request.BaseRequest;
 import com.tcdt.qlnvhang.request.object.FileDinhKemReq;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,13 @@ public class XhQdPdKhBttHdrReq extends BaseRequest {
     private String noiDungDieuChinh;
     private String type;
     private Long idQdPd;
+    private Integer typeHopDong;
+    private Integer slHdDaKy;
+    private Integer slHdChuaKy;
+    private BigDecimal tongGiaTriHdong;
+    private LocalDate ngayKthuc;
+    private String trangThaiHd;
+    private String trangThaiXh;
     private List<XhQdPdKhBttDtlReq> children;
     private List<FileDinhKemReq> canCuPhapLy = new ArrayList<>();
     private List<FileDinhKemReq> fileDinhKem = new ArrayList<>();

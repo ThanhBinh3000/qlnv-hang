@@ -98,6 +98,8 @@ public class XhHopDongBttHdr implements Serializable {
     private Long nguoiPduyetId;
     private Long idQdDc;
     private String soQdDc;
+    private String phanLoai;
+    private Long idKh;
     @Transient
     private String tenDvi;
     @Transient

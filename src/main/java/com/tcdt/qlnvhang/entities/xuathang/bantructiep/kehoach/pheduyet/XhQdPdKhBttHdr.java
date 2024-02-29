@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.hopdong.XhHopDongBttHdr;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.response.chotdulieu.QthtChotGiaInfoRes;
 import com.tcdt.qlnvhang.table.FileDinhKem;
@@ -69,6 +70,13 @@ public class XhQdPdKhBttHdr implements Serializable {
     private String noiDungDieuChinh;
     private String type;
     private Long idQdPd;
+    private Boolean typeHopDong;
+    private Integer slHdDaKy;
+    private Integer slHdChuaKy;
+    private BigDecimal tongGiaTriHdong;
+    private LocalDate ngayKthuc;
+    private String trangThaiHd;
+    private String trangThaiXh;
     @Transient
     private String tenDvi;
     @Transient
@@ -81,6 +89,10 @@ public class XhQdPdKhBttHdr implements Serializable {
     private String tenCloaiVthh;
     @Transient
     private String tenTrangThai;
+    @Transient
+    private String tenTrangThaiHd;
+    @Transient
+    private String tenTrangThaiXh;
     @Transient
     private BigDecimal tongSoLuongCuc;
     @Transient
@@ -146,6 +158,16 @@ public class XhQdPdKhBttHdr implements Serializable {
         return trangThai;
     }
 
+    public String getTrangThaiHd() {
+        setTenTrangThaiHd(TrangThaiAllEnum.getLabelById(trangThaiHd));
+        return trangThaiHd;
+    }
+
+    public String getTrangThaiXh() {
+        setTenTrangThaiXh(TrangThaiAllEnum.getLabelById(trangThaiXh));
+        return trangThaiXh;
+    }
+
     @Transient
     private List<FileDinhKem> canCuPhapLy = new ArrayList<>();
     @Transient
@@ -154,4 +176,6 @@ public class XhQdPdKhBttHdr implements Serializable {
     private List<FileDinhKem> fileDinhKemDc = new ArrayList<>();
     @Transient
     private List<XhQdPdKhBttDtl> children = new ArrayList<>();
+    @Transient
+    private List<XhHopDongBttHdr> listHopDongBtt;
 }

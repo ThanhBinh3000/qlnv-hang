@@ -33,4 +33,5 @@ public class SearchXhTcTtinBttReq extends BaseRequest {
     private String trangThaiHdr;
     private String soHopDong;
     private String tenHopDong;
+    private Integer typeHopDong;
 }
