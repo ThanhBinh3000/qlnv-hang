@@ -125,6 +125,5 @@ public class DcnbBangKeCanHangHdrReq {
     private Long keHoachDcDtlId;
     private BigDecimal tlSoBaoKhongCan;
     private BigDecimal tongSlBaoBi;
-    private BigDecimal tongTlCaBaoBi;
     private BigDecimal tlMotBaoCaBi;
 }
