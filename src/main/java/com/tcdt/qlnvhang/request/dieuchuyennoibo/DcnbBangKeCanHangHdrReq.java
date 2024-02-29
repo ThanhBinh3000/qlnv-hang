@@ -92,6 +92,7 @@ public class DcnbBangKeCanHangHdrReq {
     private String loaiDc;
     @NotNull
     private String type;
+    private String phuongPhapCan;
 
     private String maLanhDaoChiCuc;
 
