@@ -27,6 +27,9 @@ public class DcnbBangKeCanHangDtl {
     @Column(name = "HDR_ID")
     private Long hdrId;
 
+    @Column(name = "LAN")
+    private Integer lan;
+
     @Column(name = "MA_CAN")
     private String maCan;
 
