@@ -123,4 +123,7 @@ public class DcnbBangKeCanHangHdrReq {
     private ReportTemplateRequest reportTemplateRequest;
     @NotNull
     private Long keHoachDcDtlId;
+    private BigDecimal tlSoBaoKhongCan;
+    private BigDecimal tongSlBaoBi;
+    private BigDecimal tongTlCaBaoBi;
 }

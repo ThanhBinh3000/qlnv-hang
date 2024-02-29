@@ -196,7 +196,12 @@ public class DcnbBangKeCanHangHdr extends BaseEntity implements Serializable, Cl
 
     @Column(name = "PHUONG_PHAP_CAN")
     private String phuongPhapCan;
-
+    @Column(name = "TL_SO_BAO_KHONG_CAN")
+    private BigDecimal tlSoBaoKhongCan;
+    @Column(name = "TONG_SL_BAO_BI")
+    private BigDecimal tongSlBaoBi;
+    @Column(name = "TONG_TL_CA_BAO_BI")
+    private BigDecimal tongTlCaBaoBi;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
     private List<DcnbBangKeCanHangDtl> dcnbBangKeCanHangDtl = new ArrayList<>();
