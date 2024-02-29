@@ -202,6 +202,8 @@ public class DcnbBangKeCanHangHdr extends BaseEntity implements Serializable, Cl
     private BigDecimal tongSlBaoBi;
     @Column(name = "TONG_TL_CA_BAO_BI")
     private BigDecimal tongTlCaBaoBi;
+    @Column(name = "TL_MOT_BAO_CA_BI")
+    private BigDecimal tlMotBaoCaBi;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "HDR_ID")
     private List<DcnbBangKeCanHangDtl> dcnbBangKeCanHangDtl = new ArrayList<>();
