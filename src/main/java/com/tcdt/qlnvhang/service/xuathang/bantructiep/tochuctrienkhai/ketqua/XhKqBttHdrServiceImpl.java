@@ -79,6 +79,8 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
                 data.setTrangThai(data.getTrangThai());
                 data.setTrangThaiHd(data.getTrangThaiHd());
                 data.setTrangThaiXh(data.getTrangThaiXh());
+                List<XhQdPdKhBttDvi> listDtl =  xhQdPdKhBttDviRepository.findAllByIdQdKqHdr(data.getId());
+                data.setChildren(listDtl != null && !listDtl.isEmpty() ? listDtl : Collections.emptyList());
             } catch (Exception exception) {
                 throw new RuntimeException(exception);
             }

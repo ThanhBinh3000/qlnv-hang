@@ -30,6 +30,7 @@ public interface XhQdPdKhBttHdrRepository extends JpaRepository<XhQdPdKhBttHdr, 
             "AND (:#{#param.loaiVthh} IS NULL OR QD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
             "AND (:#{#param.type} IS NULL OR LOWER(QD.type) LIKE LOWER(CONCAT('%', :#{#param.type}, '%'))) " +
             "AND (:#{#param.lastest} IS NULL OR LOWER(QD.lastest) LIKE LOWER(CONCAT('%', :#{#param.lastest}, '%'))) " +
+            "AND (:#{#param.typeHopDong} IS NULL OR LOWER(QD.typeHopDong) LIKE LOWER(CONCAT('%', :#{#param.typeHopDong}, '%'))) " +
             "AND (:#{#param.trangThai} IS NULL OR QD.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.maCuc} IS NULL OR DTL.maDvi LIKE CONCAT(:#{#param.maCuc}, '%')) " +
             "ORDER BY QD.namKh DESC, QD.ngaySua DESC, QD.ngayTao DESC, QD.id DESC")

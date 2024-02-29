@@ -7,8 +7,8 @@ import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKh
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.tonghop.XhThopDxKhBttHdr;
 import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdg;
-import com.tcdt.qlnvhang.entities.xuathang.daugia.kehoach.pheduyet.XhQdPdKhBdgDtl;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.xuathang.bantructiep.hopdong.XhHopDongBttHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.dexuat.XhDxKhBanTrucTiepHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviDtlRepository;
@@ -71,6 +71,8 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
     @Autowired
     private XhTcTtinBttServiceImpl xhTcTtinBttServiceImpl;
     @Autowired
+    private XhHopDongBttHdrRepository xhHopDongBttHdrRepository;
+    @Autowired
     private FileDinhKemService fileDinhKemService;
     @Autowired
     private QthtChotGiaNhapXuatService qthtChotGiaNhapXuatService;
@@ -91,6 +93,8 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
                 data.setMapDmucVthh(mapDmucVthh);
                 data.setMapDmucDvi(mapDmucDvi);
                 data.setTrangThai(data.getTrangThai());
+                data.setTrangThaiHd(data.getTrangThaiHd());
+                data.setTrangThaiXh(data.getTrangThaiXh());
                 List<XhQdPdKhBttDtl> listDtl = xhQdPdKhBttDtlRepository.findAllByIdHdr(data.getId());
                 data.setChildren(listDtl != null && !listDtl.isEmpty() ? listDtl : Collections.emptyList());
                 if (data.getTrangThai().equals(Contains.BAN_HANH) && data.getType().equals("QDDC")) {
@@ -131,6 +135,9 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
         newData.setLastest(false);
         newData.setNgayTao(LocalDate.now());
         newData.setNguoiTaoId(currentUser.getUser().getId());
+        newData.setTypeHopDong(false);
+        newData.setTrangThaiHd(Contains.CHUA_THUC_HIEN);
+        newData.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
         if ("QDKH".equals(newData.getType())) {
             newData.setTrangThai(Contains.DU_THAO);
             newData.setLanDieuChinh(Integer.valueOf(0));
@@ -185,7 +192,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
         }
         XhQdPdKhBttHdr existingData = xhQdPdKhBttHdrRepository.findById(request.getId())
                 .orElseThrow(() -> new Exception("Không tìm thấy dữ liệu cần sửa"));
-        BeanUtils.copyProperties(request, existingData, "id", "maDvi", "lastest", "lanDieuChinh");
+        BeanUtils.copyProperties(request, existingData, "id", "maDvi", "lastest", "lanDieuChinh", "trangThaiHd", "trangThaiXh");
         existingData.setNgaySua(LocalDate.now());
         existingData.setNguoiSuaId(currentUser.getUser().getId());
         XhQdPdKhBttHdr updatedData = xhQdPdKhBttHdrRepository.save(existingData);
@@ -325,9 +332,12 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
             item.setMapDmucLoaiXuat(mapDmucLoaiXuat);
             item.setMapDmucKieuXuat(mapDmucKieuXuat);
             item.setTrangThai(item.getTrangThai());
+            item.setTrangThaiHd(item.getTrangThaiHd());
+            item.setTrangThaiXh(item.getTrangThaiXh());
             item.setCanCuPhapLy(canCuPhapLy);
             item.setFileDinhKem(fileDinhKem);
             item.setFileDinhKemDc(fileDinhKemDc);
+            item.setListHopDongBtt(xhHopDongBttHdrRepository.findAllByIdKh(item.getId()));
             item.setChildren(detailList);
             if (item.getTrangThai().equals(Contains.BAN_HANH)) {
                 QthtChotGiaInfoReq objReq = new QthtChotGiaInfoReq();
@@ -487,14 +497,28 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
         XhQdPdKhBttHdr proposal = xhQdPdKhBttHdrRepository.findById(Long.valueOf(statusReq.getId()))
                 .orElseThrow(() -> new Exception("Không tìm thấy dữ liệu"));
         String statusCombination = statusReq.getTrangThai() + proposal.getTrangThai();
-        if ("QDKH".equals(proposal.getType())) {
-            this.handleQDKHApproval(currentUser, statusReq, proposal, statusCombination);
-        } else if ("QDDC".equals(proposal.getType())) {
-            this.handleQDDCApproval(currentUser, statusReq, proposal, statusCombination);
+        if (statusReq.getTrangThai().equals(Contains.DA_HOAN_THANH)
+                && proposal.getTrangThaiHd().equals(Contains.DANG_THUC_HIEN)) {
+            proposal.setTrangThaiHd(statusReq.getTrangThai());
         } else {
-            throw new Exception("Loại dữ liệu không được hỗ trợ");
+            if ("QDKH".equals(proposal.getType())) {
+                this.handleQDKHApproval(currentUser, statusReq, proposal, statusCombination);
+            } else if ("QDDC".equals(proposal.getType())) {
+                this.handleQDDCApproval(currentUser, statusReq, proposal, statusCombination);
+            } else {
+                throw new Exception("Loại dữ liệu không được hỗ trợ");
+            }
+            proposal.setTrangThai(statusReq.getTrangThai());
         }
-        proposal.setTrangThai(statusReq.getTrangThai());
+        xhQdPdKhBttHdrRepository.save(proposal);
+        if (proposal.getTrangThai().equals(Contains.BAN_HANH)) {
+            List<XhQdPdKhBttDtl> listDtl = xhQdPdKhBttDtlRepository.findAllByIdHdr(proposal.getId());
+            BigDecimal sumTongGtri = listDtl.stream()
+                    .map(XhQdPdKhBttDtl::getThanhTienDuocDuyet)
+                    .filter(Objects::nonNull)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+            proposal.setTongGiaTriHdong(sumTongGtri);
+        }
         return xhQdPdKhBttHdrRepository.save(proposal);
     }
 

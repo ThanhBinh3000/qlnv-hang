@@ -34,6 +34,12 @@ public interface XhHopDongBttHdrRepository extends JpaRepository<XhHopDongBttHdr
     @Query(value = "SELECT COUNT(*) FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '30' AND ID_QD_KQ = :idQdKq", nativeQuery = true)
     Integer countSlHopDongDaKyCuc(@Param("idQdKq") Long idQdKq);
 
+    @Query(value = "SELECT COUNT(*) FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '00' AND ID_KH = :idKh", nativeQuery = true)
+    Integer countSlHopDongChuaKyCucKh(@Param("idKh") Long idKh);
+
+    @Query(value = "SELECT COUNT(*) FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '30' AND ID_KH = :idKh", nativeQuery = true)
+    Integer countSlHopDongDaKyCucKh(@Param("idKh") Long idKh);
+
     @Query(value = "SELECT COUNT(*) FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '00' AND ID_CHAO_GIA = :idChaoGia", nativeQuery = true)
     Integer countSlHopDongChuaKyChiCuc(@Param("idChaoGia") Long idChaoGia);
 
@@ -57,4 +63,6 @@ public interface XhHopDongBttHdrRepository extends JpaRepository<XhHopDongBttHdr
     List<XhHopDongBttHdr> findAllByIdQdKq(Long idQdKq);
 
     List<XhHopDongBttHdr> findAllByIdQdNv(Long idQdNv);
+
+    List<XhHopDongBttHdr> findAllByIdKh(Long idKh);
 }
