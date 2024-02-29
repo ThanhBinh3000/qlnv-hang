@@ -27,17 +27,20 @@ public class DcnbBangKeCanHangDtl {
     @Column(name = "HDR_ID")
     private Long hdrId;
 
-    @NotNull
     @Column(name = "MA_CAN")
     private String maCan;
 
-    @NotNull
     @Column(name = "SO_BAO_BI")
     private String soBaoBi;
 
-    @NotNull
     @Column(name = "TRONG_LUONG_CA_BAO_BI")
     private BigDecimal trongLuongCaBaoBi;
+
+    @Column(name = "SO_BAO_DEM")
+    private BigDecimal soBaoDem;
+
+    @Column(name = "TYPE")
+    private String type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "HDR_ID", insertable = false, updatable = false)
