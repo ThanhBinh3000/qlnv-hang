@@ -21,7 +21,7 @@ public interface NhHoSoKyThuatRepository extends BaseRepository<NhHoSoKyThuat, L
     void deleteByIdIn(Collection<Long> ids);
 
     @Query(
-            value = "SELECT * FROM NH_HO_SO_KY_THUAT  HS  WHERE :maDvi LIKE CONCAT(HS.MA_DVI, '%')",
+            value = "SELECT * FROM NH_HO_SO_KY_THUAT  HS  WHERE HS.MA_DVI LIKE CONCAT(:maDvi , '%')",
             countQuery = "SELECT COUNT(1) FROM NH_HO_SO_KY_THUAT  HS WHERE :maDvi LIKE CONCAT(HS.MA_DVI, '%')",
             nativeQuery = true)
     Page<NhHoSoKyThuat> selectPage(String maDvi, Pageable pageable);
