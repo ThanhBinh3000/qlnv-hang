@@ -883,11 +883,14 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			ddNhap.setListPhieuKtraCl(nhPhieuKtChatLuongService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
 //			ddNhap.setListPhieuNhapKho(nhPhieuNhapKhoService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
 			ddNhap.setListBangKeCanHang(nhBangKeCanHangService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
+			NhBbNhapDayKho nhBbNhapDayKho = new NhBbNhapDayKho();
 			if (req!= null) {
 				req.setTuNgayNhapDayKhoStr(convertFullDateToString(req.getTuNgayNhapDayKho()));
 				req.setDenNgayNhapDayKhoStr(convertFullDateToString(req.getDenNgayNhapDayKho()));
+				nhBbNhapDayKho = nhBbNhapDayKhoRepository.timKiemByDiaDiemNh(req);
+			} else {
+				nhBbNhapDayKho = nhBbNhapDayKhoRepository.findByIdDdiemGiaoNvNh(ddNhap.getId());
 			}
-			NhBbNhapDayKho nhBbNhapDayKho = nhBbNhapDayKhoRepository.timKiemByDiaDiemNh(req);
 			if (nhBbNhapDayKho != null) {
 				nhBbNhapDayKho.setTenNguoiPduyet(ObjectUtils.isEmpty(nhBbNhapDayKho.getNguoiPduyetId()) ? null : userInfoRepository.findById(nhBbNhapDayKho.getNguoiPduyetId()).get().getFullName());
 				ddNhap.setBienBanNhapDayKho(nhBbNhapDayKho);
