@@ -164,8 +164,22 @@ public class NhBangKeCanHangServiceImpl extends BaseServiceImpl implements NhBan
 
         NhBangKeCanHang item = optional.get();
         Map<String, String> listDanhMucDvi = getListDanhMucDvi("", "", "01");
-
-        item.setChiTiets(nhBangKeChCtRepository.findAllByIdBangKeCanHangHdr(item.getId()));
+        List<NhBangKeCanHangCt> listCt = nhBangKeChCtRepository.findAllByIdBangKeCanHangHdr(item.getId());
+        List<NhBangKeCanHangCt> chiTiets = new ArrayList<>();
+        List<NhBangKeCanHangCt> chiTietGd = new ArrayList<>();
+        List<NhBangKeCanHangCt> chiTietTb = new ArrayList<>();
+        listCt.forEach(ct -> {
+            if (ct.getPhanLoai() == null) {
+                chiTiets.add(ct);
+            } else if (ct.getPhanLoai().equals("GD")) {
+                chiTietGd.add(ct);
+            } else if (ct.getPhanLoai().equals("TB")) {
+                chiTietTb.add(ct);
+            }
+        });
+        item.setChiTiets(chiTiets);
+        item.setChiTietGd(chiTietGd);
+        item.setChiTietTb(chiTietTb);
         item.setTenDvi(listDanhMucDvi.get(item.getMaDvi()));
         item.setTenNguoiTao(ObjectUtils.isEmpty(item.getNguoiTaoId()) ? "" : userInfoRepository.findById(item.getNguoiTaoId()).get().getFullName());
         item.setTenNguoiPduyet(ObjectUtils.isEmpty(item.getNguoiPduyetId()) ? "" :userInfoRepository.findById(item.getNguoiPduyetId()).get().getFullName());

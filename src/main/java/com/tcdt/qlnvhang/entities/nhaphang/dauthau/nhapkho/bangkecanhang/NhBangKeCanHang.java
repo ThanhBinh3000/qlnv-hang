@@ -50,7 +50,9 @@ public class NhBangKeCanHang extends TrangThaiBaseEntity implements Serializable
     private String maDvi;
     private String maQhns;
     private String nguoiGiamSat;
+    private String phuongPhapCan;
     private BigDecimal trongLuongBaoBi;
+    private BigDecimal trongLuongMotBao;
     @Transient
     private String tenDvi;
 
@@ -60,4 +62,8 @@ public class NhBangKeCanHang extends TrangThaiBaseEntity implements Serializable
     private List<FileDinhKem> listFileDinhKem;
     @Transient
     private List<NhBangKeCanHangCt> chiTiets = new ArrayList<>();
+    @Transient
+    private List<NhBangKeCanHangCt> chiTietGd = new ArrayList<>();
+    @Transient
+    private List<NhBangKeCanHangCt> chiTietTb = new ArrayList<>();
 }

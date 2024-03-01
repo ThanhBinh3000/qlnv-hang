@@ -27,7 +27,9 @@ public class NhBangKeCanHangCt {
 
     @Column(name = "MA_CAN")
     private String maCan;
-
+    private String phanLoai;
+    private Long lan;
+    private BigDecimal soBaoDem;
     @Column(name = "TRONG_LUONG_BAO_BI")
     private BigDecimal trongLuongBaoBi;
 
