@@ -97,6 +97,8 @@ public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<NhQdGiaoNv
 					"  AND (:trichYeu IS NULL OR LOWER(NX.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) " +
 					"  AND (:tuNgayQD IS NULL OR NX.NGAY_QDINH >= TO_DATE(:tuNgayQD, 'YYYY-MM-DD HH24:MI:SS')) " +
 					"  AND (:denNgayQD IS NULL OR NX.NGAY_QDINH <= TO_DATE(:denNgayQD, 'YYYY-MM-DD HH24:MI:SS')) " +
+					"  AND (:tuNgayTgianNkho IS NULL OR NX.TGIAN_NKHO >= TO_DATE(:tuNgayTgianNkho, 'yyyy-MM-dd')) " +
+					"  AND (:denNgayTgianNkho IS NULL OR NX.TGIAN_NKHO <= TO_DATE(:denNgayTgianNkho, 'yyyy-MM-dd')) " +
 					"  AND (:trangThai IS NULL OR NX.TRANG_THAI = TO_NUMBER(:trangThai)) " +
 					" AND (:maDvi IS NULL OR NX.MA_DVI LIKE CONCAT(:maDvi, '%'))  ",
 			countQuery = " SELECT COUNT(1) " +
@@ -108,10 +110,12 @@ public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<NhQdGiaoNv
 					"  AND (:trichYeu IS NULL OR LOWER(NX.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) " +
 					"  AND (:tuNgayQD IS NULL OR NX.NGAY_QDINH >= TO_DATE(:tuNgayQD, 'YYYY-MM-DD HH24:MI:SS')) " +
 					"  AND (:denNgayQD IS NULL OR NX.NGAY_QDINH <= TO_DATE(:denNgayQD, 'YYYY-MM-DD HH24:MI:SS')) " +
+					"  AND (:tuNgayTgianNkho IS NULL OR NX.TGIAN_NKHO >= TO_DATE(:tuNgayTgianNkho, 'yyyy-MM-dd')) " +
+					"  AND (:denNgayTgianNkho IS NULL OR NX.TGIAN_NKHO <= TO_DATE(:denNgayTgianNkho, 'yyyy-MM-dd')) " +
 					"  AND (:trangThai IS NULL OR NX.TRANG_THAI = TO_NUMBER(:trangThai)) " +
 					"  AND (:maDvi IS NULL OR NX.MA_DVI LIKE CONCAT(:maDvi, '%')) "
 			, nativeQuery = true)
-	Page<NhQdGiaoNvuNhapxuatHdr> selectPageCuc(Long namNhap, String soQd, String loaiVthh,String cloaiVthh, String trichYeu, String tuNgayQD, String denNgayQD, String maDvi, String trangThai, Pageable pageable);
+	Page<NhQdGiaoNvuNhapxuatHdr> selectPageCuc(Long namNhap, String soQd, String loaiVthh,String cloaiVthh, String trichYeu, String tuNgayQD, String denNgayQD, String maDvi, String trangThai,  String tuNgayTgianNkho, String denNgayTgianNkho,Pageable pageable);
 
 	@Query(
 			value = " SELECT NX.ID,NX.SO_QD,NX.MA_DVI,NX.LOAI_QD,NX.TRANG_THAI,NX.NGAY_TAO,NX.NGUOI_TAO,NX.NGAY_SUA,NX.NGUOI_SUA,NX.NGAY_GUI_DUYET,NX.NGUOI_GUI_DUYET,NX.LDO_TUCHOI,NX.NGAY_PDUYET,NX.NGUOI_PDUYET,NX.GHI_CHU,NX.CAP_DVI,NX.NAM_NHAP,NX.NGAY_QDINH,NX.LOAI_VTHH,NX.TRICH_YEU,NX.ID_HD,NX.SO_HD,NX.CLOAI_VTHH,NX.DON_VI_TINH,NX.SO_LUONG, NX.TGIAN_NKHO, NX.TEN_GOI_THAU, NX.MO_TA_HANG_HOA, NX.TEN_TRUONG_PHONG, NX.DVI_CUNG_CAP  " +
@@ -126,12 +130,14 @@ public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<NhQdGiaoNv
 					"  AND (:kqDanhGia IS NULL OR LOWER(PKT.KQ_DANH_GIA) LIKE LOWER(CONCAT(CONCAT('%', :kqDanhGia),'%'))) " +
 					"  AND (:tuNgayLP IS NULL OR BNT.NGAY_TAO >= TO_DATE(:tuNgayLP, 'yyyy-MM-dd')) " +
 					"  AND (:denNgayLP IS NULL OR BNT.NGAY_TAO <= TO_DATE(:denNgayLP, 'yyyy-MM-dd')) " +
-					"  AND (:tuNgayKT IS NULL OR BNT.NGAY_NGHIEM_THU >= TO_DATE(:denNgayKT, 'yyyy-MM-dd')) " +
+					"  AND (:tuNgayKT IS NULL OR BNT.NGAY_NGHIEM_THU >= TO_DATE(:tuNgayKT, 'yyyy-MM-dd')) " +
 					"  AND (:denNgayKT IS NULL OR BNT.NGAY_NGHIEM_THU <= TO_DATE(:denNgayKT, 'yyyy-MM-dd')) " +
 					"  AND (:trangThai IS NULL OR NX.TRANG_THAI = TO_NUMBER(:trangThai)) " +
 					"  AND (:soQd IS NULL OR LOWER(NX.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%'))) " +
 					"  AND (:loaiVthh IS NULL OR NX.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
 					"  AND (:trichYeu IS NULL OR LOWER(NX.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) " +
+					"  AND (:tuNgayTgianNkho IS NULL OR NX.TGIAN_NKHO >= TO_DATE(:tuNgayTgianNkho, 'yyyy-MM-dd')) " +
+					"  AND (:denNgayTgianNkho IS NULL OR NX.TGIAN_NKHO <= TO_DATE(:denNgayTgianNkho, 'yyyy-MM-dd')) " +
 					"  AND ( NX_DTL.MA_DVI = :maDvi) " +
 					"  GROUP BY NX.ID,NX.SO_QD,NX.MA_DVI,NX.LOAI_QD,NX.TRANG_THAI,NX.NGAY_TAO,NX.NGUOI_TAO,NX.NGAY_SUA,NX.NGUOI_SUA,NX.NGAY_GUI_DUYET,NX.NGUOI_GUI_DUYET,NX.LDO_TUCHOI,NX.NGAY_PDUYET,NX.NGUOI_PDUYET,NX.GHI_CHU,NX.CAP_DVI,NX.NAM_NHAP,NX.NGAY_QDINH,NX.LOAI_VTHH,NX.TRICH_YEU,NX.ID_HD,NX.SO_HD,NX.CLOAI_VTHH,NX.DON_VI_TINH,NX.SO_LUONG, NX.TGIAN_NKHO, NX.TEN_GOI_THAU, NX.MO_TA_HANG_HOA, NX.TEN_TRUONG_PHONG, NX.DVI_CUNG_CAP "
 			,
@@ -152,10 +158,12 @@ public interface HhQdGiaoNvuNhapxuatRepository extends BaseRepository<NhQdGiaoNv
 					"  AND (:soQd IS NULL OR LOWER(NX.SO_QD) LIKE LOWER(CONCAT(CONCAT('%', :soQd),'%'))) " +
 					"  AND (:loaiVthh IS NULL OR NX.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) " +
 					"  AND (:trichYeu IS NULL OR LOWER(NX.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :trichYeu),'%'))) " +
+					"  AND (:tuNgayTgianNkho IS NULL OR NX.TGIAN_NKHO >= TO_DATE(:tuNgayTgianNkho, 'yyyy-MM-dd')) " +
+					"  AND (:denNgayTgianNkho IS NULL OR NX.TGIAN_NKHO <= TO_DATE(:denNgayTgianNkho, 'yyyy-MM-dd')) " +
 					"  AND ( NX_DTL.MA_DVI = :maDvi) " +
 					"  GROUP BY NX.ID,NX.SO_QD,NX.MA_DVI,NX.LOAI_QD,NX.TRANG_THAI,NX.NGAY_TAO,NX.NGUOI_TAO,NX.NGAY_SUA,NX.NGUOI_SUA,NX.NGAY_GUI_DUYET,NX.NGUOI_GUI_DUYET,NX.LDO_TUCHOI,NX.NGAY_PDUYET,NX.NGUOI_PDUYET,NX.GHI_CHU,NX.CAP_DVI,NX.NAM_NHAP,NX.NGAY_QDINH,NX.LOAI_VTHH,NX.TRICH_YEU,NX.ID_HD,NX.SO_HD,NX.CLOAI_VTHH,NX.DON_VI_TINH,NX.SO_LUONG, NX.TGIAN_NKHO, NX.TEN_GOI_THAU, NX.MO_TA_HANG_HOA, NX.TEN_TRUONG_PHONG, NX.DVI_CUNG_CAP "
 			, nativeQuery = true)
-	Page<NhQdGiaoNvuNhapxuatHdr> selectPageChiCuc(Long namNhap, String soQd, String loaiVthh, String trichYeu, String tuNgayLP, String denNgayLP, String tuNgayKT, String denNgayKT, String maDvi, String soBbNtBq, String trangThai, String tuNgayGD, String denNgayGD, String kqDanhGia, Pageable pageable);
+	Page<NhQdGiaoNvuNhapxuatHdr> selectPageChiCuc(Long namNhap, String soQd, String loaiVthh, String trichYeu, String tuNgayLP, String denNgayLP, String tuNgayKT, String denNgayKT, String maDvi, String soBbNtBq, String trangThai, String tuNgayGD, String denNgayGD, String kqDanhGia,  String tuNgayTgianNkho, String denNgayTgianNkho, Pageable pageable);
 
 	List<NhQdGiaoNvuNhapxuatHdr> findAllByLoaiVthhStartsWithAndTrangThaiAndMaDviStartsWith (String loaiVthh, String trangThai, String maDvi);
 

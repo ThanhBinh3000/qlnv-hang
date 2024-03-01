@@ -1,7 +1,10 @@
 package com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbannhapdaykho;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bienbanchuanbikho.NhBienBanChuanBiKho;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
 import com.tcdt.qlnvhang.repository.BaseRepository;
+import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -33,4 +36,18 @@ public interface NhBbNhapDayKhoRepository extends BaseRepository<NhBbNhapDayKho,
     List<NhBbNhapDayKho> findByIdQdGiaoNvNhAndMaDvi(Long idQdGiaoNvNh,String maDvi);
 
     NhBbNhapDayKho findByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh);
+
+    @Query(
+            value = " SELECT BB FROM NhBbNhapDayKho BB " +
+                    " WHERE 1 = 1 " +
+                    " AND (:#{#req.tuNgayNhapDayKhoStr} IS NULL OR BB.ngayKetThucNhap >= TO_DATE(:#{#req.tuNgayNhapDayKhoStr}, 'YYYY-MM-DD HH24:MI:SS')) " +
+                    " AND (:#{#req.denNgayNhapDayKhoStr} IS NULL OR BB.ngayKetThucNhap <= TO_DATE(:#{#req.denNgayNhapDayKhoStr}, 'YYYY-MM-DD HH24:MI:SS')) " +
+                    " AND (:#{#req.idDdiemGiaoNvNh} IS NULL OR BB.idDdiemGiaoNvNh = :#{#req.idDdiemGiaoNvNh}) " ,
+            countQuery = " SELECT COUNT * FROM ( SELECT BB FROM NhBbNhapDayKho BB " +
+                    " WHERE 1 = 1 " +
+                    " AND (:#{#req.tuNgayNhapDayKhoStr} IS NULL OR BB.ngayKetThucNhap >= TO_DATE(:#{#req.tuNgayNhapDayKhoStr}, 'YYYY-MM-DD HH24:MI:SS')) " +
+                    " AND (:#{#req.denNgayNhapDayKhoStr} IS NULL OR BB.ngayKetThucNhap <= TO_DATE(:#{#req.denNgayNhapDayKhoStr}, 'YYYY-MM-DD HH24:MI:SS')) " +
+                    " AND (:#{#req.idDdiemGiaoNvNh} IS NULL OR BB.idDdiemGiaoNvNh = :#{#req.idDdiemGiaoNvNh}) "
+    )
+    NhBbNhapDayKho timKiemByDiaDiemNh (HhQdNhapxuatSearchReq req);
 }
