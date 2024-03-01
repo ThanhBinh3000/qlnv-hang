@@ -219,9 +219,9 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 
 		String status = req.getTrangThai() + phieu.getTrangThai();
 		switch (status) {
-			case Contains.CHODUYET_LDCC + Contains.DUTHAO:
-			case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
-			case Contains.CHODUYET_LDCC + Contains.TUCHOI_TK:
+			case Contains.CHODUYET_TK + Contains.DUTHAO:
+			case Contains.CHODUYET_TK + Contains.TUCHOI_LDCC:
+			case Contains.CHODUYET_TK + Contains.TUCHOI_TK:
 				phieu.setNguoiGuiDuyetId(userInfo.getId());
 				phieu.setNgayGuiDuyet(new Date());
 				break;
