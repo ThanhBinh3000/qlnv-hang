@@ -66,6 +66,7 @@ public class XhPhieuKtraCluongBttHdrReq extends BaseRequest {
     private Long nguoiGuiDuyetId;
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
+    private String soHieuQuyChuan;
     private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
     private List<XhPhieuKtraCluongBttDtlReq> children = new ArrayList<>();
     private String dvql;
