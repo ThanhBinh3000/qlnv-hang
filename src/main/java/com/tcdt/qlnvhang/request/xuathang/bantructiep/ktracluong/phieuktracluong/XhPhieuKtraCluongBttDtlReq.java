@@ -12,4 +12,7 @@ public class XhPhieuKtraCluongBttDtlReq {
     private String ketQua;
     private String phuongPhapXd;
     private String danhGia;
+    private String mucYeuCauXuatToiDa;
+    private String mucYeuCauXuatToiThieu;
+    private String toanTu;
 }

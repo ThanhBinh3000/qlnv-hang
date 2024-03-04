@@ -76,6 +76,7 @@ public class XhPhieuKnghiemCluong implements Serializable {
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
     private String maDviCon;
+    private String soHieuQuyChuan;
     @Transient
     private String tenDvi;
     @Transient
