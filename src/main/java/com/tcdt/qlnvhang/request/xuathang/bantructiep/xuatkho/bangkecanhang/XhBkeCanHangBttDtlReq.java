@@ -11,4 +11,6 @@ public class XhBkeCanHangBttDtlReq {
     private String maCan;
     private String soBaoBi;
     private BigDecimal trongLuongCaBi;
+    private String loai;
+    private BigDecimal idVirtual;
 }

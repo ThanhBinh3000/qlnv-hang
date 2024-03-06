@@ -19,4 +19,6 @@ public class XhDgBangKeDtl {
     private String maCan;
     private String soBaoBi;
     private BigDecimal trongLuongCaBi;
+    private String loai;
+    private BigDecimal idVirtual;
 }

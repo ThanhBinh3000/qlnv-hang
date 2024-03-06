@@ -54,14 +54,18 @@ public class XhBkeCanHangBttHdrReq extends BaseRequest {
     private String soBangKeBanLe;
     private LocalDate ngayTaoBkeBanLe;
     private BigDecimal soLuongBkeBanLe;
+    private BigDecimal trongLuongMotBao;
     private BigDecimal tongTrongLuongBi;
     private BigDecimal tongTrongLuongCaBi;
     private BigDecimal tongTrongTruBi;
+    private BigDecimal trongLuongBaoKcan;
+    private BigDecimal tongSlBaoBi;
     private String loaiHinhNx;
     private String kieuNx;
     private String pthucBanTrucTiep;
     private String phanLoai;
     private String trangThai;
+    private String phuongPhapCan;
     private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
     private List<XhBkeCanHangBttDtlReq> children = new ArrayList<>();
     private String dvql;

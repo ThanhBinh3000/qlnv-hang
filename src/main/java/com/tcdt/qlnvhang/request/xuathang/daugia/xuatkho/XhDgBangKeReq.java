@@ -50,14 +50,18 @@ public class XhDgBangKeReq extends BaseRequest {
     private String cloaiVthh;
     private String tenHangHoa;
     private String donViTinh;
+    private BigDecimal trongLuongMotBao;
     private BigDecimal tongTrongLuongBi;
     private BigDecimal tongTrongLuongCaBi;
     private BigDecimal tongTrongTruBi;
+    private BigDecimal trongLuongBaoKcan;
+    private BigDecimal tongSlBaoBi;
     private String loaiHinhNx;
     private String kieuNhapXuat;
     private BigDecimal soLuong;
     private BigDecimal donGia;
     private String trangThai;
+    private String phuongPhapCan;
     private List<XhDgBangKeDtl> children = new ArrayList<>();
     private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
     private String dvql;

@@ -62,9 +62,12 @@ public class XhDgBangKeHdr implements Serializable {
     private String cloaiVthh;
     private String tenHangHoa;
     private String donViTinh;
+    private BigDecimal trongLuongMotBao;
     private BigDecimal tongTrongLuongBi;
     private BigDecimal tongTrongLuongCaBi;
     private BigDecimal tongTrongTruBi;
+    private BigDecimal trongLuongBaoKcan;
+    private BigDecimal tongSlBaoBi;
     private String loaiHinhNx;
     private String kieuNhapXuat;
     private BigDecimal soLuong;
@@ -79,6 +82,7 @@ public class XhDgBangKeHdr implements Serializable {
     private Long nguoiGuiDuyetId;
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
+    private String phuongPhapCan;
     @Transient
     private String tenDvi;
     @Transient

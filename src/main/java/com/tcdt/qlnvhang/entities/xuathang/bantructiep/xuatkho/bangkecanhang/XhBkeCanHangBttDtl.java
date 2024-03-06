@@ -20,4 +20,6 @@ public class XhBkeCanHangBttDtl implements Serializable {
     private String maCan;
     private String soBaoBi;
     private BigDecimal trongLuongCaBi;
+    private String loai;
+    private BigDecimal idVirtual;
 }
