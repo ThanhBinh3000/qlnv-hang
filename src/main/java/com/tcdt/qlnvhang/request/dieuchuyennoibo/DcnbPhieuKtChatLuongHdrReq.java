@@ -150,4 +150,5 @@ public class DcnbPhieuKtChatLuongHdrReq {
     private ReportTemplateRequest reportTemplateRequest;
     @NotNull
     private Long keHoachDcDtlId;
+    private String chiSoChatLuongTitle;
 }

@@ -80,6 +80,7 @@ public class XhPhieuKtraCluongBttHdr implements Serializable {
     private Long nguoiGuiDuyetId;
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
+    private String soHieuQuyChuan;
     @Transient
     private String tenDvi;
     @Transient

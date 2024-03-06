@@ -282,7 +282,7 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
                     userInfo.getDvql(),
                     null,
                     Contains.BAN_HANH,
-                    null, null, null,
+                    null, null, null, null, null,
                     pageable);
         } else {
             // Cục or Tổng cục
@@ -293,6 +293,7 @@ public class NhBbGiaoNhanVtServiceImpl extends BaseServiceImpl implements NhBbGi
                     null,null,null,null,
                     userInfo.getDvql(),
                     Contains.BAN_HANH,
+                    null, null,
                     pageable);
         }
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null,null,"01");

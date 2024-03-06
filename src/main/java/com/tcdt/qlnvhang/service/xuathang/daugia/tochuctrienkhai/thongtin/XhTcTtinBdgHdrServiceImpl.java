@@ -96,7 +96,7 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl {
         newData.setNgayTao(LocalDate.now());
         newData.setNguoiTaoId(currentUser.getUser().getId());
         newData.setTrangThai(Contains.DANG_THUC_HIEN);
-        newData.setId(Long.valueOf(request.getMaThongBao().split("/")[0]));
+//        newData.setId(Long.valueOf(request.getMaThongBao().split("/")[0]));
         if (request.getTgianDauGiaTu() != null) {
             newData.setTgianDauGiaTu(request.getTgianDauGiaTu()
                     .atZone(ZoneId.of("UTC"))

@@ -704,6 +704,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					Contains.convertDateToString(req.getTuNgayGD()),
 					Contains.convertDateToString(req.getDenNgayGD()),
 					req.getKqDanhGia(),
+					Contains.convertDateToString(req.getTuNgayTgianNkho()),
+					Contains.convertDateToString(req.getDenNgayTgianNkho()),
 					pageable);
 		} else {
 			// Cục or Tổng cục
@@ -717,6 +719,8 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 					convertFullDateToString(req.getDenNgayQd()),
 					userInfo.getDvql(),
 					req.getTrangThai(),
+					Contains.convertDateToString(req.getTuNgayTgianNkho()),
+					Contains.convertDateToString(req.getDenNgayTgianNkho()),
 					pageable);
 		}
 		Map<String, String> mapDmucHh = getListDanhMucHangHoa();
@@ -879,7 +883,14 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			ddNhap.setListPhieuKtraCl(nhPhieuKtChatLuongService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
 //			ddNhap.setListPhieuNhapKho(nhPhieuNhapKhoService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
 			ddNhap.setListBangKeCanHang(nhBangKeCanHangService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
-			NhBbNhapDayKho nhBbNhapDayKho = nhBbNhapDayKhoRepository.findByIdDdiemGiaoNvNh(ddNhap.getId());
+			NhBbNhapDayKho nhBbNhapDayKho = new NhBbNhapDayKho();
+			if (req!= null) {
+				req.setTuNgayNhapDayKhoStr(convertFullDateToString(req.getTuNgayNhapDayKho()));
+				req.setDenNgayNhapDayKhoStr(convertFullDateToString(req.getDenNgayNhapDayKho()));
+				nhBbNhapDayKho = nhBbNhapDayKhoRepository.timKiemByDiaDiemNh(req);
+			} else {
+				nhBbNhapDayKho = nhBbNhapDayKhoRepository.findByIdDdiemGiaoNvNh(ddNhap.getId());
+			}
 			if (nhBbNhapDayKho != null) {
 				nhBbNhapDayKho.setTenNguoiPduyet(ObjectUtils.isEmpty(nhBbNhapDayKho.getNguoiPduyetId()) ? null : userInfoRepository.findById(nhBbNhapDayKho.getNguoiPduyetId()).get().getFullName());
 				ddNhap.setBienBanNhapDayKho(nhBbNhapDayKho);

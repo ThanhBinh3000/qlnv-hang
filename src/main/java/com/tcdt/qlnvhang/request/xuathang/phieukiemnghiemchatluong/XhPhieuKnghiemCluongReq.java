@@ -53,6 +53,7 @@ public class XhPhieuKnghiemCluongReq extends BaseRequest {
     private LocalDate ngayLapTinhKho;
     private String trangThai;
     private String maDviCon;
+    private String soHieuQuyChuan;
     private List<FileDinhKemJoinTable> fileDinhKem = new ArrayList<>();
     private List<XhPhieuKnghiemCluongCtReq> children = new ArrayList<>();
     private String dvql;

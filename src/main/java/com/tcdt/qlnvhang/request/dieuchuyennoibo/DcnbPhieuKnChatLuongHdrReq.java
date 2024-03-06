@@ -137,4 +137,5 @@ public class DcnbPhieuKnChatLuongHdrReq {
 
     @NotNull
     private Long keHoachDcDtlId;
+    private String chiSoChatLuongTitle;
 }

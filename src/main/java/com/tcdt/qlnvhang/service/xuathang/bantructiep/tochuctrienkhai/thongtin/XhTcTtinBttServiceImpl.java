@@ -64,6 +64,7 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
 
     public Page<XhQdPdKhBttDtl> searchPage(CustomUserDetails currentUser, SearchXhTcTtinBttReq request) throws Exception {
 //        request.setLastest(Integer.valueOf(1));
+        request.setTypeHopDong(Integer.valueOf(0));
         request.setTrangThaiHdr(Contains.BAN_HANH);
         if (currentUser.getUser().getCapDvi().equals(Contains.CAP_CUC)) {
             request.setDvql(currentUser.getDvql());

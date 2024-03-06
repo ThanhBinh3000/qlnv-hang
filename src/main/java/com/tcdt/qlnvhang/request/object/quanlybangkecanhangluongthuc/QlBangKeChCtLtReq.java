@@ -19,4 +19,7 @@ public class QlBangKeChCtLtReq {
     private BigDecimal trongLuongBaoBi;
 
     private BigDecimal trongLuongCaBaoBi;
+    private String phanLoai;
+    private Long lan;
+    private BigDecimal soBaoDem;
 }

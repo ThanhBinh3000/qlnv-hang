@@ -68,6 +68,7 @@ public class BienBanLayMauReq extends BaseRequest {
 
 	private String trangThai;
 	private String truongBpKtbq;
+	private String kyHieuSeri;
 
 	private Long idDdiemGiaoNvNh;
 

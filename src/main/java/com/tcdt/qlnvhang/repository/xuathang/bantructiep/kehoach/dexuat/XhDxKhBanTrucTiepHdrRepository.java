@@ -21,6 +21,7 @@ public interface XhDxKhBanTrucTiepHdrRepository extends JpaRepository<XhDxKhBanT
 
     @Query("SELECT DX FROM XhDxKhBanTrucTiepHdr DX " +
             "WHERE (:#{#param.dvql} IS NULL OR DX.maDvi LIKE CONCAT(:#{#param.dvql}, '%')) " +
+            "AND (:#{#param.maDviCuc} IS NULL OR DX.maDvi LIKE CONCAT(:#{#param.maDviCuc}, '%')) " +
             "AND (:#{#param.namKh} IS NULL OR DX.namKh = :#{#param.namKh}) " +
             "AND (:#{#param.soDxuat} IS NULL OR LOWER(DX.soDxuat) LIKE LOWER(CONCAT('%', :#{#param.soDxuat}, '%'))) " +
             "AND (:#{#param.ngayTaoTu} IS NULL OR DX.ngayTao >= :#{#param.ngayTaoTu}) " +

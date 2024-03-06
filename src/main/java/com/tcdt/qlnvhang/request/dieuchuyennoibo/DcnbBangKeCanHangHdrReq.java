@@ -92,6 +92,7 @@ public class DcnbBangKeCanHangHdrReq {
     private String loaiDc;
     @NotNull
     private String type;
+    private String phuongPhapCan;
 
     private String maLanhDaoChiCuc;
 
@@ -122,4 +123,7 @@ public class DcnbBangKeCanHangHdrReq {
     private ReportTemplateRequest reportTemplateRequest;
     @NotNull
     private Long keHoachDcDtlId;
+    private BigDecimal tlSoBaoKhongCan;
+    private BigDecimal tongSlBaoBi;
+    private BigDecimal tlMotBaoCaBi;
 }

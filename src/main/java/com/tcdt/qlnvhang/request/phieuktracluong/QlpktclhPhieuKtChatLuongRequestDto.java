@@ -94,4 +94,5 @@ public class QlpktclhPhieuKtChatLuongRequestDto extends BaseRequest {
 	private BigDecimal slKhKb;
 	private BigDecimal slTtKtra;
 	private Boolean ketLuanCuoi;
+	private String soHieuQuyChuan;
 }
