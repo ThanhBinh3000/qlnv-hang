@@ -67,9 +67,12 @@ public class XhBkeCanHangBttHdr implements Serializable {
     private String soBangKeBanLe;
     private LocalDate ngayTaoBkeBanLe;
     private BigDecimal soLuongBkeBanLe;
+    private BigDecimal trongLuongMotBao;
     private BigDecimal tongTrongLuongBi;
     private BigDecimal tongTrongLuongCaBi;
     private BigDecimal tongTrongTruBi;
+    private BigDecimal trongLuongBaoKcan;
+    private BigDecimal tongSlBaoBi;
     private String loaiHinhNx;
     private String kieuNx;
     private String pthucBanTrucTiep; // 01 : chào giá; 02 : Ủy quyền; 03 : Bán lẻ
@@ -84,6 +87,7 @@ public class XhBkeCanHangBttHdr implements Serializable {
     private Long nguoiGuiDuyetId;
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
+    private String phuongPhapCan;
     @Transient
     private String tenDvi;
     @Transient
