@@ -82,6 +82,23 @@ public class QthtChotGiaNhapXuatController {
     return ResponseEntity.ok(resp);
   }
 
+  @ApiOperation(value = "Check khóa điều chỉnh giá", response = List.class)
+  @PostMapping(value = "/check-khoa-chot-dieu-nhap-xuat", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<BaseResponse> checkNhapXuat() {
+    BaseResponse resp = new BaseResponse();
+    try {
+      resp.setData(service.checkKhoaChotNhapXuat());
+      resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+      resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+    } catch (Exception e) {
+      resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+      resp.setMsg(e.getMessage());
+      log.error("Tra cứu thông tin : {}", e);
+    }
+    return ResponseEntity.ok(resp);
+  }
+
   @ApiOperation(value = "Tạo mới", response = List.class)
   @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)

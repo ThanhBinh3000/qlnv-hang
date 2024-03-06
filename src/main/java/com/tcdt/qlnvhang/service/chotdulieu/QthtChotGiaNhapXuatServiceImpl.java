@@ -245,6 +245,17 @@ public class QthtChotGiaNhapXuatServiceImpl extends BaseServiceImpl implements Q
         List<QthtChotGiaNhapXuat> ngayChotAndHieuLuc = hdrRepository.findBetweenNgayChotAndHieuLuc(filter);
         return !ngayChotAndHieuLuc.isEmpty(); // true là khóa, false là không khóa
     }
+
+    @Override
+    public boolean checkKhoaChotNhapXuat() throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        QthtChotGiaNhapXuatReq filter = new QthtChotGiaNhapXuatReq();
+        filter.setType("CHOT_NHAP_XUAT");
+        filter.setNgayChotSr(LocalDate.now());
+        filter.setMaDvi(userInfo.getDvql());
+        List<QthtChotGiaNhapXuat> ngayChotAndHieuLuc = hdrRepository.findBetweenNgayChotAndHieuLuc(filter);
+        return !ngayChotAndHieuLuc.isEmpty(); // true là khóa, false là không khóa
+    }
 //
 //  @Override
 //  public Page<ScBaoCaoHdr> searchPage(ScBaoCaoReq req) throws Exception {
