@@ -1,9 +1,11 @@
 package com.tcdt.qlnvhang.service.xuathang.xuatkhac.ktvattubaohanh;
 
+import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
+import com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan.QuyChuanQuocGiaHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhBbLayMauRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhPhieuXuatNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.vattubaohanh.XhXkVtBhQdGiaonvXnRepository;
@@ -15,7 +17,6 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtBbLayMauHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhBbLayMauHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhPhieuXuatNhapKho;
 import com.tcdt.qlnvhang.util.Contains;
@@ -38,7 +39,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class XhXkVtBhBbLayMauService extends BaseServiceImpl {
@@ -59,6 +59,9 @@ public class XhXkVtBhBbLayMauService extends BaseServiceImpl {
 
   @Autowired
   private FileDinhKemService fileDinhKemService;
+
+  @Autowired
+  private QuyChuanQuocGiaHdrRepository quyChuanQuocGiaHdrRepository;
 
   public Page<XhXkVtBhBbLayMauHdr> searchPage(CustomUserDetails currentUser, XhXkVtBhBbLayMauRequest req) throws Exception {
     String dvql = currentUser.getDvql();
@@ -253,18 +256,20 @@ public class XhXkVtBhBbLayMauService extends BaseServiceImpl {
       }
     }
   }
+
   public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
     try {
       String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
       String fileTemplate = "xuatkhac/" + fileName;
       FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
       XhXkVtBhBbLayMauHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
+      Optional<QuyChuanQuocGiaHdr> quyChuan = quyChuanQuocGiaHdrRepository.findAllByLoaiVthh(detail.getLoaiVthh());
       String chiTieuData = detail.getChiTieuKiemTra();
       String phuongPhapData = detail.getPpLayMau();
       List<Map<String, Object>> chiTieuList = parseData(chiTieuData);
       List<Map<String, Object>> phuongPhapList = parseData(phuongPhapData);
 
-      return docxToPdfConverter.convertDocxToPdf(inputStream, detail ,phuongPhapList ,chiTieuList);
+      return docxToPdfConverter.convertDocxToPdf(inputStream, detail, phuongPhapList, chiTieuList, quyChuan);
     } catch (IOException e) {
       e.printStackTrace();
     } catch (XDocReportException e) {

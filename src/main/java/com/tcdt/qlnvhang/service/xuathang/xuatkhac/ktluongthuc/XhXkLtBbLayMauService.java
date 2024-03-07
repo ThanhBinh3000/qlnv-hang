@@ -1,9 +1,11 @@
 package com.tcdt.qlnvhang.service.xuathang.xuatkhac.ktluongthuc;
 
 import com.google.common.collect.Lists;
+import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan.QuyChuanQuocGiaHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktluongthuc.XhXkLtBbLayMauHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktluongthuc.XhXkTongHopRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
@@ -14,12 +16,9 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
-import com.tcdt.qlnvhang.table.report.ReportTemplate;
-import com.tcdt.qlnvhang.table.report.ReportTemplateRequest;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktluongthuc.XhXkLtBbLayMauHdr;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktluongthuc.XhXkLtPhieuKnClHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -35,12 +34,10 @@ import org.springframework.util.StringUtils;
 import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class XhXkLtBbLayMauService extends BaseServiceImpl {
@@ -54,6 +51,9 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
 
   @Autowired
   private FileDinhKemService fileDinhKemService;
+
+  @Autowired
+  private QuyChuanQuocGiaHdrRepository quyChuanQuocGiaHdrRepository;
 
   public Page<XhXkLtBbLayMauHdr> searchPage(CustomUserDetails currentUser, XhXkLtBbLayMauRequest req) throws Exception {
     req.setDvql(currentUser.getDvql());
@@ -229,8 +229,8 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
     List<XhXkLtBbLayMauHdr> data = page.getContent();
 
     String title = "Danh sách biên bản lấy mẫu bàn giao mẫu ";
-    String[] rowsName = new String[]{"STT", "Năm KH", "Mã DS LT <= 6 tháng hết hạn lưu kho", "Điểm Kho",  "Lô kho","Tồn kho","SL hết hạn (<= 6 tháng)",
-        "DVT","Thời hạn lưu kho (tháng)", "Số BB LM/BGM", "Ngày lấy mẫu", "Trạng thái"};
+    String[] rowsName = new String[]{"STT", "Năm KH", "Mã DS LT <= 6 tháng hết hạn lưu kho", "Điểm Kho", "Lô kho", "Tồn kho", "SL hết hạn (<= 6 tháng)",
+        "DVT", "Thời hạn lưu kho (tháng)", "Số BB LM/BGM", "Ngày lấy mẫu", "Trạng thái"};
     String fileName = "danh-sach-bien-ban-lay-mau-ban-giao-mau.xlsx";
     List<Object[]> dataList = new ArrayList<Object[]>();
     Object[] objs = null;
@@ -241,7 +241,7 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
       objs[1] = dx.getNam();
       objs[2] = dx.getMaDanhSach();
       objs[3] = dx.getTenDiemKho();
-      objs[4] = (dx.getTenLoKho() != null && !dx.getTenLoKho().isEmpty()) ? (dx.getTenLoKho() +' '+dx.getTenNganKho()): dx.getTenNganKho();
+      objs[4] = (dx.getTenLoKho() != null && !dx.getTenLoKho().isEmpty()) ? (dx.getTenLoKho() + ' ' + dx.getTenNganKho()) : dx.getTenNganKho();
       objs[5] = dx.getSlTon();
       objs[6] = dx.getSlHetHan();
       objs[7] = dx.getDonViTinh();
@@ -289,12 +289,13 @@ public class XhXkLtBbLayMauService extends BaseServiceImpl {
       String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
       String fileTemplate = "xuatkhac/luongthuc/" + fileName;
       FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
-      List<XhXkLtBbLayMauHdr>  detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
+      List<XhXkLtBbLayMauHdr> detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
+      Optional<QuyChuanQuocGiaHdr> quyChuan = quyChuanQuocGiaHdrRepository.findAllByLoaiVthh(detail.get(0).getLoaiVthh());
       String chiTieuData = detail.get(0).getChiTieuKiemTra();
       String phuongPhapData = detail.get(0).getPpLayMau();
       List<Map<String, Object>> chiTieuList = parseData(chiTieuData);
       List<Map<String, Object>> phuongPhapList = parseData(phuongPhapData);
-      return docxToPdfConverter.convertDocxToPdf(inputStream, detail.get(0) ,phuongPhapList ,chiTieuList);
+      return docxToPdfConverter.convertDocxToPdf(inputStream, detail.get(0), phuongPhapList, chiTieuList, quyChuan);
     } catch (IOException e) {
       e.printStackTrace();
     } catch (XDocReportException e) {
