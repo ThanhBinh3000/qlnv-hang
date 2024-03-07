@@ -33,7 +33,7 @@ public interface XhCtvtQdPdHdrRepository extends JpaRepository<XhCtvtQuyetDinhPd
       "AND (:#{#param.tenVthh} IS NULL OR c.tenVthh = :#{#param.tenVthh}) " +
       "AND ((:#{#param.ngayKyTu}  IS NULL OR c.ngayKy >= :#{#param.ngayKyTu})" +
       "AND (:#{#param.ngayKyDen}  IS NULL OR c.ngayKy <= :#{#param.ngayKyDen}) ) " +
-      "AND (:#{#param.idQdGnvNull } = false OR ((:#{#param.idQdGnvNull } = true AND e.idQdGnv IS NULL))) " +
+//cho phep 1qd tao duoc nhieu qdgnv      "AND (:#{#param.idQdGnvNull } = false OR ((:#{#param.idQdGnvNull } = true AND e.idQdGnv IS NULL))) " +
       "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
   Page<XhCtvtQuyetDinhPdHdr> search(@Param("param") SearchXhCtvtQuyetDinhPdHdr param, Pageable pageable);
