@@ -21,6 +21,7 @@ import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktluongthuc.XhXkLtPhieuKnClHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkKhXuatHang;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkKhXuatHangDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtQdGiaonvXhHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattubaohanh.XhXkVtBhBbLayMauHdr;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -37,6 +38,7 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
@@ -231,12 +233,9 @@ public class XhXkVtQdGiaonvXhService extends BaseServiceImpl {
 
     public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
         try {
-            ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
-            reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
-            ReportTemplate model = findByTenFile(reportTemplateRequest);
-            byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
-//            FileInputStream inputStream = new FileInputStream("src/main/resources/reports/xuatcuutrovientro/Phiếu kiểm nghiệm chất lượng.docx");
+            String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
+            String fileTemplate = "xuatkhac/" + fileName;
+            FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
             XhXkVtQdGiaonvXhHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
             return docxToPdfConverter.convertDocxToPdf(inputStream, detail);
         } catch (IOException e) {

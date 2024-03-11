@@ -1,6 +1,5 @@
 package com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan;
 
-import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaDtl;
 import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaHdr;
 import com.tcdt.qlnvhang.request.khoahoccongnghebaoquan.SearchQuyChuanQgReq;
 import org.springframework.data.domain.Page;
@@ -37,5 +36,7 @@ public interface QuyChuanQuocGiaHdrRepository extends JpaRepository<QuyChuanQuoc
     Optional<QuyChuanQuocGiaHdr> findAllBySoVanBan(String maDetai);
 
     List<QuyChuanQuocGiaHdr> findAllByIdIn(List<Long> ids);
+
+    Optional<QuyChuanQuocGiaHdr> findAllByLoaiVthh(String loaiVthh);
 
 }
