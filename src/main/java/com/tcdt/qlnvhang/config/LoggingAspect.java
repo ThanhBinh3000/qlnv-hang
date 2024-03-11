@@ -12,6 +12,8 @@ import com.tcdt.qlnvhang.entities.xuathang.daugia.xuatkho.XhDgPhieuXuatKho;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
+import com.tcdt.qlnvhang.repository.khotang.KtNganKhoRepository;
+import com.tcdt.qlnvhang.repository.khotang.KtNganLoRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoCtRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhPhieuNhapKhoCtRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhGnvHdrRepository;
@@ -23,6 +25,8 @@ import com.tcdt.qlnvhang.table.PhieuNhapXuatHistory;
 import com.tcdt.qlnvhang.table.UserActivitySetting;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuNhapKhoHdr;
 import com.tcdt.qlnvhang.table.dieuchuyennoibo.DcnbPhieuXuatKhoHdr;
+import com.tcdt.qlnvhang.table.khotang.KtNganKho;
+import com.tcdt.qlnvhang.table.khotang.KtNganLo;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhBienBanDayKhoHdr;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoCt;
 import com.tcdt.qlnvhang.table.nhaphangtheoptt.HhPhieuNhapKhoHdr;
@@ -79,6 +83,10 @@ public class LoggingAspect {
   private XhCtvtQuyetDinhGnvHdrRepository xhCtvtQuyetDinhGnvHdrRepository;
   @Autowired
   private UserActivitySettingService userActivitySettingService;
+  @Autowired
+  private KtNganKhoRepository ktNganKhoRepository;
+  @Autowired
+  private KtNganLoRepository ktNganLoRepository;
 
   @Pointcut("within(com.tcdt.qlnvhang..*) && bean(*Controller))")
   public void v3Controller() {
@@ -225,7 +233,7 @@ public class LoggingAspect {
                 phieuNhapXuatHistory.setLoaiHinhNhapXuat("84");
               }
             }
-            if(rowData.getType().equals("XC")){
+            if (rowData.getType().equals("XC")) {
               phieuNhapXuatHistory.setLoaiHinhNhapXuat("101");
             }
 
@@ -347,6 +355,18 @@ public class LoggingAspect {
         if (result != null && result.getBody().getMsg().equals(EnumResponse.RESP_SUCC.getDescription())) {
           NhBbNhapDayKho rowData = objectMapper.convertValue(result.getBody().getData(), NhBbNhapDayKho.class);
           if (rowData.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
+            KtNganLo nganLo = ktNganLoRepository.findFirstByMaNganlo(rowData.getMaLoKho());
+            if (!DataUtils.isNullObject(nganLo)) {
+              nganLo.setNgayNhapDay(rowData.getNgayKetThucNhap());
+              ktNganLoRepository.save(nganLo);
+            } else {
+              KtNganKho nganKho = ktNganKhoRepository.findByMaNgankho(rowData.getMaNganKho());
+              if (!DataUtils.isNullObject(nganKho)) {
+                nganKho.setNgayNhapDay(rowData.getNgayKetThucNhap());
+                ktNganKhoRepository.save(nganKho);
+              }
+            }
+            /*
             PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
             phieuNhapXuatHistory.setMaKho(rowData.getMaLoKho() == null ? rowData.getMaNganKho() : rowData.getMaLoKho());
             phieuNhapXuatHistory.setSoLuong(DataUtils.safeToDouble(rowData.getSoLuong()));
@@ -361,15 +381,25 @@ public class LoggingAspect {
             phieuNhapXuatHistory.setNgayTao(LocalDate.now());
 
             luuKhoClient.synchronizeData(phieuNhapXuatHistory);
-            logger.info("Cập nhật kho theo Phiếu nhập đầy kho NhBienBanNhapDayKhoController {}", rowData);
+            logger.info("Cập nhật kho theo Phiếu nhập đầy kho NhBienBanNhapDayKhoController {}", rowData);*/
           }
         }
-      }
-      else if (joinPoint.getTarget().toString().contains("HhBienBanDayKhoControler")) {
+      } else if (joinPoint.getTarget().toString().contains("HhBienBanDayKhoControler")) {
         if (result != null && result.getBody().getMsg().equals(EnumResponse.RESP_SUCC.getDescription())) {
           HhBienBanDayKhoHdr rowData = objectMapper.convertValue(result.getBody().getData(), HhBienBanDayKhoHdr.class);
           if (rowData.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
-            PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
+            KtNganLo nganLo = ktNganLoRepository.findFirstByMaNganlo(rowData.getMaLoKho());
+            if (!DataUtils.isNullObject(nganLo)) {
+              nganLo.setNgayNhapDay(rowData.getNgayKthucNhap());
+              ktNganLoRepository.save(nganLo);
+            } else {
+              KtNganKho nganKho = ktNganKhoRepository.findByMaNgankho(rowData.getMaNganKho());
+              if (!DataUtils.isNullObject(nganKho)) {
+                nganKho.setNgayNhapDay(rowData.getNgayKthucNhap());
+                ktNganKhoRepository.save(nganKho);
+              }
+            }
+            /*PhieuNhapXuatHistory phieuNhapXuatHistory = new PhieuNhapXuatHistory();
             phieuNhapXuatHistory.setMaKho(rowData.getMaLoKho() == null ? rowData.getMaNganKho() : rowData.getMaLoKho());
             phieuNhapXuatHistory.setSoLuong(DataUtils.safeToDouble(rowData.getTongSoLuongNhap()));
             phieuNhapXuatHistory.setIdPhieu(rowData.getId());
@@ -383,7 +413,7 @@ public class LoggingAspect {
             phieuNhapXuatHistory.setNgayTao(LocalDate.now());
 
             luuKhoClient.synchronizeData(phieuNhapXuatHistory);
-            logger.info("Cập nhật kho theo Phiếu nhập đầy kho HhBienBanDayKhoControler {}", rowData);
+            logger.info("Cập nhật kho theo Phiếu nhập đầy kho HhBienBanDayKhoControler {}", rowData);*/
           }
         }
       }
