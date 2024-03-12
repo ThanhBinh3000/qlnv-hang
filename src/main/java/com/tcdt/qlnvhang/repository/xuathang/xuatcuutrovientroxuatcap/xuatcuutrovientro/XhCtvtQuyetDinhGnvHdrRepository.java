@@ -41,6 +41,8 @@ public interface XhCtvtQuyetDinhGnvHdrRepository extends JpaRepository<XhCtvtQuy
 
     List<XhCtvtQuyetDinhGnvHdr> findAllByIdIn(List<Long> listId);
 
+    List<XhCtvtQuyetDinhGnvHdr> findByIdQdPdIn(List<Long> listId);
+
     Optional<XhCtvtQuyetDinhGnvHdr> findBySoBbQd(String soQd);
 
     @Query("SELECT DISTINCT c FROM XhCtvtQuyetDinhGnvHdr c left join c.dataDtl e WHERE 1=1 " +

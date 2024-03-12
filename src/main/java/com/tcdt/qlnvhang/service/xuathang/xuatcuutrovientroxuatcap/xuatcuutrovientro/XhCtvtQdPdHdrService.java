@@ -16,15 +16,11 @@ import com.tcdt.qlnvhang.request.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovie
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtDeXuatHdr;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdDtl;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtQuyetDinhPdHdr;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtTongHopHdr;
+import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.*;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
 import fr.opensagres.xdocreport.core.XDocReportException;
-import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,7 +38,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @Service
 @Transactional
@@ -64,6 +63,9 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
 
   @Autowired
   private XhCtvtDeXuatHdrRepository xhCtvtDeXuatHdrRepository;
+
+  @Autowired
+  private XhCtvtQuyetDinhGnvHdrRepository xhCtvtQuyetDinhGnvHdrRepository;
 
   @Autowired
   private FileDinhKemService fileDinhKemService;
@@ -351,16 +353,16 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
       List<XhCtvtQuyetDinhPdDtl> listXuatCapDtl = new ArrayList<>();
       XhCtvtQuyetDinhPdHdr xuatCapRow = objectMapper.readValue(objectMapper.writeValueAsString(created), XhCtvtQuyetDinhPdHdr.class);
       xuatCapRow.getQuyetDinhPdDtl().forEach(s -> {
-        if(s.isXuatCap()) {
+        if (s.isXuatCap()) {
           XhCtvtQuyetDinhPdDtl dtl = new XhCtvtQuyetDinhPdDtl();
-          BeanUtils.copyProperties(s, dtl, "id","mapVthh");
+          BeanUtils.copyProperties(s, dtl, "id", "mapVthh");
           dtl.setXhCtvtQuyetDinhPdHdr(xuatCapRow);
           listXuatCapDtl.add(dtl);
         }
       });
       xuatCapRow.setQuyetDinhPdDtl(listXuatCapDtl);
       xuatCapRow.setId(null);
-      xuatCapRow.setSoBbQd(xuatCapRow.getSoBbQd().replace("QĐPDCTVT","QĐPDXC"));
+      xuatCapRow.setSoBbQd(xuatCapRow.getSoBbQd().replace("QĐPDCTVT", "QĐPDXC"));
       xuatCapRow.setTrangThai(TrangThaiAllEnum.BAN_HANH.getId());
       xuatCapRow.setPaXuatGaoChuyenXc(true);
       xuatCapRow.setType("XC");
@@ -464,7 +466,6 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
     if (req.getType() != null) {
       req.getTypes().add(req.getType());
     }
-    System.out.println(req);
     List<XhCtvtQuyetDinhPdHdr> search = xhCtvtQdPdHdrRepository.searchList(req);
     Map<String, Map<String, Object>> mapDmucDvi = getListDanhMucDviObject(null, null, "01");
 
@@ -482,6 +483,30 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
       }
       s.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(s.getTrangThai()));
     });
+
+    //check qdgnv da tao du so luong chua
+
+    if (!DataUtils.isNullOrEmpty(search)) {
+      List<XhCtvtQuyetDinhGnvHdr> listGnv = xhCtvtQuyetDinhGnvHdrRepository.findByIdQdPdIn(search.stream().map(XhCtvtQuyetDinhPdHdr::getId).collect(Collectors.toList()));
+      Map<Long, List<XhCtvtQuyetDinhGnvHdr>> collect = listGnv.stream().collect(groupingBy(XhCtvtQuyetDinhGnvHdr::getIdQdPd));
+      collect.forEach((k, v) -> {
+        AtomicReference<Double> tongSoDaPhanBo = new AtomicReference<>((double) 0);
+        v.stream().forEach(s1 -> {
+          Double slGiaoCuaGnv = s1.getDataDtl().stream().map(s2 -> {
+            System.out.println(DataUtils.safeToDouble(s2.getSoLuongGiao()));
+            return DataUtils.safeToDouble(s2.getSoLuongGiao());
+          }).reduce(0d, Double::sum);
+          tongSoDaPhanBo.updateAndGet(v1 -> v1 + slGiaoCuaGnv);
+        });
+        System.out.println(k+"@@@");
+        XhCtvtQuyetDinhPdHdr xhCtvtQuyetDinhPdHdr = search.stream().filter(s2 -> s2.getId() == k.longValue()).findFirst().orElse(null);
+        if (!DataUtils.isNullObject(xhCtvtQuyetDinhPdHdr)) {
+          if (DataUtils.safeToDouble(xhCtvtQuyetDinhPdHdr.getTongSoLuong()) <= DataUtils.safeToDouble(tongSoDaPhanBo)) {
+            xhCtvtQuyetDinhPdHdr.setHoanThanhPhanBo(true);
+          }
+        }
+      });
+    }
     return search;
   }
 }
