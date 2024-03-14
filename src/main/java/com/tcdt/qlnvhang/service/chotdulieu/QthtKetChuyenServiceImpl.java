@@ -28,10 +28,7 @@ import org.springframework.util.ObjectUtils;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class QthtKetChuyenServiceImpl extends BaseServiceImpl implements QthtKetChuyenService {
@@ -69,11 +66,15 @@ public class QthtKetChuyenServiceImpl extends BaseServiceImpl implements QthtKet
 
   @Override
   public QthtKetChuyenHdr create(QthtKetChuyenReq req) throws Exception {
+    if(req.getListDviSelected().isEmpty()){
+      throw new Exception("Danh sách cục không được đẻ trống");
+    }
     UserInfo userInfo = UserUtils.getUserInfo();
     QthtKetChuyenHdr hdr = new QthtKetChuyenHdr();
     BeanUtils.copyProperties(req,hdr);
     hdr.setNguoiTaoId(userInfo.getId());
     hdr.setNgayTao(LocalDateTime.now());
+    hdr.setMaDvi(String.join(",",req.getListDviSelected()));
     QthtKetChuyenHdr save = hdrRepository.save(hdr);
     this.saveDetail(req,save.getId());
     return save;

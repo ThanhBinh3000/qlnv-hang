@@ -34,4 +34,6 @@ public class QthtKetChuyenReq extends BaseRequest {
     private List<QthtKetChuyenDtl> children = new ArrayList<>();
 
     private String maDviSr;
+
+    private List<String> listDviSelected = new ArrayList<>();
 }
