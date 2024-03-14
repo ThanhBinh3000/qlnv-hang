@@ -64,6 +64,8 @@ public class XhHopDongServiceImpl extends BaseServiceImpl {
                 data.setMapDmucVthh(mapDmucVthh);
                 data.setTrangThai(data.getTrangThai());
                 data.setTrangThaiXh(data.getTrangThaiXh());
+                List<XhHopDongDtl> childList = xhHopDongDtlRepository.findAllByIdHdr(data.getId());
+                data.setChildren(childList != null && !childList.isEmpty() ? childList : Collections.emptyList());
             } catch (Exception exception) {
                 throw new RuntimeException(exception);
             }

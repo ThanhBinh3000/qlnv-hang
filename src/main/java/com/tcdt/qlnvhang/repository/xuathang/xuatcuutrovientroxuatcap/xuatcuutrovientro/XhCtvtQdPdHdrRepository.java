@@ -75,7 +75,7 @@ public interface XhCtvtQdPdHdrRepository extends JpaRepository<XhCtvtQuyetDinhPd
           "AND ((:#{#param.ngayKyTu}  IS NULL OR c.ngayKy >= :#{#param.ngayKyTu})" +
           "AND (:#{#param.ngayKyDen}  IS NULL OR c.ngayKy <= :#{#param.ngayKyDen}) ) " +
           "AND (:#{#param.idQdGnvNull } = false OR ((:#{#param.idQdGnvNull } = true AND e.idQdGnv IS NULL))) " +
-          "AND c.id not in (select distinct qdnv.idQdPd from XhCtvtQuyetDinhGnvHdr qdnv where qdnv.idQdPd is not null AND (:#{#param.maDviDx} IS NULL OR qdnv.maDvi LIKE CONCAT(:#{#param.maDviDx},'%')) AND (:#{#param.idQdGnv} IS NULL OR qdnv.id = :#{#param.idQdGnv}) ) "+
+//          "AND c.id not in (select distinct qdnv.idQdPd from XhCtvtQuyetDinhGnvHdr qdnv where qdnv.idQdPd is not null AND (:#{#param.maDviDx} IS NULL OR qdnv.maDvi LIKE CONCAT(:#{#param.maDviDx},'%')) AND (:#{#param.idQdGnv} IS NULL OR qdnv.id = :#{#param.idQdGnv}) ) "+
           "ORDER BY c.ngaySua desc , c.ngayTao desc, c.id desc"
   )
   List<XhCtvtQuyetDinhPdHdr> searchList(@Param("param") SearchXhCtvtQuyetDinhPdHdr param);
