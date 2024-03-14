@@ -231,9 +231,14 @@ public class NhPhieuKtChatLuongServiceImpl extends BaseServiceImpl implements Nh
 				phieu.setNgayPduyet(new Date());
 				phieu.setLyDoTuChoi(req.getLyDoTuChoi());
 				break;
-			case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
 			case Contains.CHODUYET_LDCC + Contains.CHODUYET_TK:
 				this.validateData(phieu);
+				phieu.setNguoiPduyetId(userInfo.getId());
+				phieu.setNgayPduyet(new Date());
+				break;
+			case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
+				this.validateData(phieu);
+				phieu.setTenLdcc(userInfo.getFullName());
 				phieu.setNguoiPduyetId(userInfo.getId());
 				phieu.setNgayPduyet(new Date());
 				break;
