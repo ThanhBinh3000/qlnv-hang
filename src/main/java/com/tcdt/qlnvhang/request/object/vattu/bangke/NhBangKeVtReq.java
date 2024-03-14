@@ -44,6 +44,8 @@ public class NhBangKeVtReq {
     private Date ngayHd;
 
     private String soPhieuNhapKho;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayNhapPhieuNk;
 
     private Long idDdiemGiaoNvNh;
 

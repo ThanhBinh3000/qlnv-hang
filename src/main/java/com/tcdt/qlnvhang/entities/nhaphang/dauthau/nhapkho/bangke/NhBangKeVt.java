@@ -45,7 +45,11 @@ public class NhBangKeVt extends TrangThaiBaseEntity implements Serializable {
 
     @Column(name = "NGAY_NHAP_KHO")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Temporal(TemporalType.DATE)
     private Date ngayNhapKho;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    @Temporal(TemporalType.DATE)
+    private Date ngayNhapPhieuNk;
 
     @Column(name = "SO_QD_GIAO_NV_NH")
     private String soQdGiaoNvNh;
