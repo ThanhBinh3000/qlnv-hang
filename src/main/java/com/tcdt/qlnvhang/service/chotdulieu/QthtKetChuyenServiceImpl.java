@@ -69,7 +69,7 @@ public class QthtKetChuyenServiceImpl extends BaseServiceImpl implements QthtKet
     search.getContent().forEach( item -> {
       item.setMapDmucDvi(mapDmucDvi);
       item.setMapVthh(mapVthh);
-      item.setNam(item.getNam());
+      item.setNam(req.getNam());
     });
     return search;
   }
