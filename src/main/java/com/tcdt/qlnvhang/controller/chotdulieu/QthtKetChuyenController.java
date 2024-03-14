@@ -49,10 +49,10 @@ public class QthtKetChuyenController {
   @ApiOperation(value = "Tạo mới", response = List.class)
   @PostMapping(value = PathContains.URL_TAO_MOI, produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  public ResponseEntity<BaseResponse> insert(@Valid @RequestBody List<QthtKetChuyenReq> objReq) {
+  public ResponseEntity<BaseResponse> insert(@Valid @RequestBody QthtKetChuyenReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(service.createList(objReq));
+      resp.setData(service.create(objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {
