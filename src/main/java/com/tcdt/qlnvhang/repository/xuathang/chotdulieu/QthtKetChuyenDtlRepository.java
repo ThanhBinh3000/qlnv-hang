@@ -20,12 +20,11 @@ public interface QthtKetChuyenDtlRepository extends JpaRepository<QthtKetChuyenD
     List<QthtKetChuyenDtl> findAllByIdHdr(Long idHdr);
 
     @Query("SELECT distinct c FROM QthtKetChuyenDtl c " +
-            " join QthtKetChuyenHdr hdr on c.idHdr = hdr.id " +
+            " left join QthtKetChuyenHdr hdr on c.idHdr = hdr.id " +
             " WHERE 1=1 " +
             " AND (:#{#param.nam} IS NULL OR hdr.nam = :#{#param.nam}) " +
             " AND (:#{#param.maDviSr} IS NULL OR c.maDonVi LIKE CONCAT(:#{#param.maDviSr},'%')) " +
-            " AND (:#{#param.maDvi} IS NULL OR c.maDonVi LIKE CONCAT(:#{#param.maDvi},'%')) " +
-            "ORDER BY hdr.ngaySua desc , hdr.ngayTao desc, hdr.id desc"
+            " AND (:#{#param.maDvi} IS NULL OR c.maDonVi LIKE CONCAT(:#{#param.maDvi},'%')) "
     )
     Page<QthtKetChuyenDtl> searchPage(@Param("param") QthtKetChuyenReq param, Pageable pageable);
 
