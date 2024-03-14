@@ -902,7 +902,13 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 				ddNhap.setBienBanGuiHang(nhBienBanGuiHang);
 			}
 			ddNhap.setListPhieuNhapKho(nhPhieuNhapKhoService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
-			ddNhap.setListBangKeVt(nhBangKeVtRepository.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
+			if (req!= null) {
+				req.setTuNgayNkStr(convertFullDateToString(req.getTuNgayNk()));
+				req.setDenNgayNkStr(convertFullDateToString(req.getDenNgayNk()));
+				ddNhap.setListBangKeVt(nhBangKeVtRepository.timKiemByDiaDiemNh(req));
+			} else {
+				ddNhap.setListBangKeVt(nhBangKeVtRepository.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
+			}
 			List<HhBbNghiemthuKlstHdr> hhBbNghiemthuKlstHdrList = hhBbNghiemthuKlstRepository.findByIdDdiemGiaoNvNh(ddNhap.getId());
 			hhBbNghiemthuKlstHdrList.forEach(item -> {
 				item.setTenThuKho(ObjectUtils.isEmpty(item.getIdThuKho()) ? null : userInfoRepository.findById(item.getIdThuKho()).get().getFullName());

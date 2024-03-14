@@ -138,6 +138,9 @@ public class NhPhieuKtChatLuong extends TrangThaiBaseEntity implements Serializa
 	private Long idDdiemGiaoNvNh;
 
 	private String soHieuQuyChuan;
+	private String tenThuKho;
+	private String tenKtvBq;
+	private String tenLdcc;
 
 	@Transient
 	private List<NhPhieuKtChatLuongCt> ketQuaKiemTra = new ArrayList<>();
