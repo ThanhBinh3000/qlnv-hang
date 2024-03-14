@@ -35,7 +35,7 @@ public class QthtKetChuyenController {
   public ResponseEntity<BaseResponse> colection(@RequestBody QthtKetChuyenReq objReq) {
     BaseResponse resp = new BaseResponse();
     try {
-      resp.setData(service.searchPage(objReq));
+      resp.setData(service.searchPageDtl(objReq));
       resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
       resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
     } catch (Exception e) {

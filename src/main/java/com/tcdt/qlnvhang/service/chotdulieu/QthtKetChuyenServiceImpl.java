@@ -1,21 +1,13 @@
 package com.tcdt.qlnvhang.service.chotdulieu;
 
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatDtl;
-import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNxDdiem;
-import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
-import com.tcdt.qlnvhang.repository.xuathang.chotdulieu.QthtChotGiaNhapXuatRepository;
 import com.tcdt.qlnvhang.repository.xuathang.chotdulieu.QthtKetChuyenDtlRepository;
 import com.tcdt.qlnvhang.repository.xuathang.chotdulieu.QthtKetChuyenHdrRepository;
-import com.tcdt.qlnvhang.request.chotdulieu.QthtChotGiaNhapXuatReq;
 import com.tcdt.qlnvhang.request.chotdulieu.QthtKetChuyenReq;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.table.chotdulieu.QthtChotGiaNhapXuat;
 import com.tcdt.qlnvhang.table.chotdulieu.QthtKetChuyenDtl;
 import com.tcdt.qlnvhang.table.chotdulieu.QthtKetChuyenHdr;
-import com.tcdt.qlnvhang.util.Contains;
-import com.tcdt.qlnvhang.util.ObjectMapperUtils;
 import com.tcdt.qlnvhang.util.UserUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +15,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class QthtKetChuyenServiceImpl extends BaseServiceImpl implements QthtKetChuyenService {
@@ -60,6 +53,23 @@ public class QthtKetChuyenServiceImpl extends BaseServiceImpl implements QthtKet
       });
       item.setChildren(allByIdHdr);
       item.setTenNguoiTao(userInfoRepository.findById(item.getNguoiTaoId()).get().getFullName());
+    });
+    return search;
+  }
+
+  @Override
+  public Page<QthtKetChuyenDtl> searchPageDtl(QthtKetChuyenReq req) throws Exception {
+    Pageable pageable = PageRequest.of(req.getPaggingReq().getPage(), req.getPaggingReq().getLimit());
+    UserInfo userInfo = UserUtils.getUserInfo();
+    req.setMaDvi(userInfo.getDvql());
+    Page<QthtKetChuyenDtl> search = dtlRepository.searchPage(req, pageable);
+    Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
+    Map<String, String> mapVthh = getListDanhMucHangHoa();
+
+    search.getContent().forEach( item -> {
+      item.setMapDmucDvi(mapDmucDvi);
+      item.setMapVthh(mapVthh);
+      item.setNam(item.getNam());
     });
     return search;
   }
