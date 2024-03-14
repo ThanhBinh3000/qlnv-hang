@@ -75,6 +75,7 @@ public class QthtKetChuyenServiceImpl extends BaseServiceImpl implements QthtKet
     hdr.setNguoiTaoId(userInfo.getId());
     hdr.setNgayTao(LocalDateTime.now());
     QthtKetChuyenHdr save = hdrRepository.save(hdr);
+    this.saveDetail(req,save.getId());
     return save;
   }
 
