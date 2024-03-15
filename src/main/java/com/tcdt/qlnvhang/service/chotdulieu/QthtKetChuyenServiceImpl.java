@@ -18,10 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class QthtKetChuyenServiceImpl extends BaseServiceImpl implements QthtKetChuyenService {
@@ -72,6 +69,21 @@ public class QthtKetChuyenServiceImpl extends BaseServiceImpl implements QthtKet
       item.setNam(req.getNam());
     });
     return search;
+  }
+
+  @Override
+  public List<String> searchDviKc(QthtKetChuyenReq req) throws Exception {
+    List<String> listDvi = new ArrayList<>();
+    List<QthtKetChuyenHdr> qthtKetChuyenHdrs = hdrRepository.searchList(req);
+    if(!qthtKetChuyenHdrs.isEmpty()){
+      qthtKetChuyenHdrs.forEach(item -> {
+        if(item.getMaDvi() != null){
+          String[] split = item.getMaDvi().split(",");
+          listDvi.addAll(Arrays.asList(split));
+        }
+      });
+    }
+    return listDvi;
   }
 
   @Override

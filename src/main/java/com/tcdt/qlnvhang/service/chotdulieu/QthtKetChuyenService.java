@@ -15,4 +15,6 @@ public interface QthtKetChuyenService extends BaseService<QthtKetChuyenHdr, Qtht
 
 
     Page<QthtKetChuyenDtl> searchPageDtl(QthtKetChuyenReq req) throws Exception;
+
+    List<String> searchDviKc(QthtKetChuyenReq req) throws Exception;
 }
