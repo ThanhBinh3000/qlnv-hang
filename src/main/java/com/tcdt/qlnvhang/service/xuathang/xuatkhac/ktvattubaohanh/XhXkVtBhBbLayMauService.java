@@ -263,7 +263,7 @@ public class XhXkVtBhBbLayMauService extends BaseServiceImpl {
       String fileTemplate = "xuatkhac/" + fileName;
       FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
       XhXkVtBhBbLayMauHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
-      Optional<QuyChuanQuocGiaHdr> quyChuan = quyChuanQuocGiaHdrRepository.findAllByLoaiVthh(detail.getLoaiVthh());
+      QuyChuanQuocGiaHdr quyChuan = quyChuanQuocGiaHdrRepository.findAllByLoaiVthh(detail.getLoaiVthh()).get();
       String chiTieuData = detail.getChiTieuKiemTra();
       String phuongPhapData = detail.getPpLayMau();
       List<Map<String, Object>> chiTieuList = parseData(chiTieuData);

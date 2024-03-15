@@ -12,12 +12,10 @@ import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
-import com.tcdt.qlnvhang.table.xuathang.xuatcuutrovientroxuatcap.xuatcuutrovientro.XhCtvtPhieuXuatKho;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkDanhSachHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopDtl;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.kthanghoa.XhXkTongHopHdr;
 import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtBbLayMauHdr;
-import com.tcdt.qlnvhang.table.xuathang.xuatkhac.ktvattu.XhXkVtQdXuatGiamVattu;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
 import com.tcdt.qlnvhang.util.ExportExcel;
@@ -41,8 +39,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.tcdt.qlnvhang.entities.bandaugia.kehoachbanhangdaugia.BanDauGiaDiaDiemGiaoNhan_.tenChiCuc;
 
 @Service
 public class XhXkTongHopVttbService extends BaseServiceImpl {
@@ -257,35 +253,80 @@ public class XhXkTongHopVttbService extends BaseServiceImpl {
         Object[] objs;
         List<Object[]> dataList = new ArrayList<>();
         if (objReq.getLoai().equals("VT12")) {
-             title = "Tổng hợp danh sách vật tư thiết bị có thời hạn lưu kho lớn hơn 12 tháng";
-             rowsName = new String[]{"STT", "Chi cục DTNN", "Loại hàng hóa", "Chủng loại","Điểm kho", "Ngăn/lô kho", "Ngày nhập kho", "SL hết hạn (12 tháng) đề xất xuất bán", "SL tồn", "DVT", "Ngày đề xuất"};
-             fileName = "tong-hop-danh-sach-vat-tu-thiet-bi-co-thoi-han-luu-kho-lon-hon-12-thang.xlsx";
-        }else{
+            title = "Tổng hợp danh sách vật tư thiết bị có thời hạn lưu kho lớn hơn 12 tháng";
+            rowsName = new String[]{"STT", "Chi cục DTNN", "Loại hàng DTQG", "Chủng loại DTQG", "Điểm kho", "Ngăn/lô kho",
+                "Ngày nhập kho", "SL hết hạn (12 tháng) đề xất xuất bán", "SL tồn", "DVT", "Ngày đề xuất"};
+            fileName = "tong-hop-danh-sach-vat-tu-thiet-bi-co-thoi-han-luu-kho-lon-hon-12-thang.xlsx";
+        } else if (objReq.getLoai().equals("VT6")) {
             title = "Tổng hợp danh sách vật tư thiết bị có thời hạn lưu kho lớn hơn 6 tháng";
-            rowsName = new String[]{"STT", "Chi cục DTNN", "Loại hàng hóa", "Chủng loại","Điểm kho", "Ngăn/lô kho", "Ngày nhập kho", "SL hết hạn (6 tháng) đề xất xuất bán", "SL tồn", "DVT", "Ngày đề xuất"};
+            rowsName = new String[]{"STT", "Chi cục DTNN", "Loại hàng DTQG", "Chủng loại DTQG", "Điểm kho", "Ngăn/lô kho",
+                "Ngày nhập kho", "SL hết hạn (6 tháng) đề xất xuất bán", "SL tồn", "DVT", "Ngày đề xuất"};
             fileName = "tong-hop-danh-sach-vat-tu-thiet-bi-co-thoi-han-luu-kho-lon-hon-6-thang.xlsx";
+        } else if (objReq.getLoai().equals("VTBH_BKK")) {
+            title = "Tổng hợp danh sách vật tư thiết bị hòng hóc, giảm chất lượng do nguyên nhân bất khả kháng";
+            rowsName = new String[]{"STT", "Chi cục DTNN", "Loại hàng DTQG", "Chủng loại DTQG", "Điểm kho", "Ngăn/lô kho",
+                "Ngày nhập kho", "SL tồn", "SL cần xuất hàng", "DVT", "Ngày đề xuất", "lý do cần xuất hàng"};
+            fileName = "tong-hop-danh-sach-vat-tu-thiet-bi-hong-hoc-giam-chat-luong-do-nguyen-nhan-bat-kha-khang.xlsx";
+        } else {
+            title = "Tổng hợp danh sách hàng DTQG thuộc diện xuất khỏi danh mục";
+            rowsName = new String[]{"STT", "Số QĐ xuất hàng khỏi danh mục", "Chi cục DTNN", "Loại hàng DTQG", "Loại hình xuất",
+            "Chủng loại DTQG", "Điểm kho", "Ngăn/lô kho", "SL tồn", "DVT"};
+            fileName = "tong-hop-danh-sach-dtqg-thuoc-dien-xuat-khoi-danh-muc.xlsx";
         }
         for (int i = 0; i < data.size(); i++) {
             XhXkTongHopHdr qd = data.get(i);
-
-            for (XhXkTongHopDtl dtl : qd.getTongHopDtl()) {
-                objs = new Object[rowsName.length];
-                objs[0] = i;
-                objs[1] = dtl.getTenChiCuc();
-                objs[2] = dtl.getTenLoaiVthh();
-                objs[3] = dtl.getTenCloaiVthh();
-                objs[4] = dtl.getTenDiemKho();
-                objs[5] = dtl.getTenNganKho() +  (dtl.getTenLoKho() != null ? ' ' + dtl.getTenLoKho() : "");
-                objs[6] = dtl.getNgayNhapKho();
-                objs[7] = dtl.getSlHetHan();
-                objs[8] = dtl.getSlTonKho();
-                objs[9] = dtl.getDonViTinh();
-                objs[10] = dtl.getNgayDeXuat().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                dataList.add(objs);
+            if (qd.getLoai().equals("VT12") || qd.getLoai().equals("VT6")) {
+                for (XhXkTongHopDtl dtl : qd.getTongHopDtl()) {
+                    objs = new Object[rowsName.length];
+                    objs[0] = i;
+                    objs[1] = dtl.getTenChiCuc();
+                    objs[2] = dtl.getTenLoaiVthh();
+                    objs[3] = dtl.getTenCloaiVthh();
+                    objs[4] = dtl.getTenDiemKho();
+                    objs[5] = dtl.getTenNganKho() + (dtl.getTenLoKho() != null ? ' ' + dtl.getTenLoKho() : "");
+                    objs[6] = dtl.getNgayNhapKho().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                    objs[7] = dtl.getSlTonKho();
+                    objs[8] = dtl.getSlHetHan();
+                    objs[9] = dtl.getDonViTinh();
+                    objs[10] = dtl.getNgayDeXuat().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                    dataList.add(objs);
+                }
+            } else if (qd.getLoai().equals("VTBH_BKK")) {
+                for (XhXkTongHopDtl dtl : qd.getTongHopDtl()) {
+                    objs = new Object[rowsName.length];
+                    objs[0] = i;
+                    objs[1] = dtl.getTenChiCuc();
+                    objs[2] = dtl.getTenLoaiVthh();
+                    objs[3] = dtl.getTenCloaiVthh();
+                    objs[4] = dtl.getTenDiemKho();
+                    objs[5] = dtl.getTenNganKho() + (dtl.getTenLoKho() != null ? ' ' + dtl.getTenLoKho() : "");
+                    objs[6] = dtl.getNgayNhapKho().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                    objs[7] = dtl.getSlHetHan();
+                    objs[8] = dtl.getSlTonKho();
+                    objs[9] = dtl.getDonViTinh();
+                    objs[10] = dtl.getNgayDeXuat().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                    objs[11] = dtl.getLyDo();
+                    dataList.add(objs);
+                }
+            } else {
+                for (XhXkTongHopDtl dtl : qd.getTongHopDtl()) {
+                    objs = new Object[rowsName.length];
+                    objs[0] = i;
+                    objs[1] = dtl.getTenChiCuc();
+                    objs[2] = dtl.getTenLoaiVthh();
+                    objs[3] = dtl.getTenCloaiVthh();
+                    objs[4] = dtl.getTenDiemKho();
+                    objs[5] = dtl.getTenNganKho() + (dtl.getTenLoKho() != null ? ' ' + dtl.getTenLoKho() : "");
+                    objs[6] = dtl.getNgayNhapKho().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                    objs[7] = dtl.getSlHetHan();
+                    objs[8] = dtl.getSlTonKho();
+                    objs[9] = dtl.getDonViTinh();
+                    objs[10] = dtl.getNgayDeXuat().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                    dataList.add(objs);
+                }
             }
         }
-        Comparator<Object[]> chiCuc = Comparator.comparing(obj -> (String) obj[1]);
-        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList.stream().sorted(chiCuc).collect(Collectors.toList()), response);
+        ExportExcel ex = new ExportExcel(title, fileName, rowsName, dataList, response);
         ex.export();
     }
     public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {

@@ -1,9 +1,11 @@
 package com.tcdt.qlnvhang.service.xuathang.xuatkhac.ktvattu;
 
+import com.tcdt.qlnvhang.entities.khcn.quychuankythuat.QuyChuanQuocGiaHdr;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.enums.TrangThaiAllEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
+import com.tcdt.qlnvhang.repository.khoahoccongnghebaoquan.QuyChuanQuocGiaHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtBbLayMauHdrRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtPhieuXuatNhapKhoRepository;
 import com.tcdt.qlnvhang.repository.xuathang.xuatkhac.ktvattu.XhXkVtQdGiaonvXhRepository;
@@ -38,7 +40,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class XhXkVtBbLayMauService extends BaseServiceImpl {
@@ -59,6 +60,9 @@ public class XhXkVtBbLayMauService extends BaseServiceImpl {
 
   @Autowired
   private FileDinhKemService fileDinhKemService;
+
+  @Autowired
+  private QuyChuanQuocGiaHdrRepository quyChuanQuocGiaHdrRepository;
 
   public Page<XhXkVtBbLayMauHdr> searchPage(CustomUserDetails currentUser, XhXkVtBbLayMauRequest req) throws Exception {
     String dvql = currentUser.getDvql();
@@ -248,11 +252,12 @@ public class XhXkVtBbLayMauService extends BaseServiceImpl {
       ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
 //            FileInputStream inputStream = new FileInputStream("src/main/resources/reports/xuatcuutrovientro/Phiếu kiểm nghiệm chất lượng.docx");
       XhXkVtBbLayMauHdr detail = this.detail(DataUtils.safeToLong(body.get("id")));
+      QuyChuanQuocGiaHdr quyChuan = quyChuanQuocGiaHdrRepository.findAllByLoaiVthh(detail.getLoaiVthh()).get();
       String chiTieuData = detail.getChiTieuKiemTra();
       String phuongPhapData = detail.getPpLayMau();
       List<Map<String, Object>> chiTieuList = parseData(chiTieuData);
       List<Map<String, Object>> phuongPhapList = parseData(phuongPhapData);
-      return docxToPdfConverter.convertDocxToPdf(inputStream, detail, phuongPhapList, chiTieuList);
+      return docxToPdfConverter.convertDocxToPdf(inputStream, detail, phuongPhapList, chiTieuList, quyChuan);
     } catch (IOException e) {
       e.printStackTrace();
     } catch (XDocReportException e) {
