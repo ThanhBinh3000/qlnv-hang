@@ -2,7 +2,7 @@ package com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.ketqua;
 
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
 import com.tcdt.qlnvhang.request.BaseRequest;
-import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviReq;
+import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBttReq;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -40,9 +40,10 @@ public class XhKqBttHdrReq extends BaseRequest {
     private String trangThaiXh;
     private Long idQdDc;
     private String soQdDc;
+    private String donViTinh;
     private List<FileDinhKemJoinTable> fileCanCu = new ArrayList<>();
     private List<FileDinhKemJoinTable> fileDaKy = new ArrayList<>();
-    private List<XhQdPdKhBttDviReq> children = new ArrayList<>();
+    private List<XhTcTtinBttReq> children = new ArrayList<>();
     private String dvql;
     private LocalDate ngayCgiaTu;
     private LocalDate ngayCgiaDen;

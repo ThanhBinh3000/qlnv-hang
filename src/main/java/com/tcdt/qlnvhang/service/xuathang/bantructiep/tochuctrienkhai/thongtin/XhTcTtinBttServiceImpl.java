@@ -42,7 +42,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
@@ -182,7 +181,7 @@ public class XhTcTtinBttServiceImpl extends BaseServiceImpl {
                 List<FileDinhKem> fileDinhKems = fileDinhKemService.search(item.getId(), Arrays.asList(XhQdPdKhBttDtl.TABLE_NAME + tableSuffix));
                 item.setFileDinhKem(fileDinhKems != null ? fileDinhKems : new ArrayList<>());
             }
-            item.setChildren(subCategoryList.stream().filter(type -> !type.getIsKetQua()).collect(Collectors.toList()));
+            item.setChildren(subCategoryList);
         }
         return resultList;
     }
