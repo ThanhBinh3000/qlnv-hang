@@ -19,15 +19,12 @@ public class XhXkLtPhieuKnClDtl implements Serializable {
   @SequenceGenerator(sequenceName = XhXkLtPhieuKnClDtl.TABLE_NAME
       + "_SEQ", allocationSize = 1, name = XhXkLtPhieuKnClDtl.TABLE_NAME + "_SEQ")
   private Long id;
-  private String chiSoNhap;
-  private String chiSoXuat;
-  private String danhMuc;
-  private String phuongPhap;
-  private String tenTchuan;
-  private String trangThai;
-  private String ketQuaPt;
-  private Long thuTu;
-  private String danhGia;
+  private String tenChiTieu;
+  private String maChiTieu;
+  private String chiSo;
+  private String ketQua;
+  private String ppKiemTra;
+  private Integer danhGia; // Đạt/ Không đạt
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name="idHdr")
   @JsonIgnore
