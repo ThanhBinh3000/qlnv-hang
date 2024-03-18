@@ -34,6 +34,7 @@ import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
@@ -80,8 +81,8 @@ public class XhXkLtBaoCaoKqService extends BaseServiceImpl {
     data.setTrangThai(Contains.DUTHAO);
     XhXkLtBaoCaoKq created = xhXkLtBaoCaoKqRepository.save(data);
     if (!DataUtils.isNullObject(data.getIdTongHop())) {
-      List<Long> idTongHopList = Collections.singletonList(data.getIdTongHop());
-      data.setListIdTongHop(idTongHopList);
+//      List<Long> idTongHopList = Collections.singletonList(data.getIdTongHop());
+//      data.setListIdTongHop(idTongHopList);
     }
     this.updateTongHop(created, false);
     List<FileDinhKem> fileDinhKems = fileDinhKemService.saveListFileDinhKem(objReq.getFileDinhKems(), created.getId(), XhXkLtBaoCaoKq.TABLE_NAME);
@@ -111,8 +112,8 @@ public class XhXkLtBaoCaoKqService extends BaseServiceImpl {
     BeanUtils.copyProperties(objReq, data, "id", "maDvi");
     XhXkLtBaoCaoKq created = xhXkLtBaoCaoKqRepository.save(data);
     if (!DataUtils.isNullObject(data.getIdTongHop())) {
-      List<Long> idTongHopList = Collections.singletonList(data.getIdTongHop());
-      data.setListIdTongHop(idTongHopList);
+//      List<Long> idTongHopList = Collections.singletonList(data.getIdTongHop());
+//      data.setListIdTongHop(idTongHopList);
     }
     this.updateTongHop(created, false);
     fileDinhKemService.delete(objReq.getId(), Lists.newArrayList(XhXkLtBaoCaoKq.TABLE_NAME));
@@ -143,8 +144,8 @@ public class XhXkLtBaoCaoKqService extends BaseServiceImpl {
       List<FileDinhKem> fileDinhKemsBc = fileDinhKemService.search(data.getId(), Arrays.asList(XhXkLtBaoCaoKq.TABLE_NAME+"_BC"));
       data.setFileDinhKems(fileDinhKemsBc);
       if (!DataUtils.isNullObject(data.getIdTongHop())) {
-        List<Long> idTongHopList = Collections.singletonList(data.getIdTongHop());
-        data.setListIdTongHop(idTongHopList);
+//        List<Long> idTongHopList = Collections.singletonList(data.getIdTongHop());
+//        data.setListIdTongHop(idTongHopList);
       }
     });
 
@@ -246,7 +247,11 @@ public class XhXkLtBaoCaoKqService extends BaseServiceImpl {
 
   public void updateTongHop(XhXkLtBaoCaoKq baoCao, boolean xoa) {
     if (!DataUtils.isNullObject(baoCao.getIdTongHop())) {
-      List<XhXkTongHopHdr> listTongHop = xhXkTongHopRepository.findByIdIn(baoCao.getListIdTongHop());
+      Long[] idCanCu = Arrays.stream(baoCao.getIdTongHop().split(","))
+          .map(String::trim)
+          .map(Long::valueOf)
+          .toArray(Long[]::new);
+      List<XhXkTongHopHdr> listTongHop = xhXkTongHopRepository.findByIdIn(Arrays.asList(idCanCu));
       for (XhXkTongHopHdr xhXkTongHopHdr: listTongHop){
         if (xoa){
           xhXkTongHopHdr.setIdBaoCao(null);
@@ -262,15 +267,17 @@ public class XhXkLtBaoCaoKqService extends BaseServiceImpl {
 
   public ReportTemplateResponse preview(HashMap<String, Object> body) throws Exception {
     try {
-      ReportTemplateRequest reportTemplateRequest = new ReportTemplateRequest();
-      reportTemplateRequest.setFileName(DataUtils.safeToString(body.get("tenBaoCao")));
-      ReportTemplate model = findByTenFile(reportTemplateRequest);
-      byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
-      ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
+      String fileName = DataUtils.safeToString(body.get("tenBaoCao"));
+      String fileTemplate = "xuatkhac/luongthuc/" + fileName;
+      FileInputStream inputStream = new FileInputStream(baseReportFolder + fileTemplate);
       List<XhXkLtBaoCaoKq>  detail = this.detail(Arrays.asList(DataUtils.safeToLong(body.get("id"))));
       Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
       Map<String, String> mapVthh = getListDanhMucHangHoa();
-      List<XhXkTongHopHdr> tongHopHdrList = xhXkTongHopRepository.findByIdIn(detail.get(0).getListIdTongHop());
+      Long[] idCanCu = Arrays.stream(detail.get(0).getIdTongHop().split(","))
+          .map(String::trim)
+          .map(Long::valueOf)
+          .toArray(Long[]::new);
+      List<XhXkTongHopHdr> tongHopHdrList = xhXkTongHopRepository.findByIdIn(Arrays.asList(idCanCu));
       for (XhXkTongHopHdr xhXkTongHopHdr : tongHopHdrList) {
         xhXkTongHopHdr.getTongHopDtl().forEach(tongHopDtl -> {
           tongHopDtl.setMapDmucDvi(mapDmucDvi);

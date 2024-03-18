@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.xuathang.bantructiep.tochuctrienkhai.ketqua;
 
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDvi;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviDtl;
 import com.tcdt.qlnvhang.entities.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdr;
@@ -13,13 +14,10 @@ import com.tcdt.qlnvhang.repository.xuathang.bantructiep.tochuctrienkhai.ketqua.
 import com.tcdt.qlnvhang.repository.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBttRepository;
 import com.tcdt.qlnvhang.request.IdSearchReq;
 import com.tcdt.qlnvhang.request.StatusReq;
-import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviDtlReq;
-import com.tcdt.qlnvhang.request.xuathang.bantructiep.kehoach.pheduyet.XhQdPdKhBttDviReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.ketqua.XhKqBttHdrReq;
 import com.tcdt.qlnvhang.request.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBttReq;
-import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
-import com.tcdt.qlnvhang.table.FileDinhKem;
+import com.tcdt.qlnvhang.service.xuathang.bantructiep.tochuctrienkhai.thongtin.XhTcTtinBttServiceImpl;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
@@ -59,7 +57,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
     @Autowired
     private XhHopDongBttHdrRepository xhHopDongBttHdrRepository;
     @Autowired
-    private FileDinhKemService fileDinhKemService;
+    private XhTcTtinBttServiceImpl xhTcTtinBttServiceImpl;
 
 
     public Page<XhKqBttHdr> searchPage(CustomUserDetails currentUser, XhKqBttHdrReq request) throws Exception {
@@ -79,8 +77,6 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
                 data.setTrangThai(data.getTrangThai());
                 data.setTrangThaiHd(data.getTrangThaiHd());
                 data.setTrangThaiXh(data.getTrangThaiXh());
-                List<XhQdPdKhBttDvi> listDtl =  xhQdPdKhBttDviRepository.findAllByIdQdKqHdr(data.getId());
-                data.setChildren(listDtl != null && !listDtl.isEmpty() ? listDtl : Collections.emptyList());
             } catch (Exception exception) {
                 throw new RuntimeException(exception);
             }
@@ -104,9 +100,13 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
         newData.setTrangThai(Contains.DUTHAO);
         newData.setTrangThaiHd(Contains.CHUA_THUC_HIEN);
         newData.setTrangThaiXh(Contains.CHUA_THUC_HIEN);
-        XhKqBttHdr createdRecord = xhKqBttHdrRepository.save(newData);
-        this.saveDetail(request, createdRecord.getId());
-        return createdRecord;
+        for (XhTcTtinBttReq toChucReq : request.getChildren()) {
+            XhTcTtinBtt xhTcTtinBtt = xhTcTtinBttRepository.findById(toChucReq.getId())
+                    .orElseThrow(() -> new Exception("Không tìm thấy tổ chức cá nhân bán trực tiếp"));
+            xhTcTtinBtt.setLuaChon(toChucReq.getLuaChon());
+            xhTcTtinBttRepository.save(xhTcTtinBtt);
+        }
+        return xhKqBttHdrRepository.save(newData);
     }
 
     @Transactional
@@ -122,41 +122,13 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
         BeanUtils.copyProperties(request, existingData, "id", "maDvi", "trangThaiHd", "trangThaiXh");
         existingData.setNgaySua(LocalDate.now());
         existingData.setNguoiSuaId(currentUser.getUser().getId());
-        XhKqBttHdr updatedData = xhKqBttHdrRepository.save(existingData);
-        this.saveDetail(request, updatedData.getId());
-        return updatedData;
-    }
-
-    void saveDetail(XhKqBttHdrReq request, Long headerId) {
-        xhQdPdKhBttDviRepository.deleteAllByIdQdKqHdr(headerId);
-        for (XhQdPdKhBttDviReq childReq : request.getChildren().stream().filter(item -> item.getIsKetQua()).collect(Collectors.toList())) {
-            XhQdPdKhBttDvi child = new XhQdPdKhBttDvi();
-            BeanUtils.copyProperties(childReq, child, "id");
-            child.setIdQdKqHdr(headerId);
-            child.setIsKetQua(true);
-            xhQdPdKhBttDviRepository.save(child);
-            xhQdPdKhBttDviDtlRepository.deleteAllByIdDvi(childReq.getId());
-            for (XhQdPdKhBttDviDtlReq childDtlReq : childReq.getChildren()) {
-                XhQdPdKhBttDviDtl childDtl = new XhQdPdKhBttDviDtl();
-                BeanUtils.copyProperties(childDtlReq, childDtl, "id");
-                childDtl.setIdDvi(child.getId());
-                xhQdPdKhBttDviDtlRepository.save(childDtl);
-                xhTcTtinBttRepository.deleteAllByIdDviDtl(childDtlReq.getId());
-                for (XhTcTtinBttReq tTinReq : childDtlReq.getChildren()) {
-                    XhTcTtinBtt tTtin = new XhTcTtinBtt();
-                    BeanUtils.copyProperties(tTinReq, tTtin, "id");
-                    tTtin.setId(null);
-                    tTtin.setIdDviDtl(childDtl.getId());
-                    XhTcTtinBtt saveTtin = xhTcTtinBttRepository.save(tTtin);
-                    if (!DataUtils.isNullObject(tTinReq.getFileDinhKems())) {
-                        tTinReq.getFileDinhKems().setId(null);
-                        List<FileDinhKem> fileDinhKem = fileDinhKemService.saveListFileDinhKem(
-                                Collections.singletonList(tTinReq.getFileDinhKems()), saveTtin.getId(), XhTcTtinBtt.TABLE_NAME);
-                        saveTtin.setFileDinhKems(fileDinhKem.get(0));
-                    }
-                }
-            }
+        for (XhTcTtinBttReq toChucReq : request.getChildren()) {
+            XhTcTtinBtt xhTcTtinBtt = xhTcTtinBttRepository.findById(toChucReq.getId())
+                    .orElseThrow(() -> new Exception("Không tìm thấy tổ chức cá nhân bán trực tiếp"));
+            xhTcTtinBtt.setLuaChon(toChucReq.getLuaChon());
+            xhTcTtinBttRepository.save(xhTcTtinBtt);
         }
+        return xhKqBttHdrRepository.save(existingData);
     }
 
     public List<XhKqBttHdr> detail(List<Long> ids) throws Exception {
@@ -171,27 +143,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
         Map<String, String> mapDmucLoaiXuat = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
         Map<String, String> mapDmucKieuXuat = getListDanhMucChung("KIEU_NHAP_XUAT");
-        for (XhKqBttHdr item : resultList) {
-            List<XhQdPdKhBttDvi> subCategoryList = xhQdPdKhBttDviRepository.findAllByIdQdKqHdr(item.getId());
-            for (XhQdPdKhBttDvi subCategoryItem : subCategoryList) {
-                List<XhQdPdKhBttDviDtl> subCategoryDetailList = xhQdPdKhBttDviDtlRepository.findAllByIdDvi(subCategoryItem.getId());
-                for (XhQdPdKhBttDviDtl subCategoryDetailItem : subCategoryDetailList) {
-                    subCategoryDetailItem.setMapDmucDvi(mapDmucDvi);
-                    subCategoryDetailItem.setMapDmucVthh(mapDmucVthh);
-                    subCategoryItem.setDonGiaDuocDuyet(subCategoryDetailItem.getDonGiaDuocDuyet());
-                    List<XhTcTtinBtt> organization = xhTcTtinBttRepository.findAllByIdDviDtl(subCategoryDetailItem.getId());
-                    organization.forEach(organizationItem -> {
-                        List<FileDinhKem> fileDinhKem = fileDinhKemService.search(organizationItem.getId(), Arrays.asList(XhTcTtinBtt.TABLE_NAME));
-                        if (!DataUtils.isNullOrEmpty(fileDinhKem)) {
-                            organizationItem.setFileDinhKems(fileDinhKem.get(0));
-                        }
-                    });
-                    subCategoryDetailItem.setChildren(organization);
-                }
-                item.setDonViTinh(subCategoryItem.getDonViTinh());
-                subCategoryItem.setMapDmucDvi(mapDmucDvi);
-                subCategoryItem.setChildren(subCategoryDetailList);
-            }
+        resultList.forEach(item -> {
             item.setMapDmucDvi(mapDmucDvi);
             item.setMapDmucVthh(mapDmucVthh);
             item.setMapDmucLoaiXuat(mapDmucLoaiXuat);
@@ -200,8 +152,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
             item.setTrangThaiHd(item.getTrangThaiHd());
             item.setTrangThaiXh(item.getTrangThaiXh());
             item.setListHopDongBtt(xhHopDongBttHdrRepository.findAllByIdQdKq(item.getId()));
-            item.setChildren(subCategoryList.stream().filter(type -> type.getIsKetQua()).collect(Collectors.toList()));
-        }
+        });
         return resultList;
     }
 
@@ -224,15 +175,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
         if (!allowedStatusList.contains(proposalData.getTrangThai())) {
             throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối.");
         }
-        List<XhQdPdKhBttDvi> proposalDetailsList = xhQdPdKhBttDviRepository.findAllByIdQdKqHdr(proposalData.getId());
-        proposalDetailsList.forEach(proposalDetai -> {
-            List<XhQdPdKhBttDviDtl> proposalDonViList = xhQdPdKhBttDviDtlRepository.findAllByIdDvi(proposalDetai.getId());
-            proposalDonViList.forEach(proposalDonVi -> xhTcTtinBttRepository.deleteAllByIdDviDtl(proposalDonVi.getId()));
-            xhQdPdKhBttDviDtlRepository.deleteAllByIdDvi(proposalDetai.getId());
-        });
-        xhQdPdKhBttDviRepository.deleteAllByIdQdKqHdr(proposalData.getId());
         xhKqBttHdrRepository.delete(proposalData);
-        fileDinhKemService.delete(proposalData.getId(), Collections.singleton(XhTcTtinBtt.TABLE_NAME));
     }
 
     @Transactional
@@ -251,18 +194,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
         if (!isValidToDelete) {
             throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối.");
         }
-        List<Long> proposalIds = proposalList.stream().map(XhKqBttHdr::getId).collect(Collectors.toList());
-        List<XhQdPdKhBttDvi> proposalDetailsList = xhQdPdKhBttDviRepository.findByIdQdKqHdrIn(proposalIds);
-        List<Long> detailIds = proposalDetailsList.stream().map(XhQdPdKhBttDvi::getId).collect(Collectors.toList());
-        List<XhQdPdKhBttDviDtl> proposalDonViList = xhQdPdKhBttDviDtlRepository.findByIdDviIn(detailIds);
-        List<Long> proposalDonViIds = proposalDonViList.stream().map(XhQdPdKhBttDviDtl::getId).collect(Collectors.toList());
-        List<XhTcTtinBtt> organizationList = xhTcTtinBttRepository.findByIdDviDtlIn(proposalDonViIds);
-        List<Long> organizationIds = organizationList.stream().map(XhTcTtinBtt::getId).collect(Collectors.toList());
-        xhTcTtinBttRepository.deleteAll(organizationList);
-        xhQdPdKhBttDviDtlRepository.deleteAll(proposalDonViList);
-        xhQdPdKhBttDviRepository.deleteAll(proposalDetailsList);
         xhKqBttHdrRepository.deleteAll(proposalList);
-        fileDinhKemService.deleteMultiple(organizationIds, Collections.singleton(XhTcTtinBtt.TABLE_NAME));
     }
 
     public XhKqBttHdr approve(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
@@ -420,7 +352,8 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
             String templatePath = "bantructiep/" + templateName;
             FileInputStream templateInputStream = new FileInputStream(baseReportFolder + templatePath);
             XhKqBttHdr reportDetail = this.detail(DataUtils.safeToLong(requestParams.get("id")));
-            List<XhQdPdKhBttDvi> listDvi = xhQdPdKhBttDviRepository.findAllByIdQdKqHdr(reportDetail.getId());
+            XhQdPdKhBttDtl reportThongTin = xhTcTtinBttServiceImpl.detail(reportDetail.getIdChaoGia());
+            List<XhQdPdKhBttDvi> listDvi = xhQdPdKhBttDviRepository.findAllByIdDtl(reportDetail.getId());
             listDvi.forEach(dataDvi -> {
                 List<XhQdPdKhBttDviDtl> listDviDtl = xhQdPdKhBttDviDtlRepository.findAllByIdDvi(dataDvi.getId());
                 listDviDtl.forEach(dataDviDtl -> {
@@ -428,7 +361,7 @@ public class XhKqBttHdrServiceImpl extends BaseServiceImpl {
                     dataDviDtl.setChildren(listTtin.stream().filter(item -> item.getLuaChon()).collect(Collectors.toList()));
                 });
             });
-            return docxToPdfConverter.convertDocxToPdf(templateInputStream, reportDetail);
+            return docxToPdfConverter.convertDocxToPdf(templateInputStream, reportThongTin);
         } catch (IOException | XDocReportException exception) {
             exception.printStackTrace();
         }

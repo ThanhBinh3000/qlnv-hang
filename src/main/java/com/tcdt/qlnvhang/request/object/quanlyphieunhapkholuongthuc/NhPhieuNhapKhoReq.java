@@ -116,6 +116,7 @@ public class NhPhieuNhapKhoReq extends BaseRequest {
     private String keToanTruong;
 
     private String ghiChu;
+    private String soBbGuiHang;
 
     private Long idDdiemGiaoNvNh;
 

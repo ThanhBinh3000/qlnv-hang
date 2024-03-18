@@ -258,7 +258,6 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
                 XhQdPdKhBttDvi donVi = new XhQdPdKhBttDvi();
                 BeanUtils.copyProperties(donViReq, donVi, "id");
                 donVi.setIdDtl(detail.getId());
-                donVi.setIsKetQua(false);
                 xhQdPdKhBttDviRepository.save(donVi);
                 xhQdPdKhBttDviDtlRepository.deleteAllByIdDvi(isCheckRequired ? donViReq.getId() : null);
                 for (XhQdPdKhBttDviDtlReq detailDonVIRequest : donViReq.getChildren()) {
@@ -322,7 +321,7 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
                 detailItem.setMapDmucVthh(mapDmucVthh);
                 detailItem.setMapDmucThanhToan(mapDmucThanhToan);
                 item.setDonViTinh(detailItem.getDonViTinh());
-                detailItem.setChildren(subCategoryList.stream().filter(type -> !type.getIsKetQua()).collect(Collectors.toList()));
+                detailItem.setChildren(subCategoryList);
             }
             List<FileDinhKem> canCuPhapLy = fileDinhKemService.search(item.getId(), Arrays.asList(XhQdPdKhBttHdr.TABLE_NAME));
             List<FileDinhKem> fileDinhKem = fileDinhKemService.search(item.getId(), Arrays.asList(XhQdPdKhBttHdr.TABLE_NAME + "_BAN_HANH"));
@@ -510,7 +509,6 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
             }
             proposal.setTrangThai(statusReq.getTrangThai());
         }
-        xhQdPdKhBttHdrRepository.save(proposal);
         if (proposal.getTrangThai().equals(Contains.BAN_HANH)) {
             List<XhQdPdKhBttDtl> listDtl = xhQdPdKhBttDtlRepository.findAllByIdHdr(proposal.getId());
             BigDecimal sumTongGtri = listDtl.stream()
@@ -737,36 +735,4 @@ public class XhQdPdKhBttServicelmpl extends BaseServiceImpl {
         }
         return null;
     }
-
-//    private void cloneProject(Long idClone) throws Exception {
-//        XhQdPdKhBttHdr hdr = this.detail(idClone);
-//        XhQdPdKhBttHdr hdrClone = new XhQdPdKhBttHdr();
-//        BeanUtils.copyProperties(hdr, hdrClone);
-//        hdrClone.setId(null);
-//        hdrClone.setLastest(true);
-//        hdrClone.setIdGoc(hdr.getId());
-//        xhQdPdKhBttHdrRepository.save(hdrClone);
-//        for (XhQdPdKhBttDtl dtl : hdr.getChildren()) {
-//            XhQdPdKhBttDtl dtlClone = new XhQdPdKhBttDtl();
-//            BeanUtils.copyProperties(dtl, dtlClone);
-//            dtlClone.setId(null);
-//            dtlClone.setLastest(true);
-//            dtlClone.setIdHdr(hdrClone.getId());
-//            xhQdPdKhBttDtlRepository.save(dtlClone);
-//            for (XhQdPdKhBttDvi dvi : dtlClone.getChildren()) {
-//                XhQdPdKhBttDvi dviClone = new XhQdPdKhBttDvi();
-//                BeanUtils.copyProperties(dvi, dviClone);
-//                dviClone.setId(null);
-//                dviClone.setIdDtl(dtlClone.getId());
-//                xhQdPdKhBttDviRepository.save(dviClone);
-//                for (XhQdPdKhBttDviDtl dviDtl : dvi.getChildren()) {
-//                    XhQdPdKhBttDviDtl dviDtlClone = new XhQdPdKhBttDviDtl();
-//                    BeanUtils.copyProperties(dviDtl, dviDtlClone);
-//                    dviDtlClone.setId(null);
-//                    dviDtlClone.setIdDvi(dviClone.getId());
-//                    xhQdPdKhBttDviDtlRepository.save(dviDtlClone);
-//                }
-//            }
-//        }
-//    }
 }

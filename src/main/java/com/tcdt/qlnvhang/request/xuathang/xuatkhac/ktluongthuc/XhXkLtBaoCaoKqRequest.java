@@ -18,7 +18,7 @@ public class XhXkLtBaoCaoKqRequest extends BaseRequest {
     private String soBaoCao;
     private String tenBaoCao;
     private LocalDate ngayBaoCao;
-    private Long idTongHop;
+    private String idTongHop;
     private String maDanhSach;
     private String tenDanhSach;
 
