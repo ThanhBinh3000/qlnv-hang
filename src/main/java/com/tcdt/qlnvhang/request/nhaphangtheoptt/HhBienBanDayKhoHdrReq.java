@@ -30,6 +30,7 @@ public class HhBienBanDayKhoHdrReq {
     private Long idDdiemGiaoNvNh;
 
     private Integer namKh;
+    private Integer thanLuuKho;
 
     private String maDvi;
 
@@ -39,6 +40,8 @@ public class HhBienBanDayKhoHdrReq {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayLapBban;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayHetHanLk;
 
     private String soQuyetDinhNhap;
 
