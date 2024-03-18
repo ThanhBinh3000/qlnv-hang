@@ -54,6 +54,15 @@ public interface NhPhieuNhapKhoRepository extends BaseRepository<NhPhieuNhapKho,
 
     List<NhPhieuNhapKho> findByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh);
 
+    @Query(
+            value = "SELECT * FROM NH_PHIEU_NHAP_KHO PNKLT " +
+                    "WHERE (:idDdiemGiaoNvNh IS NULL OR PNKLT.ID_DDIEM_GIAO_NV_NH = :idDdiemGiaoNvNh )" +
+                    "  AND (:tuNgayNk IS NULL OR PNKLT.NGAY_NHAP_KHO >= TO_DATE(:tuNgayNk, 'yyyy-MM-dd')) " +
+                    "  AND (:denNgayNk IS NULL OR PNKLT.NGAY_NHAP_KHO <= TO_DATE(:denNgayNk, 'yyyy-MM-dd')) " +
+                    "  AND (:soPhieuNk IS NULL OR LOWER(PNKLT.SO_PHIEU_NHAP_KHO) LIKE LOWER(CONCAT(CONCAT('%', :soPhieuNk),'%')) ) "
+            , nativeQuery = true)
+    List<NhPhieuNhapKho> findByIdDdiemGiaoNvNhAndSoPhieuNhapKho(Long idDdiemGiaoNvNh, String soPhieuNk, String tuNgayNk, String denNgayNk);
+
     List<NhPhieuNhapKho> findBySoPhieuKtraCl(String soPhieuKtraCl);
 
 
