@@ -45,4 +45,5 @@ public class HhNkPhieuKtclReq {
     private List<FileDinhKemReq> fileDinhKemCtgd;
     private List<FileDinhKemReq> fileDinhKemKtcl;
     private List<HhNkPhieuKtclCtReq> chiTieu;
+    private String soHieuQuyChuan;
 }

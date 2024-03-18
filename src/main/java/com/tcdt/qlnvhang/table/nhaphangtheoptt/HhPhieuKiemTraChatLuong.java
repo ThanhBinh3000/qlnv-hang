@@ -102,5 +102,6 @@ public class HhPhieuKiemTraChatLuong implements Serializable {
     private Integer thang;
     @Transient
     private Integer nam;
+    private String soHieuQuyChuan;
 
 }
