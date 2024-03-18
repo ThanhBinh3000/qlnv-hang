@@ -29,8 +29,6 @@ public class XhQdPdKhBttDvi implements Serializable {
     private BigDecimal soLuongChiTieu;
     private BigDecimal soLuongKhDaDuyet;
     private String donViTinh;
-    private Long idQdKqHdr;
-    private Boolean isKetQua;
     private BigDecimal thanhTien;
     private BigDecimal tienDuocDuyet;
 
