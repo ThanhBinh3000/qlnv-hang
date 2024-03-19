@@ -44,6 +44,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.ByteArrayInputStream;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -356,10 +358,36 @@ public class HhBienBanLayMauService extends BaseServiceImpl {
         byte[] byteArray = Base64.getDecoder().decode(model.getFileUpload());
         ByteArrayInputStream inputStream = new ByteArrayInputStream(byteArray);
         bienBanLayMau.setTenCloaiVthhUp(bienBanLayMau.getTenCloaiVthh().toUpperCase());
+        if(bienBanLayMau.getPpLayMau() != null){
+            if(bienBanLayMau.getPpLayMau().split("-").length == 2){
+                bienBanLayMau.setPpLayMau(bienBanLayMau.getPpLayMau().split("-")[1]);
+            }
+            if(bienBanLayMau.getPpLayMau().split("-").length < 2){
+                bienBanLayMau.setPpLayMau(bienBanLayMau.getPpLayMau());
+            }
+        }
+        if (bienBanLayMau.getChiTieuKiemTra() != null) {
+            List<String> listChiTieu = Arrays.asList(bienBanLayMau.getChiTieuKiemTra().split(";"));
+            bienBanLayMau.setChiTieuKiemTraList(new ArrayList<>());
+            listChiTieu.forEach(item -> {
+                bienBanLayMau.getChiTieuKiemTraList().add(extractTextAfterDash(item));
+            });
+        }
         bienBanLayMau.setTenDvi(mapDmucDvi.get(bienBanLayMau.getMaDvi()));
         bienBanLayMau.setTenDviUp(bienBanLayMau.getTenDvi().toUpperCase());
         bienBanLayMau.setTenDviCha(mapDmucDvi.get(bienBanLayMau.getMaDvi().substring(0, bienBanLayMau.getMaDvi().length() - 2)).toUpperCase());
         bienBanLayMau.setNgayLayMauStr(Contains.convertDateToStringSecond(bienBanLayMau.getNgayLayMau()));
         return docxToPdfConverter.convertDocxToPdf(inputStream, bienBanLayMau);
+    }
+
+    private static String extractTextAfterDash(String input) {
+        String regex = "\\-(.+)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
+        if (matcher.find()) {
+            return matcher.group(1).trim();
+        } else {
+            return "";
+        }
     }
 }
