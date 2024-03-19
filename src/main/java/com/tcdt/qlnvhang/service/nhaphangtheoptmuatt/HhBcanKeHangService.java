@@ -1,5 +1,6 @@
 package com.tcdt.qlnvhang.service.nhaphangtheoptmuatt;
 
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHangCt;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhBcanKeHangDtlRepository;
 import com.tcdt.qlnvhang.repository.nhaphangtheoptmtt.HhBcanKeHangHdrRepository;
@@ -143,7 +144,21 @@ public class HhBcanKeHangService extends BaseServiceImpl {
         bcanKeHangHdr.setTenLoKho(mapDmucDvi.get(bcanKeHangHdr.getMaLoKho()));
         bcanKeHangHdr.setTenTrangThai(NhapXuatHangTrangThaiEnum.getTenById(bcanKeHangHdr.getTrangThai()));
         List<HhBcanKeHangDtl> listDtl = hhBcanKeHangDtlRepository.findAllByIdHdr(bcanKeHangHdr.getId());
-        bcanKeHangHdr.setHhBcanKeHangDtlList(listDtl);
+        List<HhBcanKeHangDtl> chiTiets = new ArrayList<>();
+        List<HhBcanKeHangDtl> chiTietGd = new ArrayList<>();
+        List<HhBcanKeHangDtl> chiTietTb = new ArrayList<>();
+        listDtl.forEach(ct -> {
+            if (ct.getPhanLoai() == null) {
+                chiTiets.add(ct);
+            } else if (ct.getPhanLoai().equals("GD")) {
+                chiTietGd.add(ct);
+            } else if (ct.getPhanLoai().equals("TB")) {
+                chiTietTb.add(ct);
+            }
+        });
+        bcanKeHangHdr.setHhBcanKeHangDtlList(chiTiets);
+        bcanKeHangHdr.setChiTietGd(chiTietGd);
+        bcanKeHangHdr.setChiTietTb(chiTietTb);
         return bcanKeHangHdr;
     }
 

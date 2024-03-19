@@ -17,4 +17,8 @@ public class HhBcanKeHangDtlReq {
     private BigDecimal soBaoBi;
 
     private BigDecimal trongLuongCaBi;
+    private BigDecimal trongLuongBaoBi;
+    private String phanLoai;
+    private Long lan;
+    private BigDecimal soBaoDem;
 }

@@ -103,4 +103,6 @@ public class HhBienBanLayMau implements Serializable {
     private String tenDviCha;
     @Transient
     private String ngayLayMauStr;
+    @Transient
+    private List<String> chiTieuKiemTraList;
 }

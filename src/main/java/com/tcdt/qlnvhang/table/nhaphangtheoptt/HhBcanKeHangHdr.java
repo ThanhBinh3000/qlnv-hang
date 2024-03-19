@@ -6,6 +6,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -111,6 +112,10 @@ public class HhBcanKeHangHdr  implements Serializable {
     private Date ngayTao;
     private String nguoiTao;
 
+    private String phuongPhapCan;
+    private BigDecimal trongLuongBaoBi;
+    private BigDecimal trongLuongMotBao;
+
     @Temporal(TemporalType.DATE)
     private Date ngaySua;
     private String nguoiSua;
@@ -125,6 +130,10 @@ public class HhBcanKeHangHdr  implements Serializable {
 
     @Transient
     private List<HhBcanKeHangDtl> hhBcanKeHangDtlList = new ArrayList<>();
+    @Transient
+    private List<HhBcanKeHangDtl> chiTietGd = new ArrayList<>();
+    @Transient
+    private List<HhBcanKeHangDtl> chiTietTb = new ArrayList<>();
 
 
 
