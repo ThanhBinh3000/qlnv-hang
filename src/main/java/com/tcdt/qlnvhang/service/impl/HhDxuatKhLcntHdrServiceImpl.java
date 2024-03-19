@@ -670,7 +670,11 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
                     break;
                 case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
                     optional.setNguoiPduyet(getUser().getUsername());
-                    optional.setNgayPduyet(getDateTimeNow());
+                    if (stReq.getNgayPduyet() != null) {
+                        optional.setNgayPduyet(stReq.getNgayPduyet());
+                    } else {
+                        optional.setNgayPduyet(getDateTimeNow());
+                    }
                     capNhatSoLuongNhap(optional);
                     break;
                 default:
