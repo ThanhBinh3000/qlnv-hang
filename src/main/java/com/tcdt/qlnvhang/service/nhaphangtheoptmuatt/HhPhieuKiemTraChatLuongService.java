@@ -278,16 +278,20 @@ public class HhPhieuKiemTraChatLuongService extends BaseServiceImpl {
 
         String status= statusReq.getTrangThai()+optional.get().getTrangThai();
         switch (status){
-            case Contains.CHODUYET_LDCC + Contains.DUTHAO:
+//            case Contains.CHODUYET_LDCC + Contains.DUTHAO:
+            case Contains.CHODUYET_TK + Contains.DUTHAO:
             case Contains.CHODUYET_LDCC + Contains.TUCHOI_LDCC:
+            case Contains.CHODUYET_TK + Contains.TUCHOI_TK:
                 optional.get().setNguoiGduyet(userInfo.getUsername());
                 optional.get().setNgayGduyet(getDateTimeNow());
                 break;
             case Contains.TUCHOI_LDCC + Contains.CHODUYET_LDCC:
+            case Contains.TUCHOI_TK + Contains.CHODUYET_TK:
                 optional.get().setNguoiPduyet(getUser().getUsername());
                 optional.get().setNgayPduyet(getDateTimeNow());
                 optional.get().setLdoTuChoi(statusReq.getLyDo());
                 break;
+            case Contains.CHODUYET_LDCC + Contains.CHODUYET_TK:
             case Contains.DADUYET_LDCC + Contains.CHODUYET_LDCC:
                 optional.get().setNguoiPduyet(getUser().getUsername());
                 optional.get().setNgayPduyet(getDateTimeNow());
