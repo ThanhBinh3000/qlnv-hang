@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "NH_BIEN_BAN_GUI_HANG_CT")
@@ -28,4 +29,6 @@ public class NhBienBanGuiHangCt implements Serializable {
     @Column(name = "LOAI_BEN")
     private String loaiBen;
 
+    @Column(name = "ID_VIRTUAL")
+    private BigDecimal idVirtual;
 }
