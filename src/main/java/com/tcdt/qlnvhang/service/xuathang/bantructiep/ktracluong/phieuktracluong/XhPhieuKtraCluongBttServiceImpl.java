@@ -128,11 +128,15 @@ public class XhPhieuKtraCluongBttServiceImpl extends BaseServiceImpl {
         Map<String, String> mapDmucVthh = getListDanhMucHangHoa();
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapDmucHinhThuc = getListDanhMucChung("HINH_THUC_BAO_QUAN");
+        Map<String, String> mapDmucLoaiXuat = getListDanhMucChung("LOAI_HINH_NHAP_XUAT");
+        Map<String, String> mapDmucKieuXuat = getListDanhMucChung("KIEU_NHAP_XUAT");
         for (XhPhieuKtraCluongBttHdr item : resultList) {
             List<XhPhieuKtraCluongBttDtl> detailList = xhPhieuKtraCluongBttDtlRepository.findAllByIdHdr(item.getId());
             item.setChildren(detailList != null && !detailList.isEmpty() ? detailList : Collections.emptyList());
             item.setMapDmucDvi(mapDmucDvi);
             item.setMapDmucVthh(mapDmucVthh);
+            item.setMapDmucLoaiXuat(mapDmucLoaiXuat);
+            item.setMapDmucKieuXuat(mapDmucKieuXuat);
             item.setMapDmucHinhThuc(mapDmucHinhThuc);
             item.setTrangThai(item.getTrangThai());
             this.setFullNameIfNotNull(item.getIdThuKho(), item::setTenThuKho);

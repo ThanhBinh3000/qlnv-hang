@@ -163,6 +163,30 @@ public class XhPhieuKtraCluongBttHdr implements Serializable {
 
     @JsonIgnore
     @Transient
+    private Map<String, String> mapDmucLoaiXuat;
+
+    public void setMapDmucLoaiXuat(Map<String, String> mapDmucLoaiXuat) {
+        boolean isNewValue = !Objects.equals(this.mapDmucLoaiXuat, mapDmucLoaiXuat);
+        this.mapDmucLoaiXuat = mapDmucLoaiXuat;
+        if (isNewValue && !DataUtils.isNullObject(getLoaiHinhNx())) {
+            setTenLoaiHinhNx(mapDmucLoaiXuat.getOrDefault(getLoaiHinhNx(), null));
+        }
+    }
+
+    @JsonIgnore
+    @Transient
+    private Map<String, String> mapDmucKieuXuat;
+
+    public void setMapDmucKieuXuat(Map<String, String> mapDmucKieuXuat) {
+        boolean isNewValue = !Objects.equals(this.mapDmucKieuXuat, mapDmucKieuXuat);
+        this.mapDmucKieuXuat = mapDmucKieuXuat;
+        if (isNewValue && !DataUtils.isNullObject(getKieuNx())) {
+            setTenKieuNx(mapDmucKieuXuat.getOrDefault(getKieuNx(), null));
+        }
+    }
+
+    @JsonIgnore
+    @Transient
     private Map<String, String> mapDmucHinhThuc;
 
     public void setMapDmucHinhThuc(Map<String, String> mapDmucHinhThuc) {
