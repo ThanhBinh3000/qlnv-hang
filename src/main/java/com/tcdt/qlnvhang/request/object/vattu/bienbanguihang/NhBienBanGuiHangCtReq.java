@@ -3,6 +3,8 @@ package com.tcdt.qlnvhang.request.object.vattu.bienbanguihang;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @NoArgsConstructor
 public class NhBienBanGuiHangCtReq {
@@ -12,4 +14,5 @@ public class NhBienBanGuiHangCtReq {
     private Long bienBanGuiHangId;
     private String loaiBen;
     private String stt;
+    private BigDecimal idVirtual;
 }
