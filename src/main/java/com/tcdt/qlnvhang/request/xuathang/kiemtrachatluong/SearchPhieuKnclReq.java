@@ -20,4 +20,6 @@ public class SearchPhieuKnclReq extends BaseRequest {
   private Boolean kqKiemTra;
   private String type;
   private String loaiVthh;
+  private Long idQdGnv;
+  private String soQdGnv;
 }

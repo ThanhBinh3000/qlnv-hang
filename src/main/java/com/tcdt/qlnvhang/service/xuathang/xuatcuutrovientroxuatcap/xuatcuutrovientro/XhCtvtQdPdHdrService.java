@@ -493,12 +493,10 @@ public class XhCtvtQdPdHdrService extends BaseServiceImpl {
         AtomicReference<Double> tongSoDaPhanBo = new AtomicReference<>((double) 0);
         v.stream().forEach(s1 -> {
           Double slGiaoCuaGnv = s1.getDataDtl().stream().map(s2 -> {
-            System.out.println(DataUtils.safeToDouble(s2.getSoLuongGiao()));
             return DataUtils.safeToDouble(s2.getSoLuongGiao());
           }).reduce(0d, Double::sum);
           tongSoDaPhanBo.updateAndGet(v1 -> v1 + slGiaoCuaGnv);
         });
-        System.out.println(k+"@@@");
         XhCtvtQuyetDinhPdHdr xhCtvtQuyetDinhPdHdr = search.stream().filter(s2 -> s2.getId() == k.longValue()).findFirst().orElse(null);
         if (!DataUtils.isNullObject(xhCtvtQuyetDinhPdHdr)) {
           if (DataUtils.safeToDouble(xhCtvtQuyetDinhPdHdr.getTongSoLuong()) <= DataUtils.safeToDouble(tongSoDaPhanBo)) {
