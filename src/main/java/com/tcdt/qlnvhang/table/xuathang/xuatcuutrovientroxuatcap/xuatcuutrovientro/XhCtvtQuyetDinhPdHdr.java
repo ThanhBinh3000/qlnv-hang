@@ -94,6 +94,10 @@ public class XhCtvtQuyetDinhPdHdr extends BaseEntity implements Serializable {
   @Transient
   private BigDecimal slGaoChuyenXuatCap; // Số lượng gạo chuyển sang xuất cấp
 
+  @Transient
+  private Boolean hoanThanhPhanBo;
+
+
   @OneToMany(mappedBy = "xhCtvtQuyetDinhPdHdr", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<XhCtvtQuyetDinhPdDtl> quyetDinhPdDtl = new ArrayList<>();
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

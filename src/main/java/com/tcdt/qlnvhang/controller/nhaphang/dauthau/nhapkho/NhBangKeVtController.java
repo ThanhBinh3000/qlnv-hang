@@ -1,7 +1,9 @@
 package com.tcdt.qlnvhang.controller.nhaphang.dauthau.nhapkho;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.request.object.vattu.bangke.NhBangKeVtReq;
+import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
 import com.tcdt.qlnvhang.request.search.vattu.bangke.NhBangKeVtSearchReq;
 import com.tcdt.qlnvhang.response.BaseResponse;
 import com.tcdt.qlnvhang.service.nhaphang.dauthau.nhapkho.bangke.NhBangKeVtService;
@@ -16,9 +18,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -142,5 +146,26 @@ public class NhBangKeVtController {
             log.error("Xem trước: {?}", e);
         }
         return ResponseEntity.ok(resp);
+    }
+
+    @ApiOperation(value = "Kết xuất Danh sách", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(PathContains.URL_KET_XUAT)
+    @ResponseStatus(HttpStatus.OK)
+    public void export(@Valid @RequestBody HhQdNhapxuatSearchReq searchReq, HttpServletResponse response)
+            throws Exception {
+        try {
+            service.exportBknvt(searchReq, response);
+        } catch (Exception e) {
+            log.error("Kết xuất Danh sách trace: {}", e);
+            final Map<String, Object> body = new HashMap<>();
+            body.put("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            body.put("msg", e.getMessage());
+
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.writeValue(response.getOutputStream(), body);
+        }
     }
 }

@@ -97,6 +97,7 @@ public class NhBbNhapDayKho extends TrangThaiBaseEntity implements Serializable 
 
     @Column(name = "SO_LUONG")
     private BigDecimal soLuong;
+    private BigDecimal tongSoLuongNhap;
 
     @Column(name = "MA_DVI")
     private String maDvi;

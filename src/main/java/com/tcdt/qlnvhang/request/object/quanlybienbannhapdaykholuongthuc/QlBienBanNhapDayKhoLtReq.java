@@ -58,6 +58,7 @@ public class QlBienBanNhapDayKhoLtReq extends BaseRequest {
     private String maLoKho;
 
     private BigDecimal soLuong;
+    private BigDecimal tongSoLuongNhap;
 
     private String maDvi;
 

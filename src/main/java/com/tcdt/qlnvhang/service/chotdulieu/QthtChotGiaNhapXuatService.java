@@ -12,4 +12,6 @@ public interface QthtChotGiaNhapXuatService extends BaseService<QthtChotGiaNhapX
     QthtChotGiaInfoRes thongTinChotDieuChinhGia(QthtChotGiaInfoReq objReq) throws Exception;
 
     boolean checkKhoaChotDieuChinhGia() throws Exception;
+
+    boolean checkKhoaChotNhapXuat() throws Exception;
 }

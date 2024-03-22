@@ -70,6 +70,7 @@ public class HhPhieuKngiemCluong  extends TrangThaiBaseEntity implements Seriali
     private Date ngayKnghiem;
     private String ketLuan;
     private String ketQuaDanhGia;
+    private String soHieuQuyChuan;
     @Transient
     List<HhPhieuKnCluongDtl> hhPhieuKnCluongDtlList= new ArrayList<>();
 

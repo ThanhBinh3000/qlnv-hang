@@ -9,6 +9,7 @@ import lombok.Data;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -69,6 +70,9 @@ public class HhBcanKeHangHdrReq {
     private Date thoiGianGiaoNhan;
 
     private String loaiVthh;
+    private String phuongPhapCan;
+    private BigDecimal trongLuongBaoBi;
+    private BigDecimal trongLuongMotBao;
 
     private String cloaiVthh;
 

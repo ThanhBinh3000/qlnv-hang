@@ -445,13 +445,13 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
         AtomicReference<BigDecimal> tongSoLuong = new AtomicReference<>(BigDecimal.ZERO);
         AtomicReference<BigDecimal> tongThanhTien = new AtomicReference<>(BigDecimal.ZERO);
         if(hhDcQdPduyetKhmttHdr.getSoLanDieuChinh() > 0){
-            Optional<HhDcQdPduyetKhmttHdr> hhDcQdPduyetKhmttHdrGoc = hhDcQdPduyetKhMttRepository.findById(hhDcQdPduyetKhmttHdr.getId());
+            HhDcQdPduyetKhmttHdr hhDcQdPduyetKhmttHdrGoc = detail(hhDcQdPduyetKhmttHdr.getIdQdGoc().toString());
             for (HhDcQdPduyetKhmttDx hhDcQdPduyetKhmttDx : hhDcQdPduyetKhmttHdr.getHhDcQdPduyetKhmttDxList()) {
-                Optional<HhDcQdPduyetKhmttDx> listDxGoc = hhDcQdPduyetKhmttHdrGoc.get().getHhDcQdPduyetKhmttDxList().stream().filter(x -> x.getId().equals(hhDcQdPduyetKhmttDx.getId())).findFirst();
+                Optional<HhDcQdPduyetKhmttDx> listDxGoc = hhDcQdPduyetKhmttHdrGoc.getHhDcQdPduyetKhmttDxList().stream().filter(x -> x.getMaDvi().equals(hhDcQdPduyetKhmttDx.getMaDvi())).findFirst();
                 hhDcQdPduyetKhmttDx.setTgianKthucGoc(Contains.convertDateToString(listDxGoc.get().getTgianKthuc()));
                 hhDcQdPduyetKhmttDx.setTgianKthucStr(Contains.convertDateToString(hhDcQdPduyetKhmttDx.getTgianKthuc()));
                 for (HhDcQdPduyetKhmttSldd child : hhDcQdPduyetKhmttDx.getChildren()) {
-                    Optional<HhDcQdPduyetKhmttSldd> listSlddGoc = listDxGoc.get().getChildren().stream().filter(x -> x.getId().equals(child.getId())).findFirst();
+                    Optional<HhDcQdPduyetKhmttSldd> listSlddGoc = listDxGoc.get().getChildren().stream().filter(x -> x.getMaDvi().equals(child.getMaDvi())).findFirst();
                     child.setSoLuongGocStr(docxToPdfConverter.convertBigDecimalToStr(listSlddGoc.get().getTongSoLuong()));
                     child.setSoLuongStr(docxToPdfConverter.convertBigDecimalToStr(child.getTongSoLuong()));
                     child.setTongThanhTienVatStr(docxToPdfConverter.convertBigDecimalToStr(child.getDonGiaVat().multiply(child.getTongSoLuong())));
@@ -460,7 +460,7 @@ public class HhDcQdPduyetKhMttService extends BaseServiceImpl {
                     tongThanhTien.updateAndGet(v -> v.add(child.getDonGiaVat().multiply(child.getTongSoLuong())));
                 }
             }
-            hhDcQdPduyetKhmttHdr.setNgayPduyetGocStr(Contains.convertDateToString(hhDcQdPduyetKhmttHdrGoc.get().getNgayPduyet()));
+            hhDcQdPduyetKhmttHdr.setNgayPduyetGocStr(Contains.convertDateToString(hhDcQdPduyetKhmttHdrGoc.getNgayPduyet()));
             hhDcQdPduyetKhmttHdr.setNgayPduyetStr(Contains.convertDateToString(hhDcQdPduyetKhmttHdr.getNgayPduyet()));
             hhDcQdPduyetKhmttHdr.setTongSoLuongGocStr(docxToPdfConverter.convertBigDecimalToStr(tongSoLuongGoc.get()));
             hhDcQdPduyetKhmttHdr.setTongSoLuongStr(docxToPdfConverter.convertBigDecimalToStr(tongSoLuong.get()));

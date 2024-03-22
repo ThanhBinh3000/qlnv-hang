@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.common.DocxToPdfConverter;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkhotamgui.NhPhieuNhapKhoTamGui;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.phieunhapkhotamgui.NhPhieuNhapKhoTamGuiCt;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatDtl;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNhapxuatHdr;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhiemvunhap.NhQdGiaoNvuNxDdiem;
 import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
 import com.tcdt.qlnvhang.repository.UserInfoRepository;
@@ -23,10 +25,7 @@ import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
-import com.tcdt.qlnvhang.util.DataUtils;
-import com.tcdt.qlnvhang.util.ExportExcel;
-import com.tcdt.qlnvhang.util.MoneyConvert;
-import com.tcdt.qlnvhang.util.UserUtils;
+import com.tcdt.qlnvhang.util.*;
 import fr.opensagres.xdocreport.core.XDocReportException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -49,6 +48,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Service
@@ -302,14 +302,24 @@ public class NhPhieuNhapKhoTamGuiServiceImpl extends BaseServiceImpl implements 
       objs[2] = qd.getNamNhap();
       objs[3] = convertDate(qd.getTgianNkho());
       dataList.add(objs);
-      for (int j = 0; j < qd.getDtlList().get(0).getChildren().size(); j++) {
+      if (userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+        qd.setDetail(qd.getDtlList().stream().filter(item -> item.getMaDvi().equals(userInfo.getDvql())).collect(Collectors.toList()).get(0));
+      } else {
+        List<NhQdGiaoNvuNxDdiem> dataDd = new ArrayList<>();
+        for (NhQdGiaoNvuNhapxuatDtl nhQdGiaoNvuNhapxuatDtl : qd.getDtlList()) {
+          dataDd.addAll(nhQdGiaoNvuNhapxuatDtl.getChildren());
+        }
+        qd.setDetail(new NhQdGiaoNvuNhapxuatDtl());
+        qd.getDetail().setChildren(dataDd);
+      }
+      for (int j = 0; j < qd.getDetail().getChildren().size(); j++) {
         objsb = new Object[rowsName.length];
-        objsb[4] = qd.getDtlList().get(0).getChildren().get(j).getTenDiemKho();
-        objsb[5] = qd.getDtlList().get(0).getChildren().get(j).getTenNganLoKho();
-        if (qd.getDtlList().get(0).getChildren().get(j).getPhieuNhapKhoTamGui() != null) {
-          objsb[6] = qd.getDtlList().get(0).getChildren().get(j).getPhieuNhapKhoTamGui().getSoPhieuNhapKhoTamGui();
-          objsb[7] = convertDate(qd.getDtlList().get(0).getChildren().get(j).getPhieuNhapKhoTamGui().getNgayNhapKho());
-          objsb[10] = qd.getDtlList().get(0).getChildren().get(j).getPhieuNhapKhoTamGui().getTenTrangThai();
+        objsb[4] = qd.getDetail().getChildren().get(j).getTenDiemKho();
+        objsb[5] = qd.getDetail().getChildren().get(j).getTenNganLoKho();
+        if (qd.getDetail().getChildren().get(j).getPhieuNhapKhoTamGui() != null) {
+          objsb[6] = qd.getDetail().getChildren().get(j).getPhieuNhapKhoTamGui().getSoPhieuNhapKhoTamGui();
+          objsb[7] = convertDate(qd.getDetail().getChildren().get(j).getPhieuNhapKhoTamGui().getNgayNhapKho());
+          objsb[10] = qd.getDetail().getChildren().get(j).getPhieuNhapKhoTamGui().getTenTrangThai();
         }
         dataList.add(objsb);
       }

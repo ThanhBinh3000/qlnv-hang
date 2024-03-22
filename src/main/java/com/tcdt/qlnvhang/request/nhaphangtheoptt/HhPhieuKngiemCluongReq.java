@@ -47,4 +47,5 @@ public class HhPhieuKngiemCluongReq {
     private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
     List<HhPhieuKnCluongDtlReq> phieuKnCluongDtlReqList = new ArrayList<>();
     private ReportTemplateRequest reportTemplateRequest;
+    private String soHieuQuyChuan;
 }

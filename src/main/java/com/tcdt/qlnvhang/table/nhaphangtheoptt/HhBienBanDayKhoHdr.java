@@ -35,6 +35,7 @@ public class HhBienBanDayKhoHdr implements Serializable {
     private Long idDdiemGiaoNvNh;
 
     private Integer namKh;
+    private Integer thanLuuKho;
 
     private String maDvi;
     @Transient
@@ -46,6 +47,9 @@ public class HhBienBanDayKhoHdr implements Serializable {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
     private Date ngayLapBban;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)
+    private Date ngayHetHanLk;
 
     private String soQuyetDinhNhap;
 

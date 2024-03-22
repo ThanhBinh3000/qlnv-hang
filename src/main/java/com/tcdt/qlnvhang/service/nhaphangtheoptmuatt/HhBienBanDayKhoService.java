@@ -96,7 +96,7 @@ public class HhBienBanDayKhoService extends BaseServiceImpl {
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         HhBienBanDayKhoHdr data = new HhBienBanDayKhoHdr();
         BeanUtils.copyProperties(objReq, data, "id");
-        data.setNgayTao(getDateTimeNow());
+//        data.setNgayTao(getDateTimeNow());
         data.setNguoiTao(userInfo.getUsername());
         data.setTrangThai(Contains.DUTHAO);
         data.setMaDvi(userInfo.getDvql());

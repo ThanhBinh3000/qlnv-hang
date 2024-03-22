@@ -85,6 +85,7 @@ public class HhNkPhieuKtcl {
     private List<FileDinhKem> fileDinhKemCtgd;
     @Transient
     private List<FileDinhKem> fileDinhKemKtcl;
+    private String soHieuQuyChuan;
 
     @Transient
     private String ngay;

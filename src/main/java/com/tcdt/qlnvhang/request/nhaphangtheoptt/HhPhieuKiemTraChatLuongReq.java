@@ -53,4 +53,5 @@ public class HhPhieuKiemTraChatLuongReq {
     private List<FileDinhKemReq> fileDinhKems =new ArrayList<>();
     private List<HhPhieuKiemTraChatLuongDtlReq> phieuKiemTraChatLuongDtlList=new ArrayList<>();
     private ReportTemplateRequest reportTemplateRequest;
+    private String soHieuQuyChuan;
 }
