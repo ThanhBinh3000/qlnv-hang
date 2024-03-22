@@ -107,6 +107,11 @@ public class LoggingAspect {
   public void BbNhapDayKhoPointCut() {
   }
 
+  @Pointcut("execution(* com.tcdt.qlnvhang.controller.xuathang.daugia.xuatkho.XhDgBbTinhKhoController.updateStatus(..)) ||" +
+      "execution(* com.tcdt.qlnvhang.controller.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttControler.updateStatus(..))")
+  public void BbXuatDocKhoPointCut() {
+  }
+
   @Before("v3Controller()")
   public void logBefore(JoinPoint joinPoint) {
     try {
@@ -358,11 +363,15 @@ public class LoggingAspect {
             KtNganLo nganLo = ktNganLoRepository.findFirstByMaNganlo(rowData.getMaLoKho());
             if (!DataUtils.isNullObject(nganLo)) {
               nganLo.setNgayNhapDay(rowData.getNgayKetThucNhap());
+              nganLo.setTichLuongKdLt(BigDecimal.ZERO);
+              nganLo.setTichLuongKdVt(BigDecimal.ZERO);
               ktNganLoRepository.save(nganLo);
             } else {
               KtNganKho nganKho = ktNganKhoRepository.findByMaNgankho(rowData.getMaNganKho());
               if (!DataUtils.isNullObject(nganKho)) {
                 nganKho.setNgayNhapDay(rowData.getNgayKetThucNhap());
+                nganKho.setTichLuongKdLt(BigDecimal.ZERO);
+                nganKho.setTichLuongKdVt(BigDecimal.ZERO);
                 ktNganKhoRepository.save(nganKho);
               }
             }
@@ -391,11 +400,15 @@ public class LoggingAspect {
             KtNganLo nganLo = ktNganLoRepository.findFirstByMaNganlo(rowData.getMaLoKho());
             if (!DataUtils.isNullObject(nganLo)) {
               nganLo.setNgayNhapDay(rowData.getNgayKthucNhap());
+              nganLo.setTichLuongKdLt(BigDecimal.ZERO);
+              nganLo.setTichLuongKdVt(BigDecimal.ZERO);
               ktNganLoRepository.save(nganLo);
             } else {
               KtNganKho nganKho = ktNganKhoRepository.findByMaNgankho(rowData.getMaNganKho());
               if (!DataUtils.isNullObject(nganKho)) {
                 nganKho.setNgayNhapDay(rowData.getNgayKthucNhap());
+                nganKho.setTichLuongKdLt(BigDecimal.ZERO);
+                nganKho.setTichLuongKdVt(BigDecimal.ZERO);
                 ktNganKhoRepository.save(nganKho);
               }
             }
@@ -414,6 +427,55 @@ public class LoggingAspect {
 
             luuKhoClient.synchronizeData(phieuNhapXuatHistory);
             logger.info("Cập nhật kho theo Phiếu nhập đầy kho HhBienBanDayKhoControler {}", rowData);*/
+          }
+        }
+      }
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @AfterReturning(value = "BbXuatDocKhoPointCut()", returning = "result")
+  public void BbXuatDocKhoAfterLog(JoinPoint joinPoint, ResponseEntity<BaseResponse> result) {
+    try {
+      if (joinPoint.getTarget().toString().contains("XhDgBbTinhKhoController")) {
+        if (result != null && result.getBody().getMsg().equals(EnumResponse.RESP_SUCC.getDescription())) {
+          NhBbNhapDayKho rowData = objectMapper.convertValue(result.getBody().getData(), NhBbNhapDayKho.class);
+          if (rowData.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
+            KtNganLo nganLo = ktNganLoRepository.findFirstByMaNganlo(rowData.getMaLoKho());
+            if (!DataUtils.isNullObject(nganLo)) {
+              nganLo.setNgayNhapDay(rowData.getNgayKetThucNhap());
+              nganLo.setTichLuongKdLt(nganLo.getTichLuongTkLt());
+              nganLo.setTichLuongKdVt(nganLo.getTichLuongTkVt());
+              ktNganLoRepository.save(nganLo);
+            } else {
+              KtNganKho nganKho = ktNganKhoRepository.findByMaNgankho(rowData.getMaNganKho());
+              if (!DataUtils.isNullObject(nganKho)) {
+                nganKho.setNgayNhapDay(rowData.getNgayKetThucNhap());
+                nganKho.setTichLuongKdLt(nganKho.getTichLuongTkLt());
+                nganKho.setTichLuongKdVt(nganKho.getTichLuongTkVt());
+                ktNganKhoRepository.save(nganKho);
+              }
+            }
+          }
+        }
+      } else if (joinPoint.getTarget().toString().contains("XhBbTinhkBttControler")) {
+        if (result != null && result.getBody().getMsg().equals(EnumResponse.RESP_SUCC.getDescription())) {
+          HhBienBanDayKhoHdr rowData = objectMapper.convertValue(result.getBody().getData(), HhBienBanDayKhoHdr.class);
+          if (rowData.getTrangThai().equals(TrangThaiAllEnum.DA_DUYET_LDCC.getId())) {
+            KtNganLo nganLo = ktNganLoRepository.findFirstByMaNganlo(rowData.getMaLoKho());
+            if (!DataUtils.isNullObject(nganLo)) {
+              nganLo.setNgayNhapDay(rowData.getNgayKthucNhap());
+              ktNganLoRepository.save(nganLo);
+            } else {
+              KtNganKho nganKho = ktNganKhoRepository.findByMaNgankho(rowData.getMaNganKho());
+              if (!DataUtils.isNullObject(nganKho)) {
+                nganKho.setNgayNhapDay(rowData.getNgayKthucNhap());
+                nganKho.setTichLuongKdLt(BigDecimal.ZERO);
+                nganKho.setTichLuongKdVt(BigDecimal.ZERO);
+                ktNganKhoRepository.save(nganKho);
+              }
+            }
           }
         }
       }
