@@ -287,25 +287,25 @@ public class NhBangKeVtServiceImpl extends BaseServiceImpl implements NhBangKeVt
                 objsb[4] = qd.getDetail().getChildren().get(j).getTenDiemKho();
                 objsb[5] = qd.getDetail().getChildren().get(j).getTenLoKho() != null ? qd.getDetail().getChildren().get(j).getTenLoKho() + " - " + qd.getDetail().getChildren().get(j).getTenNganKho() : qd.getDetail().getChildren().get(j).getTenNganKho();
                 if (qd.getDetail().getChildren().get(j).getBienBanGuiHang() != null) {
-                    objsb[4] = qd.getDetail().getChildren().get(j).getBienBanGuiHang().getSoBienBanGuiHang();
+                    objsb[6] = qd.getDetail().getChildren().get(j).getBienBanGuiHang().getSoBienBanGuiHang();
                 }
                 if (qd.getDetail().getChildren().get(j).getBienBanChuanBiKho() != null) {
-                    objsb[5] = qd.getDetail().getChildren().get(j).getBienBanChuanBiKho().getSoBienBan();
+                    objsb[7] = qd.getDetail().getChildren().get(j).getBienBanChuanBiKho().getSoBienBan();
                 }
                 if (qd.getDetail().getChildren().get(j).getBienBanLayMau() != null) {
-                    objsb[6] = qd.getDetail().getChildren().get(j).getBienBanLayMau().getSoBienBan();
+                    objsb[8] = qd.getDetail().getChildren().get(j).getBienBanLayMau().getSoBienBan();
                 }
                 if (qd.getDetail().getChildren().get(j).getHoSoKyThuat() != null) {
-                    objsb[7] = qd.getDetail().getChildren().get(j).getHoSoKyThuat().getSoHoSoKyThuat();
+                    objsb[9] = qd.getDetail().getChildren().get(j).getHoSoKyThuat().getSoHoSoKyThuat();
                 }
                 dataList.add(objsb);
                 for (int k = 0; k < qd.getDetail().getChildren().get(j).getListBangKeVt().size(); k++) {
                     objsc = new Object[rowsName.length];
-                    objsc[8] = qd.getDetail().getChildren().get(j).getListBangKeVt().get(k).getSoBangKe();
-                    objsc[9] = convertDate(qd.getDetail().getChildren().get(j).getListBangKeVt().get(k).getNgayNhapKho());
-                    objsc[10] = qd.getDetail().getChildren().get(j).getListBangKeVt().get(k).getSoPhieuNhapKho();
-                    objsc[11] = convertDate(qd.getDetail().getChildren().get(j).getListBangKeVt().get(k).getNgayNhapPhieuNk());
-                    objsc[12] = qd.getDetail().getChildren().get(j).getListBangKeVt().get(k).getTenTrangThai();
+                    objsc[10] = qd.getDetail().getChildren().get(j).getListBangKeVt().get(k).getSoBangKe();
+                    objsc[11] = convertDate(qd.getDetail().getChildren().get(j).getListBangKeVt().get(k).getNgayNhapKho());
+                    objsc[12] = qd.getDetail().getChildren().get(j).getListBangKeVt().get(k).getSoPhieuNhapKho();
+                    objsc[13] = convertDate(qd.getDetail().getChildren().get(j).getListBangKeVt().get(k).getNgayNhapPhieuNk());
+                    objsc[14] = NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(qd.getDetail().getChildren().get(j).getListBangKeVt().get(k).getTrangThai());
                     dataList.add(objsc);
                 }
             }

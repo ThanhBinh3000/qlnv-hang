@@ -328,6 +328,7 @@ public ReportTemplateResponse preview(HashMap<String, Object> body) throws Excep
                 objsb[15] = qd.getDtlList().get(0).getListBienBanNhapDayKho().get(j).getTenTrangThai();
                 if (qd.getDtlList().get(0).getListBienBanNhapDayKho().get(j).getChiTiets() != null) {
                     for (int k = 0; k < qd.getDtlList().get(0).getListBienBanNhapDayKho().get(j).getChiTiets().size(); k++) {
+                        objsc = new Object[rowsName.length];
                         objsc[11] = qd.getDtlList().get(0).getListBienBanNhapDayKho().get(j).getChiTiets().get(k).getSoPhieuKtraCl();
                         objsc[12] = qd.getDtlList().get(0).getListBienBanNhapDayKho().get(j).getChiTiets().get(k).getSoPhieuNhapKho();
                         objsc[13] = qd.getDtlList().get(0).getListBienBanNhapDayKho().get(j).getChiTiets().get(k).getSoBangKe();
