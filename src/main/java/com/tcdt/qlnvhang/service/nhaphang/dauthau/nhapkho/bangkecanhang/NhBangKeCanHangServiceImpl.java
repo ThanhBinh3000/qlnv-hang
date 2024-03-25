@@ -16,8 +16,10 @@ import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhap
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHangRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeChCtRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.phieunhapkho.NhPhieuNhapKhoRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.object.quanlybangkecanhangluongthuc.QlBangKeCanHangLtReq;
 import com.tcdt.qlnvhang.request.object.quanlybangkecanhangluongthuc.QlBangKeChCtLtReq;
+import com.tcdt.qlnvhang.request.search.HhQdNhapxuatSearchReq;
 import com.tcdt.qlnvhang.service.HhQdGiaoNvuNhapxuatService;
 import com.tcdt.qlnvhang.service.SecurityContextService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
@@ -28,6 +30,7 @@ import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.util.Contains;
 import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
 import fr.opensagres.xdocreport.core.XDocReportException;
 import lombok.extern.log4j.Log4j2;
@@ -295,6 +298,63 @@ public class NhBangKeCanHangServiceImpl extends BaseServiceImpl implements NhBan
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public void exportToExcel(HhQdNhapxuatSearchReq req, HttpServletResponse response) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        req.setMaDvi(userInfo.getDvql());
+        Page<NhQdGiaoNvuNhapxuatHdr> page = hhQdGiaoNvuNhapxuatService.searchPage(req);
+        List<NhQdGiaoNvuNhapxuatHdr> data = page.getContent();
+
+        String title = "Danh sách bảng kê cân hàng";
+        String[] rowsName = new String[]{"STT", "Số QĐ giao NVNH", "Năm kế hoạch", "Thời hạn NH", "Điểm kho", "Ngăn/Lô kho",
+                "Số bảng kê", "Số phiếu nhập kho", "Ngày lập bảng kê", "Trạng thái"};
+        String filename = "danh-sach-bang-ke-can-hang.xlsx";
+
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        Object[] objsb = null;
+        Object[] objsc = null;
+        for (int i = 0; i < data.size(); i++) {
+            NhQdGiaoNvuNhapxuatHdr qd = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i;
+            objs[1] = qd.getSoQd();
+            objs[2] = qd.getNamNhap();
+            objs[3] = convertDate(qd.getTgianNkho());
+            dataList.add(objs);
+            if (userInfo.getCapDvi().equals(Contains.CAP_CHI_CUC)) {
+                qd.setDetail(qd.getDtlList().stream().filter(item -> item.getMaDvi().equals(userInfo.getDvql())).collect(Collectors.toList()).get(0));
+            } else {
+                List<NhQdGiaoNvuNxDdiem> dataDd = new ArrayList<>();
+                for (NhQdGiaoNvuNhapxuatDtl nhQdGiaoNvuNhapxuatDtl : qd.getDtlList()) {
+                    dataDd.addAll(nhQdGiaoNvuNhapxuatDtl.getChildren());
+                }
+                qd.setDetail(new NhQdGiaoNvuNhapxuatDtl());
+                qd.getDetail().setChildren(dataDd);
+            }
+            for (int j = 0; j < qd.getDetail().getChildren().size(); j++) {
+                objsb = new Object[rowsName.length];
+                objsb[4] = qd.getDetail().getChildren().get(j).getTenDiemKho();
+                objsb[5] = qd.getDetail().getChildren().get(j).getTenLoKho() != null ? qd.getDetail().getChildren().get(j).getTenLoKho() + " - " + qd.getDetail().getChildren().get(j).getTenNganKho() : qd.getDetail().getChildren().get(j).getTenNganKho();
+                dataList.add(objsb);
+                for (int k = 0; k < qd.getDetail().getChildren().get(j).getListBangKeCanHang().size(); k++) {
+                    objsc = new Object[rowsName.length];
+                    objsc[6] = qd.getDetail().getChildren().get(j).getListBangKeCanHang().get(k).getSoBangKe();
+                    objsc[7] = qd.getDetail().getChildren().get(j).getListBangKeCanHang().get(k).getSoPhieuNhapKho();
+                    objsc[8] = convertDate(qd.getDetail().getChildren().get(j).getListBangKeCanHang().get(k).getNgayTao());
+                    objsc[9] = NhapXuatHangTrangThaiEnum.getTrangThaiDuyetById(qd.getDetail().getChildren().get(j).getListBangKeCanHang().get(k).getTrangThai());
+                    dataList.add(objsc);
+                }
+            }
+        }
+        ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+        ex.export();
     }
 
 }

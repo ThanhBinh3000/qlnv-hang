@@ -13,6 +13,7 @@ import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bblaymaubangiaomau.BienBanLayMau;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.bbnghiemthubqld.HhBbNghiemthuKlstHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kiemtracl.phieuknghiemcl.PhieuKnghiemCluongHang;
+import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbangiaonhan.NhBbGiaoNhanVt;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHang;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKho;
@@ -31,6 +32,7 @@ import com.tcdt.qlnvhang.repository.UserInfoRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.hopdong.HhHopDongRepository;
 import com.tcdt.qlnvhang.repository.bbanlaymau.BienBanLayMauRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.kiemtracl.bienbanchuanbikho.NhBienBanChuanBiKhoRepository;
+import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bangkecanhang.NhBangKeCanHangRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbanguihang.NhBienBanGuiHangRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKhoCtRepository;
 import com.tcdt.qlnvhang.repository.nhaphang.dauthau.nhapkho.bienbannhapdaykho.NhBbNhapDayKhoRepository;
@@ -96,7 +98,7 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 	private NhPhieuNhapKhoService nhPhieuNhapKhoService;
 
 	@Autowired
-	private NhBangKeCanHangService nhBangKeCanHangService;
+	private NhBangKeCanHangRepository nhBangKeCanHangRepository;
 
 	@Autowired
 	private HhBbNghiemthuKlstRepository hhBbNghiemthuKlstRepository;
@@ -882,7 +884,15 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 			}
 			ddNhap.setListPhieuKtraCl(nhPhieuKtChatLuongService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
 //			ddNhap.setListPhieuNhapKho(nhPhieuNhapKhoService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
-			ddNhap.setListBangKeCanHang(nhBangKeCanHangService.findAllByIdDdiemGiaoNvNh(ddNhap.getId()));
+			List<NhBangKeCanHang> bangKeCanHangList = new ArrayList<>();
+			if (req!= null) {
+				req.setTuNgayTaoBkchStr(convertFullDateToString(req.getTuNgayTaoBkch()));
+				req.setDenNgayTaoBkchStr(convertFullDateToString(req.getDenNgayTaoBkch()));
+				bangKeCanHangList = nhBangKeCanHangRepository.timKiemByDiaDiemNh(req);
+			} else {
+				bangKeCanHangList = nhBangKeCanHangRepository.findByIdDdiemGiaoNvNh(ddNhap.getId());
+			}
+			ddNhap.setListBangKeCanHang(bangKeCanHangList);
 			NhBbNhapDayKho nhBbNhapDayKho = new NhBbNhapDayKho();
 			if (req!= null) {
 				req.setTuNgayNhapDayKhoStr(convertFullDateToString(req.getTuNgayNhapDayKho()));
