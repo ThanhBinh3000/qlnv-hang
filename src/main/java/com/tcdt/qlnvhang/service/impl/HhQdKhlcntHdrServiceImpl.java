@@ -901,6 +901,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				}
 			}
 			this.cloneProject(dataDB.getId());
+			capNhatSoLuongNhapLt(dataDB);
 		}
 		HhQdKhlcntHdr createCheck = hhQdKhlcntHdrRepository.save(dataDB);
 		return createCheck;
@@ -960,13 +961,32 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 				HhSlNhapHang slNhapHang = HhSlNhapHang.builder()
 						.loaiVthh(hdr.getLoaiVthh())
 						.cloaiVthh(hdr.getCloaiVthh())
-						.idDxKhlcnt(hdr.getId())
+						.idQdKhlcnt(hdr.getId())
 						.namKhoach(hdr.getNamKhoach())
 						.soLuong(ctiet.getSoLuong())
 						.maDvi(ctiet.getMaDvi())
 						.kieuNhap("NHAP_DAU_THAU")
 						.build();
 				hhSlNhapHangRepository.save(slNhapHang);
+			}
+		}
+	}
+
+	private void capNhatSoLuongNhapLt (HhQdKhlcntHdr hdr) throws Exception {
+		for (HhQdKhlcntDtl child :hdr.getChildren()) {
+			for (HhQdKhlcntDsgthau gthau : child.getChildren()){
+				for (HhQdKhlcntDsgthauCtiet ctiet : gthau.getChildren()){
+					HhSlNhapHang slNhapHang = HhSlNhapHang.builder()
+							.loaiVthh(hdr.getLoaiVthh())
+							.cloaiVthh(hdr.getCloaiVthh())
+							.idQdKhlcnt(hdr.getId())
+							.namKhoach(hdr.getNamKhoach())
+							.soLuong(ctiet.getSoLuong())
+							.maDvi(ctiet.getMaDvi())
+							.kieuNhap("NHAP_DAU_THAU")
+							.build();
+					hhSlNhapHangRepository.save(slNhapHang);
+				}
 			}
 		}
 	}
