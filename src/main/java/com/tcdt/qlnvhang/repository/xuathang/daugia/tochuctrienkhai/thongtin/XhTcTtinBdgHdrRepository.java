@@ -18,8 +18,7 @@ public interface XhTcTtinBdgHdrRepository extends JpaRepository<XhTcTtinBdgHdr, 
             "AND (:#{#param.soQdPd} IS NULL OR LOWER(TT.soQdPd) LIKE LOWER(CONCAT('%', :#{#param.soQdPd}, '%'))) " +
             "AND (:#{#param.loaiVthh} IS NULL OR TT.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
             "AND (:#{#param.trangThai} IS NULL OR TT.trangThai = :#{#param.trangThai}) " +
-            "ORDER BY TT.ngaySua DESC, TT.ngayTao DESC, TT.id DESC"
-    )
+            "ORDER BY TT.nam DESC, TT.ngaySua DESC, TT.ngayTao DESC, TT.id DESC")
     Page<XhTcTtinBdgHdr> searchPage(@Param("param") ThongTinDauGiaReq param, Pageable pageable);
 
     List<XhTcTtinBdgHdr> findAllBySoQdPd(String soQdPd);
