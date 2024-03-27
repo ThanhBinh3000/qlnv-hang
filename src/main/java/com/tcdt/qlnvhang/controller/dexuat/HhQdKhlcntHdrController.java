@@ -97,6 +97,24 @@ public class HhQdKhlcntHdrController {
 		return ResponseEntity.ok(resp);
 	}
 
+	@ApiOperation(value = "Danh sách Quyết định phê duyệt kế hoạch lựa chọn nhà thầu được điều chỉnh", response = List.class)
+	@PostMapping(value = "/ds-dieu-chinh", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<BaseResponse> selectDieuChinhQdPdKhlcnt(HttpServletRequest request,
+												  @Valid @RequestBody HhQdKhlcntSearchReq objReq, HttpServletResponse response) {
+		BaseResponse resp = new BaseResponse();
+		try {
+			resp.setData(service.selectDieuChinhQdPdKhlcnt(objReq));
+			resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+			resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+		} catch (Exception e) {
+			resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+			resp.setMsg(e.getMessage());
+			log.error("Danh sách Quyết định phê duyệt kế hoạch lựa chọn nhà thầu được điều chỉnh trace: {}", e);
+		}
+		return ResponseEntity.ok(resp);
+	}
+
 	@ApiOperation(value = "Lấy chi tiết Quyết định phê duyệt kế hoạch lựa chọn nhà thầu", response = List.class)
 	@GetMapping(value = PathContains.URL_CHI_TIET + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
