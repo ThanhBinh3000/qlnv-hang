@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -59,4 +60,6 @@ public class XhQdPdKhBdgDtlReq extends BaseRequest {
     private Integer lastest;
     private String trangThaiHdr;
     private Integer lanDieuChinh;
+    private String trangThaiNhapLieu;
+    private List<String> listTrangThaiNhapLieu =new ArrayList<>();
 }

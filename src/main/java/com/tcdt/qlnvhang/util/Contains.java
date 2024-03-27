@@ -440,4 +440,9 @@ public class Contains {
     public static String BEN_NHAN = "00";
     public static String BEN_GIAO = "01";
   }
+
+  public static class TRANG_THAI_NHAP_LIEU {
+    public static String DANG_NHAP = "00";
+    public static String HOAN_THANH = "01";
+  }
 }
