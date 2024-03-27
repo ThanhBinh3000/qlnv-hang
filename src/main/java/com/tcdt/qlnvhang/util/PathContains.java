@@ -16,6 +16,7 @@ public class PathContains {
     public static final String URL_DIEU_CHINH = "/dieu-chinh";
     public static final String URL_CHI_TIET_GOC = "/chi-tiet-goc";
     public static final String URL_THOP_DATA = "/thop-dlieu";
+    public static final String URL_KHOI_TAO = "/khoi-tao";
     // Level
     public static final String URL_CAP_CUC = "/cap-cuc";
     public static final String URL_CAP_TONG_CUC = "/cap-tong-cuc";

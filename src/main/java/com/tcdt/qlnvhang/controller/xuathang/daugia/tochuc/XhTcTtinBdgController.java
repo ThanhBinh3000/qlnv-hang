@@ -149,4 +149,21 @@ public class XhTcTtinBdgController extends BaseController {
         }
         return ResponseEntity.ok(resp);
     }
+
+    @ApiOperation(value = "Khởi tạo dữ liệu", response = List.class)
+    @PostMapping(value = PathContains.URL_KHOI_TAO, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<BaseResponse> preCreate(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody ThongTinDauGiaReq req) {
+        BaseResponse resp = new BaseResponse();
+        try {
+            resp.setData(xhTcTtinBdgHdrService.preCreate(currentUser, req));
+            resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
+            resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
+        } catch (Exception e) {
+            resp.setStatusCode(EnumResponse.RESP_FAIL.getValue());
+            resp.setMsg(e.getMessage());
+            log.error("Tạo mới thông tin  : {}", e);
+        }
+        return ResponseEntity.ok(resp);
+    }
 }

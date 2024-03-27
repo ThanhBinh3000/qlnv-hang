@@ -67,6 +67,7 @@ public class XhQdPdKhBdg implements Serializable {
     private String noiDungDieuChinh;
     private String type;
     private Long idQdPd;
+    private String trangThaiNhapLieu;
     @Transient
     private String tenDvi;
     @Transient
