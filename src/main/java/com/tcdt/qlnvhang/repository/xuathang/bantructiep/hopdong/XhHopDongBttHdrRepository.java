@@ -25,7 +25,7 @@ public interface XhHopDongBttHdrRepository extends JpaRepository<XhHopDongBttHdr
             "AND (:#{#param.soQdPd} IS NULL OR LOWER(HD.soQdPd) LIKE LOWER(CONCAT('%', :#{#param.soQdPd}, '%'))) " +
             "AND (:#{#param.soQdNv} IS NULL OR LOWER(HD.soQdNv) LIKE LOWER(CONCAT('%', :#{#param.soQdNv}, '%'))) " +
             "AND (:#{#param.trangThai} IS NULL OR HD.trangThai = :#{#param.trangThai}) " +
-            "ORDER BY HD.ngaySua DESC, HD.ngayTao DESC, HD.id DESC")
+            "ORDER BY HD.namHd DESC, HD.ngaySua DESC, HD.ngayTao DESC, HD.id DESC")
     Page<XhHopDongBttHdr> searchPage(@Param("param") XhHopDongBttHdrReq param, Pageable pageable);
 
     @Query(value = "SELECT COUNT(*) FROM XH_HOP_DONG_BTT_HDR WHERE TRANG_THAI = '00' AND ID_QD_KQ = :idQdKq", nativeQuery = true)
