@@ -321,11 +321,11 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl {
       throw new Exception("Bad request.");
     }
     XhQdPdKhBdgDtl xhQdPdKhBdgDtl = new XhQdPdKhBdgDtl();
-    if (!DataUtils.isNullObject(request.getSoQdPd())) {
-      XhQdPdKhBdg xhQdPdKhBdg = xhQdPdKhBdgRepository.findBySoQdPd(request.getSoQdPd()).orElse(new XhQdPdKhBdg());
+    if (!DataUtils.isNullObject(request.getXhQdPdKhBdgDtl())) {
+      XhQdPdKhBdg xhQdPdKhBdg = xhQdPdKhBdgRepository.findBySoQdPd(request.getXhQdPdKhBdgDtl().getSoQdPd()).orElse(new XhQdPdKhBdg());
       if (DataUtils.isNullObject(xhQdPdKhBdg.getId())) {
-        xhQdPdKhBdg.setSoQdPd(request.getSoQdPd());
-        xhQdPdKhBdg.setNam(request.getNam());
+        xhQdPdKhBdg.setSoQdPd(request.getXhQdPdKhBdgDtl().getSoQdPd());
+        xhQdPdKhBdg.setNam(request.getXhQdPdKhBdgDtl().getNam());
         xhQdPdKhBdg.setMaDvi(currentUser.getDvql());
         xhQdPdKhBdg.setLoaiVthh(request.getLoaiVthh());
         xhQdPdKhBdg.setCloaiVthh(request.getCloaiVthh());
@@ -334,24 +334,11 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl {
         xhQdPdKhBdg.setType("QDKH");
         xhQdPdKhBdg.setTrangThaiNhapLieu(Contains.TRANG_THAI_NHAP_LIEU.DANG_NHAP);
         xhQdPdKhBdg = xhQdPdKhBdgRepository.save(xhQdPdKhBdg);
+        BeanUtils.copyProperties(request.getXhQdPdKhBdgDtl(),xhQdPdKhBdgDtl);
         xhQdPdKhBdgDtl.setIdHdr(xhQdPdKhBdg.getId());
         xhQdPdKhBdgDtl.setMaDvi(currentUser.getDvql());
-        xhQdPdKhBdgDtl.setTongTienKhoiDiemDx(new BigDecimal(BigInteger.ZERO));
-        xhQdPdKhBdgDtl.setKhoanTienDatTruoc(new BigDecimal(BigInteger.ZERO));
-        if(!DataUtils.isNullObject(request.getXhQdPdKhBdgDtl())){
-          /*xhQdPdKhBdgDtl.setTgianDkienTu(requestXhQdPdKhBdgDtl.getTgianDkienTu());
-          xhQdPdKhBdgDtl.setTgianDkienDen(requestXhQdPdKhBdgDtl.getTgianDkienDen());
-          xhQdPdKhBdgDtl.setTgianTtoan(requestXhQdPdKhBdgDtl.getTgianTtoan());
-          xhQdPdKhBdgDtl.setPthucTtoan(requestXhQdPdKhBdgDtl.getPthucTtoan());
-          xhQdPdKhBdgDtl.setTgianGnhan(null);
-          xhQdPdKhBdgDtl.setPthucGnhan(null);
-          xhQdPdKhBdgDtl.setTongKtienDtruocDduyet(null);
-          xhQdPdKhBdgDtl.setLoaiVthh(request.getLoaiVthh());
-          xhQdPdKhBdgDtl.setCloaiVthh(request.getCloaiVthh());
-          xhQdPdKhBdgDtl.setTongSoLuong(new BigDecimal(BigInteger.ZERO));*/
-          BeanUtils.copyProperties(xhQdPdKhBdgDtl,request.getXhQdPdKhBdgDtl());
-          xhQdPdKhBdgDtl = xhQdPdKhBdgDtlRepository.save(xhQdPdKhBdgDtl);
-        }
+        xhQdPdKhBdgDtl = xhQdPdKhBdgDtlRepository.save(xhQdPdKhBdgDtl);
+
       }
     }
     XhTcTtinBdgHdr newData = new XhTcTtinBdgHdr();
