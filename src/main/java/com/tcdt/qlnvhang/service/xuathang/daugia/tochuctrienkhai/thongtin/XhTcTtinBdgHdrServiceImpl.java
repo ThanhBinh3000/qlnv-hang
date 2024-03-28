@@ -325,9 +325,11 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl {
       if (DataUtils.isNullObject(xhQdPdKhBdg.getId())) {
         xhQdPdKhBdg.setSoQdPd(request.getXhQdPdKhBdgDtl().getSoQdPd());
         xhQdPdKhBdg.setNam(request.getXhQdPdKhBdgDtl().getNam());
-        xhQdPdKhBdg.setMaDvi(currentUser.getDvql());
+        xhQdPdKhBdg.setMaDvi(currentUser.getDvql().substring(0, 4));
         xhQdPdKhBdg.setLoaiVthh(request.getLoaiVthh());
         xhQdPdKhBdg.setCloaiVthh(request.getCloaiVthh());
+        xhQdPdKhBdg.setTrangThai(Contains.BAN_HANH);
+        xhQdPdKhBdg.setLastest(true);
 //        xhQdPdKhBdg.setLoaiHinhNx(request.getXhQdPdKhBdgDtl().getXhQdPdKhBdg().getLoaiHinhNx());
 //        xhQdPdKhBdg.setKieuNx(request.getXhQdPdKhBdgDtl().getXhQdPdKhBdg().getKieuNx());
         xhQdPdKhBdg.setType("QDKH");
