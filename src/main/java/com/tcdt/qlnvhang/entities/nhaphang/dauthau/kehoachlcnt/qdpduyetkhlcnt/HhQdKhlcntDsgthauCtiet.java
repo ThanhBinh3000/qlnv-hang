@@ -31,6 +31,7 @@ public class HhQdKhlcntDsgthauCtiet {
 	private BigDecimal soLuong;
 
 	private BigDecimal donGia;
+	private BigDecimal donGiaLastest;
 	private BigDecimal donGiaTamTinh;
 
 	private BigDecimal thanhTien;

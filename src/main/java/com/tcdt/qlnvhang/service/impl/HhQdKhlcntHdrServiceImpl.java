@@ -1269,6 +1269,43 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	}
 
 	@Override
+	public List<HhQdKhlcntHdr> selectDieuChinhQdPdKhlcnt(HhQdKhlcntSearchReq req) throws Exception {
+		UserInfo userInfo = SecurityContextService.getUser();
+		if (userInfo == null) {
+			throw new Exception("Access denied.");
+		}
+		List<HhQdKhlcntHdr> data = null;
+		if (!userInfo.getCapDvi().equals(Contains.CAP_TONG_CUC)) {
+			req.setMaDvi(userInfo.getDvql());
+		}
+		if(req.getLoaiVthh().startsWith("02")){
+			data = hhQdKhlcntHdrRepository.selectDieuChinhQdPdKhlcntVt(
+					req.getNamKhoach(), req.getLoaiVthh(),
+					req.getTrangThai(), req.getLastest());
+		} else {
+			data = hhQdKhlcntHdrRepository.selectDieuChinhQdPdKhlcnt(
+					req.getNamKhoach(), req.getLoaiVthh(),
+					req.getTrangThai(), req.getLastest(),
+					req.getMaDvi());
+		}
+		for(HhQdKhlcntHdr qd: data){
+			if(qd.getTrangThai().equals("29")){
+				QthtChotGiaInfoReq objReq = new QthtChotGiaInfoReq();
+				objReq.setLoaiGia("LG03");
+				objReq.setNam(qd.getNamKhoach());
+				objReq.setLoaiVthh(qd.getLoaiVthh());
+				objReq.setCloaiVthh(qd.getCloaiVthh());
+				objReq.setMaCucs(qd.getChildren().stream().map(HhQdKhlcntDtl::getMaDvi).collect(Collectors.toList()));
+				objReq.setIdQuyetDinhCanDieuChinh(qd.getId());
+				objReq.setType("NHAP_DAU_THAU");
+				QthtChotGiaInfoRes qthtChotGiaInfoRes = qthtChotGiaNhapXuatService.thongTinChotDieuChinhGia(objReq);
+				qd.setQthtChotGiaInfoRes(qthtChotGiaInfoRes);
+			}
+		}
+		return data;
+	}
+
+	@Override
 	public ReportTemplateResponse preview(HhQdKhlcntHdrReq objReq) throws Exception {
 		Optional<HhQdKhlcntHdr> qOptional = hhQdKhlcntHdrRepository.findById(objReq.getId());
 		if (!qOptional.isPresent()) {
