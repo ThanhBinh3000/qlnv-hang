@@ -62,5 +62,5 @@ public class XhQdPdKhBdgDtlReq extends BaseRequest {
   private Integer lanDieuChinh;
   private String trangThaiNhapLieu;
   private List<String> listTrangThaiNhapLieu = new ArrayList<>();
-  private boolean isKhoiTao = false;
+  private boolean khoiTao = false;
 }
