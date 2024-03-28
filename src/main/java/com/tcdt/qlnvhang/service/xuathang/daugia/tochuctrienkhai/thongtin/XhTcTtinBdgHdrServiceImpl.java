@@ -36,7 +36,6 @@ import javax.transaction.Transactional;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -321,11 +320,11 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl {
       throw new Exception("Bad request.");
     }
     XhQdPdKhBdgDtl xhQdPdKhBdgDtl = new XhQdPdKhBdgDtl();
-    if (!DataUtils.isNullObject(request.getSoQdPd())) {
-      XhQdPdKhBdg xhQdPdKhBdg = xhQdPdKhBdgRepository.findBySoQdPd(request.getSoQdPd()).orElse(new XhQdPdKhBdg());
+    if (!DataUtils.isNullObject(request.getXhQdPdKhBdgDtl())) {
+      XhQdPdKhBdg xhQdPdKhBdg = xhQdPdKhBdgRepository.findBySoQdPd(request.getXhQdPdKhBdgDtl().getSoQdPd()).orElse(new XhQdPdKhBdg());
       if (DataUtils.isNullObject(xhQdPdKhBdg.getId())) {
-        xhQdPdKhBdg.setSoQdPd(request.getSoQdPd());
-        xhQdPdKhBdg.setNam(request.getNam());
+        xhQdPdKhBdg.setSoQdPd(request.getXhQdPdKhBdgDtl().getSoQdPd());
+        xhQdPdKhBdg.setNam(request.getXhQdPdKhBdgDtl().getNam());
         xhQdPdKhBdg.setMaDvi(currentUser.getDvql());
         xhQdPdKhBdg.setLoaiVthh(request.getLoaiVthh());
         xhQdPdKhBdg.setCloaiVthh(request.getCloaiVthh());
@@ -334,21 +333,11 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl {
         xhQdPdKhBdg.setType("QDKH");
         xhQdPdKhBdg.setTrangThaiNhapLieu(Contains.TRANG_THAI_NHAP_LIEU.DANG_NHAP);
         xhQdPdKhBdg = xhQdPdKhBdgRepository.save(xhQdPdKhBdg);
+        BeanUtils.copyProperties(request.getXhQdPdKhBdgDtl(), xhQdPdKhBdgDtl);
         xhQdPdKhBdgDtl.setIdHdr(xhQdPdKhBdg.getId());
         xhQdPdKhBdgDtl.setMaDvi(currentUser.getDvql());
-        xhQdPdKhBdgDtl.setTongTienKhoiDiemDx(new BigDecimal(BigInteger.ZERO));
-        xhQdPdKhBdgDtl.setKhoanTienDatTruoc(new BigDecimal(BigInteger.ZERO));
-        xhQdPdKhBdgDtl.setTgianDkienTu(null);
-        xhQdPdKhBdgDtl.setTgianDkienDen(null);
-        xhQdPdKhBdgDtl.setTgianTtoan(null);
-        xhQdPdKhBdgDtl.setPthucTtoan(null);
-        xhQdPdKhBdgDtl.setTgianGnhan(null);
-        xhQdPdKhBdgDtl.setPthucGnhan(null);
-        xhQdPdKhBdgDtl.setTongKtienDtruocDduyet(null);
-        xhQdPdKhBdgDtl.setLoaiVthh(request.getLoaiVthh());
-        xhQdPdKhBdgDtl.setCloaiVthh(request.getCloaiVthh());
-        xhQdPdKhBdgDtl.setTongSoLuong(new BigDecimal(BigInteger.ZERO));
         xhQdPdKhBdgDtl = xhQdPdKhBdgDtlRepository.save(xhQdPdKhBdgDtl);
+
       }
     }
     XhTcTtinBdgHdr newData = new XhTcTtinBdgHdr();
@@ -376,5 +365,65 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl {
     XhTcTtinBdgHdr createdRecord = xhTcTtinBdgHdrRepository.save(newData);
     this.saveDetail(request, createdRecord.getId(), false);
     return createdRecord;
+  }
+
+  @Transactional
+  public XhTcTtinBdgHdr preUpdate(CustomUserDetails currentUser, ThongTinDauGiaReq request) throws Exception {
+    if (currentUser == null || request == null || request.getId() == null) {
+      throw new Exception("Bad request.");
+    }
+    if (DataUtils.isNullObject(request.getXhQdPdKhBdgDtl())) {
+      throw new Exception("Bad request.");
+    }
+    XhQdPdKhBdgDtl oldXhQdPdKhBdgDtl = xhQdPdKhBdgDtlRepository.findById(request.getXhQdPdKhBdgDtl().getId())
+        .orElseThrow(() -> new Exception("Không tìm thấy dữ liệu cần sửa"));
+
+    XhTcTtinBdgHdr existingData = xhTcTtinBdgHdrRepository.findById(request.getId())
+        .orElseThrow(() -> new Exception("Không tìm thấy dữ liệu cần sửa"));
+
+
+    BeanUtils.copyProperties(request.getXhQdPdKhBdgDtl(), oldXhQdPdKhBdgDtl, "id", "maDvi");
+    xhQdPdKhBdgDtlRepository.save(oldXhQdPdKhBdgDtl);
+    BeanUtils.copyProperties(request, existingData, "id", "maDvi");
+    existingData.setNgaySua(LocalDate.now());
+    existingData.setNguoiSuaId(currentUser.getUser().getId());
+    if (request.getTgianDauGiaTu() != null) {
+      existingData.setTgianDauGiaTu(request.getTgianDauGiaTu()
+          .atZone(ZoneId.of("UTC"))
+          .withZoneSameInstant(ZoneId.systemDefault())
+          .toLocalDateTime());
+    }
+    if (request.getTgianDauGiaDen() != null) {
+      existingData.setTgianDauGiaDen(request.getTgianDauGiaDen()
+          .atZone(ZoneId.of("UTC"))
+          .withZoneSameInstant(ZoneId.systemDefault())
+          .toLocalDateTime());
+    }
+    XhTcTtinBdgHdr updatedData = xhTcTtinBdgHdrRepository.save(existingData);
+    this.saveDetail(request, updatedData.getId(), true);
+    return updatedData;
+  }
+
+  @Transactional
+  public XhQdPdKhBdgDtl preApprove(CustomUserDetails currentUser, StatusReq statusReq) throws Exception {
+    if (currentUser == null || StringUtils.isEmpty(statusReq.getId())) {
+      throw new Exception("Bad request.");
+    }
+    XhQdPdKhBdgDtl oldXhQdPdKhBdgDtl = xhQdPdKhBdgDtlRepository.findById(statusReq.getId())
+        .orElseThrow(() -> new Exception("Không tìm thấy dữ liệu"));
+    if (DataUtils.isNullOrEmpty(statusReq.getTrangThai())) {
+      statusReq.setTrangThai(Contains.TRANG_THAI_NHAP_LIEU.HOAN_THANH);
+    }
+    String strStatus = oldXhQdPdKhBdgDtl.getTrangThai() + statusReq.getTrangThai();
+    switch (strStatus) {
+      case Contains.TRANG_THAI_NHAP_LIEU.DANG_NHAP + Contains.TRANG_THAI_NHAP_LIEU.HOAN_THANH:
+        oldXhQdPdKhBdgDtl.setTrangThaiNhapLieu(Contains.TRANG_THAI_NHAP_LIEU.HOAN_THANH);
+        break;
+      default:
+        throw new Exception("Hoàn thành trạng thái không thành công");
+    }
+    XhQdPdKhBdgDtl updatedData = xhQdPdKhBdgDtlRepository.save(oldXhQdPdKhBdgDtl);
+
+    return updatedData;
   }
 }
