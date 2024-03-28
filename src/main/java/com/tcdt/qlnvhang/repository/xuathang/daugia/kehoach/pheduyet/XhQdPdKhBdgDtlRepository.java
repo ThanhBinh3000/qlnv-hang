@@ -29,7 +29,7 @@ public interface XhQdPdKhBdgDtlRepository extends JpaRepository<XhQdPdKhBdgDtl, 
             "AND (:#{#param.trangThaiHdr} IS NULL OR hdr.trangThai = :#{#param.trangThaiHdr}) " +
             "AND (:#{#param.lastest} IS NULL OR LOWER(hdr.lastest) LIKE LOWER(CONCAT(:#{#param.lastest},'%'))) " +
             "AND (:#{#param.loaiVthh} IS NULL OR LOWER(dtl.loaiVthh) LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
-            "AND (:#{#param.isKhoiTao()} = false OR ((:#{#param.isKhoiTao } = true AND dtl.trangThaiNhapLieu IS NOT NULL))) " +
+            "AND (:#{#param.isKhoiTao} = false OR ((:#{#param.isKhoiTao } = true AND dtl.trangThaiNhapLieu IS NOT NULL))) " +
             "ORDER BY dtl.nam DESC, dtl.id DESC")
     Page<XhQdPdKhBdgDtl> searchDtl(@Param("param") XhQdPdKhBdgDtlReq param, Pageable pageable);
 
