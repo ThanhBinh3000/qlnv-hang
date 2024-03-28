@@ -338,17 +338,20 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl {
         xhQdPdKhBdgDtl.setMaDvi(currentUser.getDvql());
         xhQdPdKhBdgDtl.setTongTienKhoiDiemDx(new BigDecimal(BigInteger.ZERO));
         xhQdPdKhBdgDtl.setKhoanTienDatTruoc(new BigDecimal(BigInteger.ZERO));
-        xhQdPdKhBdgDtl.setTgianDkienTu(null);
-        xhQdPdKhBdgDtl.setTgianDkienDen(null);
-        xhQdPdKhBdgDtl.setTgianTtoan(null);
-        xhQdPdKhBdgDtl.setPthucTtoan(null);
-        xhQdPdKhBdgDtl.setTgianGnhan(null);
-        xhQdPdKhBdgDtl.setPthucGnhan(null);
-        xhQdPdKhBdgDtl.setTongKtienDtruocDduyet(null);
-        xhQdPdKhBdgDtl.setLoaiVthh(request.getLoaiVthh());
-        xhQdPdKhBdgDtl.setCloaiVthh(request.getCloaiVthh());
-        xhQdPdKhBdgDtl.setTongSoLuong(new BigDecimal(BigInteger.ZERO));
-        xhQdPdKhBdgDtl = xhQdPdKhBdgDtlRepository.save(xhQdPdKhBdgDtl);
+        if(!DataUtils.isNullObject(request.getXhQdPdKhBdgDtl())){
+          /*xhQdPdKhBdgDtl.setTgianDkienTu(requestXhQdPdKhBdgDtl.getTgianDkienTu());
+          xhQdPdKhBdgDtl.setTgianDkienDen(requestXhQdPdKhBdgDtl.getTgianDkienDen());
+          xhQdPdKhBdgDtl.setTgianTtoan(requestXhQdPdKhBdgDtl.getTgianTtoan());
+          xhQdPdKhBdgDtl.setPthucTtoan(requestXhQdPdKhBdgDtl.getPthucTtoan());
+          xhQdPdKhBdgDtl.setTgianGnhan(null);
+          xhQdPdKhBdgDtl.setPthucGnhan(null);
+          xhQdPdKhBdgDtl.setTongKtienDtruocDduyet(null);
+          xhQdPdKhBdgDtl.setLoaiVthh(request.getLoaiVthh());
+          xhQdPdKhBdgDtl.setCloaiVthh(request.getCloaiVthh());
+          xhQdPdKhBdgDtl.setTongSoLuong(new BigDecimal(BigInteger.ZERO));*/
+          BeanUtils.copyProperties(xhQdPdKhBdgDtl,request.getXhQdPdKhBdgDtl());
+          xhQdPdKhBdgDtl = xhQdPdKhBdgDtlRepository.save(xhQdPdKhBdgDtl);
+        }
       }
     }
     XhTcTtinBdgHdr newData = new XhTcTtinBdgHdr();
