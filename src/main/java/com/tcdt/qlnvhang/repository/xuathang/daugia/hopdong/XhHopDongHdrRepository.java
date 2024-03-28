@@ -27,7 +27,7 @@ public interface XhHopDongHdrRepository extends JpaRepository<XhHopDongHdr, Long
             "AND (:#{#param.loaiVthh} IS NULL OR HD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
             "AND (:#{#param.soQdKq} IS NULL OR LOWER(HD.soQdKq) LIKE LOWER(CONCAT('%', :#{#param.soQdKq}, '%'))) " +
             "AND (:#{#param.trangThai} IS NULL OR HD.trangThai = :#{#param.trangThai}) " +
-            "ORDER BY HD.ngaySua DESC, HD.ngayTao DESC, HD.id DESC")
+            "ORDER BY HD.nam DESC, HD.ngaySua DESC, HD.ngayTao DESC, HD.id DESC")
     Page<XhHopDongHdr> searchPage(@Param("param") XhHopDongHdrReq param, Pageable pageable);
 
     @Query(value = "SELECT COUNT(*) " +

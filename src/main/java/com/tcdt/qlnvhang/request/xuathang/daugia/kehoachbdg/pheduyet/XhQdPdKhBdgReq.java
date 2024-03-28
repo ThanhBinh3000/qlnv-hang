@@ -54,4 +54,5 @@ public class XhQdPdKhBdgReq extends BaseRequest {
     private LocalDate ngayKyDcDen;
     private String dvql;
     private String maCuc;
+    private String trangThaiNhapLieu;
 }

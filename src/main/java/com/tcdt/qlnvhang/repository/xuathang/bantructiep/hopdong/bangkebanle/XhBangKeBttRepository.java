@@ -23,7 +23,7 @@ public interface XhBangKeBttRepository extends JpaRepository<XhBangKeBtt, Long> 
             "AND (:#{#param.ngayBanHangTu} IS NULL OR BK.ngayBanHang >= :#{#param.ngayBanHangTu}) " +
             "AND (:#{#param.ngayBanHangDen} IS NULL OR BK.ngayBanHang <= :#{#param.ngayBanHangDen}) " +
             "AND (:#{#param.loaiVthh} IS NULL OR BK.loaiVthh LIKE CONCAT(:#{#param.loaiVthh},'%')) " +
-            "ORDER BY BK.ngayTao desc, BK.id desc")
+            "ORDER BY BK.namKh DESC, BK.ngayTao DESC, BK.id DESC")
     Page<XhBangKeBtt> searchPage(@Param("param") XhBangKeBttReq param, Pageable pageable);
 
     List<XhBangKeBtt> findByIdIn(List<Long> idBkList);

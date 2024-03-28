@@ -33,6 +33,7 @@ public interface XhQdPdKhBdgRepository extends JpaRepository<XhQdPdKhBdg, Long> 
             "AND (:#{#param.loaiVthh} IS NULL OR QD.loaiVthh LIKE CONCAT(:#{#param.loaiVthh}, '%')) " +
             "AND (:#{#param.trangThai} IS NULL OR QD.trangThai = :#{#param.trangThai}) " +
             "AND (:#{#param.maCuc} IS NULL OR DTL.maDvi LIKE CONCAT(:#{#param.maCuc}, '%')) " +
+            "AND (QD.trangThaiNhapLieu is null) " +
             "ORDER BY QD.nam DESC, QD.ngaySua DESC, QD.ngayTao DESC, QD.id DESC")
     Page<XhQdPdKhBdg> searchPage(@Param("param") XhQdPdKhBdgReq param, Pageable pageable);
 
@@ -51,4 +52,6 @@ public interface XhQdPdKhBdgRepository extends JpaRepository<XhQdPdKhBdg, Long> 
     long countBySoQdPdAndType(String soQdPd, String type);
 
     Optional<XhQdPdKhBdg> findByIdQdPdAndLastest(Long idQuyetDinhCanDieuChinh, boolean lastest);
+
+    Optional<XhQdPdKhBdg> findBySoQdPd(String soQdPd);
 }

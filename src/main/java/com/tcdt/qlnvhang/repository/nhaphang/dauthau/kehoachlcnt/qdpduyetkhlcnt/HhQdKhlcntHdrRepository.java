@@ -119,4 +119,52 @@ public interface HhQdKhlcntHdrRepository extends BaseRepository<HhQdKhlcntHdr, L
 			" AND (:maDvi IS NULL OR CT.MA_DVI = :maDvi) "
 			, nativeQuery = true)
 	List<HhQdKhlcntHdr> getDsTtDthauVt(Integer namKh , String loaiVthh, String maDvi,  String trangThai );
+
+	@Query(value = " SELECT DISTINCT QD_HDR.* FROM HH_QD_KHLCNT_HDR QD_HDR " +
+			" LEFT JOIN HH_QD_KHLCNT_DTL QD_DTL ON QD_HDR.ID = QD_DTL.ID_QD_HDR " +
+			" LEFT JOIN HH_QD_KHLCNT_DSGTHAU DSG ON QD_DTL.ID = DSG.ID_QD_DTL " +
+			" LEFT JOIN HH_QD_PD_HSMT HSMT ON DSG.ID_QD_PD_HSMT = HSMT.ID  " +
+			" WHERE (:namKh IS NULL OR QD_HDR.NAM_KHOACH = TO_NUMBER(:namKh)) "+
+			" AND (:loaiVthh IS NULL OR QD_HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) "+
+			" AND (:trangThai IS NULL OR QD_HDR.TRANG_THAI = :trangThai)" +
+			" AND (:lastest IS NULL OR QD_HDR.LASTEST = :lastest) " +
+			" AND (:maDvi IS NULL OR QD_DTL.MA_DVI = :maDvi) " +
+			" AND (DSG.ID_QD_PD_HSMT IS NULL OR (DSG.ID_QD_PD_HSMT IS NOT NULL AND HSMT.TRANG_THAI != 29)) "
+			, countQuery = " SELECT COUNT(DISTINCT QD_HDR.ID) FROM HH_QD_KHLCNT_HDR  QD_HDR " +
+			" LEFT JOIN HH_QD_KHLCNT_DTL QD_DTL ON QD_HDR.ID = QD_DTL.ID_QD_HDR " +
+			" LEFT JOIN HH_QD_KHLCNT_DSGTHAU DSG ON QD_DTL.ID = DSG.ID_QD_DTL " +
+			" LEFT JOIN HH_QD_PD_HSMT HSMT ON DSG.ID_QD_PD_HSMT = HSMT.ID  " +
+			" WHERE (:namKh IS NULL OR QD_HDR.NAM_KHOACH = TO_NUMBER(:namKh)) "+
+			" AND (:loaiVthh IS NULL OR QD_HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) "+
+			" AND (:trangThai IS NULL OR QD_HDR.TRANG_THAI = :trangThai)" +
+			" AND (:lastest IS NULL OR QD_HDR.LASTEST = :lastest) " +
+			" AND (:maDvi IS NULL OR QD_DTL.MA_DVI = :maDvi) " +
+			" AND (DSG.ID_QD_PD_HSMT IS NULL OR (DSG.ID_QD_PD_HSMT IS NOT NULL AND HSMT.TRANG_THAI != 29)) "
+			, nativeQuery = true)
+	List<HhQdKhlcntHdr> selectDieuChinhQdPdKhlcnt(Integer namKh, String loaiVthh,String trangThai,Integer lastest,String maDvi);
+
+	@Query(value = " SELECT DISTINCT QD_HDR.* FROM HH_QD_KHLCNT_HDR QD_HDR " +
+			" LEFT JOIN HH_DC_DX_LCNT_HDR DC_HDR ON QD_HDR.ID = DC_HDR.ID_QD_GOC AND DC_HDR.LASTEST = 1 " +
+			" LEFT JOIN HH_DC_DX_LCNT_DSGTHAU DC_DSG ON DC_HDR.ID = DC_DSG.ID_DC_DX_HDR " +
+			" LEFT JOIN HH_QD_PD_HSMT HSMT_DC ON DC_DSG.ID_QD_PD_HSMT = HSMT_DC.ID  " +
+			" LEFT JOIN HH_QD_KHLCNT_DSGTHAU DSG ON QD_HDR.ID = DSG.ID_QD_HDR  " +
+			" LEFT JOIN HH_QD_PD_HSMT HSMT ON DSG.ID_QD_PD_HSMT = HSMT.ID  " +
+			" WHERE (:namKh IS NULL OR QD_HDR.NAM_KHOACH = TO_NUMBER(:namKh)) "+
+			" AND (:loaiVthh IS NULL OR QD_HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) "+
+			" AND (:trangThai IS NULL OR QD_HDR.TRANG_THAI = :trangThai)" +
+			" AND (:lastest IS NULL OR QD_HDR.LASTEST = :lastest) " +
+			" AND (DC_DSG.ID_QD_PD_HSMT IS NULL OR (DC_DSG.ID_QD_PD_HSMT IS NOT NULL AND HSMT_DC.TRANG_THAI != 29)) " +
+			" AND (DSG.ID_QD_PD_HSMT IS NULL OR (DSG.ID_QD_PD_HSMT IS NOT NULL AND HSMT.TRANG_THAI != 29)) "
+			, countQuery = " SELECT COUNT(DISTINCT QD_HDR.ID) FROM HH_QD_KHLCNT_HDR  QD_HDR " +
+			" LEFT JOIN HH_QD_KHLCNT_DTL QD_DTL ON QD_HDR.ID = QD_DTL.ID_QD_HDR " +
+			" LEFT JOIN HH_QD_KHLCNT_DSGTHAU DSG ON QD_DTL.ID = DSG.ID_QD_DTL " +
+			" LEFT JOIN HH_QD_PD_HSMT HSMT ON DSG.ID_QD_PD_HSMT = HSMT.ID  " +
+			" WHERE (:namKh IS NULL OR QD_HDR.NAM_KHOACH = TO_NUMBER(:namKh)) "+
+			" AND (:loaiVthh IS NULL OR QD_HDR.LOAI_VTHH LIKE CONCAT(:loaiVthh,'%')) "+
+			" AND (:trangThai IS NULL OR QD_HDR.TRANG_THAI = :trangThai)" +
+			" AND (:lastest IS NULL OR QD_HDR.LASTEST = :lastest) " +
+			" AND (DC_DSG.ID_QD_PD_HSMT IS NULL OR (DC_DSG.ID_QD_PD_HSMT IS NOT NULL AND HSMT_DC.TRANG_THAI != 29)) " +
+			" AND (DSG.ID_QD_PD_HSMT IS NULL OR (DSG.ID_QD_PD_HSMT IS NOT NULL AND HSMT.TRANG_THAI != 29)) "
+			, nativeQuery = true)
+	List<HhQdKhlcntHdr> selectDieuChinhQdPdKhlcntVt(Integer namKh, String loaiVthh,String trangThai,Integer lastest);
 }

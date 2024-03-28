@@ -49,6 +49,7 @@ public interface HhQdKhlcntHdrService {
 	Page<HhQdKhlcntHdr> getAllPage(HhQdKhlcntSearchReq objReq) throws Exception;
 
 	List<HhQdKhlcntHdr> getAll(HhQdKhlcntSearchReq objReq) throws Exception;
+	List<HhQdKhlcntHdr> selectDieuChinhQdPdKhlcnt(HhQdKhlcntSearchReq objReq) throws Exception;
 	ReportTemplateResponse preview(HhQdKhlcntHdrReq objReq) throws Exception;
 
 }
