@@ -336,6 +336,7 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl {
         BeanUtils.copyProperties(request.getXhQdPdKhBdgDtl(), xhQdPdKhBdgDtl);
         xhQdPdKhBdgDtl.setIdHdr(xhQdPdKhBdg.getId());
         xhQdPdKhBdgDtl.setMaDvi(currentUser.getDvql());
+        xhQdPdKhBdgDtl.setTrangThaiNhapLieu(Contains.TRANG_THAI_NHAP_LIEU.DANG_NHAP);
         xhQdPdKhBdgDtl = xhQdPdKhBdgDtlRepository.save(xhQdPdKhBdgDtl);
 
       }
