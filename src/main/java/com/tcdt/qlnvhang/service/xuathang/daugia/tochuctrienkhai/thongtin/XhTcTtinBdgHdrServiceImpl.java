@@ -339,8 +339,8 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl {
         xhQdPdKhBdgDtl.setIdHdr(xhQdPdKhBdg.getId());
         xhQdPdKhBdgDtl.setMaDvi(currentUser.getDvql());
         xhQdPdKhBdgDtl.setTrangThaiNhapLieu(Contains.TRANG_THAI_NHAP_LIEU.DANG_NHAP);
+        xhQdPdKhBdgDtl.setTrangThai(Contains.DANG_THUC_HIEN);
         xhQdPdKhBdgDtl = xhQdPdKhBdgDtlRepository.save(xhQdPdKhBdgDtl);
-
       }
     }
     XhTcTtinBdgHdr newData = new XhTcTtinBdgHdr();
