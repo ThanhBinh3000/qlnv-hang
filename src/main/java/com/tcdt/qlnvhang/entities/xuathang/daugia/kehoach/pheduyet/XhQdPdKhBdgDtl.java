@@ -130,9 +130,9 @@ public class XhQdPdKhBdgDtl implements Serializable {
   }
 
   public String getTrangThaiNhapLieu() {
-    if (trangThai.equals(Contains.TRANG_THAI_NHAP_LIEU.DANG_NHAP)) {
+    if (trangThaiNhapLieu.equals(Contains.TRANG_THAI_NHAP_LIEU.DANG_NHAP)) {
       setTenTrangThaiNhapLieu("Đang nhập");
-    } else if (trangThai.equals(Contains.TRANG_THAI_NHAP_LIEU.HOAN_THANH)) {
+    } else if (trangThaiNhapLieu.equals(Contains.TRANG_THAI_NHAP_LIEU.HOAN_THANH)) {
       setTenTrangThaiNhapLieu("Hoàn thành");
     }
     return trangThaiNhapLieu;
