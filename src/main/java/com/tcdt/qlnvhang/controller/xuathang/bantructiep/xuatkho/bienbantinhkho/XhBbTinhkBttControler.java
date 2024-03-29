@@ -2,6 +2,7 @@ package com.tcdt.qlnvhang.controller.xuathang.bantructiep.xuatkho.bienbantinhkho
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcdt.qlnvhang.controller.BaseController;
+import com.tcdt.qlnvhang.entities.xuathang.bantructiep.xuatkho.bienbantinhkho.XhBbTinhkBttHdr;
 import com.tcdt.qlnvhang.enums.EnumResponse;
 import com.tcdt.qlnvhang.jwt.CurrentUser;
 import com.tcdt.qlnvhang.jwt.CustomUserDetails;
@@ -125,7 +126,8 @@ public class XhBbTinhkBttControler extends BaseController {
     public ResponseEntity<BaseResponse> updateStatus(@CurrentUser CustomUserDetails currentUser, @Valid @RequestBody StatusReq stReq) {
         BaseResponse resp = new BaseResponse();
         try {
-            xhBbTinhkBttService.approve(currentUser, stReq);
+            XhBbTinhkBttHdr approve = xhBbTinhkBttService.approve(currentUser, stReq);
+            resp.setData(approve);
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {
