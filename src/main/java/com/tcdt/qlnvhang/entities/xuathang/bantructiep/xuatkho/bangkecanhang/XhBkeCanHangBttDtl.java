@@ -18,7 +18,7 @@ public class XhBkeCanHangBttDtl implements Serializable {
     private Long id;
     private Long idHdr;
     private String maCan;
-    private String soBaoBi;
+    private BigDecimal soBaoBi;
     private BigDecimal trongLuongCaBi;
     private String loai;
     private BigDecimal idVirtual;
