@@ -417,7 +417,7 @@ public class XhTcTtinBdgHdrServiceImpl extends BaseServiceImpl {
     if (DataUtils.isNullOrEmpty(statusReq.getTrangThai())) {
       statusReq.setTrangThai(Contains.TRANG_THAI_NHAP_LIEU.HOAN_THANH);
     }
-    String strStatus = oldXhQdPdKhBdgDtl.getTrangThai() + statusReq.getTrangThai();
+    String strStatus = oldXhQdPdKhBdgDtl.getTrangThaiNhapLieu() + statusReq.getTrangThai();
     switch (strStatus) {
       case Contains.TRANG_THAI_NHAP_LIEU.DANG_NHAP + Contains.TRANG_THAI_NHAP_LIEU.HOAN_THANH:
         oldXhQdPdKhBdgDtl.setTrangThaiNhapLieu(Contains.TRANG_THAI_NHAP_LIEU.HOAN_THANH);
