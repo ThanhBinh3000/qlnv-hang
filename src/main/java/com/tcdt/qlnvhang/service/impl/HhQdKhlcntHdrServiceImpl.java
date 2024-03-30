@@ -835,6 +835,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		switch (status) {
 			case Contains.CHODUYET_LDV + Contains.DU_THAO:
 			case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
+			case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
 				dataDB.setNguoiPduyet(getUser().getUsername());
 //				dataDB.setNgayPduyet(getDateTimeNow());
 				break;
