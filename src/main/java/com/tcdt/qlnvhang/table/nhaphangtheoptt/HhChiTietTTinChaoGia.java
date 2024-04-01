@@ -38,7 +38,6 @@ public class HhChiTietTTinChaoGia implements Serializable {
     private BigDecimal soLuong;
 
     private BigDecimal donGia;
-    @Transient
     private BigDecimal donGiaVat;
 
     private BigDecimal thueGtgt;
