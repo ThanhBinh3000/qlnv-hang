@@ -33,14 +33,17 @@ public interface XhQdPdKhBdgDtlRepository extends JpaRepository<XhQdPdKhBdgDtl, 
             "ORDER BY dtl.nam DESC, dtl.id DESC")
     Page<XhQdPdKhBdgDtl> searchDtl(@Param("param") XhQdPdKhBdgDtlReq param, Pageable pageable);
 
-    @Query(value = "SELECT COALESCE(SUM(TTHDR.SO_DVI_TSAN), 0) " +
+    @Query(value = "SELECT COALESCE(COUNT(DISTINCT TTPLO.MA_DVI_TSAN), 0) " +
             "FROM XH_QD_PD_KH_BDG_DTL DTL " +
-            "INNER JOIN XH_TC_TTIN_BDG_HDR TTHDR ON DTL.ID = TTHDR.ID_QD_PD_DTL" +
-            " WHERE TTHDR.KET_QUA = 1" +
-            " AND TTHDR.LOAI_VTHH = :loaiVthh " +
-            " AND TTHDR.MA_DVI = :maDvi " +
-            " AND TTHDR.ID_QD_PD_DTL = :idQdPdDtl " +
-            " AND TTHDR.TRANG_THAI = '45' ",
+            "INNER JOIN XH_TC_TTIN_BDG_HDR TTHDR ON DTL.ID = TTHDR.ID_QD_PD_DTL " +
+            "INNER JOIN XH_TC_TTIN_BDG_DTL TTDTL ON TTHDR.ID = TTDTL.ID_HDR " +
+            "INNER JOIN XH_TC_TTIN_BDG_PLO TTPLO ON TTDTL.ID = TTPLO.ID_DTL " +
+            "WHERE TTHDR.KET_QUA = 1 " +
+            "AND TTHDR.LOAI_VTHH = :loaiVthh " +
+            "AND TTHDR.MA_DVI = :maDvi " +
+            "AND TTHDR.ID_QD_PD_DTL = :idQdPdDtl " +
+            "AND TTPLO.TO_CHUC_CA_NHAN IS NOT NULL " +
+            "AND TTHDR.TRANG_THAI = '45'",
             nativeQuery = true)
     BigDecimal countSlDviTsanThanhCong(@Param("idQdPdDtl") Long idQdPdDtl,
                                        @Param("loaiVthh") String loaiVthh,

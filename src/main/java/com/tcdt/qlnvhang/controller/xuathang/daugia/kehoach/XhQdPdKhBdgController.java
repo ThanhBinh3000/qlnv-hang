@@ -194,10 +194,10 @@ public class XhQdPdKhBdgController extends BaseController {
     @ApiOperation(value = "Lấy chi tiết dtl", response = List.class)
     @GetMapping(value = "/dtl-chi-tiet" + "/{ids}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<BaseResponse> detailDtl(@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids") List<Long> ids) {
+    public ResponseEntity<BaseResponse> detailDtl(@CurrentUser CustomUserDetails currentUser,@ApiParam(value = "ID thông tin", example = "1", required = true) @PathVariable("ids") List<Long> ids) {
         BaseResponse resp = new BaseResponse();
         try {
-            resp.setData(xhQdPdKhBdgService.detailDtl(ids).get(0));
+            resp.setData(xhQdPdKhBdgService.detailDtl(ids,currentUser).get(0));
             resp.setStatusCode(EnumResponse.RESP_SUCC.getValue());
             resp.setMsg(EnumResponse.RESP_SUCC.getDescription());
         } catch (Exception e) {

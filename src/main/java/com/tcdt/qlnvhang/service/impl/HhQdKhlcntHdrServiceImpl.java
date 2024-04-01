@@ -180,7 +180,12 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		}
 		HhQdKhlcntHdr dataMap = ObjectMapperUtils.map(objReq, HhQdKhlcntHdr.class);
 		dataMap.setNgayTao(getDateTimeNow());
-		dataMap.setTrangThai(Contains.DANG_NHAP_DU_LIEU);
+		if (dataMap.getLoaiVthh().startsWith("02")) {
+			dataMap.setTrangThai(Contains.DU_THAO);
+		} else {
+			dataMap.setTrangThai(Contains.DANG_NHAP_DU_LIEU);
+		}
+
 		dataMap.setNguoiTao(getUser().getUsername());
 		dataMap.setMaDvi(getUser().getDvql());
 		dataMap.setDieuChinh(Boolean.FALSE);
@@ -828,7 +833,13 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 	HhQdKhlcntHdr approveVatTu(StatusReq stReq,HhQdKhlcntHdr dataDB) throws Exception {
 		String status = stReq.getTrangThai() + dataDB.getTrangThai();
 		switch (status) {
-			case Contains.BAN_HANH + Contains.DANG_NHAP_DU_LIEU:
+			case Contains.CHODUYET_LDV + Contains.DU_THAO:
+			case Contains.CHODUYET_LDV + Contains.TUCHOI_LDV:
+			case Contains.DADUYET_LDV + Contains.CHODUYET_LDV:
+				dataDB.setNguoiPduyet(getUser().getUsername());
+//				dataDB.setNgayPduyet(getDateTimeNow());
+				break;
+			case Contains.BAN_HANH + Contains.DADUYET_LDV:
 				dataDB.setNguoiPduyet(getUser().getUsername());
 				dataDB.setNgayPduyet(getDateTimeNow());
 				break;
@@ -1001,7 +1012,7 @@ public class HhQdKhlcntHdrServiceImpl extends BaseServiceImpl implements HhQdKhl
 		if (!optional.isPresent())
 			throw new Exception("Không tìm thấy dữ liệu cần xoá");
 
-		if (!optional.get().getTrangThai().equals(Contains.DANG_NHAP_DU_LIEU) && !optional.get().getTrangThai().equals(Contains.TUCHOI_LDV)){
+		if (!optional.get().getTrangThai().equals(Contains.DANG_NHAP_DU_LIEU) && !optional.get().getTrangThai().equals(Contains.DU_THAO) && !optional.get().getTrangThai().equals(Contains.TUCHOI_LDV)){
 			throw new Exception("Chỉ thực hiện xóa với quyết định ở trạng thái bản nháp hoặc từ chối");
 		}
 		/**
