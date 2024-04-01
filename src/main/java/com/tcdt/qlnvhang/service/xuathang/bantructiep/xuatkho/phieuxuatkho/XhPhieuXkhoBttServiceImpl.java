@@ -109,13 +109,15 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl {
         existingData.setNgaySua(LocalDate.now());
         existingData.setNguoiSuaId(currentUser.getUser().getId());
         XhPhieuXkhoBtt updatedData = xhPhieuXkhoBttReposytory.save(existingData);
-        xhBkeCanHangBttHdrRepository.findById(updatedData.getIdBangKeHang()).ifPresent(shippingList -> {
-            shippingList.setTenNguoiGiao(updatedData.getTenNguoiGiao());
-            shippingList.setCmtNguoiGiao(updatedData.getCmtNguoiGiao());
-            shippingList.setCongTyNguoiGiao(updatedData.getCongTyNguoiGiao());
-            shippingList.setDiaChiNguoiGiao(updatedData.getDiaChiNguoiGiao());
-            xhBkeCanHangBttHdrRepository.save(shippingList);
-        });
+        if (updatedData.getIdBangKeHang() != null){
+            xhBkeCanHangBttHdrRepository.findById(updatedData.getIdBangKeHang()).ifPresent(shippingList -> {
+                shippingList.setTenNguoiGiao(updatedData.getTenNguoiGiao());
+                shippingList.setCmtNguoiGiao(updatedData.getCmtNguoiGiao());
+                shippingList.setCongTyNguoiGiao(updatedData.getCongTyNguoiGiao());
+                shippingList.setDiaChiNguoiGiao(updatedData.getDiaChiNguoiGiao());
+                xhBkeCanHangBttHdrRepository.save(shippingList);
+            });
+        }
         return updatedData;
     }
 
@@ -186,6 +188,12 @@ public class XhPhieuXkhoBttServiceImpl extends BaseServiceImpl {
         }
         XhPhieuXkhoBtt proposal = xhPhieuXkhoBttReposytory.findById(Long.valueOf(statusReq.getId()))
                 .orElseThrow(() -> new Exception("Không tìm thấy dữ liệu"));
+        if (proposal.getIdBangKeHang() == null && proposal.getSoBangKeHang() == null){
+            String errorMessage = Contains.LOAI_VTHH_VATTU.equals(proposal.getLoaiVthh()) ?
+                    "Bảng kê xuất vật tư của phiếu xuất chưa được duyệt" :
+                    "Bảng kê cân hàng của phiếu xuất chưa được duyệt";
+            throw new Exception(errorMessage);
+        }
         String statusCombination = statusReq.getTrangThai() + proposal.getTrangThai();
         switch (statusCombination) {
             case Contains.CHODUYET_LDCC + Contains.DUTHAO:
