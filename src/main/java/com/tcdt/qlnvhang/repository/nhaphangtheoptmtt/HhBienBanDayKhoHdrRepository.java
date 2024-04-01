@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface HhBienBanDayKhoHdrRepository extends JpaRepository <HhBienBanDayKhoHdr, Long> {
@@ -37,6 +38,8 @@ public interface HhBienBanDayKhoHdrRepository extends JpaRepository <HhBienBanDa
 
     List<HhBienBanDayKhoHdr> findAllByIdQdGiaoNvNh(Long idQdGiaoNvNh);
     List<HhBienBanDayKhoHdr> findAllByIdDdiemGiaoNvNh(Long idDdiemGiaoNvNh);
+
+    Optional<HhBienBanDayKhoHdr> findByMaLoKho(String maLoKho);
 
 
 }

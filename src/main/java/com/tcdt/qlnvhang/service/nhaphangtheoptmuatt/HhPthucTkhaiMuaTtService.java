@@ -195,7 +195,7 @@ public class HhPthucTkhaiMuaTtService extends BaseServiceImpl {
                 HhChiTietTTinChaoGia chaoGia = new HhChiTietTTinChaoGia();
                 BeanUtils.copyProperties(child, chaoGia, "id");
                 chaoGia.setDonGia(child.getDonGia());
-                chaoGia.setThanhTien(chaoGia.getDonGia().multiply(chaoGia.getSoLuong()).multiply(BigDecimal.valueOf(1000)));
+                chaoGia.setThanhTien(chaoGia.getDonGia() != null ? chaoGia.getDonGia().multiply(chaoGia.getSoLuong()).multiply(BigDecimal.valueOf(1000)) : chaoGia.getDonGiaVat().multiply(chaoGia.getSoLuong()).multiply(BigDecimal.valueOf(1000)));
                 chaoGia.setId(null);
                 HhChiTietTTinChaoGia save = hhCtietTtinCgiaRepository.save(chaoGia);
                 if (!DataUtils.isNullObject(child.getFileDinhKems())) {
