@@ -93,6 +93,10 @@ public class HhBienBanDayKhoService extends BaseServiceImpl {
         if (userInfo == null){
             throw new Exception("Bad requesr.");
         }
+        Optional<HhBienBanDayKhoHdr> object = hhBienBanDayKhoHdrRepository.findByMaLoKho(objReq.getMaLoKho());
+        if(object.isPresent()){
+            throw new Exception("Lô kho đã tồn tại Biên bản nhập đầy kho.");
+        }
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         HhBienBanDayKhoHdr data = new HhBienBanDayKhoHdr();
         BeanUtils.copyProperties(objReq, data, "id");

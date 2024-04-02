@@ -83,6 +83,9 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
     private HhBcanKeHangHdrRepository hhBcanKeHangHdrRepository;
 
     @Autowired
+    private HhBcanKeHangDtlRepository hhBcanKeHangDtlRepository;
+
+    @Autowired
     private HhBienBanDayKhoHdrRepository hhBienBanDayKhoHdrRepository;
 
     @Autowired
@@ -311,6 +314,18 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
                 List<HhPhieuNhapKhoHdr> phieuNhapKhoHdr = hhPhieuNhapKhoHdrRepository.findAllBySoPhieuKtraCluong(Cl.getSoPhieu());
                 Cl.setPhieuNhapKhoHdr(phieuNhapKhoHdr);
                 List<HhBcanKeHangHdr> bcanKeHangHdr = hhBcanKeHangHdrRepository.findAllBySoPhieuKtraCluong(Cl.getSoPhieu());
+                for (HhBcanKeHangHdr hhBcanKeHangHdr : bcanKeHangHdr) {
+                    List<HhBcanKeHangDtl> hhBcanKeHangDtls = hhBcanKeHangDtlRepository.findAllByIdHdr(hhBcanKeHangHdr.getId());
+                    hhBcanKeHangHdr.setTongSlCaBaoBi(hhBcanKeHangDtls.stream()
+                            .filter(x -> x.getTrongLuongCaBi() != null)
+                            .mapToLong(x -> Long.parseLong(String.valueOf(x.getTrongLuongCaBi())))
+                            .sum());
+
+                    hhBcanKeHangHdr.setTongSlBaoBi(hhBcanKeHangDtls.stream()
+                            .filter(x -> x.getTrongLuongBaoBi() != null)
+                            .mapToLong(x -> Long.parseLong(String.valueOf(x.getTrongLuongBaoBi())))
+                            .sum());
+                }
                 Cl.setBcanKeHangHdr(bcanKeHangHdr);
             }
             dDiem.setListPhieuKtraCl(phieuKiemTraChatLuongList);
@@ -403,7 +418,7 @@ public class HhQdGiaoNvNhapHangService extends BaseServiceImpl {
             hhQdPheduyetKhMttHdr.get().setSoQdGnvu(data.getSoQd());
             hhQdPheduyetKhMttHdrRepository.save(hhQdPheduyetKhMttHdr.get());
         }
-        if(!StringUtils.isEmpty(objReq.getIdHd()) && !objReq.getTrangThai().equals(Contains.DUTHAO)){
+        if(!StringUtils.isEmpty(objReq.getIdHd())){
             String[] idHds = objReq.getIdHd().split(",");
             for (int i = 0; i < idHds.length; i++) {
                 Optional<HopDongMttHdr> hopDongMttHdr = hopDongMttHdrRepository.findById(Long.valueOf(idHds[i]));

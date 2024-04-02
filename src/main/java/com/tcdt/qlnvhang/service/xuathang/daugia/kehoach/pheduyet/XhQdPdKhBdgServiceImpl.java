@@ -28,6 +28,7 @@ import com.tcdt.qlnvhang.response.chotdulieu.QthtChotGiaInfoRes;
 import com.tcdt.qlnvhang.service.chotdulieu.QthtChotGiaNhapXuatService;
 import com.tcdt.qlnvhang.service.filedinhkem.FileDinhKemService;
 import com.tcdt.qlnvhang.service.impl.BaseServiceImpl;
+import com.tcdt.qlnvhang.service.xuathang.daugia.tochuctrienkhai.thongtin.XhTcTtinBdgHdrServiceImpl;
 import com.tcdt.qlnvhang.table.FileDinhKem;
 import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.util.Contains;
@@ -73,6 +74,8 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
   private FileDinhKemService fileDinhKemService;
   @Autowired
   private QthtChotGiaNhapXuatService qthtChotGiaNhapXuatService;
+  @Autowired
+  private XhTcTtinBdgHdrServiceImpl xhTcTtinBdgHdrServiceImpl;
 
   public Page<XhQdPdKhBdg> searchPage(CustomUserDetails currentUser, XhQdPdKhBdgReq request) throws Exception {
     if (currentUser.getUser().getCapDvi().equals(Contains.CAP_TONG_CUC)) {
@@ -713,6 +716,11 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
         biddingInfo.setMapDmucDvi(mapDmucDvi);
         biddingInfo.setMapDmucVthh(mapDmucVthh);
         biddingInfo.setTrangThai(biddingInfo.getTrangThai());
+        //truong hop khoitao tra ve them du lieu
+        if (!DataUtils.isNullOrEmpty(item.getTrangThaiNhapLieu())) {
+          XhTcTtinBdgHdr detail = xhTcTtinBdgHdrServiceImpl.detail(biddingInfo.getId());
+          biddingInfo.setChildren(detail.getChildren());
+        }
       }
       item.setListTtinDg(biddingInfoList);
       item.setChildren(detailList);
