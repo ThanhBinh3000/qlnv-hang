@@ -129,6 +129,7 @@ public class HhDxuatKhLcntHdr implements Serializable {
 	String cviecDaTh;
 	String cviecKhongTh;
 	String maDviLapDx;
+	String maThueVat;
 	@Temporal(TemporalType.DATE)
 	Date ngayKyQdPdGiaCuThe;
 	String soQdPdGiaCuThe;
