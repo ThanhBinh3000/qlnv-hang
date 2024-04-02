@@ -70,5 +70,5 @@ public interface HhDxuatKhLcntHdrService {
 
 	BigDecimal getGiaBanToiDa (String cloaiVhtt, String maDvi, String namKhoach);
 
-	List<HhDxKhlcntDsgthau> danhSachGthauTruot (HhDxuatKhLcntHdrReq objReq);
+	List<HhDxKhlcntDsgthau> danhSachGthauTruot (HhDxuatKhLcntHdrReq objReq) throws Exception;
 }

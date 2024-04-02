@@ -47,9 +47,10 @@ public interface HhQdKhlcntDsgthauRepository extends BaseRepository<HhQdKhlcntDs
             " AND (:cloaiVthh IS NULL OR gthau.CLOAI_VTHH = :cloaiVthh)" +
             " AND (:loaiVthh IS NULL OR gthau.LOAI_VTHH = :loaiVthh)" +
             " AND (:namKh IS NULL OR hdr.NAM_KHOACH = :namKh)" +
+            " AND (:maDvi IS NULL OR dtl.MA_DVI = :maDvi)" +
             " AND gthau.TRANG_THAI_DT IN ('41', '36', '84')"
             , nativeQuery = true)
-    List<HhQdKhlcntDsgthau> danhSachGthauTruot (String cloaiVthh, String loaiVthh, Integer namKh);
+    List<HhQdKhlcntDsgthau> danhSachGthauTruot (String cloaiVthh, String loaiVthh, Integer namKh, String maDvi);
 
     @Query(value = "SELECT gthau.* FROM HH_QD_KHLCNT_DSGTHAU gthau" +
             " JOIN HH_QD_KHLCNT_HDR hdr ON gthau.ID_QD_HDR = hdr.ID " +
@@ -57,9 +58,10 @@ public interface HhQdKhlcntDsgthauRepository extends BaseRepository<HhQdKhlcntDs
             " AND (:cloaiVthh IS NULL OR gthau.CLOAI_VTHH = :cloaiVthh)" +
             " AND (:loaiVthh IS NULL OR gthau.LOAI_VTHH = :loaiVthh)" +
             " AND (:namKh IS NULL OR hdr.NAM_KHOACH = :namKh)" +
+            " AND (:maDvi IS NULL OR hdr.MA_DVI = :maDvi)" +
             " AND gthau.TRANG_THAI_DT IN ('41', '36', '84')"
             , nativeQuery = true)
-    List<HhQdKhlcntDsgthau> danhSachGthauTruotVt (String cloaiVthh, String loaiVthh, Integer namKh);
+    List<HhQdKhlcntDsgthau> danhSachGthauTruotVt (String cloaiVthh, String loaiVthh, Integer namKh, String maDvi);
 
     @Query(value = "SELECT gthau.* FROM HH_QD_KHLCNT_DSGTHAU gthau" +
             " WHERE 1 = 1 " +

@@ -1181,13 +1181,14 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
     }
 
     @Override
-    public List<HhDxKhlcntDsgthau> danhSachGthauTruot(HhDxuatKhLcntHdrReq objReq) {
+    public List<HhDxKhlcntDsgthau> danhSachGthauTruot(HhDxuatKhLcntHdrReq objReq) throws Exception {
+        UserInfo userInfo = UserUtils.getUserInfo();
         List<HhDxKhlcntDsgthau> data = new ArrayList<>();
         List<HhQdKhlcntDsgthau> dsgthaus = new ArrayList<>();
         if (objReq.getLoaiVthh() != null && objReq.getLoaiVthh().startsWith("02")) {
-            dsgthaus = qdKhlcntDsgthauRepository.danhSachGthauTruotVt(objReq.getCloaiVthh(), objReq.getLoaiVthh(), objReq.getNamKhoach());
+            dsgthaus = qdKhlcntDsgthauRepository.danhSachGthauTruotVt(objReq.getCloaiVthh(), objReq.getLoaiVthh(), objReq.getNamKhoach(), userInfo.getDvql());
         } else {
-            dsgthaus = qdKhlcntDsgthauRepository.danhSachGthauTruot(objReq.getCloaiVthh(), objReq.getLoaiVthh(), objReq.getNamKhoach());
+            dsgthaus = qdKhlcntDsgthauRepository.danhSachGthauTruot(objReq.getCloaiVthh(), objReq.getLoaiVthh(), objReq.getNamKhoach(), userInfo.getDvql());
         }
         Map<String, String> mapDmucDvi = getListDanhMucDvi(null, null, "01");
         Map<String, String> mapVthh = getListDanhMucHangHoa();
@@ -1223,7 +1224,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
             data.add(item);
         });
         if (objReq.getLoaiVthh() != null && objReq.getLoaiVthh().startsWith("02")) {
-            List<HhDchinhDxKhLcntDsgthau> danhSachGthauTruotVt = dchinhDxKhLcntDsgthauRepository.danhSachGthauTruotVt(objReq.getCloaiVthh(), objReq.getLoaiVthh(), objReq.getNamKhoach());
+            List<HhDchinhDxKhLcntDsgthau> danhSachGthauTruotVt = dchinhDxKhLcntDsgthauRepository.danhSachGthauTruotVt(objReq.getCloaiVthh(), objReq.getLoaiVthh(), objReq.getNamKhoach(), userInfo.getDvql());
             danhSachGthauTruotVt.forEach(gthau -> {
                 HhDxKhlcntDsgthau item = new HhDxKhlcntDsgthau();
                 item.setGoiThau(gthau.getGoiThau());
