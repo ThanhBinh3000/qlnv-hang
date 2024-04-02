@@ -717,7 +717,7 @@ public class XhQdPdKhBdgServiceImpl extends BaseServiceImpl {
         biddingInfo.setMapDmucVthh(mapDmucVthh);
         biddingInfo.setTrangThai(biddingInfo.getTrangThai());
         //truong hop khoitao tra ve them du lieu
-        if (DataUtils.isNullOrEmpty(item.getTrangThaiNhapLieu())) {
+        if (!DataUtils.isNullOrEmpty(item.getTrangThaiNhapLieu())) {
           XhTcTtinBdgHdr detail = xhTcTtinBdgHdrServiceImpl.detail(biddingInfo.getId());
           biddingInfo.setChildren(detail.getChildren());
         }
