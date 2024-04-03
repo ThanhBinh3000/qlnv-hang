@@ -1,6 +1,7 @@
 package com.tcdt.qlnvhang.request.xuathang.daugia.hopdong;
 
 import com.tcdt.qlnvhang.entities.FileDinhKemJoinTable;
+import com.tcdt.qlnvhang.entities.xuathang.daugia.tochuctrienkhai.ketqua.XhKqBdgHdr;
 import com.tcdt.qlnvhang.request.BaseRequest;
 import lombok.Data;
 
@@ -89,4 +90,5 @@ public class XhHopDongHdrReq extends BaseRequest {
     private List<XhHopDongHdrReq> phuLuc = new ArrayList<>();
     private List<XhHopDongDtlReq> phuLucDtl = new ArrayList<>();
     private String dvql;
+    private XhKqBdgHdr xhKqBdgHdr;
 }
