@@ -251,7 +251,7 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
                         vtMap.setId(null);
                         vtMap.setIdGoiThauCtiet(dsgthauCtiet.getId());
                         hhDxKhlcntDsgthauCtietVtRepository.save(vtMap);
-                        hhDxKhlcntDsgthauCtietVt1Repository.deleteAllByIdGoiThauCtietVt(vt.getId());
+//                        hhDxKhlcntDsgthauCtietVt1Repository.deleteAllByIdGoiThauCtietVt(vt.getId());
                     }
                 }
             });
