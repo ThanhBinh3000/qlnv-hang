@@ -67,8 +67,8 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
     @Autowired
     private HhDxKhlcntDsgthauCtietVtRepository hhDxKhlcntDsgthauCtietVtRepository;
 
-    @Autowired
-    private HhDxKhlcntDsgthauCtietVt1Repository hhDxKhlcntDsgthauCtietVt1Repository;
+//    @Autowired
+//    private HhDxKhlcntDsgthauCtietVt1Repository hhDxKhlcntDsgthauCtietVt1Repository;
 
     @Autowired
     private HhDxuatKhLcntCcxdgDtlRepository hhDxuatKhLcntCcxdgDtlRepository;
@@ -305,13 +305,13 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
                     vtMap.setId(null);
                     vtMap.setIdGoiThauCtiet(dataDdNhap.getId());
                     hhDxKhlcntDsgthauCtietVtRepository.save(vtMap);
-                    hhDxKhlcntDsgthauCtietVt1Repository.deleteAllByIdGoiThauCtietVt(vt.getId());
-                    // Lưu Điểm kho ( Lương thực )
-                    for (HhDxuatKhLcntDsgthauDtlCtietVt1Req dk : vt.getChildren()) {
-                        HhDxKhlcntDsgthauCtietVt1 dk1 = new ModelMapper().map(dk, HhDxKhlcntDsgthauCtietVt1.class);
-                        dk1.setIdGoiThauCtietVt(vtMap.getId());
-                        hhDxKhlcntDsgthauCtietVt1Repository.save(dk1);
-                    }
+//                    hhDxKhlcntDsgthauCtietVt1Repository.deleteAllByIdGoiThauCtietVt(vt.getId());
+//                    // Lưu Điểm kho ( Lương thực )
+//                    for (HhDxuatKhLcntDsgthauDtlCtietVt1Req dk : vt.getChildren()) {
+//                        HhDxKhlcntDsgthauCtietVt1 dk1 = new ModelMapper().map(dk, HhDxKhlcntDsgthauCtietVt1.class);
+//                        dk1.setIdGoiThauCtietVt(vtMap.getId());
+//                        hhDxKhlcntDsgthauCtietVt1Repository.save(dk1);
+//                    }
                 }
             }
         }
@@ -428,11 +428,11 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
                 List<HhDxKhlcntDsgthauCtietVt> byIdGoiThauCtiet = hhDxKhlcntDsgthauCtietVtRepository.findByIdGoiThauCtiet(f.getId());
                 byIdGoiThauCtiet.forEach(x -> {
                     x.setTenDvi(StringUtils.isEmpty(x.getMaDvi()) ? null : mapDmucDvi.get(x.getMaDvi()));
-                    List<HhDxKhlcntDsgthauCtietVt1> byIdGoiThauCtiet1 = hhDxKhlcntDsgthauCtietVt1Repository.findByIdGoiThauCtietVt(x.getId());
-                    byIdGoiThauCtiet1.forEach(y -> {
-                        y.setTenDvi(StringUtils.isEmpty(y.getMaDvi()) ? null : mapDmucDvi.get(y.getMaDvi()));
-                    });
-                    x.setChildren(byIdGoiThauCtiet1);
+//                    List<HhDxKhlcntDsgthauCtietVt1> byIdGoiThauCtiet1 = hhDxKhlcntDsgthauCtietVt1Repository.findByIdGoiThauCtietVt(x.getId());
+//                    byIdGoiThauCtiet1.forEach(y -> {
+//                        y.setTenDvi(StringUtils.isEmpty(y.getMaDvi()) ? null : mapDmucDvi.get(y.getMaDvi()));
+//                    });
+//                    x.setChildren(byIdGoiThauCtiet1);
                 });
                 f.setChildren(byIdGoiThauCtiet);
             });
@@ -740,9 +740,9 @@ public class HhDxuatKhLcntHdrServiceImpl extends BaseServiceImpl implements HhDx
                 for (HhDxKhlcntDsgthauCtiet ctiet : dsCtiet) {
                     List<HhDxKhlcntDsgthauCtietVt> dsCtietVt = hhDxKhlcntDsgthauCtietVtRepository.findByIdGoiThauCtiet(ctiet.getId());
                     hhDxKhlcntDsgthauCtietVtRepository.deleteAll(dsCtietVt);
-                    for (HhDxKhlcntDsgthauCtietVt ctietVt : dsCtietVt) {
-                        hhDxKhlcntDsgthauCtietVt1Repository.deleteAllByIdGoiThauCtietVt(ctietVt.getId());
-                    }
+//                    for (HhDxKhlcntDsgthauCtietVt ctietVt : dsCtietVt) {
+//                        hhDxKhlcntDsgthauCtietVt1Repository.deleteAllByIdGoiThauCtietVt(ctietVt.getId());
+//                    }
                 }
             }
             hhDxuatKhLcntDsgtDtlRepository.deleteAll(goiThau);
