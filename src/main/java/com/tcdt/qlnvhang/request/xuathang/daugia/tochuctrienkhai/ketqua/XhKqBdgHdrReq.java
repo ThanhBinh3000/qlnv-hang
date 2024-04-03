@@ -56,4 +56,5 @@ public class XhKqBdgHdrReq extends BaseRequest {
     private Long thanhTien;
     private String trangThaiHd;
     private String trangThaiXh;
+    private boolean khoiTao = false;
 }
