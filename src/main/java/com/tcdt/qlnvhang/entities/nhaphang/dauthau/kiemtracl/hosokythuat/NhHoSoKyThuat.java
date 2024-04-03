@@ -53,6 +53,8 @@ public class NhHoSoKyThuat extends TrangThaiBaseEntity implements Serializable {
 
     @Column(name = "SO_HO_SO_KY_THUAT")
     private String soHoSoKyThuat;
+    private String truongPhong;
+    private String lanhDaoCuc;
 
     @Column(name = "NAM")
     private Integer nam;
