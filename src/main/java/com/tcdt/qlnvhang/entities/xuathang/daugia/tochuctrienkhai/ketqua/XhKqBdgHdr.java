@@ -61,6 +61,7 @@ public class XhKqBdgHdr implements Serializable {
     private Long nguoiGuiDuyetId;
     private LocalDate ngayPduyet;
     private Long nguoiPduyetId;
+    private String trangThaiNhapLieu;
     @Transient
     private String tenDvi;
     @Transient

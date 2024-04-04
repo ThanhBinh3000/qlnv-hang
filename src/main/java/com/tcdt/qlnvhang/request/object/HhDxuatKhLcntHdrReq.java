@@ -162,6 +162,7 @@ public class HhDxuatKhLcntHdrReq {
 	String ctietTccl;
 	String tenPthucLcnt;
 	String tenHthucLcnt;
+	String maThueVat;
 	BigDecimal giaBanHoSo;
 	Long idChiTieuKhNam;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Contains.FORMAT_DATE_STR)

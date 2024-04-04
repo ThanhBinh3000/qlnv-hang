@@ -17,6 +17,7 @@ import com.tcdt.qlnvhang.repository.QlnvDmVattuRepository;
 import com.tcdt.qlnvhang.repository.quyetdinhgiaonhiemvunhapxuat.HhQdGiaoNvuNhapxuatRepository;
 import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatCtRepository;
 import com.tcdt.qlnvhang.repository.vattu.hosokythuat.NhHoSoKyThuatRepository;
+import com.tcdt.qlnvhang.request.PaggingReq;
 import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.kiemtrachatluong.NhHoSoBienBanPreview;
 import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.kiemtrachatluong.NhHoSoKyThuatCtPreview;
 import com.tcdt.qlnvhang.request.nhaphang.nhapdauthau.kiemtrachatluong.NhHoSoKyThuatPreview;
@@ -33,6 +34,7 @@ import com.tcdt.qlnvhang.table.ReportTemplateResponse;
 import com.tcdt.qlnvhang.table.UserInfo;
 import com.tcdt.qlnvhang.table.report.ReportTemplate;
 import com.tcdt.qlnvhang.util.DataUtils;
+import com.tcdt.qlnvhang.util.ExportExcel;
 import com.tcdt.qlnvhang.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -124,7 +126,7 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
 
         NhHoSoKyThuat item = new NhHoSoKyThuat();
         BeanUtils.copyProperties(req, item, "id");
-        item.setNgayTao(new Date());
+//        item.setNgayTao(new Date());
         item.setNguoiTaoId(userInfo.getId());
         item.setTrangThai(NhapXuatHangTrangThaiEnum.DUTHAO.getId());
         item.setMaDvi(userInfo.getDvql());
@@ -181,6 +183,7 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
             bienBanLayMau.get().setTenNhaKho(listDanhMucDvi.get(bienBanLayMau.get().getMaNhaKho()));
             bienBanLayMau.get().setTenNganLoKho(bienBanLayMau.get().getMaLoKho() != null ? listDanhMucDvi.get(bienBanLayMau.get().getMaLoKho()) + " - " + listDanhMucDvi.get(bienBanLayMau.get().getMaNganKho()): listDanhMucDvi.get(bienBanLayMau.get().getMaNganKho()));
             bienBanLayMau.get().setTenDvi(listDanhMucDvi.get(bienBanLayMau.get().getMaDvi()));
+            bienBanLayMau.get().setTenNguoiPduyet(ObjectUtils.isEmpty(bienBanLayMau.get().getNguoiPduyetId()) ? "" :userInfoRepository.findById(bienBanLayMau.get().getNguoiPduyetId()).get().getFullName());
             item.setBienBanLayMau(bienBanLayMau.get());
         }
         Optional<NhQdGiaoNvuNhapxuatHdr> qdGiaoNvuNhapxuatHdr = hhQdGiaoNvuNhapxuatRepository.findById(item.getIdQdGiaoNvNh());
@@ -225,7 +228,7 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
             (NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId()).equals(trangThai) ||
             (NhapXuatHangTrangThaiEnum.TUCHOI_TP.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_TP.getId()).equals(trangThai)
         ) {
-            item.setNguoiPduyetId(userInfo.getId());
+            item.setTruongPhong(userInfo.getFullName());
             item.setLyDoTuChoi(req.getLyDoTuChoi());
         } else if (
             (NhapXuatHangTrangThaiEnum.DADUYET_LDC.getId() + NhapXuatHangTrangThaiEnum.CHODUYET_LDC.getId()).equals(trangThai) ||
@@ -233,6 +236,7 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
         ) {
             item.setNgayPduyet(new Date());
             item.setNguoiPduyetId(userInfo.getId());
+            item.setLanhDaoCuc(userInfo.getFullName());
             item.setLyDoTuChoi(req.getLyDoTuChoi());
         } else {
             throw new Exception("Phê duyệt không thành công");
@@ -265,7 +269,41 @@ public class NhHoSoKyThuatServiceImpl extends BaseServiceImpl implements NhHoSoK
 
     @Override
     public void export(NhHoSoKyThuatReq req, HttpServletResponse response) throws Exception {
-//        return false;
+        PaggingReq paggingReq = new PaggingReq();
+        paggingReq.setPage(0);
+        paggingReq.setLimit(Integer.MAX_VALUE);
+        req.setPaggingReq(paggingReq);
+        Page<NhHoSoKyThuat> page = searchPage(req);
+        List<NhHoSoKyThuat> data = page.getContent();
+        String title = "Danh sách hồ sơ kỹ thuật";
+        String[] rowsName = new String[]{"STT", "Số hồ sơ kỹ thuật", "Ngày tạo HSKT", "Điểm kho", "Ngăn/Lô kho",
+                "Số BB LM/BGM", "Số QĐ giao NVNH", "Số hợp đồng", "Số BB kiểm tra ngoại quan", "Số BB kiểm tra vận hành",
+                "Số BB kiểm tra HSKT", "Trạng thái"};
+        String filename = "danh-sach-hskt.xlsx";
+
+        List<Object[]> dataList = new ArrayList<Object[]>();
+        Object[] objs = null;
+        for (int i = 0; i < data.size(); i++) {
+            NhHoSoKyThuat qd = data.get(i);
+            objs = new Object[rowsName.length];
+            objs[0] = i + 1;
+            objs[1] = qd.getSoHoSoKyThuat();
+            objs[2] = convertDate(qd.getNgayTao());
+            if (qd.getBienBanLayMau() != null) {
+                objs[3] = qd.getBienBanLayMau().getTenDiemKho();
+                objs[4] = qd.getBienBanLayMau().getTenNganLoKho();
+            }
+            objs[5] = qd.getSoBbLayMau();
+            objs[6] = qd.getSoQdGiaoNvNh();
+            objs[7] = qd.getSoHd();
+            objs[8] = qd.getSoBbKtnq();
+            objs[9] = qd.getSoBbKtvh();
+            objs[10] = qd.getSoBbKthskt();
+            objs[11] = qd.getTenTrangThai();
+            dataList.add(objs);
+        }
+        ExportExcel ex = new ExportExcel(title, filename, rowsName, dataList, response);
+        ex.export();
     }
 
     @Override

@@ -853,6 +853,10 @@ public class HhQdGiaoNvuNhapxuatServiceImpl extends BaseServiceImpl implements H
 						bienBanLayMau.setTenDiemKho(mapDmucDvi.get(bienBanLayMau.getMaDiemKho()));
 						bienBanLayMau.setTenNhaKho(mapDmucDvi.get(bienBanLayMau.getMaNhaKho()));
 						bienBanLayMau.setTenNganLoKho(bienBanLayMau.getMaLoKho() != null ? mapDmucDvi.get(bienBanLayMau.getMaLoKho()) + " - " + mapDmucDvi.get(bienBanLayMau.getMaNganKho()): mapDmucDvi.get(bienBanLayMau.getMaNganKho()));
+						NhBienBanGuiHang nhBienBanGuiHang = nhBienBanGuiHangRepository.findByIdDdiemGiaoNvNh(bienBanLayMau.getIdDdiemGiaoNvNh());
+						if (nhBienBanGuiHang != null) {
+							bienBanLayMau.setBienBanGuiHang(nhBienBanGuiHang);
+						}
 					}
 				}
 				qdGiaoNvuNhapxuatHdr.setListBienBanLayMau(bienBanLayMauList);

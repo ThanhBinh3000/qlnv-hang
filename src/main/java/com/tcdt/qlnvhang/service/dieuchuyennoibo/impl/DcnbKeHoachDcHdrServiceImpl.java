@@ -95,7 +95,7 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
         }
         DcnbKeHoachDcHdr data = new DcnbKeHoachDcHdr();
         BeanUtils.copyProperties(objReq, data);
-        data.setSoDxuat(objReq.getSoDxuat() + "/DCNB");
+        data.setSoDxuat(objReq.getSoDxuat() );
         data.setMaDviPq(currentUser.getDvql());
         data.setType(Contains.DIEU_CHUYEN);
         data.setTrangThai(Contains.DUTHAO);
@@ -182,11 +182,7 @@ public class DcnbKeHoachDcHdrServiceImpl extends BaseServiceImpl {
         objReq.setMaDviPq(data.getMaDviPq());
         BeanUtils.copyProperties(objReq, data);
         if(!StringUtils.isEmpty(objReq.getSoDxuat())){
-            if(!objReq.getSoDxuat().contains("/DCNB")){
-                data.setSoDxuat(objReq.getSoDxuat() + "/DCNB");
-            }else {
-                data.setSoDxuat(objReq.getSoDxuat());
-            }
+            data.setSoDxuat(objReq.getSoDxuat());
         }
         data.setDanhSachHangHoa(objReq.getDanhSachHangHoa());
         data.setPhuongAnDieuChuyen(objReq.getPhuongAnDieuChuyen());

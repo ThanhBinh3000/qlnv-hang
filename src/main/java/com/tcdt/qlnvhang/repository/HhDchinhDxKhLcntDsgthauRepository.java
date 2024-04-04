@@ -35,13 +35,15 @@ public interface HhDchinhDxKhLcntDsgthauRepository extends CrudRepository<HhDchi
     long countByIdDcDxDtl(Long idDcDxDtl);
     @Query(value = "SELECT dc.* FROM HH_DC_DX_LCNT_DSGTHAU dc" +
             " JOIN HH_DC_DX_LCNT_HDR hdr ON dc.ID_DC_DX_HDR = hdr.ID " +
+            " JOIN HH_QD_KHLCNT_HDR hdrg ON hdr.ID_QD_GOC = hdrg.ID " +
             " WHERE 1 = 1 " +
             " AND (:cloaiVthh IS NULL OR dc.CLOAI_VTHH = :cloaiVthh)" +
             " AND (:loaiVthh IS NULL OR dc.LOAI_VTHH = :loaiVthh)" +
             " AND (:namKh IS NULL OR hdr.NAM = :namKh)" +
+            " AND (:maDvi IS NULL OR hdrg.MA_DVI = :maDvi)" +
             " AND dc.TRANG_THAI_DT IN ('41', '36', '84')"
             , nativeQuery = true)
-    List<HhDchinhDxKhLcntDsgthau> danhSachGthauTruotVt (String cloaiVthh, String loaiVthh, Integer namKh);
+    List<HhDchinhDxKhLcntDsgthau> danhSachGthauTruotVt (String cloaiVthh, String loaiVthh, Integer namKh, String maDvi);
 
     @Query(value = "SELECT gthau.* FROM HH_DC_DX_LCNT_DSGTHAU gthau" +
             " WHERE 1 = 1 " +
