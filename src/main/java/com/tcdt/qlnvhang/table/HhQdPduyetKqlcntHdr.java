@@ -11,12 +11,6 @@ import com.tcdt.qlnvhang.enums.NhapXuatHangTrangThaiEnum;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntDtl;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.kehoachlcnt.qdpduyetkhlcnt.HhQdKhlcntHdr;
 import com.tcdt.qlnvhang.entities.nhaphang.dauthau.hopdong.HhHopDongHdr;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Where;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.tcdt.qlnvhang.entities.FileDKemJoinKquaLcntHdr;
 
 import lombok.Data;
 
@@ -95,6 +89,7 @@ public class HhQdPduyetKqlcntHdr implements Serializable {
 	String loaiVthh;
 
 	String cloaiVthh;
+	@Lob
 	String noiDungQd;
 	@Temporal(TemporalType.DATE)
 	private Date tgianTrinhKqTcg;
