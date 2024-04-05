@@ -10,9 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 
 public interface HhQdPduyetKqlcntHdrRepository extends BaseRepository<HhQdPduyetKqlcntHdr, Long> {
-	String QUERY_SEARCH = " SELECT DISTINCT QDPD.* FROM HH_QD_PDUYET_KQLCNT_HDR QDPD "+
-			" LEFT JOIN HH_HOP_DONG_HDR HD ON QDPD.ID = HD.ID_QD_KQ_LCNT  " +
-			" LEFT JOIN HH_HOP_DONG_DTL DTL ON HD.ID = DTL.ID_HDR  " +
+	String QUERY_SEARCH = " SELECT QDPD.* FROM HH_QD_PDUYET_KQLCNT_HDR QDPD "+
 			" WHERE (:#{#req.namKhoach} IS NULL OR QDPD.NAM_KHOACH = TO_NUMBER(:#{#req.namKhoach})) "+
 			" AND (:#{#req.loaiVthh} IS NULL OR QDPD.LOAI_VTHH LIKE CONCAT(:#{#req.loaiVthh},'%')) "+
 			" AND (:#{#req.cloaiVthh} IS NULL OR QDPD.CLOAI_VTHH LIKE CONCAT(:#{#req.cloaiVthh},'%')) "+
@@ -22,7 +20,11 @@ public interface HhQdPduyetKqlcntHdrRepository extends BaseRepository<HhQdPduyet
 			" AND (:#{#req.denNgayKyStr} IS NULL OR QDPD.NGAY_KY <= TO_DATE(:#{#req.denNgayKyStr}, 'YYYY-MM-DD HH24:MI:SS')) "+
 			" AND (:#{#req.trichYeu} IS NULL OR LOWER(QDPD.TRICH_YEU) LIKE LOWER(CONCAT(CONCAT('%', :#{#req.trichYeu}),'%')))" +
 			" AND (:#{#req.maDvi} IS NULL OR QDPD.MA_DVI = :#{#req.maDvi} "+
-			" OR DTL.MA_DVI = :#{#req.maDvi}) "+
+			" OR EXISTS(SELECT DTL.*" +
+			" FROM  HH_HOP_DONG_DTL DTL " +
+			" JOIN HH_HOP_DONG_HDR HD ON HD.ID = DTL.ID_HDR " +
+			" WHERE DTL.MA_DVI = :#{#req.maDvi} " +
+			" AND HD.ID_QD_KQ_LCNT = QDPD.ID)) "+
 			" AND (:#{#req.trangThaiHd} IS NULL OR QDPD.TRANG_THAI_HD != :#{#req.trangThaiHd}) "+
 			" AND (:#{#req.trangThai} IS NULL OR QDPD.TRANG_THAI = :#{#req.trangThai}) ";
 
