@@ -61,6 +61,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().anyRequest().authenticated().and().csrf().disable();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+//		http.cors();
+		http.cors().configurationSource(request -> {
+			CorsConfiguration config = new CorsConfiguration();
+			config.setAllowedHeaders(Collections.singletonList("*"));
+			config.setAllowedMethods(Collections.singletonList("*"));
+			config.addAllowedOrigin("*");
+			config.setAllowCredentials(true);
+			return config;
+		});
 		http.cors();
 //		http.cors().configurationSource(request -> {
 //			CorsConfiguration config = new CorsConfiguration();
